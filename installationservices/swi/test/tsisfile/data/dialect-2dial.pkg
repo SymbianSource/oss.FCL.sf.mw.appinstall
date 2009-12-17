@@ -1,0 +1,27 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This package file tests dialects feature.
+; Needs MAKESIS v2.1 and Typhoon APPINST.
+
+&EN(1024),EN
+
+#{"English-1024","English"}, (0x1000001F), 1, 2, 3, TYPE=SA
+
+%{"Vendor","Vendor"}
+:"Vendor"
+
+"dialect-2dial.pkg"-"",FT,TC
+{"text\english-1024.txt" "text\englishfile.txt"}-"C:\Documents\InstTest\dialect.txt"

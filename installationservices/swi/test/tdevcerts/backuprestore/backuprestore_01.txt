@@ -1,0 +1,21 @@
+# Constraints specify system capabilities that meet the requested capabilities
+[main]
+name=backuprestore_01
+template=simple.txt
+inifile=notused.ini
+
+[chains]
+chain1=root5CA,system_caps
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswisystemcapability_protected.exe"-"!:\sys\bin\tswisystemcapability_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswisystemcapability_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnoexist=1
+noexist0=c:\sys\bin\tswisystemcapability_protected.exe

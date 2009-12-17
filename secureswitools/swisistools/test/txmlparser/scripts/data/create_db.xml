@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE CreateDatabase SYSTEM "create_db.dtd">
+
+<!-- Creation of database for SCR--> 
+
+<CreateDatabase>
+	<SQLQuery>CREATE TABLE SoftwareTypes(SoftwareTypeId INTEGER PRIMARY KEY NOT NULL,SoftwareTypeName TEXT NOT NULL UNIQUE,SifPluginUid INTEGER,InstallerSecureId INTEGER,ExecutionLayerSecureId INTEGER);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_SoftwareTypes_MimeType ON SoftwareTypes(SoftwareTypeName);</SQLQuery>
+	<SQLQuery>CREATE TABLE MimeTypes(MimeTypeId INTEGER PRIMARY KEY NOT NULL,SoftwareTypeId INTEGER NOT NULL,MimeType TEXT NOT NULL UNIQUE COLLATE NOCASE);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_MimeTypes_SoftwareType ON MimeTypes(SoftwareTypeId);</SQLQuery>
+	<SQLQuery>CREATE TABLE Components(ComponentId INTEGER PRIMARY KEY AUTOINCREMENT,SoftwareTypeId INTEGER NOT NULL,Removable BOOLEAN DEFAULT 1,Size INTEGER DEFAULT 0,ScomoState INTEGER DEFAULT 0,InstalledDrives INTEGER DEFAULT 0,InstalledDrivesRefCount TEXT NOT NULL,Version TEXT);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_Components_SoftwareTypeId ON Components(SoftwareTypeId);</SQLQuery>
+	<SQLQuery>CREATE TABLE ComponentLocalizables(CompLocalId INTEGER PRIMARY KEY AUTOINCREMENT, ComponentId INTEGER DEFAULT 0,ApplicationId INTEGER DEFAULT 0,Locale INTEGER DEFAULT 0,Name TEXT,Vendor TEXT);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentLocalizables_ComponentId ON ComponentLocalizables(ComponentId);</SQLQuery>
+	<SQLQuery>CREATE TABLE ComponentDependencies(ComponentId INTEGER NOT NULL,DependentId INTEGER NOT NULL);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentDependencies_ComponentId ON ComponentDependencies(ComponentId);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentDependencies_DependentId ON ComponentDependencies(DependentId);</SQLQuery>
+	<SQLQuery>CREATE TABLE ComponentsFiles(CmpFileId INTEGER PRIMARY KEY NOT NULL,ComponentId INTEGER NOT NULL,LocationHash INTEGER DEFAULT 0,Location TEXT NOT NULL COLLATE NOCASE);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentsFiles_ComponentId ON ComponentsFiles(ComponentId);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentsFiles_LocationHash ON ComponentsFiles(LocationHash);</SQLQuery>
+	<SQLQuery>CREATE TABLE ComponentProperties(PropertyId INTEGER PRIMARY KEY NOT NULL,Name TEXT NOT NULL COLLATE NOCASE,Locale INTEGER DEFAULT 0,ComponentId INTEGER NOT NULL,IntValue INTEGER,StrValue TEXT);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentProperties_Name ON ComponentProperties(Name);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_ComponentProperties_ComponentId ON ComponentProperties(ComponentId);</SQLQuery>
+	<SQLQuery>CREATE TABLE FileProperties(PropertyId INTEGER PRIMARY KEY NOT NULL,Name TEXT NOT NULL COLLATE NOCASE,Locale INTEGER DEFAULT 0,CmpFileId INTEGER NOT NULL,IntValue INTEGER,StrValue TEXT);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_FileProperties_Name ON FileProperties(Name);</SQLQuery>
+	<SQLQuery>CREATE INDEX idx_FileProperties_CmpFileId ON FileProperties(CmpFileId);</SQLQuery>
+	<SQLQuery>CREATE TABLE ScrVersion(MajorVersion INTEGER NOT NULL, MinorVersion INTEGER NOT NULL, BuildNumber INTEGER NOT NULL);</SQLQuery>
+	<SQLQuery>INSERT INTO ScrVersion(MajorVersion, MinorVersion, BuildNumber) VALUES(1, 1, 1);</SQLQuery>
+</CreateDatabase>
+

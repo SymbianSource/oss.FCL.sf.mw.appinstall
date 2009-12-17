@@ -1,0 +1,16 @@
+*version5_case_a.txt
+*version5_case_b.txt
+*version5_case_c.txt
+*version5_case_d.txt
+*version5_case_e.txt
+*version5_negative_a.txt
+*version5_negative_b.txt
+*version5_negative_c1.txt
+*version5_negative_c2.txt
+*version5_negative_c3.txt
+*version5_negative_d1.txt
+*version5_negative_d2.txt
+*version5_negative_d3.txt
+*version5_cov1.txt
+*version5_cov2.txt
+version5_cov3.txt

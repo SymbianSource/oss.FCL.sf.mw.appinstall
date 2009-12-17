@@ -1,0 +1,49 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-DEF053165B-I-0001
+//! @SYMTestCaseDesc 		Tries to install a package which overwrites an orphaned file, with orphaned file overwriting disabled
+//! @SYMTestPriority        	Medium     
+//! @SYMTestExpectedResults 	SWI behaves as appropriate.
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF053165B-I-0001
+
+// With xml file saying displayquestion returning true, but should fail as orphaned overwrite disabled
+
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\tswi\DEF053165.temp
+
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini OrphanedOverwrite_qt
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_OrphanedOverwrite_qt_failed
+
+// With xml file saying displayquestion returning false, so should fail install
+
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\tswi\DEF053165.temp
+
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini OrphanedOverwrite_qf
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_OrphanedOverwrite_qf
+
+RUN_UTILS deletefile c:\tswi\DEF053165.temp
+
+END_TESTCASE API-SEC-UISA-DEF053165B-I-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

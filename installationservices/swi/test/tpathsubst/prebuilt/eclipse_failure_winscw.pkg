@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+
+#{"ECLIPSE_FAILURE"},(0x81505360), 1,2,3
+
+%{"Crypto_Services"}
+:"Crypto_Services"
+
+(0x802730A1), *, *, *, {"Invalid non-upgrade eclipse"}
+
+; test faling to overwrite a ROM-based file which is not part of a package
+"\epoc32\release\winscw\udeb\tswinocapability.exe"-"!:\TO_SYS_BIN\tps_ecl.exe",FF
+

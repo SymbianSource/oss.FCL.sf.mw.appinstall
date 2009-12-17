@@ -1,0 +1,33 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+
+PRJ_TESTMMPFILES
+
+group/eclipsingdll1.mmp
+group/eclipsingdll2.mmp
+group/eclipsingloader.mmp
+
+makefile buildstub.fil
+
+PRJ_TESTEXPORTS
+
+data/file1.txt	/epoc32/winscw/c/tswi/teclipsing/data/file1.txt
+data/file2.txt	/epoc32/winscw/c/tswi/teclipsing/data/file2.txt
+data/file3.txt	/epoc32/winscw/c/tswi/teclipsing/data/file3.txt
+data/file2.txt  /epoc32/release/winscw/udeb/z/noteclipsable/noteclipsable.txt
+data/file2.txt  /epoc32/release/winscw/urel/z/noteclipsable/noteclipsable.txt

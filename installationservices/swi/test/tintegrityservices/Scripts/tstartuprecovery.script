@@ -1,0 +1,99 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Start-up recovery tests...
+//
+LOAD_SUITE tintegrityservices
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tuiscriptadaptors
+//
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-INTEGRITYSERVICESSTARTUP-0001
+//! @SYMTestCaseDesc 		Represent a failure during addition of sis registry entries followed by a recovery at start-up.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Create critical failure recovery scenario  by copying recovery logs to the integrityservices folder under /sys 
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMEC 			EC084
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0001
+
+// Check to see if the files have been rolledback
+RUN_TEST_STEP 100 tintegrityservices Check z:\tswi\tintegrityservices\scripts\tintegrityservices.ini registryrollback
+// Now check to see if the sis registry cache is correct
+RUN_TEST_STEP_RESULT 106 100 tSisRegistryTest IsUidInstalled z:\tswi\tintegrityservices\scripts\tintegrityservices.ini package_not_installed
+
+END_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-INTEGRITYSERVICESSTARTUP-0002
+//! @SYMTestCaseDesc 		Represent a failure after addition of sis registry entries during the commit stage followed by a recovery.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Create critical failure recovery scenario  by copying recovery logs to the integrityservices folder under /sys 
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMEC 			EC084
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0002
+
+// Check to see if the files are present
+RUN_TEST_STEP 100 tintegrityservices Check z:\tswi\tintegrityservices\scripts\tintegrityservices.ini registryrollforward
+// Now check to see if the sis registry cache is correct
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled z:\tswi\tintegrityservices\scripts\tintegrityservices.ini package_installed
+// Uninstall the application
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tintegrityservices\scripts\tintegrityservices.ini uninstall_package
+
+END_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-INTEGRITYSERVICESSTARTUP-0003
+//! @SYMTestCaseDesc 		Represent a failure during addition of files on removable media followed by a recovery.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Create critical failure recovery scenario  by copying recovery logs to the integrityservices folder under /sys on system drive and removable media
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMEC 			EC084
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0003
+
+// Check to see if the files are present
+RUN_TEST_STEP 100 tintegrityservices Check z:\tswi\tintegrityservices\scripts\tintegrityservices.ini removablemedia
+
+END_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0003
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-INTEGRITYSERVICESSTARTUP-0004
+//! @SYMTestCaseDesc 		Represent a failure after removal of sis registry entries during the commit stage followed by a recovery.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Create critical failure recovery scenario  by copying recovery logs to the integrityservices folder under /sys 
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMEC 			EC084
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0004
+
+// Check to see if the files are present
+RUN_TEST_STEP 100 tintegrityservices Check z:\tswi\tintegrityservices\scripts\tintegrityservices.ini uninstallrollforward
+// Now check to see if the sis registry cache is correct
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled z:\tswi\tintegrityservices\scripts\tintegrityservices.ini package_present
+// Uninstall the application
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tintegrityservices\scripts\tintegrityservices.ini remove_package
+
+END_TESTCASE API-SEC-INTEGRITYSERVICESSTARTUP-0004

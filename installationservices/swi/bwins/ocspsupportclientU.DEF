@@ -1,0 +1,14 @@
+EXPORTS
+	??1CRevocationHandler@Swi@@UAE@XZ @ 1 NONAME ; Swi::CRevocationHandler::~CRevocationHandler(void)
+	?Error@CRevocationHandler@Swi@@QBEHXZ @ 2 NONAME ; int Swi::CRevocationHandler::Error(void) const
+	?NewL@COcspSupportTransport@Swi@@SAPAV12@AAK@Z @ 3 NONAME ; class Swi::COcspSupportTransport * Swi::COcspSupportTransport::NewL(unsigned long &)
+	?NewL@CRevocationHandler@Swi@@SAPAV12@AAVMCTCertStore@@@Z @ 4 NONAME ; class Swi::CRevocationHandler * Swi::CRevocationHandler::NewL(class MCTCertStore &)
+	?NewLC@COcspSupportTransport@Swi@@SAPAV12@AAK@Z @ 5 NONAME ; class Swi::COcspSupportTransport * Swi::COcspSupportTransport::NewLC(unsigned long &)
+	?Outcome@CRevocationHandler@Swi@@QBEABVTOCSPOutcome@@H@Z @ 6 NONAME ; class TOCSPOutcome const & Swi::CRevocationHandler::Outcome(int) const
+	?SendRequestL@CRevocationHandler@Swi@@QAEXAAV?$RPointerArray@VCPKIXCertChainBase@@@@AAKAAVTRequestStatus@@@Z @ 7 NONAME ; void Swi::CRevocationHandler::SendRequestL(class RPointerArray<class CPKIXCertChainBase> &, unsigned long &, class TRequestStatus &)
+	?SetDefaultURIL@CRevocationHandler@Swi@@QAEXABVTDesC8@@@Z @ 8 NONAME ; void Swi::CRevocationHandler::SetDefaultURIL(class TDesC8 const &)
+	?SummaryResult@CRevocationHandler@Swi@@QBE?AW4TResult@OCSP@@XZ @ 9 NONAME ; enum OCSP::TResult Swi::CRevocationHandler::SummaryResult(void) const
+	?TransactionCount@CRevocationHandler@Swi@@QBEHXZ @ 10 NONAME ; int Swi::CRevocationHandler::TransactionCount(void) const
+	?SetRetryCount@CRevocationHandler@Swi@@QAEXI@Z @ 11 NONAME ; void Swi::CRevocationHandler::SetRetryCount(unsigned int)
+	?SetTimeout@CRevocationHandler@Swi@@QAEXH@Z @ 12 NONAME ; void Swi::CRevocationHandler::SetTimeout(int)
+

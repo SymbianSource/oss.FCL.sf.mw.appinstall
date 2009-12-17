@@ -1,0 +1,38 @@
+MAKEDATA :
+!IF "$(PLATFORM)" == "GCCXML" || "$(PLATFORM)" == "TOOLS"
+	cd
+	echo ----------------
+	echo  Do nothing ...
+	echo ----------------
+!ELSE
+	cd
+	echo ----------------
+	echo Building tasynccancel sis files...
+	echo ----------------
+
+	call copyexe.bat $(PLATFORM) $(CFG)
+	call sis.bat $(PLATFORM) $(CFG)
+	call movesis.bat $(PLATFORM) $(CFG)
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+BLD : DO_NOTHING
+RELEASABLES : DO_NOTHING
+
+SAVESPACE : BLD
+
+FINAL : MAKEDATA
+
+CLEAN : 
+	clean.bat $(PLATFORM) $(CFG)

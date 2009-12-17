@@ -1,0 +1,947 @@
+//
+// Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// script file for testing swiconsole
+// 
+//
+
+PRINT Swiconsole Tests...
+
+LOAD_SUITE tswiconsole
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0001
+//! @SYMTestCaseDesc		Simple installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a simple sis file.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0001
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0002
+//! @SYMTestCaseDesc		Legacy file format support
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file with pre SISX format.
+//! @SYMTestExpectedResults	File installation should return proper error code
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0002
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST4
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0003
+//! @SYMTestCaseDesc		Embedded sis file support
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing embedded sis file
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0003
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST5
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL5
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0004
+//! @SYMTestCaseDesc		Embedded sis file support
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing embedded sis file and the install dialog answered with no
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0004
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST6
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0005
+//! @SYMTestCaseDesc		Embedded sis file support
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing embedded sis filee and the install dialog answered with yes
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0005
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST7
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL5
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0006
+//! @SYMTestCaseDesc		Embedded sis file support
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing embedded sis file
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0006
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST8
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+RUN_TEST_STEP 100 tswiconsole SwiUtility z:\tswi\tswiconsole\scripts\tswiconsole.ini IFEXISTS1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0001
+//! @SYMTestCaseDesc		Progress Information Test
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Progress bar is answered with yes - This will terminate the installation
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0001
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST9
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0002
+//! @SYMTestCaseDesc		Progress Information Test
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Progress bar is answered with no 
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0002
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST10
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL27
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0003
+//! @SYMTestCaseDesc		Developer certificate support test
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file signed by a developer certificate. Answer developer certificate warning by no
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0003
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST11
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL2
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0004
+//! @SYMTestCaseDesc		Developer certificate support test
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file signed by a developer certificate. Answer developer certificate warning by yes
+//! @SYMTestExpectedResults	File installation fails with general security error
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0004
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST12
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0005
+//! @SYMTestCaseDesc		Cancellable Events - Remove files
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file and then again install the same sis file. File remove event should be answered with yes
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0005
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST13A
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST13
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL27
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0006
+//! @SYMTestCaseDesc		Cancellable Events - Remove files
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file and then again install the same sis file. File remove event should be answered with no
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0006
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST13A
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST14
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL27
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0007
+//! @SYMTestCaseDesc		Cancellable Events - Copying files
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing text file. File copy event should be answered with yes
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0007
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST15
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-EVT-0008
+//! @SYMTestCaseDesc		Cancellable Events - Copying files
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing text file. File copy event should be answered with no
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-EVT-0008
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST16
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL27
+
+END_TESTCASE API-SEC-SWI-I-SWICON-EVT-0008
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0001
+//! @SYMTestCaseDesc		Display Install
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file. Install dialog answered with yes
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0001
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST17
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0002
+//! @SYMTestCaseDesc		Display Install
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file. Install dialog answered with no
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0002
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST18
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0003
+//! @SYMTestCaseDesc		Display Grant Capabilities
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing exe which requires user capability. Dialog answered with yes
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0003
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST19
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL28
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0004
+//! @SYMTestCaseDesc		Display Grant Capabilities
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing exe which requires user capability. Dialog answered with no
+//! @SYMTestExpectedResults	File installation is terminated with general security error
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0004
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST20
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0005
+//! @SYMTestCaseDesc		Display Language
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file language option. Dialog should be answered with correct language 
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0005
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST21
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL8FR
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0006
+//! @SYMTestCaseDesc		Display Language
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file language option. Dialog should be answered with incorrect language 
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0006
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST22
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0007
+//! @SYMTestCaseDesc		Display Language
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file language option. Dialog should be answered with cancel command
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0007
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST24
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0008
+//! @SYMTestCaseDesc		Display Drive
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing drive selection option. Dialog should be answered with valid drive
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0008
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST25
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL9
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0008
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0009
+//! @SYMTestCaseDesc		Display Drive
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing drive selection option. Dialog should be answered with invalid drive
+//! @SYMTestExpectedResults	File installation should be terminated
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0009
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST26
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0009
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0010
+//! @SYMTestCaseDesc		Display Drive
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing drive selection option. Dialog should be cancelled
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0010
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST27
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0010
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0011
+//! @SYMTestCaseDesc		Display Upgrade
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file then install it again. Dialog should be answered with yes
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0011
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST28
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0011
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0012
+//! @SYMTestCaseDesc		Display Upgrade
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file then install it again. Dialog should be answered with no
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0012
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST29
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0012
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0013
+//! @SYMTestCaseDesc		Display Option
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing option list. Dialog should be answered with valid options
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0013
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST30
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL10
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0013
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0014
+//! @SYMTestCaseDesc		Display Option
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing option list. Dialog should be answered with cancel option
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0014
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST31
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0014
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0015
+//! @SYMTestCaseDesc		Display Option (Un-attended mode)
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing option list. Dialog should be answered with invalid options
+//! @SYMTestExpectedResults	File installation should be terminated
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0015
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST32
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0016
+//! @SYMTestCaseDesc		Display Option (Optimal mode)
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing option list. Dialog should be answered with invalid options
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0016
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST33
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL10
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0016
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0017
+//! @SYMTestCaseDesc		Display Warning
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file signed with a self-signed certificate. Dialog answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0017
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST34
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL9
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0017
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0018
+//! @SYMTestCaseDesc		Display Warning
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file signed with a self-signed certificate. Dialog answered with no.
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0018
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST35
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0018
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0023
+//! @SYMTestCaseDesc		Display File Overwrite
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing file.txt after this install another sis containg the same file.
+//! @SYMTestExpectedResults	File installation should be terminated
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0023
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST40
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST41
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL9
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0023
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0024
+//! @SYMTestCaseDesc		Display Missing Dependency
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file which is dependent on another sis file. Dialog should be answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0024
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST42
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL11
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0024
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0025
+//! @SYMTestCaseDesc		Display Missing Dependency
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file which is dependent on another sis file. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File installation should be terminated
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0025
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST43
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0025
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0026
+//! @SYMTestCaseDesc		Display Missing Dependency
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		First install the dependency. Then install the dependent sis file. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0026
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST44
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL11
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0026
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0027
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TC type. Dialog should be answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0027
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST45
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL12
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0027
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0028
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TC type. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0028
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST46
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL12
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0028
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0029
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TA type. Dialog should be answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0029
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST47
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL12
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0029
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0030
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TA type. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0030
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST48
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0030
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0031
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TE type. Dialog should be answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0031
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST49
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL12
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0031
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0032
+//! @SYMTestCaseDesc		Display Text
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file containing display text option. Select TE type. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File installation should be cancelled
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0032
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST50
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0032
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0035
+//! @SYMTestCaseDesc		Display Question
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		copy eclipse.txt file to X location and install a sis file containing same file. Dialog answered with yes.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0035
+
+RUN_UTILS	MkDir c:\Documents\
+RUN_UTILS	MkDir c:\Documents\InstTest\
+RUN_UTILS	CopyFile z:\tswi\tswiconsole\data\eclipse.txt c:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST51
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL9
+RUN_UTILS 	DeleteFile c:\Documents\InstTest\file1.txt
+RUN_UTILS	DeleteDirectory c:\Documents\InstTest\
+RUN_UTILS	DeleteDirectory c:\Documents\
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0035
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0036
+//! @SYMTestCaseDesc		Display Question
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		copy eclipse.txt file to X location and install a sis file containing same file. Dialog answered with no.
+//! @SYMTestExpectedResults	File installation should be terminated.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0036
+
+RUN_UTILS	MkDir c:\Documents\
+RUN_UTILS	MkDir c:\Documents\InstTest\
+RUN_UTILS	CopyFile z:\tswi\tswiconsole\data\eclipse.txt c:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST52
+RUN_UTILS 	DeleteFile c:\Documents\InstTest\file1.txt
+RUN_UTILS	DeleteDirectory c:\Documents\InstTest\
+RUN_UTILS	DeleteDirectory c:\Documents\
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0036
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0037
+//! @SYMTestCaseDesc		Un-installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a Sis file. Then give uid of the package to uninstall.
+//! @SYMTestExpectedResults	File un-installation should be terminated.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0037
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST53
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0037
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0038
+//! @SYMTestCaseDesc		Un-installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a Sis file. Then give package namd and vendor name of the package to uninstall.
+//! @SYMTestExpectedResults	File un-installation should be terminated.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0038
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST54
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0038
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-A-0039
+//! @SYMTestCaseDesc		Un-installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a Sis file. Then un-install the sis. <Optimal mode>
+//! @SYMTestExpectedResults	File un-installation should be sucessful.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-A-0039
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST55
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-A-0039
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0039
+//! @SYMTestCaseDesc		Un-installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a Sis file. Then un-install the sis. Dialog should be answered with yes.
+//! @SYMTestExpectedResults	File un-installation should be sucessful.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0039
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST56
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0039
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0040
+//! @SYMTestCaseDesc		Un-installation
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a Sis file. Then un-install the sis. Dialog should be answered with no.
+//! @SYMTestExpectedResults	File un-installation should be cancelled.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0040
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST57
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0040
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0041
+//! @SYMTestCaseDesc		Dependency Break
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install the dependency sis. Then install the dependent sis. Later un-install the dependency. Dialog should be answered with yes
+//! @SYMTestExpectedResults	File un-installation should be sucessful.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0041
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST42
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST58
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL11
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0041
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0042
+//! @SYMTestCaseDesc		Dependency Break
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install the dependency sis. Then install the dependent sis. Later un-install the dependency. Dialog should be answered with no
+//! @SYMTestExpectedResults	File un-installation should be cancelled.
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0042
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST42
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST59
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL11
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0042
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0043
+//! @SYMTestCaseDesc		List installed packages
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a sis file. Then list the packages by giving the uid of the installed package.
+//! @SYMTestExpectedResults	Tool should return KErrNone
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0043
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST1
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST60
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0043
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0044
+//! @SYMTestCaseDesc		List installed packages
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		List the packages by giving the uid of a package which is not installed.
+//! @SYMTestExpectedResults	Tool should return KErrNotFound
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0044
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST61
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0044
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0045
+//! @SYMTestCaseDesc		Miscellaneous
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a sis contains most of the options present in the sis file.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0045
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST62
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL17EN
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0045
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0046
+//! @SYMTestCaseDesc		Miscellaneous
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a sis contains embedded sis upto level 4.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0046
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST63
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL20
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0046
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-DLG-0047
+//! @SYMTestCaseDesc		Miscellaneous
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a sis contains embedded sis upto level 8.
+//! @SYMTestExpectedResults	File installation should be terminated
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0047
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST64
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0047
+
+
+//! @SYMTestCaseID		API-SEC-SWI-I-SWICON-GEN-0048
+//! @SYMTestCaseDesc		DEF111731 swi fails with -2 when called without driver letter is the sis path name
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions  		Installs a simple sis file without specifying a drive letter in the sis path name
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-GEN-0048
+
+RUN_UTILS CopyFile z:\tswi\tsis\data\filebase.sis c:\filebase.sis
+RUN_UTILS MakeReadWrite c:\filebase.sis
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST65
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL1
+RUN_UTILS Delete c:\filebase.sis
+
+END_TESTCASE API-SEC-SWI-I-SWICON-GEN-0048
+
+

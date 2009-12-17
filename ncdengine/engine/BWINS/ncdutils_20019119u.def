@@ -1,0 +1,180 @@
+EXPORTS
+	??0CNcdPurchaseDownloadInfo@@IAE@XZ @ 1 NONAME ; CNcdPurchaseDownloadInfo::CNcdPurchaseDownloadInfo(void)
+	??0CNcdPurchaseInstallInfo@@IAE@XZ @ 2 NONAME ; CNcdPurchaseInstallInfo::CNcdPurchaseInstallInfo(void)
+	??0TNcdProgress@@QAE@II@Z @ 3 NONAME ; TNcdProgress::TNcdProgress(unsigned int, unsigned int)
+	??0TNcdProgress@@QAE@XZ @ 4 NONAME ; TNcdProgress::TNcdProgress(void)
+	??1CNcdAttributes@@UAE@XZ @ 5 NONAME ; CNcdAttributes::~CNcdAttributes(void)
+	??1CNcdPurchaseDownloadInfo@@UAE@XZ @ 6 NONAME ; CNcdPurchaseDownloadInfo::~CNcdPurchaseDownloadInfo(void)
+	??1CNcdPurchaseInstallInfo@@UAE@XZ @ 7 NONAME ; CNcdPurchaseInstallInfo::~CNcdPurchaseInstallInfo(void)
+	?ActivationKey@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 8 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::ActivationKey(void) const
+	?AddDownloadInfoL@CNcdPurchaseDetails@@QAEXPAVMNcdPurchaseDownloadInfo@@@Z @ 9 NONAME ; void CNcdPurchaseDetails::AddDownloadInfoL(class MNcdPurchaseDownloadInfo *)
+	?AddDownloadedFileL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 10 NONAME ; void CNcdPurchaseDetails::AddDownloadedFileL(class TDesC16 const &)
+	?AddInstallInfoL@CNcdPurchaseDetails@@QAEXPAVMNcdPurchaseInstallInfo@@@Z @ 11 NONAME ; void CNcdPurchaseDetails::AddInstallInfoL(class MNcdPurchaseInstallInfo *)
+	?AddKeywordL@CNcdSearchFilter@@QAEXABVTDesC16@@@Z @ 12 NONAME ; void CNcdSearchFilter::AddKeywordL(class TDesC16 const &)
+	?ApplicationUid@CNcdPurchaseInstallInfo@@UBE?AVTUid@@XZ @ 13 NONAME ; class TUid CNcdPurchaseInstallInfo::ApplicationUid(void) const
+	?ApplicationVersion@CNcdPurchaseInstallInfo@@UBEABVTDesC16@@XZ @ 14 NONAME ; class TDesC16 const & CNcdPurchaseInstallInfo::ApplicationVersion(void) const
+	?AttributeInt32@CNcdAttributes@@QBEJH@Z @ 15 NONAME ; long CNcdAttributes::AttributeInt32(int) const
+	?AttributeInt32L@CNcdPurchaseDownloadInfo@@UBEJW4TDownloadAttribute@MNcdPurchaseDownloadInfo@@@Z @ 16 NONAME ; long CNcdPurchaseDownloadInfo::AttributeInt32L(enum MNcdPurchaseDownloadInfo::TDownloadAttribute) const
+	?AttributeString16@CNcdAttributes@@QBEABVTDesC16@@H@Z @ 17 NONAME ; class TDesC16 const & CNcdAttributes::AttributeString16(int) const
+	?AttributeStringL@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@W4TDownloadAttribute@MNcdPurchaseDownloadInfo@@@Z @ 18 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::AttributeStringL(enum MNcdPurchaseDownloadInfo::TDownloadAttribute) const
+	?AttributeType@CNcdAttributes@@QBE?AW4TAttributeType@1@H@Z @ 19 NONAME ; enum CNcdAttributes::TAttributeType CNcdAttributes::AttributeType(int) const
+	?BaseConstructL@CNcdPurchaseInstallInfo@@IAEXABVMNcdPurchaseInstallInfo@@@Z @ 20 NONAME ; void CNcdPurchaseInstallInfo::BaseConstructL(class MNcdPurchaseInstallInfo const &)
+	?BaseConstructL@CNcdPurchaseInstallInfo@@IAEXXZ @ 21 NONAME ; void CNcdPurchaseInstallInfo::BaseConstructL(void)
+	?ConstructL@CNcdPurchaseDownloadInfo@@IAEXABVMNcdPurchaseDownloadInfo@@@Z @ 22 NONAME ; void CNcdPurchaseDownloadInfo::ConstructL(class MNcdPurchaseDownloadInfo const &)
+	?ConstructL@CNcdPurchaseDownloadInfo@@IAEXXZ @ 23 NONAME ; void CNcdPurchaseDownloadInfo::ConstructL(void)
+	?ContentMimeType@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 24 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::ContentMimeType(void) const
+	?ContentSize@CNcdPurchaseDownloadInfo@@UBEHXZ @ 25 NONAME ; int CNcdPurchaseDownloadInfo::ContentSize(void) const
+	?ContentUri@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 26 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::ContentUri(void) const
+	?ContentUsage@CNcdPurchaseDownloadInfo@@UBE?AW4TContentUsage@MNcdPurchaseDownloadInfo@@XZ @ 27 NONAME ; enum MNcdPurchaseDownloadInfo::TContentUsage CNcdPurchaseDownloadInfo::ContentUsage(void) const
+	?ContentValidityDelta@CNcdPurchaseDownloadInfo@@UBEHXZ @ 28 NONAME ; int CNcdPurchaseDownloadInfo::ContentValidityDelta(void) const
+	?CreateAttributesL@CNcdPurchaseDownloadInfo@@IAEXXZ @ 29 NONAME ; void CNcdPurchaseDownloadInfo::CreateAttributesL(void)
+	?DescriptorData@CNcdPurchaseDownloadInfo@@UBEABVTDesC8@@XZ @ 30 NONAME ; class TDesC8 const & CNcdPurchaseDownloadInfo::DescriptorData(void) const
+	?DescriptorName@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 31 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::DescriptorName(void) const
+	?DescriptorType@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 32 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::DescriptorType(void) const
+	?DescriptorUri@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 33 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::DescriptorUri(void) const
+	?DownloadInfo@CNcdPurchaseDetails@@QAEAAVCNcdPurchaseDownloadInfo@@H@Z @ 34 NONAME ; class CNcdPurchaseDownloadInfo & CNcdPurchaseDetails::DownloadInfo(int)
+	?DownloadInfoCount@CNcdPurchaseDetails@@QBEHXZ @ 35 NONAME ; int CNcdPurchaseDetails::DownloadInfoCount(void) const
+	?ExternalizeL@CNcdAttributes@@QBEXAAVRWriteStream@@@Z @ 36 NONAME ; void CNcdAttributes::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CNcdKeyValuePair@@QBEXAAVRWriteStream@@@Z @ 37 NONAME ; void CNcdKeyValuePair::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CNcdPurchaseDetails@@QBEXAAVRWriteStream@@@Z @ 38 NONAME ; void CNcdPurchaseDetails::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CNcdPurchaseDownloadInfo@@QBEXAAVRWriteStream@@@Z @ 39 NONAME ; void CNcdPurchaseDownloadInfo::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CNcdPurchaseHistoryFilter@@QBEXAAVRWriteStream@@@Z @ 40 NONAME ; void CNcdPurchaseHistoryFilter::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CNcdPurchaseInstallInfo@@QBEXAAVRWriteStream@@@Z @ 41 NONAME ; void CNcdPurchaseInstallInfo::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@TNcdConnectionMethod@@QBEXAAVRWriteStream@@@Z @ 42 NONAME ; void TNcdConnectionMethod::ExternalizeL(class RWriteStream &) const
+	?ExternalizeToDesLC@CNcdKeyValuePair@@QBEPAVHBufC8@@XZ @ 43 NONAME ; class HBufC8 * CNcdKeyValuePair::ExternalizeToDesLC(void) const
+	?Filename@CNcdPurchaseInstallInfo@@UBEABVTDesC16@@XZ @ 44 NONAME ; class TDesC16 const & CNcdPurchaseInstallInfo::Filename(void) const
+	?GetIconData@CNcdPurchaseDetails@@QAEPAVHBufC8@@XZ @ 45 NONAME ; class HBufC8 * CNcdPurchaseDetails::GetIconData(void)
+	?InsertDownloadInfoL@CNcdPurchaseDetails@@QAEXPAVMNcdPurchaseDownloadInfo@@H@Z @ 46 NONAME ; void CNcdPurchaseDetails::InsertDownloadInfoL(class MNcdPurchaseDownloadInfo *, int)
+	?InsertDownloadedFileL@CNcdPurchaseDetails@@QAEXABVTDesC16@@H@Z @ 47 NONAME ; void CNcdPurchaseDetails::InsertDownloadedFileL(class TDesC16 const &, int)
+	?InsertInstallInfoL@CNcdPurchaseDetails@@QAEXPAVMNcdPurchaseInstallInfo@@H@Z @ 48 NONAME ; void CNcdPurchaseDetails::InsertInstallInfoL(class MNcdPurchaseInstallInfo *, int)
+	?InstallInfo@CNcdPurchaseDetails@@QAEAAVCNcdPurchaseInstallInfo@@H@Z @ 49 NONAME ; class CNcdPurchaseInstallInfo & CNcdPurchaseDetails::InstallInfo(int)
+	?InstallInfoCount@CNcdPurchaseDetails@@QBEHXZ @ 50 NONAME ; int CNcdPurchaseDetails::InstallInfoCount(void) const
+	?InstallNotificationUri@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 51 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::InstallNotificationUri(void) const
+	?InternalizeL@CNcdAttributes@@QAEXAAVRReadStream@@@Z @ 52 NONAME ; void CNcdAttributes::InternalizeL(class RReadStream &)
+	?InternalizeL@CNcdKeyValuePair@@QAEXAAVRReadStream@@@Z @ 53 NONAME ; void CNcdKeyValuePair::InternalizeL(class RReadStream &)
+	?InternalizeL@CNcdPurchaseDetails@@QAEXAAVRReadStream@@@Z @ 54 NONAME ; void CNcdPurchaseDetails::InternalizeL(class RReadStream &)
+	?InternalizeL@CNcdPurchaseDownloadInfo@@QAEXAAVRReadStream@@@Z @ 55 NONAME ; void CNcdPurchaseDownloadInfo::InternalizeL(class RReadStream &)
+	?InternalizeL@CNcdPurchaseHistoryFilter@@QAEXAAVRReadStream@@@Z @ 56 NONAME ; void CNcdPurchaseHistoryFilter::InternalizeL(class RReadStream &)
+	?InternalizeL@CNcdPurchaseInstallInfo@@QAEXAAVRReadStream@@@Z @ 57 NONAME ; void CNcdPurchaseInstallInfo::InternalizeL(class RReadStream &)
+	?InternalizeL@TNcdConnectionMethod@@QAEXAAVRReadStream@@@Z @ 58 NONAME ; void TNcdConnectionMethod::InternalizeL(class RReadStream &)
+	?IsLaunchable@CNcdPurchaseDownloadInfo@@UBEHXZ @ 59 NONAME ; int CNcdPurchaseDownloadInfo::IsLaunchable(void) const
+	?MatchByKey@CNcdKeyValuePair@@SAHABV1@0@Z @ 60 NONAME ; int CNcdKeyValuePair::MatchByKey(class CNcdKeyValuePair const &, class CNcdKeyValuePair const &)
+	?NewL@CNcdAttributes@@SAPAV1@AAVRReadStream@@HH@Z @ 61 NONAME ; class CNcdAttributes * CNcdAttributes::NewL(class RReadStream &, int, int)
+	?NewL@CNcdAttributes@@SAPAV1@ABV1@@Z @ 62 NONAME ; class CNcdAttributes * CNcdAttributes::NewL(class CNcdAttributes const &)
+	?NewL@CNcdAttributes@@SAPAV1@HH@Z @ 63 NONAME ; class CNcdAttributes * CNcdAttributes::NewL(int, int)
+	?NewL@CNcdKeyValuePair@@SAPAV1@AAVRReadStream@@@Z @ 64 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewL(class RReadStream &)
+	?NewL@CNcdKeyValuePair@@SAPAV1@ABVMNcdKeyValuePair@@@Z @ 65 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewL(class MNcdKeyValuePair const &)
+	?NewL@CNcdKeyValuePair@@SAPAV1@ABVTDesC16@@0@Z @ 66 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewL(class TDesC16 const &, class TDesC16 const &)
+	?NewL@CNcdPurchaseDetails@@SAPAV1@ABVMNcdPurchaseDetails@@@Z @ 67 NONAME ; class CNcdPurchaseDetails * CNcdPurchaseDetails::NewL(class MNcdPurchaseDetails const &)
+	?NewL@CNcdPurchaseDetails@@SAPAV1@XZ @ 68 NONAME ; class CNcdPurchaseDetails * CNcdPurchaseDetails::NewL(void)
+	?NewL@CNcdPurchaseDownloadInfo@@SAPAV1@ABVMNcdPurchaseDownloadInfo@@@Z @ 69 NONAME ; class CNcdPurchaseDownloadInfo * CNcdPurchaseDownloadInfo::NewL(class MNcdPurchaseDownloadInfo const &)
+	?NewL@CNcdPurchaseDownloadInfo@@SAPAV1@XZ @ 70 NONAME ; class CNcdPurchaseDownloadInfo * CNcdPurchaseDownloadInfo::NewL(void)
+	?NewL@CNcdPurchaseHistoryFilter@@SAPAV1@V?$TArray@VTUid@@@@ABVTDesC16@@1I@Z @ 71 NONAME ; class CNcdPurchaseHistoryFilter * CNcdPurchaseHistoryFilter::NewL(class TArray<class TUid>, class TDesC16 const &, class TDesC16 const &, unsigned int)
+	?NewL@CNcdPurchaseHistoryFilter@@SAPAV1@XZ @ 72 NONAME ; class CNcdPurchaseHistoryFilter * CNcdPurchaseHistoryFilter::NewL(void)
+	?NewL@CNcdPurchaseInstallInfo@@SAPAV1@ABVMNcdPurchaseInstallInfo@@@Z @ 73 NONAME ; class CNcdPurchaseInstallInfo * CNcdPurchaseInstallInfo::NewL(class MNcdPurchaseInstallInfo const &)
+	?NewL@CNcdPurchaseInstallInfo@@SAPAV1@XZ @ 74 NONAME ; class CNcdPurchaseInstallInfo * CNcdPurchaseInstallInfo::NewL(void)
+	?NewL@CNcdSearchFilter@@SAPAV1@AAVRReadStream@@@Z @ 75 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewL(class RReadStream &)
+	?NewL@CNcdSearchFilter@@SAPAV1@ABV1@@Z @ 76 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewL(class CNcdSearchFilter const &)
+	?NewL@CNcdSearchFilter@@SAPAV1@XZ @ 77 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewL(void)
+	?NewLC@CNcdKeyValuePair@@SAPAV1@AAVRReadStream@@@Z @ 78 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewLC(class RReadStream &)
+	?NewLC@CNcdKeyValuePair@@SAPAV1@ABVMNcdKeyValuePair@@@Z @ 79 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewLC(class MNcdKeyValuePair const &)
+	?NewLC@CNcdKeyValuePair@@SAPAV1@ABVTDesC16@@0@Z @ 80 NONAME ; class CNcdKeyValuePair * CNcdKeyValuePair::NewLC(class TDesC16 const &, class TDesC16 const &)
+	?NewLC@CNcdPurchaseDetails@@SAPAV1@ABVMNcdPurchaseDetails@@@Z @ 81 NONAME ; class CNcdPurchaseDetails * CNcdPurchaseDetails::NewLC(class MNcdPurchaseDetails const &)
+	?NewLC@CNcdPurchaseDetails@@SAPAV1@XZ @ 82 NONAME ; class CNcdPurchaseDetails * CNcdPurchaseDetails::NewLC(void)
+	?NewLC@CNcdPurchaseDownloadInfo@@SAPAV1@ABVMNcdPurchaseDownloadInfo@@@Z @ 83 NONAME ; class CNcdPurchaseDownloadInfo * CNcdPurchaseDownloadInfo::NewLC(class MNcdPurchaseDownloadInfo const &)
+	?NewLC@CNcdPurchaseDownloadInfo@@SAPAV1@XZ @ 84 NONAME ; class CNcdPurchaseDownloadInfo * CNcdPurchaseDownloadInfo::NewLC(void)
+	?NewLC@CNcdPurchaseHistoryFilter@@SAPAV1@V?$TArray@VTUid@@@@ABVTDesC16@@1I@Z @ 85 NONAME ; class CNcdPurchaseHistoryFilter * CNcdPurchaseHistoryFilter::NewLC(class TArray<class TUid>, class TDesC16 const &, class TDesC16 const &, unsigned int)
+	?NewLC@CNcdPurchaseHistoryFilter@@SAPAV1@XZ @ 86 NONAME ; class CNcdPurchaseHistoryFilter * CNcdPurchaseHistoryFilter::NewLC(void)
+	?NewLC@CNcdPurchaseInstallInfo@@SAPAV1@ABVMNcdPurchaseInstallInfo@@@Z @ 87 NONAME ; class CNcdPurchaseInstallInfo * CNcdPurchaseInstallInfo::NewLC(class MNcdPurchaseInstallInfo const &)
+	?NewLC@CNcdPurchaseInstallInfo@@SAPAV1@XZ @ 88 NONAME ; class CNcdPurchaseInstallInfo * CNcdPurchaseInstallInfo::NewLC(void)
+	?NewLC@CNcdSearchFilter@@SAPAV1@AAVRReadStream@@@Z @ 89 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewLC(class RReadStream &)
+	?NewLC@CNcdSearchFilter@@SAPAV1@ABV1@@Z @ 90 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewLC(class CNcdSearchFilter const &)
+	?NewLC@CNcdSearchFilter@@SAPAV1@XZ @ 91 NONAME ; class CNcdSearchFilter * CNcdSearchFilter::NewLC(void)
+	?RangeLowerLimit@CNcdAttributes@@QBEHXZ @ 92 NONAME ; int CNcdAttributes::RangeLowerLimit(void) const
+	?RangeUpperLimit@CNcdAttributes@@QBEHXZ @ 93 NONAME ; int CNcdAttributes::RangeUpperLimit(void) const
+	?RemoveDownloadInfo@CNcdPurchaseDetails@@QAEXH@Z @ 94 NONAME ; void CNcdPurchaseDetails::RemoveDownloadInfo(int)
+	?RemoveDownloadedFile@CNcdPurchaseDetails@@QAEXH@Z @ 95 NONAME ; void CNcdPurchaseDetails::RemoveDownloadedFile(int)
+	?RemoveInstallInfo@CNcdPurchaseDetails@@QAEXH@Z @ 96 NONAME ; void CNcdPurchaseDetails::RemoveInstallInfo(int)
+	?ReplaceDownloadedFileL@CNcdPurchaseDetails@@QAEXHABVTDesC16@@@Z @ 97 NONAME ; void CNcdPurchaseDetails::ReplaceDownloadedFileL(int, class TDesC16 const &)
+	?RightsType@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 98 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::RightsType(void) const
+	?RightsUri@CNcdPurchaseDownloadInfo@@UBEABVTDesC16@@XZ @ 99 NONAME ; class TDesC16 const & CNcdPurchaseDownloadInfo::RightsUri(void) const
+	?SetActivationKeyL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 100 NONAME ; void CNcdPurchaseDownloadInfo::SetActivationKeyL(class TDesC16 const &)
+	?SetApplicationUid@CNcdPurchaseInstallInfo@@QAEXVTUid@@@Z @ 101 NONAME ; void CNcdPurchaseInstallInfo::SetApplicationUid(class TUid)
+	?SetApplicationVersionL@CNcdPurchaseInstallInfo@@QAEXABVTDesC16@@@Z @ 102 NONAME ; void CNcdPurchaseInstallInfo::SetApplicationVersionL(class TDesC16 const &)
+	?SetAttributeL@CNcdAttributes@@QAEXHABVTDesC16@@@Z @ 103 NONAME ; void CNcdAttributes::SetAttributeL(int, class TDesC16 const &)
+	?SetAttributeL@CNcdAttributes@@QAEXHJ@Z @ 104 NONAME ; void CNcdAttributes::SetAttributeL(int, long)
+	?SetAttributeL@CNcdPurchaseDownloadInfo@@QAEXW4TDownloadAttribute@MNcdPurchaseDownloadInfo@@ABVTDesC16@@@Z @ 105 NONAME ; void CNcdPurchaseDownloadInfo::SetAttributeL(enum MNcdPurchaseDownloadInfo::TDownloadAttribute, class TDesC16 const &)
+	?SetAttributeL@CNcdPurchaseDownloadInfo@@QAEXW4TDownloadAttribute@MNcdPurchaseDownloadInfo@@J@Z @ 106 NONAME ; void CNcdPurchaseDownloadInfo::SetAttributeL(enum MNcdPurchaseDownloadInfo::TDownloadAttribute, long)
+	?SetCatalogSourceName@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 107 NONAME ; void CNcdPurchaseDetails::SetCatalogSourceName(class HBufC16 *)
+	?SetCatalogSourceNameL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 108 NONAME ; void CNcdPurchaseDetails::SetCatalogSourceNameL(class TDesC16 const &)
+	?SetClientUid@CNcdPurchaseDetails@@QAEXVTUid@@@Z @ 109 NONAME ; void CNcdPurchaseDetails::SetClientUid(class TUid)
+	?SetClientUids@CNcdPurchaseHistoryFilter@@QAEXV?$TArray@VTUid@@@@@Z @ 110 NONAME ; void CNcdPurchaseHistoryFilter::SetClientUids(class TArray<class TUid>)
+	?SetContentMimeTypeL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 111 NONAME ; void CNcdPurchaseDownloadInfo::SetContentMimeTypeL(class TDesC16 const &)
+	?SetContentPurposes@CNcdSearchFilter@@QAEXI@Z @ 112 NONAME ; void CNcdSearchFilter::SetContentPurposes(unsigned int)
+	?SetContentSize@CNcdPurchaseDownloadInfo@@QAEXH@Z @ 113 NONAME ; void CNcdPurchaseDownloadInfo::SetContentSize(int)
+	?SetContentUriL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 114 NONAME ; void CNcdPurchaseDownloadInfo::SetContentUriL(class TDesC16 const &)
+	?SetContentUsage@CNcdPurchaseDownloadInfo@@QAEXW4TContentUsage@MNcdPurchaseDownloadInfo@@@Z @ 115 NONAME ; void CNcdPurchaseDownloadInfo::SetContentUsage(enum MNcdPurchaseDownloadInfo::TContentUsage)
+	?SetContentValidityDelta@CNcdPurchaseDownloadInfo@@QAEXH@Z @ 116 NONAME ; void CNcdPurchaseDownloadInfo::SetContentValidityDelta(int)
+	?SetDescription@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 117 NONAME ; void CNcdPurchaseDetails::SetDescription(class HBufC16 *)
+	?SetDescriptionL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 118 NONAME ; void CNcdPurchaseDetails::SetDescriptionL(class TDesC16 const &)
+	?SetDescriptorDataL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC8@@@Z @ 119 NONAME ; void CNcdPurchaseDownloadInfo::SetDescriptorDataL(class TDesC8 const &)
+	?SetDescriptorNameL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 120 NONAME ; void CNcdPurchaseDownloadInfo::SetDescriptorNameL(class TDesC16 const &)
+	?SetDescriptorTypeL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 121 NONAME ; void CNcdPurchaseDownloadInfo::SetDescriptorTypeL(class TDesC16 const &)
+	?SetDescriptorUriL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 122 NONAME ; void CNcdPurchaseDownloadInfo::SetDescriptorUriL(class TDesC16 const &)
+	?SetDownloadAccessPoint@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 123 NONAME ; void CNcdPurchaseDetails::SetDownloadAccessPoint(class HBufC16 *)
+	?SetDownloadAccessPointL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 124 NONAME ; void CNcdPurchaseDetails::SetDownloadAccessPointL(class TDesC16 const &)
+	?SetDownloadInfoL@CNcdPurchaseDetails@@QAEXABV?$TArray@PAVMNcdPurchaseDownloadInfo@@@@@Z @ 125 NONAME ; void CNcdPurchaseDetails::SetDownloadInfoL(class TArray<class MNcdPurchaseDownloadInfo *> const &)
+	?SetDownloadedFiles@CNcdPurchaseDetails@@QAEXPAVCDesC16Array@@@Z @ 126 NONAME ; void CNcdPurchaseDetails::SetDownloadedFiles(class CDesC16Array *)
+	?SetDownloadedFilesL@CNcdPurchaseDetails@@QAEXABVMDesC16Array@@@Z @ 127 NONAME ; void CNcdPurchaseDetails::SetDownloadedFilesL(class MDesC16Array const &)
+	?SetEntityId@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 128 NONAME ; void CNcdPurchaseDetails::SetEntityId(class HBufC16 *)
+	?SetEntityIdL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 129 NONAME ; void CNcdPurchaseDetails::SetEntityIdL(class TDesC16 const &)
+	?SetEntityIdL@CNcdPurchaseHistoryFilter@@QAEXABVTDesC16@@@Z @ 130 NONAME ; void CNcdPurchaseHistoryFilter::SetEntityIdL(class TDesC16 const &)
+	?SetEventId@CNcdPurchaseHistoryFilter@@QAEXI@Z @ 131 NONAME ; void CNcdPurchaseHistoryFilter::SetEventId(unsigned int)
+	?SetFilenameL@CNcdPurchaseInstallInfo@@QAEXABVTDesC16@@@Z @ 132 NONAME ; void CNcdPurchaseInstallInfo::SetFilenameL(class TDesC16 const &)
+	?SetFinalPrice@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 133 NONAME ; void CNcdPurchaseDetails::SetFinalPrice(class HBufC16 *)
+	?SetFinalPriceL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 134 NONAME ; void CNcdPurchaseDetails::SetFinalPriceL(class TDesC16 const &)
+	?SetHasIcon@CNcdPurchaseDetails@@QAEXH@Z @ 135 NONAME ; void CNcdPurchaseDetails::SetHasIcon(int)
+	?SetIcon@CNcdPurchaseDetails@@QAEXPAVHBufC8@@@Z @ 136 NONAME ; void CNcdPurchaseDetails::SetIcon(class HBufC8 *)
+	?SetIconL@CNcdPurchaseDetails@@QAEXABVTDesC8@@@Z @ 137 NONAME ; void CNcdPurchaseDetails::SetIconL(class TDesC8 const &)
+	?SetInstallInfoL@CNcdPurchaseDetails@@QAEXABV?$TArray@PAVMNcdPurchaseInstallInfo@@@@@Z @ 138 NONAME ; void CNcdPurchaseDetails::SetInstallInfoL(class TArray<class MNcdPurchaseInstallInfo *> const &)
+	?SetInstallNotificationUriL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 139 NONAME ; void CNcdPurchaseDownloadInfo::SetInstallNotificationUriL(class TDesC16 const &)
+	?SetItemName@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 140 NONAME ; void CNcdPurchaseDetails::SetItemName(class HBufC16 *)
+	?SetItemNameL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 141 NONAME ; void CNcdPurchaseDetails::SetItemNameL(class TDesC16 const &)
+	?SetItemPurpose@CNcdPurchaseDetails@@QAEXI@Z @ 142 NONAME ; void CNcdPurchaseDetails::SetItemPurpose(unsigned int)
+	?SetItemType@CNcdPurchaseDetails@@QAEXW4TItemType@MNcdPurchaseDetails@@@Z @ 143 NONAME ; void CNcdPurchaseDetails::SetItemType(enum MNcdPurchaseDetails::TItemType)
+	?SetKeyL@CNcdKeyValuePair@@QAEXABVTDesC16@@@Z @ 144 NONAME ; void CNcdKeyValuePair::SetKeyL(class TDesC16 const &)
+	?SetLastOperationErrorCode@CNcdPurchaseDetails@@QAEXH@Z @ 145 NONAME ; void CNcdPurchaseDetails::SetLastOperationErrorCode(int)
+	?SetLastOperationTime@CNcdPurchaseDetails@@QAEXABVTTime@@@Z @ 146 NONAME ; void CNcdPurchaseDetails::SetLastOperationTime(class TTime const &)
+	?SetLastUniversalOperationTime@CNcdPurchaseDetails@@QAEXXZ @ 147 NONAME ; void CNcdPurchaseDetails::SetLastUniversalOperationTime(void)
+	?SetLaunchable@CNcdPurchaseDownloadInfo@@QAEXH@Z @ 148 NONAME ; void CNcdPurchaseDownloadInfo::SetLaunchable(int)
+	?SetNamespace@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 149 NONAME ; void CNcdPurchaseDetails::SetNamespace(class HBufC16 *)
+	?SetNamespaceL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 150 NONAME ; void CNcdPurchaseDetails::SetNamespaceL(class TDesC16 const &)
+	?SetNamespaceL@CNcdPurchaseHistoryFilter@@QAEXABVTDesC16@@@Z @ 151 NONAME ; void CNcdPurchaseHistoryFilter::SetNamespaceL(class TDesC16 const &)
+	?SetOriginNodeId@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 152 NONAME ; void CNcdPurchaseDetails::SetOriginNodeId(class HBufC16 *)
+	?SetOriginNodeIdL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 153 NONAME ; void CNcdPurchaseDetails::SetOriginNodeIdL(class TDesC16 const &)
+	?SetPaymentMethodName@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 154 NONAME ; void CNcdPurchaseDetails::SetPaymentMethodName(class HBufC16 *)
+	?SetPaymentMethodNameL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 155 NONAME ; void CNcdPurchaseDetails::SetPaymentMethodNameL(class TDesC16 const &)
+	?SetPurchaseOptionId@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 156 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionId(class HBufC16 *)
+	?SetPurchaseOptionIdL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 157 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionIdL(class TDesC16 const &)
+	?SetPurchaseOptionName@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 158 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionName(class HBufC16 *)
+	?SetPurchaseOptionNameL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 159 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionNameL(class TDesC16 const &)
+	?SetPurchaseOptionPrice@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 160 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionPrice(class HBufC16 *)
+	?SetPurchaseOptionPriceL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 161 NONAME ; void CNcdPurchaseDetails::SetPurchaseOptionPriceL(class TDesC16 const &)
+	?SetPurchaseTime@CNcdPurchaseDetails@@QAEXVTTime@@@Z @ 162 NONAME ; void CNcdPurchaseDetails::SetPurchaseTime(class TTime)
+	?SetRecursionDepthL@CNcdSearchFilter@@QAEXI@Z @ 163 NONAME ; void CNcdSearchFilter::SetRecursionDepthL(unsigned int)
+	?SetRightsTypeL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 164 NONAME ; void CNcdPurchaseDownloadInfo::SetRightsTypeL(class TDesC16 const &)
+	?SetRightsUriL@CNcdPurchaseDownloadInfo@@QAEXABVTDesC16@@@Z @ 165 NONAME ; void CNcdPurchaseDownloadInfo::SetRightsUriL(class TDesC16 const &)
+	?SetSearchMode@CNcdSearchFilter@@QAEXW4TSearchMode@MNcdSearchFilter@@@Z @ 166 NONAME ; void CNcdSearchFilter::SetSearchMode(enum MNcdSearchFilter::TSearchMode)
+	?SetServerUri@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 167 NONAME ; void CNcdPurchaseDetails::SetServerUri(class HBufC16 *)
+	?SetServerUriL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 168 NONAME ; void CNcdPurchaseDetails::SetServerUriL(class TDesC16 const &)
+	?SetThemeNameL@CNcdPurchaseInstallInfo@@QAEXABVTDesC16@@@Z @ 169 NONAME ; void CNcdPurchaseInstallInfo::SetThemeNameL(class TDesC16 const &)
+	?SetTotalContentSize@CNcdPurchaseDetails@@QAEXH@Z @ 170 NONAME ; void CNcdPurchaseDetails::SetTotalContentSize(int)
+	?SetValueL@CNcdKeyValuePair@@QAEXABVTDesC16@@@Z @ 171 NONAME ; void CNcdKeyValuePair::SetValueL(class TDesC16 const &)
+	?SetVersion@CNcdPurchaseDetails@@QAEXPAVHBufC16@@@Z @ 172 NONAME ; void CNcdPurchaseDetails::SetVersion(class HBufC16 *)
+	?SetVersionL@CNcdPurchaseDetails@@QAEXABVTDesC16@@@Z @ 173 NONAME ; void CNcdPurchaseDetails::SetVersionL(class TDesC16 const &)
+	?ThemeName@CNcdPurchaseInstallInfo@@UBEABVTDesC16@@XZ @ 174 NONAME ; class TDesC16 const & CNcdPurchaseInstallInfo::ThemeName(void) const
+	?SetAttributeL@CNcdPurchaseDetails@@QAEXW4TPurchaseAttribute@MNcdPurchaseDetails@@ABVTDesC16@@@Z @ 175 NONAME ; void CNcdPurchaseDetails::SetAttributeL(enum MNcdPurchaseDetails::TPurchaseAttribute, class TDesC16 const &)
+	?SetAttributeL@CNcdPurchaseDetails@@QAEXW4TPurchaseAttribute@MNcdPurchaseDetails@@J@Z @ 176 NONAME ; void CNcdPurchaseDetails::SetAttributeL(enum MNcdPurchaseDetails::TPurchaseAttribute, long)
+	?ExternalizeAttributesL@CNcdPurchaseDetails@@QBEXAAVRWriteStream@@@Z @ 177 NONAME ; void CNcdPurchaseDetails::ExternalizeAttributesL(class RWriteStream &) const
+	?InternalizeAttributesL@CNcdPurchaseDetails@@QAEXAAVRReadStream@@@Z @ 178 NONAME ; void CNcdPurchaseDetails::InternalizeAttributesL(class RReadStream &)
+

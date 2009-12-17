@@ -1,0 +1,4 @@
+# All capabilities required by tests
+
+[cert_capabilities]
+caps=ReadUserData WriteUserData LocalServices ReadDeviceData WriteDeviceData

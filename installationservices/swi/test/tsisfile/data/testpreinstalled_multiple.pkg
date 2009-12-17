@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test file tests pre-installed packages.
+; It is a pre-installed package which can be put onto the device
+;
+; Check that this is rejected with KErrSISInvalidTargetFile, since
+; it references files on more than one drive. See INC109356.
+
+;Languages
+&EN
+
+;Header
+#{"PreInstalled_Install"}, (0x81111209), 1, 2, 3,TYPE=PA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"files\option1.txt"-"c:\tswi\preinstalled\preinstalledinstall.txt";
+"files\option1.txt"-"e:\tswi\preinstalled\preinstalledinstall.txt";
+

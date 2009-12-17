@@ -1,0 +1,13 @@
+EXPORTS
+	??1CCafSisDataProvider@Swi@@UAE@XZ @ 1 NONAME ; Swi::CCafSisDataProvider::~CCafSisDataProvider(void)
+	?ExecuteDrmIntent@CCafSisDataProvider@Swi@@UAEHW4TIntent@ContentAccess@@@Z @ 2 NONAME ; int Swi::CCafSisDataProvider::ExecuteDrmIntent(enum ContentAccess::TIntent)
+	?NewL@CCafSisDataProvider@Swi@@SAPAV12@AAVRFile@@@Z @ 3 NONAME ; class Swi::CCafSisDataProvider * Swi::CCafSisDataProvider::NewL(class RFile &)
+	?NewL@CCafSisDataProvider@Swi@@SAPAV12@ABV?$TBuf@$0BAA@@@@Z @ 4 NONAME ; class Swi::CCafSisDataProvider * Swi::CCafSisDataProvider::NewL(class TBuf<256> const &)
+	?NewLC@CCafSisDataProvider@Swi@@SAPAV12@AAVRFile@@@Z @ 5 NONAME ; class Swi::CCafSisDataProvider * Swi::CCafSisDataProvider::NewLC(class RFile &)
+	?NewLC@CCafSisDataProvider@Swi@@SAPAV12@ABV?$TBuf@$0BAA@@@@Z @ 6 NONAME ; class Swi::CCafSisDataProvider * Swi::CCafSisDataProvider::NewLC(class TBuf<256> const &)
+	?OpenDrmContentL@CCafSisDataProvider@Swi@@UAEXW4TIntent@ContentAccess@@@Z @ 7 NONAME ; void Swi::CCafSisDataProvider::OpenDrmContentL(enum ContentAccess::TIntent)
+	?Read@CCafSisDataProvider@Swi@@UAEHAAVTDes8@@@Z @ 8 NONAME ; int Swi::CCafSisDataProvider::Read(class TDes8 &)
+	?Read@CCafSisDataProvider@Swi@@UAEHAAVTDes8@@H@Z @ 9 NONAME ; int Swi::CCafSisDataProvider::Read(class TDes8 &, int)
+	?Seek@CCafSisDataProvider@Swi@@UAEHW4TSeek@@AA_J@Z @ 10 NONAME ; int Swi::CCafSisDataProvider::Seek(enum TSeek, long long &)
+	?IsContentProtected@CCafSisDataProvider@Swi@@QAEHXZ @ 11 NONAME ; int Swi::CCafSisDataProvider::IsContentProtected(void)
+

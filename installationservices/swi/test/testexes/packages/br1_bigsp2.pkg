@@ -1,0 +1,47 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A different SP upgrade with lots of files
+;
+&EN
+#{"Backup & Restore upgrades test - 1 - SP - 2"}, (0x0a000019), 1, 0, 1, TYPE=SP
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+; DON'T ADD ANY NEW FILES HERE. THE USER SELECTION SHOULD REMAIN SET TO NOT-SPECIFIED
+
+"osver.txt"-"$:\private\81000005\bigsp2.txt"
+
+; Make the controller larger than the base
+"osver.txt"-"$:\br1_bigsp2_01.txt"
+"osver.txt"-"$:\br1_bigsp2_02.txt"
+"osver.txt"-"$:\br1_bigsp2_03.txt"
+"osver.txt"-"$:\br1_bigsp2_04.txt"
+"osver.txt"-"$:\br1_bigsp2_05.txt"
+"osver.txt"-"$:\br1_bigsp2_06.txt"
+"osver.txt"-"$:\br1_bigsp2_07.txt"
+"osver.txt"-"$:\br1_bigsp2_08.txt"
+"osver.txt"-"$:\br1_bigsp2_09.txt"
+"osver.txt"-"$:\br1_bigsp2_10.txt"
+"osver.txt"-"$:\br1_bigsp2_11.txt"
+"osver.txt"-"$:\br1_bigsp2_12.txt"
+"osver.txt"-"$:\br1_bigsp2_13.txt"
+"osver.txt"-"$:\br1_bigsp2_14.txt"
+"osver.txt"-"$:\br1_bigsp2_15.txt"
+"osver.txt"-"$:\br1_bigsp2_16.txt"
+"osver.txt"-"$:\br1_bigsp2_17.txt"
+"osver.txt"-"$:\br1_bigsp2_18.txt"
+"osver.txt"-"$:\br1_bigsp2_19.txt"
+"osver.txt"-"$:\br1_bigsp2_20.txt"

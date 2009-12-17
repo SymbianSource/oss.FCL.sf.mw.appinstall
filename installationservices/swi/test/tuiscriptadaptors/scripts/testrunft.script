@@ -1,0 +1,41 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run special test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-INC082371-0001
+//! @SYMTestCaseDesc 		INC082371: Exes are launched by Installer App before EULA is accepted
+//! @SYMDEF 			INC082371
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Installation with text file and run on install exe is attempted and canceled in text display 
+//! @SYMTestExpectedResults 	Exe must not run and installation should be cancelled.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC082371-0001
+
+RUN_TEST_STEP_RESULT -3 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrunft.ini exeRI
+
+// If cancel worked, the exe should not be running...
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrunft.ini consoleappRunning
+
+END_TESTCASE API-SEC-INC082371-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+

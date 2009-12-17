@@ -1,0 +1,38 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// @file swi003-001.script
+// 
+//
+
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID 		API-SEC-sistools-InterpretSIS-SWI003-DB-0001
+//! @SYMTestCaseDesc 		Compare installation of SWI and Interpretsis 
+//! @SYMPREQ  			PREQ2114
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Check to see if the SA + RU + NR installed successfully
+//!				2. Uninstall the SA + RU + NR
+//! @SYMTestExpectedResults 	The SP installed to the media card is not removed   
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-sistools-InterpretSIS-SWI003-DB-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled c:\tswi\tinterpretsisinteg\scripts\ini.ini SWI003-001
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep c:\tswi\tinterpretsisinteg\scripts\ini.ini uSWI003-001_db
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove c:\tswi\tinterpretsisinteg\scripts\ini.ini uSWI003-001force
+
+END_TESTCASE API-SEC-sistools-InterpretSIS-SWI003-DB-0001

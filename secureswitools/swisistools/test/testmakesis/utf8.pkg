@@ -1,0 +1,64 @@
+﻿;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+
+;Languages
+&JA
+
+;Header 
+#{"Unicode paths/names large sample UTF8"}, (0xA2000222), 1, 2, 3, TYPE=SA
+
+%{"Vendor"}
+:"Vendor"
+
+; Hiragana Hx3041-Hx309E range 
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\ぁあぃいぅう\ゎわゐゑをんゔ.txt" 
+
+; Kanji
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\こんにちは世界\こんにちは.txt" 
+
+; Katakana Hx30A1 – Hx30FE range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\ァアィイゥウェエォオカ\ヹヺ・ーヽヾ.txt" 
+ 
+; Enclosed CJK letters and months Hx3220 -Hx32FE range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\㈠㈡㈢㈣㈤㈥\㋹㋺㋻㋽㋾.txt" 
+
+; CJK compatibility Hx3300 - Hx3368 range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\㌀㌁㌂㌃㌄\㍤㍥㍦㍧㎓.txt" 
+
+; CJK Unified ideographs Hx4E00 – Hx4E75 range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\一丁丂七丄丅\乳乴乵乹乾乿.txt" 
+
+; CJK Unified ideographs Hx9F90 – HxFA2D range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\龐龑龒龔龕\飯飼館鶴.txt" 
+
+; Halfwidth and fullwidth forms HxFF41 – HxFFEE range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\ａｂｃｄｅｆ\￥￨￩￪￫￬￭￮.txt" 
+
+; Greek Hx0391 – Hx03AB range.
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\ΑΒΓΔΕΖ\ωϊϋόύώ.txt" 
+
+; Cyrillic Hx0410 – Hx042F range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\АБВГДЕЖ\ъыьэюя.txt" 
+
+
+; Hebrew Hx05D0 – Hx05F3 range.
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\אבגדהו\תװױײ׳.txt" 
+
+; Arabic Hx060C - Hx0652 range
+"\epoc32\winscw\c\tswi\utf8.txt"-"!:\Documents\،؛؟ءآأ\قكلمنهىيًٌٍَ.txt" 
+
+

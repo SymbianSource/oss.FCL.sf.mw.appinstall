@@ -1,0 +1,2 @@
+–z d:\romdrive /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/testfile1.sis
+

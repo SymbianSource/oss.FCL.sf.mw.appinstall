@@ -1,0 +1,31 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; An optional/add-on install package
+
+;Languages
+&EN,FR
+
+;Header
+#{"App add-on-EN", "App add-on-FR"}, (0x10000011), 1, 2, 3, TYPE=SO
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+;Dependencies
+(0x10000004), 1, 2, 3, {"Testall-EN", "Testall-FR"}
+
+;Display text files
+"text\textfilec.txt"-"", FT, TC

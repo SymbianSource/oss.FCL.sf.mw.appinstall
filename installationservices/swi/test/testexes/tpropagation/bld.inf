@@ -1,0 +1,28 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Component description file
+*
+*/
+
+
+PRJ_TESTMMPFILES
+tpropagationfile4.mmp
+modified_tpropagationfile4.mmp
+
+PRJ_TESTEXPORTS
+
+//// dummy files to be used for media propagation of SU signed stubs ////
+../osver.txt     z:/system/non_stubed_system.txt
+../osver.txt     z:/resources/non_stubed_resources.txt

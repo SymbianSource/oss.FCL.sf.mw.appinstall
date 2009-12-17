@@ -1,0 +1,85 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; testexpressions_version6.pkg
+;
+; Test PKG for the following CR1125 Test Cases:
+; SEC-SWI-PKGVER-B007 - Installing a SIS containing an EXISTS condition with arguments missing from the argument string
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_version6"}, (0xE000B006), 1, 0, 0,TYPE=SA
+
+%{"Symbian Software Limited"}
+:"Symbian Software Limited"
+
+
+; ---------------------------
+; Case A
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_a.txt";
+endif
+
+
+; ---------------------------
+; Case B
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_b.txt";
+endif
+
+
+; ---------------------------
+; Case C
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_c.txt";
+endif
+
+
+; ---------------------------
+; Case D
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_d.txt";
+endif
+
+
+; ---------------------------
+; Case E
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_e.txt";
+endif
+
+
+; ---------------------------
+; Case F
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,2,")
+	"files\option1.txt"-"c:\tswi\tpkgver\version6_case_f.txt";
+endif
+
+
+

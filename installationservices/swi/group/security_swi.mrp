@@ -1,0 +1,19 @@
+component	security_swi
+source	\sf\mw\appinstall\installationservices\swi\bwins
+source \sf\mw\appinstall\installationservices\swi\docs
+source \sf\mw\appinstall\installationservices\swi\eabi
+source \sf\mw\appinstall\installationservices\swi\group
+source \sf\mw\appinstall\installationservices\swi\inc
+source \sf\mw\appinstall\installationservices\swi\source
+source \sf\mw\appinstall\installationservices\swi\test
+binary	\sf\mw\appinstall\installationservices\swi\group	all
+exports	\sf\mw\appinstall\installationservices\swi\group
+
+
+notes_source	\component_defs\release.src
+
+
+ipr E 
+ipr T \sf\mw\appinstall\installationservices\swi\test
+
+

@@ -1,0 +1,14 @@
+; Create a .sis package with a pUID in protected range
+
+;Languages
+&EN
+
+; Use a pUID which is in the protected range,
+; i.e. one less than 0x80000000.
+
+#{"testprotpUID"},  (0x7F000001), 1, 2, 3, TYPE=SA
+
+%{"Test Package"}
+:"Unique Vendor Name"
+
+##FILES##

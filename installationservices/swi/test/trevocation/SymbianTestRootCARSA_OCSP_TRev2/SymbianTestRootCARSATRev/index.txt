@@ -1,0 +1,2 @@
+V	150510101843Z		01	unknown	/O=Symbian/CN=certTrev1
+R	150510101843Z	050512101953Z,keyCompromise	02	unknown	/O=Symbian/CN=certTrev2

@@ -1,0 +1,142 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; testexpressions_version5.pkg
+;
+; Test PKG for the following CR1125 Test Cases:
+; SEC-SWI-PKGVER-B006 - Installing a SIS containing an EXISTS condition with invalid data in the argument string
+; Additional Negative & Coverage Tests
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_version5"}, (0xE000B005), 1, 0, 0,TYPE=SA
+
+%{"Symbian Software Limited"}
+:"Symbian Software Limited"
+
+
+; ---------------------------
+; Case A
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?test,ET,4,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_case_a.txt";
+endif
+
+
+; ---------------------------
+; Case B
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,test,4,3,1")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_case_b.txt";
+endif
+
+
+; ---------------------------
+; Case C
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,test,3,1")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_case_c.txt";
+endif
+
+
+; ---------------------------
+; Case D
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,test,1")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_case_d.txt";
+endif
+
+
+; ---------------------------
+; Case E
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,test")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_case_e.txt";
+endif
+
+
+; ---------------------------
+; Invalid Package Uid
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE128SB8F,ET,4,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_a.txt";
+endif
+
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B,ET,4,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_b.txt";
+endif
+
+
+; ------------------------------------------------
+; Invalid Version Components - Negative Values
+; ------------------------------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,-2,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_c1.txt";
+endif
+
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,-2,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_c2.txt";
+endif
+
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,-2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_c3.txt";
+endif
+
+
+; ------------------------------------------------
+; Invalid Version Components - Out of Bound Values
+; ------------------------------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,128,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_d1.txt";
+endif
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,100,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_d2.txt";
+endif
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,32768")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_negative_d3.txt";
+endif
+
+
+; --------------------------------
+; Additional Conditional Coverage
+; --------------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,LE,4,2,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_cov1.txt";
+endif
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,LT,4,2,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_cov2.txt";
+endif
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,GT,3,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version5_cov3.txt";
+endif
+

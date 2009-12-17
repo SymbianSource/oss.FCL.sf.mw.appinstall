@@ -1,0 +1,88 @@
+# This is a configuration file for multiple signing a sis file
+# 
+# sisfile = File PATH of sisfile to be signed.
+# signedsis = ONLY the filename of the signed sis.
+# outputpath = if required path of signed sis file. (default path : epoc32/winscw/c/tswi/tsis/data/multiple_times)
+# addtoiby = true/false (Adds the entry to iby file)
+# cert = File PATH of the certificate
+# password = password for the private key (if any)
+# key = File PATH of the private key of the certificate
+# 
+# The order of "cert", "password" and "key" should not be changed and 
+# Every "cert" should have its corresponding "key" statement
+# immediately after it.
+#
+
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain1.sis
+addtoiby = true
+cert = Root5CA\cert_chain_rsa_len3\chain_rsa_len3.cert.pem
+key = Root5CA\cert_chain_rsa_len3\rsa3.key
+cert = CertificatesNotInStore\chain_pool_cert.pem
+key = CertificatesNotInStore\pool_key.pem
+cert = CertificatesNotInStore\chain_ebook_cert.pem
+key = CertificatesNotInStore\ebook_key.pem
+[/SIGNING]
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain2.sis
+addtoiby = true
+cert = CertificatesNotInStore\chain_pool_cert.pem
+key = CertificatesNotInStore\pool_key.pem
+cert = Root5CA\cert_chain_rsa_len3\chain_rsa_len3.cert.pem
+key = Root5CA\cert_chain_rsa_len3\rsa3.key
+cert = CertificatesNotInStore\chain_ebook_cert.pem
+key = CertificatesNotInStore\ebook_key.pem
+[/SIGNING]
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain3.sis
+addtoiby = true
+cert = CertificatesNotInStore\chain_pool_cert.pem
+key = CertificatesNotInStore\pool_key.pem
+cert = CertificatesNotInStore\chain_ebook_cert.pem
+key = CertificatesNotInStore\ebook_key.pem
+cert = Root5CA\cert_chain_rsa_len3\chain_rsa_len3.cert.pem
+key = Root5CA\cert_chain_rsa_len3\rsa3.key
+[/SIGNING]
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain4.sis
+addtoiby = true
+cert = Root5CA\cert_chain_rsa_len1\chain_rsa_len1.cert.pem
+key = Root5CA\cert_chain_rsa_len1\rsa1.key
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+[/SIGNING]
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain5.sis
+addtoiby = true
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+cert = Root5CA\cert_chain_rsa_len1\chain_rsa_len1.cert.pem
+key = Root5CA\cert_chain_rsa_len1\rsa1.key
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+[/SIGNING]
+
+[SIGNING]
+sisfile = ..\tobesigned\testupgrade_base.sis
+signedsis = multichain6.sis
+addtoiby = true
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+cert = CertificatesNotInStore\selfsigned_cert.pem
+key = CertificatesNotInStore\selfsigned_key.pem
+cert = Root5CA\cert_chain_rsa_len1\chain_rsa_len1.cert.pem
+key = Root5CA\cert_chain_rsa_len1\rsa1.key
+[/SIGNING]
+

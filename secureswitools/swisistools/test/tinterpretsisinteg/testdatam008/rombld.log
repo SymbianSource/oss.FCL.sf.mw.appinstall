@@ -1,0 +1,2791 @@
+/*
+* Portions Copyright (c) 1996-2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+ROMBUILD - Rom builder V2.08 (Build 590)
+
+Creating Rom image rombld.img
+MemModel: 2
+ChunkSize: 00100000
+PageSize: 00001000
+Inserting 65536 bytes for RomPageInfo at ROM offset 0x000082f0
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ekern.exe 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_kaomap.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_dma.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ecust_tv.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_exmoncommon.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_exmondebug.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\evfp.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_power.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_i2c_master.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_menelaus.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_battery.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_serialno.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_gpioexpander.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_FPGA.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_spi1.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_exyin.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_lcd.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_splashscreen.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ekeyb.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_KEYPAD.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\ELOCD.LDD 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_medint.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_euart.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_esdrv.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_soundsc.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_medlfs.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ISPC.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_USBCC.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\usbc.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\EPBUSMMC.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\MEDMMC.PDD 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_MMC.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ecommdma.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\esound.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\esoundsc.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\pipelib.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\enet.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ethernet.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\minkda.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\exstart.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_NOWATCHDOG.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_medusii.pdd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\TrkDriver.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\rm_debug.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\rm_debug_svr.exe 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_reboot.ldd 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\drtaeabi.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\dfpaeabi_vfpv2.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\drtrvct2_2_vfpv2.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\dfprvct2_2_vfpv2.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\dfprvct2_2-thunk.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\scppnwdl.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_euser.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\RPIPE.DLL 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\ektran.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_hal.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_ekdata.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\efile.exe 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\efsrv.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\elocal.fsy 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\elffs.fsy 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\ecomp.fsy 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\erofs.fsy 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\_h4hrp_e32strt.exe 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\domainSrv.exe 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\domainCli.dll 
+		compression format:0x101f7afc 
+Loading E32Image file \epoc32\release\ARMV5\urel\domainPolicy.dll 
+		compression format:0x101f7afc 
+
+Variant 09080004, 45 Files:
+Primary      ekern.exe[09080004] DataSize=   d30 DataOffset=     0
+Variant      ecust.dll[09080004] DataSize=   140 DataOffset=   d30
+Extension   kaomap.dll[09080004] DataSize=   780 DataOffset=   e70
+Extension      dma.dll[09080004] DataSize=   bd0 DataOffset=  15f0
+Extension exmoncommon.dll[09080004] DataSize=  1070 DataOffset=  21c0
+Extension exmondebug.dll[09080004] DataSize=  8200 DataOffset=  3230
+Extension     evfp.dll[09080004] DataSize=     0 DataOffset=  b430
+Extension    power.dll[09080004] DataSize=   4c0 DataOffset=  b430
+Extension i2c_master.dll[09080004] DataSize=    10 DataOffset=  b8f0
+Extension menelaus.DLL[09080004] DataSize=    10 DataOffset=  b900
+Extension  battery.DLL[09080004] DataSize=     0 DataOffset=  b910
+Extension serialno.DLL[09080004] DataSize=     0 DataOffset=  b910
+Extension gpioexpander.dll[09080004] DataSize=    10 DataOffset=  b910
+Extension     FPGA.DLL[09080004] DataSize=     0 DataOffset=  b920
+Extension     spi1.dll[09080004] DataSize=    10 DataOffset=  b920
+Extension    exyin.dll[09080004] DataSize=     0 DataOffset=  b930
+Extension      lcd.dll[09080004] DataSize=    10 DataOffset=  b930
+Extension splashscreen.dll[09080004] DataSize=     0 DataOffset=  b940
+Extension eps2keyb.dll[09080004] DataSize=     0 DataOffset=  b940
+Extension   KEYPAD.DLL[09080004] DataSize=     0 DataOffset=  b940
+Extension    ELOCD.LDD[09080004] DataSize=   120 DataOffset=  b940
+Extension   medint.pdd[09080004] DataSize=     0 DataOffset=  ba60
+Extension   MEDLFS.PDD[09080004] DataSize=    30 DataOffset=  ba60
+Extension     ISPC.DLL[09080004] DataSize=    30 DataOffset=  ba90
+Extension    USBCC.DLL[09080004] DataSize= 10b40 DataOffset=  bac0
+Extension   EPBUSM.DLL[09080004] DataSize=    30 DataOffset= 1c600
+Extension   MEDMMC.PDD[09080004] DataSize=     0 DataOffset= 1c630
+Extension      MMC.DLL[09080004] DataSize=     0 DataOffset= 1c630
+Extension  exstart.dll[09080004] DataSize=    20 DataOffset= 1c630
+Extension WATCHDOG.DLL[09080004] DataSize=    10 DataOffset= 1c650
+Extension  mednand.pdd[09080004] DataSize=   ce0 DataOffset= 1c660
+Extension TrkDriver.ldd[09080004] DataSize=     0 DataOffset= 1d340
+Extension rm_debug.ldd[09080004] DataSize=   830 DataOffset= 1d340
+Device      euart1.pdd[09080004] DataSize=     0 DataOffset= 1db70
+Device       esdrv.pdd[09080004] DataSize=     0 DataOffset= 1db70
+Device     soundsc.pdd[09080004] DataSize=     0 DataOffset= 1db70
+Device       eusbc.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device       ecomm.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device      esound.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device    esoundsc.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device     pipelib.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device        enet.ldd[09080004] DataSize=     0 DataOffset= 1db70
+Device    ethernet.pdd[09080004] DataSize=    10 DataOffset= 1db70
+Device      minkda.ldd[09080004] DataSize=     0 DataOffset= 1db80
+Device      reboot.ldd[09080004] DataSize=     0 DataOffset= 1db80
+
+Total SvData size= 1db80
+
+Building dependence graph.
+
+Sorting files to paged/unpaged.
+Unpaged file ekern.exe
+Unpaged file kaomap.dll
+Unpaged file dma.dll
+Unpaged file ecust.dll
+Unpaged file exmoncommon.dll
+Unpaged file exmondebug.dll
+Unpaged file evfp.dll
+Unpaged file power.dll
+Unpaged file i2c_master.dll
+Unpaged file menelaus.DLL
+Unpaged file battery.DLL
+Unpaged file serialno.DLL
+Unpaged file gpioexpander.dll
+Unpaged file FPGA.DLL
+Unpaged file spi1.dll
+Unpaged file exyin.dll
+Unpaged file lcd.dll
+Unpaged file splashscreen.dll
+Unpaged file eps2keyb.dll
+Unpaged file KEYPAD.DLL
+Unpaged file ELOCD.LDD
+Unpaged file medint.pdd
+Unpaged file euart1.pdd
+Unpaged file esdrv.pdd
+Unpaged file soundsc.pdd
+Unpaged file MEDLFS.PDD
+Unpaged file ISPC.DLL
+Unpaged file USBCC.DLL
+Unpaged file eusbc.ldd
+Unpaged file EPBUSM.DLL
+Unpaged file MEDMMC.PDD
+Unpaged file MMC.DLL
+Unpaged file ecomm.ldd
+Unpaged file esound.ldd
+Unpaged file esoundsc.ldd
+Unpaged file pipelib.ldd
+Unpaged file enet.ldd
+Unpaged file ethernet.pdd
+Unpaged file minkda.ldd
+Unpaged file exstart.dll
+Unpaged file WATCHDOG.DLL
+Unpaged file mednand.pdd
+Unpaged file TrkDriver.ldd
+Unpaged file rm_debug.ldd
+Unpaged file reboot.ldd
+Unpaged file DRTAEABI.dll
+Unpaged file DFPAEABI.dll
+Unpaged file DRTRVCT2_2.dll
+Unpaged file DFPRVCT2_2.dll
+Unpaged file dfprvct2_2-thunk.dll
+Unpaged file SCPPNWDL.dll
+Unpaged file EUser.dll
+Unpaged file EKData.dll
+Unpaged file efile.exe
+Unpaged file EFSrv.dll
+Unpaged file ELocal.fsy
+Unpaged file ELffs.fsy
+Unpaged file ecomp.fsy
+Unpaged file erofs.fsy
+Unpaged file EStart.exe
+Unpaged file domainSrv.exe
+Unpaged file domainCli.dll
+Unpaged file domainPolicy.dll
+
+Executable not exception aware: ekern.exe
+Executable not exception aware: kaomap.dll
+Executable not exception aware: dma.dll
+Executable not exception aware: ecust.dll
+Executable not exception aware: exmoncommon.dll
+Executable not exception aware: exmondebug.dll
+Executable not exception aware: evfp.dll
+Executable not exception aware: power.dll
+Executable not exception aware: i2c_master.dll
+Executable not exception aware: menelaus.DLL
+Executable not exception aware: battery.DLL
+Executable not exception aware: serialno.DLL
+Executable not exception aware: gpioexpander.dll
+Executable not exception aware: FPGA.DLL
+Executable not exception aware: spi1.dll
+Executable not exception aware: exyin.dll
+Executable not exception aware: lcd.dll
+Executable not exception aware: splashscreen.dll
+Executable not exception aware: eps2keyb.dll
+Executable not exception aware: KEYPAD.DLL
+Executable not exception aware: ELOCD.LDD
+Executable not exception aware: medint.pdd
+Executable not exception aware: euart1.pdd
+Executable not exception aware: esdrv.pdd
+Executable not exception aware: soundsc.pdd
+Executable not exception aware: MEDLFS.PDD
+Executable not exception aware: ISPC.DLL
+Executable not exception aware: USBCC.DLL
+Executable not exception aware: eusbc.ldd
+Executable not exception aware: EPBUSM.DLL
+Executable not exception aware: MEDMMC.PDD
+Executable not exception aware: MMC.DLL
+Executable not exception aware: ecomm.ldd
+Executable not exception aware: esound.ldd
+Executable not exception aware: esoundsc.ldd
+Executable not exception aware: pipelib.ldd
+Executable not exception aware: enet.ldd
+Executable not exception aware: ethernet.pdd
+Executable not exception aware: minkda.ldd
+Executable not exception aware: exstart.dll
+Executable not exception aware: WATCHDOG.DLL
+Executable not exception aware: mednand.pdd
+Executable not exception aware: TrkDriver.ldd
+Executable not exception aware: rm_debug.ldd
+Executable not exception aware: reboot.ldd
+
+Calculating kernel limit.
+
+Calculating data addresses.
+
+Code Align to 8001c000.  Skipped 12696 bytes
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ekern.exe
+[Primary]
+Load Address:            8001bf88
+Size:                    0003d708
+Uids:                    1000007a 1000008b 100041af 6bf50df9
+Entry point:             8001c110
+Code start addr:         8001c000
+Data start addr:         800594e8
+DataBssLinearBase:       c8000000
+Text size:               0003d4e8
+Code size:               0003d4e8
+Data size:               00000220
+BssSize:                 00000b08
+Total data size:         00000d28
+Heap min:                00001000
+Heap max:                00fff000
+Stack size:              00001000
+Dll ref table:           00000000
+Export directory:        80058710
+Export dir count:        00000376
+Hardware variant:        09080004
+Flags:                   8500012a
+Secure ID:               100041af
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\ekern.exe
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_kaomap.dll
+Load Address:            80059710
+Size:                    00003554
+Uids:                    10000079 1000008d 100000b9 55084d55
+Entry point:             80059788
+Code start addr:         80059788
+Data start addr:         8005ccb4
+DataBssLinearBase:       c8000e70
+Text size:               0000352c
+Code size:               0000352c
+Data size:               00000020
+BssSize:                 00000760
+Total data size:         00000780
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8005ccd4
+Export directory:        8005c9e8
+Export dir count:        000000b3
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100000b9
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\kaomap.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_dma.dll
+Load Address:            8005cce0
+Size:                    00001a00
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             8005cd58
+Code start addr:         8005cd58
+Data start addr:         8005e748
+DataBssLinearBase:       c80015f0
+Text size:               000019f0
+Code size:               000019f0
+Data size:               00000008
+BssSize:                 00000bbc
+Total data size:         00000bc4
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8005e750
+Export directory:        8005e6d4
+Export dir count:        0000001d
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\dma.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ecust_tv.dll
+Load Address:            8005e760
+Size:                    0000163c
+Uids:                    10000079 1000008d 100039e8 ea0570db
+Entry point:             8005e7d8
+Code start addr:         8005e7d8
+Data start addr:         8005fdb0
+DataBssLinearBase:       c8000d30
+Text size:               000015d8
+Code size:               000015d8
+Data size:               0000005c
+BssSize:                 000000dc
+Total data size:         00000138
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8005fe0c
+Export directory:        8005fd78
+Export dir count:        0000000e
+Hardware variant:        09080004
+Flags:                   4180012b
+Secure ID:               100039e8
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ecust.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_exmoncommon.dll
+Load Address:            8005fe20
+Size:                    00003bec
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             8005fe98
+Code start addr:         8005fe98
+Data start addr:         80063a78
+DataBssLinearBase:       c80021c0
+Text size:               00003be0
+Code size:               00003be0
+Data size:               00000004
+BssSize:                 00001064
+Total data size:         00001068
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80063a7c
+Export directory:        800639e8
+Export dir count:        00000024
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\exmoncommon.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_exmondebug.dll
+Load Address:            80063a90
+Size:                    00005e30
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             80063b08
+Code start addr:         80063b08
+Data start addr:         800698e4
+DataBssLinearBase:       c8003230
+Text size:               00005ddc
+Code size:               00005ddc
+Data size:               0000004c
+BssSize:                 000081b4
+Total data size:         00008200
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80069930
+Export directory:        80063a6c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\exmondebug.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\evfp.dll
+Load Address:            80069940
+Size:                    00004540
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800699b8
+Code start addr:         800699b8
+Data start addr:         00000000
+DataBssLinearBase:       c800b430
+Text size:               00004538
+Code size:               00004538
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8006def0
+Export directory:        8006991c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               00000000
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\evfp.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_power.dll
+Load Address:            8006df00
+Size:                    00006cf0
+Uids:                    10000079 1000008d 100039e8 ea0570db
+Entry point:             8006df78
+Code start addr:         8006df78
+Data start addr:         80074c40
+DataBssLinearBase:       c800b430
+Text size:               00006cc8
+Code size:               00006cc8
+Data size:               00000020
+BssSize:                 000004a0
+Total data size:         000004c0
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80074c60
+Export directory:        80074ad4
+Export dir count:        0000005b
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e8
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\power.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_i2c_master.dll
+Load Address:            80074c70
+Size:                    00000fd8
+Uids:                    10000079 1000008d 100039e9 ea0543ea
+Entry point:             80074ce8
+Code start addr:         80074ce8
+Data start addr:         80075cb4
+DataBssLinearBase:       c800b8f0
+Text size:               00000fcc
+Code size:               00000fcc
+Data size:               00000004
+BssSize:                 00000000
+Total data size:         00000004
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80075cb8
+Export directory:        80075c88
+Export dir count:        0000000b
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e9
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\i2c_master.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_menelaus.DLL
+Load Address:            80075cc0
+Size:                    00001bb4
+Uids:                    10000079 1000008d 100039eb ea052588
+Entry point:             80075d38
+Code start addr:         80075d38
+Data start addr:         800778d8
+DataBssLinearBase:       c800b900
+Text size:               00001ba0
+Code size:               00001ba0
+Data size:               0000000c
+BssSize:                 00000000
+Total data size:         0000000c
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800778e4
+Export directory:        800778bc
+Export dir count:        00000007
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039eb
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\menelaus.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_battery.DLL
+Load Address:            800778f0
+Size:                    000004fc
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             80077968
+Code start addr:         80077968
+Data start addr:         00000000
+DataBssLinearBase:       c800b910
+Text size:               000004f4
+Code size:               000004f4
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80077e5c
+Export directory:        800778cc
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\battery.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_serialno.DLL
+Load Address:            80077e70
+Size:                    00000318
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             80077ee8
+Code start addr:         80077ee8
+Data start addr:         00000000
+DataBssLinearBase:       c800b910
+Text size:               00000310
+Code size:               00000310
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800781f8
+Export directory:        80077e4c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\serialno.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_gpioexpander.dll
+Load Address:            80078200
+Size:                    00000990
+Uids:                    10000079 1000008d 100039eb ea052588
+Entry point:             80078278
+Code start addr:         80078278
+Data start addr:         80078bfc
+DataBssLinearBase:       c800b910
+Text size:               00000984
+Code size:               00000984
+Data size:               00000004
+BssSize:                 00000000
+Total data size:         00000004
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80078c00
+Export directory:        80078bec
+Export dir count:        00000004
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039eb
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\gpioexpander.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_FPGA.DLL
+Load Address:            80078c10
+Size:                    000000fc
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             80078c88
+Code start addr:         80078c88
+Data start addr:         00000000
+DataBssLinearBase:       c800b920
+Text size:               000000f4
+Code size:               000000f4
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80078d7c
+Export directory:        80078d60
+Export dir count:        00000007
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\FPGA.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_spi1.DLL
+Load Address:            80078d90
+Size:                    00002d74
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             80078e08
+Code start addr:         80078e08
+Data start addr:         8007bb6c
+DataBssLinearBase:       c800b920
+Text size:               00002d64
+Code size:               00002d64
+Data size:               00000008
+BssSize:                 00000000
+Total data size:         00000008
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8007bb74
+Export directory:        8007bb3c
+Export dir count:        0000000c
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\spi1.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_exyin.dll
+Load Address:            8007bb80
+Size:                    00001b70
+Uids:                    10000079 1000008d 100039ea ea0516b9
+Entry point:             8007bbf8
+Code start addr:         8007bbf8
+Data start addr:         00000000
+DataBssLinearBase:       c800b930
+Text size:               00001b68
+Code size:               00001b68
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8007d760
+Export directory:        8007bb5c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039ea
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\exyin.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_lcd.dll
+Load Address:            8007d770
+Size:                    000076d4
+Uids:                    10000079 1000008d 100039e8 ea0570db
+Entry point:             8007d7e8
+Code start addr:         8007d7e8
+Data start addr:         80084ea8
+DataBssLinearBase:       c800b930
+Text size:               000076c0
+Code size:               000076c0
+Data size:               0000000c
+BssSize:                 00000000
+Total data size:         0000000c
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80084eb4
+Export directory:        80084de0
+Export dir count:        00000032
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e8
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\lcd.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_splashscreen.dll
+Load Address:            80084ec0
+Size:                    00000178
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             80084f38
+Code start addr:         80084f38
+Data start addr:         00000000
+DataBssLinearBase:       c800b940
+Text size:               00000170
+Code size:               00000170
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800850a8
+Export directory:        800850a4
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\splashscreen.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ekeyb.dll
+Load Address:            800850b0
+Size:                    000006e8
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             80085128
+Code start addr:         80085128
+Data start addr:         00000000
+DataBssLinearBase:       c800b940
+Text size:               000006e0
+Code size:               000006e0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80085808
+Export directory:        8008508c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\eps2keyb.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_KEYPAD.DLL
+Load Address:            80085810
+Size:                    000010cc
+Uids:                    10000079 1000008d 100039eb ea052588
+Entry point:             80085888
+Code start addr:         80085888
+Data start addr:         00000000
+DataBssLinearBase:       c800b940
+Text size:               000010c4
+Code size:               000010c4
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8008694c
+Export directory:        8008693c
+Export dir count:        00000004
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039eb
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\KEYPAD.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\ELOCD.LDD
+Load Address:            80086960
+Size:                    00003eec
+Uids:                    10000079 100000af 100000c9 55089f2a
+Entry point:             800869d8
+Code start addr:         800869d8
+Data start addr:         8008a8a8
+DataBssLinearBase:       c800b940
+Text size:               00003ed0
+Code size:               00003ed0
+Data size:               00000014
+BssSize:                 00000100
+Total data size:         00000114
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8008a8bc
+Export directory:        8008a7b8
+Export dir count:        0000003c
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100000c9
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ELOCD.LDD
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_medint.pdd
+Load Address:            8008a8d0
+Size:                    00000880
+Uids:                    10000079 100039d0 100000d8 8a9639f3
+Entry point:             8008a948
+Code start addr:         8008a948
+Data start addr:         00000000
+DataBssLinearBase:       c800ba60
+Text size:               00000878
+Code size:               00000878
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8008b1c0
+Export directory:        8008b1bc
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100000d8
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\medint.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_euart.pdd
+Load Address:            8008b1d0
+Size:                    00005b48
+Uids:                    10000079 100039d0 1000015b b9a77738
+Entry point:             8008b248
+Code start addr:         8008b248
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               00005b40
+Code size:               00005b40
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80090d88
+Export directory:        80090d84
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               1000015b
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\euart1.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_esdrv.pdd
+Load Address:            80090d90
+Size:                    00002ec8
+Uids:                    10000079 100039d0 1000015c b9a7eeaf
+Entry point:             80090e08
+Code start addr:         80090e08
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               00002ec0
+Code size:               00002ec0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80093cc8
+Export directory:        80093cc4
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               1000015c
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\esdrv.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_soundsc.pdd
+Load Address:            80093cd0
+Size:                    00002ab0
+Uids:                    10000079 100039d0 1000015c b9a7eeaf
+Entry point:             80093d48
+Code start addr:         80093d48
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               00002aa8
+Code size:               00002aa8
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800967f0
+Export directory:        800967ec
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               1000015c
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\soundsc.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_medlfs.pdd
+Load Address:            80096800
+Size:                    00001ab0
+Uids:                    10000079 100039d0 00000000 98a7a57d
+Entry point:             80096878
+Code start addr:         80096878
+Data start addr:         00000000
+DataBssLinearBase:       c800ba60
+Text size:               00001aa8
+Code size:               00001aa8
+Data size:               00000000
+BssSize:                 0000002c
+Total data size:         0000002c
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80098320
+Export directory:        8009831c
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\MEDLFS.PDD
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ISPC.DLL
+Load Address:            80098330
+Size:                    00000e18
+Uids:                    10000079 100039d0 1000015f b9a7bbfc
+Entry point:             800983a8
+Code start addr:         800983a8
+Data start addr:         800991b4
+DataBssLinearBase:       c800ba90
+Text size:               00000e0c
+Code size:               00000e0c
+Data size:               00000004
+BssSize:                 0000002c
+Total data size:         00000030
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800991b8
+Export directory:        800991a0
+Export dir count:        00000005
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               1000015f
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ISPC.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_USBCC.DLL
+Load Address:            800991c0
+Size:                    0000e488
+Uids:                    10000079 100039d0 1000015f b9a7bbfc
+Entry point:             80099238
+Code start addr:         80099238
+Data start addr:         800a7414
+DataBssLinearBase:       c800bac0
+Text size:               0000e1dc
+Code size:               0000e1dc
+Data size:               000002a4
+BssSize:                 00010898
+Total data size:         00010b3c
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800a76b8
+Export directory:        800a72c4
+Export dir count:        00000054
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               1000015f
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\USBCC.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\usbc.ldd
+Load Address:            800a76c0
+Size:                    00004234
+Uids:                    10000079 100000af 101f8928 f4085f77
+Entry point:             800a7738
+Code start addr:         800a7738
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               0000422c
+Code size:               0000422c
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800ab964
+Export directory:        800ab960
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               101f8928
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\eusbc.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\EPBUSMMC.DLL
+Load Address:            800ab970
+Size:                    0000a76c
+Uids:                    10000079 1000008d 10004087 58c46bcf
+Entry point:             800ab9e8
+Code start addr:         800ab9e8
+Data start addr:         00000000
+DataBssLinearBase:       c801c600
+Text size:               0000a764
+Code size:               0000a764
+Data size:               00000000
+BssSize:                 00000030
+Total data size:         00000030
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800b614c
+Export directory:        800b5f54
+Export dir count:        0000007e
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               10004087
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\EPBUSM.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\MEDMMC.PDD
+Load Address:            800b6160
+Size:                    0000381c
+Uids:                    10000079 100039d0 100000d9 8a960ac2
+Entry point:             800b61d8
+Code start addr:         800b61d8
+Data start addr:         00000000
+DataBssLinearBase:       c801c630
+Text size:               00003814
+Code size:               00003814
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800b99ec
+Export directory:        800b99e8
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100000d9
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\MEDMMC.PDD
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_MMC.DLL
+Load Address:            800b9a00
+Size:                    00003bf4
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800b9a78
+Code start addr:         800b9a78
+Data start addr:         00000000
+DataBssLinearBase:       c801c630
+Text size:               00003bec
+Code size:               00003bec
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800bd664
+Export directory:        800bd604
+Export dir count:        00000018
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\MMC.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ecommdma.ldd
+Load Address:            800bd670
+Size:                    000031e8
+Uids:                    10000079 100000af 100000c9 55089f2a
+Entry point:             800bd6e8
+Code start addr:         800bd6e8
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               000031e0
+Code size:               000031e0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c08c8
+Export directory:        800c08c4
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               100000c9
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ecomm.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\esound.ldd
+Load Address:            800c08d0
+Size:                    000012c8
+Uids:                    10000079 100000af 100000cb 5508f948
+Entry point:             800c0948
+Code start addr:         800c0948
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               000012c0
+Code size:               000012c0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c1c08
+Export directory:        800c1c04
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               100000cb
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\esound.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\esoundsc.ldd
+Load Address:            800c1c10
+Size:                    00002f64
+Uids:                    10000079 100000af 100000cb 5508f948
+Entry point:             800c1c88
+Code start addr:         800c1c88
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               00002f5c
+Code size:               00002f5c
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c4be4
+Export directory:        800c4be0
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               100000cb
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\esoundsc.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\pipelib.ldd
+Load Address:            800c4bf0
+Size:                    00001b54
+Uids:                    10000079 100000af 00000000 473933e6
+Entry point:             800c4c68
+Code start addr:         800c4c68
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               00001b4c
+Code size:               00001b4c
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c67b4
+Export directory:        800c67b0
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\pipelib.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\enet.ldd
+Load Address:            800c67c0
+Size:                    000011b0
+Uids:                    10000079 100000af 00000000 473933e6
+Entry point:             800c6838
+Code start addr:         800c6838
+Data start addr:         00000000
+DataBssLinearBase:       c801db70
+Text size:               000011a8
+Code size:               000011a8
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c79e0
+Export directory:        800c79dc
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\enet.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ethernet.pdd
+Load Address:            800c79f0
+Size:                    000010f8
+Uids:                    10000079 100039d0 1000015c b9a7eeaf
+Entry point:             800c7a68
+Code start addr:         800c7a68
+Data start addr:         800c8b54
+DataBssLinearBase:       c801db70
+Text size:               000010ec
+Code size:               000010ec
+Data size:               00000004
+BssSize:                 00000000
+Total data size:         00000004
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c8b58
+Export directory:        800c8b50
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1780012b
+Secure ID:               1000015c
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ethernet.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\minkda.ldd
+Load Address:            800c8b60
+Size:                    00000de0
+Uids:                    10000079 100000af 00000000 473933e6
+Entry point:             800c8bd8
+Code start addr:         800c8bd8
+Data start addr:         00000000
+DataBssLinearBase:       c801db80
+Text size:               00000dd8
+Code size:               00000dd8
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c99b0
+Export directory:        800c99ac
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\minkda.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\exstart.dll
+Load Address:            800c99c0
+Size:                    000002a0
+Uids:                    10000079 1000008d 10004087 58c46bcf
+Entry point:             800c9a38
+Code start addr:         800c9a38
+Data start addr:         00000000
+DataBssLinearBase:       c801c630
+Text size:               00000298
+Code size:               00000298
+Data size:               00000000
+BssSize:                 00000018
+Total data size:         00000018
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800c9cd0
+Export directory:        800c999c
+Export dir count:        00000000
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               10004087
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\exstart.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_NOWATCHDOG.DLL
+Load Address:            800c9ce0
+Size:                    000006e0
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             800c9d58
+Code start addr:         800c9d58
+Data start addr:         800ca42c
+DataBssLinearBase:       c801c650
+Text size:               000006d4
+Code size:               000006d4
+Data size:               00000004
+BssSize:                 00000000
+Total data size:         00000004
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800ca430
+Export directory:        800ca418
+Export dir count:        00000005
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\WATCHDOG.DLL
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_medusii.pdd
+Load Address:            800ca440
+Size:                    0000e9c4
+Uids:                    10000079 100039d0 101f9bcf 4e8740c9
+Entry point:             800ca4b8
+Code start addr:         800ca4b8
+Data start addr:         800d8ab8
+DataBssLinearBase:       c801c660
+Text size:               0000e600
+Code size:               0000e600
+Data size:               000003bc
+BssSize:                 00000920
+Total data size:         00000cdc
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800d8e74
+Export directory:        800d8ab4
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               101f9bcf
+Vendor ID:               00000000
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\mednand.pdd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\TrkDriver.ldd
+Load Address:            800d8e80
+Size:                    0000416c
+Uids:                    10000079 100000af 101f7157 6e604710
+Entry point:             800d8ef8
+Code start addr:         800d8ef8
+Data start addr:         00000000
+DataBssLinearBase:       c801d340
+Text size:               00004164
+Code size:               00004164
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800dd05c
+Export directory:        800dd058
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               101f7157
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\TrkDriver.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\rm_debug.ldd
+Load Address:            800dd070
+Size:                    000083c4
+Uids:                    10000079 100000af 101f7157 6e604710
+Entry point:             800dd0e8
+Code start addr:         800dd0e8
+Data start addr:         800e54a0
+DataBssLinearBase:       c801d340
+Text size:               000083b8
+Code size:               000083b8
+Data size:               00000004
+BssSize:                 00000820
+Total data size:         00000824
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800e54a4
+Export directory:        800e549c
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   2180012b
+Secure ID:               101f7157
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\rm_debug.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_reboot.ldd
+Load Address:            800e54b0
+Size:                    000005d8
+Uids:                    10000079 100000af 00000000 473933e6
+Entry point:             800e5528
+Code start addr:         800e5528
+Data start addr:         00000000
+DataBssLinearBase:       c801db80
+Text size:               000005d0
+Code size:               000005d0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           800e5af8
+Export directory:        800e5af4
+Export dir count:        00000001
+Hardware variant:        09080004
+Flags:                   1180012b
+Secure ID:               00000000
+Vendor ID:               00000000
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\reboot.ldd
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\drtaeabi.dll
+Load Address:            800e5b00
+Size:                    000038d0
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800e5b78
+Code start addr:         800e5b78
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               000038d0
+Code size:               000038d0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800e90d4
+Export dir count:        000000dd
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800e5b8c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\DRTAEABI.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\dfpaeabi_vfpv2.dll
+Load Address:            800e9450
+Size:                    0000173c
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800e94c8
+Code start addr:         800e94c8
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               0000173c
+Code size:               0000173c
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800eab44
+Export dir count:        00000030
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800e94dc
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\DFPAEABI.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\drtrvct2_2_vfpv2.dll
+Load Address:            800eac10
+Size:                    00001c04
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800eac88
+Code start addr:         800eac88
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00001c04
+Code size:               00001c04
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800ec728
+Export dir count:        00000059
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800eac9c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\DRTRVCT2_2.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\dfprvct2_2_vfpv2.dll
+Load Address:            800ec890
+Size:                    00001ddc
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800ec908
+Code start addr:         800ec908
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00001ddc
+Code size:               00001ddc
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800ee644
+Export dir count:        00000028
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800ec91c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\DFPRVCT2_2.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\dfprvct2_2-thunk.dll
+Load Address:            800ee6f0
+Size:                    00000160
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800ee768
+Code start addr:         800ee768
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000160
+Code size:               00000160
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800ee8a8
+Export dir count:        00000008
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800ee77c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\dfprvct2_2-thunk.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\scppnwdl.dll
+Load Address:            800ee8d0
+Size:                    00000140
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             800ee948
+Code start addr:         800ee948
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000140
+Code size:               00000140
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        800eea64
+Export dir count:        00000009
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    800ee95c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\SCPPNWDL.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_euser.dll
+Load Address:            800eea90
+Size:                    000369a4
+Uids:                    10000079 1000008d 100039e5 ea050687
+Entry point:             800eeb08
+Code start addr:         800eeb08
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               000369a4
+Code size:               000369a4
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        801231b4
+Export dir count:        000008be
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               100039e5
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    800eeb1c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\EUser.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_ekdata.dll
+Load Address:            801254b0
+Size:                    00000c40
+Uids:                    10000079 1000008d 100039e0 ea05f972
+Entry point:             80125528
+Code start addr:         80125528
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000c40
+Code size:               00000c40
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        8012615c
+Export dir count:        00000003
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               100039e0
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8012553c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\EKData.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\efile.exe
+[Secondary]
+Load Address:            80126170
+Size:                    000258b0
+Uids:                    1000007a 1000008c 100039e3 ea051475
+Entry point:             801261e8
+Code start addr:         801261e8
+Data start addr:         8014b968
+DataBssLinearBase:       00400000
+Text size:               00025780
+Code size:               00025780
+Data size:               00000130
+BssSize:                 00002348
+Total data size:         00002478
+Heap min:                00001000
+Heap max:                01000000
+Stack size:              00004000
+Dll ref table:           00000000
+Export directory:        8014b638
+Export dir count:        000000cc
+Hardware variant:        01000000
+Flags:                   0d00012a
+Secure ID:               100039e3
+Vendor ID:               70000001
+Capability:              00000000 00001b07
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    80126244
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\efile.exe
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\efsrv.dll
+Load Address:            8014baa0
+Size:                    00007ef8
+Uids:                    10000079 1000008d 100039e4 ea0535b6
+Entry point:             8014bb18
+Code start addr:         8014bb18
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00007ef8
+Code size:               00007ef8
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80153490
+Export dir count:        00000160
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               100039e4
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8014bb2c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\EFSrv.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\elocal.fsy
+Load Address:            80153a10
+Size:                    0000bf5c
+Uids:                    10000079 100039df 100000d6 8a96ce12
+Entry point:             80153a88
+Code start addr:         80153a88
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               0000bf54
+Code size:               0000bf54
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8015f9dc
+Export directory:        8015f9d8
+Export dir count:        00000001
+Hardware variant:        01000000
+Flags:                   0180012b
+Secure ID:               100000d6
+Vendor ID:               70000001
+Capability:              00000000 00001b07
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    80153a9c
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ELocal.fsy
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\elffs.fsy
+Load Address:            8015f9f0
+Size:                    0000d9a8
+Uids:                    10000079 100039df 100000d6 8a96ce12
+Entry point:             8015fa68
+Code start addr:         8015fa68
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               0000d9a0
+Code size:               0000d9a0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8016d408
+Export directory:        8016d404
+Export dir count:        00000001
+Hardware variant:        01000000
+Flags:                   0180012b
+Secure ID:               100000d6
+Vendor ID:               70000001
+Capability:              00000000 00001b07
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8015fa7c
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ELffs.fsy
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\ecomp.fsy
+Load Address:            8016d410
+Size:                    000015c0
+Uids:                    10000079 100039df 100000d6 8a96ce12
+Entry point:             8016d488
+Code start addr:         8016d488
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               000015b8
+Code size:               000015b8
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           8016ea40
+Export directory:        8016ea3c
+Export dir count:        00000001
+Hardware variant:        01000000
+Flags:                   0180012b
+Secure ID:               100000d6
+Vendor ID:               70000001
+Capability:              00000000 00001b07
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8016d49c
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\ecomp.fsy
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\erofs.fsy
+Load Address:            8016ea50
+Size:                    00002514
+Uids:                    10000079 100039df 100000d6 8a96ce12
+Entry point:             8016eac8
+Code start addr:         8016eac8
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               0000250c
+Code size:               0000250c
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           80170fd4
+Export directory:        80170fd0
+Export dir count:        00000001
+Hardware variant:        01000000
+Flags:                   0180012b
+Secure ID:               100000d6
+Vendor ID:               70000001
+Capability:              00000000 00001b07
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8016eadc
+Priority:                350
+Dll ref table size:      00000008
+Compression:             00000000
+Device file name:        Sys\Bin\erofs.fsy
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_e32strt.exe
+Load Address:            80170fe0
+Size:                    000029d4
+Uids:                    1000007a 00000000 10272c04 55e05bdf
+Entry point:             80171058
+Code start addr:         80171058
+Data start addr:         80173a1c
+DataBssLinearBase:       00400000
+Text size:               000029c4
+Code size:               000029c4
+Data size:               00000010
+BssSize:                 00000000
+Total data size:         00000010
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80170fbc
+Export dir count:        00000000
+Hardware variant:        01000000
+Flags:                   0500012a
+Secure ID:               10272c04
+Vendor ID:               70000001
+Capability:              00000000 00001b25
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    801710b4
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\EStart.exe
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\domainSrv.exe
+Load Address:            80173a30
+Size:                    00001f18
+Uids:                    1000007a 00000000 1020e406 ca1d4d5a
+Entry point:             80173aa8
+Code start addr:         80173aa8
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00001f18
+Code size:               00001f18
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80173a0c
+Export dir count:        00000000
+Hardware variant:        01000000
+Flags:                   0000012a
+Secure ID:               1020e406
+Vendor ID:               70000001
+Capability:              00000000 00001304
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    80173b04
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\domainSrv.exe
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\domainCli.dll
+Load Address:            801759c0
+Size:                    00000ea4
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             80175a38
+Code start addr:         80175a38
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000ea4
+Code size:               00000ea4
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80176800
+Export dir count:        00000037
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    80175a4c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\domainCli.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\domainPolicy.dll
+Load Address:            801768e0
+Size:                    00000140
+Uids:                    10000079 00000000 00000000 045a0d7e
+Entry point:             80176958
+Code start addr:         80176958
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000140
+Code size:               00000140
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80176a8c
+Export dir count:        00000003
+Hardware variant:        01000000
+Flags:                   0000012b
+Secure ID:               00000000
+Vendor ID:               70000001
+Capability:              00000000 00001304
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    8017696c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\domainPolicy.dll
+
+
+********************************************************************
+Reading resource \epoc32\rom\h4hrp\unistore2\ESTARTNANDCOMP.TXT to rom linear address 80176aa0
+Size:                    00000179
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\rm_debug_svr.exe
+Load Address:            80176c20
+Size:                    000037d0
+Uids:                    1000007a 100039ce 102834e2 43c701da
+Entry point:             80176c98
+Code start addr:         80176c98
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               000037d0
+Code size:               000037d0
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        80176bfc
+Export dir count:        00000000
+Hardware variant:        01000000
+Flags:                   0000022a
+Secure ID:               102834e2
+Vendor ID:               70000001
+Capability:              00000000 00001800
+Tools Version:           2.00(507)
+Module Version:          10.0
+Exception Descriptor:    80176cf4
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\rm_debug_svr.exe
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\RPIPE.DLL
+Load Address:            8017a470
+Size:                    00000b48
+Uids:                    10000079 1000008d 102827d5 ca79a678
+Entry point:             8017a4e8
+Code start addr:         8017a4e8
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000b48
+Code size:               00000b48
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        8017afcc
+Export dir count:        00000019
+Hardware variant:        01000000
+Flags:                   0000022b
+Secure ID:               102827d5
+Vendor ID:               00000000
+Capability:              00000000 000ffffe
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8017a4fc
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\rpipe.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\ektran.dll
+Load Address:            8017b030
+Size:                    00000f18
+Uids:                    10000079 1000008d 100039e1 ea05ca43
+Entry point:             8017b0a8
+Code start addr:         8017b0a8
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00000f18
+Code size:               00000f18
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        8017bf80
+Export dir count:        00000010
+Hardware variant:        01000000
+Flags:                   0000022b
+Secure ID:               100039e1
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8017b0bc
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\EKTran.dll
+
+
+********************************************************************
+Processing file \epoc32\release\ARMV5\urel\_h4hrp_hal.dll
+Load Address:            8017bfc0
+Size:                    00001208
+Uids:                    10000079 1000008d 100039e8 ea0570db
+Entry point:             8017c038
+Code start addr:         8017c038
+Data start addr:         00000000
+DataBssLinearBase:       00400000
+Text size:               00001208
+Code size:               00001208
+Data size:               00000000
+BssSize:                 00000000
+Total data size:         00000000
+Heap min:                00001000
+Heap max:                00100000
+Stack size:              00002000
+Dll ref table:           00000000
+Export directory:        8017d22c
+Export dir count:        00000005
+Hardware variant:        01000000
+Flags:                   0000022b
+Secure ID:               100039e8
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    8017c04c
+Priority:                350
+Dll ref table size:      00000000
+Compression:             00000000
+Device file name:        Sys\Bin\Hal.dll
+
+
+********************************************************************
+Reading resource \epoc32\data\Z\Resource\Fonts\eon14.gdr to rom linear address 8017d240
+Size:                    00001acb
+Sorting Rom Exception Table.
+
+Resolving Dll reference tables.
+Resolving Imports.
+
+0017ed10 of 02000000 bytes used.
+
+Compressing pages...
+.
+99.37%
+
+
+Development configuration settings:
+TraceMask[0]:            80000000
+TraceMask[1]:            00000000
+TraceMask[2]:            00000000
+TraceMask[3]:            00000000
+TraceMask[4]:            00000000
+TraceMask[5]:            00000000
+TraceMask[6]:            00000000
+TraceMask[7]:            00000000
+BTrace[0]:            00000000
+BTrace[1]:            00000000
+BTrace[2]:            00000000
+BTrace[3]:            00000000
+BTrace[4]:            00000000
+BTrace[5]:            00000000
+BTrace[6]:            00000000
+BTrace[7]:            00000000
+BTraceMode:           00000000
+BTraceBuffer:         00000000
+DebugPort:               00000001
+KernelConfigFlags:       0000007e
+PlatSecDiagnostics:      ON
+PlatSecEnforcement:      ON
+PlatSecProcessIsolation: ON
+PlatSecEnforceSysBin:    ON
+PagingPolicy:            DefaultPaged
+PlatSecDisabledCaps:     SwEvent 
+
+
+Rom details:
+Version 0.01(000)
+Hardware version:        00000000
+Language Support:        0000000000000000
+Linear base address:     80000000
+Size:                    00200000
+Root directory list:     80018350
+Kernel data address:     c8000000
+Kernel limit:            c9100000
+Primary file address:    80018360
+Secondary file address:  80018b30
+First variant address:   800183b4
+First extension address: 8001837c
+Pageable ROM offset:     00177000
+Pageable ROM size:       00007d10
+ROM page index offset:   000082f0
+Demand Paging Config:    minPages=256 maxPages=512 ageRatio=3 spare[0..2]=0,0,0 
+Checksum word:           8197d31d
+TotalSvDataSize:         0001db80
+User data address:       40000000
+TotalUserDataSize:       00000000
+Relocation Info Address: 00000000
+
+Root directories:
+Directory  0 09080004 80018db0
+Rom 32bit words sum to   12345678
+Rom 8bit checksum        114faa1b
+Rom 8bit odd checksum    09db681d
+Rom 8bit even checksum   077441fe
+
+Primary details (Multiple Kernels):
+
+Kernel 1:
+Uids:                    1000007a 1000008b 100041af 6bf50df9
+Entry point:             8001c110
+Code start addr:         8001c000
+Data start addr:         800594e8
+DataBssLinearBase:       c8000000
+Text size:               0003d4e8
+Code size:               0003d4e8
+Data size:               00000220
+BssSize:                 00000b08
+Total data size:         00000d28
+Heap min:                00001000
+Heap max:                00fff000
+Stack size:              00001000
+Dll ref table:           00000000
+Export directory:        80058710
+Export dir count:        00000376
+Hardware variant:        09080004
+Flags:                   8500012a
+Secure ID:               100041af
+Vendor ID:               70000001
+Capability:              00000000 000fffff
+Tools Version:           2.00(508)
+Module Version:          10.0
+Exception Descriptor:    00000000
+Priority:                350
+
+Summary of file sizes in rom:
+Overhead (bootstrap+gaps+sectioning)	112144
+Overhead (directory size)	2712
+\epoc32\release\ARMV5\urel\_h4hrp_ekern.exe	251776
+\epoc32\release\ARMV5\urel\_h4hrp_kaomap.dll	13772
+\epoc32\release\ARMV5\urel\_h4hrp_dma.dll	6776
+\epoc32\release\ARMV5\urel\_h4hrp_ecust_tv.dll	5812
+\epoc32\release\ARMV5\urel\_h4hrp_exmoncommon.dll	15460
+\epoc32\release\ARMV5\urel\_h4hrp_exmondebug.dll	24232
+\epoc32\release\ARMV5\urel\evfp.dll	17848
+\epoc32\release\ARMV5\urel\_h4hrp_power.dll	28008
+\epoc32\release\ARMV5\urel\_h4hrp_i2c_master.dll	4176
+\epoc32\release\ARMV5\urel\_h4hrp_menelaus.DLL	7212
+\epoc32\release\ARMV5\urel\_h4hrp_battery.DLL	1396
+\epoc32\release\ARMV5\urel\_h4hrp_serialno.DLL	912
+\epoc32\release\ARMV5\urel\_h4hrp_gpioexpander.dll	2568
+\epoc32\release\ARMV5\urel\_h4hrp_FPGA.DLL	372
+\epoc32\release\ARMV5\urel\_h4hrp_spi1.DLL	11756
+\epoc32\release\ARMV5\urel\_h4hrp_exyin.dll	7144
+\epoc32\release\ARMV5\urel\_h4hrp_lcd.dll	30540
+\epoc32\release\ARMV5\urel\_h4hrp_splashscreen.dll	496
+\epoc32\release\ARMV5\urel\_h4hrp_ekeyb.dll	1888
+\epoc32\release\ARMV5\urel\_h4hrp_KEYPAD.DLL	4420
+\epoc32\release\ARMV5\urel\ELOCD.LDD	16228
+\epoc32\release\ARMV5\urel\_h4hrp_medint.pdd	2296
+\epoc32\release\ARMV5\urel\_h4hrp_euart.pdd	23488
+\epoc32\release\ARMV5\urel\_h4hrp_esdrv.pdd	12096
+\epoc32\release\ARMV5\urel\_h4hrp_soundsc.pdd	11048
+\epoc32\release\ARMV5\urel\_h4hrp_medlfs.pdd	6952
+\epoc32\release\ARMV5\urel\_h4hrp_ISPC.DLL	3728
+\epoc32\release\ARMV5\urel\_h4hrp_USBCC.DLL	58624
+\epoc32\release\ARMV5\urel\usbc.ldd	17068
+\epoc32\release\ARMV5\urel\EPBUSMMC.DLL	42980
+\epoc32\release\ARMV5\urel\MEDMMC.PDD	14484
+\epoc32\release\ARMV5\urel\_h4hrp_MMC.DLL	15468
+\epoc32\release\ARMV5\urel\_h4hrp_ecommdma.ldd	12896
+\epoc32\release\ARMV5\urel\esound.ldd	4928
+\epoc32\release\ARMV5\urel\esoundsc.ldd	12252
+\epoc32\release\ARMV5\urel\pipelib.ldd	7116
+\epoc32\release\ARMV5\urel\enet.ldd	4648
+\epoc32\release\ARMV5\urel\_h4hrp_ethernet.pdd	4464
+\epoc32\release\ARMV5\urel\minkda.ldd	3672
+\epoc32\release\ARMV5\urel\exstart.dll	792
+\epoc32\release\ARMV5\urel\_h4hrp_NOWATCHDOG.DLL	1880
+\epoc32\release\ARMV5\urel\_h4hrp_medusii.pdd	59964
+\epoc32\rom\h4hrp\unistore2\ESTARTNANDCOMP.TXT	377
+\epoc32\release\ARMV5\urel\TrkDriver.ldd	16868
+\epoc32\release\ARMV5\urel\rm_debug.ldd	33852
+\epoc32\release\ARMV5\urel\rm_debug_svr.exe	14408
+\epoc32\release\ARMV5\urel\_h4hrp_reboot.ldd	1616
+\epoc32\release\ARMV5\urel\drtaeabi.dll	14664
+\epoc32\release\ARMV5\urel\dfpaeabi_vfpv2.dll	6068
+\epoc32\release\ARMV5\urel\drtrvct2_2_vfpv2.dll	7292
+\epoc32\release\ARMV5\urel\dfprvct2_2_vfpv2.dll	7764
+\epoc32\release\ARMV5\urel\dfprvct2_2-thunk.dll	472
+\epoc32\release\ARMV5\urel\scppnwdl.dll	440
+\epoc32\release\ARMV5\urel\_h4hrp_euser.dll	223772
+\epoc32\release\ARMV5\urel\RPIPE.DLL	3008
+\epoc32\release\ARMV5\urel\ektran.dll	3984
+\epoc32\release\ARMV5\urel\_h4hrp_hal.dll	4736
+\epoc32\release\ARMV5\urel\_h4hrp_ekdata.dll	3256
+\epoc32\release\ARMV5\urel\efile.exe	153896
+\epoc32\release\ARMV5\urel\efsrv.dll	32624
+\epoc32\release\ARMV5\urel\elocal.fsy	49108
+\epoc32\release\ARMV5\urel\elffs.fsy	55840
+\epoc32\release\ARMV5\urel\ecomp.fsy	5688
+\epoc32\release\ARMV5\urel\erofs.fsy	9612
+\epoc32\release\ARMV5\urel\_h4hrp_e32strt.exe	10828
+\epoc32\release\ARMV5\urel\domainSrv.exe	8080
+\epoc32\release\ARMV5\urel\domainCli.dll	3868
+\epoc32\release\ARMV5\urel\domainPolicy.dll	440
+\epoc32\data\Z\Resource\Fonts\eon14.gdr	6859
+
+Total used	1558151
+Free	539001
+
+Writing compressedRom image with repro header to file rombld.img

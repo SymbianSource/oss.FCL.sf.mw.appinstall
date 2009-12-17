@@ -1,0 +1,256 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWI-DEF092900-I-0011
+//! @SYMTestCaseDesc		Test of Cancellation. This test is in this script to cause it to pause for period of time while the networking subsystem loads. This allows us to reliably cancel the operation.  
+//! @SYMDEF 			DEF092900
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to Cancel the security check
+//! @SYMTestExpectedResults	Cancellation should not hang
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-DEF092900-I-0011
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def_92900
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def_92900
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def_92900
+
+END_TESTCASE API-SEC-SWI-DEF092900-I-0011
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0001
+//! @SYMTestCaseDesc		Installs a file with a very large controller for CR APOS-65ZL6Z 
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Installs a file with a very large controller
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0002
+//! @SYMTestCaseDesc		Tries to install a SIS file containing a greater total size of data files than is available onto drive x
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Consume most of the disk space on drive x, then attempt to install a SIS file containing more data than
+//! 				can fit in the remaining space.
+//! @SYMTestExpectedResults	Installation fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0002
+
+// Create temporary file to leave very little space free on drive X.
+RUN_TEST_STEP 100 tuiscriptadaptors FillDrive z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini almostfilldrive
+RUN_TEST_STEP !Error=-26 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini diskfull
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini u_diskfull
+RUN_TEST_STEP !Error=-26 100 tuiscriptadaptors InstallAsyncFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini diskfull
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini u_diskfull
+
+// Delete space hogging file from drive X
+RUN_UTILS DeleteFile x:\BigTempFile
+RUN_UTILS DeleteFile e:\BigTempFile
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0003
+//! @SYMTestCaseDesc		Tries to install a script file as a SISX file
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a script file as a SISX file
+//! @SYMTestExpectedResults	Installation fails, appropriate dialog displayed, and error returned.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0003
+
+RUN_TEST_STEP !Error=-20 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidsisxfile
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0004
+//! @SYMTestCaseDesc		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0004
+
+RUN_TEST_STEP !Error=-10146 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidfilename
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_invalidfilename
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0005
+//! @SYMTestCaseDesc		Display a text file and install/uninstall it
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Display text file and install/uninstall it
+//! @SYMTestExpectedResults	Display text file dialog called, file [un]installed
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayonly
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayonly
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0006
+//! @SYMTestCaseDesc		Install text file in a simple unsigned SISX package
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Install a simple unsigned package
+//! @SYMTestExpectedResults	Text file is installed
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0006
+
+// Simple file installation from a compressed SIS file
+// Be sure that the registry entries are deleted because they may have been left
+// from previous failed test cases
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+// Simple file installation from a non-compressed SIS file
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simplenc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simplenc
+// Bad language selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini badlangsel
+// Bad drive selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddrivesel
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0006
+
+
+//! @SYMTestCaseID		API-SEC-LOGOTEST-0002
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-LOGOTEST-0002
+
+// Installation of a SIS file that contains a logo.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini logo
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_logo
+
+END_TESTCASE API-SEC-LOGOTEST-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0007
+//! @SYMTestCaseDesc		Install package with embedded packages
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package and embedded packages
+//! @SYMTestExpectedResults	Package and embedded packages installed
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0008
+//! @SYMTestCaseDesc		Install simple SIS file with 1 signature
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+
+// Signed SIS tests
+START_TESTCASE API-SEC-SWI-ASYNC-I-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0008
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0009
+//! @SYMTestCaseDesc		Install SIS file with missing dependency
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Missing dependency prevents SIS package installation 
+//! @SYMTestExpectedResults	Files are not installed
+//! @SYMDevelopedForRelease	Mike
+
+// Missing dependency tests
+START_TESTCASE API-SEC-SWI-ASYNC-I-0009
+
+RUN_TEST_STEP !Error=-10136 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddepend
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0009
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNC-I-0010
+//! @SYMTestCaseDesc		Test installation of two executables with the same SID
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install various combinations of executables with the same SID
+//! @SYMTestExpectedResults	Only one executable with a certain SID will be allowed on the device at once
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A
+RUN_TEST_STEP !Error=-11 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_A
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B
+RUN_TEST_STEP !Error=-11 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_B
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0010
+
+
+//! @SYMTestCaseID		API-SEC-INC074992-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-INC074992-0001
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini setfinal_cancel
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini updateprogress_cancel
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini inc074992
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_inc074992
+
+END_TESTCASE API-SEC-INC074992-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+

@@ -1,0 +1,50 @@
+ROM Based SwiCertStore :
+
+suflagsupport.dat:
+
+[SymbianTestRootCADiffSerial]
+
+file = SymbianTestRootCADiffSerial.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 1
+SystemUpgrade = 0
+
+
+[Root5CA]
+
+file = Root5CA.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 1
+SystemUpgrade = 0
+
+
+[SymbianTestRSACA]
+
+file = SymbianTestRSACA.der
+capability = DRM
+capability = NetworkServices
+application = SWInstall
+application = SWInstallOCSP
+Mandatory = 0
+SystemUpgrade = 0
+
+
+[sucert]
+
+file = sucert.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 0
+SystemUpgrade = 1
+

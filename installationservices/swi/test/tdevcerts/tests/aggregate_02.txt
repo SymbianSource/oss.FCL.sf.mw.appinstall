@@ -1,0 +1,20 @@
+# sid constraints contains a single id and a bad sid 
+[main]
+name=aggregate_02
+template=simple.txt
+inifile=aggregate.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_sid1,bad_single_sid
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+exist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

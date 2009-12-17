@@ -1,0 +1,147 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+/**
+ @file
+ This is to create a dummy exe to be contained in a SIS file for testing purposes
+*/
+
+#include "tpropagation/bld.inf"
+
+PRJ_TESTMMPFILES
+createprivatefile.mmp
+tswiusergrantable.mmp
+tswinocapability.mmp
+tswinocapability2.mmp
+tswinocapability3.mmp
+tswinocapability4.mmp
+tswinocapabilityVFP.mmp
+tswisystemcapability.mmp
+tswiusergrantable_all.mmp
+tswiusergrantable_some.mmp
+tswiusergrantable_none.mmp
+tswisystemcapability_all.mmp
+tswiallcapabilities.mmp
+tswisignedcap_8.mmp
+tswidrmcapability.mmp
+tswidrmandusercapabilities.mmp
+tswiunprotectedsid.mmp
+tswiunprotectedvid.mmp
+tswiprotectedvid.mmp
+tswiprotectedsid.mmp
+tswiallusercapsinsecuritypolicy.mmp
+tswiusergrantable_all_protected.mmp
+tswiusergrantable_allfiles.mmp
+tswiusergrantable_commdd.mmp
+tswiusergrantable_diskadmin.mmp
+tswiusergrantable_multimediadd.mmp
+tswiusergrantable_networkcontrol.mmp
+tswisystemcapability_protected.mmp
+testsidcheck_ROM.mmp
+tswidllusergrantable.mmp
+tswidllsystemcapability.mmp
+tswidllnocapabilityprotectedvid.mmp
+tswidllnocapabilityunprotectedvid.mmp
+tswiswevent.mmp
+tswisidupgradeexe.mmp
+tsaromupgradeexe.mmp
+testappinuse/HelloWorld.mmp
+testappinuse/HelloWorld2.mmp
+testappinuse/console_app.mmp
+testappinuse/runtestexe.mmp
+
+mimehandler/mimehandler.mmp
+plugin/group/plugin.mmp
+runwait/runwaitexe1.mmp
+runwait/runwaitexe2.mmp
+runwait/runwaitexe3.mmp
+
+// INC125338
+sasunonru.mmp
+
+// DEF123261
+testappinuse/dummy_test1.mmp
+testappinuse/dummy_test2.mmp
+testappinuse/dummy_test3.mmp
+testappinuse/dummy_test4.mmp
+testappinuse/dummy_test5.mmp
+testappinuse/dummy_test6.mmp
+testappinuse/dummy_test7.mmp
+testappinuse/dummy_test8.mmp
+testappinuse/dummy_test9.mmp
+testappinuse/dummy_test10.mmp
+testappinuse/dummy_test11.mmp
+testappinuse/dummy_test12.mmp
+testappinuse/dummy_test13.mmp
+testappinuse/dummy_test14.mmp
+testappinuse/dummy_test15.mmp
+testappinuse/dummy_test16.mmp
+testappinuse/dummy_test17.mmp
+testappinuse/dummy_test18.mmp
+testappinuse/dummy_test19.mmp
+testappinuse/dummy_test20.mmp
+testappinuse/dummy_test21.mmp
+testappinuse/dummy_test22.mmp
+testappinuse/dummy_test23.mmp
+testappinuse/dummy_test24.mmp
+testappinuse/dummy_test25.mmp
+testappinuse/dummy_test26.mmp
+testappinuse/dummy_test27.mmp
+testappinuse/dummy_test28.mmp
+testappinuse/dummy_test29.mmp
+testappinuse/dummy_test30.mmp
+testappinuse/dummy_test31.mmp
+testappinuse/dummy_test32.mmp
+testappinuse/dummy_test33.mmp
+testappinuse/dummy_test34.mmp
+testappinuse/dummy_test35.mmp
+testappinuse/test36_console_app.mmp
+testappinuse/dummy_test37.mmp
+testappinuse/dummy_test38.mmp
+testappinuse/dummy_test39.mmp
+testappinuse/dummy_test40.mmp
+console_app_longrun.mmp
+runtestexe2.mmp
+testbigexe.mmp
+netcontrol.mmp
+killrunningprocess.mmp
+tswisidcache1.mmp
+tswisidcache2.mmp
+tdemand_paging/isolated/isolated_app.mmp
+tdemand_paging/isolated_unpaged/isolated_app_unpaged.mmp
+tdemand_paging/staticdll/appusingdll.mmp
+tdemand_paging/staticdll/largearraydll.mmp
+tdemand_paging/staticdll/largearraydll2.mmp
+//INC128848
+texeforbackuprestoretest_1.mmp
+texeforbackuprestoretest_2.mmp
+texeforbackuprestoretest_3.mmp
+
+console_infinite_exe.mmp
+testlargeexe.mmp
+testlargeexe2.mmp
+sucertcapcheck.mmp
+sucerttestexe.mmp
+sucertdll.mmp
+adornedfilenametestingdll_v10_0.mmp
+adornedfilenametestingdll_v10_1.mmp
+adornedfilenametestingdll_v10_2.mmp
+safemodetest.mmp
+
+non_stubbed_exe.mmp
+

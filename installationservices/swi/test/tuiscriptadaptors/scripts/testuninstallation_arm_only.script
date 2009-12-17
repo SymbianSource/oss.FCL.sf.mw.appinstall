@@ -1,0 +1,37 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// ARM specific uninstallation tests
+PRINT Run ARM specific uninstallation tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-DEF101378-0001
+//! @SYMTestCaseDesc 		Test that installs an application whicn runs on install and creates many files in the private directory. Then, it tries to uninstall the files in a sane amount of time
+//! @SYMTestPriority 		High
+//! @SYMTestExpectedResults 	The test completes on time with files cleaned-up.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-UISA-DEF101378-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.ini def101378_install
+RUN_TEST_STEP 60 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.ini def101378_uninstall
+
+END_TESTCASE API-SEC-UISA-DEF101378-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

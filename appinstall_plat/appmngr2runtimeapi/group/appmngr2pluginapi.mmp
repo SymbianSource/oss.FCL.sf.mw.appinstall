@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Runtime plugin API
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET                  appmngr2pluginapi.dll
+TARGETTYPE              DLL
+UID                     0x1000008d 0x20016BF3
+
+CAPABILITY              CAP_GENERAL_DLL
+VENDORID                VID_DEFAULT
+
+SOURCEPATH              ../src
+SOURCE                  appmngr2runtime.cpp
+SOURCE                  appmngr2infobase.cpp
+SOURCE                  appmngr2appinfo.cpp
+SOURCE                  appmngr2packageinfo.cpp
+SOURCE                  appmngr2driveutils.cpp
+SOURCE                  appmngr2drmutils.cpp
+SOURCE                  appmngr2infoiterator.cpp
+SOURCE                  appmngr2recognizedfile.cpp
+
+USERINCLUDE             ../inc
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY                 euser.lib                   // Base
+LIBRARY                 ecom.lib                    // ECom
+LIBRARY                 commonengine.lib            // StringLoader
+LIBRARY                 avkon.lib                   // AknTextUtils
+LIBRARY                 cone.lib                    // CCoeEnv
+LIBRARY                 eikcore.lib                 // CEikonEnv
+LIBRARY                 bafl.lib                    // TResourceReader, BaflUtils
+LIBRARY                 efsrv.lib                   // TParse
+LIBRARY                 caf.lib                     // ContentAccess::CContent
+LIBRARY                 drmhelper.lib               // CDRMHelper
+LIBRARY                 platformenv.lib             // DriveInfo
+LIBRARY                 apmime.lib                  // TDataType
+
+DEBUGLIBRARY            flogger.lib                 // RFileLogger
+
+SMPSAFE
+

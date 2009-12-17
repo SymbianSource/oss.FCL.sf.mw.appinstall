@@ -1,0 +1,61 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for IA Update Client
+*                member functions.
+*
+*/
+
+
+#include <platform_paths.hrh>
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+
+../loc/iaupdate.loc  MW_LAYER_LOC_EXPORT_PATH(iaupdate.loc)
+
+PRJ_MMPFILES
+
+// IA Updater
+#include "../updater/group/bld.inf"
+
+// IA Engine
+#include "../engine/group/bld.inf"
+
+// IA Tools
+#include "../tools/group/bld.inf"
+
+// IA API
+// Compile API before UI because UI imports the IA API library
+#include "../api/group/bld.inf"
+
+// firmware update 
+// Compile before UI and bgchecker because they import the library
+#include "../firmwareupdate/group/bld.inf"
+
+// IA UI
+#include "../ui/group/bld.inf"
+
+// IA Enabler
+#include "../enabler/group/bld.inf"
+
+// background checker
+#include "../backgroundchecker/group/bld.inf"
+
+// launcher
+#include "../launcher/group/bld.inf"
+
+// configurator
+#include "../configurator/group/bld.inf"

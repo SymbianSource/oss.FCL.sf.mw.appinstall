@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* uisupport.mmp
+* ocspsupport.exe Provides OCSP support functionality
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY Protserv NetworkServices 
+
+TARGET		ocspsupport.exe
+TARGETTYPE	exe
+
+UID			0x1000007A 0x10202DCC
+VENDORID	0x70000001
+
+USERINCLUDE ../source/ocspsupport/server
+USERINCLUDE	../source/ocspsupport/common
+USERINCLUDE ../source/ocspsupport/client
+USERINCLUDE	../inc ../inc/swi
+
+SOURCEPATH	../source/ocspsupport
+
+SOURCE	server/ocspsupportserver.cpp server/ocspsupportsession.cpp
+SOURCE	server/ocspqueryrunner.cpp
+SOURCE  server/GenericTimer.cpp
+
+//SOURCE	common/msisuihandlers.cpp
+//SOURCE	common/ocspsupportstream.cpp
+
+//SOURCE	client/ocspsupportclient.cpp
+
+//SOURCE	server/commands/shutdownserver.cpp
+
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY		euser.lib estor.lib
+LIBRARY		crypto.lib x509.lib x500.lib pkixcertbase.lib
+LIBRARY	flogger.lib ocsptransport.lib ecom.lib
+SMPSAFE

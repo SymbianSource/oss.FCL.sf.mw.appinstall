@@ -1,0 +1,10 @@
+component	install_config
+source  	\sf\mw\appinstall\installationservices\swiconfig
+binary  	\sf\mw\appinstall\installationservices\swiconfig\group all
+exports		\sf\mw\appinstall\installationservices\swiconfig\group
+notes_source	\component_defs\release.src
+
+
+ipr E 
+ipr T \sf\mw\appinstall\installationservices\swiconfig\tswi
+

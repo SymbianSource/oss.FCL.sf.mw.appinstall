@@ -1,0 +1,176 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run PA and SA stub delete tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+
+//! @SYMTestCaseID		API-SEC-PADeleteFiles-0001
+//! @SYMTestCaseDesc		Installs a PA package, Remove media card, Uninstall an App, Reinsert the card back, Files should get deleted
+//! @SYMDEF			DEF113546
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-PADeleteFiles-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_pa_delete
+
+END_TESTCASE API-SEC-PADeleteFiles-0001 
+
+
+//! @SYMTestCaseID		API-SEC-PADeleteFiles-0002
+//! @SYMTestCaseDesc		Installs a PA package, Remove media card, Reinsert the card back, Files should not get deleted
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card which should not be cleaned up because the app is not uninstalled
+//! @SYMTestExpectedResults	Media card should not be free of installed files
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-PADeleteFiles-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_pa_notdelete
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+END_TESTCASE API-SEC-PADeleteFiles-0002 
+
+
+//! @SYMTestCaseID		API-SEC-PADeleteFiles-0003
+//! @SYMTestCaseDesc		Installs a PA package1, Install a PA package2, Remove the media card, Uninstall package1, 
+//! 				ReInsert card back , Files should get deleted related to package1 but package2 files should be present.
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card which should be cleaned up for particular application but not for other one.
+//! @SYMTestExpectedResults	Media card should be free of installed files with particular application but not for other one.
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-PADeleteFiles-0003
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled_2pkgs
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa1
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_pkg1delete_notpkg2
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub1
+
+END_TESTCASE API-SEC-PADeleteFiles-0003 
+
+
+//! @SYMTestCaseID		API-SEC-PADeleteFiles-0004
+//! @SYMTestCaseDesc		Installs a PA package, Install a PP over it, Remove the media card, Uninstall PP, 
+//! 				ReInsert card back , Files should get deleted related to PP
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card which should be cleaned up for particular application but not for other one.
+//! @SYMTestExpectedResults	Media card should be free of installed files with particular application but not for other one.
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-PADeleteFiles-0004
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled_PA_PP
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pp
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pp
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_ppdelete_notpa
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+END_TESTCASE API-SEC-PADeleteFiles-0004 
+
+
+//! @SYMTestCaseID		API-SEC-PADeleteFiles-0005
+//! @SYMTestCaseDesc		Installs through PA readonly sisfile, Remove the media card, uninstall PA, Reinsert card back,
+//! 				Files should not get deleted.
+//! @SYMREQ 			DEF113546
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card which should not be cleaned up for read only stub sis file.
+//! @SYMTestExpectedResults	Media card should not be free of installed files. 
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-PADeleteFiles-0005
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled
+
+RUN_TEST_STEP 10 tuiscriptadaptors SetClearReadOnlyStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setreadonlystub
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+// Files should not get deleted because stub is read only
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_pa_notdelete
+
+RUN_UTILS MAKEREADWRITE x:\private\10202dce\testpreinstalled_install_x.sis
+DELAY 5000
+// Clean up the MMC card at the end of test
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+END_TESTCASE API-SEC-PADeleteFiles-0005 

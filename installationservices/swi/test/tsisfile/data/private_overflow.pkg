@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A private_overflow SIS file
+; Incorrect UIDs for private directories cause overflow error in SWI.
+
+;Languages
+&HR
+
+;Header
+#{"Private Overflow"}, (0x80000044), 1, 2, 3, TYPE=SA
+%{"Vendor"}
+:"Unique Vendor Name"
+
+
+;Ordinary file to selected drive
+"text\file1.txt"-"!:\private\2164260872\file1.txt"

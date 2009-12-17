@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SystemDefinition schema="3.0.0">
+  <package id="appinstall" name="Application Installation" levels="tool framework generic api">
+    <collection id="appinstaller" name="Application Installer" level="generic">
+      <component id="appmngr2" filter="s60" name="Application Manager 2" introduced="^2">
+        <unit bldFile="appinstaller/appmngr2/group"/>
+      </component>
+      <component id="appinstui" filter="s60" name="Application Installer UI" introduced="^2">
+        <unit bldFile="appinstaller/appinstui/group"/>
+      </component>
+    </collection>
+    <collection id="ncdengine" name="Nokia Content Discover" level="framework">
+      <component id="ncdengine_engine" filter="s60" name="NCD Engine" introduced="^1">
+        <unit bldFile="ncdengine/engine/group"/>
+      </component>
+      <component id="debuglogger" filter="s60" name="NCD Debug Logger" introduced="^1">
+        <!-- <unit bldFile="ncdengine/debuglogger/group"/> -->
+      </component>
+      <component id="ncdengine_build" filter="s60" name="NCD Build" introduced="^1">
+        <unit bldFile="ncdengine/group"/>
+      </component>
+    </collection>
+    <collection id="iaupdateapi_stub" name="IA Update API Stub" level="api">
+      <component id="iaupdateapi_stub_build" name="IA Update API Stub Build" filter="s60" introduced="^2">
+        <unit bldFile="iaupdateapi_stub/group"/>
+      </component>
+    </collection>
+    <collection id="iaupdate" name="Independent Apps Update" level="api">
+      <component id="iad" name="Software Update" filter="s60" introduced="^2">
+        <unit bldFile="iaupdate/iad/group"/>
+      </component>
+      <component id="iaupdate_help" filter="s60" name="IA Update Help" introduced="^2">
+        <unit bldFile="iaupdate/help/group"/>
+      </component>
+      <component id="iaupdate_build" filter="s60" name="IA Update Build" introduced="^2">
+        <unit bldFile="iaupdate/group"/>
+      </component>
+    </collection>
+    <collection id="installationservices" name="Installation Services" level="generic">
+      <component id="swi" name="Secure Software Install" purpose="optional">
+        <unit bldFile="installationservices/swi/group" mrp="installationservices/swi/group/security_swi.mrp"/>
+      </component>
+      <component id="swidevicetools" name="Secure Software Install Device Tools" introduced="8.1" purpose="development">
+        <unit bldFile="installationservices/swidevicetools/group" mrp="installationservices/swidevicetools/group/security_switools_device.mrp"/>
+      </component>
+      <component id="switestfw" name="Software Install Test Framework" deprecated="^3" introduced="7.0" purpose="development" filter="test">
+        <unit mrp="installationservices/switestfw/group/install_testframework.mrp" bldFile="installationservices/switestfw/group"/>
+      </component>
+      <component id="swiconfig" name="Software Install Config" introduced="9.1" purpose="optional" class="config">
+        <unit bldFile="installationservices/swiconfig/group" mrp="installationservices/swiconfig/group/install_config.mrp"/>
+      </component>
+    </collection>
+    <collection id="secureswitools" name="Secure Software Install Tools" level="tool">
+      <component id="makekeys" name="MakeKeys" filter="gt" introduced="6.0" purpose="optional" target="desktop">
+        <unit bldFile="secureswitools/makekeys/group" mrp="secureswitools/makekeys/group/security_makekeys.mrp"/>
+      </component>
+      <component id="swianalysistoolkit" name="SWI Analysis Toolkit" purpose="development" target="desktop">
+        <unit bldFile="secureswitools/swianalysistoolkit/group" mrp="secureswitools/swianalysistoolkit/group/security_switools.mrp"/>
+      </component>
+      <component id="openssllib" name="OpenSSL Library" purpose="optional" target="desktop">
+        <unit mrp="secureswitools/openssllib/security_openssl.mrp"/>
+      </component>
+      <component id="swisistools" name="Secure Software Install SIS Tools" purpose="optional" target="desktop">
+        <unit bldFile="secureswitools/swisistools/group" mrp="secureswitools/swisistools/group/security_sistools.mrp"/>
+      </component>
+    </collection>
+    <collection id="appinstall_info" name="Application Installation Info" level="api">
+      <component id="appinstall_pub" filter="s60" name="Application Installation Public Interfaces" class="api">
+        <unit bldFile="appinstall_pub/group"/>
+        <!-- <unit bldFile="appinstall_pub/startup_list_management_api/tsrc/bc/startuplistmanagementapi/selfsignedstartupapp/group"/> -->
+        <!-- <unit bldFile="appinstall_pub/startup_list_management_api/tsrc/bc/startuplistmanagementapi/startupapp/group"/> -->
+      </component>
+      <component id="appinstall_plat" filter="s60" name="Application Installation Platform Interfaces" class="api">
+        <unit bldFile="appinstall_plat/group"/>
+        <unit bldFile="appinstall_plat/appmngr2runtimeapi/tsrc/group"/>
+        <!-- <unit bldFile="appinstall_plat/appmngr2runtimeapi/tsrc/data_src/sistest"/> -->
+      </component>
+      <component id="appinstall_test" filter="s60" name="Application Installation Test" purpose="development">
+        <!-- <unit bldFile="tsrc/group"/> -->
+      </component>
+      <component id="appinstall_metadata" name="Application Installation Metadata" class="config" introduced="^2" purpose="development" target="desktop">
+        <unit mrp="appinstall_info/appinstall_metadata/appinstall_metadata.mrp"/>
+      </component>
+    </collection>
+  </package>
+</SystemDefinition>

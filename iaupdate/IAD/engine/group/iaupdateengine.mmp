@@ -1,0 +1,139 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   MMP file of iaupdateengine.dll
+*
+*/
+
+
+
+#include <platform_paths.hrh>
+#include "build_config.mmpi"
+
+
+CAPABILITY      CAP_GENERAL_DLL
+
+TARGET          iaupdateengine.dll
+TARGETTYPE      dll
+UID             0x1000008d 0x2000F85B
+
+PAGED
+
+// Engine public files
+USERINCLUDE     ../inc
+
+// Engine controller files
+USERINCLUDE     ../controller/inc
+
+// Updater includes
+USERINCLUDE     ../../updater/inc
+USERINCLUDE     ../../updater/updaterfiles/inc
+
+// Controller files
+SOURCEPATH      ../controller/src
+SOURCE          iaupdatefactory.cpp
+SOURCE          iaupdatecontrollerimpl.cpp
+SOURCE          iaupdateselfupdaterctrl.cpp
+SOURCE          iaupdateloader.cpp
+SOURCE          iaupdatenodefactory.cpp
+SOURCE          iaupdatebasenodeimpl.cpp
+SOURCE          iaupdatenodeimpl.cpp
+SOURCE          iaupdatefwnodeimpl.cpp
+SOURCE          iaupdatespecialnode.cpp
+SOURCE          iaupdateservicepacknode.cpp
+SOURCE          iaupdatenodecontainer.cpp
+SOURCE          iaupdateutils.cpp
+SOURCE          iaupdateversion.cpp
+SOURCE          iaupdatenodedetails.cpp
+SOURCE          iaupdatenodedependencyimpl.cpp
+SOURCE          iaupdateplatformdependency.cpp
+SOURCE          iaupdatexmlparser.cpp
+SOURCE          iaupdatexmlsubparser.cpp
+SOURCE          iaupdatedependencyxmlparser.cpp
+SOURCE          iaupdatedependencyxmlsubparser.cpp
+SOURCE          iaupdatenodedependencyxmlparser.cpp
+SOURCE          iaupdateinterdepxmlparser.cpp
+SOURCE          iaupdatenodeuidxmlparser.cpp
+SOURCE          iaupdatenodeembeddedxmlparser.cpp
+SOURCE          iaupdatenodeversionxmlparser.cpp
+SOURCE          iaupdatenodeversionfloorxmlparser.cpp
+SOURCE          iaupdatenodeversionroofxmlparser.cpp
+SOURCE          iaupdateplatformdependencyxmlparser.cpp
+SOURCE          iaupdateplatformversionxmlparser.cpp
+SOURCE          iaupdateplatformversionfloorxmlparser.cpp
+SOURCE          iaupdateplatformversionroofxmlparser.cpp
+SOURCE          iaupdateplatformdescriptionxmlparser.cpp
+SOURCE          iaupdateversionmajorxmlparser.cpp
+SOURCE          iaupdateversionminorxmlparser.cpp
+SOURCE          iaupdateversionbuildxmlparser.cpp
+SOURCE          iaupdateenginexmlparser.cpp
+SOURCE          iaupdateenginexmlsubparser.cpp
+SOURCE          iaupdateengineconfigdata.cpp
+SOURCE          iaupdatehistoryimpl.cpp
+SOURCE          iaupdatehistoryitemimpl.cpp
+SOURCE          iaupdateselfupdaterinitializer.cpp
+SOURCE          iaupdatependingnodesfile.cpp
+SOURCE          iaupdaterestartinfo.cpp
+SOURCE          iaupdaterendezvous.cpp
+SOURCE          iaupdatenetworkregistration.cpp
+SOURCE          iaupdatecontentoperation.cpp
+SOURCE          iaupdatenormalcontentoperation.cpp
+SOURCE          iaupdatefwpurchaseoperation.cpp
+SOURCE          iaupdatepurchaseoperation.cpp
+SOURCE          iaupdatedownloadoperation.cpp
+SOURCE          iaupdateinstalloperation.cpp
+SOURCE          iaupdateselfupdateinitoperation.cpp
+SOURCE          iaupdatecontentoperationmanager.cpp
+SOURCE          iaupdatecachecleaner.cpp
+SOURCE          iaupdatecontrollerfile.cpp
+SOURCE          iaupdatetimer.cpp
+SOURCE          iaupdatefwversionfilehandler.cpp
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         apgrfx.lib
+LIBRARY         apparc.lib
+LIBRARY         bafl.lib
+LIBRARY		    efsrv.lib
+LIBRARY         euser.lib
+LIBRARY         estor.lib
+LIBRARY         sisregistryclient.lib
+LIBRARY         charconv.lib		// UTF<->Unicode conversion
+LIBRARY         xmlframework.lib	// Xml::CParser
+LIBRARY         sysutil.lib
+LIBRARY         platformenv.lib
+LIBRARY         platformver.lib     // System version info
+LIBRARY         etel3rdparty.lib
+LIBRARY         swinstcli.lib
+LIBRARY         apmime.lib
+LIBRARY         ecom.lib            // For the NCD Engine ECOM session closing.
+LIBRARY         sysversioninfo.lib
+LIBRARY         etel.lib            // RTelServer
+LIBRARY         etelmm.lib          // RMobilePhone
+
+// Updater files dll
+LIBRARY         iaupdaterfiles.lib
+
+// NCD Engine
+LIBRARY         ncdengine_20019119.lib
+LIBRARY         ncdutils_20019119.lib
+
+// For debugging and logging purposes
+
+DEBUGLIBRARY    flogger.lib
+
+#ifdef CATALOGS_DEBUG_ENABLED
+LIBRARY         ncddebug_20019119.lib
+#endif
+
+SMPSAFE

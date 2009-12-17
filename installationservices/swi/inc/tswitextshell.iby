@@ -1,0 +1,328 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef TSWITEXTSHELL
+#define TSWITEXTSHELL
+
+
+// We need bigger ROFS files for tests with TBAS
+rofssize=0x2100000
+
+// Save build details in ROM
+data=\buildid.txt                 \buildid.txt
+
+// platsec.oby should be included, but a fault in rombuild prevents build with watchers disabled and PlatSecEnforceSysBin ON
+//#include "platsec.oby"
+ROM_IMAGE[0] {
+PlatSecDiagnostics ON
+PlatSecEnforcement ON
+PlatSecEnforceSysBin ON
+PlatSecProcessIsolation ON
+}
+
+
+#include "testexecute.iby"
+#include "xml.iby" // Needed for security tests
+
+
+
+#include "switextshell.iby"
+#include "ezlib.iby"
+#include "openenv.iby"
+
+define ZDRIVE \epoc32\winscw\c
+
+// This the file which used to redirect the request from cam-ocsptest01 to ban-ocsptest01
+data = ZDRIVE\autohardware\hosts		     \hosts
+
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\tintegrityservices.exe		sys\bin\tintegrityservices.exe
+file=ABI_DIR\BUILD_DIR\tintegrityservicesclient.dll	sys\bin\tintegrityservicesclient.dll
+file=ABI_DIR\BUILD_DIR\tintegrityservicesserver.exe	sys\bin\tintegrityservicesserver.exe
+#endif
+
+file=ABI_DIR\BUILD_DIR\tsis_tshell.exe			sys\bin\tsis.exe
+file=ABI_DIR\BUILD_DIR\tsisfile.exe			sys\bin\tsisfile.exe
+file=ABI_DIR\BUILD_DIR\tocspclient.dll			sys\bin\tocspclient.dll
+file=ABI_DIR\BUILD_DIR\tsishelperserver.exe		sys\bin\tsishelperserver.exe
+file=ABI_DIR\BUILD_DIR\consoleclient.dll		sys\bin\consoleclient.dll
+file=ABI_DIR\BUILD_DIR\consoleserver.exe		sys\bin\consoleserver.exe
+file=ABI_DIR\BUILD_DIR\tuseadapter.exe			sys\bin\tuseadapter.exe
+file=ABI_DIR\BUILD_DIR\tuiscriptadaptors_tshell.exe	sys\bin\tuiscriptadaptors.exe
+file=ABI_DIR\BUILD_DIR\tsisregistrytest.exe		sys\bin\tsisregistrytest.exe	
+file=ABI_DIR\BUILD_DIR\tbackuprestore.exe		sys\bin\tbackuprestore.exe
+file=ABI_DIR\BUILD_DIR\tdevinfosupport.exe		sys\bin\tdevinfosupport.exe
+file=ABI_DIR\BUILD_DIR\tdataprovider.exe		sys\bin\tdataprovider.exe
+file=ABI_DIR\BUILD_DIR\killrunningprocess.exe		sys\bin\killrunningprocess.exe
+file=ABI_DIR\BUILD_DIR\swicaptests.dll			sys\bin\swicaptests.dll
+file=ABI_DIR\BUILD_DIR\tswiconsole.exe			sys\bin\tswiconsole.exe
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+file=ABI_DIR\BUILD_DIR\trevocation.exe			sys\bin\trevocation.exe
+#endif
+
+#ifdef __AUTO_HARDWARE_TESTS__
+	data = ZDRIVE\autohardware\autoexec.bat		\autoexec.bat
+#endif
+
+data = ZDRIVE\autohardware\switextshell_nonmcs.bat	\testsecurity.bat
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testupgrades.ini 	\tswi\tuiscriptadaptors\scripts\testupgrades.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testupgrades.script 	\tswi\tuiscriptadaptors\scripts\testupgrades_tshell.script
+
+data = \epoc32\winscw\c\tswi\tswiconsole\scripts\tswiconsole.ini 		\tswi\tswiconsole\scripts\tswiconsole.ini
+data = \epoc32\winscw\c\tswi\tswiconsole\scripts\tswiconsole.script 		\tswi\tswiconsole\scripts\tswiconsole_tshell.script
+data = \epoc32\winscw\c\tswi\tswiconsole\data\eclipse.txt			\tswi\tswiconsole\data\eclipse.txt 
+
+//SWI Observer Reference Plugin
+ECOM_PLUGIN(refswiobsplugin.dll, refswiobsplugin.rsc)
+
+data = \epoc32\data\z\tswi\tswiobserver\scripts\testswiobserver.ini 		\tswi\tswiobserver\scripts\testswiobserver.ini
+data = \epoc32\data\z\tswi\tswiobserver\scripts\testswiobserver.script 		\tswi\tswiobserver\scripts\testswiobserver_tshell.script
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\installexes.log 		\tswi\tswiobserver\scripts\data\installexes.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\log_resume_notification	\tswi\tswiobserver\scripts\data\log_resume_notification
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\restore.log		\tswi\tswiobserver\scripts\data\restore.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallexes.log 		\tswi\tswiobserver\scripts\data\uninstallexes.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallupgrade.log 	\tswi\tswiobserver\scripts\data\uninstallupgrade.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallupgradedpackage.log \tswi\tswiobserver\scripts\data\uninstallupgradedpackage.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradeaugmentation.log 	\tswi\tswiobserver\scripts\data\upgradeaugmentation.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradepackage.log 	\tswi\tswiobserver\scripts\data\upgradepackage.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradepartial.log 	\tswi\tswiobserver\scripts\data\upgradepartial.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\corrupted 			\tswi\tswiobserver\scripts\data\corrupted
+
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_ocsp.script 		\tswi\tdevcerts\scripts\devcerts_ocsp_tshell.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\ocsp.ini 			\tswi\tdevcerts\scripts\ocsp.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\switermination.script 	\tswi\tuiscriptadaptors\scripts\switermination_tshell.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\switermination.ini 	\tswi\tuiscriptadaptors\scripts\switermination.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrun.ini 		\tswi\tuiscriptadaptors\scripts\testrun.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\cr956_test_armv5.ini	\tswi\tuiscriptadaptors\scripts\cr956_test_armv5.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\switextshell.script 	\tswi\tuiscriptadaptors\scripts\switextshell_tshell.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testeclipse.ini 		\tswi\tuiscriptadaptors\scripts\testeclipse.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini 	\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini
+
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple.xml 		\tswi\tuiscriptadaptors\scripts\simple.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\uninstall.xml 		\tswi\tuiscriptadaptors\scripts\uninstall.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_lang1.xml 	\tswi\tuiscriptadaptors\scripts\simple_lang1.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_drive_e.xml 	\tswi\tuiscriptadaptors\scripts\simple_drive_e.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\simple_ocsp.xml 			\tswi\tdevcerts\scripts\simple_ocsp.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\uninstall.xml 			\tswi\tdevcerts\scripts\uninstall.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\simple.xml 			\tswi\tdevcerts\scripts\simple.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_question_true.xml \tswi\tuiscriptadaptors\scripts\simple_question_true.xml
+
+
+data = \epoc32\winscw\c\config.txt 						\tswi\tdevcerts\config.txt
+data = \epoc32\winscw\c\config2.txt 						\tswi\tdevcerts\config2.txt
+
+data = ZDRIVE\tswi\tsis\data\testupgrade.sis 		 			tswi\tsis\data\testupgrade.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_augmentation.sis 		 	tswi\tsis\data\testupgrade_augmentation.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_base.sis 		 		tswi\tsis\data\testupgrade_base.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_basediffname.sis 		 	tswi\tsis\data\testupgrade_basediffname.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_baseembed.sis 		 		tswi\tsis\data\testupgrade_baseembed.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_baseembedded.sis 		 	tswi\tsis\data\testupgrade_baseembedded.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_base_C.sis 		 		tswi\tsis\data\testupgrade_base_C.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_invalidupgrade.sis 		 	tswi\tsis\data\testupgrade_invalidupgrade.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_partial.sis 		 		tswi\tsis\data\testupgrade_partial.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_partial2.sis 		 		tswi\tsis\data\testupgrade_partial2.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_partial3.sis 		 		tswi\tsis\data\testupgrade_partial3.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_partial4.sis 		 		tswi\tsis\data\testupgrade_partial4.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_sp.sis 		 		tswi\tsis\data\testupgrade_sp.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgrade.sis 		 		tswi\tsis\data\testupgrade_upgrade.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgrade2.sis 		 		tswi\tsis\data\testupgrade_upgrade2.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgrade3.sis 		 		tswi\tsis\data\testupgrade_upgrade3.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgrade4.sis 		 		tswi\tsis\data\testupgrade_upgrade4.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgradeembed.sis 		 	tswi\tsis\data\testupgrade_upgradeembed.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgradeembed2.sis 		 	tswi\tsis\data\testupgrade_upgradeembed2.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgradeembedded.sis 		 	tswi\tsis\data\testupgrade_upgradeembedded.sis
+data = ZDRIVE\tswi\tsis\data\testupgrade_upgradeembedded2.sis 		 	tswi\tsis\data\testupgrade_upgradeembedded2.sis
+data = ZDRIVE\tswi\tsis\data\DEF061485pu.sis 		 			tswi\tsis\data\DEF061485pu.sis
+data = ZDRIVE\tswi\tsis\data\DEF063439.sis 		 			tswi\tsis\data\DEF063439.sis
+data = ZDRIVE\tswi\tsis\data\upgrade_language.sis 		 		tswi\tsis\data\upgrade_language.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_A.sis 		 		tswi\tsis\data\testaugmentations_A.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_A_PU.sis 		 	tswi\tsis\data\testaugmentations_A_PU.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_B.sis 		 		tswi\tsis\data\testaugmentations_B.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_base.sis 		 	tswi\tsis\data\testaugmentations_base.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_C.sis 		 		tswi\tsis\data\testaugmentations_C.sis
+data = ZDRIVE\tswi\tsis\data\testaugmentations_D.sis 		 		tswi\tsis\data\testaugmentations_D.sis
+data = ZDRIVE\tswi\tsis\data\armv5\DEF061485.sis 				tswi\tsis\data\DEF061485.sis
+data = ZDRIVE\tswi\tsis\data\armv5\filenullmmc.sis 				tswi\tsis\data\filenullmmc.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswinocapabilityhardcode.sis 		tswi\tsis\data\tswinocapabilityhardcode.sis
+data = ZDRIVE\tswi\tsis\data\armv5\embedeclipsingromexepu.sis 			tswi\tsis\data\embedeclipsingromexepu.sis
+data = ZDRIVE\tswi\tsis\data\armv5\embedeclipsingromexesp.sis 			tswi\tsis\data\embedeclipsingromexesp.sis
+data = ZDRIVE\tswi\tsis\data\filebase.sis 		 			tswi\tsis\data\filebase.sis
+data = ZDRIVE\tswi\tsis\data\filepu.sis 		 			tswi\tsis\data\filepu.sis
+data = ZDRIVE\tswi\tsis\data\filesp.sis 		 			tswi\tsis\data\filesp.sis
+data = ZDRIVE\tswi\tsis\data\filesp2.sis 		 			tswi\tsis\data\filesp2.sis
+data = ZDRIVE\tswi\tsis\data\filesp3.sis 		 			tswi\tsis\data\filesp3.sis
+data = ZDRIVE\tswi\tsis\data\testembedpu.sis 		 			tswi\tsis\data\testembedpu.sis
+data = ZDRIVE\tswi\tsis\data\testembedsp.sis 		 			tswi\tsis\data\testembedsp.sis
+data = ZDRIVE\tswi\tsis\data\testembedsp2.sis 		 			tswi\tsis\data\testembedsp2.si
+data = ZDRIVE\tswi\tsis\data\embedspsa.sis 		 			tswi\tsis\data\embedspsa.sis
+data = ZDRIVE\tswi\tsis\data\armv5\filesp-signed.sis 				tswi\tsis\data\filesp-signed.sis
+data = ZDRIVE\tswi\tsis\data\zz1500files.sis 				tswi\tsis\data\zz1500files.sis
+
+data = ZDRIVE\tswi\tsis\data\armv5\testlocations_privatedir.sis 		tswi\tsis\data\testlocations_privatedir.sis
+data = ZDRIVE\tswi\tsis\data\armv5\testlocations_privatedir_patch.sis 		tswi\tsis\data\testlocations_privatedir_patch.sis
+data = ZDRIVE\tswi\tsis\data\armv5\testlocations_privatedir_upgrade.sis 	tswi\tsis\data\testlocations_privatedir_upgrade.sis
+data = ZDRIVE\tswi\tsis\data\bigcontroller.sis 		 			tswi\tsis\data\bigcontroller.sis
+data = ZDRIVE\tswi\tsis\data\bigcontrollerpu.sis 		 		tswi\tsis\data\bigcontrollerpu.sis
+data = ZDRIVE\tswi\tsis\data\def10049_base.sis 		 			tswi\tsis\data\def10049_base.sis
+data = ZDRIVE\tswi\tsis\data\def10049_update1.sis 		 		tswi\tsis\data\def10049_update1.sis
+data = ZDRIVE\tswi\tsis\data\def10049_update1_embedded.sis 		 	tswi\tsis\data\def10049_update1_embedded.sis
+data = ZDRIVE\tswi\tsis\data\def10049_update2.sis 		 		tswi\tsis\data\def10049_update2.sis
+data = ZDRIVE\tswi\tsis\data\def10049_update2_embedded.sis 		 	tswi\tsis\data\def10049_update2_embedded.sis
+data = ZDRIVE\tswi\tsis\data\def10049_update2_sp.sis 		 		tswi\tsis\data\def10049_update2_sp.sis
+data = ZDRIVE\tswi\tsis\data\def10049_additionalTests_A.sis 		 	tswi\tsis\data\def10049_additionalTests_A.sis
+data = ZDRIVE\tswi\tsis\data\def10049_additionalTests_B.sis 		 	tswi\tsis\data\def10049_additionalTests_B.sis
+data = ZDRIVE\tswi\tsis\data\def10049_putest_update.sis 		 	tswi\tsis\data\def10049_putest_update.sis
+data = ZDRIVE\tswi\tsis\data\def10049_putest_update_embedded.sis 		tswi\tsis\data\def10049_putest_update_embedded.sis
+data = ZDRIVE\tswi\tsis\data\def10049_satest_update.sis 		 	tswi\tsis\data\def10049_satest_update.sis
+data = ZDRIVE\tswi\tsis\data\def10049_satest_update_embedded.sis 		tswi\tsis\data\def10049_satest_update_embedded.sis
+data = ZDRIVE\tswi\tsis\data\testembedsapu.sis 		 			tswi\tsis\data\testembedsapu.sis
+data = ZDRIVE\tswi\tsis\data\testembedsasa.sis 		 			tswi\tsis\data\testembedsasa.sis
+data = ZDRIVE\tswi\tsis\data\testembedsa2.sis 		 			tswi\tsis\data\testembedsa2.sis
+data = ZDRIVE\tswi\tsis\data\testembedsasp.sis 		 			tswi\tsis\data\testembedsasp.sis
+data = ZDRIVE\tswi\tsis\data\testembedsasp2.sis 		 		tswi\tsis\data\testembedsasp2.sis
+data = ZDRIVE\tswi\tsis\data\testembedsp2.sis 		 			tswi\tsis\data\testembedsp2.sis
+
+data = ZDRIVE\tswi\tsis\data\legacy.sis 					tswi\tsis\data\legacy.sis
+data = ZDRIVE\tswi\tsis\data\053177c_1.sis 		 			tswi\tsis\data\053177c_1.sis
+data = ZDRIVE\tswi\tsis\data\simpleonc.sis 		 			tswi\tsis\data\simpleonc.sis
+data = ZDRIVE\tswi\tsis\data\simpleond.sis 		 			tswi\tsis\data\simpleond.sis
+data = ZDRIVE\tswi\tdevcerts\data\armv5\match_13.sis 				tswi\tdevcerts\data\match_13.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswiallusercapsinsecuritypolicy.sis 		tswi\tsis\data\tswiallusercapsinsecuritypolicy.sis
+data = ZDRIVE\tswi\tsis\data\testlanguage.sis 		 			tswi\tsis\data\testlanguage.sis
+data = ZDRIVE\tswi\tsis\data\simple.sis 		 			tswi\tsis\data\simple.sis
+data = ZDRIVE\tswi\tsis\data\newoptions.sis 		 			tswi\tsis\data\newoptions.sis
+data = ZDRIVE\tswi\tsis\data\eclipse.sis 		 			tswi\tsis\data\eclipse.sis
+data = ZDRIVE\tswi\tsis\data\testdependency.sis 		 		tswi\tsis\data\testdependency.sis
+data = ZDRIVE\tswi\tsis\data\text.sis 		 				tswi\tsis\data\text.sis
+data = ZDRIVE\tswi\tsis\data\complete.sis 		 			tswi\tsis\data\complete.sis
+data = ZDRIVE\tswi\tsis\data\053177c_4.sis 		 			tswi\tsis\data\053177c_4.sis
+data = ZDRIVE\tswi\tsis\data\053177c_8.sis 		 			tswi\tsis\data\053177c_8.sis
+
+data = ZDRIVE\tswi\tsis\data\testdisplay_install.sis 		 		tswi\tsis\data\testdisplay_install.sis
+
+data = ZDRIVE\tswi\tdevcerts\data\armv5\ocsp_01.sis 				tswi\tdevcerts\data\ocsp_01.sis
+data = ZDRIVE\tswi\tdevcerts\data\armv5\ocsp_02.sis 				tswi\tdevcerts\data\ocsp_02.sis
+data = ZDRIVE\tswi\tdevcerts\data\armv5\ocsp_03.sis 				tswi\tdevcerts\data\ocsp_03.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswinocapability.sis 			tswi\tsis\data\tswinocapability.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswinocapabilityembeded.sis 			tswi\tsis\data\tswinocapabilityembeded.sis
+
+data = ZDRIVE\tswi\tsis\data\testhugecontroller.sis 		 		tswi\tsis\data\testhugecontroller.sis
+data = ZDRIVE\tswi\tsis\data\DEF052175.sis 		 			tswi\tsis\data\DEF052175.sis
+data = ZDRIVE\tswi\tsis\data\CARSA\rsa_len1\longname_rsa_l1.sis 		tswi\tsis\data\CARSA\rsa_len1\longname_rsa_l1.sis
+data = ZDRIVE\tswi\tsis\data\armv5\testrun_exeRIRW.sis 				tswi\tsis\data\testrun_exeRIRW.sis
+data = ZDRIVE\tswi\tsis\data\armv5\console_app_longrun.sis 			tswi\tsis\data\console_app_longrun.sis
+data = ZDRIVE\tswi\tsis\data\armv5\testrun_exeRI_longrun_pu_Root5.sis 		tswi\tsis\data\testrun_exeRI_longrun_pu_Root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\testrun_exe.sis 				tswi\tsis\data\testrun_exe.sis
+data = ZDRIVE\tswi\tsis\data\cancel.sis 		 			tswi\tsis\data\cancel.sis
+data = ZDRIVE\tswi\tsis\data\testmime.sis 		 			tswi\tsis\data\testmime.sis
+data = ZDRIVE\tswi\tsis\data\logo.sis 		 				tswi\tsis\data\logo.sis
+
+data = ZDRIVE\tswi\tsis\data\armv5\cr956_rbs_root5.sis 				tswi\tsis\data\cr956_rbs_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\cr956_rrrirbs_root5.sis 			tswi\tsis\data\cr956_rrrirbs_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\cr956_rbs_embed_root5.sis 			tswi\tsis\data\cr956_rbs_embed_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\cr956_rbs_sh_root5.sis 			tswi\tsis\data\cr956_rbs_sh_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\newoptions_cr956.sis 			tswi\tsis\data\newoptions_cr956.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswinocapabilityhardcode_root5.sis 		tswi\tsis\data\tswinocapabilityhardcode_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\tswinocapabilitypu.sis 			tswi\tsis\data\tswinocapabilitypu.sis
+data = ZDRIVE\tswi\tsis\data\armv5\filesp-signed_root5.sis 			tswi\tsis\data\filesp-signed_root5.sis
+data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu.sis 			tswi\tsis\data\eclipsingromexepu.sis
+data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu_root5.sis 			tswi\tsis\data\eclipsingromexepu_root5.sis
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+// Used for registry management
+file=ABI_DIR\BUILD_DIR\sisregistryaccessserver.exe 		sys\bin\sisregistryaccessserver.exe
+#endif
+
+file=ABI_DIR\BUILD_DIR\testutilclientswi.dll	sys\bin\testutilclientswi.dll
+file=ABI_DIR\BUILD_DIR\testutilserverswi.exe	sys\bin\testutilserverswi.exe
+
+// stub testing
+data = \epoc32\winscw\c\tswi\teclipsing\data\eclispingteststub.sis \system\install\eclispingteststub.sis
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt \eclipsetest\file1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt \eclipsetest\file2.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt \eclipsetest\file3.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\romstub.sis \system\install\romstub.sis
+
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt \noteclipsable\noteclipsable.txt
+
+file = ABI_DIR\BUILD_DIR\eclipsetest1.dll	sys\bin\eclipsetest.dll
+file = ABI_DIR\BUILD_DIR\tswisidupgradeexe.exe	sys\bin\tswisidupgradeexe.exe
+
+// This is the bat file to run the security tests automatically
+data = ZDRIVE\auto.cfg					\auto.cfg
+
+// ced is not included in release builds by default (in commdb.iby)
+// so we include it explicitly here if _DEBUG is NOT defined
+file=ABI_DIR\BUILD_DIR\ced.exe                      				System\Libs\ced.exe
+data=EPOCROOT##epoc32\data\z\system\data\meshpreface1.cfg			system\data\meshpreface1.cfg
+
+file=ABI_DIR\BUILD_DIR\ceddump.exe                  				System\Programs\ceddump.exe
+
+// Security Manager test exports
+data = \epoc32\winscw\c\tswi\tsis\data\certstore\cacerts.dat \tswi\tsis\data\certstore\cacerts.dat
+data = \epoc32\winscw\c\tswi\tsis\data\certstore\certclients.dat \tswi\tsis\data\certstore\certclients.dat
+
+#include "thindump.iby"
+#include "sntpclient.iby"
+#include <insock.iby>
+#include <centralrepository.iby>
+
+
+// *** Additional includes and configuration for vFuture (SSM Requirements) ***
+#ifdef _SSMSTARTUPMODE
+
+#include "aplp.iby"
+#include "amastart.iby"
+#include "shma.iby"
+#include "ssrefplugins.iby"
+
+#endif
+
+// *** Additional includes and configuration for Non-Dp Rom Dependencies ***
+
+#include "sqlite3.iby"
+
+file=ABI_DIR\BUILD_DIR\SDPCodec.dll SHARED_LIB_DIR\SDPCodec.dll
+
+file=ABI_DIR\DEBUG_DIR\securesocket.DLL	System\Libs\securesocket.DLL
+
+file=ABI_DIR\DEBUG_DIR\ipsecpolapi.dll		System\Libs\ipsecpolapi.dll
+file=ABI_DIR\DEBUG_DIR\lib_pfkey.dll		System\Libs\lib_pfkey.dll
+#include "etext.iby"
+
+file=ABI_DIR\DEBUG_DIR\eikcore.dll		System\Libs\EikCore.dll
+
+file=ABI_DIR\BUILD_DIR\clock.dll 		System\Libs\Clock.dll
+file=ABI_DIR\BUILD_DIR\EIKSRVC.DLL				System\Libs\EIKSRVC.DLL
+file=ABI_DIR\BUILD_DIR\UIKLAF.DLL				System\Libs\UIKLAF.DLL
+file=ABI_DIR\BUILD_DIR\eikcoctl.dll 			System\Libs\EikCoctl.dll
+file=ABI_DIR\BUILD_DIR\exparser.dll		        System\Libs\exparser.dll
+file=ABI_DIR\BUILD_DIR\form.dll 		System\Libs\Form.dll
+#include "fepbase.iby"
+file=ABI_DIR\BUILD_DIR\tagma.dll 		System\Libs\Tagma.dll
+//file=ABI_DIR\BUILD_DIR\tzclient.dll		System\Libs\tzclient.dll
+
+
+#endif //TSWITEXTSHELL

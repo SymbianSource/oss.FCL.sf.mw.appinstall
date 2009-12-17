@@ -1,0 +1,7 @@
+EXPORTS
+	??0CSwiObserverPlugin@Swi@@IAE@XZ @ 1 NONAME ; Swi::CSwiObserverPlugin::CSwiObserverPlugin(void)
+	??1CSwiObserverPlugin@Swi@@UAE@XZ @ 2 NONAME ; Swi::CSwiObserverPlugin::~CSwiObserverPlugin(void)
+	?GetExtension@CSwiObserverPlugin@Swi@@UAEHIAAPAXPAX@Z @ 3 NONAME ; int Swi::CSwiObserverPlugin::GetExtension(unsigned int, void * &, void *)
+	?NewL@CSwiObserverPlugin@Swi@@SAPAV12@ABVTUid@@@Z @ 4 NONAME ; class Swi::CSwiObserverPlugin * Swi::CSwiObserverPlugin::NewL(class TUid const &)
+	?Extension_@CSwiObserverPlugin@Swi@@MAEHIAAPAXPAX@Z @ 5 NONAME ; int Swi::CSwiObserverPlugin::Extension_(unsigned int, void * &, void *)
+

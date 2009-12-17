@@ -1,0 +1,37 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   registration resource file of IAD client launcher
+*
+*/
+
+
+
+#include <appinfo.rh>
+#include <iaupdatelauncher.rsg>
+#include <data_caging_paths_strings.hrh>
+#include "iaupdatelauncheruids.h"
+
+UID2 KUidAppRegistrationResourceFile
+UID3 KIAUpdateLauncherUid
+
+RESOURCE APP_REGISTRATION_INFO
+  {
+  app_file="iaupdatelauncher";
+  localisable_resource_file =  APP_RESOURCE_DIR"\\iaupdatelauncher";
+  localisable_resource_id = R_IAUPDATELAUNCHER_LOCALISABLE_APP_INFO;
+
+  embeddability=KAppNotEmbeddable;
+  newfile=KAppDoesNotSupportNewFile;
+  }
+

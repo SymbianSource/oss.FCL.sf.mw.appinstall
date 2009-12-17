@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Software Install Device Tools">
+  <purpose>
+    Tools used to build swicertstore dat file and  console based SWI tool.
+  </purpose>
+
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="003">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+
+  <defect number="DEF128237" title="SWI text console: Incorrectly labelled option in command line help" revision="002">
+    The option to specify destination drive letter for s_help_dd_option_msg  is changed to /dd at swiconsole/inc/swiconsole.l01.
+  </defect>
+
+  <deliverystep number="708" name="Security - Alignment of CBR and System Model components" osproject="Oghma" revision="001">
+    <milestone project="GT0313" number="MS3.7"/>
+    <preq number="775" title="Alignment of CBR and System Model components">
+      SWI Device tools are split from SWI component into a new component security_switools_device.
+    </preq>
+  </deliverystep>
+</relnotes>

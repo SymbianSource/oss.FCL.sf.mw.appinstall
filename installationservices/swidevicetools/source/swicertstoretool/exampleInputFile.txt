@@ -1,0 +1,27 @@
+# exmplateInputFile.txt
+#
+# An example input file for the swi cert store tool
+
+[Root5CA]
+file = c:\system\TOCSP\Certs\newopenssl\Root5-RSA.der
+mandatory = 1
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+
+[SymbianTestDSACA]
+file = c:\tappinst\certs\Symbian-Test-DSA.der
+capability = NetworkServices
+capability = LocalServices
+capability = Location
+application = SWInstall
+application = SWInstallOCSP
+
+[SymbianTestRSACA]
+file = c:\tappinst\certs\Symbian-Test-RSA.der
+capability = ReadUserData
+capability = WriteUserData
+application = SWInstall
+application = SWInstallOCSP

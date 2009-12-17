@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+&EN
+
+#{"SA ROM Upgrade"}, (0x802730A2), 1, 2, 3, TYPE=SA, RU
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tsaromupgradeexe.exe"-"c:\sys\bin\saromupgrade_execute.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswidllnocapabilityprotectedvid.dll"-"c:\sys\bin\saromupgrade_library.dll"
+
+;priavte directory file
+"osver.txt"-"c:\private\10273582\cr1027_config1.txt"
+"osver.txt"-"c:\private\10273582\cr1027_config2.txt"
+
+;data files
+"main.cpp"-"c:\cr1027test\cr1027_file1.txt"
+

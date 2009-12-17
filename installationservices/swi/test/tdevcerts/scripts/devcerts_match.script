@@ -1,0 +1,306 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+// All of the test cases should result in a successful install/uninstall.
+PRINT Run Developer Certificates match test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-match-0001
+//! @SYMTestCaseDesc 		The constraint specifies a single device that matches SIM.TSY
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_01
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_01
+
+END_TESTCASE API-SEC-match-0001
+
+
+//! @SYMTestCaseID 		API-SEC-match-0002
+//! @SYMTestCaseDesc 		The constraint specifies a single secure id that matches the executable.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_02
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_02
+
+END_TESTCASE API-SEC-match-0002
+
+
+//! @SYMTestCaseID 		API-SEC-match-0003
+//! @SYMTestCaseDesc 		The constraint specifies a single vendor id that matches the executable.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_03
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_03
+
+END_TESTCASE API-SEC-match-0003
+
+
+//! @SYMTestCaseID 		API-SEC-match-0004
+//! @SYMTestCaseDesc 		The constraint specifies user grantable capabilities which matches the executables request.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_04
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_04
+
+END_TESTCASE API-SEC-match-0004
+
+
+//! @SYMTestCaseID 		API-SEC-match-0005
+//! @SYMTestCaseDesc 		The constraint allows the system capabilities which are requested by the executable.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_05
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_05
+
+END_TESTCASE API-SEC-match-0005
+
+
+//! @SYMTestCaseID 		API-SEC-match-0006
+//! @SYMTestCaseDesc 		Two chains each with a different constraint types (device and capabilities). 
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_06
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_06
+
+END_TESTCASE API-SEC-match-0006
+
+
+//! @SYMTestCaseID 		API-SEC-match-0007
+//! @SYMTestCaseDesc 		A certificate that specifies each different constraint type.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_07
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_07
+
+END_TESTCASE API-SEC-match-0007
+
+
+//! @SYMTestCaseID 		API-SEC-match-0008
+//! @SYMTestCaseDesc 		Test the narrowing of capabilities. (all_caps n system_caps)
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_08
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_08
+
+END_TESTCASE API-SEC-match-0008
+
+
+//! @SYMTestCaseID 		API-SEC-match-0009
+//! @SYMTestCaseDesc 		Check that executables with unprotected secure ids can be installed even if the secure id constraint doesn't match.
+//! @SYMREQ 			REQ4052 - assumption 3
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_09
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_09
+
+END_TESTCASE API-SEC-match-0009
+
+
+//! @SYMTestCaseID 		API-SEC-match-0010
+//! @SYMTestCaseDesc 		Check that executables with an unprotected vendor id can be installed even if a vendor id constraint is present and not matched.
+//! @SYMREQ 			REQ4052 - assumption 3
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_10
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_10
+
+END_TESTCASE API-SEC-match-0010
+
+
+//! @SYMTestCaseID 		API-SEC-match-0011
+//! @SYMTestCaseDesc 		Check that user grantable capabilities are still prompted for if the constraint doesn't prevent this.
+//! @SYMREQ 			REQ4052 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0011
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_11
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_11
+
+END_TESTCASE API-SEC-match-0011
+
+
+//! @SYMTestCaseID 		API-SEC-match-0012
+//! @SYMTestCaseDesc 		Verify that the constraints applied to an embedded SIS file are independent of the parents constraints.
+//! @SYMREQ 			REQ4052 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0012
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_12
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_12
+
+END_TESTCASE API-SEC-match-0012
+
+
+//! @SYMTestCaseID 		API-SEC-DEF62898-test-0001
+//! @SYMTestCaseDesc 		Test the cancelling case of dev cert warning dialog.
+//! @SYMREQ 			REQ4052 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation should fail.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-DEF62898-test-0001
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\devcert.ini devcertwarn
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\devcert.ini u_devcertwarn
+
+END_TESTCASE API-SEC-DEF62898-test-0001
+
+
+//! @SYMTestCaseID 		API-SEC-match-0013
+//! @SYMTestCaseDesc 		Verify that certificates with no constraints interact correctly with constrained certificates.
+//! @SYMREQ 			REQ4052 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-match-0013
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini match_13
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_match_13
+
+END_TESTCASE API-SEC-match-0013
+
+
+//! @SYMTestCaseID 		API-SEC-DEF058580-0001
+//! @SYMTestCaseDesc 		Attempts to install a SIS file containing an executable that requires a system capability that
+//! 				is not allowed by the constraint but is grantable by the loader i.e. the capability is disabled.
+//! @SYMTestExpectedResults 	Installation is successful.
+
+START_TESTCASE API-SEC-DEF058580-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini 01_loader_capabilities
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_01_loader_capabilities
+
+END_TESTCASE API-SEC-DEF058580-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M-0006
+//! @SYMTestCaseDesc 		Allow the installation of a dll with a protected VID with trusted signature that matches a devcert constraint.
+//! @SYMCR			EGUO-6G9J6M
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install and uninstall a SIS file containing a dll with a protected vendor id.
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini 03_protected_vid_match
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_03_protected_vid_match
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0006
+
+
+//! @SYMTestCaseID 		API-SEC-protpuid_nonconstr_sid_match-0005
+//! @SYMTestCaseDesc 		Package with SIDs not constrained and with protected pUID should be installed.
+//! @SYMDEF 			DEF084528
+//! @SYMTestPriority 		Critical
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-protpuid_nonconstr_sid_match-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini 05_protpuid_nonconstr_sid_match
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_05_protpuid_nonconstr_sid_match
+
+END_TESTCASE API-SEC-protpuid_nonconstr_sid_match-0005
+
+
+//! @SYMTestCaseID 		API-SEC-nonprotpuid_constr_sid_match-0006
+//! @SYMTestCaseDesc 		Package with constrained SIDs and with a non-protected pUID should be installed.
+//! @SYMDEF 			DEF084528
+//! @SYMTestPriority 		Critical
+//! @SYMTestExpectedResults 	Installation is successful.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-nonprotpuid_constr_sid_match-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\match.ini 06_nonprotpuid_constr_sid_match
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\match.ini u_06_nonprotpuid_constr_sid_match
+
+END_TESTCASE API-SEC-nonprotpuid_constr_sid_match-0006
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,102 @@
+MAKEDATA :
+!IF "$(PLATFORM)" == "GCCXML" || "$(PLATFORM)" == "TOOLS"
+	cd
+	echo ----------------
+	echo  Do nothing ...
+	echo ----------------
+!ELSE
+	cd
+	echo ---------------------------
+	echo Building test rom stub...
+	echo ---------------------------
+
+	cd data
+	makesis -s eclipsingteststub.pkg
+	makesis -s romstub.pkg
+	makesis -s 2000stub.pkg
+	makesis -s backuprestore_test_rom_stub.pkg
+
+	makesis -s CR1027ROMUpgradeStub.pkg
+	makesis -s CR1027ROMUpgradeStub2.pkg
+	makesis -s CR1027ROMUpgradeStubDiffPkg.pkg
+	makesis -s CR1122WildCardROMStub.pkg
+	makesis -s sucertromstub.pkg
+	makesis -s adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.pkg
+	makesis -s adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.pkg
+
+	IF NOT EXIST %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data md %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data
+	copy eclipsingteststub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\eclispingteststub.sis
+	copy romstub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\romstub.sis
+	copy 2000stub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\2000stub.sis
+	copy CR1027ROMUpgradeStub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\CR1027ROMUpgradeStub.sis
+	copy CR1122WildCardROMStub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\CR1122WildCardROMStub.sis
+	copy sucertromstub.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\sucertromstub.sis
+	copy adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis
+	copy adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis %EPOCROOT%epoc32\winscw\c\tswi\teclipsing\data\adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy romstub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\romstub.sis
+	copy backuprestore_test_rom_stub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\backuprestore_test_rom_stub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy romstub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\romstub.sis
+	copy backuprestore_test_rom_stub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\backuprestore_test_rom_stub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy eclipsingteststub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\eclipsingteststub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy eclipsingteststub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\eclipsingteststub.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy sucertromstub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\sucertromstub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy sucertromstub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\sucertromstub.sis
+	
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy CR1027ROMUpgradeStub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\CR1027ROMUpgradeStub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy CR1027ROMUpgradeStub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\CR1027ROMUpgradeStub.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\winscw\c\tswi\tinterpretsisinteg\data md %EPOCROOT%epoc32\winscw\c\tswi\tinterpretsisinteg\data
+	copy CR1027ROMUpgradeStub2.sis %EPOCROOT%epoc32\winscw\c\tswi\tinterpretsisinteg\data\CR1027ROMUpgradeStub2.sis
+	copy CR1027ROMUpgradeStubDiffPkg.sis %EPOCROOT%epoc32\winscw\c\tswi\tinterpretsisinteg\data\CR1027ROMUpgradeStubDiffPkg.sis
+	copy adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis %EPOCROOT%epoc32\winscw\c\tswi\tinterpretsisinteg\data\adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy CR1122WildCardROMStub.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\CR1122WildCardROMStub.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy CR1122WildCardROMStub.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\CR1122WildCardROMStub.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis
+
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\udeb\z\system\install md %EPOCROOT%epoc32\release\winscw\udeb\z\system\install
+	copy adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis %EPOCROOT%epoc32\release\winscw\udeb\z\system\install\adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis
+	IF NOT EXIST %EPOCROOT%epoc32\release\winscw\urel\z\system\install md %EPOCROOT%epoc32\release\winscw\urel\z\system\install
+	copy adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis %EPOCROOT%epoc32\release\winscw\urel\z\system\install\adornedfilenamestesting_stub_0x2baecad8_symbiantest1_dummydll4pkg.sis
+
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+FINAL : DO_NOTHING
+RELEASABLES : DO_NOTHING
+
+SAVESPACE : BLD
+
+BLD : MAKEDATA
+
+CLEAN :     
+	cd data
+        del *.sis

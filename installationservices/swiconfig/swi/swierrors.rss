@@ -1,0 +1,55 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+NAME SWIE
+#include <badef.rh>
+#include <baerrrsvr.rh>
+
+#include "swierrors01.rls"
+
+RESOURCE BA_RSS_SIGNATURE { }
+
+RESOURCE ERROR_SET r_error_res_swi_set
+	{
+	errorarrays=
+		{
+		ERROR_ARRAY
+			{
+			startError=-10100;
+			errors=r_error_res_swi_sisx_file_errors;
+			},
+		ERROR_ARRAY
+			{
+			startError=-10200;
+			errors=r_error_res_swi_process_error;
+			},
+		ERROR_ARRAY
+			{
+			startError=-10250;
+			errors=r_error_res_swi_instserv_errors;
+			},
+		ERROR_ARRAY
+			{
+			startError=-10270;
+			errors=r_error_res_legacy_error;
+			}
+		};
+	}
+
+#include "swierrors.ra"
+

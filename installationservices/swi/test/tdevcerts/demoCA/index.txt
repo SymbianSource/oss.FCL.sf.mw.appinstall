@@ -1,0 +1,2 @@
+R	980705233205Z	951009233205Z	01	certs/00000001	/CN=Eric Young
+V	010331000000Z		0162	unknown	/C=UK/O=Symbian/CN=Entity Cert ocsp_03 comb1 0 0

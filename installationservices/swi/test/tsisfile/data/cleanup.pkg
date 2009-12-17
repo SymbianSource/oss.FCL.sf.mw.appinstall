@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; sis file which installs nothing but should clean up a directory
+; testers should ensure that this directory exists
+
+&EN
+
+#{"cleanup"}, (0x88000031), 1, 2, 3
+
+%{"Vendor"}
+:"Vendor"
+
+"cleanup.pkg"-"", FT, TC
+
+"text\file1.txt"-"C:\Documents\InstTest\file1.txt"
+
+""-"C:\Documents\InstTest\deleteme", FN
+""-"C:\Documents\InstTest\deleteme1\", FN
+""-"C:\Documents\InstTest\deleteme2\*.*", FN
+""-"C:\Documents\InstTest\romeo.txt", FN

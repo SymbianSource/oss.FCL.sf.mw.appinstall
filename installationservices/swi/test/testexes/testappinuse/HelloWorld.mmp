@@ -1,0 +1,53 @@
+/*
+* Copyright (c) 2000-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* using relative paths for sourcepath and user includes
+*
+*/
+
+
+TARGET        helloworld_forpackage.exe
+TARGETTYPE    exe
+TARGETPATH    /tswi/testexes/testappinuse
+UID           0x100039CE 0x90008ACE
+VENDORID 	  0
+
+SOURCEPATH    .
+SOURCE        HelloWorld_Main.cpp
+SOURCE        HelloWorld_Application.cpp
+SOURCE        HelloWorld_Document.cpp
+SOURCE        HelloWorld_AppUi.cpp
+SOURCE        HelloWorld_AppView.cpp
+USERINCLUDE   .
+APP_LAYER_SYSTEMINCLUDE_SYMBIAN
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+
+START RESOURCE	HelloWorld.rss
+HEADER
+end
+
+START RESOURCE	helloworldhacked.rss
+END
+
+START RESOURCE	HelloWorld_reg.rss
+DEPENDS		helloworld.rsg
+END
+
+START BITMAP	helloworld.mbm
+SOURCE			c8,1 icon24.BMP icon2M.BMP icon32.BMP icon3M.BMP icon48.BMP icon4M.BMP
+END
+
+LIBRARY       euser.lib apparc.lib cone.lib eikcore.lib bafl.lib gdi.lib
+SMPSAFE

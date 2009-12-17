@@ -1,0 +1,7 @@
+
+
+10274D07		Interface ID.				KSwiDriveWatcherPlugin
+10274D08		Plugin DLL.
+10274D09		Interface implementation
+
+

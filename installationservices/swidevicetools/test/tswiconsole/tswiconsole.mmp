@@ -1,0 +1,52 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* tswiconsole.exe
+*
+*/
+
+
+/**
+ @file
+*/
+
+CAPABILITY ProtServ TrustedUI
+
+TARGET			tswiconsole.exe
+TARGETTYPE		exe
+UID			0xE000007A 0xE01F777C
+VENDORID		0x70000001
+
+SOURCEPATH		.
+SOURCE			tswiconsoleserver.cpp
+SOURCE			tswiconsolestep.cpp
+SOURCE			tswiconsolestepbase.cpp
+SOURCE 			tswiconsoleutilitystep.cpp
+
+USERINCLUDE		.
+USERINCLUDE		../../../swi/test
+USERINCLUDE		../../../swi/inc
+USERINCLUDE		../../../swi/inc/swi
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY			euser.lib
+LIBRARY			testexecuteutils.lib
+LIBRARY			efsrv.lib
+LIBRARY			testexecutelogclient.lib
+LIBRARY			sishelper.lib
+LIBRARY			flogger.lib
+LIBRARY 		estor.lib
+LIBRARY			bafl.lib
+SMPSAFE

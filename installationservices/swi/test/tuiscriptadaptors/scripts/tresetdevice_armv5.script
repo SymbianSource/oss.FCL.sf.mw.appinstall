@@ -1,0 +1,178 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+PRINT SWIPolicy AllowPackagePropagate, DeletePreinstalledFilesOnUninstall must be set to true for these tests to pass
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+// after startup wait for registry to shutdown so it can restart and reinitialize with the test registry files
+DELAY 5000
+
+//! @file
+//! @SYMTestCaseID   		API-SEC-ResetDevice-HW-0001					
+//! @SYMTestCaseDesc 		Prepares the test by backing up the existing SisRegistry and copying test files
+//! @SYMDEF	     		PDEF091134
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Prepares the test by backing up the existing SisRegistry and copying test files
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-ResetDevice-HW-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest BackupRegistry
+
+END_TESTCASE API-SEC-ResetDevice-HW-0001
+
+
+RUN_UTILS DeleteFile e:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile e:\Documents\InstTest\upgrade2.txt
+RUN_UTILS DeleteFile e:\Documents\InstTest\upgrade3.txt
+RUN_UTILS DeleteFile e:\private\10202dce\811111FD.sis
+RUN_UTILS DeleteFile e:\testupgrade_base.sis
+RUN_UTILS DeleteFile e:\upgrade1.txt
+RUN_UTILS DeleteFile e:\upgrade2.txt
+RUN_UTILS DeleteFile e:\upgrade3.txt
+
+
+//! @SYMTestCaseID   		API-SEC-ResetDevice-HW-0002
+//! @SYMTestCaseDesc 		Install an application to MMC, backup the device, flash the MMC and device,
+//!		     		boot and attempt a restore to empty phone
+//! @SYMDEF	     		PDEF091134
+//! @SYMTestPriority 		Low
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions  		Restore application.
+//! @SYMTestExpectedResults 	Restore should complete.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-ResetDevice-HW-0002
+
+// Install the application
+RUN_TEST_STEP	100	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini install
+
+// Backup the device
+RUN_TEST_STEP	100	tbackuprestore	  BACKUP      z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+// Wait for registry to shutdown
+DELAY 5000
+
+// Format phone (which is simulated by deleting the registry)
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+
+// Check whether the installed file is present
+RUN_TEST_STEP	100	tbackuprestore	  ABSENT     z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+// Attempt to restore the backup
+RUN_TEST_STEP 100 tbackuprestore    RESTORE        z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+// Check whether the installed file is present
+RUN_TEST_STEP	100	tbackuprestore	  PRESENT     z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+// cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep  z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini u_install
+
+END_TESTCASE API-SEC-ResetDevice-HW-0002
+
+
+
+
+//! @SYMTestCaseID   		API-SEC-ResetDevice-HW-0005
+//! @SYMTestCaseDesc 		Install an application to MMC, backup the device, flash the device, and make the 
+//!		     		application Propagated, downgrade the Propagated, boot and attempt a restore. 
+//! @SYMDEF	     		PDEF091134
+//! @SYMTestPriority 		Low
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions  		Restore the application should fail
+//! @SYMTestExpectedResults 	Fail restore the application with KErrNotSupport
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-ResetDevice-HW-0005
+
+// Install the application
+RUN_TEST_STEP	100	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini install_upgrade
+
+// Copy the stub that was created and the texts files installed by testupgrade_base.sis
+RUN_UTILS CopyFile e:\private\10202dce\811111FD.sis e:\811111FD.sis
+RUN_UTILS CopyFile e:\Documents\InstTest\upgrade1.txt e:\upgrade1.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\upgrade4.txt e:\upgrade4.txt
+
+// Backup the device
+RUN_TEST_STEP	100	tbackuprestore	  BACKUP      z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+// Wait for registry to shutdown
+DELAY 5000
+
+// Format phone (which is simulated by deleting the registry)
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+
+// Unmount the MMC
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+// Re-Insert the MMC and boot
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep   z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Make the application 
+RUN_UTILS MkDir e:\Documents\
+RUN_UTILS MkDir e:\Documents\InstTest\
+RUN_UTILS CopyFile e:\upgrade1.txt e:\Documents\InstTest\upgrade1.txt
+RUN_UTILS CopyFile e:\upgrade4.txt e:\Documents\InstTest\upgrade4.txt
+RUN_UTILS DeleteFile e:\upgrade1.txt
+RUN_UTILS DeleteFile e:\upgrade4.txt
+
+// Copy stub back into position
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile e:\811111FD.sis e:\private\10202dce\811111FD.sis 
+RUN_UTILS DeleteFile e:\811111FD.sis
+
+// Silent Install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep  z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini install_upgrade
+
+// Downgrade the Propagated App.
+RUN_TEST_STEP	100	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini install
+
+// Attempt to restore the backup
+RUN_TEST_STEP 100 tbackuprestore    RESTORE        z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini resetdevice
+
+
+// cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep  z:\tswi\tuiscriptadaptors\scripts\tresetdevice.ini u_install
+
+END_TESTCASE API-SEC-ResetDevice-HW-0005
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-ResetDevice-HW-0006
+//! @SYMTestCaseDesc 		Removes the Test Registry, restores the original
+//! @SYMDEF	     		PDEF091134
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Removes the test registry
+//! @SYMTestExpectedResults 	The test completes with KErrNone completion code.
+//! @SYMTestType 		UT
+
+// wait for the registry to shutdown
+START_TESTCASE API-SEC-ResetDevice-HW-0006
+
+DELAY 10000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+RUN_TEST_STEP 100 tSisRegistryTest RestoreRegistry
+
+END_TESTCASE API-SEC-ResetDevice-HW-0006
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

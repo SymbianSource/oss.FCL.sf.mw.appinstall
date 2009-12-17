@@ -1,0 +1,297 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run Silent install tests
+LOAD_SUITE tuiscriptadaptors
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_AWIR-6FSGNJ-B-0001
+//! @SYMTestCaseDesc		Check expected callbacks happen
+//! @SYMREQ 			REQ5496 REQ5497 REQ5498
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-B-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test1_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test1_all
+// Do not need to cleanup because following test formats the MMC
+
+END_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_AWIR-6FSGNJ-0002
+//! @SYMTestCaseDesc		Tries to install a SISX file onto drive q, which is not present
+//! @SYMREQ 			REQ5499
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test2_all
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+END_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-0002
+
+
+// Copy files into place on the pre-installed drives
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledpatch.txt
+
+//Install a base package through normal installation(tuiscriptadaptors). 
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini selfsigned_base
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0001
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base pkg and Swi-Daemon will check preinstall patch(PP) over it.
+//! @SYMDEF 			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test2_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test3_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0001
+
+
+// Install a patch over base using normal installation (tuiscriptadaptors).
+
+// Install preinstalled patch on MMC.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch_x
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0002
+//! @SYMTestCaseDesc		Check expected callbacks happen we have Base, PP over it and Swi-Daemon will check PP again with the same name.
+//! @SYMDEF 			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test2_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test4_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0003
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base , PP over it and PP over it with different name using Swi-Daemon.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0003
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test3_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test5_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0003
+
+
+// Remove base app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base
+
+// Install base package(SA) 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini  augmentation_base
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0004
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have a Base pkg and Swi-Daemon will check SP over it.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0004
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test4_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test6_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0004
+
+
+// Really Install the SP from normal installation. 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini augmentation_A
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0005
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base,SP over it and Swi-Daemon will check SP again with the same name.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0005
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test4_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test4_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0006
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base,SP over it and Swi-Daemon will check SP again with different name.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0006
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test5_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test7_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0006
+
+
+// Uninstall the augmentation and base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini u_augmentation_A
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini u_augmentation
+
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_install_dsa_l1.sis e:\testpreinstalled_install_dsa_l1.sis
+
+// pre-installed normal application
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install
+
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0007
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base pkg (PA) and Swi-Daemon will check PP over it.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0007
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test6_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test8_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0007
+
+
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_patch2_dsa_l1.sis e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledpatch2.txt
+
+// pre-installed patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch2
+
+//! @SYMTestCaseID		API-SEC-SWIDummyPlugin-I-0008
+//! @SYMTestCaseDesc		Check expected callbacks happen when we have Base pkg (PA), PP over it and Swi-Daemon will check for PP again with same name.
+//! @SYMDEF			DEF105776
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Format MMC, copy pre-installed app to MMC, and check actions after re-inserting MMC
+//! @SYMTestExpectedResults	Correct callbacks occur
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-SWIDummyPlugin-I-0008
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test6_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tsilent.ini test4_all
+
+END_TESTCASE API-SEC-SWIDummyPlugin-I-0008
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_install
+
+// End of file
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

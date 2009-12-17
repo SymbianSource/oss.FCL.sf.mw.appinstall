@@ -1,0 +1,24 @@
+ROM Based SwiCertStore :
+
+unicodecertificatename.dat:
+
+[Root5CA]
+
+file = Root5CA.der
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 1
+SystemUpgrade = 0
+
+
+[SymbianTestDSACA]
+
+file = SymbianTestDSACA.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+application = SWInstall
+application = SWInstallOCSP
+Mandatory = 0
+SystemUpgrade = 0
+

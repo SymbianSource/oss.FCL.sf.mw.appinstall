@@ -1,0 +1,472 @@
+/*
+* Copyright (c) 2002-2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for sixui plugin.
+*
+*/
+
+
+NAME SIUI
+
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <avkon.mbg>
+#include <avkon.loc>
+#include <SWInstCommonUI.rsg>
+#include "SisxUI.rh"                // LANG_NAME
+#include <e32lang.h>                // TLanguage enum
+#include <languages.hrh>            // S60 added language codes
+
+#include <appinstui.loc>
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE TBUF64 { buf = ""; }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_options_query
+//    Defines a dialog for option selection
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE AVKON_MULTISELECTION_LIST_QUERY r_sisxui_options_query
+    {
+    flags = EGeneralQueryFlags;
+    softkeys = r_swiui_softkeys_ok_cancel__mark;
+
+    items =
+        {
+        AVKON_MULTISELECTION_LIST_QUERY_DLG_LINE 
+            {
+            control = AVKON_LIST_QUERY_CONTROL
+                {
+                listtype = EAknCtSingleGraphicPopupMenuListBox;
+                listbox = AVKON_MULTISELECTION_LIST_QUERY_LIST
+                    {
+                    array_id = r_sisxui_empty_array;
+                    };
+                heading = qtn_swins_title_optional_files;
+                };
+            }
+        };
+    }
+
+
+//------------------------------------------------------------------------------
+//
+//    r_swiui_softkeys_ok_cancel__mark
+//    Defines a CBA, temporary solution
+//    Change back to Avkon's R_Avkon_softkeys_ok_cancel__mark
+//    after the fix has been made in avkon side
+//------------------------------------------------------------------------------
+//
+RESOURCE CBA r_swiui_softkeys_ok_cancel__mark
+    {
+    buttons =
+        {
+        CBA_BUTTON {id=EAknSoftkeyYes; txt=text_softkey_ok;},
+        CBA_BUTTON {id=EAknSoftkeyCancel; txt= text_softkey_cancel;},
+        CBA_BUTTON {id=EAknSoftkeyMark; txt=qtn_msk_mark;}
+        };
+    }
+
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_language_query
+//    Defines a dialog for language selection
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE AVKON_LIST_QUERY r_sisxui_language_query
+    {
+    flags = EGeneralQueryFlags;
+    softkeys = R_AVKON_SOFTKEYS_OK_CANCEL__OK;
+
+    items =
+        {
+        AVKON_LIST_QUERY_DLG_LINE
+            {
+            control = AVKON_LIST_QUERY_CONTROL
+                {
+                listtype = EAknCtSinglePopupMenuListBox;
+                listbox = AVKON_LIST_QUERY_LIST
+                    {
+                    array_id = r_sisxui_empty_array;
+                    };
+                heading = qtn_swins_lqh_lang_sel;
+                };
+            }
+        };
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_text_dialog
+//    Defines a dialog for showing application specific texts
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_sisxui_text_dialog
+    {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_EMPTY__OK;
+    items=
+        {
+        DLG_LINE 
+            {
+            type = EAknCtPopupHeadingPane;
+            id = EAknMessageQueryHeaderId;
+            control = AVKON_HEADING
+                {
+                headinglayout = R_AVKON_WML_SIGN_QUERY_HEADING_PANE;
+                };
+            },
+        DLG_LINE
+            {
+            type = EAknCtMessageQuery;
+            id = EAknMessageQueryContentId;
+            control = AVKON_MESSAGE_QUERY
+                {
+                };
+            }
+        };
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_capab_dialog
+//    Defines a dialog for capablities acceptance
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_sisxui_capab_dialog
+    {
+    flags = EGeneralQueryFlags | EEikDialogFlagNoBorder | EEikDialogFlagNoShadow;
+    buttons = R_SWCOMMON_SOFTKEYS_CONTINUE_CANCEL__CONTINUE;
+    items=
+        {
+        DLG_LINE 
+            {
+            type = EAknCtPopupHeadingPane;
+            id = EAknMessageQueryHeaderId;
+            control = AVKON_HEADING
+                {
+                label = qtn_swins_capab_header;
+                headinglayout = R_AVKON_WML_SIGN_QUERY_HEADING_PANE;
+                };
+            },
+        DLG_LINE
+            {
+            type = EAknCtMessageQuery;
+            id = EAknMessageQueryContentId;
+            control = AVKON_MESSAGE_QUERY
+                {
+                };
+            }
+        };
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_devcert_warning_dialog
+//    Defines a warning dialog for development certificate installations
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_sisxui_devcert_dialog
+    {
+    flags = EGeneralQueryFlags | EEikDialogFlagNoBorder | EEikDialogFlagNoShadow;
+    buttons = R_AVKON_SOFTKEYS_YES_NO__YES;
+    items =
+        {
+        DLG_LINE 
+            {
+            type = EAknCtPopupHeadingPane;
+            id = EAknMessageQueryHeaderId;
+            control = AVKON_HEADING
+                {
+                label = qtn_am_note_head_security_warn;
+                headinglayout = R_AVKON_WML_SIGN_QUERY_HEADING_PANE;
+                };
+            },
+        DLG_LINE
+            {
+            type = EAknCtMessageQuery;
+            id = EAknMessageQueryContentId;
+            control = AVKON_MESSAGE_QUERY
+                {                
+                };
+            }
+        };
+
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_softkeys_continue_empty
+//    Defines softkeys continue, empty
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE CBA r_sisxui_softkeys_continue_empty
+    {
+    buttons =
+        {
+        CBA_BUTTON { id = EAknSoftkeyOk; txt = text_softkey_continue; },
+	  CBA_BUTTON { txt = text_softkey_empty; }
+        };
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_softkeys_continue_empty__continue
+//    Defines softkeys continue, empty, continue (MSK)
+//
+//------------------------------------------------------------------------------
+//
+RESOURCE CBA r_sisxui_softkeys_continue_empty__continue
+    {
+    buttons =
+        {
+        CBA_BUTTON { id = EAknSoftkeyOk; txt = text_softkey_continue; },
+	CBA_BUTTON { txt = text_softkey_empty; },
+        CBA_BUTTON { id = EAknSoftkeyOk; txt = text_softkey_continue; } 
+        };
+    }
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_empty_array
+//    Defines an empty array
+//
+//------------------------------------------------------------------------------
+RESOURCE ARRAY r_sisxui_empty_array
+    {
+    items=
+        {
+        LBUF { txt=""; }
+        };
+    }
+
+//----------------------------------------------------
+//    r_sisxui_dialect_code
+//----------------------------------------------------
+RESOURCE INT16 r_sisxui_dialect_code { value = 0; }
+
+//------------------------------------------------------------------------------
+//
+//    String definitions
+//
+//------------------------------------------------------------------------------
+//
+
+// Wait note strings
+RESOURCE TBUF r_sisxui_preparing { buf = qtn_swins_note_prep_inst; }
+RESOURCE TBUF r_sisxui_installing { buf = qtn_swins_note_install; }
+RESOURCE TBUF r_sisxui_uninstalling { buf = qtn_gen_note_removing; }
+RESOURCE TBUF r_sisxui_doing_ocsp { buf = qtn_am_ocsp_wait_check; }
+RESOURCE TBUF r_sisxui_cancelling { buf = qtn_inst_note_cancel; }
+
+// Information note strings
+RESOURCE TBUF r_sisxui_install_cancelled { buf = qtn_swins_note_cancelled; }
+RESOURCE TBUF r_sisxui_uninstall_cancelled { buf = qtn_swins_uninstall_cancel; }
+RESOURCE TBUF r_sisxui_install_completed { buf = qtn_jam_install_complete; }
+RESOURCE TBUF r_sisxui_uninstall_completed { buf = qtn_jam_uninstall_done_info; }
+
+// Prompt strings
+RESOURCE TBUF r_sisxui_install_prompt { buf = qtn_swins_note_inst_conf_head; }
+RESOURCE TBUF r_sisxui_uninstall_prompt { buf = qtn_swins_note_uninst_conf_head; }
+RESOURCE TBUF r_sisxui_upgrade_prompt { buf = qtn_inst_conf_replace; }
+RESOURCE TBUF r_sisxui_close_single_inst { buf = qtn_inst_conf_close_single; }
+RESOURCE TBUF r_sisxui_close_multi_inst { buf = qtn_inst_conf_close_multi; }
+RESOURCE TBUF r_sisxui_close_single_uninst { buf = qtn_am_close_running; } 
+RESOURCE TBUF r_sisxui_close_multi_uninst { buf = qtn_am_close_running_multi; }
+RESOURCE TBUF r_sisxui_ocsp_security_warning { buf = qtn_swins_note_security_warn; }
+RESOURCE TBUF r_sisxui_ocsp_mandatory { buf = qtn_am_ocsp_must_check_query; }
+RESOURCE TBUF r_sisxui_dependency_break { buf = qtn_swins_note_uninst_conf_warn; }
+RESOURCE TBUF r_sisxui_component_missing { buf = qtn_swins_note_comp_missing; }
+RESOURCE TBUF r_sisxui_incomp_package { buf = qtn_swins_note_incomp_applic; }
+RESOURCE TBUF r_sisxui_devcert_warning { buf = qtn_swins_query_dev_cert; }
+
+// Error strings
+RESOURCE TBUF r_sisxui_already_in_rom { buf = qtn_swins_note_rom; }
+RESOURCE TBUF r_sisxui_require_ver { buf = qtn_swins_note_need_version; }
+RESOURCE TBUF r_sisxui_require_ver_or_greater { buf = qtn_swins_note_need_vers_gre; }
+RESOURCE TBUF r_sisxui_disk_not_present { buf = qtn_swins_note_no_mmc; }
+RESOURCE TBUF r_sisxui_cannot_read { buf = qtn_swins_note_incomp_read; }
+RESOURCE TBUF r_sisxui_cannot_delete { buf = qtn_swins_note_incomp_delete; }
+RESOURCE TBUF r_sisxui_capabilities_cannot_be_granted { buf = qtn_swins_note_capab_fail; }
+RESOURCE TBUF r_sisxui_update_error { buf = qtn_swins_note_update_err; }
+RESOURCE TBUF r_sisxui_not_compatible { buf = qtn_swins_note_incomp; }
+RESOURCE TBUF r_sisxui_file_corrupt { buf = qtn_swins_note_file_corrupt; }
+RESOURCE TBUF r_sisxui_certificate_error { buf = qtn_swins_note_cert_fail; }
+RESOURCE TBUF r_sisxui_selfsigned_error { buf = qtn_swins_note_check_settings; }
+RESOURCE TBUF r_sisxui_not_enough_memory { buf = qtn_swins_note_no_memory; }
+RESOURCE TBUF r_sisxui_ocsp_revoked { buf = qtn_am_ocsp_warn_cert_revoked; }
+RESOURCE TBUF r_sisxui_ocsp_settings_error { buf = qtn_swins_note_ocsp_sett; }
+RESOURCE TBUF r_sisxui_ocsp_general_error { buf = qtn_swins_note_ocsp_fail; }
+RESOURCE TBUF r_sisxui_install_error { buf = qtn_jam_install_failed; }
+RESOURCE TBUF r_sisxui_uninstall_error { buf = qtn_swins_note_unable_uninstall; }
+RESOURCE TBUF r_sisxui_access_denied { buf = qtn_swins_note_access_denied; }
+RESOURCE TBUF r_sisxui_cert_date_invalid { buf = qtn_swins_note_date_mismatch; }
+RESOURCE TBUF r_sisxui_cert_expired { buf = qtn_swins_note_expired; }
+RESOURCE TBUF r_sisxui_base_missing { buf = qtn_swins_note_base_missing; }
+RESOURCE TBUF r_sisxui_uninstall_partial_error { buf = qtn_swins_note_uninst_partial; }
+RESOURCE TBUF r_sisxui_protected_error { buf = qtn_swins_note_protected; }
+RESOURCE TBUF r_sisxui_constrained_error { buf = qtn_swins_note_cert_constrained; }
+
+// For capabilities dialog
+RESOURCE TBUF r_sisxui_capab_heading { buf = qtn_inst_conf_capab; }
+RESOURCE TBUF r_sisxui_capab_local { buf = qtn_swins_capab_local; }
+RESOURCE TBUF r_sisxui_capab_read_user { buf = qtn_inst_capab_read; }
+RESOURCE TBUF r_sisxui_capab_write_user { buf = qtn_inst_capab_modify; }
+RESOURCE TBUF r_sisxui_capab_userenv { buf = qtn_swins_capab_userenv; } 
+RESOURCE TBUF r_sisxui_capab_more_info { buf = qtn_swins_capab_info; }
+RESOURCE TBUF r_sisxui_capab_network { buf = qtn_inst_capab_network; } 
+RESOURCE TBUF r_sisxui_capab_location { buf = qtn_inst_capab_location; } 
+
+
+//------------------------------------------------------------------------------
+//
+//    r_sisxui_languages_array
+//    Defines an array of all supported languages
+//
+//------------------------------------------------------------------------------
+
+RESOURCE ARRAY r_sisxui_languages_array
+    {
+    items=
+        {
+		LANG_NAME { id = ELangTest; txt = qtn_swins_lqi_unknow; },
+		LANG_NAME { id = ELangEnglish; txt = qtn_swins_lqi_uk; },
+		LANG_NAME { id = ELangFrench; txt = qtn_swins_lqi_french; },
+		LANG_NAME { id = ELangGerman; txt = qtn_swins_lqi_german; },
+		LANG_NAME { id = ELangSpanish; txt = qtn_swins_lqi_span; },
+		LANG_NAME { id = ELangItalian; txt = qtn_swins_lqi_ital; },
+		LANG_NAME { id = ELangSwedish; txt = qtn_swins_lqi_swedish; },
+		LANG_NAME { id = ELangDanish; txt = qtn_swins_lqi_danish; },
+		LANG_NAME { id = ELangNorwegian; txt = qtn_swins_lqi_norweg; },
+		LANG_NAME { id = ELangFinnish; txt = qtn_swins_lqi_finnish; },
+		LANG_NAME { id = ELangAmerican; txt = qtn_swins_lqi_us; },
+		LANG_NAME { id = ELangSwissFrench; txt = qtn_swins_lqi_swissfre; },
+		LANG_NAME { id = ELangSwissGerman; txt = qtn_swins_lqi_swissger; },
+		LANG_NAME { id = ELangPortuguese; txt = qtn_swins_lqi_portug; },
+		LANG_NAME { id = ELangTurkish; txt = qtn_swins_lqi_turk; },
+		LANG_NAME { id = ELangIcelandic; txt = qtn_swins_lqi_ice; },
+		LANG_NAME { id = ELangRussian; txt = qtn_swins_lqi_russ; },
+		LANG_NAME { id = ELangHungarian; txt = qtn_swins_lqi_hung; },
+		LANG_NAME { id = ELangDutch; txt = qtn_swins_lqi_dutch; },
+		LANG_NAME { id = ELangBelgianFlemish; txt = qtn_swins_lqi_belgdutch; },
+		LANG_NAME { id = ELangAustralian; txt = qtn_swins_lqi_austeng; },
+		LANG_NAME { id = ELangBelgianFrench; txt = qtn_swins_lqi_belgfrench; },
+		LANG_NAME { id = ELangAustrian; txt = qtn_swins_lqi_austrger; },
+		LANG_NAME { id = ELangNewZealand; txt = qtn_swins_lqi_nzeng; },
+		LANG_NAME { id = ELangInternationalFrench; txt = qtn_swins_lqi_intfrench; },
+		LANG_NAME { id = ELangCzech; txt = qtn_swins_lqi_czech; },
+		LANG_NAME { id = ELangSlovak; txt = qtn_swins_lqi_slovak; },
+		LANG_NAME { id = ELangPolish; txt = qtn_swins_lqi_polish; },
+		LANG_NAME { id = ELangSlovenian; txt = qtn_swins_lqi_sloven; },
+		LANG_NAME { id = ELangTaiwanChinese; txt = qtn_swins_lqi_taiwchin; },
+		LANG_NAME { id = ELangHongKongChinese; txt = qtn_swins_lqi_hkchin; },
+		LANG_NAME { id = ELangPrcChinese; txt = qtn_swins_lqi_prcchin; },
+		LANG_NAME { id = ELangJapanese; txt = qtn_swins_lqi_japan; },
+		LANG_NAME { id = ELangThai; txt = qtn_swins_lqi_thai; },
+		LANG_NAME { id = ELangAfrikaans; txt = qtn_swins_lqi_afrik; },
+		LANG_NAME { id = ELangAlbanian; txt = qtn_swins_lqi_alb; },
+		LANG_NAME { id = ELangAmharic; txt = qtn_swins_lqi_amhar; },
+		LANG_NAME { id = ELangArabic; txt = qtn_swins_lqi_arabic; },
+		LANG_NAME { id = ELangArmenian; txt = qtn_swins_lqi_armenian; },
+		LANG_NAME { id = ELangTagalog; txt = qtn_swins_lqi_taga; },
+		LANG_NAME { id = ELangBelarussian; txt = qtn_swins_lqi_belarus; },
+		LANG_NAME { id = ELangBengali; txt = qtn_swins_lqi_beng; },
+		LANG_NAME { id = ELangBulgarian; txt = qtn_swins_lqi_bulg; },
+		LANG_NAME { id = ELangBurmese; txt = qtn_swins_lqi_burm; },
+		LANG_NAME { id = ELangCatalan; txt = qtn_swins_lqi_catalan; },
+		LANG_NAME { id = ELangCroatian; txt = qtn_swins_lqi_croat; },
+		LANG_NAME { id = ELangCanadianEnglish; txt = qtn_swins_lqi_caneng; },
+		LANG_NAME { id = ELangInternationalEnglish; txt = qtn_swins_lqi_inteng; },
+		LANG_NAME { id = ELangSouthAfricanEnglish; txt = qtn_swins_lqi_saeng; },
+		LANG_NAME { id = ELangEstonian; txt = qtn_swins_lqi_estonia; },
+		LANG_NAME { id = ELangFarsi; txt = qtn_swins_lqi_farsi; },
+		LANG_NAME { id = ELangCanadianFrench; txt = qtn_swins_lqi_canfrench; },
+		LANG_NAME { id = ELangScotsGaelic; txt = qtn_swins_lqi_scotgael; },
+		LANG_NAME { id = ELangGeorgian; txt = qtn_swins_lqi_georg; },
+		LANG_NAME { id = ELangGreek; txt = qtn_swins_lqi_greek; },
+		LANG_NAME { id = ELangCyprusGreek; txt = qtn_swins_lqi_cygreek; },
+		LANG_NAME { id = ELangGujarati; txt = qtn_swins_lqi_gujarat; },
+		LANG_NAME { id = ELangHebrew; txt = qtn_swins_lqi_hebr; },
+		LANG_NAME { id = ELangHindi; txt = qtn_swins_lqi_hindi; },
+		LANG_NAME { id = ELangIndonesian; txt = qtn_swins_lqi_indon; },
+		LANG_NAME { id = ELangIrish; txt = qtn_swins_lqi_irish; },
+		LANG_NAME { id = ELangSwissItalian; txt = qtn_swins_lqi_swissital; },
+		LANG_NAME { id = ELangKannada; txt = qtn_swins_lqi_kannada; },
+		LANG_NAME { id = ELangKazakh; txt = qtn_swins_lqi_kazakh; },
+		LANG_NAME { id = ELangKhmer; txt = qtn_swins_lqi_khmer; },
+		LANG_NAME { id = ELangKorean; txt = qtn_swins_lqi_korean; },
+		LANG_NAME { id = ELangLao; txt = qtn_swins_lqi_lao; },
+		LANG_NAME { id = ELangLatvian; txt = qtn_swins_lqi_latv; },
+		LANG_NAME { id = ELangLithuanian; txt = qtn_swins_lqi_lith; },
+		LANG_NAME { id = ELangMacedonian; txt = qtn_swins_lqi_maced; },
+		LANG_NAME { id = ELangMalay; txt = qtn_swins_lqi_malay; },
+		LANG_NAME { id = ELangMalayalam; txt = qtn_swins_lqi_malyalam; },
+		LANG_NAME { id = ELangMarathi; txt = qtn_swins_lqi_marath; },
+		LANG_NAME { id = ELangMoldavian; txt = qtn_swins_lqi_molda; },
+		LANG_NAME { id = ELangMongolian; txt = qtn_swins_lqi_mong; },
+		LANG_NAME { id = ELangNorwegianNynorsk; txt = qtn_swins_lqi_nornynorsk; },
+		LANG_NAME { id = ELangBrazilianPortuguese; txt = qtn_swins_lqi_brazport; },
+		LANG_NAME { id = ELangPunjabi; txt = qtn_swins_lqi_punj; },
+		LANG_NAME { id = ELangRomanian; txt = qtn_swins_lqi_roman; },
+		LANG_NAME { id = ELangSerbian; txt = qtn_swins_lqi_serb; },
+		LANG_NAME { id = ELangSinhalese; txt = qtn_swins_lqi_sinhal; },
+		LANG_NAME { id = ELangSomali; txt = qtn_swins_lqi_somal; },
+		LANG_NAME { id = ELangInternationalSpanish; txt = qtn_swins_lqi_intspan; },
+		LANG_NAME { id = ELangLatinAmericanSpanish; txt = qtn_swins_lqi_latspan; },
+		LANG_NAME { id = ELangSwahili; txt = qtn_swins_lqi_swahil; },
+		LANG_NAME { id = ELangFinlandSwedish; txt = qtn_swins_lqi_finswe; },
+		LANG_NAME { id = ELangReserved1; txt = qtn_swins_lqi_tajik; },
+		LANG_NAME { id = ELangTamil; txt = qtn_swins_lqi_tamil; },
+		LANG_NAME { id = ELangTelugu; txt = qtn_swins_lqi_telugu; },
+		LANG_NAME { id = ELangTibetan; txt = qtn_swins_lqi_tibet; },
+		LANG_NAME { id = ELangTigrinya; txt = qtn_swins_lqi_tigrin; },
+		LANG_NAME { id = ELangCyprusTurkish; txt = qtn_swins_lqi_cyturk; },
+		LANG_NAME { id = ELangTurkmen; txt = qtn_swins_lqi_turkmen; },
+		LANG_NAME { id = ELangUkrainian; txt = qtn_swins_lqi_ukran; },
+		LANG_NAME { id = ELangUrdu; txt = qtn_swins_lqi_urdu; },
+		LANG_NAME { id = ELangReserved2; txt = qtn_swins_lqi_uzbek; },
+		LANG_NAME { id = ELangVietnamese; txt = qtn_swins_lqi_viet; },
+		LANG_NAME { id = ELangWelsh; txt = qtn_swins_lqi_welsh; },
+		LANG_NAME { id = ELangZulu; txt = qtn_swins_lqi_zulu; },
+		LANG_NAME { id = ELangBasque; txt = qtn_swins_lqi_basque; },
+		LANG_NAME { id = ELangGalician; txt = qtn_swins_lqi_galic; },
+		LANG_NAME { id = ELangEnglish_Apac; txt = qtn_swins_lqi_apaceng; },
+		LANG_NAME { id = ELangEnglish_Taiwan; txt = qtn_swins_lqi_tweng; },
+		LANG_NAME { id = ELangEnglish_HongKong; txt = qtn_swins_lqi_hkeng; },
+		LANG_NAME { id = ELangEnglish_Prc; txt = qtn_swins_lqi_prceng; },
+		LANG_NAME { id = ELangEnglish_Japan; txt = qtn_swins_lqi_jpneng; },
+		LANG_NAME { id = ELangEnglish_Thailand; txt = qtn_swins_lqi_thaieng; },
+		LANG_NAME { id = ELangMalay_Apac; txt = qtn_swins_lqi_apacmalay; },
+
+		// Additional S60 language codes (not defined in TLanguage enum)
+		LANG_NAME { id = KLangApacIndonesian; txt = qtn_swins_lqi_apacind; },
+
+		// Old language IDs (used in S60 3.2 products):
+		LANG_NAME { id = 401; txt = qtn_swins_lqi_basque; },
+		LANG_NAME { id = 402; txt = qtn_swins_lqi_galic; }
+		};
+	}
+
+
+// End of File

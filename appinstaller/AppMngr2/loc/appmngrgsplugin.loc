@@ -1,0 +1,40 @@
+/*
+* Copyright (c) 2003-2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   This is a localisation file for AppMngrGSPlugin
+*
+*/
+
+
+//  MENU OPTIONS
+
+// CAPTION STRINGS
+
+// d: Application plugin title for general settings
+// l: list_single_large_graphic_pane_t1
+// w: 
+// r: 3.1
+#define qtn_set_folder_application_manager "Application Manager"
+
+// d: Application plugin title for control panel list
+// l: list_single_large_graphic_pane_t1
+// w: 
+// r: 5.0
+#define qtn_cp_folder_installation_settings "Installation Settings"
+
+// d: Title of installation settings in status pane.
+// r: 5.0
+// l: title_pane_t2/opt9
+#define qtn_am_installation_settings_title "Installation Settings"
+
+// End of File

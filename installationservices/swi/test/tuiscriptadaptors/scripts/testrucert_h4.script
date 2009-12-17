@@ -1,0 +1,891 @@
+//
+// Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+
+PRINT Run all eclipsing tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tbackuprestore
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0002
+//! @SYMTestCaseDesc		Eclipsing z drive with RU flags without sis stubs 
+//! @SYMREQ 			REQ8958
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		eclipses files in the absence of correponding stubs
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-B-0002
+//! @SYMTestCaseDesc		Eclipsing z drive with RU flags without sis stubs with protected pUID
+//! @SYMREQ 			REQ8958
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		eclipses files in the absence of correponding stubs 
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully only if symbian signed
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-B-0002
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_protectedsid_notsigned
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_protectedsid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_protectedsid
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-B-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-2A-0002
+//! @SYMTestCaseDesc		Eclipsing z drive with RU flags with sis stubs 
+//! @SYMREQ 			REQ8958
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		eclipses files in the presence of correponding stubs
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-2A-0002
+
+//Checking for eclipsing files referred by stub
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_stubpresent_sa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_stubpresent_pu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_stubpresent_sp
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubpresent1
+// sp on top of ROM uninstalled seperately
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubpresent_sp
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-2A-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-2ABand2B-0002
+//! @SYMTestCaseDesc		Eclipsing z drive with RU flags with sis stubs in different drives which are already eclipsed in one drive
+//! @SYMREQ 			REQ8958
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		eclipses files another drive which are already eclipsed in one drive
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-2ABand2B-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertsa_diffdrive
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-2ABand2B-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0006
+//! @SYMTestCaseDesc		Eclipsing z drive with RU flags with sis stubs in different drives which are already eclipsed in one drive
+//! @SYMREQ 			REQ8975
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		overwriting of files while upgrading
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_saoversa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_saoversa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertpuoversa
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertspoversa_overwrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0008-and-0009
+//! @SYMTestCaseDesc		Check for upgrades signed with SU Cert over SA package
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		upgrading of files
+//! @SYMTestExpectedResults	z drive files are eclipsed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0008-and-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertpuoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0008-and-0009
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-8A-0008
+//! @SYMTestCaseDesc		Check for upgrades not signed with SU Cert over SA package
+//! @SYMREQ 			REQ8962, REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		upgrading of files fails as valid signature is missing
+//! @SYMTestExpectedResults	no upgrading 
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-8A-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nonrucertpuoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-8A-0008
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0010
+//! @SYMTestCaseDesc		Check for patches(SP) over SA package signed with certificate trusted with SystemUpgrade flag
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Patching of sis file
+//! @SYMTestExpectedResults	Successfull installation of SP package over SA Package
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertspoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0010
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-10A-0010
+//! @SYMTestCaseDesc		Check for patches(SP) over SA package when SP is not signed with valid certificate
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		upgrading of files fails as valid signature is missing
+//! @SYMTestExpectedResults	upgrading of files fails as valid signature is missing
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-10A-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nonrucertspoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-10A-0010
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0012-and-0013
+//! @SYMTestCaseDesc		Check for PU, SP over SA package signed with valid certificate
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Successfull installation of PU followed by SP package over SA Package
+//! @SYMTestExpectedResults	Successful installing of PU and SP packages
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0012-and-0013
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertpuoversa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertspoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0012-and-0013
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0014
+//! @SYMTestCaseDesc		Check for PU signed with valid certificate, without base package
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install PU sis 
+//! @SYMTestExpectedResults	upgrading of files fails as the base package is missing
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0014
+
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertpuoversa_withoutbase
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0014
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0015
+//! @SYMTestCaseDesc		Check for SP signed with valid certificate, without base package
+//! @SYMREQ 			REQ8965
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install SP sis signed with SU cert
+//! @SYMTestExpectedResults	upgrading of file fails as the base package is missing
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0015
+
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertspoversa_withoutbase
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-2F-0002
+//! @SYMTestCaseDesc		Check for eclipsing exe's with same SID
+//! @SYMREQ 			REQ8959
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		fails with -11 
+//! @SYMTestExpectedResults	Eclipsing of exe'e with same SID is not allowed
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-2F-0002
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_samesid
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-2F-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-7A-0007
+//! @SYMTestCaseDesc		Check for eclipsing of files with SA which are already eclipsed with SA
+//! @SYMREQ 			REQ8964
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Successful eclipsing of files
+//! @SYMTestExpectedResults	Major upgrades to packages is allowed
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-7A-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_saoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-7A-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0003
+//! @SYMTestCaseDesc		Check for eclipsing of files with SA not signed with SU Cert
+//! @SYMREQ 			REQ8959
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install sis file without SU cert which eclipses files
+//! @SYMTestExpectedResults	Installation fails with -10257
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0003
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nonrucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0004
+//! @SYMTestCaseDesc		Check for eclipsing of files with SA without RU flag
+//! @SYMREQ 			REQ8959
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install sis file without RU flag which eclipses files
+//! @SYMTestExpectedResults	Installation fails with -10257
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0004
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_noruflag
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4Aand4B-0004
+//! @SYMTestCaseDesc		Installing non-removable eclipsing packages and upgrades when signed with SU Cert
+//! @SYMREQ 			REQ8970
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable sis file and upgrade with RU flag and SU Cert which eclipses files
+//! @SYMTestExpectedResults	Installs successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4Aand4B-0004
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrsa
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+// RUN_UTILS DeleteDirectory c:\sys\install\sisregistry\802730A7  fails with permissiondenied
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrpu
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrdir
+RUN_UTILS DeleteDirectory c:\rucerttest
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4Aand4B-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4C-0004
+//! @SYMTestCaseDesc		Installing non-removable partial upgrade packages not signed using trusted certificate
+//! @SYMREQ 			REQ8971
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable upgrade with RU flag and SU Cert which eclipses files
+//! @SYMTestExpectedResults	Upgrading fails with -10256
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4C-0004
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrsa
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nonrucert_nrpu
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrdir
+RUN_UTILS DeleteDirectory c:\rucerttest
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4C-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4D-0004
+//! @SYMTestCaseDesc		Installing non-removable SP packages
+//! @SYMREQ 			REQ8970
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable patch with RU flag and SU Cert which eclipses files
+//! @SYMTestExpectedResults	Patch is installed successfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4D-0004
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrsa
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrspovernrsa
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrdir
+RUN_UTILS DeleteDirectory c:\rucerttest
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4D-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4E-0004
+//! @SYMTestCaseDesc		Installing non-removable PU over normal SA pkg
+//! @SYMREQ 			REQ8971
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable upgrade with RU flag and SU Cert over removable sis file
+//! @SYMTestExpectedResults	Installation fails with -10256
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4E-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nrupgradeovernonnr
+// the above installation should not be allowed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4E-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-5A-0005
+//! @SYMTestCaseDesc		eclipsing z drive with RU flags with sis stubs with NR pkg file
+//! @SYMREQ 			REQ8961
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable package with RU flag and SU Cert in presence of stub
+//! @SYMTestExpectedResults	Installation fails with -10256
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-5A-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nrsaupgradeovernonnr
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrnormaldir
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-5A-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4G-0004
+//! @SYMTestCaseDesc		Installing non-removable eclipsing packages not signed with RU-Cert
+//! @SYMREQ 			REQ8970
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable eclipsing sis file not signed eith trusted certificate
+//! @SYMTestExpectedResults	Installation fails with -5
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4G-0004
+
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nonrucert_nrsa
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4G-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4AB-0004
+//! @SYMTestCaseDesc		Installing non-removable eclipsing packages in presence of stub
+//! @SYMREQ 			REQ8970
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install non-removable eclipsing sis file in presence of stub
+//! @SYMTestExpectedResults	Installation succeeds and the files are eclipsed
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4AB-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_nrsa_stubfile
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrdir
+RUN_UTILS DeleteDirectory c:\rucerttest
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4AB-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-2C-0002
+//! @SYMTestCaseDesc		Eclipsing z drive binary with more capabilities than SU CERT.
+//! @SYMREQ 			REQ8959
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to eclipse binaries with more capabilities than the certificate has.
+//! @SYMTestExpectedResults	Installation fails with -10254
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-2C-0002
+
+//Check for eclipsing exe with more caps than sucert
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_morecaps
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-2C-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-2D-0002
+//! @SYMTestCaseDesc		eclipsing z drive binary with more capabilities than SU CERT and signing with another certificate which has the required capabilities.
+//! @SYMREQ 			REQ8959
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to eclipse binaries with more capabilities than the certificate has, but signed with two certs
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-2D-0002
+
+//Check for eclipsing exe with more caps than sucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_morecaps_root5cacert
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_morecaps_root5cacert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-2D-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-5B-0005
+//! @SYMTestCaseDesc		eclipsing z drive with RU flags with sis file having same UID as stub.
+//! @SYMREQ 			REQ8961
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to eclipse files which has same UID as the stub
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-5B-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubuid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubuid
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-5B-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-7C-0007
+//! @SYMTestCaseDesc		Major upgrades to a packages which eclipses z drive files.
+//! @SYMREQ 			REQ8964
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Upgrading already eclipsed files with SA
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-7C-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  simplesa_nonsucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  sucertsa_over_nonsucert
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_sucertsa_over_nonsucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-7C-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-18and19-0007
+//! @SYMTestCaseDesc		Check for embedded packages which eclipse z drive files
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install and uninstall RU SA signed with SU CERT with right embedded package
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-18and19-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  sucert_embed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_sucert_embed
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-18and19-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0005
+//! @SYMTestCaseDesc		Eclipsing z drive files in presence of stubs
+//! @SYMREQ 			REQ8961
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install and uninstall RU SA signed with SU CERT 
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0005
+
+//sa sis + RU flag + SU cert + different uid from stub + packagename is same as one of the stub + filelist  not owned by any of the stub 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini   sucert_stubname_diffuid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini   u_sucert_stubname_diffuid
+//sa sis + RU flag + SU cert + different uid from stub + different packaename from stub + filelist which is owned by one of the stub
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini   sucert_diffstubname_diffuid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini   u_sucert_diffstubname_diffuid
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-11and11A-0011
+//! @SYMTestCaseDesc		SP over SA which upgraded ROM package which do not have same UID as an existing ROM stub and uninstalling
+//! @SYMREQ 			REQ8966
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install SA followed by SP 
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-11and11A-0011
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep	z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertspoversa
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucertspoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-11and11A-0011
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-7B-0007
+//! @SYMTestCaseDesc		SA over upgraded SA which eclipsed z drive without sis stubs and ensure base package is deleted before upgraded package is installed
+//! @SYMREQ 			REQ8976
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install SA followed by SA and check base is uninstalled
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-7B-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertpuoversa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_saoversa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-7B-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0017
+//! @SYMTestCaseDesc		Eclipsing of files in different drives
+//! @SYMREQ 			REQ8974
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Eclipse files in one drive which are already eclipsed in another drive
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0017
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertsa_diffdrive
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0017
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-4F-0004
+//! @SYMTestCaseDesc		Installing normal SP packages over NR SA package
+//! @SYMREQ 			REQ8970
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install normal patch with RU flag and SU Cert over non-removable SA
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-4F-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_nrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spovernrsa
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrdir
+RUN_UTILS DeleteDirectory c:\rucerttest
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-4F-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-17A-0017
+//! @SYMTestCaseDesc		Eclipsing of files in different drives
+//! @SYMREQ 			REQ8974
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Eclipse files in one drive which are already eclipsed in another drive
+//! @SYMTestExpectedResults	Installation succeeds
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-17A-0017
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucertsa_diffdrive1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucertsa_diffdrive1
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-17A-0017
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0018
+//! @SYMTestCaseDesc		Eclipsing of files using PA 
+//! @SYMREQ 			REQ8974
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Eclipse files using PA
+//! @SYMTestExpectedResults	Installation fails with KErrInvalidUpgrade
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0018
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini preinstall_sucert
+RUN_UTILS MkDir e:\rucerttest
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini preinstall_sucert_install
+RUN_TEST_STEP 50 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  preinstall_sucert_remove
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0018
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-SAoverSA_diffuid-0007
+//! @SYMTestCaseDesc		Check for eclipsing of files with SA which are already eclipsed with SA with different UID
+//! @SYMREQ 			REQ8964
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Successful eclipsing of files
+//! @SYMTestExpectedResults	Major upgrades to packages is allowed
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-SAoverSA_diffuid-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_saoversa_diffuid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_saoversa_diffuid
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-SAoverSA_diffuid-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0050
+//! @SYMTestCaseDesc		SAoverSARUSU
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0050
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_wihtoutRU_withoutSUsigned
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_wihtoutSUsigned
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0050
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0051
+//! @SYMTestCaseDesc		SARUSUoverSA
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0051
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert_wihtoutRU_withoutSUsigned1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini rucert
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0051
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0052
+//! @SYMTestCaseDesc		SARUSUoverSARU
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0052
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini saru
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini sarusu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_sarusu
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0052
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0053
+//! @SYMTestCaseDesc		SARUSUoverSARUSU
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0053
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_sasu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert_nrsa
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0053
+
+
+//! @SYMTestCaseID		API-SEC-SPtest-H4-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SPtest-H4-0001
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_sp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_sp1
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_sp2
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_sp3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_rucert
+
+END_TESTCASE API-SEC-SPtest-H4-0001
+
+
+//! @SYMTestCaseID		API-SEC-SPRomstubtest-H4-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SPRomstubtest-H4-0001
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubpresent_sa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubpresent_sasp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubpresent_saspru
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubpresent_sasprunr_failed
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_stubpresent_sasprunrsucert_failed
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubpresent
+// sp on top of ROM uninstalled seperately
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubpresent_sasp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  u_rucert_stubpresent_saspru
+
+END_TESTCASE API-SEC-SPRomstubtest-H4-0001
+
+
+//! @SYMTestCaseID		API-SEC-SPNRtest-H4-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SPNRtest-H4-0001
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_nrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_spovernrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_ruspovernrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_ruspnrovernrsa
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  rucert_suruspovernrsa
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrspdir
+
+END_TESTCASE API-SEC-SPNRtest-H4-0001
+
+
+//! @SYMTestCaseID		API-SEC-SPNRRomstubtest-H4-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SPNRRomstubtest-H4-0001
+
+//While uninstalling fives KErrNotSupported Error
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini nrsaupgradestub
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nrsaupgradestub_sp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nrsaupgradestub_spru
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nrsaupgradestub_sprunr
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  nrsaupgradestub_sprunrsucert
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini  removenrspstubdir
+
+END_TESTCASE API-SEC-SPNRRomstubtest-H4-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-PREQ1912-H4-0016
+//! @SYMTestCaseDesc		Backup and restore with private file only
+//! @SYMREQ 			REQ8974
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		install, backup, uninstall and restore of sis file with private file only
+//! @SYMTestExpectedResults	back up and restore succeed 
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-SWI-PREQ1912-H4-0016
+
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+RUN_TEST_STEP   100	tbackuprestore	INSTALL		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tuiscriptadaptors\scripts\testrucert.ini		rucert_backuprestore_private
+
+END_TESTCASE API-SEC-SWI-PREQ1912-H4-0016
+
+
+//! @SYMTestCaseID		API-SEC-SWI-INC125338-H4-0001
+//! @SYMDEF			INC125338
+//! @SYMTestCaseDesc		Test case for defect INC125338
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install various SIS files SU signed without RU flag
+//! @SYMTestExpectedResults	SA SU SIS files behave as normal SA SU files
+
+START_TESTCASE API-SEC-SWI-INC125338-H4-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini INC125338_SA
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_INC125338_SA
+
+END_TESTCASE API-SEC-SWI-INC125338-H4-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RemovingNonRemovablePatches-H4-0001
+//! @SYMTestCaseDesc		Verify that a non-removable patch is removed if the base package is made removable and uninstalled.
+//! @SYMDEF 			DEF126082
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Install a non-removable base-package SA+RU+SU+NR
+//!				Install a non-removable patch SP+RU+SU+NR
+//!				Install a removable SA upgrade SA+RU+SU
+//!				Uninstall the base now that it has been removed.	
+//! @SYMTestExpectedResults	The base, sp and all of their files should be removed.
+
+START_TESTCASE API-SEC-RemovingNonRemovablePatches-H4-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_base_nr  
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_patch_nr
+// Check base is not removable and uninstall fails
+RUN_TEST_STEP_RESULT -5 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_spnr_base_denied
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_sa_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_spnr_base
+
+END_TESTCASE API-SEC-RemovingNonRemovablePatches-H4-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RemovingEmbeddedNonRemovablePatches-H4-0001
+//! @SYMTestCaseDesc		Same as RemovingNonRemovablePatches but the system-upgrade is delivered as an embedded package
+//! @SYMDEF 			DEF126082
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Install wrapper package that embedds non-removable base-package 	SA+RU+SU+NR
+//!				Install a non-removable patch 										SP+RU+SU+NR
+//!				Install a removable SA upgrade to the embedded package				SA+RU+SU
+//!				Uninstall the base (wrapper)
+//! @SYMTestExpectedResults	The base, sp and all of their files should be removed.
+
+START_TESTCASE API-SEC-RemovingEmbeddedNonRemovablePatches-H4-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_embed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_patch_nr
+// Check base is not removable and uninstall fails
+RUN_TEST_STEP_RESULT -5 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_spnr_base_denied
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\testrucert.ini spnr_sa_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_spnr_embed
+
+END_TESTCASE API-SEC-RemovingEmbeddedNonRemovablePatches-H4-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF125174_TestEclipse-H4-0001
+//! @SYMTestCaseDesc		Test scenario for a SA_RU over SP_RU Is trusted to eclipse the rom files in case of SU Packages.
+//! @SYMDEF  			DEF125174
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install SPRU over SARU of SU packages for eclipsing the Rom exes.
+//! @SYMTestExpectedResults	File installs sucessfully.
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF125174_TestEclipse-H4-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini def125174_SASU
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini def125174_SPSU_Eclipse
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_def125174
+
+END_TESTCASE API-SEC-DEF125174_TestEclipse-H4-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF125174_TestOverWrite-H4-0001
+//! @SYMTestCaseDesc		Test scenario for a SA_RU over SP_RU Is not trusted to overwrite the rom files in case of SU Packages.
+//! @SYMDEF  			DEF125174
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to install a SU certified SPRU package would not allow to overwrite the files which are already installed  By SARU package installation.
+//! @SYMTestExpectedResults	KErrSISWouldOverWrite for failure cases.
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF125174_TestOverWrite-H4-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini def125174_SARU
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini def125174_SASU
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini def125174_SPSU_overwrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_def125174_SARU
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrucert.ini u_def125174
+
+END_TESTCASE API-SEC-DEF125174_TestOverWrite-H4-0001
+

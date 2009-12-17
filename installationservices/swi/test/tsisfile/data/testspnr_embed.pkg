@@ -1,0 +1,26 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+; Embeds testspnr_appsarusunr to verify that the non-removable SP can still
+; be removed even if the corresponding SA package was an embedded package.
+
+#{"Test Application Embed SA1"}, (0x81001812), 1, 0, 1, TYPE=SA
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+@"testspnr_appsarusunr.sis",(0x01001811)
+"text\file1.txt"-"c:\spnr\embed.txt"

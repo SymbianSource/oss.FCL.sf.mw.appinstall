@@ -1,0 +1,96 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all overwrite private directory tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-DEF082922-0002
+//! @SYMTestCaseDesc 		Orphaned files in protected dirs can be overwritten by untrusted packages
+//! @SYMDEF 			DEF082922
+//! @SYMTestPriority 		High
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions 		a) Create a file - e:\private\80604020\import\orphan.sis and install a package which overwites it.
+//! 				b) attempt to install a package which overwrites a file in /resource
+//! 				c) attempt to install a package which overwrites a file in /sys/bin
+//! @SYMTestExpectedResults 	all installations should pass
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-DEF082922-0002
+
+RUN_UTILS  MkDir e:\private\
+RUN_UTILS  MkDir e:\private\80604020\
+RUN_UTILS  MkDir e:\private\80604020\import\
+
+#create blocking files
+RUN_TEST_STEP 5 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+
+# /private/xxxxxxxx/import
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /resource
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /sys/bin
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+RUN_TEST_STEP 5 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+
+RUN_UTILS DeleteDir e:\private\80604020\import\
+RUN_UTILS DeleteDir e:\private\80604020\
+
+PRINT Test code for DEF094558: Overwriting orphaned executables blows up install process
+PRINT NOTE On the emulator this test requires that overwriteprivate_positive.bat is run first to work,
+PRINT This copies tswiusergrantable_none.exe to z:\tswi\testexes\
+
+END_TESTCASE API-SEC-DEF082922-0002
+
+
+//! @SYMTestCaseID 		API-SEC-DEF094558-0001
+//! @SYMTestCaseDesc 		Overwriting orphaned executables blows up install process
+// 				When SWI is preparing to install it first checks if any of the files that are to be installed already exist.  
+// 				If there is an exe which is about to be replaced and was not part of an original install (that is an 
+// 				"orphaned" file) SWI attempts to stop that exe.  The defect was that the SID value of 0 was used 
+// 				rather than the correct value. This could cause SWI to stop the wrong process and as a 
+// 				result "bad things may happen".
+//! @SYMDEF 			DEF094558
+//! @SYMTestPriority 		High
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions 		a) create the orphaned exe by copying tswiusergrantable_none.exe to c:\sys\bin
+//! 				b) Install a pkg (tswiusergrantable_none.sis) that contains the same exe.
+//! 				This tests the defect fix as without the fix this install fails.
+//! 				c) Tidy up by uninstalling the package. 
+//! @SYMTestExpectedResults 	all installations should pass
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-DEF094558-0001
+
+#create orphaned exe by copying tswiusergrantable_none.exe to sys\bin
+RUN_TEST_STEP 5 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\overwriting_executables.ini overwriting_executables
+
+#install tusergrantable.sis using simple.xml
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\overwriting_executables.ini overwriting_executables
+
+#tidy up by uninstall exe
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\overwriting_executables.ini u_overwriting_executables
+
+END_TESTCASE API-SEC-DEF094558-0001
+

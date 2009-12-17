@@ -1,0 +1,11 @@
+EXPORTS
+	?AddL@RIntegrityServicesServerSession@Test@Swi@@QAEXABVTDesC16@@@Z @ 1 NONAME ; void Swi::Test::RIntegrityServicesServerSession::AddL(class TDesC16 const &)
+	?CommitL@RIntegrityServicesServerSession@Test@Swi@@QAEXXZ @ 2 NONAME ; void Swi::Test::RIntegrityServicesServerSession::CommitL(void)
+	?Connect@RIntegrityServicesServerSession@Test@Swi@@QAEHXZ @ 3 NONAME ; int Swi::Test::RIntegrityServicesServerSession::Connect(void)
+	?CreateNewTestFileL@RIntegrityServicesServerSession@Test@Swi@@QAEXABVTDesC16@@@Z @ 4 NONAME ; void Swi::Test::RIntegrityServicesServerSession::CreateNewTestFileL(class TDesC16 const &)
+	?CreateTempTestFileL@RIntegrityServicesServerSession@Test@Swi@@QAEXABVTDesC16@@@Z @ 5 NONAME ; void Swi::Test::RIntegrityServicesServerSession::CreateTempTestFileL(class TDesC16 const &)
+	?RemoveL@RIntegrityServicesServerSession@Test@Swi@@QAEXABVTDesC16@@@Z @ 6 NONAME ; void Swi::Test::RIntegrityServicesServerSession::RemoveL(class TDesC16 const &)
+	?RollBackL@RIntegrityServicesServerSession@Test@Swi@@QAEXH@Z @ 7 NONAME ; void Swi::Test::RIntegrityServicesServerSession::RollBackL(int)
+	?SetSimulatedFailure@RIntegrityServicesServerSession@Test@Swi@@QAEXVTPtrC16@@00@Z @ 8 NONAME ; void Swi::Test::RIntegrityServicesServerSession::SetSimulatedFailure(class TPtrC16, class TPtrC16, class TPtrC16)
+	?TemporaryL@RIntegrityServicesServerSession@Test@Swi@@QAEXABVTDesC16@@@Z @ 9 NONAME ; void Swi::Test::RIntegrityServicesServerSession::TemporaryL(class TDesC16 const &)
+

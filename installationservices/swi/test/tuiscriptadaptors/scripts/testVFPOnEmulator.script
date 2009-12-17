@@ -1,0 +1,42 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all tests for VFP Support
+LOAD_SUITE tuiscriptadaptors
+
+
+//! @SYMTestCaseID 		API-SEC-VFP-AUTOVFPSISFILE-I-0001
+//! @SYMTestCaseDesc 		Installs a SIS file which support the option to install the most appropriate executable. 
+//! @SYMREQ 			REQ5259
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Installs a SIS file which support the option to install the most appropriate executable. 
+//! @SYMTestExpectedResults 	The most appropriate executable installs sucessfully
+//! @SYMDevelopedForRelease 	Intulo
+
+START_TESTCASE API-SEC-VFP-AUTOVFPSISFILE-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testVFPOnEmulator.ini VFPAutoSIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testVFPOnEmulator.ini u_VFPAutoSIS
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testVFPOnEmulator.ini VFPAutoSIS1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testVFPOnEmulator.ini u_VFPAutoSIS1
+
+END_TESTCASE API-SEC-VFP-AUTOVFPSISFILE-I-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

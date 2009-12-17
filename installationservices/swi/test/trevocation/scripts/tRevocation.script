@@ -1,0 +1,533 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Revocation tests...
+
+LOAD_SUITE tRevocation
+LOAD_SUITE tuiscriptadaptors
+
+
+//===============================================================================
+//! @file
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0011
+//! @SYMTestCaseDesc		Scenario where SisRegistry's ValidationStatus = EValidatedToAnchor
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then uninstalls a file that has been signed by a good signing certificate.
+//! @SYMTestExpectedResults	ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspNotPerformed, Installation ok
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0011
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.1
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.1
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.1
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.1
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.1
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0011
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0012
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s ValidationStatus = EExpired
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then uninstalls a file that has been signed by an expired certificate.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0012
+
+//Here,an expired certificate is used
+PAUSE
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.2
+PAUSE
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.2
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.2
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.2
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.2
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0012
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0016
+//! @SYMTestCaseDesc		Scenario where SisRegistry's RevocationStatus = EOcspGood
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0016
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.6
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.6
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.6
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.6
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.6
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0016
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0018
+//! @SYMTestCaseDesc		Scenario where SisRegistry's RevocationStatus = EOcspTransient
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. PIR check is with an invalid address
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0018
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.8
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.8
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.8
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.8
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.8
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0018
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0019
+//! @SYMTestCaseDesc		Scenario where SisRegistry's RevocationStatus = EOcspUnknown
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. PIR check is with an address that doesn't recognize the certificate
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0019
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.9
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.9
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.9
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.9
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.9
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0019
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0021
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspGood
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as good
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0021
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0021
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0022
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspRevoked
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognize the certificate as revoked
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, At install, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspNotPerformed. Then PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspRevoked
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0022
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0022
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0023
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspTransient
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an invalid address
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, At install, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspNotPerformed, PIR check runs ok then, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0023
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.3a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.3a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0023
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0024
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspGood to EOcspTransient
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an address that recognizes the certificate as good. PIR check is with an invalid address
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, At install, RevocationStatus = EOcspGood. PIR check runs ok then, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0024
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.4a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.4a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0024
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0025
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspTransient to EOcspGood
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an invalid address. PIR check is with an address that recognizes the certificate as good. 
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, At install, RevocationStatus = EOcspTransient, then PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0025
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.5a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.5a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0025
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0026
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspUnknown to EOcspTransient
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an address that doesn't recognize the certificate. PIR check is with an invalid address. 
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0026
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.6a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.6a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0026
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0027
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from ENotPerformed to EOcspUnknown
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check is not performed. PIR check is with an address that doesn't recognize the certificate. 
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = ENotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0027
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.7a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.7a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0027
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0028
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspGood to EOcspUnknown
+//! @SYMREQ			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check is performed with an address that recognizes the certificate as good. PIR check is with an address that doesn't recognize the certificate. 
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0028
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.8a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test2.8a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0028
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0031
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspGood, using the async method
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as good
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0031
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.1a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test3.1a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0031
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0032
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspRevoked, using the async method
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as revoked
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspRevoked
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0032
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.2a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test3.2a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0032
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0033
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspGood to EOcspTransient, using the async method
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an invalid address
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspGood, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0033
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.3a
+RUN_TEST_STEP_RESULT 0 100	tRevocation ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test3.3a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0033
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0034
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspTransient to EOcspGood
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an invalid address. PIR check is with an address that recognizes the certificate as good
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspTransient, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0034
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.4a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test3.4a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0034
+
+
+//OK
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0035
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspUnknown
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an invalid address. PIR check is with an address that doesn't recognize the certificate
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0035
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test3.5a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test3.5a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0035
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0041
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspGood
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as good.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0041
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1a
+RUN_TEST_STEP_RESULT 0 100	tRevocation ABSENT	z:\tswi\tRevocation\scripts\trevocation.ini Test4.1a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0041
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0042
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspRevoked
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as revoked.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspRevoked
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0042
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.2a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test4.2a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0042
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0043
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspGood to EOcspTransient, using the an invalid URI
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed. PIR check is with an invalid address.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspGood, PIR check with invalid URI, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspTransient
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0043
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.3a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test4.3a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0043
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0044
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspTransient to EOcspGood, using the async method
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an invalid address. PIR check is with an address that recognizes the certificate as good.
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspTransient, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0044
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.4a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test4.4a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0044
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0045
+//! @SYMTestCaseDesc		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspUnknown, using the async method, cancelling before completion of the pir request
+//! @SYMREQ			REQ4053.5.3, REQ4053.4
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. Installtime check performed with an invalid address. PIR check is with an address that doesn't recognize the certificate. Cancelling before completion of the pir request
+//! @SYMTestExpectedResults	File installs then uninstalls sucessfully, RevocationStatus = EOcspNotPerformed, PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspUnknown
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0045
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5b
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test4.5a
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test4.5a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0045
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0046
+//! @SYMTestCaseDesc		Tries to install the sis with OCSP enabled.
+//! @SYMDEF  			DEF092126
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Tries to install the sis with OCSP enabled. 
+//! @SYMTestExpectedResults	Install should complete without any panic.
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0046
+
+RUN_UTILS mkdir c:\Documents\
+RUN_UTILS mkdir c:\Documents\def092126\
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini Test4.6a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini u_Test4.6a
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0046
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

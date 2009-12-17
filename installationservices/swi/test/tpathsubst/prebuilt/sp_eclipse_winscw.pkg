@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file is not translated into a SIS file when the tests are built.
+; The pre-built SIS files for WINSCW and ARMV5 are stored in Perforce.
+; This file is only provided for reference.
+
+&EN
+
+#{"ROM_STUB_SP"}, (0x802730A1), 1, 2, 4, TYPE=SP
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+; Works when eclipse a ROM-based file which is itself part of a package
+"\epoc32\release\winscw\udeb\eclipsetest2.dll"-"c:\TO_SYS_BIN\eclipsetest.dll"

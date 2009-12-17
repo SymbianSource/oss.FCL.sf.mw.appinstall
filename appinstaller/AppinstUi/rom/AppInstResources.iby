@@ -1,0 +1,40 @@
+/*
+* Copyright (c) 2002-2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Series 60 ROM description for Software install localised 
+*                resources.
+*
+*/
+
+
+#ifndef APPINSTRESOURCES_IBY
+#define APPINSTRESOURCES_IBY
+
+// Server app resource
+S60_APP_RESOURCE(SWInstSvrUI)
+S60_APP_CAPTION(SWInstSvrUI)
+
+// Common ui resources
+data=DATAZ_\RESOURCE_FILES_DIR\SWInstCommonUI.rsc        RESOURCE_FILES_DIR\SWInstCommonUI.rsc
+
+#ifdef __INSTALLER_SISX
+ // Sisx plugin resources
+  data=DATAZ_\Resource\SisxUIData.rsc                        Resource\SisxUIData.rsc
+#endif
+
+// Daemon
+data=DATAZ_\RESOURCE_FILES_DIR\swidaemon.rsc             RESOURCE_FILES_DIR\swidaemon.rsc
+
+#endif // APPINSTRESOURCES_IBY
+
+//  End of File

@@ -1,0 +1,3 @@
+# An empty capability constraint set
+[cert_capabilities]
+

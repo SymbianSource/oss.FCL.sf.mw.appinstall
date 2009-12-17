@@ -1,0 +1,466 @@
+/*
+* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project definition file for project CataLogsClientServer
+*
+*/
+
+
+#define CATALOGS_COMPONENT_CATALOGSSERVEREXE
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../../inc/catalogsuids.h"
+#include "../inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+#ifdef USE_BUILD_SCRIPT
+TARGET        ncdserver_APP_NAME_POSTFIX.exe
+#else
+TARGET        ncdserver_20019119.exe
+#endif // USE_BUILD_SCRIPT
+TARGETTYPE    exe
+// Borrow UIDs from the old downloadmanager. UIDs are mandatory
+UID  		0x100039CE KCatalogsServerUid 
+
+MACRO COMPONENT_CATALOGSSERVEREXE
+CAPABILITY		CAP_SERVER
+
+
+VENDORID                VID_DEFAULT
+
+EPOCSTACKSIZE 0x5000
+
+// Heap size
+// The first parameter is heap's minimum size and the latter the maximum size.
+// Min (default): 4kB, max: 2MB (default 1MB)
+EPOCHEAPSIZE    0x1000 0x200000
+
+#ifdef CATALOGS_DEBUG_ENABLED
+MACRO CATALOGS_PROFILING
+// Enable catalogs undertaker process
+MACRO CATALOGS_UNDERTAKER
+#endif
+
+SOURCEPATH    ../src
+
+// Server side classes
+SOURCE        catalogsbasemessageimpl.cpp
+SOURCE        catalogsclientserverserver.cpp
+SOURCE        catalogsclientserverserversession.cpp
+SOURCE        catalogsincompletemessage.cpp
+SOURCE        catalogsserverengine.cpp
+SOURCE        catalogsutils.cpp
+SOURCE        catalogskeyvaluepair.cpp
+SOURCE        catalogscontextimpl.cpp
+SOURCE        catalogsbigdes.cpp
+SOURCE        catalogsinterfacebase.cpp
+SOURCE        catalogsinterfaceidentifier.cpp
+SOURCE        catalogsstringmanager.cpp
+SOURCE        catalogsshutdownoperation.cpp
+
+// Transport
+SOURCEPATH    ../transport/src
+SOURCE        catalogstransportimpl.cpp
+SOURCE        catalogshttpconfigimpl.cpp
+SOURCE        catalogshttpheadersimpl.cpp
+SOURCE        catalogshttpsessionimpl.cpp
+SOURCE        catalogshttpdownloadmanagerimpl.cpp
+SOURCE        catalogshttpdownload.cpp
+SOURCE        catalogshttptransaction.cpp
+SOURCE        catalogshttptransactionmanagerimpl.cpp
+SOURCE        catalogshttpstack.cpp
+SOURCE        catalogshttpsessionmanagerimpl.cpp
+SOURCE        catalogshttpconnectioncreator.cpp
+SOURCE        catalogshttpconnectionmanager.cpp
+SOURCE        catalogssmssessionimpl.cpp
+SOURCE        catalogssmsoperationimpl.cpp
+SOURCE        catalogssmssender.cpp
+SOURCE        catalogssmsutils.cpp
+SOURCE        catalogsnetworkmanager.cpp
+SOURCE	      catalogsconnectioneventsink.cpp
+SOURCE        catalogshttprequestparser.cpp
+SOURCE        catalogshttprequestadapter.cpp
+SOURCE        catalogshttpresponsecomposer.cpp
+SOURCE        catalogshttputils.cpp
+SOURCE        catalogsconnection.cpp
+
+
+// Access point manager
+SOURCEPATH    ../accesspointmanager/src
+SOURCE        catalogsaccesspointmanagerimpl.cpp
+SOURCE        catalogsaccesspoint.cpp
+SOURCE        catalogsaccesspointsettings.cpp
+SOURCE        catalogsaccesspointmap.cpp
+SOURCE        catalogsclientaccesspointdata.cpp
+SOURCE        catalogsremoveaccesspointshutdownoperation.cpp
+
+// Server
+SOURCEPATH    ../../provider/server/src
+SOURCE        ncdcommunicable.cpp
+SOURCE        ncdproviderimpl.cpp
+SOURCE        ncdnodemanager.cpp
+SOURCE        ncdnodedbmanager.cpp
+SOURCE        ncdoperationmanager.cpp
+SOURCE        ncdnodeimpl.cpp
+SOURCE        ncdnodefolder.cpp
+SOURCE        ncdparentoftransparentnode.cpp
+SOURCE        ncdnodetransparentfolder.cpp
+SOURCE        ncdnodeitem.cpp
+SOURCE        ncdrootnode.cpp
+SOURCE        ncdnodemetadataimpl.cpp
+SOURCE        ncdnodeitemmetadata.cpp
+SOURCE        ncdnodefoldermetadata.cpp
+SOURCE        ncdnodedisclaimer.cpp
+SOURCE        ncdnodeiconimpl.cpp
+SOURCE        ncdnodescreenshotimpl.cpp
+SOURCE        ncdnodeskinimpl.cpp
+SOURCE        ncdnodelink.cpp
+SOURCE        ncdnodeitemlink.cpp
+SOURCE        ncdnodefolderlink.cpp
+SOURCE        ncdnodeidentifier.cpp
+SOURCE        ncdnodeuserdataimpl.cpp
+SOURCE        ncdnodedownloadimpl.cpp
+SOURCE        ncdnodeupgradeimpl.cpp
+SOURCE        ncdnodedependencyimpl.cpp
+SOURCE        ncdnodecachecleaner.cpp
+SOURCE        ncdnodecachecleanermanager.cpp
+SOURCE        ncdnodefactory.cpp
+SOURCE        ncdnodeidentifiereditor.cpp
+SOURCE        ncddbmaxsizemap.cpp
+SOURCE        ncdbaseoperation.cpp
+SOURCE        ncdloadnodeoperationimpl.cpp
+SOURCE        ncdloadrootnodeoperationimpl.cpp
+SOURCE        ncdsendableprogress.cpp
+SOURCE        ncdconfigurationmanagerimpl.cpp
+SOURCE        ncdpurchaseoperationimpl.cpp
+SOURCE        ncdpurchaseoptionimpl.cpp
+SOURCE        ncdserversubscription.cpp
+SOURCE        ncdserverpartofsubscription.cpp
+SOURCE        ncdserverupgrade.cpp
+SOURCE        ncdserversubscribablecontent.cpp
+SOURCE        ncdnodeinstallimpl.cpp
+SOURCE        ncdinstalloperationimpl.cpp
+SOURCE        ncdnodecontentinfoimpl.cpp
+SOURCE        ncdnodeuricontentimpl.cpp
+SOURCE        ncdinstallinfo.cpp
+SOURCE        ncdfileinfo.cpp
+SOURCE        ncdsubscriptionmanagerimpl.cpp
+SOURCE        ncdclientssubscriptions.cpp
+SOURCE        ncdsubscriptiongroup.cpp
+SOURCE        ncdsubscriptionimpl.cpp
+SOURCE        ncdsubscriptionoperationimpl.cpp
+SOURCE        ncdsubscriptionssourceidentifier.cpp
+SOURCE        ncdrightsobjectoperationimpl.cpp
+SOURCE        ncdnodepreviewimpl.cpp
+SOURCE        ncdserveraddress.cpp
+SOURCE        ncdsearchoperationimpl.cpp
+SOURCE        ncdsearchnodeitem.cpp
+SOURCE        ncdsearchnodefolder.cpp
+SOURCE        ncdsearchnodebundle.cpp
+SOURCE        ncdbundlefolder.cpp
+SOURCE        ncdpreviewmanager.cpp
+SOURCE        ncdchildentity.cpp
+SOURCE        ncdchildentitymap.cpp
+SOURCE        ncdsearchrootnode.cpp
+SOURCE        ncdproviderutils.cpp
+SOURCE        ncdserverdetailsimpl.cpp
+SOURCE        ncdcontentdescriptor.cpp
+SOURCE        ncdsubscriptiondatacompleter.cpp
+SOURCE        ncdnodesupplier.cpp
+SOURCE        ncdnodesupplierlink.cpp
+SOURCE        ncddownloadinfo.cpp
+SOURCE        ncdextendedinstallinfo.cpp
+SOURCE        ncdloadbundlenodeoperationimpl.cpp
+SOURCE        ncddependencyinfo.cpp
+SOURCE        ncdfavoritemanagerimpl.cpp
+SOURCE        ncdreportmanager.cpp
+SOURCE        ncdreport.cpp
+SOURCE        ncdreportdownload.cpp
+SOURCE        ncdreportomadownload.cpp
+SOURCE        ncdreportinstall.cpp
+SOURCE        ncdnodeseeninfo.cpp
+SOURCE        ncdnodeseenimpl.cpp
+SOURCE        ncdnodeseenfolderimpl.cpp
+SOURCE        ncdnodeidentifierutils.cpp
+SOURCE        ncdpurchasehistoryutils.cpp
+SOURCE        ncdcreateaccesspointoperationimpl.cpp
+SOURCE        ncdsendhttprequestoperationimpl.cpp
+SOURCE        ncdhttputils.cpp
+SOURCE        ncdserverreportoperationimpl.cpp
+SOURCE        ncdserverreportmanagerimpl.cpp
+SOURCE        ncdprovidermanager.cpp
+SOURCE        ncdgeneralmanager.cpp
+
+
+// Server-side file download operations
+SOURCE        ncddownloadoperationimpl.cpp
+SOURCE        ncdbasedownloadhandler.cpp
+SOURCE        ncdskindownloadhandler.cpp
+SOURCE        ncdfilestoragefilehandler.cpp
+SOURCE        ncddatabasefilehandler.cpp
+SOURCE        ncdicondownloadhandler.cpp
+SOURCE        ncdfiledownloadhandler.cpp
+SOURCE        ncdpreviewdownloadhandler.cpp
+SOURCE        ncdscreenshotdownloadhandler.cpp
+SOURCE        ncdcontentdownloadoperation.cpp
+SOURCE        ncddownloadsuboperation.cpp
+SOURCE        ncddescriptordownloadsuboperation.cpp
+
+
+// Engine configuration handling
+SOURCE        ncdconfigurationparser.cpp
+SOURCE        ncdengineconfigurationimpl.cpp
+
+// Common
+SOURCEPATH    ../../provider/client/src
+SOURCE        ncdqueryimpl.cpp
+SOURCE        ncdqueryitemimpl.cpp
+SOURCE        ncdquerytextitemimpl.cpp
+SOURCE        ncdquerynumericitemimpl.cpp
+SOURCE        ncdqueryselectionitemimpl.cpp
+SOURCE        ncdquerypincodeitemimpl.cpp
+SOURCE        ncdqueryoptionimpl.cpp
+SOURCE        ncdexpirednode.cpp
+SOURCE        ncdlocalizerutils.cpp
+
+// Storage
+SOURCEPATH    ../../provider/storage/src
+SOURCE        ncdstoragemanagerimpl.cpp
+SOURCE        ncdstorageimpl.cpp
+SOURCE        ncdstorageclientimpl.cpp
+SOURCE        ncddbstoragemanager.cpp
+SOURCE        ncdstoragefiledataitem.cpp
+SOURCE        ncdfilestorageimpl.cpp
+SOURCE        ncdstoragebase.cpp
+SOURCE        ncddatabasestorageimpl.cpp
+SOURCE        ncdstoragedescriptordataitem.cpp
+
+// Protocol
+SOURCEPATH      ../../provider/protocol/src
+SOURCE          ncdparserimpl.cpp
+SOURCE          ncdparserfactory.cpp
+SOURCE          ncdprotocoldefaultobserverimpl.cpp
+SOURCE          ncd_pp_iconimpl.cpp
+SOURCE          ncd_pp_skinimpl.cpp
+SOURCE          ncd_parser_pp_response.cpp
+SOURCE          ncd_parser_pp_entityref.cpp
+SOURCE          ncd_parser_pp_embeddeddata.cpp
+SOURCE          ncd_parser_pp_datablocks.cpp
+SOURCE          ncd_parser_pp_purchaseoption.cpp
+SOURCE          ncd_parser_pp_dataentity.cpp
+SOURCE          ncd_parser_pp_dataentitycontent.cpp
+SOURCE          ncd_parser_pp_entitydependency.cpp
+SOURCE          ncd_parser_pp_download.cpp
+SOURCE          ncd_parser_pp_rights.cpp
+SOURCE          ncd_parser_pp_information.cpp
+SOURCE          ncd_parser_pp_messages.cpp
+SOURCE          ncd_parser_pp_moreinfo.cpp
+SOURCE          ncd_parser_pp_purchase.cpp
+SOURCE          ncd_parser_pp_purchaseinformation.cpp
+SOURCE          ncd_parser_pp_purchaseprocessed.cpp
+SOURCE          ncd_parser_pp_purchaseentity.cpp
+SOURCE          ncd_parser_pp_payment.cpp
+SOURCE          ncd_parser_pp_expiredcacheddata.cpp
+SOURCE          ncd_parser_pp_subscriptionreport.cpp
+SOURCE          ncd_parser_pp_subscription.cpp
+SOURCE          ncd_parser_pp_subscriptiondetails.cpp
+SOURCE          ncd_parser_cp_actionrequest.cpp
+SOURCE          ncd_parser_cp_response.cpp
+SOURCE          ncd_parser_cp_capabilities.cpp
+SOURCE          ncd_parser_cp_clientconfiguration.cpp
+SOURCE          ncd_parser_cp_cookie.cpp
+SOURCE          ncd_parser_cp_detail.cpp
+SOURCE          ncd_parser_cp_details.cpp
+SOURCE          ncd_parser_cp_error.cpp
+SOURCE          ncd_parser_cp_query.cpp
+SOURCE          ncd_parser_cp_queryelement.cpp
+SOURCE          ncd_parser_cp_serverdetails.cpp
+SOURCE          ncd_pp_folderrefimpl.cpp
+SOURCE          ncd_pp_itemrefimpl.cpp
+SOURCE          ncd_pp_datablockimpl.cpp
+SOURCE          ncd_pp_dataentityimpl.cpp
+SOURCE          ncd_pp_dataentitycontentimpl.cpp
+SOURCE          ncd_pp_entitydependencyimpl.cpp
+SOURCE          ncd_pp_embeddeddataimpl.cpp
+SOURCE          ncd_pp_expiredcacheddataimpl.cpp
+SOURCE          ncd_pp_informationimpl.cpp
+SOURCE          ncd_pp_purchaseoptionimpl.cpp
+SOURCE          ncd_pp_subscriptionimpl.cpp
+SOURCE          ncd_pp_subscriptiondetailsimpl.cpp
+SOURCE          ncd_pp_downloadimpl.cpp
+SOURCE          ncd_pp_descriptorimpl.cpp
+SOURCE          ncd_pp_rightsimpl.cpp
+SOURCE          ncd_pp_purchaseimpl.cpp
+SOURCE          ncd_pp_purchaseinformationimpl.cpp
+SOURCE          ncd_pp_purchaseprocessedimpl.cpp
+SOURCE          ncd_pp_purchaseentityimpl.cpp
+SOURCE          ncd_pp_paymentimpl.cpp
+SOURCE          ncd_pp_smsdetailsimpl.cpp
+SOURCE          ncd_cp_actionrequestimpl.cpp
+SOURCE	    	ncd_cp_clientconfigurationimpl.cpp
+SOURCE          ncd_cp_cookieimpl.cpp
+SOURCE          ncd_cp_detailimpl.cpp
+SOURCE          ncd_cp_errorimpl.cpp
+SOURCE          ncd_pp_errorimpl.cpp
+
+SOURCE          ncd_cp_queryimpl.cpp
+SOURCE          ncd_cp_queryelementimpl.cpp
+SOURCE          ncd_cp_queryoptionimpl.cpp
+SOURCE          ncd_cp_queryresponseimpl.cpp
+SOURCE          ncd_cp_serverdetailsimpl.cpp
+SOURCE          ncdsubparser.cpp
+SOURCE          ncdtoplevelparser.cpp
+SOURCE          ncdunknownparser.cpp
+SOURCE          ncdprotocolutils.cpp
+SOURCE          ncdparserobserverbundleimpl.cpp
+SOURCE          ncdprotocolimpl.cpp
+SOURCE          ncdsessionhandler.cpp
+
+SOURCE		    ncdstring.cpp
+
+SOURCE          ncdrequestgenerator.cpp
+SOURCE          ncdrequestbase.cpp
+SOURCE          ncdrequestbrowsesearch.cpp
+SOURCE          ncdrequestconfiguration.cpp
+SOURCE          ncdrequestconfigurationdata.cpp
+SOURCE          ncdrequestpurchase.cpp
+SOURCE          ncdrequestmanagesubscriptions.cpp
+SOURCE          ncdrequestinstallation.cpp
+
+// Purchase History
+SOURCEPATH      ../../provider/purchasehistory/src
+SOURCE          ncdpurchasehistorydbimpl.cpp
+
+
+// General
+SOURCEPATH      ../../provider/src
+SOURCE          ncdkeyvaluemap.cpp
+SOURCE          ncdpurchasedetails.cpp
+SOURCE          ncddelay.cpp
+
+#ifdef CATALOGS_DEBUG_ENABLED
+// Test config
+SOURCEPATH    ../../provider/deviceinteraction/src
+SOURCE        ncdtestconfig.cpp
+#endif // CATALOGS_DEBUG_ENABLED
+
+USERINCLUDE   ../../provider/inc 
+USERINCLUDE   ../../provider/server/inc 
+USERINCLUDE   ../../provider/client/inc
+USERINCLUDE   ../../provider/storage/inc
+USERINCLUDE   ../../provider/protocol/inc
+USERINCLUDE   ../../provider/deviceinteraction/inc
+USERINCLUDE   ../../provider/purchasehistory/inc
+
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../engine/inc
+USERINCLUDE   ../../engine/transport/inc
+USERINCLUDE   ../../engine/accesspointmanager/inc
+
+
+// System include paths
+#ifndef __SERIES60_30__
+APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE   /epoc32/include
+#endif
+
+SYSTEMINCLUDE   /epoc32/include/libc
+SYSTEMINCLUDE   /epoc32/include/ecom
+
+// Unnecessary systeminclude, removed:
+//SYSTEMINCLUDE   /epoc32/include/Xml
+//SYSTEMINCLUDE   /epoc32/include/caf
+
+LIBRARY         euser.lib estor.lib bafl.lib flogger.lib 
+LIBRARY         efsrv.lib edbms.lib
+LIBRARY         platformenv.lib // catalogsutils.cpp needs this
+
+#ifdef USE_BUILD_SCRIPT
+LIBRARY         ncdutils_APP_NAME_POSTFIX.lib
+LIBRARY         ncddevicemgmt_APP_NAME_POSTFIX.lib
+#else  
+LIBRARY         ncdutils_20019119.lib
+LIBRARY         ncddevicemgmt_20019119.lib
+#endif // USE_BUILD_SCRIPT
+
+
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif
+
+// For Protocol
+LIBRARY         charconv.lib		// UTF<->Unicode conversion
+LIBRARY         xmlframework.lib	// Xml::CParser
+LIBRARY         XmlInterface.lib
+
+#ifdef  __SERIES60_30__
+// Use backported libs when compiling for the 3.0 platform
+LIBRARY         20007801XmlEngine.lib
+LIBRARY         20007801XmlEngineDOM.lib
+LIBRARY         20007801XmlEngineUtils.lib
+#else
+LIBRARY         XmlEngine.lib
+LIBRARY         XmlEngineDOM.lib
+LIBRARY         XmlEngineUtils.lib
+#endif
+
+LIBRARY     	estlib.lib          // C standard lib stuff
+LIBRARY         hash.lib            // SHA-1
+
+LIBRARY         sysutil.lib // catalogsutils need this
+
+// For Transport
+LIBRARY         downloadmgr.lib
+LIBRARY         commdb.lib
+LIBRARY         esock.lib
+LIBRARY         http.lib
+LIBRARY         ecom.lib
+LIBRARY         httpfiltercommon.lib
+LIBRARY         inetprotutil.lib
+LIBRARY         gsmu.lib    // SMS
+LIBRARY         smcm.lib    // SMS
+LIBRARY         msgs.lib    // SMS
+LIBRARY         apengine.lib
+
+#ifndef __SERIES60_31__
+LIBRARY         cmmanager.lib // CMManager and other SNAP/APN classes
+#endif
+
+LIBRARY         apmime.lib // TDataType
+LIBRARY         commonui.lib // CDocumentHandler
+
+START WINS
+//DEFFILE ../BWINS/catalogsserverwins.def
+END
+
+START MARM
+//DEFFILE ../EABI/catalogsserverarm.def
+END
+
+NOSTRICTDEF
+
+SMPSAFE
+

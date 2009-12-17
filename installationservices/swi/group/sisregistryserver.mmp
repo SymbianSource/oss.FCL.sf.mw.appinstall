@@ -1,0 +1,89 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* sisregistryserver.exe Implementation of software registry server
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY TCB AllFiles ProtServ WriteDeviceData ReadUserData
+
+// minimum 4KB maximum 2MB (twice the maximum default)
+EPOCHEAPSIZE	0x1000 0x200000
+
+target sisregistryserver.exe
+targettype exe
+
+UID			0x1000007a 0x10202DCA
+VENDORID	0x70000001
+
+USERINCLUDE ../source/sisregistry/server 
+USERINCLUDE ../source/sisregistry/common
+USERINCLUDE ../source/plan
+USERINCLUDE ../inc/swi 
+USERINCLUDE ../inc
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+USERINCLUDE ../../swtransactionservices/inc
+USERINCLUDE ../../swcomponentregistry/inc
+#endif //#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+SOURCEPATH	../source/sisregistry
+
+SOURCE		server/sisregistryserver.cpp
+SOURCE		server/sisregistryserversession.cpp
+SOURCE		server/sisregistryserversubsession.cpp
+SOURCE		server/sisregistryserverstartup.cpp
+SOURCE		server/sisregistryservershutdown.cpp
+SOURCE      server/sisregistryutil.cpp
+SOURCE		server/siscontrollerverifier.cpp
+SOURCE		common/sisregistrylog.cpp
+SOURCE		server/sisregistryserveripcbuf.cpp
+SOURCE		server/scrhelperutil.cpp
+SOURCE		common/globalidformat.cpp
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+SOURCE      server/sisrevocationmanager.cpp
+#endif
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+#ifdef __SWI_LOGGING__
+LIBRARY flogger.lib    // Logging & tracing support -- To use define __SWI_LOGGING__ in the .hrh file
+#endif 
+
+LIBRARY	    euser.lib 
+LIBRARY	    estor.lib 
+LIBRARY	    efsrv.lib
+LIBRARY	    sisregistryclient.lib
+LIBRARY	    plan.lib
+LIBRARY     swidataprovider.lib
+LIBRARY     siscontroller.lib 
+LIBRARY     hash.lib
+LIBRARY     securitymanager.lib
+LIBRARY		sectcbutil.lib
+LIBRARY		x509.lib
+LIBRARY		swiobserverclient.lib
+LIBRARY 	scrclient.lib
+LIBRARY		stsclient.lib
+LIBRARY 	ipcstream.lib
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+LIBRARY		sislauncherclient.lib
+LIBRARY		swtypereginfo.lib
+#endif
+SMPSAFE

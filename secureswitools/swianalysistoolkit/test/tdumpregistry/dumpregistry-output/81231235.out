@@ -1,0 +1,42 @@
+Package Information:
+
+Registry File :.\data\81231235\00000000.reg
+
+Package UID :0x81231235
+Package Name :TestAppInUse Suite
+Vendor :Unique Vendor Name
+Package Index :0
+Drives :4
+No of executables :3
+Package Version :1.0.0
+Languages :English
+Selected Drive :C
+File Major Version :4
+File Minor Version :0
+Package Vendor Localized Name :Vendor
+Package Install Type :PartialUpgrade
+Is Package in ROM :No
+Package Preinstalled :No
+Package Signed :Yes
+Package Trust :SisPackageCertificateChainValidatedToTrustAnchor
+Package Information:
+
+Registry File :.\data\81231235\00000001.reg
+
+Package UID :0x81231235
+Package Name :testappinuse_patch
+Vendor :Unique Vendor Name
+Package Index :1
+Drives :4
+No of executables :0
+Package Version :1.0.1
+Languages :English
+Selected Drive :C
+File Major Version :4
+File Minor Version :0
+Package Vendor Localized Name :Vendor
+Package Install Type :Augmentation
+Is Package in ROM :No
+Package Preinstalled :No
+Package Signed :Yes
+Package Trust :SisPackageCertificateChainValidatedToTrustAnchor

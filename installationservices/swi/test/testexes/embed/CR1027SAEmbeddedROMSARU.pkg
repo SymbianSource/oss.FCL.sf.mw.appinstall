@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe that is run synchronously on removal, which runs for 5 seconds before exiting.
+
+;Languages
+&EN
+
+;Header
+#{"CR1027 Testrun EXE"}, (0x8000887A), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;ROM based Embedded package
+@"CR1027ROMUpgradeSA_root5.sis", (0x802730A2)
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\console_app_forpackage.exe"-"c:\sys\bin\console_app.exe", FR, RUNREMOVE, RW

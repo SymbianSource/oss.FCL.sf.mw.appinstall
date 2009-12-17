@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description: 
+;
+&EN
+
+;Header
+#{"iaupdater"},(0x2000F85D),1,0,0
+
+;Localised Vendor name
+%{"Nokia IAUpdater"}
+
+;Unique Vendor name
+:"Nokia IAUpdater"
+
+"\epoc32\release\armv5\udeb\iaupdater.exe" - "!:\sys\bin\iaupdater.exe"
+"\epoc32\data\z\resource\apps\iaupdater.rsc" - "!:\resource\apps\iaupdater.rsc"
+"\epoc32\data\z\private\10003a3f\import\apps\iaupdater_reg.rsc" - "!:\private\10003a3f\import\apps\iaupdater_reg.rsc"
+
+; Updater files DLL
+"\epoc32\release\armv5\udeb\iaupdaterfiles.dll" - "!:\sys\bin\iaupdaterfiles.dll"

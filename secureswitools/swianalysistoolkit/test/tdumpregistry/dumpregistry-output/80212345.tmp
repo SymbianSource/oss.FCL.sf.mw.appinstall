@@ -1,0 +1,41 @@
+Registry Controller Information:
+
+Registry Entry :.\data\80212345\00000000.reg
+
+Package UID :0x80212345
+Package Name :TestSA
+Vendor :Vendor
+Package Index :0
+
+Controller1 Version :1.2.4
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 1
+
+Dependencies Information : 
+
+Dependent Package UID : 0x80000003
+Dependent Package From Version : 1.2.3
+Dependent Package To Version : -1.-1.-1
+
+Number of Embedded Packages : 1
+
+List Of Embedded  Packages:
+
+Embedded Package UID : 0x80000002
+Embedded Package Name : Sub-EN
+Embedded Package Vendor Name :Vendor
+Embedded Package Index : -1
+
+SISProperty Count:0
+
+Number Of File Descriptions :1
+
+SIS File Description:
+
+Target1:C:\Documents\InstTest\lang.txt
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : Validated
+Revocation Status : OcspNotPerformed

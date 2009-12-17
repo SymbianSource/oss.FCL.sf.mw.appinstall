@@ -1,0 +1,29 @@
+Registry Controller Information:
+
+Registry Entry :.\data\81231235\00000001.reg
+
+Package UID :0x81231235
+Package Name :testappinuse_patch
+Vendor :Unique Vendor Name
+Package Index :1
+
+Controller1 Version :1.0.1
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 0
+
+SISProperty Count:0
+
+Number Of File Descriptions :1
+
+SIS File Description:
+
+Target1:c:\private\89334569\osver2.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

@@ -1,0 +1,6 @@
+dira1.txt
+dirb1.txt
+dirc1.txt
+dira2.txt
+dirb2.txt
+dirc2.txt

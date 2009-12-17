@@ -1,0 +1,142 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS integration dependency tests
+PRINT Run SWI dependency tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-Uninstallation-I-0001
+//! @SYMTestCaseDesc 		Tests new uninstalling policy considering dependencies
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests whether an embedded package which has dependency is uninstalled only when the last dependent package has been uninstalled
+//! @SYMTestExpectedResults 	An embedded package which has dependency is uninstalled only when the last dependent package 
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-UISA-Uninstallation-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini embedC
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini embeddependE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini embeddependF
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_embedC
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_embeddependD
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_embeddependE
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_embeddependF
+
+END_TESTCASE API-SEC-UISA-Uninstallation-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-Uninstallation-I-0002
+//! @SYMTestCaseDesc 		Tests for extended uninstallation scenarios
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests whether an embedded package which has dependency is uninstalled only when the last dependent package has been uninstalled
+//! @SYMTestExpectedResults 	An embedded package which has dependency is uninstalled only when the last dependent package 
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-UISA-Uninstallation-I-0002
+
+//Scenario 1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario1a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario1c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario1c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario1a
+
+//Scenario 2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario2a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario1c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario1c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario1a
+
+//Scenario 3
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario3a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario1c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario3c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario3a
+
+//Scenario 4
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario3a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario4c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario4c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario4a
+
+//Scenario 5
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario5a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario5c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario5a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario5c
+
+//Scenario 6
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario6a
+
+//Scenario 7
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario7a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario6c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario7a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario7c
+
+//Scenario 8
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario8a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini scenario6c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario8a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_scenario7c
+
+END_TESTCASE API-SEC-UISA-Uninstallation-I-0002
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-Uninstallation-I-0003
+//! @SYMTestCaseDesc 		Tests correct rollback on un-installation failure.  
+//! @SYMDEF 			PDEF118284
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Start an un-installation which removes one file then fails on removal of the second file due to it being in use.
+//! @SYMTestExpectedResults 	All files present before the failed un-installation started should still exist or have been restored.     
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-UISA-Uninstallation-I-0003
+
+// Install the PDEF118284 sis file.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini testuninstall_PDEF118284
+
+// Install Helloworld application suite
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini helloworld
+
+// Run Helloworld app as well as console exe which will keep running for 30 seconds
+DELAY 500
+RUN_PROGRAM -1 helloworld.exe
+
+// This app will hold open one of the files (textfile2_pdef118284.txt) owned by PDEF118284.sis
+RUN_PROGRAM -1 runtestexe console_app  -s 30000000 -h \textfile2_pdef118284.txt  
+DELAY 500
+
+// Verify that both exes are installed and running 
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini consoleapp_running
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini helloworld_running
+
+// Try to un-install the PDEF118284 sis file. This should fail with KErrInUse (-14) as one of its files is being held by the console app.
+DELAY 500
+RUN_TEST_STEP_RESULT -14 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini  u_error_testuninstall_PDEF118284
+DELAY 500
+
+// Un-install helloworld. (This will release the held file)
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_helloworld
+
+// Un-install the PDEF118284 sis file. This should pass this time as none of the files it owns are in use.
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testuninstallation.ini u_testuninstall_PDEF118284
+
+END_TESTCASE API-SEC-UISA-Uninstallation-I-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

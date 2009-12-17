@@ -1,0 +1,1991 @@
+/*
+* Portions Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+ 
+EPOC Technical Paper  
+
+EIKON Application Style Guide
+Revision 1.0(006), December 1998
+
+Summary
+EPOC and the EIKON graphical user interface are the result of knowledge built up through over a decade of developing software for devices with small screen sizes. This document is distilled from these years of knowledge and experience and gives advice and guidance on UI design for such devices.
+
+Contents
+ 1. Introduction 
+1.1 About EPOC 
+1.2 Purpose and scope of this document 
+2. Introduction 
+2.1 Why take care over the UI? 
+2.2 What we aim for 
+2.3 How can these ultimate goals be achieved? 
+3. General principles 
+3.1 The 80:20 rule - everything most users will want to do in the program should be possible 
+3.2 Everything the user can do in the program should be easy to find & easy to use 
+3.3 The program should have the WOW it takes to get itself talked about 
+3.4 The program should be customisable 
+4. EPOC design principles & examples 
+4.1 Success comes when all the main features are good enough 
+4.2 Take the time to refine designs 
+4.3 Take great care with wording 
+4.4 Choose UI terminology carefully & keep a glossary 
+5. The appearance of the screen 
+5.1 Using colour 
+5.2 The Toolbar 
+5.3 Relationship between Toolbar actions and menu commands 
+5.4 Text, icons, or both? 
+5.5 The Toolband 
+5.6 Navigation 
+5.7 Selecting items 
+6. Terminology 
+6.1 Names of programs 
+6.2 Add/remove versus New/Delete 
+7. Menus 
+7.1 Guidelines on Menus 
+7.2 Menus 
+7.3 Menu tiles & shortcut keys 
+7.4 Standard menu items and their shortcuts 
+7.5 Summarising menu hints and tips 
+8. Dialogs, infoprints & buttons 
+8.1 Dialogs 
+8.2 Infoprints 
+8.3 Error messages 
+8.4 General info 
+8.5 Buttons in dialogs 
+8.6 Commands 
+9. Entering user information 
+9.1 Entering information & using a program 
+10. Files, file storage and the filing system 
+10.1 File names 
+10.2 File locations 
+10.3 Using your program 
+11. Windows-based programs 
+12. Glossary of terms in EPOC programs 
+12.1 Basic terms and usage 
+12.2 Terms to avoid using, and what to use instead 
+13. Appendix - Sequence of items in resource files  
+
+1. Introduction
+ 1.1 About EPOC 
+1.2 Purpose and scope of this document  
+
+1.1 About EPOC
+EPOC is a software component produced by Symbian Ltd. It consists of the following components:
+
+An operating system 
+A graphic user interface (for half-VGA devices, this is called EIKON) 
+A set of programs including a word processor, spreadsheet, contacts manager, agenda and to-do list, calculator, drawing program, database, spell checker, communications suite including terminal emulation, an email package and a World Wide Web browser, a game and a full programming language and compiler 
+A PC software suite (EPOC Connect) which provides backup, synchronisation, file management and conversion, etc., to allow an EPOC machine to share information with a PC. 
+NOTE: EPOC is adaptable and is designed to be run on a variety of different machines with different screen sizes and dimensions. An EPOC machine and PC package may contain any, all, or just some of the above components. The present document refers mainly to the half-VGA screen size; separate documents are available for other screen sizes.
+
+1.2 Purpose and scope of this document
+This document is intended as a guide and reference source for all those developing and customising programs for EPOC machines with half-VGA screens, and who wish their own products to have a consistent look-and-feel with Symbian’s own software. It also contains general guidelines on how to approach development of program User Interfaces that are applicable no matter what the development environment or destination machine.
+
+2. Introduction
+ 2.1 Why take care over the UI? 
+2.2 What we aim for 
+2.3 How can these ultimate goals be achieved?  
+
+Symbian's goal in UI design is: Make every user experience a good one. Users may or may not have read the instructions, and may or may not be particularly knowledgeable. They may not be paying attention, or they may be in a rush. They may be experimenting. These are all perfectly reasonable situations for people to be in, so software should try to make the experience a good one in all these cases.
+
+2.1 Why take care over the UI?
+Quite simply, if a program is difficult or unintuitive to use it won’t sell very well and the authors won’t get rich. It doesn’t matter how packed with features it is, how many months - or years - it took to design and code it, or how clever the programmers know that it is, if the intended user can’t figure out they’ll use something else.
+
+2.2 What we aim for
+Symbian gained its enviable reputation largely because of sales of the Series 3, Series 5 and Siena ranges of palmtop computers, for which we designed and produced the software. Far and away the biggest reason for the success of these machines in the marketplace was that they were so usable; ordinary non-technical people were able to work out how to do most of the things they wanted to do on them. As a result the machines had impressive reviews from the computing press (who promoted them as must-have items), ordinary people bought them and recommended them to their friends, and there were many repeat sales from people who upgraded from the Series 3 to the Series 3a, and then to the Series 3c and Series 5.
+
+The same user- and quality-centric approach still applies today. Our software is designed to run on a wide variety of different machines made by different manufacturers, and we work with them to ensure that our UI principles are applied to every machine which carries the EPOC logo. From the very beginning and inception of an idea, we strive to apply the principles outlined in this document so that the end product is as user-friendly and delightful as it can possibly be.
+
+So what makes EPOC software so usable? The biggest contribution to usability has come from the programs that run on the machines. A long, long time was spent designing, testing and improving the programs to ensure they had the functionality users wanted, accessed via a UI they could understand, and were reliable and usable.
+
+UI design can reduce costs and make products more profitable. The better the UI for programs, the less is needed in the way of documentation and technical support, both of which can be costly elements of supporting a product. The easier it is for a user to intuitively use the software, the less likely they will be in need of assistance and the more confident they will feel in terms of purchasing and learning to use a new product.
+
+Good UIs create a standard that other products have to live up to. If UIs don’t keep up with the standards set by the best in the industry, the software will eventually fail. The number of companies in the software market is increasing and users are becoming more sophisticated and demanding; in this climate the development of UIs is becoming a critical factor in terms of competitive edge.
+
+2.3 How can these ultimate goals be achieved?
+Write a requirements document before attempting a functional specification of how the program will look and work. These really define the problem that need to be addressed - they should include both user and programmer requirements of the software. They help to avoid false assumptions and help to balance product and project requirements. 
+When designing a UI, try to think like the users. Think of the things they want to do, in the terms they understand. Never take anything for granted; remember that software designers and programmers are advanced beyond the dreams of most people when it comes to using computers. It is vital to be aware of this in order to do good product specs and UI design for such people. 
+Be aware that even apparently simple questions or designs involve complex discussion in order to come to the best decisions. Keep asking for comments from others: no specification can cover all the different scenarios the software could be used in, the different requirements of different users and inconsistencies with other areas of the software. Be prepared for repeated changes and tweaking as more and more of these come to light. 
+Design for use by all different sorts of people. Design for intermediates, novices and advanced users - try hard to think and look at the software like all of them will. If the software is well designed and intuitive, novices will not remain so for long! 
+Try to please the majority of users, e.g. if most people’s modems will work without a dialog, don’t display the dialog. 
+Create prototypes of unknown features before fully implementing them. Sometimes it is hard to adequately spec things without having a model to look at. But be prepared to throw those prototypes away when the design ideas are finished - it’s always best to start the implementation with clean code. 
+Allow for usability testing and re-speccing - it’s often needed to get things right. 
+Before a release, ensure each and every thing is good enough. If a fax program is more difficult to use than the ordinary fax machine in your office it won’t succeed. 
+Hide anything complex. Each time a user encounters something they don't understand, they are one step closer to giving up and throwing the product away. Hide commands which are rarely used, complex or intimidating in cascades. 
+Remove jargon. 
+3. General principles
+ 3.1 The 80:20 rule - everything most users will want to do in the program should be possible 
+3.2 Everything the user can do in the program should be easy to find & easy to use 
+3.3 The program should have the WOW it takes to get itself talked about 
+3.4 The program should be customisable  
+
+No matter which machine the software is being designed to run on, the ultimate goals are the same:
+
+3.1 The 80:20 rule - everything most users will want to do in the program should be possible
+A program can be designed to perform a lot of different actions, but the majority of users (e.g. 80%) are only likely to use a limited set of actions. A successful program will allow those 80% of users to do all the things that they are interested in. Only then is it fit for the purpose for which the user purchased it.
+
+If the features required by the other 20% of users can also be incorporated without adversely affecting the most important 80%, all well and good; if they can’t, then those features should be left out.
+
+3.2 Everything the user can do in the program should be easy to find & easy to use
+If users don't understand something, they won't have an enjoyable experience.
+
+Inside, the program works one way. The user has a set of desires, concepts, things they understand. The UI’s job is to get the former across in terms as close to the latter as possible so that the UI becomes intuitive to use. If the user cannot find a function, or cannot use it properly, then it will either go unused, or will require a lot of user support in the form of documentation and phone line support.
+
+3.3 The program should have the WOW it takes to get itself talked about
+When the first two goals have been achieved, try to distinguish the program from the crowd of other programs on offer by implementing things which will make the user say Wow that’s really clever, Wow that looks really good, etc. and make them tell their friends, family and work colleagues about it. These will be the same things that get the program rave reviews in the press.
+
+Sometimes the wow factor can be provided quite cheaply - nice graphics and layout on the screen, intuitive actions when the user taps on particular places on screen, or presses a particular keypress - while at other times it can be quite expensive to include.
+
+3.4 The program should be customisable
+Different people have different preferred working methods, so the program should allow users to set it up according to their preferences (if possible).
+
+4. EPOC design principles & examples
+ 4.1 Success comes when all the main features are good enough 
+4.2 Take the time to refine designs 
+4.3 Take great care with wording 
+4.4 Choose UI terminology carefully & keep a glossary  
+
+The principles outlined here are the ones that guide our software development here at Symbian. Although they apply equally well to the development of PC or handheld programs, they are arguably more critical to handheld program designs (PC users have invested a lot more in their equipment and will tolerate problems with software more than handheld users).
+
+4.1 Success comes when all the main features are good enough
+A program doesn’t succeed because it has whizzo features, it succeeds when nothing’s broken and when all the day-to-day features are powerful enough and easy enough to use for normal people. When advanced features haven’t spoiled simple ones, & simple features spoiled advanced ones.
+
+Key things to consider are:
+
+User-friendliness 
+Adequate Help/Tips 
+WYSIWYG display in programs 
+Ability to compress files which can grow very large 
+Ability to change the way data is structured, e.g. in a database 
+Password-protection for files 
+And, on the downside:
+
+Missing functionality 
+Missing connectivity 
+Limitations on file sizes 
+Time is much better spent on things like the above than on fine-tuning whizzo features.
+
+4.2 Take the time to refine designs
+Seemingly simple questions or designs often involve complex discussions in order to come to the best decisions. Think carefully about the variety of things normal users will want to do, and which words and ideas they’ll understand.
+
+Keep asking for comment from others. Be prepared for repeated tweaking as more and more things are found that aren’t sufficiently good enough for real users.
+
+Occasionally a new idea or approach breaks the established norm, ideas such as those following can create lots of extra resistance and debate:
+
+Making To-Dos appear anywhere on the Agenda’s “day” screen (What? To-Do lists are To-Do lists!) 
+Allowing overlapping entries, so that Repeating entries work sensibly (What?? How can you be in two meetings at once!!) 
+Keeping the MS-DOS filing system (disk letters, colons, slashes, directories and file extensions) hidden throughout the main UI. 
+It took large amounts of discussion just to generate these ideas in the first place, then much more afterwards before they were accepted.
+
+4.3 Take great care with wording
+Take time with wording - error messages, dialog titles, prompts and so on. The misunderstandings that result from poor wording in UIs are one of the main reasons why ordinary people have problems with using computers. People who design UIs need to take the time to communicate with the user in clear, intelligible, unambiguous words, that can be understood by someone who hasn’t passed an exam in industry jargon.
+
+For example a sequence of setup dialogs might end with the line: Save current settings as default? [Y/N]. But to most people, current settings means those which are currently set - in other words, the way they were before they were changed. A better, and less ambiguous, message would be Save these as default settings? [Y/N]. But, then again, what’s a default? It’s largely industry jargon. So maybe something like: Use settings for: [Just this connection] [All future connections] would be best.
+
+4.4 Choose UI terminology carefully & keep a glossary
+Express things the user’s way, don’t allow the way the program works to influence what is shown to the user, and try always to reduce the average amount of user confusion.
+
+Pay attention to detail:
+
+Try to use intelligible English words, instead of industry jargon, as far as possible. For instance, the EPOC Data app uses the term entry (not record). People can understand this. For computer-related terminology, which has no obvious everyday metaphors, standardising with other systems is the best way to improve recognition. See the Glossary of terms later in this document for details of the terms we have chosen to use in EPOC programs. 
+Make sure the same terms are used to refer to the same things, throughout the UI. 
+Be consistent in use of capitalisation in UI. Inconsistent use of capitals makes the UI look messy and unpolished. 
+Keep a glossary to help make the UI consistent and usable! A simple way to improve usability hugely, for little effort, is to generate a glossary of intelligible terms, check it with other people, then stick to it so that the same terms are used throughout. 
+Design wording and messages carefully to be jargon-free and to tell the user something they can understand, also to be as reassuring as possible. For example, say Create new file rather than just the ambiguous New, Information, not Error. In database programs, use entries, lines and items, not records and fields. 
+Some other things to bear in mind:
+
+Key names are usually provided at the system level. But where they’re hand-entered (as in Help files, say), be sure to use the text exactly as it’s written on the keyboard - i.e. Ctrl, Fn, Shift and Tab. 
+Files are usually referred to as program name (in quotes if possible) plus “file” - Data file, Word file etc. There may be exceptions - if it’s much clearer to use a different name everywhere, that’s OK, but bear in mind people will be used to seeing program name plus “file” everywhere. 
+5. The appearance of the screen
+ 5.1 Using colour 
+5.2 The Toolbar 
+5.2.1 Style and design issues 
+5.3 Relationship between Toolbar actions and menu commands 
+5.4 Text, icons, or both? 
+5.4.1 What to include on the Toolbar 
+5.4.2 What not to include 
+5.4.3 Standard positions for commands on Toolbars 
+5.5 The Toolband 
+5.5.1 Toolband button ordering, sizes and spacing 
+5.5.2 Buttons which display dialogs 
+5.6 Navigation 
+5.6.1 Arrow keys 
+5.6.2 Dogears 
+5.7 Selecting items 
+5.7.1 Don’t use double-taps  
+
+5.1 Using colour
+Starting with release 5, EPOC can also support colour. As much as possible, programs should use the standard colours (as defined in Eikon) rather than have their own colour schemes hardcoded into them. This avoids having programs that use colours which may not be consistent - or may appear unpleasant - with the colours used on a particular device.
+
+In colouring the platform a number of decisions were made which should be adhered to when considering the colourisation of future products:
+
+The System screen background should be a pale colour in order to get as much contrast as possible. Additionally, if a colour other than white is used it might mean that custom wallpaper (which, if designed by the user in Sketch would probably have a white background) would look odd bordered by a different colour. 
+The program workspace should always have a white background, and the text (or whatever) colour should always be black, unless the user specifically changes these. 
+Toolbars, menus, dialogs and buttons should be pale grey with black text. 
+Icons should be predominantly white, with small splashes of colour from a limited palette - 16 colours (e.g. the EGA colours) should suffice. Subtle shading and differences in tone do not always come through. 
+It is also worth bearing in mind that different devices may have different capabilities (especially in hardware terms), and whereas one may show graphics on screen in all their glory another may dither any too-subtle colours to a uniform grey.
+
+5.2 The Toolbar
+ 5.2.1 Style and design issues 
+5.2.1.1 Using the same buttons in all views 
+5.2.1.2 Buttons on Toolbars should not have the cascade symbol or ellipses (…) 
+5.2.1.3 Ideally just one button should latch down on the Toolbar 
+5.2.1.4 Unavailable items  
+
+This section contains guidelines relating to the Toolbar, which appears down the right hand side of a program and comprises four buttons and a clock. The shortcut Ctrl-T should be used to show/hide the Toolbar.
+
+5.2.1 Style and design issues
+5.2.1.1 Using the same buttons in all views
+With a program that has different views on the same information, and enough oft-used commands that are common to all views, e.g. Agenda, try to use the same buttons on the Toolbar in each view. This allows the user to perform the same actions by the same means in all the views (something that they will expect), and reduces the amount of things that change on screen when they switch view (cosmetically pleasing and results in less confusion...”I’m sure there was a button somewhere that let me do that, but I can’t remember which screen it was on...” etc.).
+
+With a program that has different information in each view, but that has some common and oft-used commands in all the views, e.g. Sheet, include as many of the common commands as buttons on the Toolbar as possible. Where there are not enough common commands, or where there are commands that are more often used than the ones that are common, use buttons that are specific to the individual views. Note that the buttons that are common to all views should appear in the same place on the Toolbar in each view.
+
+With a program that displays different information in each view and no commands that are common to all views, obviously there should be different buttons in each view.
+
+5.2.1.2 Buttons on Toolbars should not have the cascade symbol or ellipses (…)
+The cascade symbol, shown below, is used to show that there is a list of options, while ellipses indicate that the option displays a dialog.
+
+ 
+Cascaded menu symbol 
+Reasons being:
+
+To leave room for as much text as possible. 
+These buttons are not akin to menu commands and dialogs. The fact that they have text is for explanatory purposes; ideally, it would be better to just use graphics and then ellipses would not be necessary or appropriate. 
+They are not cosmetically pleasing. On the Toolband and menu commands, the arrows (>) point to where the list will appear. Here they would point off the screen or into the next button. 
+5.2.1.3 Ideally just one button should latch down on the Toolbar
+People will use these buttons to find out at a glance which view they are on, so avoid having buttons that can be latched down at the same time on the Toolbar. E.g. In Sheet, the Sheet view started off having the Titles button on the Toolbar. Problem with this was that with the Titles on, a user might wonder “which view am I on - the Sheet view or the Titles view?”.
+
+5.2.1.4 Unavailable items
+When a button is unavailable it will still depress as normal when pressed, then (typically) the app will display an Infoprint explaining why it is unavailable.
+
+Latching icons are possible, to reflect the current state of something.
+
+5.3 Relationship between Toolbar actions and menu commands
+The keyboard user must be able to duplicate each Toolbar action by selecting a menu command (which has a shortcut key). (Because it’s important that there doesn’t appear to be 2 sets of functionality in the interface - menus and Toolbars.) In a few cases, though, the keyboard user may then require an extra keystroke or two. Examples of the unusual cases:
+
+If there were a Print now Toolbar button, a keyboard user could achieve this by selecting the normal Print command, followed by an Enter. That’s OK - no separate Print now menu command is required. 
+In some apps e.g. Agenda a View Toolbar button pops up a list of views - the menu should include a Switch view command that pops up a list of the views with keyboard shortcuts for each view. 
+5.4 Text, icons, or both?
+ 5.4.1 What to include on the Toolbar 
+5.4.1.1 Example 
+5.4.1.2 A command for not showing Toolbars 
+5.4.1.3 Buttons that move between views 
+5.4.2 What not to include 
+5.4.3 Standard positions for commands on Toolbars  
+
+Generally, Toolbar buttons should have an icon and some accompanying text. Sometimes an icon works just as well (or better) without text - see the Sketch Toolbar for an example - but it’s very rare to find a situation which works best with text but no icons. Icons are in general more powerful reminders than text. Humans have great visual abilities - pattern recognition. To be really effective, though, icons have to represent things or ideas from the user’s world, of course - and, ideally, be guessable (for example, a pair of binoculars is used to represent find).
+
+If text is used, as well as an icon, place the text to the right of the icon. 
+5.4.1 What to include on the Toolbar
+Programs that have the same buttons ought to have them in the same position, e.g. Print appears at the bottom of the Toolbar. The following criteria should be used when choosing default Toolbar buttons:
+
+Criteria
+ Examples
+ 
+1. Used frequently
+ E.g. Today in the Agenda
+ 
+2. Advertise the major functionality of the program
+ Find, Add, Change view, Spell, Print
+ 
+3. Are “valid” for a high proportion of the time
+ Most of the above
+ 
+4. For “instant” operations.
+ e.g. Changing the view - things which don’t need to go via dialogs and/or further keyboard actions
+ 
+5. Reflect PC apps’ buttons - which actions they are, in which order, and with what sort of icons.
+NB: Don’t directly copy another app’s Toolbar design and/or layout!
+ Both W4W and Excel have this order:
+
+New, Open, Save
+
+Print, Print Preview, Spell
+
+Cut, Copy, Paste, Format painter
+
+Undo, Redo/Repeat
+
+Bold, Italic, Underline
+
+Right, Centre, Left, Justified
+
+TipWizard, Help
+ 
+6. Related to “pen-activity”
+ Navigation.
+ 
+
+5.4.1.1 Example
+Agenda (in all views) is like this:
+
+Button
+ Explanation
+ 
+View
+ Tabs out to a list of all views - shows the major functionality
+ 
+Sketch
+ The main purpose of a Sketch is to enter data quickly, and it’s a pen activity.
+ 
+Today
+ Most frequent operation
+ 
+Goto
+ Calendar navigation - pen activity
+ 
+
+5.4.1.2 A command for not showing Toolbars
+If a Toolbar is provided, it should also be able to be turned off in order to maximise the available workspace.
+
+5.4.1.3 Buttons that move between views
+If multiple views are available in a program, it is important to include Toolbar buttons for moving between them because it advertises the fact that more views are available.
+
+It may be appropriate to have a button for each view, e.g. Sheet, or one button that gives access to commands for each of the views, e.g. Agenda - it depends how many views there are to move to (if there are more than four, use a single button for moving between views), and how many buttons should be included for other often-used commands.
+
+5.4.2 What not to include
+Toolbars are to provide non-novices with the sort of actions mentioned above. Things to avoid on Toolbars include:
+
+Very basic operations which people will be unlikely to use when they become familiar with the program. 
+Multiple button bars or a More... button. This defeats the purpose of the Toolbar: fast, instant, etc. 
+Showing different Toolbar buttons when the user switches to a different view (unless the basic functionality changes with the view, as in Sheet). 
+Putting useless or rarely-used options on a Toolbar to fill it out. Instead, consider making the buttons bigger, to help finger-use. Support finger-use wherever possible, but not everywhere - if small controls are needed, use them. 
+Multiple columns of buttons. Only use two columns (and make the buttons smaller) if the extra buttons are really necessary or useful (e.g. in Sketch) - i.e. worth losing the screen space for. 
+5.4.3 Standard positions for commands on Toolbars
+There are standard positions for some Toolbar items, which should be followed if possible:
+
+Topmost
+ Spell
+ 
+Second
+ Find or Sketch
+ 
+Third
+ Find or New
+ 
+Bottom
+ Go To
+ 
+
+5.5 The Toolband
+ 5.5.1 Toolband button ordering, sizes and spacing 
+5.5.1.1 Order of buttons on the Toolband 
+5.5.1.2 Spacing 
+5.5.1.3 Size 
+5.5.2 Buttons which display dialogs  
+
+This section contains guidelines relating to the Toolband, which appears along the top of a program and typically contains text and paragraph formatting options. The shortcut Ctrl-Shift-T should be used to show/hide the Toolband.
+
+Not every program has a Toolband; for examples of those which do, please refer to the Word and Sheet programs. 
+5.5.1 Toolband button ordering, sizes and spacing
+For cosmetic reasons, the spacing and size of buttons on the Toolband should be as regular as possible.
+
+5.5.1.1 Order of buttons on the Toolband
+Try to group related buttons together and separate the groups with spaces. E.g. in Word:
+
+Style - Font - Font size - | B I U | - Alignment - Borders - Bullets
+
+Buttons for changing font, then buttons for emphases, then buttons for formatting entire paragraphs.
+
+Similarly in Sheet:
+
+Font - Font size - | B I U | - Alignment - Borders - Shading - | Freeze Panes - Sum - Functions
+
+Buttons for changing font, then buttons for emphases, then buttons for formatting highlighted blocks of cells, then special features.
+
+5.5.1.2 Spacing
+Don’t have all the buttons squished up to one end leaving the other end empty, or buttons at either end of the Toolband with a big gap in the middle, or irregular spacing between buttons.
+
+The best approach is to group buttons where possible (e.g. keep the font name and font size buttons together, the B I U ones together), then spread the groups of buttons out along the length of the Toolband so that the gaps between the groups are the same.
+
+Note that some machines may have larger screens; for this reason Toolbars should automatically rescale so that the spaces remain even.
+
+5.5.1.3 Size
+For cosmetic reasons, limit the number of sizes of Toolband buttons. Allowing many different sizes of buttons in the Toolband makes them look untidy and unprofessional. Ideally, just one single size of button would be used in the Toolband, for neatness sake. However there are different sized icons and text to place on the buttons, and some buttons need a little down arrow to indicate that they drop down a list, so 4 different sizes of button are used. Each program should use no more than 3 of the 4 sizes available, as follows:
+
+The smallest size is a fixed size for buttons that either have small icons (e.g. bullet list icon in Word), or single letters (e.g. Bold, Italic and Underline B I and U). These are 35 pixels wide. 
+The smaller of the middle sizes is for buttons that have an icon and a drop-down arrow (e.g. paragraph alignment in Word) - 51 pixels. 
+The larger of the middle sizes is a fixed size - 68 pixels wide - and is used for point size buttons. This button has to be larger than the paragraph alignment button size, because when a 3-digit font size is used the “pt” appears clipped. 
+The largest will be for buttons that have text and a drop down list (e.g. style and font buttons in Word) - 115 pixels. 
+Some programs may need to have custom buttons. E.g. Sheet Graph view has an 83 pixel sized button for Label type, Legends etc.
+
+5.5.2 Buttons which display dialogs
+Buttons on the Toolband should be reserved for actions that take immediate effect and should not be used for actions that require a dialog to be displayed first
+
+5.6 Navigation
+ 5.6.1 Arrow keys 
+5.6.2 Dogears  
+
+Wherever possible - wherever it can be done without compromising anything else - make controls big enough to be pressed by a finger.
+
+5.6.1 Arrow keys
+The arrow keys are used to navigate up, down, left and right - normally one step (e.g. one time slot, or one item on a list) per press. The Ctrl and Fn keys are used to increase the size of the steps.
+
+Pressing Ctrl+ arrow key increases the size of the step, Fn+ arrow key (the Home keypress) increases it still more, and Ctrl+Fn+ arrow key moves the maximum possible in the appropriate direction. However, if there is a different action which might be expected (e.g. from PC usage) by a Home keypress, use this instead. For example, in the day view of Agenda, Home/End go to the top/bottom of the view, while Ctrl+Fn+left/right still move by a bigger amount (which in this case is move-by-week).
+
+5.6.2 Dogears
+Use dogears to indicate the area of the screen to tap to turn pages rather than single arrows when the screen display is a representation of a physical page e.g. Agenda.
+
+5.7 Selecting items
+5.7.1 Don’t use double-taps
+Wherever a user can select an item without necessarily performing an action on it, e.g. selecting a file in the System screen, use a single-tap to select the item and a second tap to perform an action on that item - as opposed to a double tap. (Of course, the user can double-tap if they desire, it has the same effect as two single clicks.)
+
+Double-taps are provided for in Eikon, but are not specifically used in the built-in programs because it is an awkward action for users to achieve on the screen - especially on the move. 3rd party developers can use this feature, although this will not be consistent with EPOC.
+
+6. Terminology
+ 6.1 Names of programs 
+6.2 Add/remove versus New/Delete 
+6.2.1 Punctuation  
+
+6.1 Names of programs
+EPOC programs are referred to by their names. These are generally single words derived from a description of what the program is or does - for example Word is the word processor (not the word processor program), Contacts is the contacts manager (not the contacts manager program), etc.
+
+Note that the name of the program is capitalised, but the functionality of the program is not. 
+6.2 Add/remove versus New/Delete
+ 6.2.1 Punctuation 
+6.2.1.1 General punctuation rules 
+6.2.1.2 Use of quotation marks 
+6.2.1.3 File storage 
+6.2.1.4 Files and folders 
+6.2.1.5 Command names, dialogs etc. 
+6.2.1.6 Dialogs and menu commands  
+
+Use Add when the thing to be added already exists and/or can be selected from a list - e.g. a new program, an email account, etc. Use Remove to delete these items (implies it could be replaced somehow, e.g. by reinstalling) 
+Use New (or, better, Create new) when it will be created from scratch - e.g. a new entry in an agenda, or a new file. Use Delete to remove these items (implies they’re gone after deletion). 
+6.2.1 Punctuation
+6.2.1.1 General punctuation rules
+Don’t put a space between the last word in a sentence and a question mark or full stop 
+Don’t put a space between a word and the comma, colon or semi-colon that follows it 
+Always put a single space between a comma, semi-colon or full stop and the word that follows it 
+Don’t put exclamation marks at the end of error messages. 
+Don’t use a full stop at the end of an infoprint. 
+Do use commas and hyphens in the line of text. 
+Try not to use a full stop if the line of text comes in two parts; use a hyphen to separate them instead. For example, instead of Cannot paste. Copy and paste areas are different use Cannot paste - copy and paste areas are different
+
+6.2.1.2 Use of quotation marks
+Where the text is user-generated, e.g. the name of a user’s file, or the text string that they have chosen to replace, use double quotes - for example, “Diary” found.
+
+Note: filenames that are generated by the machine, e.g. Word(01) etc., should be treated as though the user has entered the name of the file, otherwise we’ll have inconsistent use of quote marks around the names of files the user can edit.
+
+Where the text is generated by the machine, e.g. the name of a program, or a system file that the user cannot edit, use single quotes, e.g. `Word’ not present.
+
+If the source is uncertain, e.g. for countries in Time, treat them as though they are generated by the user.
+
+6.2.1.3 File storage
+EPOC filenames are case-sensitive at a UI level, and retain the capitalisation they were given when created, but the filing system does not distinguish between upper and lower case. It is therefore not possible to have two files of the same name in the same folder, even if they are capitalised differently (e.g. Fred and FRED)
+
+6.2.1.4 Files and folders
+Files and folders created by EPOC programs should always have an initial capital letter. If the file or folder name consists of more than one word, any subsequent words should not be capitalised unless they are a proper name.
+
+When software has been developed by third parties and uses a different standard naming convention, the relevant files and folders should be named according to that software’s external standard (e.g. it is standard to use all lower case for Java files and folders). 
+Files and folders created by the user should maintain the capitalisation given them by the user.
+
+6.2.1.5 Command names, dialogs etc.
+Use capital letters on the first word in a menu command only, i.e. Create new file and not Create New File or Create new File (or Create New file)
+
+Similarly, only the first word in dialog line text should be capitalised.
+
+The exception is view names which have an initial capital, e.g. Switch view - Year planner, wherever they appear. 
+6.2.1.6 Dialogs and menu commands
+Be consistent in use of capitalisation in UI (inconsistent use of capitals makes the UI look messy and unpolished).
+
+To be consistent with EPOC, use a capital letter on the first word of resource strings only unless a subsequent word is a proper noun. For example, use Day entry preferences as a command, not Day Entry Preferences, or Day entry Preferences. For multi-word dialog lines and menu commands, use one initial capital letter only - e.g. Create new agenda, not Create New Agenda.
+
+When the name of a folder or file is a single-word contraction of two or more words, e.g. EikExtra.dll, the first letter of the second word may appear as a capital letter within the filename.
+
+Files and folders created by a user should appear in the form in which the user entered the name (either at the time of its creation or during a later rename), with upper- and lower case letters appearing exactly as the user entered them.
+
+Note that a file or folder cannot coexist in the same folder with another file or folder which has the same name, even if they are capitalised differently. 
+Are filenames are case-sensitive? It’s not obvious if so! 
+File names are displayed using the capitalisation as entered by the user and not automatically capitalised (though the pre-defined files have capitalised names).
+
+If the user types “xyz” they get it in lower case.
+
+However the user cannot have two files with the same name in the same folder, even if they are capitalised differently (e.g. “FREDA” and “freda”). This happens automatically.
+
+7. Menus
+ 7.1 Guidelines on Menus 
+7.1.1 Cascaded menus 
+7.1.2 Cascaded menus often look best at the bottom of menus 
+7.1.3 Commands must be displayed even when the cascade is dimmed 
+7.1.4 Print shouldn’t be a cascaded menu when it’s the first option on the menu 
+7.2 Menus 
+7.2.1 Menu wording 
+7.2.2 Settings, Options and Preferences 
+7.3 Menu tiles & shortcut keys 
+7.3.1 Commands that will be frequently used must have shortcuts 
+7.3.2 Grey out commands that can’t be used 
+7.3.3 Use & instead of and in menu commands 
+7.3.4 When to use lines to separate commands, and when not to 
+7.3.5 Place frequently used commands at the top or bottom of a menu 
+7.3.6 Use ellipses for commands that display a dialog 
+7.3.7 Actions with a few settings should cycle through them 
+7.3.8 Don’t squash more commands than necessary onto a menu 
+7.3.9 Giving clues about menu items which lead to dialogs or cascaded menus 
+7.3.10 In general, don’t change the names of menu commands when view changes 
+7.3.11 Apps should have separate Import and Export 
+7.3.12 Infrared should be a cascaded command on Tools 
+7.3.13 Switching between views 
+7.3.14 When not to display the shortcut in a menu tile 
+7.3.15 Don’t include shortcuts for commands that cascade from buttons 
+7.3.16 Choosing shortcuts 
+7.3.17 All commands should have shortcuts, if possible 
+7.4 Standard menu items and their shortcuts 
+7.5 Summarising menu hints and tips  
+
+7.1 Guidelines on Menus
+ 7.1.1 Cascaded menus 
+7.1.1.1 When to use cascaded menus 
+7.1.2 Cascaded menus often look best at the bottom of menus 
+7.1.3 Commands must be displayed even when the cascade is dimmed 
+7.1.4 Print shouldn’t be a cascaded menu when it’s the first option on the menu  
+
+This section contains guidelines for the menus and shortcut keys.
+
+7.1.1 Cascaded menus
+Cascading menus are the commands which lead to further options, indicated by an >.
+
+7.1.1.1 When to use cascaded menus
+Consider cascaded menus wherever there are more than 6 (for half-VGA screens; adjust appropriately for other DFRDs) commands on a menu, and some of them are rarely-used or hard-to-understand commands.
+
+Because otherwise:
+
+Everyday things get hard to find in amongst the other commands. 
+People can feel confused by all these commands they don’t understand. 
+Cascaded menus are best kept towards the bottom of a menu tile, to stop menu users being shocked by the appearance of the cascade while moving down to a non-cascaded command they want.
+
+Cascaded commands should still be accessible by shortcut-keys where appropriate.
+
+Don’t get too keen with cascaded menus as there are drawbacks, such as people unable to find commands & having to go into every submenu to find them, and menu users finding it all too fiddly.
+
+Also, always consider - can a single command be used, with a multi-page dialog, instead of several commands?
+
+Notes:
+
+The terms used on cascaded menus should be brief - ideally a single word. 
+Cascaded menus are often used for selecting a value for an item (usually a set of items with Option buttons): e.g. 
+Switch View: <list of views> or Alignment: <Left, Right, etc.>.
+
+Use cascades for options that belong in a group and that share terms, e.g. Memory in, Memory clear etc. etc. This will help to make menu tiles narrower. 
+The half-VGA EPOC machine has a relatively small screen size, all the more reason to hide some commands behind a more cascade
+
+7.1.2 Cascaded menus often look best at the bottom of menus
+If a cascaded menu looks poor in the middle of a menu try putting it at the end, especially if it contains commands that toggle and that are likely to be frequently used.
+
+7.1.3 Commands must be displayed even when the cascade is dimmed
+For example, in a read-only Agenda file, the Create new entry cascade on the Entry menu should still display its commands even when the file is read-only, and the commands are dimmed. The user must be able to see what all the commands are, even if they cannot use them at this moment, otherwise it appears that commands disappear and then reappear later.
+
+7.1.4 Print shouldn’t be a cascaded menu when it’s the first option on the menu
+For example, on the File menu when viewing an inserted document there may only be 2 options: Print and Close. Since a cascaded command should not be first one on a menu, and it would look odd anyway, all Print options should appear on the top level here.
+
+7.2 Menus
+ 7.2.1 Menu wording 
+7.2.1.1 Cascaded menu commands 
+7.2.1.2 What More menus in programs can contain 
+7.2.2 Settings, Options and Preferences  
+
+7.2.1 Menu wording
+7.2.1.1 Cascaded menu commands
+Cascaded commands should be kept should short, so instead of:
+More >
+
+    Create new this
+    Create new that
+    Create new other
+the cascade should contain just the closing half of the item, as in:
+
+Create new >
+
+    This
+    That
+    Other
+This is to avoid the situation where the cascade is forced to pop up on the left of the menu rather than the right, because of the length of the text in the cascaded commands.
+
+Menu cascades should be thought of like Option buttons in a dialog. Do not re-state the prompt for each item.
+
+Menu tiles should not be too wide either.
+
+App authors should consider re-arranging menu tiles, combining menu options, using multi-page dialogs, etc. to avoid the problem.
+
+However this problem is fixed, it is never going to be as good as avoiding the problem in the first place.
+
+Try not to use More as the name of a cascaded menu command. If at all possible, try to find a better term for further commands. More should only be used as a last resort term.
+
+E.g. instead of having a cascade like:
+
+More >
+
+    >Edit sketch
+    >Edit voice note
+    >Edit memo
+Try using
+
+Edit object >
+
+    >Sketch
+    >Voice note
+    >Memo
+7.2.1.2 What More menus in programs can contain
+If there is a More command on the File menu, it can contain any of the following commands (in this order):
+
+    Save as...
+    Save
+    Revert to saved
+    Merge in...
+    Import text file...
+    Export/Export as text file...
+    Tidy/archive file...
+7.2.2 Settings, Options and Preferences
+This is a bit of a murky area, and may vary between programs, but in general the differences are as follows:
+
+Settings
+
+This menu command should be used for setting things which, once set, will probably be left alone - e.g. a communications program might have modem settings.
+
+Preferences
+
+This should be used for commands that allow the user to customise the program, i.e. change the way things are presented on screen, change the features that are available, change the default settings for things etc.
+
+Preferences should always use the Ctrl-K shortcut key combination. 
+Options
+
+This should be avoided, if possible - try to find an alternative which gives a better idea of what it leads to. If it is used it should contain commands that are alternatives to each other.
+
+Use More… instead of Options to give access to additional commands that won’t fit on the top level on a menu.
+
+7.3 Menu tiles & shortcut keys
+ 7.3.1 Commands that will be frequently used must have shortcuts 
+7.3.2 Grey out commands that can’t be used 
+7.3.3 Use & instead of and in menu commands 
+7.3.4 When to use lines to separate commands, and when not to 
+7.3.5 Place frequently used commands at the top or bottom of a menu 
+7.3.6 Use ellipses for commands that display a dialog 
+7.3.7 Actions with a few settings should cycle through them 
+7.3.8 Don’t squash more commands than necessary onto a menu 
+7.3.9 Giving clues about menu items which lead to dialogs or cascaded menus 
+7.3.10 In general, don’t change the names of menu commands when view changes 
+7.3.11 Apps should have separate Import and Export 
+7.3.12 Infrared should be a cascaded command on Tools 
+7.3.13 Switching between views 
+7.3.14 When not to display the shortcut in a menu tile 
+7.3.15 Don’t include shortcuts for commands that cascade from buttons 
+7.3.16 Choosing shortcuts 
+7.3.17 All commands should have shortcuts, if possible  
+
+This section contains general guidelines about menus and shortcuts, and lists the standard menu commands.
+
+7.3.1 Commands that will be frequently used must have shortcuts
+Otherwise they are too difficult to use in practice.
+
+7.3.2 Grey out commands that can’t be used
+In the same way that dialog lines that are currently unavailable are greyed out, menu commands should also be greyed out.
+
+Makes it obvious to the user that they are unavailable by providing an infoprint, because this is much more satisfactory than providing a host of messages that say Cannot do this... etc. etc.
+
+Note: where a menu command is a cascade, all its options should appear greyed when unavailable. Do not hide the commands otherwise the user may think that something has gone wrong.
+
+7.3.3 Use & instead of and in menu commands
+E.g. Record & replace in Record, instead of Record and replace. It looks neater and makes the text string shorter.
+
+7.3.4 When to use lines to separate commands, and when not to
+Use them to group commands that have some relationship to each other, and separate them from commands that are unrelated, but that appear on the same menu, e.g.:
+
+Create new file
+
+Open file
+
+-------------------
+
+Close
+
+Do not use lines around single commands, unless the command is at the top or bottom of the menu. A menu tile will quickly seem line-bound if there are lines around single commands in the middle of the menu. E.g. don’t have:
+
+Create new file
+
+Open file
+
+-------------------
+
+Printing
+
+-------------------
+
+More
+
+-------------------
+
+Close
+
+If this happens, try rearranging the menu tiles. E.g. the above could be:
+
+Create new file
+
+Open file
+
+Printing
+
+More
+
+-------------------
+
+Close
+
+Do not use lines between commands on cascades. This makes the cascaded command appear even more complex.
+
+Move commands to other menus, create more cascades, or try changing the wording of the commands so that they fit more happily within a group.
+
+7.3.5 Place frequently used commands at the top or bottom of a menu
+So that users notice them first.
+
+Although the first command on a menu has prominence, don’t forget that users will also notice the command at the bottom of a menu just as much.
+
+7.3.6 Use ellipses for commands that display a dialog
+All menu commands that display a dialog should have an ellipsis at the end, e.g. Page setup.... To keep the menu command as short as possible, there shouldn’t be a space between the last letter of the command name and the ellipsis character.
+
+Note that commands that display a dialog to give information about the progress of something that has started as a result of selecting a menu command, e.g. Infrared Send and Infrared Receive, should not have ellipses. The action has already started before the dialog is displayed.
+
+7.3.7 Actions with a few settings should cycle through them
+All commands that move up and down a small number of settings - like Zoom in and Zoom out - should cycle round the various settings, rather than coming to the end of the list and forcing the user to use the other command to go back. A user who is trying to find the best setting should be able to move between them all without changing keypress. This mirrors the action of the arrow keys when moving between menus, and between commands on a menu (the right arrow key, for example, goes all the way to the right until it gets to the end, when it goes back to the far left).
+
+7.3.8 Don’t squash more commands than necessary onto a menu
+If there are more items than will fit comfortably onto a menu (for a half-VGA screen eight items is just about the limit), try reorganising them, or move infrequently used options onto a cascade. If an extra option has to go onto a menu, try using fewer dividing lines between them.
+
+Don’t use scrolling menus if at all possible. If a scrolling menu is unavoidable, don’t allow it to wrap back to the top when the last item is reached.
+
+7.3.9 Giving clues about menu items which lead to dialogs or cascaded menus
+Commands which lead to dialogs should be shown ending in the ... character.
+
+Commands which have a cascaded menu are shown ending in the right-pointing triangle character.
+
+(There’s no need to use these characters if/when referring to them elsewhere - e.g. in Help, Infoprints etc.)
+
+7.3.10 In general, don’t change the names of menu commands when view changes
+The menu contents should generally be fixed. For example, the commands should not change around when e.g. shifting to a new view. (If it’s an entirely different view, requiring entirely new menus, then sure - like in Sheet - because the user’s asked for a completely different mode. But avoid subtle changes, as they only confuse.)
+
+Some entries change their names slightly to reflect the state of the program. For example, Undo might become Undo Deletion.
+
+Avoid flip-flop command names - like Wrap on becoming Wrap off - for the obvious reason that users often aren’t sure whether it’s saying what the setting is, or what it will be if the command is used. Use tickboxes on menu commands instead. This example should just always be e.g. Wrap to screen, and have a tickbox.
+
+7.3.11 Apps should have separate Import and Export
+Since the Save as and Merge in dialogs need to be kept as simple as possible, all the import/export stuff should be put in separate dialogs (rather than adding a File type line to the Save as and Merge in dialogs).
+
+So the appropriate apps will need Import file and Export file commands. The commands should be at the end of the More choice list on the File menu.
+
+7.3.12 Infrared should be a cascaded command on Tools
+As:
+
+Infrared >
+
+    > Send
+    > Receive
+Reasons: Not used very often. Also makes the last menu tile narrower - good plan because this helps to prevent other cascades having to appear to the left of the menu tile.
+
+7.3.13 Switching between views
+The Switch view command (if applicable) should cycle through preferred views, and should use the Ctrl-Q shortcut.
+
+Switch view should also cascade, giving the list of alternate views:
+
+Switch view >
+
+    >> Day view
+    >> Week view
+    etc.
+    etc.
+Note - the Switch view shortcut key cycles through the views.
+
+7.3.14 When not to display the shortcut in a menu tile
+If the shortcut for a menu command will not work while the menu is displayed, the shortcut key should not be displayed on the menu unless it’s a very common command that users might want to know the shortcut for.
+
+For example, in Word, the Insert - Page break command is shown with a Ctrl+Enter shortcut. However this keypress does not work while the menu is displayed and a user might get confused if they call up the menu and then use the keypress. In this case the keypress is shown anyway, because it advertises functionality and is a very useful one to know, but generally this type of shortcut keypress should not be shown on the menu.
+
+7.3.15 Don’t include shortcuts for commands that cascade from buttons
+For example, don’t include shortcuts for the commands that cascade from a View button in the Toolbar (See Agenda for an example), or that cascade from the Command icons to the left of the screen (Infrared Send and Receive etc.).
+
+These commands are all pen activated when they are selected from the button, so they do not need keyboard shortcuts. They have shortcuts for the equivalent commands available from the menu bar.
+
+Including shortcuts would also make the lists of commands too wide.
+
+7.3.16 Choosing shortcuts
+Use the standard ones for standard commands, then allocate shortcuts so that the most commonly used commands are given priority. When all those have shortcuts, consider the less often used commands.
+
+Choose shortcuts that are easy to remember - using a letter from the command name is a often a good plan, or a letter that sounds like the command.
+
+Don’t have e.g. Undo & Redo using the same key, one of them shifted and the other not. Users may forget whether or not they are supposed to use shift with the shortcut, so make sure that the exact opposite of the user’s intention is not carried out if they press the wrong keypress.
+
+If a standard shortcut has to be used for a non-standard command, make sure that the standard command is not also used with a different shortcut, and that nothing bad happens if the user presses the shortcut anticipating the standard action.
+
+7.3.17 All commands should have shortcuts, if possible
+If not, allocate them to the most frequently used commands and/or the most inaccessible ones (e.g. those on cascades) first.
+
+7.4 Standard menu items and their shortcuts
+Provide shortcut keys for the more commonly used menu commands. Shortcut keys should contain either CTRL, or CTRL & SHIFT and a letter. They should not contain numbers.
+
+In the table that follows, CTRL+ letter shortcuts are denoted just by the letter, e.g. U means CTRL+U, while shifted shortcuts are denoted SH-U.
+
+Here are the standard menu tiles and their contents:
+
+File
+ Edit
+ View
+ Insert
+ Format
+ Tools
+ 
+Create new file N
+
+Open file O
+ Undo Z
+
+Redo Y
+ Zoom in M
+
+Zoom out Sh- M
+ Sketch
+
+Graph
+
+Other 
+object Sh- O
+ Bold B
+
+Italic I
+
+Underline U
+
+Paragraph >
+
+>Indents
+
+>Tab positions
+
+>Horizontal alignment
+
+>Vertical spacing
+ View preferences K
+
+General preferences Sh-K
+ 
+Password Sh-Q
+ Cut X
+
+Copy C
+
+Paste V
+
+Delete/Delete all D
+
+Select all A
+ Show Toolbar T
+
+Show Toolband Sh-T
+
+Wrap to screen W
+  
+  
+ Spell check L
+
+Thesaurus Sh- L
+
+Word count Sh- W
+ 
+Printing >
+
+>Page setup Sh-U
+
+>Print setup Sh-P
+
+>Print preview Sh-V
+
+>Print P
+ Find F >
+
+> Find next J
+
+> Replace H
+
+> Go to G
+ Switch view Q >
+
+> List of views
+
+> Name view
+  
+  
+ Infrared >
+
+> Send
+
+> Receive
+ 
+major, app-specific
+ major, app-specific
+ major, app-specific
+  
+ major, app-specific
+ * Help on program Sh- H
+
+* About program Sh- A
+ 
+More>
+
+>Save as Sh- S
+
+>Save S
+
+>Revert to saved R
+
+>Merge in Sh -I
+
+> Import
+
+> Export
+
+>minor, app-specific
+ Object>
+
+> Edit object... Sh- Z
+
+> Format object... Sh- J
+
+More>
+
+> minor, app-specific
+ More>
+
+> minor, app-specific
+  
+ More>
+
+> minor, app-specific
+ major, app-specific
+ 
+Close E
+  
+  
+  
+  
+ More>
+
+>minor, app-specific
+ 
+
+* = 3rd party programs only
+
+Note: If a program has an Insert menu, it should be positioned between the View and Format menu tiles.
+
+Try not to have more commands than will fit tidily on a menu (for half-VGA screens the sensible maximum is eight) - use cascaded commands to avoid this. This menu tile layout shows 9 on the Edit menu for the purposes of showing which commands should be included on this menu. In practice none of the apps use all the Edit commands that are listed here.
+
+Below is a list of all the standard system shortcuts. Avoid all of these shortcuts for program specific functions and use the remaining unclaimed shifted shortcuts instead. Bear in mind that it is only necessary to supply shortcuts for the most commonly used functions - keyboard users always have the option of doing the three-key <menu>-<tile>-<command> keystroke to invoke a menu command - so it’s not a big deal not to have a shortcut for everything.
+
+The platform-wide “standards” (in English) will be:
+
+Ctrl+
+ Normal keystroke
+ Shifted keystroke
+ 
+A
+ Select all
+ * About Program name
+ 
+B
+ Bold
+  
+ 
+C
+ Copy
+ Insert special character
+ 
+D
+ Delete
+  
+ 
+E
+ Close
+  
+ 
+F
+ Find
+ Font
+ 
+G
+ Go to
+  
+ 
+H
+ Replace
+ * Help on Program name
+ 
+I
+ Italic
+ Merge in
+ 
+J
+ Find next
+ Format object
+ 
+K
+ Preferences
+  
+ 
+L
+ Spell
+ Thesaurus
+ 
+M
+ Zoom in
+ Zoom out
+ 
+N
+ Create new
+  
+ 
+O
+ Open
+ Insert object
+ 
+P
+ Print
+ Print setup
+ 
+Q
+ Switch view
+ Password
+ 
+R
+ Revert to saved
+  
+ 
+S
+ Save
+ Save as
+ 
+T
+ Show Toolbar
+ Show Toolband
+ 
+U
+ Underline
+ Page setup
+ 
+V
+ Paste
+ Print preview
+ 
+W
+ Wrap
+  
+ 
+X
+ Cut
+  
+ 
+Y
+ Redo
+  
+ 
+Z
+ Undo
+ Edit object
+ 
+
+applies to 3rd party programs only.
+
+7.5 Summarising menu hints and tips
+Don’t change the menu contents, grey them out & display a message instead when they are not available. Tickboxes are better than flip-flop commands.
+
+Use dividing lines between related commands and standard shortcut keys.
+
+Hide scary, unimportant, or little used commands away on sub-menus.
+
+8. Dialogs, infoprints & buttons
+ 8.1 Dialogs 
+8.1.1 Dialog titles: say as much as necessary in order to explain the dialog 
+8.1.2 Don’t show the effects of changes until the dialog is complete 
+8.1.3 Don’t wrap scrolling dialogs 
+8.1.4 Text and controls should be dimmed when not available 
+8.1.5 Put measurement units after edit boxes, not in the title 
+8.1.6 Don’t use Are you sure? in confirmation dialogs 
+8.1.7 Don’t use Abandon changes? 
+8.1.8 Don’t mix metaphors in dialogs 
+8.1.9 Add explanatory text to dialogs that are not easy to understand… 
+8.1.10 …but try not to squeeze too much text into a single dialog 
+8.1.11 Use & instead of and on dialog line settings 
+8.1.12 Show relationships between settings on dialog lines 
+8.1.13 Help for 3rd party programs will be available from the Tools menu 
+8.1.14 About dialogs for 3rd party and add-on programs 
+8.1.15 Preferences - have separate dialogs for View and General preferences 
+8.1.16 Use Stop rather than Abort or Cancel in error dialogs 
+8.1.17 Eikon doesn’t allow the display of shifted shortcuts under buttons 
+8.1.18 Validation in dialogs - take the user to the line they need to set 
+8.1.19 Don’t show this dialog again settings 
+8.1.20 Put annotation text underneath the line to which it refers 
+8.1.21 Make long strings of annotation text a single paragraph 
+8.1.22 Use quote marks round text in dialogs 
+8.1.23 Ideally, dialogs only appear when the user asks for them 
+8.2 Infoprints 
+8.2.1 Use Infoprints and Beeps when it isn’t obvious what’s happened 
+8.2.2 Using a confirmation dialog instead of an infoprint 
+8.2.3 Be specific with infoprints 
+8.2.4 Avoid ambiguity, have simple indications of goodness and badness 
+8.2.5 Position of messages and infoprints 
+8.2.6 Don’t try to explain the unexplainable 
+8.2.7 Keep messages short and to the point 
+8.2.8 Be specific 
+8.2.9 Use different messages for single and multiple files 
+8.2.10 Messages to use when commands and features aren’t available 
+8.2.11 Use No xxx name entered when the user must enter a name before pressing Enter 
+8.2.12 What not to put in infoprints 
+8.3 Error messages 
+8.3.1 A basic principle for error messages 
+8.3.2 Make error messages meaningful 
+8.3.3 What to warn users about 
+8.4 General info 
+8.4.1 Dim commands and options if unavailable 
+8.5 Buttons in dialogs 
+8.5.1 Try to avoid buttons 
+8.5.2 Choosing where to position buttons 
+8.5.3 Button names 
+8.5.4 Don't change the text or functionality of a button depending on mode 
+8.5.5 Enter is the do it key - not always an exit key 
+8.5.6 Using ellipses and arrows on buttons in dialogs 
+8.5.7 Use Y/N in any dialogs with ? in the title 
+8.5.8 N buttons must also be activated by N and Esc 
+8.5.9 Use a Done button when inserting objects 
+8.5.10 Dialogs which can be re-used should have a Close button 
+8.5.11 When to specify keynames for buttons and when not 
+8.5.12 Keep buttons in secondary dialogs in the same position 
+8.5.13 Dealing with a mixture of labelled and unlabelled buttons 
+8.5.14 Buttons with two words on them 
+8.5.15 Buttons in text editors in dialogs 
+8.6 Commands 
+8.6.1 All commands should have Undo option  
+
+As with menus, the overriding principles are clarity, simplicity and reassurance. Be positive if at all possible, and word dialogs in such a way that it's easy to understand what they mean. If they have advanced (ie incomprehensible) settings, then add an Advanced... button.
+
+8.1 Dialogs
+ 8.1.1 Dialog titles: say as much as necessary in order to explain the dialog 
+8.1.2 Don’t show the effects of changes until the dialog is complete 
+8.1.3 Don’t wrap scrolling dialogs 
+8.1.4 Text and controls should be dimmed when not available 
+8.1.5 Put measurement units after edit boxes, not in the title 
+8.1.6 Don’t use Are you sure? in confirmation dialogs 
+8.1.7 Don’t use Abandon changes? 
+8.1.8 Don’t mix metaphors in dialogs 
+8.1.9 Add explanatory text to dialogs that are not easy to understand… 
+8.1.10 …but try not to squeeze too much text into a single dialog 
+8.1.11 Use & instead of and on dialog line settings 
+8.1.12 Show relationships between settings on dialog lines 
+8.1.13 Help for 3rd party programs will be available from the Tools menu 
+8.1.14 About dialogs for 3rd party and add-on programs 
+8.1.15 Preferences - have separate dialogs for View and General preferences 
+8.1.16 Use Stop rather than Abort or Cancel in error dialogs 
+8.1.17 Eikon doesn’t allow the display of shifted shortcuts under buttons 
+8.1.17.1 Avoid jargon 
+8.1.17.2 Avoid pidgin-speak 
+8.1.17.3 Check that messages are not unnecessarily scary. 
+8.1.17.4 If it’s serious, say so. 
+8.1.17.5 Always tell the user if the program is busy. 
+8.1.17.6 Only validate data that has to be validated. 
+8.1.17.7 If it’s the program’s limitation, say so. 
+8.1.17.8 Avoid using pleasantries 
+8.1.18 Validation in dialogs - take the user to the line they need to set 
+8.1.19 Don’t show this dialog again settings 
+8.1.20 Put annotation text underneath the line to which it refers 
+8.1.21 Make long strings of annotation text a single paragraph 
+8.1.22 Use quote marks round text in dialogs 
+8.1.23 Ideally, dialogs only appear when the user asks for them  
+
+This section contains guidelines about dialogs.
+
+Generally:
+
+Only use confirmation dialogs for unexpected or dangerous actions. 
+Have links to other related actions e.g. creating a folder when saving a file. 
+Remember settings from one session to the next. 
+Keep the main pane simple & intelligible. 
+Use standard exit buttons in standard places. 
+Use explanatory text & frames to group related controls. 
+Main dialog text should be bold, any annotation text should be in a smaller size and not emboldened. 
+8.1.1 Dialog titles: say as much as necessary in order to explain the dialog
+Many dialogs won’t need anything other than the command name. Use longer dialog titles wherever it helps explain what the dialog is for. For example (as mentioned elsewhere) certain dialog titles can give a big hint that Agenda(s), WP documents etc. are different types of “files”: the title for the Create new file dialog should be Create new Data file; for Open other file it should be e.g. Open other Word file.
+
+If the dialog title needs further explanation, try rewording the menu command to make it clearer what it means.
+
+For example, with a dialog to give information about an object that has been inserted in the current file, the title Inserted object info would be much better as Information on inserted object because the dialog is then linked to the name(s) of the commands, etc., that are used to insert objects (e.g. in Word).
+
+8.1.2 Don’t show the effects of changes until the dialog is complete
+Don’t show the effects of any changes the user makes in a dialog, until the dialog has been confirmed, i.e. don’t have the screen redrawn behind the dialog.
+
+For example, Data has a dialog to change the layout of columns and the fonts used. The effects of any change the user makes to the layout and font are not shown until the dialog has been confirmed and removed, because:
+
+It would be unclear whether the changes would remain if the dialog were cancelled instead of confirmed. 
+If for any reason the user were interrupted after making some changes, they might come back and cancel the dialog and be surprised that the screen reverts to a different setup (the original). 
+In this case it wouldn’t be very useful anyway because only those changes which affected the visible part of the screen could be seen. 
+It’s inconsistent with the behaviour of any other dialogs in the system. 
+In multi-page sequential dialogs and wizards, don’t save the settings until either the sequence is over or the user presses OK to exit the sequence. If the user presses Cancel, all changes made should be lost (though a confirmation dialog would help here).
+
+8.1.3 Don’t wrap scrolling dialogs
+If a dialog has so much text or other contents that it is necessary to scroll through more than a single page, do not wrap the dialog - i.e. don’t return to the top when the last item is reached.
+
+8.1.4 Text and controls should be dimmed when not available
+When dialog lines are dimmed because they aren’t available, the controls should also be made invisible as well. For example: in the Tools-Sound dialog in the Time program the Silent for (hh:mm) setting is dimmed unless the Alarm sound”on the above line is set to Silent for. When the text Silent for (hh:mm) is dimmed, so should the controls 00:30.
+
+Dialog lines should be dimmed rather than made invisible when they aren’t available.
+
+Buttons in dialogs should also be dimmed when unavailable; this is preferable to having them appear and disappear as other options are implemented. 
+8.1.5 Put measurement units after edit boxes, not in the title
+In dialogs that have edit boxes for numbers in a particular unit of measurement, e.g. the Indents dialog in Word, put the measurement unit that is currently in use as small text after the edit box rather than before it. For example:
+
+Indent: Left [0.00] in
+
+rather than
+
+Indent: Left (in) [0.00]
+
+8.1.6 Don’t use Are you sure? in confirmation dialogs
+Putting a second question in the dialog implies that the user can’t be trusted to make the decision without a second confirmation.
+
+Instead, phrase the confirmation in the form:
+
+You will lose all the changes
+
+Revert to saved?
+
+Y/N
+
+Try to place the questioning part of the dialog immediately before the Yes/No answer, rather than the alternative Revert to saved? You will lose all the changes (Y/N). In many cases it doesn’t matter, but sometimes it changes the sense of the dialog: for example Out of memory. Exit, lose changes? (Y/N) reads OK, but Exit, lose changes? Out of memory (Y/N) reads as if the user is being asked to confirm the out of memory state, not the exiting of the program. 
+8.1.7 Don’t use Abandon changes?
+Exit and lose changes? is much clearer.
+
+8.1.8 Don’t mix metaphors in dialogs
+(Or anywhere else, for that matter). Check the following example - it isn’t clear that closing the link will render it inactive.
+
+Close link to desktop?
+
+Link to desktop is active
+
+No Yes
+
+8.1.9 Add explanatory text to dialogs that are not easy to understand…
+Some dialogs are not understandable at first glance, no matter how carefully they are worded, and others contain jargon or abbreviations that may not be familiar to many people.
+
+In these dialogs, add a short line of explanatory text at the top of the dialog to make things a bit clearer.
+
+E.g. in the Time program, in the Add city dialog, the explanatory line GMT offset’ is time difference from Greenwich Mean Time appears, and the Add name dialog in Sheet says Note: Value can be a number, text, cell or range reference.
+
+8.1.10 …but try not to squeeze too much text into a single dialog
+Dialogs that contain long text strings and a lot of settings can appear overwhelming and difficult to understand to the user, but they can also cause problems with localisation - text strings in other languages are generally longer than in English. A dialog whose dialog lines & setting boxes look alright and fit in English may not work when translated into German, for example.
+
+When localised into other languages, text strings grow by about 30%. Make sure that the English wording leaves enough room on the dialog for them to grow by that much. A rule of thumb is: for each dialog consider the longest text string used to label a setting box, and the longest text string within the list of settings for that box. If these two together won't fit in the dialog when they grow by 30%, localisation won't be easy and the text needs changing.
+
+If a dialog has long text strings and/or too many settings, try:
+
+Reducing dialog line and setting string text by rewording. Be careful with this though; there is no point in abbreviating text to the point at which it becomes impossible to understand. 
+Adding annotation text to explain shortened dialog line descriptions - annotation text generally takes up less space because the font is smaller (but remember to leave room for this to grow by 30% too). 
+Adding further pages to the dialog. When doing this, ensure that settings are grouped in a sensible way - ideally all settings for a particular aspect should appear on the same page, e.g. in the battery info dialog from the System screen, the summary information appears on one page, while the current and previous settings have their own pages. 
+Reworking the dialog to change the way that settings are expressed and grouped.
+For example, instead of having
+Allow Timed day entries      Y/N
+Allow Untimed day entries      Y/N
+Allow Events      Y/N
+Consider
+Allow:
+Timed day entries      Y/N
+Untimed day entries      Y/N
+Events      Y/N 
+8.1.11 Use & instead of and on dialog line settings
+It looks neater and makes the line of text shorter.
+
+8.1.12 Show relationships between settings on dialog lines
+When the setting on a dialog line (let’s call it Line B) is related to the setting made on a previous dialog line (let’s call this line, Line A), should show this relationship to the user. There are a number of ways to do it, depending on the relationship involved:
+
+If the setting on the Line A determines whether or not the user can change Line B, use dimming. Line B should be active only when the appropriate setting has been selected on Line A.
+
+Note: if the dimmed label of Line B does not indicate that Line B is related to Line A, indent Line B as well. E.g. in the Import options dialog in Data, the text Use on the line following Text delimiter does not make it sufficiently clear on first glance that this line is related to the Text delimiter line. So the Use line is indented to make it clear that this line is related to the line above.
+
+If there is a dynamic relationship between the Lines A and B such that a change on either line updates the other, then use indents to show the relationship between the two. For example, in Agenda Find dialog between the lines Find range and the From and To lines that follow.
+
+8.1.13 Help for 3rd party programs will be available from the Tools menu
+If the EPOC machine has a special Help key combination, this should always display the default machine Help. 3rd party apps should include a command (on the Tools menu, if it exists) called Help on program name, and a further command to display the About program name dialog.
+
+8.1.14 About dialogs for 3rd party and add-on programs
+Some 3rd party programs, and additional programs, will need About dialogs. Where they are to be included, they should be accessible from an About xx command which should be placed at the bottom of the Tools menu in the program.
+
+The shortcut for the command should be Ctrl-Sh-A.
+
+The text and/or graphics that appear in the dialog should be determined by the owner of the particular program.
+
+The text should contain, as a minimum, details of:
+
+Program name and version.
+
+Copyright symbol, copyright holder name and date.
+
+All the rest is up to the program owner to decide.
+
+8.1.15 Preferences - have separate dialogs for View and General preferences
+If there are a number of preferences that control how the information looks on screen and how the program works (e.g. 3 view preferences and 2 control settings), separate the View preferences from the control preferences and refer to the control preferences as General preferences, but if there is only e.g. one view preference and one control preference, just have one Preferences command on the Tools menu.
+
+Keeping the view and control preferences separate like this allows more space to increase the number of preferences in future versions of the program, if necessary, and also advertises the fact that both the appearance and behaviour of the program can be changed.
+
+8.1.16 Use Stop rather than Abort or Cancel in error dialogs
+In dialogs where not retrying can cause loss of data (e.g. in disk error dialogs) or an action to remain un finished, use Stop and Retry buttons instead of Abort or Cancel. Abort can have unpleasant associations and Cancel implies that the situation can be returned to the way it was before (untrue, because data will have been lost).
+
+8.1.17 Eikon doesn’t allow the display of shifted shortcuts under buttons
+If a button in a dialog for a standard program command has a shortcut keypress of Shift+keypress, also allow the unshifted keypress to perform the same function and display the unshifted shortcut as the legend under the button.
+
+E.g. a Font button in a dialog should be activated by the normal associated shortcut (Sh+Ctrl+F) and also Ctrl+F. Ctrl+F should be displayed as the legend under the button.
+
+8.1.17.1 Avoid jargon
+And other words that users may not know
+
+8.1.17.2 Avoid pidgin-speak
+It is quite common for error messages to leave out the verb, with the result that users who don’t know which words are jargon can’t work out the syntax of the sentence. For example, take the error message Cursor not on entry. What does this mean? Is cursor an imperative (i.e. don’t cursor on an entry)? Cursor is not on an entry is clearer.
+
+In almost all current software, error messages are full of these! Re-read any error messages from the point of view of a novice with no knowledge of terminology etc., and try hard to misunderstand it. Check that it is jargon-free or, if jargon is unavoidable, is it clearly marked as such (e.g. in quote marks)? If the user does not know which words are jargon and which are not, the dialog should still be clear and unambiguous. Could any of the nouns be misread as a verb, or vice versa?
+
+8.1.17.3 Check that messages are not unnecessarily scary.
+File does not exist should be File not found or similar. The user may have mistyped the filename, or be in the wrong folder, and not realise it; File does not exist implies that the file has vanished.
+
+There is an unrecoverable error on file XXX. To the user, unrecoverable means you cannot now recover your file! Should be something like Problem while trying to save file. Check your file is OK.
+
+8.1.17.4 If it’s serious, say so.
+If possible, give likely explanations and/or courses of action. Ideally if printing fails don’t say Invalid printer or some such, say what it might be (the printer’s off-line?) and e.g. have buttons for actions like print it when possible (i.e. spool it) etc. Try not just to say wrong!. Matching requires sorted file - well why not tell them how to sort the file then? Use the Sorting option before matching?
+
+8.1.17.5 Always tell the user if the program is busy.
+If a program has to stop responding for a few moments, e.g. while searching or sorting, tell the user that it’s OK for this to happen, try to indicate how long there is left (if possible), and let them cancel it if at all possible. When displaying a progress bar for e.g. a multiple file delete, try to indicate the time remaining for the entire process (and not individual progress bars for each file).
+
+8.1.17.6 Only validate data that has to be validated.
+Try to avoid messages saying things like Invalid data if a user enters something the program can’t handle. Try instead to find a way to make the program handle a variety of possible inputs. For example, if a dialog asks for a distance in the form Distance is [ ] cm, try to do the right thing if a user types 5 cm (or 2 ins) in the entry box.
+
+8.1.17.7 If it’s the program’s limitation, say so.
+Don’t make it sound like it’s the user’s fault for not knowing. Don’t say Invalid data if the data may look perfectly valid to the user.
+
+8.1.17.8 Avoid using pleasantries
+Don’t say please this, please that. Instead of Please enter a number, just say Enter a number. Users can get irritated by having to read a large number of pleases, and this also makes for shorter text in other languages.
+
+8.1.18 Validation in dialogs - take the user to the line they need to set
+If the user presses Enter in a dialog and fails to set a line that is validated before the dialog can be closed, display a message saying e.g. No xx name entered and move the cursor to the line that the user must set.
+
+If the user has failed to set several lines in a multi-page dialog, display the same message and take them to the first line to set then, when they press Enter again, display another message and take them to the second line to set, and so on.
+
+8.1.19 Don’t show this dialog again settings
+Beware of these - users may not know how to turn the dialog back on once they have turned it off. If this option is included on a dialog, include the option to turn it back on again with the program’s preferences..
+
+8.1.20 Put annotation text underneath the line to which it refers
+Because the annotation text is smaller than the dialog text, it appears to the eye that the annotation text is always linked to the dialog line above it.
+
+8.1.21 Make long strings of annotation text a single paragraph
+Instead of using two or more paragraphs for annotation text, try to use a single paragraph with line breaks in the resource file where necessary.
+
+This helps during translation because text can wrap more easily with wordy languages, and doesn't take up so much space.
+
+8.1.22 Use quote marks round text in dialogs
+Whenever a program quotes some text which appears elsewhere, the quoted text should appear in quotation marks. Whether to use single or double quotes depends on the source of the quoted text.
+
+Where a piece of text has been generated by the EPOC machine (e.g. the name of a program, or of a system file that the user cannot edit) put the file name in single quotes - ‘Word’ not present. 
+Where the text has been created by the user (e.g. the name of a user’s file, or of a text string that they have chosen to replace) use double quotes - “Diary” found. 
+If the source is uncertain, e.g. for countries in Time which may have been entered by the user, treat them as though they are generated by the user and use single quotes. 
+When a file name has been generated by the machine, e.g. Word(01), this should be treated as though it were user-created (i.e. double quotes) in order to be consistent with quote marks around editable filenames.
+
+8.1.23 Ideally, dialogs only appear when the user asks for them
+Sometimes, dialogs in software seem to appear for no reason other than for the programmer to throw up all the settings they know about, at a point convenient to them (it’s almost as if they’re saying OK, I understand these settings. You can try and set any of these things - if you know what they mean, that is).
+
+This is an appalling thing to do in a UI. Generally the user doesn’t usually want to see a dialog at all, they just want to tell the program to get on and do a nice simple thing (if these settings really need to be made available hide them behind an Advanced button)!
+
+Two things to bear in mind:
+
+Often, when a dialog appears, there is one single option that 95% of users will want to do 95% of the time. Instead of showing the dialog, consider doing this action instead. If it turns out not to be quite right, have some other setting/command for the user to change the action; 
+When a dialog is necessary (and, indeed, it’s only rarely in practice that they can be dispensed with completely), multi-page dialogs often make dialogs much simpler to use. 
+8.2 Infoprints
+ 8.2.1 Use Infoprints and Beeps when it isn’t obvious what’s happened 
+8.2.1.1 When a command cycles through settings 
+8.2.2 Using a confirmation dialog instead of an infoprint 
+8.2.3 Be specific with infoprints 
+8.2.4 Avoid ambiguity, have simple indications of goodness and badness 
+8.2.5 Position of messages and infoprints 
+8.2.6 Don’t try to explain the unexplainable 
+8.2.7 Keep messages short and to the point 
+8.2.8 Be specific 
+8.2.9 Use different messages for single and multiple files 
+8.2.10 Messages to use when commands and features aren’t available 
+8.2.11 Use No xxx name entered when the user must enter a name before pressing Enter 
+8.2.12 What not to put in infoprints 
+8.2.12.1 Don’t display unnecessary messages. 
+8.2.12.2 Don’t use Check if the...  
+
+Infoprints show feedback messages clearly but in a non-intrusive way - they don’t require an OK click to make them go away.
+
+Infoprints and messages are used to give the user feedback about something that is going on, and yet they often seem to be among those areas of UI which have had the least attention paid to them. Error messages, particularly, often give the appearance of being whatever the programmers fancied saying, whenever they fancied saying it. So a little attention to detail here can make a big difference.
+
+8.2.1 Use Infoprints and Beeps when it isn’t obvious what’s happened
+Users need feedback to know that the command they’ve selected has been carried out.
+
+In most situations something will happen on the screen to mark the action, e.g. a dialog will appear, or the text they’ve typed will change in some way. Other commands, however, cause no change to the contents of the screen; provide an Infoprint to show the action has been carried out - Copied, Saved etc. - or sound a Beep when an Infoprint isn’t appropriate.
+
+8.2.1.1 When a command cycles through settings
+If a command cycles between settings which have no obvious effect on screen, display a message in the bottom left corner of the screen to let the user know that the action has taken place.
+
+8.2.2 Using a confirmation dialog instead of an infoprint
+In certain situations (mainly in the event of potential or actual loss of user data) it is better to use a confirmation dialog rather than just displaying an infoprint - e.g. say Are you sure? Your entire Agenda will be deleted rather than your entire agenda has been deleted.
+
+8.2.3 Be specific with infoprints
+For example, instead of displaying Please wait (which gives the user no clue as to what they are waiting for), display a specific message. e.g. while a merge in is taking place, display Merging in....
+
+And put ... at the end - it implies that the user has to wait, without saying so specifically.
+
+8.2.4 Avoid ambiguity, have simple indications of goodness and badness
+If a program is trying to say e.g. Everything’s fine, or You have a virus!, it had better make sure it’s clear which it’s saying. A common virus checker says, after checking a file named Mydoc.doc:
+
+Scanning C:\MYDOC.DOC
+Summary report on MYDOC.DOC
+File(s)
+Analyzed………………….            1
+Scanned…………………..            0
+Possibly Infected………            0
+Time: 00:00.00
+
+But it’s difficult to understand what this means. If it analyzed the file, why didn’t it scan it? This is undoubtedly some program-specific use of the words analysed and scanned - but that’s no reason to throw them as-is at normal users, to whom it just looks like a error.
+
+Also, here the phrase Possibly infected leaps out at the user. There’s a zero which is related to it, but it so far over to the right of the screen it isn’t obvious at first glance; it is failing the principle of having simple indications of goodness and badness. Instead of Possibly Infected…..0, What's wrong with No files infected (or no viruses found)?
+
+And what about Time: 00:00.00 - is this the current time (ie it’s reset the PC’s clock to midnight), or is it saying how long it took to run the program? If the latter, does the fact that it took no time at all to run mean that it didn’t run after all? (What use is this information anyway, even if it was saying a non-zero time? Since other apps don’t say how long they took to run, it just makes people think this app must have some special time-critical nature which they don’t know about.)
+
+8.2.5 Position of messages and infoprints
+Static messages, e.g. infoprints like Entry copied, should appear in the top right-hand corner of the screen where people are likely to notice them. Busy messages, on the other hand, should appear in the bottom left corner of the screen. The reason for this is that the two types of messages can’t appear in the same place on the screen, and the user is likely to move their hand away from the screen while busy messages are displayed (no further actions can be performed while these messages are on screen).
+
+8.2.6 Don’t try to explain the unexplainable
+For example: when something which has been copied cannot be pasted somewhere else, because the destination does not accept the type of information that has been copied, don’t say Cannot paste - different type of data required here, just say Nothing to paste.
+
+8.2.7 Keep messages short and to the point
+Remember that they are only on the screen for a short amount of time, so users will not be able to read and understand a message that’s very long. For example, the message: The disk has been removed - please replace it, can be shortened to Disk is not present without any loss in meaning for the user.
+
+8.2.8 Be specific
+Don’t use Busy if the user is having to wait because the program is searching for something, display a Searching... message.
+
+Likewise if the program is recalculating, say Recalculating....
+
+8.2.9 Use different messages for single and multiple files
+For instance, if a message or status bar would otherwise say xx file(s) selected, use two different messages: 1 file selected and xx files selected. This avoids the ugly and inaccurate message 1 file(s) selected.
+
+8.2.10 Messages to use when commands and features aren’t available
+If the feature is never available in the program, e.g. Infrared in Time, use the message This item is not available. 
+If the feature is not available at this time in the program, e.g. pasting when nothing has yet been copied or cut, use the message Nothing to xx (e.g. Nothing to paste). 
+If the feature is not available because the program is busy doing something else, use a message like Not available while the Remote mailbox is open (if the text is too long replace the while with a hyphen, e.g. Not available - Remote mailbox is already open - or, if that is still too long, just say Not available at this time). 
+8.2.11 Use No xxx name entered when the user must enter a name before pressing Enter
+Where xxx refers to the thing that is to be named - e.g. No folder name entered.
+
+8.2.12 What not to put in infoprints
+Infoprints and messages should only be used as on-screen confirmation that something has happened, or not happened, not for explaining why certain things occur, or don’t occur.
+
+8.2.12.1 Don’t display unnecessary messages.
+They stop the proceedings and interrupt the user’s interaction.
+
+A hammer has a good UI. If it is used properly all is well, but if it is used badly it doesn’t stop and say: You Bent The Nail Five Degrees (You Idiot)! [Abort].
+
+8.2.12.2 Don’t use Check if the...
+Just state the possible causes of the problem. For example, the message Problem with Infrared - check that the serial port is not in use, and that there is enough free memory would be better as Problem with Infrared - serial port may be use, or there is not enough memory
+
+8.3 Error messages
+ 8.3.1 A basic principle for error messages 
+8.3.2 Make error messages meaningful 
+8.3.3 What to warn users about  
+
+This section contains guidelines for error messages.
+
+If possible, avoid the use of the word error - use information messages instead. 
+8.3.1 A basic principle for error messages
+Only display error messages when it is unavoidable, and word them carefully. Sometimes error messages just look like stupidity on the part of the program; most, even though they seem innocuous to the programmer, make many users think they’re being told they are stupid. Most people would rather that if they did make a error it got lost in the noise, or ignored, or (ideally) taken care of.
+
+8.3.2 Make error messages meaningful
+Try to indicate exactly what has gone wrong. E.g. don’t give a message like Invalid data when the cause of the problem is that the user has set a combination of margins that is too large for the page size that they have set to print to. Display a message like Combined margins too large for paper size. That way, they will see that they either have to change the margins or the paper size in order to solve the problem.
+
+Unexpected end of file is not an acceptable error message; it means nothing to most users and doesn’t give any information about what went wrong or what - if anything - to do about it. It’s not even clear that it’s a bad thing. 
+8.3.3 What to warn users about
+And what sort of language to use
+
+Low battery power - especially if the relevant action is not happening yet (e.g. setting an alarm for tomorrow. If the alarm were to tested right now, the user would know that there wasn’t enough power). 
+Memory/disk space shortages 
+8.4 General info
+8.4.1 Dim commands and options if unavailable
+If a command is disabled or temporarily unavailable (e.g. in Time/World the Infrared Send and Infrared Receive commands are not applicable) it should nevertheless be displayed, but dimmed-out to show that it cannot be used.
+
+Provide an infoprint, e.g. This item is not available, to confirm that the user has indeed tried to implement it and that the machine has received the command.
+
+8.5 Buttons in dialogs
+ 8.5.1 Try to avoid buttons 
+8.5.2 Choosing where to position buttons 
+8.5.2.1 Multi-page dialogs 
+8.5.3 Button names 
+8.5.4 Don't change the text or functionality of a button depending on mode 
+8.5.5 Enter is the do it key - not always an exit key 
+8.5.6 Using ellipses and arrows on buttons in dialogs 
+8.5.7 Use Y/N in any dialogs with ? in the title 
+8.5.8 N buttons must also be activated by N and Esc 
+8.5.9 Use a Done button when inserting objects 
+8.5.10 Dialogs which can be re-used should have a Close button 
+8.5.11 When to specify keynames for buttons and when not 
+8.5.12 Keep buttons in secondary dialogs in the same position 
+8.5.13 Dealing with a mixture of labelled and unlabelled buttons 
+8.5.14 Buttons with two words on them 
+8.5.15 Buttons in text editors in dialogs  
+
+This section provides guidelines for buttons in dialogs.
+
+8.5.1 Try to avoid buttons
+(other than OK and Cancel.) They’re OK, but they’re not great. Use e.g. multi-page dialogs instead, where possible.
+
+Buttons are not intuitive to keyboard users - the keypresses they require often seem random or unrelated to the action.
+
+8.5.2 Choosing where to position buttons
+If a dialog has Cancel and OK buttons (which the vast majority of dialogs do), they should appear as a pair at the bottom right of the dialog. OK at the far right-hand side, Cancel to the left of OK. Any other buttons should go above the OK button, starting at the top right of the dialog and working downwards. If you have a New button, this should be positioned at the bottom left.
+
+If necessary (e.g. the full screen width is needed for the rest of the dialog, or the dialog looks too unbalanced with buttons on the right) other buttons can appear in a row along the bottom starting from the left-hand side, but try to keep the Cancel and OK buttons in their default position.
+
+ 
+8.5.2.1 Multi-page dialogs
+On a multi-page dialog all exit/confirm buttons (i.e. those which exit the dialog) must be outside the pages. (Cancel must cancel ALL settings made on a multi-page dialog.) Those which apply to a particular page must be on that page.
+
+8.5.3 Button names
+Always have standard exit button names. 90% of dialogs should just have OK/Cancel (at the bottom right). Alternatives which should cover most other dialogs are:
+
+Yes/No: Hopefully Y/N dialogs will come with a system-standard layout. 
+Done - this is preferable to Close. 
+Continue. 
+Stop: If an action has already started and cannot be completely undone (e.g. a multi-file copy where it isn’t possible to actually cancel it as some files will already have been copied), use Stop instead of Cancel. Only use Cancel when it will revert to the state it was in before the action was carried out. 
+Don’t use OK as a confirmation when telling the user something bad. Continue (or maybe even Sorry!) is better when a situation is clearly not OK! Also, bear in mind that the meaning of an OK button may not be obvious to people who are not familiar with computers; for example when presented with a disk format dialog which says formatting will remove all files from this disk and has an OK button, how many people would take OK to mean I understand what you’ve just told me or start formatting now?
+
+Avoid using double negatives between dialog text and button text (e.g. Cancel changes? [OK] [Cancel]).
+
+Except in rare circumstances, don’t change the meaning or wording of a button or keypress on a dialog. Such a change in meaning would have to be sufficiently obvious to the user to override the general consistency principle.
+
+8.5.4 Don't change the text or functionality of a button depending on mode
+Don’t change modally - keep menu commands and button text the same no matter what the context. In other words, if a button performs a particular function don’t make it do something else in another context. If necessary dim out any which do not apply.
+
+8.5.5 Enter is the do it key - not always an exit key
+Enter is the Do it key in dialogs, but is not always a dialog completion key.
+
+For example, imagine a dialog which was exclusively for entering as many numbers as the user wanted to enter. In this case Enter might be used to mean Enter number, and the dialog would be closed by means of a Done button. In this situation it might be that no overall Cancel action were required, or else Esc might be the Done key with a confirmation to Save Changes, for example.
+
+8.5.6 Using ellipses and arrows on buttons in dialogs
+Dialog buttons (but not Toolbar buttons) that display a further dialog should have an ellipsis after the name on the button (in order to be consistent with menu commands). Use a proper ellipsis character (…) and not three full stops, and there should not be a space between the last character of the button name and the ellipsis. 
+Dialogs which lead only to a confirmation dialog where no further information is required (e.g. Delete) should not have ellipses. 
+Buttons that display a choice list should have an arrow. This arrow should point to the right if the choice list appears to the right or left of the button, or down if the choice list appears below the button. 
+Users will therefore know that whenever they see an ellipsis the command/button (whatever) presents a dialog requiring further information before performing an action, and that whenever there is an arrow on a button there will be two or more options to choose from.
+
+8.5.7 Use Y/N in any dialogs with ? in the title
+Any dialog whose title ends in a question mark should have Yes/No buttons, and not OK/Cancel buttons.
+
+8.5.8 N buttons must also be activated by N and Esc
+Y/N buttons in dialogs (used instead of OK/Cancel in dialogs where the title is a question) should also be activated by Y/N. N should also be activated by Esc, but Y should not be activated by the Enter key (it’s too easy for users to make a error in confirmation dialogs that use Y and N).
+
+8.5.9 Use a Done button when inserting objects
+This shows the user that they are working on an inserted object and not a separate file. It also confirms that any changes will be saved as opposed to Exit or Cancel buttons which might imply that any changes would be lost.
+
+8.5.10 Dialogs which can be re-used should have a Close button
+When a dialog has a Save button, which saves changes but does not dismiss the dialog (e.g. the New entry dialog in Data), a Close button should be used to exit the dialog. Using Cancel might make the user think that all the entries they’d added will disappear.
+
+Use Close rather than Finished because it is the same word which is used instead of exit in the programs (also it fits better on the button).
+
+8.5.11 When to specify keynames for buttons and when not
+Buttons in dialogs normally have the keyboard equivalent printed underneath them. The exceptions are the OK and Cancel buttons in dialogs, which don’t need explanatory text unless the keyboard alternatives are other than Enter (which means do it) and Esc (which means remove the dialog and don’t do it).
+
+Always specify keynames for buttons that use other than Esc and Enter.
+
+If there are only two buttons in a dialog (e.g. Insert text and Cancel), don’t put a legend under the Insert text button unless the key that activates it is something other than Enter. Do not put Esc under the Cancel button either.
+
+8.5.12 Keep buttons in secondary dialogs in the same position
+If a dialog has a secondary dialog which appears as a result of an action on the first dialog, any buttons on the secondary dialog should be in an equivalent position to those on the first (e.g. if the first dialog has buttons along the bottom, the second should also have them there and not down the side). However, they should not be in exactly the same position on screen pixel-for-pixel.
+
+For example, the Create new entry dialog in Agenda has Alarm/More…, Cancel, and OK buttons down the right-hand side. The OK and Cancel buttons in the dialog which appears when the Alarm/More button is pressed are also down the right-hand side, but not directly over the buttons in the previous dialog.
+
+8.5.13 Dealing with a mixture of labelled and unlabelled buttons
+Dialogs with more than 2 buttons will typically have a mixture of labelled and unlabelled buttons. If the buttons are placed along the bottom of the dialog this can look odd, so they should be placed vertically down the RHS with some extra space between the labelled button(s) at the top and the Cancel and OK ones at the bottom.
+
+If all the buttons have to appear along the bottom of the dialog, keep the labelled one(s) to the left/middle and separated from Cancel and OK by some extra space (if possible).
+
+8.5.14 Buttons with two words on them
+If a button has two words on it, put the second word on a new line under the first to make a deeper button rather than making the button wider. In some situations (e.g. the Slot definitions button in Agenda) this may be unavoidable.
+
+Avoid combining buttons of different widths on the same dialog. 
+8.5.15 Buttons in text editors in dialogs
+When a dialog contains a text editor (e.g. the Text page of the Edit entry details dialog in Agenda), the text formatting buttons should be next to each other to form a miniature Toolbar underneath the text box (see below).
+
+ 
+All the buttons should be activated by the standard shortcuts for those functions, and the standard keyboard shortcuts for the buttons should apply.
+
+Commands that cascade from these buttons do not have shortcuts because the shortcuts are reserved for buttons that may be required in the dialogs. Any developer who wishes to give these controls shortcuts in their own programs will need to provide their own customised controls, but they should follow the conventions and use the standard shortcuts that are used for the menu commands that are associated with these functions.
+
+For example, they might add the following Format commands:
+
+Borders/Colours by Sh-Ctrl-D 
+Alignment by Sh-Ctrl-A 
+Tab positions by Sh-Ctrl-Y 
+And these Insert commands:
+
+Filename Ctrl-N (N chosen because F is used and N for new file has association with file) 
+Page number Ctrl-P (P free and for “page”) 
+Number of pages Ctrl-G (N not free, G in “pages”) 
+Current time Sh-Ctrl-T and Ctrl-T (note: both of these are available, because Sh-Ctrl-T is used in Time to set the time) 
+Current date Ctrl-E (not D because already used for Borders/Colours) 
+8.6 Commands
+8.6.1 All commands should have Undo option
+If at all possible. If an action cannot be undone afterwards, warn the user with a confirmation message, e.g.:
+
+
+--------------------------------------------------------------------------------
+
+Delete all files? 
+
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+This action cannot be undone 
+
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+Y/N 
+
+--------------------------------------------------------------------------------
+
+9. Entering user information
+9.1 Entering information & using a program
+Ask what might the user try? Giving them something unexpected can delight
+
+The importance of having a universal Undo command - it lets the user explore things and try things out.
+
+Show the user where they are - the cursor is very important.
+
+10. Files, file storage and the filing system
+ 10.1 File names 
+10.1.1 File extensions 
+10.2 File locations 
+10.2.1 Program files 
+10.3 Using your program 
+10.3.1 Inserted objects 
+10.3.2 Last opened file  
+
+10.1 File names
+10.1.1 File extensions
+File extensions are not used to differentiate files of the same name, except where they are required - e.g. an OPL program called FRED translates to FRED.OPO.
+
+10.2 File locations
+ 10.2.1 Program files 
+10.2.1.1 All files that are not explicitly user data must be kept in \system. 
+10.2.1.2 Don’t put files, e.g. log files, in the user’s folders  
+
+This section contains guidelines about where to keep files which are not created by the user directly.
+
+10.2.1 Program files
+10.2.1.1 All files that are not explicitly user data must be kept in \system.
+Any files that are not explicitly user data must go under the System folder (which is hidden by default), out of the way of most users.
+
+There are a number of reasons for this; one is that there is a temptation for people to delete files they do not recognise, another is that the filing system can look very messy if there are system files, temporary files and programs scattered all over the place (as with PCs).
+
+Additionally, folder names under \System are language independent. In other words, a folder named \System\Alarms\ can be relied upon to contain alarms for all machines in all languages. If C:\Alarms were used instead, the text C:\Alarms would have to come from a resource file and all programs and system components that used it would have to load this name from the resource file. Almost inevitably some apps (e.g. 3rd party apps) would forget this and there would be problems on foreign machines - or on earlier ROM machines without this resource file, etc.
+
+10.2.1.2 Don’t put files, e.g. log files, in the user’s folders
+When creating files for programs, e.g. a log of an email session or log of synchronisation changes for example, don’t put that file in one of the user’s folders. Never put anything in a user’s folder that they aren’t explicitly aware of - they may wonder what is that? I haven’t created a file called that, and then delete it.
+
+If such a file is necessary it should be placed in a hidden folder, but one that the user can get access to for technical support purposes later if need be.
+
+An appropriate place for such a file would be in a \System\logs folder on the same disk as the program is stored on, if the program is EPOC based.
+
+For a log file for a PC based program, e.g. a log of changes made during synchronisation with the PC, the best place for it is on the PC; again in a \log subfolder of the folder that is used by the PC program (not a user’s documents folder).
+
+10.3 Using your program
+ 10.3.1 Inserted objects 
+10.3.1.1 Importing a file into, and exporting a file from, an inserted object 
+10.3.2 Last opened file 
+10.3.2.1 Last file used - record this, not last file opened, on closing the program  
+
+10.3.1 Inserted objects
+10.3.1.1 Importing a file into, and exporting a file from, an inserted object
+It is important to retain the distinction between files (e.g. those created by Word and Sheet) and objects (e.g. those created by Word and Sheet) inserted in other files. For this reason, if an inserted object allows the import or export of its contents as a separate file, do not use Open file or Save file as… commands. Instead, use Import or Merge in file and Export as file. The user should not be encouraged to consider that an inserted object is like a normal file.
+
+10.3.2 Last opened file
+10.3.2.1 Last file used - record this, not last file opened, on closing the program
+Whenever an EPOC program, e.g. Word, is opened, it automatically attempts to load the last-used file (if it is capable of doing so).
+
+Note that this is not necessarily the file which was opened, rather it is the file that was in use when the program was closed. This is the most intuitive behaviour for the user and means that the file they were last viewing is the one that is loaded when the program is next opened. The difference is obvious if multiple instances of a program are running simultaneously and are all closed down; when the program is restarted it will use the last file to have been closed, which may not have been the last one opened.
+
+11. Windows-based programs
+EPOC Connect is the PC-based connectivity software which enables communication between the EPOC machine and a PC. As such it conforms to Microsoft Windows style guidelines (available elsewhere), but there are some specific matters which are relevant to mention here.
+
+Icons in the system tray on the PC’s Start menu should BE 16x16 pixels on a transparent or grey background.
+
+12. Glossary of terms in EPOC programs
+ 12.1 Basic terms and usage 
+12.2 Terms to avoid using, and what to use instead  
+
+12.1 Basic terms and usage
+Term to use
+ Terms not to use
+ Use for
+ 
+EPOC Connect
+  For the program that runs on the PC.
+ 
+Docking cable
+ 3Link, serial link, cable, link cable
+  
+ 
+arrow keys
+ cursor keys
+  
+ 
+email
+ Email, E-mail, e-mail
+ When referring to messages, service providers, etc., but not to the name of the email program.
+ 
+Email
+  
+ The name of the EPOC email program
+ 
+handles
+  
+ For the square blobs that appear on a selected inserted object that allows the size of the object to be changed.
+ 
+List of open files and programs
+ task list
+ For the list of open files and running programs.
+ 
+Program icons
+ buttonbar
+ For the buttons that move between different programs.
+ 
+Command icons
+ sidebar
+ For the buttons along the left edge of the screen.
+ 
+IrDA
+ IRDA irda
+  
+ 
+Infrared
+ infra red infra-red
+  
+ 
+menu bar
+ menubar
+  
+ 
+Toolbar
+ status window
+ For the row of buttons and the clock on the right hand side of the screen.
+ 
+Toolband
+  
+ For the row of buttons along the top edge of the screen.
+ 
+Command, menu command
+ option, menu option, menu item
+  
+ 
+menu cascade
+ cascading menu
+  
+ 
+dialog
+ dialog box
+  
+ 
+tabs
+  
+ On the top of multi-page dialogs that go to the different “pages” in the dialog.
+ 
+dialog lines
+ dialog items
+  
+ 
+shortcut key
+ hot-key
+ E.g. for Ctrl+X, Ctrl+C. Key combinations are usually written with a “+” nowadays, e.g. CTRL+F rather than CTRL-F.
+ 
+File
+ document
+  
+ 
+filename
+ file name
+  
+ 
+folder
+ directory
+  
+ 
+disk
+ drive
+  
+ 
+Internal disk
+  
+ For the disk built into the machine.
+ 
+Memory disk
+  
+ For the plug in cards.
+ 
+Program
+ application
+  
+ 
+object
+ document file
+ For inserted files because Windows users will pick up the above much faster than the alternatives.
+ 
+Tap
+ click
+ For the pen tapping the screen. This also helps guard against thinking in terms of mice.
+ 
+Entry
+ record
+ For what is often called a record in the database.
+ 
+
+12.2 Terms to avoid using, and what to use instead
+Term
+ Reason for avoiding it
+ Alternative
+ 
+abort
+ Too “techie”. Also unpleasant connotations in English.
+ stop or cancel, depending on context.
+ 
+Application
+  
+ “program”
+ 
+Are you sure?
+  
+ Remove completely and make sure title of confirmation dialog is a question and ends with “?”
+ 
+default
+ Too “techie”.
+ Better as “standard”, or “preferred” (in Time e.g. “preferred alarm time”)
+ 
+directory
+  
+ “folder”
+ 
+drive
+  
+ “disk”
+ 
+embedded file, embedded object
+  
+ “Inserted object”
+ 
+exit/exited
+  
+ “close/closed”
+ 
+hide/hidden
+ Hide seen as a negative action.
+ Turn the whole thing round so instead of having options to hide things, use options to “show” things. Except for e.g. hidden files
+ 
+jump to
+  
+ “go to”. Matches similar options in Windows apps.
+ 
+Just
+ Does not work in some places, so “only” was chosen for reasons of consistency.
+ “only”.
+ 
+Loading
+  
+ “opening”
+ 
+location (on screen)
+ Could be confused in e.g. World with location on map.
+ “position”
+ 
+path
+  
+ “folder”
+ 
+picture
+  
+ “sketch” if inserting a file that was created in the Sketch app. Matches the name of program in which pictures are created, and so points the user to the correct program to create them.
+ 
+record
+  
+ “entry”
+ 
+search
+  
+ “find” in menu commands. Matches similar options in Windows. But “search for” in the Find dialogs.
+ 
+status window
+  
+ “Toolbar ”
+ 
+task
+  
+ “file” or “program”, depending on context
+ 
+task bar
+  
+ “list of open files”
+ 
+task list
+  
+ “list of open files”
+ 
+
+13. Appendix - Sequence of items in resource files
+For ease of localisation, all programs that have a single resource file should have items in the following order:
+
+Shortcut keys 
+Toolbar 
+Menu commands 
+Dialog titles 
+Dialog 1 
+... 
+Dialog N 
+Dialog 1 pages 
+Dialog 1 page i 
+Dialog 1 page i choice list a 
+Dialog 1 page i choice list b 
+Dialog 1 page ii 
+Dialog 1 buttons 
+... 
+Dialog N pages 
+Dialog N page i 
+Dialog N page i choice list a 
+Dialog N page i choice list b 
+Dialog N page ii 
+Dialog N buttons 
+Dialog text, etc. 
+Information Messages 
+Debugging messages and other text that is to be removed for the candidate release
+
+Further Reading
+Symbian licenses, develops and supports the EPOC operating system, providing leading software, user interfaces, application frameworks and development tools for Wireless Information Devices such as Communicators and Smartphones. Symbian is based in London, with offices worldwide. See http://www.symbian.com/ for more technical papers, information about Symbian, and information about EPOC.
+
+Trademarks and acknowledgements
+Symbian and the Symbian logo, EPOC and the EPOC logo are the trademarks of Symbian Ltd.
+
+All other trademarks are acknowledged.
+
+The author wishes to thank ... who supplied valuable information and review comments.
+
+  
+

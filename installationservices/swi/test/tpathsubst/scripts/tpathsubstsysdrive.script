@@ -1,0 +1,60 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT SWI System Drive Path substitution tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-sysdrive_no_subst-0001
+//! @SYMTestActions 		Installs target filenames with hard-coded drives where paths aren't replaced.
+//! @SYMTestExpectedResults 	The files are installed to literal targets.
+
+START_TESTCASE API-SEC-sysdrive_no_subst-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_no_subst_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_no_subst_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_no_subst_uninstall
+
+END_TESTCASE API-SEC-sysdrive_no_subst-0001
+
+
+//! @SYMTestCaseID 		API-SEC-sysdrive_multi_find-0001
+//! @SYMTestActions 		Install where LHS matches multiple find paths.
+//! @SYMTestExpectedResults 	Installs to right replace dir based on drive.
+
+START_TESTCASE API-SEC-sysdrive_multi_find-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_find_uninstall
+
+END_TESTCASE API-SEC-sysdrive_multi_find-0001
+
+
+//! @SYMTestCaseID 		API-SEC-sysdrive_multi_dir_match-0001
+//! @SYMTestActions 		Install target, translating where required.
+//! @SYMTestExpectedResults 	Where entire path is matched, install to translated dir.
+
+START_TESTCASE API-SEC-sysdrive_multi_dir_match-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_dir_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_dir_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubstsysdrive.ini sysdrive_multi_dir_find_uninstall
+
+END_TESTCASE API-SEC-sysdrive_multi_dir_match-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

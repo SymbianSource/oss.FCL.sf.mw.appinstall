@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Installation patch file for eclipsing random ROM files including servers and clients
+;
+#{"Random ROM Files Patch1"},(0x802730A4),1,0,0, TYPE=SP, RU
+
+
+;Localised Vendor name
+%{"Symbian Software Ltd."}
+
+;Unique Vendor name
+:"Symbian Software Ltd."
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\cryptospi.dll"				  -"!:\sys\bin\cryptospi.dll"
+
+
