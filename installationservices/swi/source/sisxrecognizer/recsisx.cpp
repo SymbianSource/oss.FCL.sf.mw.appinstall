@@ -24,6 +24,7 @@
 #include <ecom/ecom.h>
 #include <ecom/implementationproxy.h>
 #include <u32hal.h> 
+#include <e32svr.h>
 
 using namespace Swi;
 

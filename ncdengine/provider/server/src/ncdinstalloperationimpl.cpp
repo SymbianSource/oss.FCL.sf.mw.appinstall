@@ -467,7 +467,10 @@ void CNcdInstallOperation::GetFileInfoL( MCatalogsBaseMessage& aMessage )
                 {
                 // Writing JAD to file on this side because proxies can't
                 // write to engine's private dir
-                DeletePtr( iJadFile );
+                if ( iJadFile )
+                {
+                    DeletePtr( iJadFile );
+                }
                 iJadFile = 
                     CNcdProviderUtils::InstallationServiceL().WriteJadL(
                         fileInfo->FilePath(), downloadInfo->DescriptorData() );

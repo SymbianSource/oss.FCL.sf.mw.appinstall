@@ -44,7 +44,7 @@ RUN_TEST_STEP_RESULT -39 1 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadapto
 RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
 
 // Make sure install can actually complete now (and set up for further tests)
-RUN_TEST_STEP 400 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+RUN_TEST_STEP 600 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
 
 // Abort install which runs exe to completion
 RUN_TEST_STEP_RESULT -39 3 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW
@@ -122,7 +122,7 @@ RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts
 CONSECUTIVE
 
 CONCURRENT
-run_program killrunningprocess 101f7295 800000
+run_program killrunningprocess 101f7295 400000
 RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini def052175_swiskilled
 CONSECUTIVE
 
@@ -259,7 +259,7 @@ CONSECUTIVE
 
 DELAY 4000
 // Complete uninstall of cancelpackage.
-RUN_TEST_STEP 15 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_cancelpackage
+RUN_TEST_STEP 35 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_cancelpackage
 
 END_TESTCASE API-SEC-SwisTerminated-0001
 

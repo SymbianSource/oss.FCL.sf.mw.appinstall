@@ -24,60 +24,59 @@
 
 
 namespace Swi
-	{
-	// For uninstaller
-	CDaemonBehaviour* CDaemonBehaviour::NewL( CProgramStatus& aMainStatus )
-		{
-		CDaemonBehaviour* self = NewLC( aMainStatus );
-		CleanupStack::Pop(self);
-		return self;
-		}
-	
-	CDaemonBehaviour* CDaemonBehaviour::NewLC( CProgramStatus& aMainStatus )
-		{
-		CDaemonBehaviour* self = new (ELeave) CDaemonBehaviour;
-		CleanupStack::PushL(self);
-		self->ConstructL( aMainStatus );
-		return self;	
-		}
-		
-	void CDaemonBehaviour::ConstructL( CProgramStatus& aMainStatus )
-		{
-		User::LeaveIfError(iFs.Connect());
-		User::LeaveIfError(iFs.ShareProtected());
-
-		// For uninstaller
-		iSisInstaller = CSisInstaller::NewL( this, aMainStatus );
-		// Create plugin
-		TRAP_IGNORE( iSwiDaemonPlugin = CSwiDaemonPlugin::NewL() );		
-		}
-	
-	CDaemonBehaviour::~CDaemonBehaviour()
-		{
-	    if ( iSwiDaemonPlugin )
-	        {
-	        delete iSwiDaemonPlugin;
-	        REComSession::FinalClose();
-	        }		
-		delete iSisInstaller;
-		iSisInstaller = NULL;
-		iFs.Close();	
-
-		
-#ifdef RD_MULTIPLE_DRIVE 		
-		iDriveArray.Close();
-#endif				
-		}
-		
-	// from MDaemonBehaviour
-	TBool CDaemonBehaviour::StartupL()
-		{
-		// Return state of Startup
-		return ETrue;
-		}
+    {
+    // For uninstaller
+    CDaemonBehaviour* CDaemonBehaviour::NewL( CProgramStatus& aMainStatus )
+        {
+        CDaemonBehaviour* self = NewLC( aMainStatus );
+        CleanupStack::Pop(self);
+        return self;
+        }
+  
+    CDaemonBehaviour* CDaemonBehaviour::NewLC( CProgramStatus& aMainStatus )
+        {
+        CDaemonBehaviour* self = new (ELeave) CDaemonBehaviour;
+        CleanupStack::PushL(self);
+        self->ConstructL( aMainStatus );
+        return self;  
+        }
+    
+    void CDaemonBehaviour::ConstructL( CProgramStatus& aMainStatus )
+        {
+        User::LeaveIfError(iFs.Connect());
+        User::LeaveIfError(iFs.ShareProtected());
+        
+        // For uninstaller
+        iSisInstaller = CSisInstaller::NewL( this, aMainStatus );
+        // Create plugin
+        TRAP_IGNORE( iSwiDaemonPlugin = CSwiDaemonPlugin::NewL() );   
+        }
+  
+    CDaemonBehaviour::~CDaemonBehaviour()
+        {
+        if ( iSwiDaemonPlugin )
+            {
+            delete iSwiDaemonPlugin;
+            REComSession::FinalClose();
+            }   
+        delete iSisInstaller;
+        iSisInstaller = NULL;
+        iFs.Close();  
+                
+#ifdef RD_MULTIPLE_DRIVE    
+        iDriveArray.Close();
+#endif        
+        }
+    
+    // from MDaemonBehaviour
+    TBool CDaemonBehaviour::StartupL()
+        {
+        // Return state of Startup
+        return ETrue;
+        }
 
     void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
-		{
+        {
         FLOG_1( _L("Daemon: Media change %d"), aDrive );
         RSisRegistryWritableSession registrySession;
         
@@ -86,69 +85,79 @@ namespace Swi
         
         if (aChangeType==EMediaInserted)
             {
-            FLOG( _L("Daemon: Media inserted") );                        
-            // Scan directory on the card and run pre-installed through SWIS
-            ProcessPreinstalledFilesL(aDrive);
-            
+            FLOG( _L("Daemon: Media inserted") );  
+            FLOG( _L("Daemon: Media change: Update sis registry") );            
             // notify IAR
+            // Error ou1cimx1#212652
+            // Note SWI Daemon needs to notify sis registry from
+            // media change. Otherwice registry is not updated
+            // and e.g. IsPresentL function will give false results.
+            // Note also that this function should be called before
+            // ProcessPreinstalledFilesL in SWI Daemon.            
             registrySession.AddDriveL(aDrive);
-			
+                                                
+            // Scan directory on the card and run pre-installed through SWIS
+            FLOG( _L("Daemon: Media change: Process preinstalled files") );
+            ProcessPreinstalledFilesL(aDrive);            
+        
 #ifdef RD_MULTIPLE_DRIVE   
             // Add inserted media drive to drive array.                     
             if ( iDriveArray.Find(aDrive) == KErrNotFound )
                 {                
                 iDriveArray.AppendL(aDrive); 
                 }      
-#endif			
+#endif      
             }
         else if (aChangeType==EMediaRemoved)
             {
             FLOG( _L("Daemon: Media removed") ); 
-            
+        
 #ifdef RD_MULTIPLE_DRIVE     
             // Get Installer state.                   
             TBool installerRunning = iSisInstaller->IsInstalling();                        
 #endif 
-            
+        
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK                                           
             // notify IAR
+            // Note SWI Daemon need to notify sis registry from
+            // media change.            
             registrySession.RemoveDriveL(aDrive);
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-            
+        
             // Cancel all requests for install
             iSisInstaller->Cancel();
-            
+        
 #ifdef RD_MULTIPLE_DRIVE
-// Notify plugin
-        if(iSwiDaemonPlugin)
-            {
-            TInt index = iDriveArray.Find(aDrive);
-            iSwiDaemonPlugin->MediaRemoved(index);
-            }
+            // Notify plugin
+            if(iSwiDaemonPlugin)
+                {
+                TInt index = iDriveArray.Find(aDrive);
+                iSwiDaemonPlugin->MediaRemoved(index);
+                }
 #else
-// Notify plugin
-        if(iSwiDaemonPlugin)
-            {
-            iSwiDaemonPlugin->MediaRemoved(aDrive);
-            }
+            // Notify plugin
+            if(iSwiDaemonPlugin)
+                {
+                iSwiDaemonPlugin->MediaRemoved(aDrive);
+                }
 #endif //RD_MULTIPLE_DRIVE            
-
+        
 #ifdef RD_MULTIPLE_DRIVE
             // Get index of removed drive from array
             TInt index = iDriveArray.Find(aDrive);
-            
+        
             if ( index > KErrNotFound )
                 {
                 iDriveArray.Remove(index); 
                 iDriveArray.Compress();   
                 }
-            
+        
             // Continue installing from other drives if needed.
             if ( installerRunning )
-                {			    			    	                
+                {                                     
                 // Get count of inserted drives.
                 TInt count = iDriveArray.Count();
-                                
+                        
                 if ( count )            
                     {                             
                     for(index = 0; index < count; index++ )
@@ -158,31 +167,32 @@ namespace Swi
                         }
                     }                
                 }           
-#endif						
-			}
-		CleanupStack::PopAndDestroy(&registrySession);
-		}
-	
+#endif            
+            }
+        
+        CleanupStack::PopAndDestroy(&registrySession);
+        }
+      
     void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
-		{
-		_LIT(KDaemonPrivatePath,":\\private\\10202dce\\");
-		
+        {
+        _LIT(KDaemonPrivatePath,":\\private\\10202dce\\");
+        
 #ifndef RD_MULTIPLE_DRIVE
-		iSisInstaller->Cancel();
-#endif			
-		// For uninstaller
+        iSisInstaller->Cancel();
+#endif      
+        // For uninstaller
         // Set on installing mode.
         iGeneralProcessStatus = EStateInstalling; 
         FLOG_1( _L("[CDaemonBehaviour] iGeneralProcessStatus = %d"), 
-                iGeneralProcessStatus );
-		
-		ProcessPreinstalledFilesL(aDrive, KDaemonPrivatePath);
+        iGeneralProcessStatus );
+        
+        ProcessPreinstalledFilesL(aDrive, KDaemonPrivatePath);
         iStartNotified = EFalse;
-        iDrive = aDrive;		
-		iSisInstaller->StartInstallingL();
-		}
-		
-	void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory)
+        iDrive = aDrive;    
+        iSisInstaller->StartInstallingL();
+        }
+    
+    void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory)
         {
         FLOG( _L("Daemon: ProcessPreInstalledFilesL") );
         TPath preInstalledPath;
@@ -193,7 +203,7 @@ namespace Swi
         
         FLOG_1( _L("Daemon: ProcessPreInstalledFilesL Getting dir %S"), &preInstalledPath );
         CDir* dir = NULL;
-        TInt err = iFs.GetDir(preInstalledPath, KEntryAttNormal, ESortNone, dir);	
+        TInt err = iFs.GetDir(preInstalledPath, KEntryAttNormal, ESortNone, dir); 
         if (err != KErrNone && err != KErrPathNotFound)
             {
             FLOG_1( _L("Daemon: ProcessPreInstalledFilesL GetDir with error %d"), err );
@@ -217,7 +227,7 @@ namespace Swi
             }
         }
 
-	// For uninstaller
+    // For uninstaller
     TInt& CDaemonBehaviour::GetProcessStatus()
         {
         return iGeneralProcessStatus;
@@ -227,8 +237,8 @@ namespace Swi
     void CDaemonBehaviour::SetProcessStatus( TInt aStatus )
         {
         iGeneralProcessStatus = aStatus;
-        }   	
-	
+        }     
+  
     // For plugin support
     void CDaemonBehaviour::DoNotifyMediaProcessingComplete()
         {
@@ -253,11 +263,11 @@ namespace Swi
         {
         FLOG( _L("Daemon: NotifyPlugin"));
         if ( !iStartNotified )
-             {
-             FLOG_1( _L("Daemon: MediaProcessingStart for drive = %d"), iDrive );
-             iSwiDaemonPlugin->MediaProcessingStart( iDrive );
-             iStartNotified = ETrue;
-             }    
+            {
+            FLOG_1( _L("Daemon: MediaProcessingStart for drive = %d"), iDrive );
+            iSwiDaemonPlugin->MediaProcessingStart( iDrive );
+            iStartNotified = ETrue;
+            }    
         }
     
     // For plugin support
@@ -282,5 +292,5 @@ namespace Swi
         CleanupStack::PopAndDestroy( &file ); 
         }
                                         
-	} // namespace Swi
+    } // namespace Swi
 //EOF

@@ -159,10 +159,14 @@ TBool CIAUpdateLoader::RootExpiredL() const
         rootExpired = ETrue;
         }
 
-    MNcdNodeContainer* container( rootNode->QueryInterfaceLC< MNcdNodeContainer >() );               
-    TInt childCount( container->ChildCount() );
-    CleanupStack::PopAndDestroy( container );
-    
+    TInt childCount( 0 );
+    MNcdNodeContainer* container( rootNode->QueryInterfaceLC< MNcdNodeContainer >() );
+    if ( container )
+        {
+        childCount = container->ChildCount();
+        CleanupStack::PopAndDestroy( container );
+        }
+       
     IAUPDATE_TRACE_1("[IAUPDATE] count of children: %d", childCount ); 
     
     //2 here means arrow CGW and firmware CGW. If one of them failed last time, 

@@ -26,12 +26,17 @@
 #include <e32base.h>
 #include <SWInstStartupTaskParam.h>
 #include <SWInstLogTaskParam.h>
-#include <DRMHelper.h>
 
 #include "SisxUIHandler.h"
 #include "CUICancelTimer.h"
 
 // FORWARD DECLARATIONS
+namespace ContentAccess
+{
+class CManager;
+class TAgent;
+}
+
 namespace Swi 
 { 
 class CInstallPrefs; 
@@ -312,7 +317,7 @@ class CSisxUIOperationWatcher : public CActive,
         * @param aAgent - content access agent
         * @return Manager - Manages files and content access agents
         */        
-        ContentAccess::CManager* GetCafDataL( TAgent& aAgent ); 
+        ContentAccess::CManager* GetCafDataL( ContentAccess::TAgent& aAgent );
         
         /**
          * Register PIP package content to DRM DCF server.

@@ -80,7 +80,7 @@ USERINCLUDE       ../../loc
 USERINCLUDE       ../../firmwareupdate/inc
 USERINCLUDE       ../../launcher/inc
 
-MW_LAYER_SYSTEMINCLUDE
+APP_LAYER_SYSTEMINCLUDE
 
 LIBRARY           iaupdatetools.lib
 LIBRARY           iaupdateapi.lib

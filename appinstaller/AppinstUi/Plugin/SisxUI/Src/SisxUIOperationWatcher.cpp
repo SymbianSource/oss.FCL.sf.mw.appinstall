@@ -36,13 +36,10 @@
 #include <SWInstFileTaskParam.h>
 #include <e32property.h>
 #include <SWInstallerInternalPSKeys.h>
-#include <Oma2Agent.h>
+#include <Oma2Agent.h>              // KOmaDrm2AgentName
 #include <syslangutil.h>
-
-#include <caf/caf.h>
-//#include <caf/content.h>
-//#include <caf/stringattributeset.h>
-//#include <caf/attributeset.h>
+#include <caf/manager.h>            // ContentAccess::CManager
+#include <caf/agent.h>              // ContentAccess::TAgent
 
 #include <DcfEntry.h> // JPAA-7GEB7P 
 #include <DcfRep.h> // JPAA-7GEB7P
@@ -1228,7 +1225,7 @@ void CSisxUIOperationWatcher::NotifyEndUninstall()
 // (other items were commented in a header).
 // -----------------------------------------------------------------------------
 // 
-ContentAccess::CManager* CSisxUIOperationWatcher::GetCafDataL( TAgent& aAgent ) 
+ContentAccess::CManager* CSisxUIOperationWatcher::GetCafDataL( ContentAccess::TAgent& aAgent )
     {
     RArray<TAgent> agents;
 
@@ -1245,8 +1242,8 @@ ContentAccess::CManager* CSisxUIOperationWatcher::GetCafDataL( TAgent& aAgent )
             break;
             }
         }
-    CleanupStack::Pop(); // manager
-    CleanupStack::PopAndDestroy(); // agents        
+    CleanupStack::Pop( manager );
+    CleanupStack::PopAndDestroy( &agents );
     return manager;    
     }
 
