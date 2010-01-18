@@ -18,7 +18,7 @@
 &EN
 
 ;Header 
-#{"IAUpdate"}, (0x2000f85a), 1, 0, 0, TYPE=SA
+#{"Software update"}, (0x2000f85a), 1, 0, 0, TYPE=SA
 
 ;Localised Vendor Name
 %{"Nokia"}

@@ -325,10 +325,7 @@ void CIAUpdateAppUi::HandleCommandL( TInt aCommand )
         case EIAUpdateCmdStartUpdate:
             {
             IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::HandleCommandL() EIAUpdateCmdStartUpdate");
-
-            // No need to be totally silent since the updating is started
-            // by user.
-            SetDefaultConnectionMethodL( EFalse );
+    
 
             // by pushing object to cleanup stack it's destructor is called if leave happens
             // so global lock issued by this instance can be released in destructor of CIAUpdateGlobalLockHandler
@@ -336,6 +333,9 @@ void CIAUpdateAppUi::HandleCommandL( TInt aCommand )
             if ( !globalLockHandler->InUseByAnotherInstanceL() )
                 {
             	globalLockHandler->SetToInUseForAnotherInstancesL( ETrue );
+            	// No need to be totally silent since the updating is started
+            	// by user.
+            	SetDefaultConnectionMethodL( EFalse );
             	iController->StartUpdateL();
             	CleanupStack::Pop( globalLockHandler );	
             	delete iGlobalLockHandler;
@@ -578,54 +578,38 @@ void CIAUpdateAppUi::StartupComplete( TInt aError )
 void CIAUpdateAppUi::StartupCompleteL()
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::StartupCompleteL() begin"); 
-    TBool totalSilent( EFalse );
-    if ( iRequestType == IAUpdateUiDefines::ECheckUpdates )
-        {
-        if ( iController->Filter() )
-            {
-        	if ( iController->Filter()->FilterParams() )
-        	    {
-        	    if ( iController->Filter()->FilterParams()->Refresh() )
-        	        {
-        	    	//from bgchecker, make it silent
-                    totalSilent = ETrue;
-        	        }
-           	    }
-            }
-        }
     
-    TRAPD( err, SetDefaultConnectionMethodL( totalSilent ) );
-    
-    if ( err != KErrNone )
-        {
-        IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::StartupCompleteL() IAP selection failed!!"); 
-        //can't find usable IAP on the phone, complete the request
-        //If background checker is the client, it will try again after 1 month
-        if ( totalSilent )
-            {
-            //from bgchecker, report the error to so background checker will start retry mode
-            RefreshCompleteL( EFalse, err );
-            }
-        else
-            {
-            //report it to the API caller or to main view
-            RefreshCompleteL( ETrue, err );
-            }
-        return;
-        }
-       
     delete iGlobalLockHandler;
     iGlobalLockHandler = NULL;
     iGlobalLockHandler = CIAUpdateGlobalLockHandler::NewL();
     if ( !iGlobalLockHandler->InUseByAnotherInstanceL() )
         {
+        TBool totalSilent( EFalse );
+        if ( iRequestType == IAUpdateUiDefines::ECheckUpdates )
+            {
+            if ( iController->Filter() )
+                {
+                if ( iController->Filter()->FilterParams() )
+                    {
+                    if ( iController->Filter()->FilterParams()->Refresh() )
+                        {
+                        //from bgchecker, make it silent
+                        totalSilent = ETrue;
+                        }
+                    }
+                }
+            }
+        SetDefaultConnectionMethodL( totalSilent );
         iGlobalLockHandler->SetToInUseForAnotherInstancesL( ETrue );
-        iController->StartRefreshL();	
+        iController->StartRefreshL();  
         }
     else
         {
         RefreshCompleteL( ETrue, KErrServerBusy );
         }    
+ 
+       
+    
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::StartupCompleteL() end");    
     }
     
@@ -694,16 +678,6 @@ void CIAUpdateAppUi::RefreshCompleteL( TBool aWithViewActivation, TInt aError )
         }
     else 
         {    
-        /*if ( ( iController->TestRole() ) && 
-             ( !iStartedFromApplication ) && 
-             ( aWithViewActivation  ) )
-            {
-    	    for( TInt i = 0; i < iController->Nodes().Count(); ++i )
-                {
-                MIAUpdateNode* node = iController->Nodes()[i];
-                node->Base().SetSelected( EFalse ); 
-                }
-            }*/    
         RefreshL( aError );   
         if ( aWithViewActivation)
             {

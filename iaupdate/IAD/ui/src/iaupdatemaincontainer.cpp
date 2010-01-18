@@ -409,58 +409,22 @@ void CIAUpdateMainContainer::RefreshL( const RPointerArray<MIAUpdateAnyNode>& aN
         
         if ( node->NodeType() == MIAUpdateAnyNode::ENodeTypeNormal )  
             {       
-
-            MIAUpdateNode* normalnode = static_cast<MIAUpdateNode*>( node );
-
-            HBufC* nameAndVersion = NULL;
-
-            if ( normalnode->Type() == MIAUpdateNode::EPackageTypeServicePack )
-                {
-                nameAndVersion = node->Base().Name().AllocLC();
-                }
-            else
-                {
-                CDesCArray* stringArray = new ( ELeave ) CDesCArrayFlat( 1 );  
-                CleanupStack::PushL( stringArray );  
-            
-                stringArray->AppendL( node->Base().Name() );  
-            
-                CArrayFixFlat<TInt>* numberArray = new ( ELeave ) CArrayFixFlat<TInt>( 2 );
-                CleanupStack::PushL( numberArray );
-            
-                numberArray->AppendL( node->Base().Version().iMajor ); 
-                numberArray->AppendL( node->Base().Version().iMinor );  
-              
-                    
-                nameAndVersion = StringLoader::LoadL( R_IAUPDATE_NAME_WITH_VERSION, 
-                                                          *stringArray, 
-                                                          *numberArray );
-
-                CleanupStack::PopAndDestroy( numberArray );
-                CleanupStack::PopAndDestroy( stringArray );
-                
-                CleanupStack::PushL( nameAndVersion ); 
-                }
-
-            
-            TPtr nameAndVersionPtr = nameAndVersion->Des();
-            AknTextUtils::DisplayTextLanguageSpecificNumberConversion( nameAndVersionPtr );
-            
+            HBufC* name = node->Base().Name().AllocLC();
             HBufC* buffer = HBufC::NewLC( KOne.iTypeLength +
                                           KTabulator.iTypeLength + 
-                                          nameAndVersion->Length() + 
+                                          name->Length() + 
                                           KTabulator.iTypeLength +
                                           importanceDescription->Length() );
             buffer->Des() = KOne();
             buffer->Des() += KTabulator();
-            buffer->Des() += *nameAndVersion;
+            buffer->Des() += *name;
             buffer->Des() += KTabulator();
             buffer->Des() += *importanceDescription;        
             
             iItemTextArray->AppendL( *buffer );
             
             CleanupStack::PopAndDestroy( buffer );
-            CleanupStack::PopAndDestroy( nameAndVersion );
+            CleanupStack::PopAndDestroy( name );
             }
 
         
@@ -494,9 +458,6 @@ void CIAUpdateMainContainer::RefreshL( const RPointerArray<MIAUpdateAnyNode>& aN
             CleanupStack::PopAndDestroy( buffer );
             CleanupStack::PopAndDestroy( firmwarename );
             }
-
-        
-
         
         CleanupStack::PopAndDestroy( importanceDescription );
         }    

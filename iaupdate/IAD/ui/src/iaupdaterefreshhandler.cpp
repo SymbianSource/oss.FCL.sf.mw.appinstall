@@ -202,9 +202,9 @@ void CIAUpdateRefreshHandler::RunL()
 // 
 // -----------------------------------------------------------------------------
 //
-TInt CIAUpdateRefreshHandler::RunError( TInt aError )
+TInt CIAUpdateRefreshHandler::RunError( TInt /*aError*/ )
     {
-	IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateRefreshHandler::RunError() error id: %d", aError );
+	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateRefreshHandler::RunError()");
 	return KErrNone;
     }
     

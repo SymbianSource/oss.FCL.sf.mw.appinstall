@@ -159,9 +159,9 @@ void CIAUpdateInstallationListener::RunL()
 // 
 // -----------------------------------------------------------------------------
 //
-TInt CIAUpdateInstallationListener::RunError( TInt aError )
+TInt CIAUpdateInstallationListener::RunError( TInt /*aError*/ )
     {
-	IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateInstallationListener::RunError() error id: %d", aError );
+	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateInstallationListener::RunError()");
 	return KErrNone;
     }
     

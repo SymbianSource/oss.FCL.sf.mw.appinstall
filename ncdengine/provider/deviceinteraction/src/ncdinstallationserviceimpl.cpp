@@ -591,7 +591,6 @@ TNcdApplicationStatus CNcdInstallationService::IsApplicationInstalledL(
     // 0.0.0
     if ( err == KErrNone && 
          status == ENcdApplicationInstalled &&
-         installedVersion != TCatalogsVersion() &&
          aVersion != TCatalogsVersion() ) 
         {
         DLINFO(("Installed version: %d.%d.%d, comparing to: %d.%d.%d",

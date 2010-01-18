@@ -439,7 +439,7 @@ TBool CIAUpdateBaseNode::Equals( const CIAUpdateBaseNode& aNode ) const
             && aNode.MetaId() == MetaId()
          || ( aNode.Uid() == Uid()
             && aNode.Version() == Version() 
-            && aNode.iMime->Match( IAUpdateProtocolConsts::KMimeServicePackPattern()) == KErrNotFound ) ) //MTA: Changed!!!!!
+            && aNode.iMime->Match( IAUpdateProtocolConsts::KMimeServicePackPattern()) == KErrNotFound ) ) 
         {
         return ETrue;
         }

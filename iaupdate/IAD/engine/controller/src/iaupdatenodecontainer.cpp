@@ -666,7 +666,7 @@ void CIAUpdateNodeContainer::UpdateHeadNodeListL( CIAUpdateNode& aNode )
         for ( TInt i = 0; i < iHeadNodes.Count(); ++i )
             {
             CIAUpdateNode& tmpNode( *iHeadNodes[ i ] );            
-            if( aNode.Uid() == tmpNode.Uid() && aNode.Type() != MIAUpdateNode::EPackageTypeServicePack ) //MTA: Changed!!!
+            if( aNode.Uid() == tmpNode.Uid() && aNode.Type() != MIAUpdateNode::EPackageTypeServicePack ) 
                 {
                 IAUPDATE_TRACE("[IAUPDATE] Head node already in the list.");
                 

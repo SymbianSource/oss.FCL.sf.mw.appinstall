@@ -358,13 +358,10 @@ protected:  // data
      * or installation files list, or it may be displayed in separate
      * list of highlighted items.
      * 
-     * For example, untrusted installed applications can be highlighted.
-     * 
-     * 
-     * The
-     * item should indicate the reason why it is not displayed normally
-     * when iShowOnTop is set to ETrue (e.g. use special icon).
-     * See also the IsShowOnTop() function defined above.
+     * For example, new or untrusted installed applications can be highlighted.
+     * When set, the item needs to show the reason why iShowOnTop is enabled
+     * (e.g. by using "new" or "untrusted" icon). See also the IsShowOnTop()
+     * function defined above.
      */
     TBool iShowOnTop;
 

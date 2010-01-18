@@ -49,7 +49,7 @@ CSWInstAppUi::CSWInstAppUi()
 void CSWInstAppUi::ConstructL()
     {
     BaseConstructL( EStandardApp | ENoScreenFurniture | ENonStandardResourceFile
-            | EAknEnableSkin | EAknEnableMSK );
+            | EAknEnableSkin | EAknEnableMSK | EAknSingleClickCompatible );
 
     // Create private path for the process
     iEikonEnv->FsSession().CreatePrivatePath( EDriveC );

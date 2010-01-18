@@ -234,71 +234,30 @@ void CIAUpdateHistoryContainer::RefreshL( MIAUpdateHistory& aHistory )
             // error situations.
             iconIndex = 1;
             }
-        
         HBufC* nodeStateDescription = NodeStateDescriptionLC( *item );
         TPtr ptr = nodeStateDescription->Des();
         AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr ); 
-        
-
-        HBufC* nameAndVersion = NULL;
-        
-        _LIT( KZeroVersion, "0.00(0)");
-        
-        //If version number is all zeros, then only show name of the package
-        //This checking is meant for service pack which doesn't have any version number
-
-        if ( item->Version().Compare( KZeroVersion ) == 0 )
-            {
-            nameAndVersion = item->Name().AllocLC();
-            }
-        else
-            {
-            CDesCArray* stringArray = new ( ELeave ) CDesCArrayFlat( 1 );  
-            CleanupStack::PushL( stringArray );  
-            stringArray->AppendL( item->Name() );  
-            CArrayFix<TInt>* numberArray = new ( ELeave ) CArrayFixFlat<TInt>( 2 );
-            CleanupStack::PushL( numberArray );
-            TInt8 majorVersion( 0 );
-            TInt8 minorVersion( 0 );
-            TInt16 buildVersion( 0 );
-            IAUpdateUtils::DesToVersionL( item->Version(), 
-                                      majorVersion, minorVersion, buildVersion );
-                                             
-            numberArray->AppendL( majorVersion ); 
-            numberArray->AppendL( minorVersion );  
-                
-            nameAndVersion = StringLoader::LoadL( R_IAUPDATE_NAME_WITH_VERSION, 
-                                                      *stringArray, 
-                                                      *numberArray );
-            CleanupStack::PopAndDestroy( numberArray );
-            CleanupStack::PopAndDestroy( stringArray );
-
-            CleanupStack::PushL( nameAndVersion );
-            }
-
-        
-        TPtr nameAndVersionPtr = nameAndVersion->Des();
-        AknTextUtils::DisplayTextLanguageSpecificNumberConversion( nameAndVersionPtr );  
-        
+ 
+        HBufC* name = item->Name().AllocLC();
         TBuf<iconIndexLength> iconIndexBuf;
         iconIndexBuf.Format( KIconIndexFormat, iconIndex );
 
         HBufC* buffer = HBufC::NewLC( iconIndexBuf.Length() +
                                       KTabulator.iTypeLength + 
-                                      nameAndVersion->Length() + 
+                                      name->Length() + 
                                       KTabulator.iTypeLength +
                                       nodeStateDescription->Length() );  
 
         buffer->Des() = iconIndexBuf;
         buffer->Des() += KTabulator();
-        buffer->Des() += *nameAndVersion;
+        buffer->Des() += *name;
         buffer->Des() += KTabulator();
         buffer->Des() += *nodeStateDescription;        
          
         iItemTextArray->AppendL( *buffer );
                  
         CleanupStack::PopAndDestroy( buffer );
-        CleanupStack::PopAndDestroy( nameAndVersion );
+        CleanupStack::PopAndDestroy( name );
         CleanupStack::PopAndDestroy( nodeStateDescription );
         }    
     
