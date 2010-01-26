@@ -499,12 +499,20 @@ GOTO END
 mkdir .\romdrive\cr1027test > NUL
 mkdir .\romdrive\private\10273582 > NUL
 mkdir .\romdrive\sys\bin > NUL
+IF NOT EXIST .\cdrive\sys mkdir .\cdrive\sys > NUL
+IF NOT EXIST .\cdrive\sys\install mkdir .\cdrive\sys\install > NUL
+IF NOT EXIST .\cdrive\sys\install\sisregistry mkdir .\cdrive\sys\install\sisregistry > NUL
+
+call copy \epoc32\winscw\c\sys\install\sisregistry\ROMVersionStringCache_localSysUtil.bin .\cdrive\sys\install\sisregistry\ROMVersionStringCache_localSysUtil.bin > NUL
+call copy \epoc32\winscw\c\sys\install\sisregistry\swiregfirstinit.log .\cdrive\sys\install\sisregistry\swiregfirstinit.log > NUL
 call copy \epoc32\winscw\c\tswi\teclipsing\data\CR1027ROMUpgradeStub.sis .\romdrive\system\install\CR1027ROMUpgradeStub.sis > NUL
 call copy \epoc32\release\winscw\udeb\eclipsetest1.dll .\romdrive\sys\bin\saromupgrade_library.dll > NUL
 call copy \epoc32\release\winscw\udeb\tsaromupgradeexe.exe .\romdrive\sys\bin\saromupgrade_execute.exe > NUL
 call copy \epoc32\winscw\c\tswi\teclipsing\data\file1.txt .\romdrive\private\10273582\cr1027_config1.txt > NUL
 call copy \epoc32\winscw\c\tswi\teclipsing\data\file2.txt .\romdrive\cr1027test\cr1027_file1.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\CR1027ROMUpgradeSA.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness_db.txt > NUL
+if exist \epoc32\winscw\c\sys\install\scr\scr.db del \epoc32\winscw\c\sys\install\scr\scr.db /Q > NUL
+copy .\romdrive\sys\install\scr\provisioned\scr.db \epoc32\winscw\c\sys\install\scr\scr.db /Y > NUL
 if not %errorlevel%==0 GOTO LAST
 set exist_file=.\cdrive\sys\install\sisregistry\802730A2\00000000_0000.ctl
 if not exist %exist_file% GOTO FAIL_NOT_FOUND

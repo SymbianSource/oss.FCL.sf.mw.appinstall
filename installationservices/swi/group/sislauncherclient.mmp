@@ -34,7 +34,7 @@ VENDORID	0x70000001
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 DEFFILE		sislauncherclient.DEF
 #else
-DEFFILE		sislauncherclient_legacy.def
+DEFFILE		sislauncherclient_legacy.DEF
 #endif
 
 USERINCLUDE	../source/sislauncher/client

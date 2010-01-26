@@ -213,6 +213,7 @@ EXPORTS
 	_ZN3Swi18RSisRegistryHelper7ConnectEv @ 212 NONAME ABSENT
 	_ZN3Swi18RSisRegistryHelperC1Ev @ 213 NONAME ABSENT
 	_ZN3Swi18RSisRegistryHelperC2Ev @ 214 NONAME ABSENT
-	_ZN3Swi25RSisRegistryWritableEntry30GetMatchingSupportedLanguagesLER6RArrayI9TLanguageE @ 215 NONAME 
+	_ZN3Swi25RSisRegistryWritableEntry30GetMatchingSupportedLanguagesLER6RArrayI9TLanguageE @ 215 NONAME
+	_ZN3Swi17RSisRegistryEntry14RegistryFilesLER13RPointerArrayI7HBufC16E @ 216 NONAME
 
 

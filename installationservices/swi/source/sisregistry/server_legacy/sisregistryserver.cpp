@@ -47,6 +47,7 @@ const TInt CSisRegistryServer::iRanges[KPolicyRanges] =
 	ESidToPackage,          			// accessible by all clients
 	ESeparatorMinimumWriteUserData, // accessible by NetworkServices + WriteUserData clients only
 	ESeparatorMinimumTCB, 			// accessible by TCB clients only
+	ERegistryFiles,                    // accessible by all clients
 	ESeparatorMinimumReadUserData2, 	// accessible by ReadUserData clients only
 	ESeparatorEndAll,     			// not supported from there on
 	};
@@ -62,6 +63,7 @@ const TUint8 CSisRegistryServer::iElementsIndex[iRangeCount] =
 	0,  // all clients can have access	
 	4,  // WriteUserData clients only
 	2,	// Used by SWIS only, so TCB is needed - check on cap and SID.
+	0,  // all clients can have access
 	1,  // ReadUserData clients only
 	CPolicyServer::ENotSupported,  
 	};

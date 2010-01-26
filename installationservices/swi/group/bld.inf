@@ -371,7 +371,7 @@ PRJ_TESTEXPORTS
 ../test/tsisregistrytest_legacy/data/backup.lst /epoc32/winscw/c/tswi/tsisregistrytest/data/backup.lst
 ../test/tsisregistrytest_legacy/data/hashForLang_txt.dat /epoc32/winscw/c/tswi/tsisregistrytest/data/hashforlang_txt.dat
 ../test/tsisregistrytest_legacy/data/hashForTestsidcheck_A_exe.dat /epoc32/winscw/c/tswi/tsisregistrytest/data/hashfortestsidcheck_a_exe.dat
-../test/tsisregistrytest_legacy/data/ROMVersionStringCache_localSysUtil.bin /epoc32/winscw/c/tswi/tsisregistrytest/data/ROMVersionStringCache_localSysUtil.bin
+../test/tsisregistrytest_legacy/data/ROMVersionStringCache_localSysUtil.bin /epoc32/winscw/c/tswi/tsisregistrytest/data/romversionstringcache_localsysutil.bin
 
 ../test/tsisregistrytest_legacy/data/a0001022/00000000.reg /epoc32/winscw/c/tswi/tsisregistrytest/data/a0001022/00000000.reg
 ../test/tsisregistrytest_legacy/data/a0001022/00000000_0000.ctl /epoc32/winscw/c/tswi/tsisregistrytest/data/a0001022/00000000_0000.ctl

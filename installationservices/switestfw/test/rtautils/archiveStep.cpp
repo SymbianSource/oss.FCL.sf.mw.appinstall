@@ -20,6 +20,9 @@
 #include <apmstd.h>
 #include <caf/caf.h>
 #include <caf/manager.h>
+#include <caf/supplier.h>
+#include <caf/importfile.h>
+#include <caf/supplieroutputfile.h>
 #include "archivestep.h"
 #include "rtaArchive.h"
 #include "reftestagentconstants.h"

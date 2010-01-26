@@ -36,7 +36,7 @@ namespace Swi
 _LIT_SECURE_ID(KDaemonSecureId, 0x10202DCE);
 _LIT_SECURE_ID(KSwisSecureId, 0x101F7295);	
 
-const TInt KPolicyRanges= 11;
+const TInt KPolicyRanges= 12;
 const TInt KPolicyElements = 5;
 
 class CSisRegistrySession;

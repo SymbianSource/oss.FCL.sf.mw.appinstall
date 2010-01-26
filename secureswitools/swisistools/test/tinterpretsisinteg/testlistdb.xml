@@ -1528,12 +1528,12 @@
 <test id="testdatainc124436">
 	<title>testdatainc124436</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisinc124436_db.bat A testdatainc124436 </command>
-	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436 testcaseinc124436file.txt 7 "positive" "both"</check>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436 testcaseinc124436file.txt 1 "positive" "both"</check>
 	</test>
 <test id="testdatainc124436_1">
 	<title>testdatainc124436_1</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisinc124436_db.bat B testdatainc124436_1 </command>
-	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436_1 testcaseinc124436file.txt 7 "positive" "both"</check>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436_1 testcaseinc124436file.txt 1 "positive" "both"</check>
 	</test>
 <test id="INT014-001">
 	<title>SEC-sistools-InterpretSIS-INT014-001</title>

@@ -166,11 +166,10 @@ private:
 	void RequestRemovablePackagesL(const RMessage2& aMessage);
 	void IsRemovableL(const RMessage2& aMessage);
 	
-	void RecoverL(const RMessage2& aMessage);
-	
+	void RecoverL(const RMessage2& aMessage);	
 	void LoggingFileInfoL(const RMessage2& aMessage);
-
 	void RequestMatchingSupportedLanguagesL(const RMessage2& aMessage);
+	void RequestInternalRegistryFilesL(const RMessage2& aMessage);
 private:
     friend class CSisRevocationManager;
 	RFs iFs;

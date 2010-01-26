@@ -639,3 +639,38 @@ EXPORT_C TBool RSisRegistryEntry::IsSignedBySuCertL()
 	return signedSuCert;	
 	}
 
+EXPORT_C void RSisRegistryEntry::RegistryFilesL(RPointerArray<HBufC>& aRegistryFiles)
+    {
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+    HBufC8* outputBuffer = HBufC8::NewLC(KDefaultBufferSize);
+	TPtr8 outputPtr(outputBuffer->Des());
+    
+    TInt result = SendReceive(ERegistryFiles, TIpcArgs(&outputPtr));
+    
+    if (KErrOverflow == result)
+        {
+        TInt lenNeeded;
+        TPckg<TInt> lenNeededPckg(lenNeeded);
+        lenNeededPckg.Copy(*outputBuffer);
+        
+        // Re-allocate output buffer
+        CleanupStack::PopAndDestroy(outputBuffer);
+        outputBuffer = HBufC8::NewLC(lenNeeded);
+        TPtr8 newOutputPtr(outputBuffer->Des());
+        
+        result = SendReceive(ERegistryFiles, TIpcArgs(&newOutputPtr));
+        }
+    User::LeaveIfError(result);
+
+    // Reading the list of files from the buffer
+    RDesReadStream outputStream(*outputBuffer);
+    CleanupClosePushL(outputStream);    
+    InternalizePointerArrayL(aRegistryFiles, outputStream);
+        
+    CleanupStack::PopAndDestroy(2, outputBuffer); // outputStream  
+#else
+    // There is API is not currently supported with USIF
+    User::Leave(KErrNotSupported);
+	aRegistryFiles.Close(); // To remove the compiler warning: variable/argument 'aRegistryFiles' is not used in function
+#endif
+    }

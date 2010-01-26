@@ -232,5 +232,9 @@ CTestStep* CTestSisRegistry::CreateTestStep(const TDesC& aStepName)
 		{
 		name = new CChangeLocaleStep;
 		}
+	else if (aStepName == KRegistryFiles)
+        {
+        name = new CRegistryFilesStep;
+        }
    	return name;
 	}

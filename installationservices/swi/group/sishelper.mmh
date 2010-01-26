@@ -89,5 +89,5 @@ library sif.lib
 
 deffile	sishelper.DEF
 #else
-deffile	sishelper_legacy.def
+deffile	sishelper_legacy.DEF
 #endif

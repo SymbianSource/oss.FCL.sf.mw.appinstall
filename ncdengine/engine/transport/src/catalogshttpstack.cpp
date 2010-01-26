@@ -31,11 +31,11 @@
 
 // HTTP headers
 
-#include <HttpFilterAcceptHeaderInterface.h>
+#include <httpfilteracceptheaderinterface.h>
 #include <uaproffilter_interface.h>
-#include <DeflateFilterInterface.h>
-#include <HttpFilterCommonStringsExt.h>
-#include <HttpFilterProxyInterface.h>
+#include <deflatefilterinterface.h>
+#include <httpfiltercommonstringsext.h>
+#include <httpfilterproxyinterface.h>
 #include <CookieFilterInterface.h>
     
 #include "catalogs_device_config.h"

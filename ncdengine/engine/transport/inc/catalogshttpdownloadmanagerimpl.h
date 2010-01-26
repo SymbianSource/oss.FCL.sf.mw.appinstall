@@ -19,7 +19,7 @@
 #ifndef C_CATALOGSHTTPDOWNLOADMANAGER_H
 #define C_CATALOGSHTTPDOWNLOADMANAGER_H
 
-#include <DownloadMgrClient.h>
+#include <downloadmgrclient.h>
 
 #include "catalogstransportoperationid.h"
 #include "catalogshttpsession.h"    // RCatalogsHttpOperationArray

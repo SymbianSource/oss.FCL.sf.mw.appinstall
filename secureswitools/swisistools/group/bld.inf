@@ -139,7 +139,7 @@ PRJ_TESTEXPORTS
 ../test/tsignsis/packagedata/simple/file0 /epoc32/winscw/c/tswi/tsignsis/packagedata/simple/file0
 ../test/tsignsis/packagedata/simple/file1 /epoc32/winscw/c/tswi/tsignsis/packagedata/simple/file1
 ../test/tsignsis/testsignsis.pl /epoc32/winscw/c/tswi/tsignsis/testsignsis.pl
-../test/tsignsis/data/CertWithUnicodeSubjectLine.SIS /epoc32/winscw/c/tswi/tsignsis/data/CertWithUnicodeSubjectLine.SIS
+../test/tsignsis/data/CertWithUnicodeSubjectLine.SIS /epoc32/winscw/c/tswi/tsignsis/data/certwithunicodesubjectline.sis
 
 // tdumpsis
 ../test/tdumpsis/data/condtest/file0 /epoc32/winscw/c/tswi/tdumpsis/data/condtest/file0

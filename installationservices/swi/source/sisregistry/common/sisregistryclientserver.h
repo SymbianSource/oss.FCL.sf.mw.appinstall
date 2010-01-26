@@ -117,8 +117,8 @@ enum TSisRegistryMessages
 	ESize,
 	EPackage,
 	EPackageAugmentationsNumber,
-	ENonRemovable,
-	EloggingFile,
+	ENonRemovable,	
+	EloggingFile,	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
 	EIsFileRegistered, 
 	EComponentIdForUid,
@@ -151,10 +151,11 @@ enum TSisRegistryMessages
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	ERegenerateCache,
 #endif
-
+	// All clients 
+	ERegistryFiles = 128,
 	// Additional ReadUserData calls
 	ESeparatorMinimumReadUserData2 = 256,
-	ERemovablePackages,
+	ERemovablePackages,	
 	// RegistryEntry  ReadUserData
 	EDeletablePreInstalled,
 	EDependentPackages,		 

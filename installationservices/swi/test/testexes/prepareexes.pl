@@ -713,6 +713,12 @@ SignFile("hiddensa.sis", "hiddensa_root5.sis", "root5ca", \*iby);
 
 SignFile("smlsyncagent.sis", "smlsyncagent_root5.sis", "root5ca", \*iby);
 
+#Swi Support for RFS
+SignFile("swi_rfs_test_SA.sis", "swi_rfs_test_SA_root5.sis", "root5ca", \*iby);
+SignFile("swi_rfs_test_PU.sis", "swi_rfs_test_PU_root5.sis", "root5ca", \*iby);
+SignFile("swi_rfs_test_SP.sis", "swi_rfs_test_SP_root5.sis", "root5ca", \*iby);
+SignFile("swi_rfs_test_SP_2.sis", "swi_rfs_test_SP_2_root5.sis", "root5ca", \*iby);
+
 # CR1122 - Wildcard support for ROM based stub.
 SignFile("CR1122WCROMUpgradeSA.sis", "CR1122WCROMUpgradeSA_root5.sis", "root5ca", \*iby);
 SignFile("CR1122WCROMUpgradeSA1.sis", "CR1122WCROMUpgradeSA1_root5.sis", "root5ca", \*iby);

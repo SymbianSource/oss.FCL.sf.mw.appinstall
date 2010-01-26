@@ -27,7 +27,7 @@
 {9.6}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
 {future}=Common,SWI,SisTools,SwiTools,USIF,Misc,ToolsNew,SwiDiran
 {tb92}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
-{tb101}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
+{tb101}=Common,SWI,SisTools,SwiTools,USIF,Misc,ToolsNew,SwiDiran
 
 
 ###############################################################################

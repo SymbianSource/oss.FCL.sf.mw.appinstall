@@ -62,6 +62,7 @@ _LIT(KCorruptCacheStep, "CorruptCacheStep");
 _LIT(KCorruptCacheRecoverStep, "CorruptCacheRecoverStep");
 _LIT(KEmbeddingPackageStep, "EmbeddingPackageStep");
 _LIT(KChangeLocale, "ChangeLocale");
+_LIT(KRegistryFiles, "RegistryFiles");
 
 // Base class for all steps
 class CSisRegistryTestStepBase : public CTestStep

@@ -20,7 +20,7 @@
 #define C_APPMNGR2WIDGETRUNTIME_H
 
 #include <appmngr2runtime.h>            // CAppMngr2Runtime
-#include <WidgetRegistryClient.h>       // RWidgetRegistryClientSession 
+#include <widgetregistryclient.h>       // RWidgetRegistryClientSession 
 
 class CAppMngr2PackageInfo;
 class CAknIconArray;

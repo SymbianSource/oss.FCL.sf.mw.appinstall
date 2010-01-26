@@ -27,6 +27,7 @@
 
 #include <e32base.h>
 #include <f32file.h>
+#include <e32ldr_private.h>
 
 namespace Swi
 {

@@ -326,7 +326,10 @@ void CSisRegistrySession::ServiceL(const RMessage2& aMessage)
  		break;
 	case EGetMatchingSupportedLanguages:
 		RequestMatchingSupportedLanguagesL(aMessage);
-	    break;	
+	    break;
+	case ERegistryFiles:
+	    RequestInternalRegistryFilesL(aMessage);
+        break;
 	default:
 		PanicClient(aMessage,EPanicIllegalFunction);
 		break;
@@ -1896,7 +1899,7 @@ void SendDataPointerArrayL(const RMessage2& aMessage, const RPointerArray<T> aPr
     	
 	if (aMessage.GetDesMaxLengthL(aIpcIndx) < buffer->Size())
 		{
-		TInt bufferSize = buffer->Size();
+        TInt bufferSize = buffer->Size();
 		TPckgC<TInt> bufferSizePackage(bufferSize);
 		aMessage.WriteL(aIpcIndx, bufferSizePackage);
 		aMessage.Complete(KErrOverflow);
@@ -2090,14 +2093,14 @@ void CSisRegistrySession::SetRemoveWithLastDependentL(const RMessage2& aMessage)
 	}
 
 void CSisRegistrySession::RequestRemovablePackagesL(const RMessage2& aMessage)
-	{
+    {
     RPointerArray<CSisRegistryPackage> packages; 
     CleanupResetAndDestroy<RPointerArray<CSisRegistryPackage> >::PushL(packages);
     Server().Cache().RemovablePackageListL(packages);
     SendDataPointerArrayL(aMessage, packages, EIpcArgument0);
     CleanupStack::PopAndDestroy(&packages);
-	}
-		
+    }
+	
 void CSisRegistrySession::IsRemovableL(const RMessage2& aMessage)
 	{
 	CSisRegistryObject& object = Server().Cache().EntryObjectL(aMessage.Int3());	
@@ -2172,3 +2175,83 @@ void CSisRegistrySession::RequestMatchingSupportedLanguagesL(const RMessage2& aM
 	RArray<TInt>& supportedLanguageIds = object.GetSupportedLanguageIdsArray(); 	
 	SendDataArrayL(aMessage, supportedLanguageIds, EIpcArgument0);	
 	}
+
+void CSisRegistrySession::RequestInternalRegistryFilesL(const RMessage2& aMessage)
+    {
+    DEBUG_PRINTF(_L8("Sis Registry Server - Generate the list of registry files"));
+    
+    TEntry entry;
+    TInt err = 0;
+    RPointerArray<HBufC> files; 
+    CleanupResetAndDestroyPushL(files);
+    
+    // Get the registry object for the package
+    CSisRegistryObject& regObject = Server().Cache().EntryObjectL(aMessage.Int3());
+    
+    // Form the corresponding registry file name 
+    HBufC* regFilename = SisRegistryUtil::BuildEntryFileNameLC(regObject.Uid(), regObject.Index());
+    DEBUG_PRINTF3(_L("Sis Registry Server - Reg file not to be removed : %S : %d"), regFilename, regFilename->Length());
+    // Check if the registry file is present on the device
+    err = iFs.Entry(*regFilename, entry);  
+    if (err==KErrNone)
+        {
+        files.AppendL(regFilename);    
+        CleanupStack::Pop(regFilename);
+        }
+    else
+        {
+        CleanupStack::PopAndDestroy(regFilename);
+        }
+        
+    const RPointerArray<CControllerInfo>& regControllerInfo = regObject.ControllerInfo();
+    TInt ctlCount = regControllerInfo.Count();
+    for (TInt j = 0; j < ctlCount; j++)
+        {
+        // Form the ctl file name for the index 
+        HBufC* ctlFilename = SisRegistryUtil::BuildControllerFileNameLC(regObject.Uid(), regObject.Index(), regControllerInfo[j]->Offset());
+        DEBUG_PRINTF3(_L("Sis Registry Server - Ctl file not to be removed : %S : %d"), ctlFilename, ctlFilename->Length());
+        // Check if the ctl file is present 
+        err = iFs.Entry(*ctlFilename, entry);  
+        if (err==KErrNone)
+            {
+            files.AppendL(ctlFilename);                
+            CleanupStack::Pop(ctlFilename);
+            }
+        else
+            {
+            CleanupStack::PopAndDestroy(ctlFilename);
+            }
+        }
+    
+    _LIT(KSysBinPath, "\\sys\\bin\\");    
+    _LIT(KSysHashPath, ":\\sys\\hash\\");
+    const RPointerArray<CSisRegistryFileDescription>& fileDescriptions = regObject.FileDescriptions();
+    TInt fileCount = fileDescriptions.Count();
+    for (TInt k = 0; k < fileCount; k++)
+        {
+        const TDesC& targetPath = fileDescriptions[k]->Target();
+        // Check if the target is a binary file
+        if (KErrNotFound != targetPath.FindF(KSysBinPath))
+            {
+            // Create the hash file name for the binary
+            TFileName targetHashPath;
+            targetHashPath.Append(RFs::GetSystemDriveChar());
+            targetHashPath.Append(KSysHashPath);
+            targetHashPath.Append(TParsePtrC(targetPath).NameAndExt());
+            DEBUG_PRINTF3(_L("Sis Registry Server - Hash file not to be removed : %S : %d"), &targetHashPath, targetHashPath.Length());
+            
+            // Check if the hash file is present
+            err = iFs.Entry(targetHashPath, entry);
+            if (err==KErrNone)
+                {
+                HBufC* hashPtr = targetHashPath.AllocLC();
+                files.AppendL(hashPtr);
+                CleanupStack::Pop(hashPtr);
+                }
+            }
+        }
+        
+    SendDataPointerArrayL(aMessage, files, EIpcArgument0);
+   
+    CleanupStack::PopAndDestroy(&files);
+    }

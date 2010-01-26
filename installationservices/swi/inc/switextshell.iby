@@ -95,6 +95,9 @@ file=ABI_DIR\BUILD_DIR\backuprestore.dll			sys\bin\backuprestore.dll
 file=ABI_DIR\BUILD_DIR\cafdataprovider.dll			sys\bin\cafdataprovider.dll
 file=ABI_DIR\BUILD_DIR\pkgremover.dll				sys\bin\pkgremover.dll
 
+// OMX IL component common(Temp Fix to Build navi text shell images)
+file=ABI_DIR\BUILD_DIR\omxilcomponentcommon.dll    System\Libs\omxilcomponentcommon.dll
+
 // Core SWI - 9.5
 REM Including swiplugin.iby instead explicitly mentioning the files to avoid duplicate includes 
 #include "swiplugin.iby"

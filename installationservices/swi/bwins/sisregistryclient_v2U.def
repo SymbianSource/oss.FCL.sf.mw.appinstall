@@ -191,5 +191,5 @@ EXPORTS
 	?Close@RSisRegistryHelper@Swi@@QAEXXZ @ 190 NONAME ABSENT ; void Swi::RSisRegistryHelper::Close(void)
 	?GetEquivalentLanguagesL@RSisRegistryHelper@Swi@@QAEXW4TLanguage@@AAV?$RArray@W4TLanguage@@@@@Z @ 191 NONAME ABSENT ; void Swi::RSisRegistryHelper::GetEquivalentLanguagesL(enum TLanguage, class RArray<enum TLanguage> &)
 	?GetMatchingSupportedLanguagesL@RSisRegistryWritableEntry@Swi@@QAEXAAV?$RArray@W4TLanguage@@@@@Z @ 192 NONAME ; void Swi::RSisRegistryWritableEntry::GetMatchingSupportedLanguagesL(class RArray<enum TLanguage> &)
+	?RegistryFilesL@RSisRegistryEntry@Swi@@QAEXAAV?$RPointerArray@VHBufC16@@@@@Z @ 193 NONAME ; void Swi::RSisRegistryEntry::RegistryFilesL(class RPointerArray<class HBufC16> &)
 
-	

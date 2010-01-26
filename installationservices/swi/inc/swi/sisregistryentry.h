@@ -470,6 +470,15 @@ public:
 	*
 	*/
 	IMPORT_C TBool IsSignedBySuCertL();
+
+	/**
+    * Returns the list of files that were created internally by registry. This function
+	* is to be used to determine the list of internal files that are not to be removed for
+	* an NR package during an RFS(Restore Factory Settings).
+    *
+    * @param aRegistryFiles     The array of filenames with complete path
+    */
+    IMPORT_C void RegistryFilesL(RPointerArray<HBufC>& aRegistryFiles);
 		
 protected:
 	/**

@@ -272,5 +272,13 @@ public:
 	virtual TVerdict doTestStepL();
 	};
 
+// CRegistryFilesStep 
+class CRegistryFilesStep : public CSisRegistrySessionStep
+    {
+public:
+    CRegistryFilesStep();
+    virtual TVerdict doTestStepL();
+    };
+
 #endif
 

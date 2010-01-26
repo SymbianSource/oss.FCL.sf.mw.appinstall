@@ -23,7 +23,7 @@
 */
  
 #include <test/testexecutelog.h>
-
+#include <test/testexecutestepbase.h>
 #include "sessionstep.h"
 #include "sisregistrysession.h"
 #include "sisregistryentry.h"
@@ -60,7 +60,10 @@ _LIT(KResultTag, "expectedresult");
 _LIT(KDateTime, "datetime"); //YYYYMMDD:HHMMSS.MMMMMM
 _LIT(KPkgCount, "embeddingpkgcount");
 _LIT(KLanguage, "language");
-
+_LIT(KRegFileName, "regfilename");
+_LIT(KCtlCount, "ctlcount");
+_LIT(KHashCount, "hashcount");
+_LIT(KIndex, "index");
 _LIT(KSisRegistryPath, "\\sys\\install\\sisregistry\\");
 _LIT(KCacheBackupFile, "\\sys\\install\\sisregistry\\backup.lst");
 _LIT(KCorruptCacheBackupFile, "z:\\tswi\\tsisregistrytest\\data\\hashforlang_txt.dat");
@@ -1884,4 +1887,140 @@ TVerdict CChangeLocaleStep::doTestStepL()
     }
 
 
+/////////////////////////////////////////////////////////////////////
+// CRegistryFilesStep - obtain a list of RegistryFiles
+/////////////////////////////////////////////////////////////////////
+CRegistryFilesStep::CRegistryFilesStep()
+    {    
+    }
+
+TVerdict CRegistryFilesStep::doTestStepL()
+    {
+    TPtrC package;
+    TPtrC vendor;
+    TUid packageUid;
+    TInt index;
+
+    if(!GetStringFromConfig(ConfigSection(), KPackage, package))
+        {
+        ERR_PRINTF1(_L("Failed to find the package name in the ini"));
+        SetTestStepResult(EFail);    
+        return TestStepResult();
+        }
+    
+    if(! GetStringFromConfig(ConfigSection(), KVendor, vendor))
+        {
+        ERR_PRINTF1(_L("Failed to find the vedor name in the ini"));
+        SetTestStepResult(EFail);    
+        return TestStepResult();
+        }
+   
+    if(!GetIntFromConfig(ConfigSection(), KIndex, index))
+        {
+        ERR_PRINTF1(_L("Failed to find the registry index in the ini"));
+        SetTestStepResult(EFail);    
+        return TestStepResult();
+        }
+    
+    if(!GetUidFromConfig(ConfigSection(), KUid, packageUid))
+        {
+        ERR_PRINTF1(_L("Failed to find the package Uid in the ini"));
+        SetTestStepResult(EFail);    
+        return TestStepResult();
+        }        
+    // Read the expected reg file name for the package uid and append it to the expected files array
+    TPtrC regFileName;
+    RPointerArray<HBufC> expectedFilesArray;
+    CleanupResetAndDestroyPushL(expectedFilesArray);
+    GetStringFromConfig(ConfigSection(), KRegFileName, regFileName);    
+    expectedFilesArray.AppendL(regFileName.AllocLC());   
+    CleanupStack::Pop();
+    
+    // Read the registry files for the package uid
+    TInt ctlcount = 0;
+    TPtrC ctlName;
+    TInt expectedFileCount(0);
+    GetIntFromConfig(ConfigSection(), KCtlCount, ctlcount);
+    _LIT(KCtlName,"ctlName");
+    
+    for(TInt i=0 ; i < ctlcount ; i++)
+        {            
+            TBuf<20> integerAppendStr;
+            TPtrC name;
+            integerAppendStr.Format(_L("%S%d"), KCtlName().AllocLC(),i);            
+            GetStringFromConfig(ConfigSection(), integerAppendStr, name);
+            CleanupStack::PopAndDestroy();
+            expectedFilesArray.AppendL(name.AllocLC());   
+            CleanupStack::Pop();
+        }    
+    
+    // Read the expected hash file name(2) for the package uid and append it to the expected files array
+    TInt hashcount(0);
+    _LIT(KHashFileName,"hashfilename");
+    GetIntFromConfig(ConfigSection(), KHashCount, hashcount);
+    for(TInt i=0 ; i < hashcount ; i++)
+           {            
+               TBuf<20> integerAppendStr;
+               TPtrC hashFileName;
+               integerAppendStr.Format(_L("%S%d"), KHashFileName().AllocLC(),i);            
+               GetStringFromConfig(ConfigSection(), integerAppendStr, hashFileName);
+               CleanupStack::PopAndDestroy();
+               expectedFilesArray.AppendL(hashFileName.AllocLC()); 
+               CleanupStack::Pop();
+           }
+            
+    //Call the RegistryFiles API    
+    RPointerArray<HBufC> obtainedRegistryFiles;
+    CleanupResetAndDestroyPushL(obtainedRegistryFiles);  
+    CSisRegistryPackage* registryPackage = NULL;
+    Swi::RSisRegistryEntry entry;
+    registryPackage = CSisRegistryPackage::NewLC(packageUid, package, vendor);
+    registryPackage->SetIndex(index);
+    
+    //open the registry entry
+    TRAPD(err, entry.OpenL(iSisRegistry,*registryPackage));    
+    if(err != KErrNone)
+        {
+        SetTestStepResult(EFail); 
+        User::Leave(err);
+        }
+    
+    //Get the Regisrty files(.reg, .ctl and hash) for ythe registry entry
+    TRAP(err, entry.RegistryFilesL(obtainedRegistryFiles));
+    if(err != KErrNone)
+        {
+        SetTestStepResult(EFail); 
+        User::Leave(err);
+        }
+    
+    // Total no of expected files        
+    expectedFileCount = ctlcount + hashcount + 1;     //ctl + hash + reg     
+    
+    if(obtainedRegistryFiles.Count() != expectedFileCount)  
+        {
+        ERR_PRINTF1(_L("Number of obtained files not same as the expected files"));
+        SetTestStepResult(EFail);    
+        }                
+   
+   //Compare the obtained Registry files with the expected files in the order(.reg, , .ctls and hash).  
+   for (TInt i = 0 ; i < expectedFileCount ; i++)
+       {      
+       if (KErrNone != obtainedRegistryFiles[i]->Compare(*expectedFilesArray[i]))
+           {                     
+           ERR_PRINTF1(_L("Obtained Registry files does not match with the exptected Registry Files"));
+           SetTestStepResult(EFail);    
+           break;
+           }
+    }
+
+    entry.Close();    
+    CleanupStack::PopAndDestroy(registryPackage);  
+    CleanupStack::Pop(&obtainedRegistryFiles);
+    obtainedRegistryFiles.ResetAndDestroy();
+    obtainedRegistryFiles.Close();    
+    CleanupStack::Pop(&expectedFilesArray);
+    expectedFilesArray.ResetAndDestroy();
+    expectedFilesArray.Close();
+    return TestStepResult();
+    }
 
