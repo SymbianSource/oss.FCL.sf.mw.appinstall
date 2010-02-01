@@ -21,7 +21,7 @@
 #define SWINSTAPI_H
 
 // INCLUDES
-#include <aknserverapp.h>
+#include <AknServerApp.h>
 #include <SWInstDefs.h>
 
 // FORWARD DECLARATIONS

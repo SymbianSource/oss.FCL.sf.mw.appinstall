@@ -18,7 +18,7 @@
 
 
 // INCLUDE FILES 
-#include <FeatureControl.h>
+#include <featurecontrol.h>
 #include "iaupdatebgrefreshtimer.h"
 #include "iaupdatebgcontrollerfile.h"
 #include "iaupdatebgsoftnotification.h"

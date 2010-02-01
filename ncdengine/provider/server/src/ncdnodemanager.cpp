@@ -2694,6 +2694,10 @@ CNcdNode& CNcdNodeManager::CreateTemporaryNodeL(
         }
 
     DASSERT( node );
+    if (!node )
+        {
+        User::Leave( KErrGeneral );
+        }
             
     // Because this is temporary node, we will create or get the metadata for the node.
     // This way the metadata will be at least initialized with the purchase history data.

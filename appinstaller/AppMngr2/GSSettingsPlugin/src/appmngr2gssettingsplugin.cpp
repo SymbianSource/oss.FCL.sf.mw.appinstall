@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2003-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -364,17 +364,11 @@ void CAppMngr2GSSettingsPlugin::ShowSettingPageL( TInt aSettingIndex )
 
         if( aSettingIndex == EAppMngr2SettingSwInstall )
             {
-            // Install software
-            itemArray = iCoeEnv->ReadDesC16ArrayResourceL(
-                    R_APPMNGR2_ALLOW_UNTRUSTED_VALUE_ARRAY );
-            repDB->Get( KSWInstallerAllowUntrusted, newIndex );
-            if( newIndex )
-                {
-                newIndex = 1;
-                }
-            dlg = new ( ELeave ) CAknRadioButtonSettingPage(
-                    R_APPMNGR2_SET_PAGE_ALLOW_UNTRUSTED,
-                    newIndex, itemArray );
+            // Install software - toggle 'Signed only' and 'All'
+            TBool allowUntrusted = EFalse;
+            repDB->Get( KSWInstallerAllowUntrusted, allowUntrusted );
+            allowUntrusted = !allowUntrusted;
+            SetPermissionL( aSettingIndex, allowUntrusted, urlText );
             }
         else
             {
@@ -389,7 +383,7 @@ void CAppMngr2GSSettingsPlugin::ShowSettingPageL( TInt aSettingIndex )
         CleanupStack::PopAndDestroy( repDB );
         CleanupStack::PushL( itemArray );
 
-        if( dlg->ExecuteLD( CAknSettingPage::EUpdateWhenChanged ) )
+        if( dlg && dlg->ExecuteLD( CAknSettingPage::EUpdateWhenChanged ) )
             {
             SetPermissionL( aSettingIndex, newIndex, urlText );
             }

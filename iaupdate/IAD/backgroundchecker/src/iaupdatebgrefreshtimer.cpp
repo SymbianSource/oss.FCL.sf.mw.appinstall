@@ -21,18 +21,18 @@
 #include <iaupdate.h>
 #include <iaupdateparameters.h>
 #include <iaupdateresult.h>
-#include <W32STD.H>
-#include <APGWGNAM.H>
+#include <w32std.h>
+#include <apgwgnam.h>
 #include <apgcli.h>
-#include <APACMDLN.H>
+#include <apacmdln.h>
 #include <avkon.hrh>
-#include <stringloader.h> 
+#include <StringLoader.h> 
 #include <iaupdate.rsg>
 #include <data_caging_path_literals.hrh>
 #include <bautils.h>
 #include <apgtask.h>
 #include <sysversioninfo.h>  //sysversioninfo
-#include <FeatureControl.h>
+#include <featurecontrol.h>
 
 #include "iaupdateprivatecrkeys.h"
 #include "iaupdate.hrh"

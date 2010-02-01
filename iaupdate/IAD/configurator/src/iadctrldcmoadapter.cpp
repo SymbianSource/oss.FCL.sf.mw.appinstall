@@ -16,7 +16,7 @@
 */
 
 #include <featmgr.h>
-#include <FeatureControl.h>
+#include <featurecontrol.h>
 #include <iadctrl.rsg>
 #include <stringresourcereader.h> 
 #include <f32file.h> 
