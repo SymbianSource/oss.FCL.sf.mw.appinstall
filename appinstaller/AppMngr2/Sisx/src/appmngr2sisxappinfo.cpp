@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2003-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -235,13 +235,14 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
     {
     FLOG( "CAppMngr2SisxAppInfo::ConstructL()" );
     CAppMngr2AppInfo::ConstructL();     // base construct
-    
+
     iAppUid = aEntry.UidL();
     FLOG( "CAppMngr2SisxAppInfo::ConstructL, iAppUid = 0x%08x", iAppUid.iUid );
     iName = aEntry.PackageNameL();
     FLOG( "CAppMngr2SisxAppInfo::ConstructL, iName = %S", iName );
     iDetails = SizeStringWithUnitsL( aEntry.SizeL() );
-    FLOG( "CAppMngr2SisxAppInfo::ConstructL, iDetails = %S", iDetails );
+    FLOG( "CAppMngr2SisxAppInfo::ConstructL, aEntry.SizeL() = %Ld, iDetails = %S",
+            aEntry.SizeL(), iDetails );
 
     TUint drivesMask = aEntry.InstalledDrivesL();
     if( drivesMask )
@@ -263,7 +264,7 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
 
     iVersion = aEntry.VersionL();
     iVendor = aEntry.LocalizedVendorNameL();
-    
+
     iIsAugmentation = aEntry.IsAugmentationL();
     if( iIsAugmentation )
         {
@@ -272,7 +273,7 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
         delete pkg;
         }
 
-    Swi::TSisPackageTrust trustLevel = aEntry.TrustL();  
+    Swi::TSisPackageTrust trustLevel = aEntry.TrustL();
     if( trustLevel >= Swi::ESisPackageCertificateChainValidatedToTrustAnchor )
         {
         iIsTrusted = ETrue;
@@ -296,8 +297,8 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
                 FLOG( "CAppMngr2SisxAppInfo::ConstructL, protected file %S", fileName );
                 iProtectedFile = fileName;  // takes ownership
                 files.Remove( fileIndex );
-                iIsRightsObjectMissingOrExpired = 
-                    TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL( *fileName ); 
+                iIsRightsObjectMissingOrExpired =
+                    TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL( *fileName );
                 }
             }
         CleanupStack::PopAndDestroy( &files );
@@ -316,21 +317,21 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
     {
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL()" );
     TRAP_IGNORE( ReadCertificatesL() );
-    
+
     CAppMngr2SisxInfoIterator* iterator = CAppMngr2SisxInfoIterator::NewL( *this,
             EAppMngr2StatusInstalled );
     CleanupStack::PushL( iterator );
-    
+
     SwiUI::CommonUI::CCUIDetailsDialog* details = SwiUI::CommonUI::CCUIDetailsDialog::NewL();
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, isDRM %d, noRightsObj %d, CertCount %d",
             iIsDRMProtected, iIsRightsObjectMissingOrExpired, iCertificates.Count() );
-    
+
     if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired )
         {
         RFile fileHandle;
         TInt err = fileHandle.Open( iFs, *iProtectedFile, EFileShareReadersOnly | EFileRead );
         CleanupClosePushL( fileHandle );
-        
+
         if( iCertificates.Count() )
             {
             details->ExecuteLD( *iterator, iCertificates, fileHandle );
@@ -353,7 +354,7 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             details->ExecuteLD( *iterator );
             }
         }
-    
+
     CleanupStack::PopAndDestroy( iterator );
     }
 
@@ -366,7 +367,7 @@ void CAppMngr2SisxAppInfo::ReadCertificatesL()
     if( !iCertsRead )
         {
         FLOG_PERF_STATIC_BEGIN( SisxAppInfo_ReadCerts );
-        
+
         Swi::RSisRegistrySession regSession;
         CleanupClosePushL( regSession );
         User::LeaveIfError( regSession.Connect() );
@@ -400,7 +401,7 @@ void CAppMngr2SisxAppInfo::ReadCertificatesL()
         CleanupStack::PopAndDestroy( &entry );
         CleanupStack::PopAndDestroy( &regSession );
         iCertsRead = ETrue;
-        
+
         FLOG_PERF_STATIC_END( SisxAppInfo_ReadCerts )
         }
     }
@@ -424,14 +425,14 @@ void CAppMngr2SisxAppInfo::HandleUninstallL( TRequestStatus& aStatus )
         {
         User::Leave( KErrInUse );
         }
-    
+
     if( iIsAugmentation )
         {
         FLOG( "CAppMngr2SisxAppInfo::HandleUninstallL, is augmentation" );
         SwiUI::TOpUninstallIndexParam params;
         params.iUid = iAppUid;
         params.iIndex = iAugmentationIndex;
-        
+
         SwiUI::TOpUninstallIndexParamPckg pckg( params );
         if( iSWInstLauncherCustomUninstallParams )
             {

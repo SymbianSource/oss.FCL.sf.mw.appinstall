@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -51,16 +51,6 @@ const TUint32 KIAUpdateAccessPoint = 0x0;
 * 2 = Automatic update enabled
 **/
 const TUint32 KIAUpdateAutoUpdateCheck = 0x1;
-
-/**
-* Roaming warning, integer value.
-*
-* Possible values:
-*
-* 0 = No roaming warning
-* 1 = Roaming warning
-**/
-const TUint32 KIAUpdateRoamingWarning = 0x2;
 
 
 /**

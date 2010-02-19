@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -86,12 +86,6 @@ public: // new functions
     */
     TBool IsRoaming();
     
-    /**
-    * Shows roaming warning dialog if needed 
-    * @return True value if network access rejected because of roaming warning
-    */
-    TBool RoamingRejectionL();
-        
 
 private:
 
@@ -116,8 +110,7 @@ private: //data
 	TBool iPreparing;
 	
 	TBool iPrepared;
-	
-	TBool iRoamingConnectionAccepted;
+
     };
 
 

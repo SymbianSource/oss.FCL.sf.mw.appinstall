@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -133,7 +133,7 @@ TInt CAppMngr2Model::PackageInfoCount() const
 // CAppMngr2Model::PackageInfo()
 // ---------------------------------------------------------------------------
 //
-CAppMngr2PackageInfo& CAppMngr2Model::PackageInfo( TInt aIndex ) const 
+CAppMngr2PackageInfo& CAppMngr2Model::PackageInfo( TInt aIndex ) const
     {
     return *( reinterpret_cast< CAppMngr2PackageInfo* >( iInstallationFiles->At( aIndex ) ) );
     }
@@ -145,7 +145,7 @@ CAppMngr2PackageInfo& CAppMngr2Model::PackageInfo( TInt aIndex ) const
 void CAppMngr2Model::LoadIconsL( CAknIconArray& aIconArray )
     {
     LoadDefaultIconsL( aIconArray );
-    
+
     TInt pluginCount = iPlugins.Count();
     for( TInt index = 0; index < pluginCount; index++ )
         {
@@ -179,7 +179,7 @@ void CAppMngr2Model::GetIconIndexesL( TUid aUid, TInt& aIconIndexBase, TInt& aIc
 void CAppMngr2Model::HandleCommandL( CAppMngr2InfoBase& aInfo, TInt aCommand )
     {
     FLOG( "CAppMngr2Model::HandleCommandL( %d ), IsActive() = %d", aCommand, IsActive() );
-    
+
     if( !IsActive() )
         {
         // About to start plugin specific command. Note that when the command completes
@@ -204,7 +204,7 @@ void CAppMngr2Model::HandleCommandL( CAppMngr2InfoBase& aInfo, TInt aCommand )
         iActiveItem = &aInfo;
         iActiveCommand = aCommand;
         FLOG( "CAppMngr2Model::HandleCommandL, iActiveItem = 0x%08x '%S'",
-                iActiveItem, &( iActiveItem->Name() ) ); 
+                iActiveItem, &( iActiveItem->Name() ) );
         TRAPD( err, iActiveItem->HandleCommandL( aCommand, iStatus ) );
         FLOG( "CAppMngr2Model::HandleCommandL, command started, err = %d", err );
         SetActive();
@@ -226,17 +226,22 @@ void CAppMngr2Model::HandleCommandL( CAppMngr2InfoBase& aInfo, TInt aCommand )
 //
 void CAppMngr2Model::StartFetchingInstallationFilesL()
     {
-    FLOG( "CAppMngr2Model::StartFetchingInstallationFilesL" );
-    FLOG_PERF_START( FetchInstallationFiles )
-    
-    // Installation files cache must be enabled until scanner has completed.
-    // This ensures that scanner has time to call GetInstallationFilesL() for
-    // each plugin and for each directory before the first call completes.
-    // If the first call completes before scanner has made all these requets,
-    // cache will be turned off and partial results are displayed.
-    iInstallationFiles->IncrementCacheUseStartingNewRoundL();
+    FLOG( "CAppMngr2Model::StartFetchingInstallationFilesL, fetching %d",
+            iFetchingInstallationFiles );
+    if( !iFetchingInstallationFiles )
+        {
+        FLOG_PERF_START( FetchInstallationFiles )
+        iFetchingInstallationFiles = ETrue;
 
-    iScanner->StartScanningL();
+        // Installation files cache must be enabled until scanner has completed.
+        // This ensures that scanner has time to call GetInstallationFilesL() for
+        // each plugin and for each directory before the first call completes.
+        // If the first call completes before scanner has made all these requets,
+        // cache will be turned off and partial results are displayed.
+        iInstallationFiles->IncrementCacheUseStartingNewRoundL();
+
+        iScanner->StartScanningL();
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -245,39 +250,44 @@ void CAppMngr2Model::StartFetchingInstallationFilesL()
 //
 void CAppMngr2Model::StartFetchingInstalledAppsL()
     {
-    FLOG( "CAppMngr2Model::StartFetchingInstalledAppsL" );
-    FLOG_PERF_START( FetchInstalledApps )
-
-    // Additional cache increment to ensure that iInstalledApps cache is
-    // used until GetInstalledAppsL() function is called for each plugin.
-    // Without this, the fastest plugin might get it's list complete before
-    // other IncrementCacheUseL() calls and iInstalledApps would display
-    // partial list.
-    iInstalledApps->IncrementCacheUseStartingNewRoundL();
-    
-    TInt pluginCount = iPlugins.Count();
-    for( TInt pluginIndex = 0; pluginIndex < pluginCount; pluginIndex++ )
+    FLOG( "CAppMngr2Model::StartFetchingInstalledAppsL, fetching %d",
+            iFetchingInstalledApps );
+    if( !iFetchingInstalledApps )
         {
-        CAppMngr2AppInfoMaker* appInfoMaker = CAppMngr2AppInfoMaker::NewLC(
-                iPlugins[ pluginIndex ]->Runtime(), *this, iFs );
-        
-        TRAPD( err, appInfoMaker->StartGettingInstalledAppsL() );
-        FLOG( "CAppMngr2Model::StartFetchingInstalledAppsL, plugin 0x%08x, err = %d",
-                iPlugins[ pluginIndex ]->Runtime().RuntimeUid().iUid, err );
-        if( err == KErrNone )
-            {
-            iInfoMakers.AppendL( appInfoMaker );
-            CleanupStack::Pop( appInfoMaker );
-            iInstalledApps->IncrementCacheUseL();
-            }
-        else
-            {
-            CleanupStack::PopAndDestroy( appInfoMaker );
-            }
-        }
+        FLOG_PERF_START( FetchInstalledApps )
+        iFetchingInstalledApps = ETrue;
 
-    // All GetInstalledAppsL() requests have been issued
-    iInstalledApps->DecrementCacheUse();
+        // Additional cache increment to ensure that iInstalledApps cache is
+        // used until GetInstalledAppsL() function is called for each plugin.
+        // Without this, the fastest plugin might get it's list complete before
+        // other IncrementCacheUseL() calls and iInstalledApps would display
+        // partial list.
+        iInstalledApps->IncrementCacheUseStartingNewRoundL();
+
+        TInt pluginCount = iPlugins.Count();
+        for( TInt pluginIndex = 0; pluginIndex < pluginCount; pluginIndex++ )
+            {
+            CAppMngr2AppInfoMaker* appInfoMaker = CAppMngr2AppInfoMaker::NewLC(
+                    iPlugins[ pluginIndex ]->Runtime(), *this, iFs );
+
+            TRAPD( err, appInfoMaker->StartGettingInstalledAppsL() );
+            FLOG( "CAppMngr2Model::StartFetchingInstalledAppsL, plugin 0x%08x, err = %d",
+                    iPlugins[ pluginIndex ]->Runtime().RuntimeUid().iUid, err );
+            if( err == KErrNone )
+                {
+                iInfoMakers.AppendL( appInfoMaker );
+                CleanupStack::Pop( appInfoMaker );
+                iInstalledApps->IncrementCacheUseL();
+                }
+            else
+                {
+                CleanupStack::PopAndDestroy( appInfoMaker );
+                }
+            }
+
+        // All GetInstalledAppsL() requests have been issued
+        iInstalledApps->DecrementCacheUse();
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -287,7 +297,7 @@ void CAppMngr2Model::StartFetchingInstalledAppsL()
 void CAppMngr2Model::DoCancel()
     {
     FLOG( "CAppMngr2Model::DoCancel, iActiveItem = 0x%08x", iActiveItem );
-    
+
     if( iActiveItem )
         {
         iActiveItem->CancelCommand();
@@ -324,7 +334,7 @@ void CAppMngr2Model::RunL()
 
         // Leave on error. This displays error note (if error notes are enabled).
         User::LeaveIfError( err );
-        
+
         // If the command is EAppMngr2CmdUninstall or EAppMngr2CmdRemove, and it
         // completed without errors, then we remove the current item immediatelty
         // from the displayed list. Otherwise it may take quite long time until
@@ -355,7 +365,7 @@ void CAppMngr2Model::RunL()
 void CAppMngr2Model::RefreshInstalledApps()
     {
     FLOG( "CAppMngr2Model::RefreshInstalledApps" );
-    
+
     TRAP_IGNORE( StartFetchingInstalledAppsL() );
     }
 
@@ -377,7 +387,7 @@ void CAppMngr2Model::RefreshInstallationFiles()
 void CAppMngr2Model::ScanningResultL( RPointerArray<CAppMngr2RecognizedFile>& aResult )
     {
     FLOG( "CAppMngr2Model::ScanningResultL, begin: aResult.Count() = %d", aResult.Count() );
-    
+
     // Split recognition result array into smaller (plugin specific) arrays. Plugin
     // specific arrays are maintained by CAppMngr2PackageInfoMaker objects, so one
     // CAppMngr2PackageInfoMaker object is needed for each plugin that has recognized
@@ -424,7 +434,7 @@ void CAppMngr2Model::ScanningResultL( RPointerArray<CAppMngr2RecognizedFile>& aR
 void CAppMngr2Model::ScanningComplete()
     {
     FLOG( "CAppMngr2Model::ScanningComplete" );
-    
+
     iInstallationFiles->DecrementCacheUse();
     }
 
@@ -435,7 +445,7 @@ void CAppMngr2Model::ScanningComplete()
 void CAppMngr2Model::DirectoryChangedL( const TDesC& /*aChangedDir*/ )
     {
     FLOG( "CAppMngr2Model::DirectoryChangedL" );
-    
+
     // This might be improved by scanning the changed directory only. Model
     // could record which items are got from which directory, so that it could
     // remove those items that were created from the changed directory and
@@ -451,7 +461,7 @@ void CAppMngr2Model::DirectoryChangedL( const TDesC& /*aChangedDir*/ )
 void CAppMngr2Model::HandleAppListEvent( TInt /*aEvent*/ )
     {
     FLOG( "CAppMngr2Model::HandleAppListEvent" );
-    
+
     TRAP_IGNORE( StartFetchingInstalledAppsL() );
     }
 
@@ -464,7 +474,7 @@ void CAppMngr2Model::NewAppsCreatedL( const CAppMngr2InfoMaker& aMaker,
     {
     FLOG( "CAppMngr2Model::NewAppsCreatedL, plugin 0x%08x: packageCount = %d",
             aMaker.RuntimeUid().iUid, aAppInfos.Count() );
-    
+
     iInstalledApps->AddItemsInOrderL( aAppInfos );
     iInstalledApps->DecrementCacheUse();
     CloseInfoMaker( aMaker );
@@ -483,7 +493,7 @@ void CAppMngr2Model::ErrorInCreatingAppsL( const CAppMngr2InfoMaker& aMaker,
     {
     FLOG( "CAppMngr2Model::ErrorInCreatingAppsL, plugin 0x%08x: error = %d",
             aMaker.RuntimeUid().iUid, aError );
-    
+
     iInstalledApps->DecrementCacheUse();
     CloseInfoMaker( aMaker );
     }
@@ -497,7 +507,7 @@ void CAppMngr2Model::NewPackagesCreatedL( const CAppMngr2InfoMaker& aMaker,
     {
     FLOG( "CAppMngr2Model::NewPackagesCreatedL, plugin 0x%08x: packageCount = %d",
             aMaker.RuntimeUid().iUid, aPackageInfos.Count() );
-    
+
     iInstallationFiles->AddItemsInOrderL( aPackageInfos );
     iInstallationFiles->DecrementCacheUse();
     CloseInfoMaker( aMaker );
@@ -516,7 +526,7 @@ void CAppMngr2Model::ErrorInCreatingPackagesL( const CAppMngr2InfoMaker& aMaker,
     {
     FLOG( "CAppMngr2Model::ErrorInCreatingPackagesL, plugin 0x%08x: error = %d",
             aMaker.RuntimeUid().iUid, aError );
-    
+
     iInstallationFiles->DecrementCacheUse();
     CloseInfoMaker( aMaker );
     }
@@ -528,17 +538,28 @@ void CAppMngr2Model::ErrorInCreatingPackagesL( const CAppMngr2InfoMaker& aMaker,
 void CAppMngr2Model::ArrayContentChanged( CAppMngr2InfoArray* aArray,
         TInt aMoreRefreshesExpected )
     {
+    FLOG( "CAppMngr2Model::ArrayContentChanged, more = %d", aMoreRefreshesExpected );
     if( aArray == iInstalledApps )
         {
         FLOG_PERF_STOP( FetchInstalledApps )
         FLOG_PERF_PRINT( FetchInstalledApps )
         iObs.InstalledAppsChanged( aMoreRefreshesExpected );
+        if( !aMoreRefreshesExpected )
+            {
+            FLOG( "CAppMngr2Model::ArrayContentChanged: StartFetchingInstalledAppsL done" );
+            iFetchingInstalledApps = EFalse;
+            }
         }
     if( aArray == iInstallationFiles )
         {
         FLOG_PERF_STOP( FetchInstallationFiles )
         FLOG_PERF_PRINT( FetchInstallationFiles )
         iObs.InstallationFilesChanged( aMoreRefreshesExpected );
+        if( !aMoreRefreshesExpected )
+            {
+            FLOG( "CAppMngr2Model::ArrayContentChanged: StartFetchingInstallationFilesL done" );
+            iFetchingInstallationFiles = EFalse;
+            }
         }
     }
 
@@ -563,7 +584,7 @@ void CAppMngr2Model::ConstructL()
 
     iInstalledApps = CAppMngr2AppInfoArray::NewL( *this );
     iInstallationFiles = CAppMngr2PackageInfoArray::NewL( *this );
-    
+
     FLOG_PERF_STATIC_BEGIN( LoadPluginsL )
     LoadPluginsL();
     FLOG_PERF_STATIC_END( LoadPluginsL )
@@ -585,13 +606,13 @@ void CAppMngr2Model::ConstructL()
 void CAppMngr2Model::LoadDefaultIconsL( CAknIconArray& aIconArray )
     {
     FLOG( "CAppMngr2Model::LoadDefaultIconsL" );
-    
+
     MAknsSkinInstance* skinInstance = AknsUtils::SkinInstance();
     HBufC* bitmapFile = TAppMngr2DriveUtils::FullBitmapFileNameLC( KAppMngr2BitmapFile, iFs );
     CFbsBitmap* bitmap = NULL;
     CFbsBitmap* mask = NULL;
     CGulIcon* icon = NULL;
-    
+
     // Note that icons can be graphically-skinned (icon graphic defined in theme)
     // or color-skinned (icon colors change depending on background color defined
     // in theme). Normal icons are graphically-skinned and indicator icons are
@@ -601,9 +622,9 @@ void CAppMngr2Model::LoadDefaultIconsL( CAknIconArray& aIconArray )
 
     // Icon 0: EAppMngr2IconIndex_QgnIndiAmInstMmcAdd
     // Indicator icon for items stored/installed in memory card
-    AknsUtils::CreateColorIconLC( skinInstance, 
+    AknsUtils::CreateColorIconLC( skinInstance,
             KAknsIIDQgnIndiMmcAdd, KAknsIIDQsnIconColors, EAknsCIQsnIconColorsCG13,
-            bitmap, mask, *bitmapFile, 
+            bitmap, mask, *bitmapFile,
             EMbmAppmngr2Qgn_indi_mmc_add,
             EMbmAppmngr2Qgn_indi_mmc_add_mask,
             KRgbBlack );
@@ -616,9 +637,9 @@ void CAppMngr2Model::LoadDefaultIconsL( CAknIconArray& aIconArray )
 
     // Icon 1: EAppMngr2IconIndex_QgnIndiFmgrMsAdd
     // Indicator icon for items stored/installed in mass memory
-    AknsUtils::CreateColorIconLC( skinInstance, 
+    AknsUtils::CreateColorIconLC( skinInstance,
             KAknsIIDQgnIndiFmgrMsAdd, KAknsIIDQsnIconColors, EAknsCIQsnIconColorsCG13,
-            bitmap, mask, *bitmapFile, 
+            bitmap, mask, *bitmapFile,
             EMbmAppmngr2Qgn_indi_fmgr_ms_add,
             EMbmAppmngr2Qgn_indi_fmgr_ms_add_mask,
             KRgbBlack );
@@ -633,14 +654,14 @@ void CAppMngr2Model::LoadDefaultIconsL( CAknIconArray& aIconArray )
     // List icon for items that are not known
     icon = AknsUtils::CreateGulIconL( skinInstance,
             KAknsIIDQgnPropUnknown, *bitmapFile,
-            EMbmAppmngr2Qgn_prop_unknown, 
+            EMbmAppmngr2Qgn_prop_unknown,
             EMbmAppmngr2Qgn_prop_unknown_mask );
     CleanupStack::PushL( icon );
     aIconArray.AppendL( icon );
     CleanupStack::Pop( icon );
 
     CleanupStack::PopAndDestroy( bitmapFile );
-    
+
     // Additionally some unknown indicator icon could be defined.
     // Now, if some plugin gives incorrect index fox indicator icon,
     // then no indicator icon is displayed.
@@ -653,7 +674,7 @@ void CAppMngr2Model::LoadDefaultIconsL( CAknIconArray& aIconArray )
 void CAppMngr2Model::LoadPluginsL()
     {
     FLOG( "CAppMngr2Model::LoadPluginsL" );
-    
+
     RImplInfoPtrArray implInfoArray;
     CleanupResetAndDestroyPushL( implInfoArray  );
     REComSession::ListImplementationsL( KAppMngr2PluginInterface, implInfoArray );
@@ -747,7 +768,7 @@ void CAppMngr2Model::CreateScannerL()
             }
         CleanupStack::PopAndDestroy( &dirsToScan );
         }
-    
+
     // KSWInstallerPackageFolder directory if defined in CenRep
     CRepository* cenrep = CRepository::NewLC( KCRUidSWInstallerLV );
     err = cenrep->Get( KSWInstallerPackageFolder, path );
@@ -780,7 +801,7 @@ void CAppMngr2Model::CreateScannerL()
                                 {
                                 TFileName fullPath;
                                 fullPath.Format( KDriveSpec, static_cast<TUint>( driveLetter ) );
-                                fullPath.Append( path ); 
+                                fullPath.Append( path );
                                 iScanner->AddDirectoryL( fullPath );
                                 }
                             }
@@ -809,7 +830,7 @@ void CAppMngr2Model::CreateScannerL()
 void CAppMngr2Model::FetchDataTypesL()
     {
     FLOG( "CAppMngr2Model::FetchDataTypesL" );
-    
+
     TInt pluginCount = iPlugins.Count();
     for( TInt pluginIndex = 0; pluginIndex < pluginCount; pluginIndex++ )
         {
@@ -827,7 +848,7 @@ void CAppMngr2Model::CloseInfoMaker( const CAppMngr2InfoMaker& aMaker )
     const CAppMngr2InfoMaker* makerToClose = &aMaker;
     for( TInt index = iInfoMakers.Count() - 1; index >= 0; index-- )
         {
-        CAppMngr2InfoMaker* maker = iInfoMakers[ index ]; 
+        CAppMngr2InfoMaker* maker = iInfoMakers[ index ];
         if( maker == makerToClose )
             {
             iInfoMakers.Remove( index );

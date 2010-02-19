@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -200,10 +200,10 @@ void CAppMngr2FileRecognizer::RecognizeNextFileL()
         
         HBufC* mimeType = HBufC::NewLC( KMaxDataTypeLength );
         TPtr mimePtr( mimeType->Des() );
-        content->GetStringAttribute( ContentAccess::EMimeType, mimePtr );
-        
+        User::LeaveIfError( content->GetStringAttribute( ContentAccess::EMimeType, mimePtr ) );
+
         CAppMngr2RecognizedFile* recFile = CAppMngr2RecognizedFile::NewL( fullName, mimeType );
-        CleanupStack::Pop( mimeType );
+        CleanupStack::Pop( mimeType );		// CAppMngr2RecognizedFile takes ownership
         CleanupStack::PopAndDestroy( content );
         CleanupStack::Pop( fullName );
         

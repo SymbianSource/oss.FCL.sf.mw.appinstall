@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -49,7 +49,7 @@ void CAppMngr2AppUi::ConstructL()
     wsSession.ComputeMode( RWsSession::EPriorityControlDisabled );
 
     FeatureManager::InitializeLibL();
-    
+
     TFileName* fullName = TAppMngr2DriveUtils::NearestResourceFileLC(
             KSWInstCommonUIResourceFileName, iEikonEnv->FsSession() );
     FLOG( "CAppMngr2AppUi::ConstructL, opening %S", fullName );
@@ -58,7 +58,7 @@ void CAppMngr2AppUi::ConstructL()
 
     FLOG( "CAppMngr2AppUi::ConstructL, creting model" );
     iModel = CAppMngr2Model::NewL( iEikonEnv->FsSession(), *this );
-   
+
     FLOG( "CAppMngr2AppUi::ConstructL, creting views" );
     CAppMngr2InstalledView* installedView = CAppMngr2InstalledView::NewL();
     AddViewL( installedView );  // takes ownership
@@ -92,7 +92,7 @@ void CAppMngr2AppUi::ConstructL()
         {
         ActivateLocalViewL( KInstalledViewId );
         }
-    
+
     FLOG( "CAppMngr2AppUi::ConstructL, starting delayed construct" );
     iIdle = CIdle::NewL( CActive::EPriorityStandard );
     iIdle->Start( TCallBack( &CAppMngr2AppUi::DelayedConstructL, this ) );
@@ -180,35 +180,20 @@ TInt CAppMngr2AppUi::DelayedConstructL( TAny* aSelf )
         CAppMngr2AppUi* self = static_cast<CAppMngr2AppUi*>( aSelf );
         FLOG( "CAppMngr2AppUi::DelayedConstructL, step %d",
                 self->iDelayedConstructionStep );
-        switch( self->iDelayedConstructionStep )
-            {
-            case EFirstStep:
-                if( self->iConstructInstallationFilesFirst )
-                    {
-                    self->iModel->StartFetchingInstallationFilesL();
-                    }
-                else
-                    {
-                    self->iModel->StartFetchingInstalledAppsL();
-                    }
-                self->iDelayedConstructionStep = ESecondStep;
-                return ETrue; // call DelayedConstruct again
 
-            case ESecondStep:
-                if( self->iConstructInstallationFilesFirst )
-                    {
-                    self->iModel->StartFetchingInstalledAppsL();
-                    }
-                else
-                    {
-                    self->iModel->StartFetchingInstallationFilesL();
-                    }
-                self->iDelayedConstructionStep = EAllDone;
-                break;
-                
-            default:
-                break;
+        // Only necessary part of the model is constructed. AppMngr2 runs
+        // as embedded application in Control panel. It is started either
+        // to display installed applications, or installation files.
+        if( self->iConstructInstallationFilesFirst )
+            {
+            self->iModel->StartFetchingInstallationFilesL();
             }
+        else
+            {
+            self->iModel->StartFetchingInstalledAppsL();
+            }
+
+        self->iDelayedConstructionStep = EAllDone;
         }
     return EFalse; // all done
     }
