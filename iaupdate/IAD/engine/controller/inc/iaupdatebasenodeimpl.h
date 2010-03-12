@@ -64,6 +64,11 @@ public: // MIAUpdateBaseNode
      * @see MIAUpdateBaseNode::Uid
      **/
     virtual const TUid& Uid() const;
+	
+	/**
+     * @see MIAUpdateBaseNode::Identifier
+     **/
+    virtual const TDesC& Identifier() const;
 
     /**
      * @see MIAUpdateBaseNode::Name
@@ -135,6 +140,11 @@ public: // MIAUpdateBaseNode
      */
     virtual void SetInstallStatusToPurchaseHistoryL( 
         TInt aErrorCode, TBool aForceVisibleInHistory );
+    
+    /**
+     * @see MIAUpdateBaseNode::Mime
+     */
+    virtual const TDesC& Mime() const;
     
     
 public: // ** New functions
@@ -277,6 +287,7 @@ private: // data
     HBufC*                              iDescription;
     HBufC*                              iMime;
     TUid                                iUid;
+    HBufC*                              iIdentifier;
     TIAUpdateVersion                    iVersion;
     CIAUpdateNodeDetails*               iDetails;
     TBool                               iSelected;

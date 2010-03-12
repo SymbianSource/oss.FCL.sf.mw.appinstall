@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -33,6 +33,8 @@
 #include "ncditempurpose.h"
 #include "ncdasyncoperationobserver.h"
 #include "ncdasyncsilentinstallobserver.h"
+
+#include "ncdwidgetregistrydata.h"
 
 
 /**
@@ -148,6 +150,12 @@ public: // From MNcdInstallationService
                              const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
     
     /**
+     * @see MNcdInstallationService::SilentInstallWidgetJavaL
+     */
+    void SilentInstallWidgetL( RFile& aFile,
+                               const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+    
+    /**
      * @see MNcdInstallationService::MNcdCancelSilentInstall
      */
     void CancelSilentInstall( HBufC*& aFileName,
@@ -176,6 +184,17 @@ public: // From MNcdInstallationService
      */
     TNcdApplicationStatus IsApplicationInstalledL( 
         const TUid& aUid, const TCatalogsVersion& aVersion );
+    
+    /**
+     * @see MNcdInstallationService::IsWidgetInstalledL
+     */
+    TNcdApplicationStatus IsWidgetInstalledL(
+        const TDesC& aIdentifier, const TCatalogsVersion& aVersion);
+    
+    /**
+     * @see MNcdInstallationService::WidgetUidL
+     */
+    TUid WidgetUidL( const TDesC& aIdentifier);
     
     /**
      * @see MNcdInstallationService::SidFromSisRegistryL
@@ -386,6 +405,8 @@ private: // new methods
     
     void PopulateInstalledWidgetUidsL();
     
+    void PopulateInstalledWidgetsL(RExtendedWidgetInfoArray& aWidgets);
+    
     TUid InstalledWidgetUidL();
     
     HBufC* InstalledWidgetNameLC();
@@ -395,6 +416,10 @@ private: // new methods
     void HandleInstalledWidgetL();
     
     TBool WidgetExistsL( const TUid& aUid );
+    
+    TBool WidgetExistsL( const TDesC& aIdentifier, TCatalogsVersion& aVersion );
+    
+    TBool WidgetExistsL( const TUid& aUid, TCatalogsVersion& aVersion );
     
 private:
     
@@ -468,7 +493,9 @@ private: // Data
     
     
     RWidgetRegistryClientSession iWidgetRegistry;    
+    
     RWidgetInfoArray iInstalledWidgets;    
+    RPointerArray<CExtendedWidgetInfo> iInstalledWidgetsInfos; 
     };
 
 #endif // C_NCD_INSTALLATION_SERVICE_IMPL_H

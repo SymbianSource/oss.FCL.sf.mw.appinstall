@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -444,6 +444,13 @@ void CNcdInstallOperation::GetFileInfoL( MCatalogsBaseMessage& aMessage )
         installType = CNcdInstallInfo::ENcdInstallJad;                
         }
 
+    // compare with widget mimetype. If matching, assign ENcdInstallWidget to install type
+    // The type value will be checked later when installing starts.
+    else if( downloadInfo->ContentMimeType().MatchF( KMimeTypeMatchWidget ) != KErrNotFound )
+        {
+        purpose = ENcdItemPurposeApplication;        
+        installType = CNcdInstallInfo::ENcdInstallWidget;  
+        }
 
     DLTRACE(("Creating fileinfo"));
     // Create file info for proxy-side installer

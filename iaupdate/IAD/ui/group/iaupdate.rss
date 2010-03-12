@@ -698,6 +698,11 @@ RESOURCE TBUF r_iaupdate_cannot_omit
     buf = qtn_swupdate_cannot_omit;
     }
 
+RESOURCE TBUF r_iaupdate_main_device_fw
+    {
+    buf  = qtn_swupdate_main_device_fw;
+    }
+
 //background check strings
 
 RESOURCE LBUF r_iaupdate_update_available

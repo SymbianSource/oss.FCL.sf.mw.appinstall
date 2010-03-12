@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -33,6 +33,8 @@
 #include "ncdpurchasedetails.h"
 
 #include "catalogsdebug.h"
+#include "catalogsconstants.h"
+
 
 CNcdNodeContentInfo::CNcdNodeContentInfo( NcdNodeClassIds::TNcdNodeClassId aClassId )
 : CNcdCommunicable(),
@@ -44,7 +46,7 @@ void CNcdNodeContentInfo::ConstructL()
     {
     iMimeType = KNullDesC().AllocL();
     iVersion = KNullDesC().AllocL();
-
+    iIdentifier = KNullDesC().AllocL();
     }
 
 
@@ -76,6 +78,9 @@ CNcdNodeContentInfo::~CNcdNodeContentInfo()
 
     delete iVersion;
     iVersion = NULL;
+    
+    delete iIdentifier;
+    iIdentifier = NULL;
 
     DLTRACEOUT((""));
     }        
@@ -98,6 +103,11 @@ const TDesC& CNcdNodeContentInfo::MimeType() const
 const TUid& CNcdNodeContentInfo::Uid() const
     {
     return iUid;
+    }
+
+const TDesC& CNcdNodeContentInfo::Identifier() const
+    {
+    return *iIdentifier;
     }
 
 const TDesC& CNcdNodeContentInfo::Version() const
@@ -134,7 +144,11 @@ void CNcdNodeContentInfo::InternalizeL(
     iMimeType = NULL;
 
     iUid = TUid::Null();
-
+    
+    delete iIdentifier;
+    iIdentifier = NULL;
+    iIdentifier = KNullDesC().AllocL();  
+    
     delete iVersion;
     iVersion = NULL;
 
@@ -194,22 +208,31 @@ void CNcdNodeContentInfo::InternalizeL(
             iPurpose |= ENcdItemPurposeUnknown;
             }
         }
-
     iMimeType = aData.DownloadableContent()->Mime().AllocL();
 
     if ( iPurpose & ENcdItemPurposeApplication )
         {
-        TInt uid = 0;
-        TRAPD( err, uid = DesHexToIntL( aData.DownloadableContent()->Id() ) );
-        if( err != KErrNone )
+        if ( iMimeType->Compare(KMimeTypeMatchSisx) == 0 )
             {
-            DLERROR(( _L("DownloadableContent()->Id() was not valid hex, using ZERO: %S"),
-                      &aData.DownloadableContent()->Id() ));
-            iUid.iUid = 0;
+            // sis package, convert the string to uid
+            TInt uid = 0;
+            TRAPD( err, uid = DesHexToIntL( aData.DownloadableContent()->Id() ) );
+            if( err != KErrNone )
+                {
+                DLERROR(( _L("DownloadableContent()->Id() was not valid hex, using ZERO: %S"),
+                           &aData.DownloadableContent()->Id() ));
+                iUid.iUid = 0;
+                }
+            else
+                {
+                iUid.iUid = uid;
+                }
             }
-        else
+         
+        if ( iMimeType->Compare( KMimeTypeMatchWidget ) == 0 )
             {
-            iUid.iUid = uid;
+            // widget, save identifier
+            iIdentifier = aData.DownloadableContent()->Id().AllocL();
             }
         }
 
@@ -230,7 +253,17 @@ void CNcdNodeContentInfo::ExternalizeL( RWriteStream& aStream )
     
     aStream.WriteUint16L( iPurpose );
     ExternalizeDesL( *iMimeType, aStream );
-    aStream.WriteInt32L( iUid.iUid );
+    
+    // The code here must be sync with the Internalization code in CNcdNodeContentInfoProxy
+    if ( iMimeType->Compare( KMimeTypeMatchWidget ) == 0 )
+        {
+        ExternalizeDesL( *iIdentifier, aStream );
+        }
+    else
+        {
+        aStream.WriteInt32L( iUid.iUid );
+        }
+    
     ExternalizeDesL( *iVersion, aStream );
     aStream.WriteInt32L( iSize );
 
@@ -255,7 +288,18 @@ void CNcdNodeContentInfo::InternalizeL( RReadStream& aStream )
     
     iPurpose = aStream.ReadUint16L();
     InternalizeDesL( iMimeType, aStream );
-    iUid.iUid = aStream.ReadInt32L();
+    
+    // This Internalize function is called when the node is loaded from cache. RReadStream is a sign of that.
+    // So same logic here also. Check mimetype and then decide to save uid or identifier.
+    if ( iMimeType->Compare( KMimeTypeMatchWidget ) == 0  )
+        {
+        InternalizeDesL( iIdentifier, aStream );
+        }
+    else
+        {
+        iUid.iUid = aStream.ReadInt32L();
+        }
+    
     InternalizeDesL( iVersion, aStream );
     iSize = aStream.ReadInt32L();
 

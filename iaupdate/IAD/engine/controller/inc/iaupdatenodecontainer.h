@@ -200,6 +200,9 @@ private:
     // If same version of the node is installed, makes it hidden.
     TBool InstallCheckL( CIAUpdateNode& aNode ) const;
 
+    // Checks if  the head node ids / identifers are equal
+    TBool NodeExists( const CIAUpdateNode& aNode, 
+                      const CIAUpdateNode& tmpNode ) const;
     
 private: // data
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -1044,7 +1044,8 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
 
     // was >=, DL manager should give us proper errors but it doesn't always
     if ( ( statusCode == KHttpErrorStatus ||
-           globalErrorId == KGenericSymbianHttpError ) && 
+           globalErrorId == KGenericSymbianHttpError ||
+           globalErrorId == KErrDisMounted) && 
          aEvent.iDownloadState != EHttpDlFailed ) 
         {
         DLTRACE(("Setting download as failed because received a response >= 400" ));
@@ -2422,7 +2423,16 @@ void CCatalogsHttpDownload::UpdateExtensionL()
     
     TFileName filename = iConfig->Filename();
     TDataType type( ContentType() );
-    iOwner.DocumentHandler().CheckFileNameExtension( filename, type );
+    
+    // Doc handler does not yet support Widget extension change
+    TFileName mimeType;
+    mimeType.Copy(type.Des8());
+    if ( mimeType.Compare(KMimeTypeMatchWidget) == 0 )
+            {
+            ReplaceExtension( filename, KWidgetExtension );
+            }
+    else
+       iOwner.DocumentHandler().CheckFileNameExtension( filename, type );
     
     iConfig->SetFilenameL( filename );        
     }
@@ -2650,3 +2660,18 @@ const TDesC8& CCatalogsHttpDownload::EncodedUri() const
     return *iEncodedUri;
     }
 
+// ---------------------------------------------------------
+// CCatalogsHttpDownload::ReplaceExtension()
+// Replace current extension at aName with extension given (eExt).
+// ---------------------------------------------------------
+//      
+void CCatalogsHttpDownload::ReplaceExtension( TDes& aName, const TDesC& aExt )
+    {
+    
+    TInt dotPos = aName.LocateReverse( '.' );
+    if ( dotPos != KErrNotFound )
+       {
+       aName.Delete( dotPos, aName.Length()- dotPos );
+       aName.Append( aExt );
+       }
+    }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -143,13 +143,13 @@ void CIAUpdateDetailsDialog::ConstructTextL()
 
     TPtr ptr = iBuf->Des();
     
-    //TPtrC name =         iParam->iNode->Base().Name();
+    TPtrC name =         iParam->iNode->Base().Name();
     TPtrC description =  iParam->iNode->Base().Description();
     TIAUpdateVersion version = iParam->iNode->Base().Version();
     TInt contentSize =   iParam->iNode->Base().ContentSizeL();
     
     
-    /*HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_APP_NAME );
+    HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_APP_NAME );
     ptr.Append( KOpeningBoldTag );
     ptr.Append( *hBuf );
     ptr.Append( KClosingBoldTag );
@@ -158,9 +158,9 @@ void CIAUpdateDetailsDialog::ConstructTextL()
     ptr.Append( KNewLine );
     ptr.Append( name );
     ptr.Append( KNewLine );
-    ptr.Append( KNewLine );*/
-    
-    HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_DESCRIPTION );
+    ptr.Append( KNewLine );
+       
+    hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_DESCRIPTION );
     ptr.Append( KOpeningBoldTag );
     ptr.Append( *hBuf );
     ptr.Append( KClosingBoldTag );
@@ -211,9 +211,9 @@ TBool CIAUpdateDetailsDialog::ShowDialogL()
 	{
 	ConstructTextL();
 
-	//HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_TITLE );
-	IAUpdateDialogUtil::ShowMessageQueryL( iParam->iNode->Base().Name(), *iBuf );
-	//CleanupStack::PopAndDestroy( hBuf );
+	HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_TITLE );
+	IAUpdateDialogUtil::ShowMessageQueryL( *hBuf, *iBuf );
+	CleanupStack::PopAndDestroy( hBuf );
     
     return ETrue;
 	}

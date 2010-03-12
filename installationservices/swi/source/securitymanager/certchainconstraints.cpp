@@ -26,7 +26,6 @@
 #include "certchainconstraints.h"
 #include "x509constraintext.h"
 #include <x509certext.h>
-#include <collate.h> 
 //#include "log.h"
 
 using namespace Swi;
@@ -88,21 +87,17 @@ EXPORT_C TBool CCertChainConstraints::CapabilitiesAreValid(TCapabilitySet& aRequ
 	{
 	return iValidCapabilities.HasCapabilities(aRequestCapabilities);
 	}
-
+	
 EXPORT_C TBool CCertChainConstraints::DeviceIDIsValid(const HBufC* aRequestDeviceID) const
 	{
 	TBool ret=EFalse;
 	if (iDeviceIDsAreConstrained)
 		{
 		TInt deviceIDCount=iValidDeviceIDs.Count();
-
-		TCollationMethod m = *Mem::CollationMethodByIndex(0); // get the standard method
-		m.iFlags |= TCollationMethod::EFoldCase; // Convert to lowercase and compare.
-
 		//Check if request Device ID is in the valid device ID list
 		for(TInt i=0; i<deviceIDCount; i++)
 			{
-			if (iValidDeviceIDs[i]->CompareC(*aRequestDeviceID, 0, &m) ==0)
+			if (iValidDeviceIDs[i]->CompareF(*aRequestDeviceID)==0)
 				{
 				ret=ETrue;
 				break;

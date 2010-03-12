@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -70,8 +70,6 @@ const TUint KFileOpenFlags = EFileShareReadersOrWriters;
 
 // length taken from WidgetRegistryData.h
 const TInt KWidgetBundleIdLength = KWidgetRegistryVal + 1;    
-
-_LIT( KWidgetExtension, ".wgz" );
 
 // ======== CALLBACK FUNCTION ========
  
@@ -158,6 +156,7 @@ CNcdInstallationService::~CNcdInstallationService()
         iWidgetRegistry.Close();
         }
     iInstalledWidgets.ResetAndDestroy();
+    iInstalledWidgetsInfos.ResetAndDestroy();
     }
 
 // ---------------------------------------------------------------------------
@@ -298,7 +297,25 @@ void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
     DLTRACEOUT((""));
     }
 
+// ---------------------------------------------------------------------------
+// Installs widget silently.
+// ---------------------------------------------------------------------------
+//
+void CNcdInstallationService::SilentInstallWidgetL( RFile& aFile,
+                                                    const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+    {
+    DLTRACEIN((""));
+    
+    if ( iSilentInstallActiveObserver == NULL )
+        {
+        DLINFO(("Create active observer for silent install"));
+        iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
+        }
 
+    InstallWidgetL( aFile, &aInstallOptionsPckg );
+    
+    DLTRACEOUT((""));
+    }
 // ---------------------------------------------------------------------------
 // Cancell silent install.
 // ---------------------------------------------------------------------------
@@ -533,7 +550,55 @@ TBool CNcdInstallationService::JavaAppExistsL(
     }
 
 #endif
+
+// Check via widget registry API
+TNcdApplicationStatus CNcdInstallationService::IsWidgetInstalledL(const TDesC& aIdentifier, const TCatalogsVersion& aVersion)
+    {
+    DLTRACEIN((""));
     
+    TNcdApplicationStatus status( ENcdApplicationNotInstalled );
+    
+    if ( aIdentifier.Length() == 0 )
+        {
+        DLTRACEOUT(("Null identifier"));
+        return status;
+        }
+    
+    
+    TCatalogsVersion installedVersion;
+    
+    //check widget existance and get version number if it is installed
+    if ( WidgetExistsL( aIdentifier, installedVersion ) )
+        {
+        status = ENcdApplicationInstalled;
+        }
+           
+    //compare the version
+    if ( status == ENcdApplicationInstalled &&
+         aVersion != TCatalogsVersion() ) 
+            {
+            DLINFO(("Installed widget version: %d.%d.%d, comparing to: %d.%d.%d",
+                installedVersion.iMajor,
+                installedVersion.iMinor,
+                installedVersion.iBuild,
+                aVersion.iMajor,
+                aVersion.iMinor,
+                aVersion.iBuild ));
+                
+            if ( installedVersion > aVersion ) 
+                {
+                status = ENcdApplicationNewerVersionInstalled;
+                }
+            else if ( !( installedVersion == aVersion ) ) 
+                {
+                status = ENcdApplicationOlderVersionInstalled;
+                }
+            }
+        
+        DLTRACEOUT(("widget Status: %d", status));
+        return status;    
+    }
+
 // ---------------------------------------------------------------------------
 // Checks the application status
 // ---------------------------------------------------------------------------
@@ -580,9 +645,10 @@ TNcdApplicationStatus CNcdInstallationService::IsApplicationInstalledL(
     // SIS app not found, try to get java
     if ( err == KErrNotFound &&
          ( JavaAppExistsL( aUid ) ||
-           WidgetExistsL( aUid ) ) )
+           WidgetExistsL( aUid, installedVersion ) ) ) 
         {
         status = ENcdApplicationInstalled;
+        err = KErrNone;
         }
         
     LeaveIfNotErrorL( err, KErrNotFound );  
@@ -1540,10 +1606,10 @@ void CNcdInstallationService::InstallWidgetL(
     
     iInstallType = EWidgetInstall;
 
-    // Get the list of installed widget uids so that we can
+    // Get the list of installed widgets so that we can
     // get the uid of the new widget after installation
-    PopulateInstalledWidgetUidsL();
-    
+    PopulateInstalledWidgetsL(iInstalledWidgetsInfos);
+
     TDataType dataType;    
     // Start application installation.
     DLINFO(( "Calling doc handler Open" ));
@@ -1649,6 +1715,19 @@ void CNcdInstallationService::HandleSilentInstallSuccessAfterCancelL( HBufC*& aF
             {
             DLINFO(("Installed midlet was not found"));
             // Because the new midlet was not found, we can suppose that the
+            // application was not installed. So, set the error as KErrCancel.
+            aError = KErrCancel;
+            }
+        }
+    else if ( iInstallType == EWidgetInstall )
+        {    
+        // Set the midlet UID for the aAppUid variable.
+        aAppUid = InstalledWidgetUidL();
+        
+        if ( aAppUid == KNullUid )
+            {
+            DLINFO(("Installed widget was not found"));
+            // Because the new widget was not found, we can suppose that the
             // application was not installed. So, set the error as KErrCancel.
             aError = KErrCancel;
             }
@@ -2057,6 +2136,49 @@ void CNcdInstallationService::PopulateInstalledWidgetUidsL()
     User::LeaveIfError( iWidgetRegistry.InstalledWidgetsL( iInstalledWidgets ) );    
     }
 
+// ---------------------------------------------------------------------------
+// Populates the list of installed widgets
+// ---------------------------------------------------------------------------
+//
+void CNcdInstallationService::PopulateInstalledWidgetsL
+         (RExtendedWidgetInfoArray& aWidgets) 
+    {
+    DLTRACEIN((""));
+    
+    // Get the list of installed widget uids 
+    PopulateInstalledWidgetUidsL();
+    
+    const TInt count = iInstalledWidgets.Count();
+    
+    // Create array with UID & Version infos
+    for ( TInt i = 0; i < count; ++i )
+        {
+        CExtendedWidgetInfo* tempInfo = new ( ELeave ) CExtendedWidgetInfo();
+        CleanupStack::PushL( tempInfo );
+        
+        CWidgetInfo* widgetInfo = iInstalledWidgets[i];
+        
+        CWidgetPropertyValue* version = iWidgetRegistry.GetWidgetPropertyValueL
+            (widgetInfo->iUid, EBundleVersion );
+        CleanupStack::PushL( version );
+
+        // Fill info
+        tempInfo->iUid = widgetInfo->iUid;
+        if (!version->iValue.s)
+            *(tempInfo->iVersion) = KDefVersion;
+        else
+            *(tempInfo->iVersion) = *(version->iValue.s);
+        
+        // Append to arrayt
+        aWidgets.AppendL( tempInfo );
+
+        CleanupStack::PopAndDestroy( version );
+        CleanupStack::Pop( tempInfo );
+        }
+   
+        DLTRACEOUT((""));
+
+    }
 
 // ---------------------------------------------------------------------------
 // Gets the name of widget that was installed last
@@ -2093,25 +2215,33 @@ TUid CNcdInstallationService::InstalledWidgetUidL()
     {
     DLTRACEIN((""));
     
-    RWidgetInfoArray widgets;
+    RExtendedWidgetInfoArray widgets;
+    PopulateInstalledWidgetsL(widgets);
     CleanupResetAndDestroyPushL( widgets );
         
-    User::LeaveIfError( iWidgetRegistry.InstalledWidgetsL( widgets ) );
+
     DLINFO(("widget count: %d", widgets.Count() ));
     
     TUid uid( KNullUid );
     
     const TInt count = widgets.Count();
-    const TInt installedCount = iInstalledWidgets.Count();
+    const TInt installedCount = iInstalledWidgetsInfos.Count();
     
     // Try to find a widget that was not installed earlier.
     for ( TInt i = 0; i < count; ++i )
         {
         TBool wasInstalled = EFalse;
-        CWidgetInfo* widgetInfo = widgets[ i ];
+        CExtendedWidgetInfo * widgetInfo = widgets[ i ];
         for ( TInt j = 0; j < installedCount; j++ )
             {
-            if ( iInstalledWidgets[ j ]->iUid == widgetInfo->iUid )
+          
+            TCatalogsVersion versionBefore, versionAfter;
+            TCatalogsVersion::ConvertL
+                ( versionBefore, *(iInstalledWidgetsInfos[ j ]->iVersion) );
+            TCatalogsVersion::ConvertL( versionAfter, *(widgetInfo->iVersion) );
+            
+            if ( iInstalledWidgetsInfos[ j ]->iUid == widgetInfo->iUid &&
+                 versionBefore >= versionAfter) 
                 {
                 wasInstalled = ETrue;
                 break;
@@ -2203,3 +2333,114 @@ TBool CNcdInstallationService::WidgetExistsL( const TUid& aUid )
         }
     return EFalse;         
     }
+
+// ---------------------------------------------------------------------------
+//Calling widget registry API to check if a widget with given uid is installed 
+//already
+// ---------------------------------------------------------------------------
+//
+TBool CNcdInstallationService::WidgetExistsL( 
+        const TUid& aUid, TCatalogsVersion& aVersion )
+    {
+    DLTRACEIN((""));
+    
+    if ( !iWidgetRegistry.Handle() )
+        {
+        User::LeaveIfError( iWidgetRegistry.Connect() );
+        }
+    
+    if ( iWidgetRegistry.IsWidget( aUid ) )
+        {
+        TBuf<KWidgetBundleIdLength> id;
+        iWidgetRegistry.GetWidgetBundleId( aUid, id );
+        if (iWidgetRegistry.WidgetExistsL( id ))
+            {
+            // Get version
+            CWidgetPropertyValue* version = 
+                iWidgetRegistry.GetWidgetPropertyValueL(aUid, EBundleVersion );
+            CleanupStack::PushL( version );
+            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
+            CleanupStack::PopAndDestroy( version ); 
+            return (ETrue);
+            }
+        else
+            {
+            return (EFalse);
+            }
+        }
+    else
+       return(EFalse);
+
+    }
+    
+// ---------------------------------------------------------------------------
+// Calling widget registry API to check if a widget with given identifier is 
+// installed already
+// ---------------------------------------------------------------------------
+//
+TBool CNcdInstallationService::WidgetExistsL
+          ( const TDesC& aIdentifier, TCatalogsVersion& aVersion )
+    {
+    DLTRACEIN((""));
+    
+    if ( !iWidgetRegistry.Handle() )
+          {
+          User::LeaveIfError( iWidgetRegistry.Connect() );
+          }
+
+    RPointerArray<CWidgetInfo> widgetInfoArr;
+    
+    CleanupResetAndDestroyPushL( widgetInfoArr );
+    TInt err = iWidgetRegistry.InstalledWidgetsL(widgetInfoArr);
+    
+    for( TInt i( widgetInfoArr.Count() - 1 ); i >= 0; --i ) 
+        {
+        CWidgetInfo* widgetInfo( widgetInfoArr[i] );                  
+        CWidgetPropertyValue* bundleId = 
+            iWidgetRegistry.GetWidgetPropertyValueL
+                (widgetInfo->iUid, EBundleIdentifier );
+        CleanupStack::PushL( bundleId );
+        
+        if( aIdentifier.Compare( *(bundleId->iValue.s) )== 0 )
+            {
+            CWidgetPropertyValue* version = 
+                iWidgetRegistry.GetWidgetPropertyValueL
+                    (widgetInfo->iUid, EBundleVersion );
+            CleanupStack::PushL( version );
+            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
+            
+            CleanupStack::PopAndDestroy( version );
+            CleanupStack::PopAndDestroy( bundleId );
+            CleanupStack::PopAndDestroy( &widgetInfoArr );
+                        
+            return ETrue;
+            }
+        CleanupStack::PopAndDestroy( bundleId );
+        }
+    CleanupStack::PopAndDestroy( &widgetInfoArr );
+    return EFalse;
+    }
+
+// ---------------------------------------------------------------------------
+//  Calling widget registry API to return the Uid of the widget
+//  with given identifier.
+// ---------------------------------------------------------------------------
+//
+TUid CNcdInstallationService::WidgetUidL( const TDesC& aIdentifier)
+    {
+    DLTRACEIN((""));
+    
+    TUid id = TUid::Uid(0);
+    
+   if ( !iWidgetRegistry.Handle() )
+          {
+          User::LeaveIfError( iWidgetRegistry.Connect() );
+          }
+    
+    id.iUid = iWidgetRegistry.GetWidgetUidL( aIdentifier);
+
+    return id;
+    
+    }
+
+    

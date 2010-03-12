@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -135,6 +135,12 @@ public: // New functions
                                      const TDesC& aMimeType,
                                      const TDesC8& aDescriptorData,
                                      const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg ) = 0;
+    
+    /*
+     * Use SWI API to install widget silently. 
+     */     
+    virtual void SilentInstallWidgetL(RFile& aFile,
+                                      const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg ) = 0;
 
     /**
      * Cancels the silent installation if it is going on.
@@ -184,7 +190,20 @@ public: // New functions
 
     virtual TNcdApplicationStatus IsApplicationInstalledL( 
         const TUid& aUid, const TCatalogsVersion& aVersion ) = 0;
-
+    
+    /**
+     * Use widget registry API to check if certain widget with given identifier
+     * has been installed already.
+     */
+    virtual TNcdApplicationStatus IsWidgetInstalledL(
+        const TDesC& aIdentifier, const TCatalogsVersion& aVersion) = 0;
+    
+    /**
+     * Calling widget registry API to return the Uid of the widget 
+     * with given identifier.
+     */     
+    virtual TUid WidgetUidL( const TDesC& aIdentifier) = 0;
+    
     /**
      * Gets the first SID from the SIS registry package
      * by using application UID.

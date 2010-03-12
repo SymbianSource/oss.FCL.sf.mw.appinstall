@@ -69,6 +69,7 @@ SOURCE            iaupdaterefreshhandler.cpp
 SOURCE            iaupdateinstallationlistener.cpp
 SOURCE            iaupdatedeputils.cpp
 SOURCE            iaupdateuitimer.cpp
+SOURCE            iaupdatenodeid.cpp
 
 USERINCLUDE       ../inc
 USERINCLUDE       ../../tools/inc

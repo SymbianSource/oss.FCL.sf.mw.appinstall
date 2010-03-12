@@ -37,7 +37,7 @@
 #include <ncdpurchaseoption.h>
 
 #include <catalogsutils.h>
-
+#include <widgetregistryclient.h>
 
 //Constants
 const TInt KSpaceMarginal( 100 * 1024 );
@@ -292,6 +292,53 @@ EXPORT_C TBool IAUpdateUtils::IsAppInstalledL(
         }
     }
 
+// -----------------------------------------------------------------------------
+// IAUpdateUtils::IsWidgetInstalledL
+// Check existance of widget and request the version info if the widget has been installed
+// The Widget registry API is used here.
+// -----------------------------------------------------------------------------
+
+EXPORT_C TBool IAUpdateUtils::IsWidgetInstalledL(const TDesC& aIdentifier, TIAUpdateVersion& aVersion )
+    {
+    RWidgetRegistryClientSession widgetRegistry;
+
+    User::LeaveIfError( widgetRegistry.Connect() );
+    
+    CleanupClosePushL( widgetRegistry );
+    
+    RPointerArray<CWidgetInfo> widgetInfoArr;
+    CleanupResetAndDestroyPushL( widgetInfoArr );
+    TInt err = widgetRegistry.InstalledWidgetsL(widgetInfoArr); 
+    
+    for( TInt i( widgetInfoArr.Count() - 1 ); i >= 0; --i ) 
+        {
+        CWidgetInfo* widgetInfo( widgetInfoArr[i] );  
+        
+        CWidgetPropertyValue* BundleId = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleIdentifier );
+        CleanupStack::PushL( BundleId );
+        
+        if( aIdentifier.Compare( *(BundleId->iValue.s) )== 0 )
+            {
+            CWidgetPropertyValue* version = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleVersion );
+            CleanupStack::PushL( version );
+            
+            DesToVersionL(*(version->iValue.s), aVersion.iMajor, aVersion.iMinor, aVersion.iBuild );
+            
+            CleanupStack::PopAndDestroy( version );
+            CleanupStack::PopAndDestroy( BundleId );
+            CleanupStack::PopAndDestroy( &widgetInfoArr );
+            CleanupStack::PopAndDestroy( &widgetRegistry);
+            return ETrue;
+            }
+        CleanupStack::PopAndDestroy( BundleId );
+        }
+    
+    CleanupStack::PopAndDestroy( &widgetInfoArr );
+    CleanupStack::PopAndDestroy( &widgetRegistry);
+    return EFalse;
+      
+     
+    }
 
 // -----------------------------------------------------------------------------
 // IAUpdateUtils::SpaceAvailableInInternalDrivesL

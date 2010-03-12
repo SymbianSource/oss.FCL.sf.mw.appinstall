@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -204,7 +204,18 @@ void CNcdSilentInstallOperationProxy::UseInstallServiceL( const CNcdFileInfo& aF
                 SilentInstallOptionsPackage() );             
             break;
             }            
-        
+
+        // Call the corresponding installing function according to the type value.
+        // MimeType info is missing here but SWI will figure out the mimetype via file handler
+        // and call the corresponding plugin.
+        case CNcdInstallInfo::ENcdInstallWidget:
+            {
+            Installer().SilentInstallWidgetL(
+                    iFileHandle, 
+                    SilentInstallOptionsPackage() );
+   
+            break;
+            }
         
         default:
             {

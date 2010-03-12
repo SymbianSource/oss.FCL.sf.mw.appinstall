@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -27,6 +27,7 @@
 #include "catalogsutils.h"
 #include "catalogsdebug.h"
 #include "ncderrors.h"
+#include "catalogsconstants.h"
 
 
 // ======== PUBLIC MEMBER FUNCTIONS ========
@@ -86,7 +87,10 @@ CNcdNodeContentInfoProxy::~CNcdNodeContentInfoProxy()
 
     delete iMimeType;
     iMimeType = NULL;
-
+    
+    delete iIdentifier;
+    iIdentifier = NULL;
+    
     delete iVersion;
     iVersion = NULL;
     }
@@ -166,6 +170,11 @@ const TDesC& CNcdNodeContentInfoProxy::MimeType() const
     return *iMimeType;
     }
 
+const TDesC& CNcdNodeContentInfoProxy::Identifier() const
+    {
+    return *iIdentifier;
+    }
+
 TUid CNcdNodeContentInfoProxy::Uid() const
     {
     return iUid;
@@ -209,9 +218,19 @@ void CNcdNodeContentInfoProxy::InternalizeDataL( RReadStream& aStream )
     InternalizeDesL( iMimeType, aStream );    
     DLINFO(( _L("Mime: %S"), iMimeType ));
     
-    iUid.iUid = aStream.ReadInt32L();    
-    DLINFO(( "Uid: %x", iUid.iUid ));
-    
+    //The Internalization here must be consistant with the externalization in CNcdNodeContentInfo
+    if ( iMimeType->Compare( KMimeTypeMatchWidget ) == 0 )
+        {
+        //widget
+        InternalizeDesL( iIdentifier, aStream );
+        }
+    else
+        {
+        //sis
+        iUid.iUid = aStream.ReadInt32L();   
+        DLINFO(( "Uid: %x", iUid.iUid )); 
+        }
+   
     InternalizeDesL( iVersion, aStream );    
     DLINFO(( _L("Version: %S"), iVersion ));
 

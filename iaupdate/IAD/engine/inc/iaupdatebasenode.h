@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -63,7 +63,13 @@ public:
      * @return const TUid& Uid of this node
      **/
     virtual const TUid& Uid() const = 0;
-        
+	
+	/*
+	 * This returns the identifier of widget. Normally it is a string --> "com.yiibu.hue"
+	 * This is the unique identifier of widget before installing on top of Symbian platform.
+     */
+     virtual const TDesC& Identifier() const = 0;    
+
     /**
      * @return const TDesC& The name of this node
      **/
@@ -161,6 +167,11 @@ public:
      */
     virtual void SetInstallStatusToPurchaseHistoryL( 
         TInt aErrorCode, TBool aForceVisibleInHistory ) = 0;
+    
+    /**
+    * @return const TDesC& The mime type of this node
+    **/
+    virtual const TDesC& Mime() const = 0;
 
     
 protected:

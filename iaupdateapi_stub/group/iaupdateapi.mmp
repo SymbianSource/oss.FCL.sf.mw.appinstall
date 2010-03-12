@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -21,14 +21,10 @@
 
 CAPABILITY      CAP_GENERAL_DLL
 
-#if defined(WINS) || defined(WINSCW)
-TARGET          iaupdateapi.dll
-#else
 TARGET          iaupdateapi_stub.dll
-#endif
 
 LINKAS          iaupdateapi.dll
-EXPORTLIBRARY   iaupdateapi.lib
+EXPORTLIBRARY   iaupdateapi_stub.lib
 
 TARGETTYPE      dll
 UID             0x1000008d 0x2000F85C

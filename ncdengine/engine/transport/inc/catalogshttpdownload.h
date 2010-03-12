@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -478,6 +478,11 @@ private: // New methods
      * and ContentType() and sets it to iConfig
      */
     void UpdateExtensionL();
+    
+    /**
+     *  Replace current extension at aName with extension given (eExt).
+     */
+    void CCatalogsHttpDownload::ReplaceExtension( TDes& aName, const TDesC& aExt );
     
     /**
      * Checks the preset content-type and forces HEAD request if

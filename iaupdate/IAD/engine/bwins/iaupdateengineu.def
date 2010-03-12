@@ -87,4 +87,5 @@ EXPORTS
 	?InternalizeL@TIAUpdateVersion@@QAEXABVTDesC16@@@Z @ 86 NONAME ; void TIAUpdateVersion::InternalizeL(class TDesC16 const &)
 	?SetToFloor@TIAUpdateVersion@@QAEXXZ @ 87 NONAME ; void TIAUpdateVersion::SetToFloor(void)
 	?SetToRoof@TIAUpdateVersion@@QAEXXZ @ 88 NONAME ; void TIAUpdateVersion::SetToRoof(void)
+	?IsWidgetInstalledL@IAUpdateUtils@@YAHABVTDesC16@@AAVTIAUpdateVersion@@@Z @ 89 NONAME ; int IAUpdateUtils::IsWidgetInstalledL(class TDesC16 const &, class TIAUpdateVersion &)
 

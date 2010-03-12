@@ -47,15 +47,7 @@ class CIAUpdateRefreshHandler;
 class MIAUpdateUiControllerObserver;
 class MIAUpdateHistory;
 class MIAUpdateFwNode;
-
-
-struct SIAUpdateNodeId
-    {
-    MIAUpdateAnyNode::TNodeType  iNodeType;
-    TUid                         iPackageUid;
-    TIAUpdateVersion             iVersion;	
-    TBool                        iSelected;
-    };
+class CIAUpdateNodeId;
 
 
 // CLASS DECLARATION
@@ -559,7 +551,7 @@ private: // data
 
     RPointerArray< MIAUpdateFwNode > iFwNodes;   
    
-    CArrayFix<SIAUpdateNodeId>* iPreviousSelections;
+    RPointerArray<CIAUpdateNodeId> iPreviousSelections;
     
     RPointerArray<MIAUpdateNode> iServicePackNodes;
  

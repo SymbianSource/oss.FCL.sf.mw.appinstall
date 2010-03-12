@@ -294,11 +294,13 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
             iIsDRMProtected = TAppMngr2DRMUtils::IsDRMProtected( *fileName );
             if( iIsDRMProtected )
                 {
-                FLOG( "CAppMngr2SisxAppInfo::ConstructL, protected file %S", fileName );
+                FLOG( "CAppMngr2SisxAppInfo::ConstructL, iProtectedFile %S", fileName );
                 iProtectedFile = fileName;  // takes ownership
                 files.Remove( fileIndex );
                 iIsRightsObjectMissingOrExpired =
                     TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL( *fileName );
+                FLOG( "CAppMngr2SisxAppInfo::ConstructL, iIsRightsObjectMissingOrExpired %d",
+                        iIsRightsObjectMissingOrExpired );
                 }
             }
         CleanupStack::PopAndDestroy( &files );
@@ -326,12 +328,21 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, isDRM %d, noRightsObj %d, CertCount %d",
             iIsDRMProtected, iIsRightsObjectMissingOrExpired, iCertificates.Count() );
 
+    RFile fileHandle;
+    TInt fileOpenError = KErrNone;
     if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired )
         {
-        RFile fileHandle;
-        TInt err = fileHandle.Open( iFs, *iProtectedFile, EFileShareReadersOnly | EFileRead );
-        CleanupClosePushL( fileHandle );
+        FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, iProtecteFile %S", iProtectedFile );
+        fileOpenError = fileHandle.Open( iFs, *iProtectedFile, EFileShareReadersOnly | EFileRead );
+        FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, fileOpenError %d", fileOpenError );
+        if( !fileOpenError )
+            {
+            CleanupClosePushL( fileHandle );
+            }
+        }
 
+    if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired && !fileOpenError )
+        {
         if( iCertificates.Count() )
             {
             details->ExecuteLD( *iterator, iCertificates, fileHandle );
@@ -340,8 +351,6 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             {
             details->ExecuteLD( *iterator, fileHandle );
             }
-
-        CleanupStack::PopAndDestroy( &fileHandle );
         }
     else
         {
@@ -353,6 +362,11 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             {
             details->ExecuteLD( *iterator );
             }
+        }
+
+    if( !fileOpenError )
+        {
+        CleanupStack::PopAndDestroy( &fileHandle );
         }
 
     CleanupStack::PopAndDestroy( iterator );
