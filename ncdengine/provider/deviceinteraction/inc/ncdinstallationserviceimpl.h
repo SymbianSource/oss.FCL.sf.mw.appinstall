@@ -27,7 +27,7 @@
 #include <apgcli.h>
 #include <centralrepository.h>
 #include <SWInstApi.h>
-#include <WidgetRegistryClient.h>
+#include <widgetregistryclient.h>
 
 #include "ncdinstallationservice.h"
 #include "ncditempurpose.h"

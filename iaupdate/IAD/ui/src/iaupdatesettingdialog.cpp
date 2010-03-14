@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -425,11 +425,7 @@ void CIAUpdateSettingDialog::SaveSettingsL()
     num = iList->Attribute( EAutoUpdateCheck );
     err = cenrep->Set( KIAUpdateAutoUpdateCheck, num );
     User::LeaveIfError( err );
-    
-    num = iList->Attribute( ERoamingWarning );
-    err = cenrep->Set( KIAUpdateRoamingWarning, num );
-    User::LeaveIfError( err );
-    
+           
     TUint32 ignore = KErrNone;
     User::LeaveIfError( cenrep->CommitTransaction( ignore ) );
     CleanupStack::PopAndDestroy(); // CleanupCancelTransactionPushL()
@@ -477,14 +473,6 @@ CAknSettingItem* CIAUpdateSettingItemList::CreateSettingItemL( TInt aSettingId )
             User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, iAutoUpdateCheck ) );
             item = new (ELeave) CAknEnumeratedTextPopupSettingItem
                                ( aSettingId, iAutoUpdateCheck );
-            break;
-            }
-
-        case EIAUpdateSettingRoamingWarning:
-            {
-            User::LeaveIfError( cenrep->Get( KIAUpdateRoamingWarning, iRoamingWarning ) );
-            item = new (ELeave) CAknBinaryPopupSettingItem
-                               ( aSettingId, iRoamingWarning );
             break;
             }
 
@@ -548,11 +536,6 @@ TInt CIAUpdateSettingItemList::Attribute( TInt aKey )
             ret = iAutoUpdateCheck;
             break;
             }
-        case CIAUpdateSettingDialog::ERoamingWarning:
-            {
-            ret = iRoamingWarning;
-            break;
-            }
         default:
             {
             IAUpdateDialogUtil::Panic( KErrNotSupported );
@@ -576,12 +559,6 @@ void CIAUpdateSettingItemList::CheckSettings()
          iAutoUpdateCheck != EIAUpdateSettingValueEnable )
         {
         iAutoUpdateCheck = EIAUpdateSettingValueEnable;
-        }
-
-    if ( iRoamingWarning != EIAUpdateSettingValueOff &&
-         iRoamingWarning != EIAUpdateSettingValueOn )
-        {
-        iRoamingWarning = EIAUpdateSettingValueOn;
         }
     }
 

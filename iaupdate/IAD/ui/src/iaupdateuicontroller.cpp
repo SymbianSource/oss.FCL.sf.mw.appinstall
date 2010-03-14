@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -26,6 +26,7 @@
 #include <SWInstDefs.h>
 #include <avkon.rsg>
 #include <featurecontrol.h>
+#include <cmmanager.h>
 #include <iaupdate.rsg>
 #include <iaupdateparameters.h>
 
@@ -360,19 +361,23 @@ void CIAUpdateUiController::CheckUpdatesL()
        	    return;	
        	    }
         }
-            
-    if ( iRequestType == IAUpdateUiDefines::EShowUpdates && iRefreshed )
+    if ( iRequestType == IAUpdateUiDefines::ECheckUpdates && 
+         AllowNetworkRefreshL() && 
+         iRoamingHandler->IsRoaming() && 
+         !AutomaticConnectionWhenRoamingL() )
+        {
+        // In Silent check updates case, global setting when roaming to be automatic 
+        // Promt dialog is not allowed in the silent check
+        // error is returned that a client (backround checker) will try again later 
+        iObserver.RefreshCompleteL( EFalse, KErrAbort );
+        }  
+    else if ( iRequestType == IAUpdateUiDefines::EShowUpdates && iRefreshed )
         {
     	iFilter->FilterAndSortNodesL( iNodes, iFwNodes );
         iObserver.RefreshCompleteL( ETrue, KErrNone );
         }
     else
         {
-        if ( IsStartedByLauncher() && AllowNetworkRefreshL() )
-            {
-        	iUserRoamingRejection = iRoamingHandler->RoamingRejectionL();
-            }
-
         TInt ret( iController->Startup() );
         if ( ret == KErrAlreadyExists )   
             {
@@ -411,43 +416,39 @@ void CIAUpdateUiController::StartUpdateL()
     // started.
     iController->ResetSelfUpdate();
 
-    iUserRoamingRejection = iRoamingHandler->RoamingRejectionL();
-    if ( !iUserRoamingRejection )
-        {
-        CreateSelectedNodesArrayL();
+    CreateSelectedNodesArrayL();
                 
-        if ( !IAUpdateUtils::SpaceAvailableInInternalDrivesL( iSelectedNodesArray ) )
+    if ( !IAUpdateUtils::SpaceAvailableInInternalDrivesL( iSelectedNodesArray ) )
+        {
+  	    HBufC* noteText = NULL;
+        noteText = StringLoader::LoadLC( R_IAUPDATE_INSUFFICIENT_MEMORY );
+        IAUpdateDialogUtil::ShowInformationQueryL( *noteText ); 
+        CleanupStack::PopAndDestroy( noteText );
+        }
+    else
+        {
+        if ( !IsStartedByLauncher() )
             {
-    	    HBufC* noteText = NULL;
-            noteText = StringLoader::LoadLC( R_IAUPDATE_INSUFFICIENT_MEMORY );
-            IAUpdateDialogUtil::ShowInformationQueryL( *noteText ); 
-            CleanupStack::PopAndDestroy( noteText );
-            }
-        else
-            {
-            if ( !IsStartedByLauncher() )
+            if ( !iStarter )
                 {
-                if ( !iStarter )
-                    {
-                    // Notice, that the ownership of the filter parameters will
-                    // remain in the filter.
-                    CIAUpdateParameters* params = iFilter->FilterParams();
-        	        iStarter = CIAUpdateStarter::NewL( params->CommandLineExecutable(), 
+                // Notice, that the ownership of the filter parameters will
+                // remain in the filter.
+                CIAUpdateParameters* params = iFilter->FilterParams();
+      	        iStarter = CIAUpdateStarter::NewL( params->CommandLineExecutable(), 
         	                                           params->CommandLineArguments() );
-                    }
                 }
-            // Inform the controller that we are now starting updates. This way the
-            // controller can handle situations as a whole and not as one item at the
-            // time.
-            iController->StartingUpdatesL();
-            
-            iFileInUseError = EFalse;
-            // Set the node index to -1 because ContinueUpdateL increases it by one
-            // in the beginning of the function. So, we can use the ContinueUpdateL
-            // also in here.
-            iNodeIndex = -1;
-            ContinueUpdateL( EFalse );
             }
+        // Inform the controller that we are now starting updates. This way the
+        // controller can handle situations as a whole and not as one item at the
+        // time.
+        iController->StartingUpdatesL();
+            
+        iFileInUseError = EFalse;
+        // Set the node index to -1 because ContinueUpdateL increases it by one
+        // in the beginning of the function. So, we can use the ContinueUpdateL
+        // also in here.
+        iNodeIndex = -1;
+        ContinueUpdateL( EFalse );
         }
 
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::StartUpdateL() end");
@@ -2267,7 +2268,6 @@ TBool CIAUpdateUiController::AllowNetworkRefreshL()
     if ( IsStartedByLauncher() )
         {
     	if ( !iRefreshFromNetworkDenied && 
-    	     !iUserRoamingRejection && 
     	     !RestartedFromSelfUpdate() )
     	    {
     		if ( LocalNodesExpiredL() )
@@ -2717,5 +2717,25 @@ TBool CIAUpdateUiController::IAUpdateEnabledL() const
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::IAUpdateEnabledL() end");
     return enabled;        
     }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateUiController::AutomaticConnectionWhenRoamingL()
+// ---------------------------------------------------------------------------
+//
+TBool CIAUpdateUiController::AutomaticConnectionWhenRoamingL() const
+    {
+    TBool automaticConnection = EFalse;
+    RCmManager cmManager;
+    cmManager.OpenLC();
+    TCmGenConnSettings genConnSettings;
+    cmManager.ReadGenConnSettingsL( genConnSettings );
+    CleanupStack::PopAndDestroy( &cmManager );
+    if ( genConnSettings.iCellularDataUsageVisitor == ECmCellularDataUsageAutomatic )
+        {
+        automaticConnection = ETrue;
+        }
+    return automaticConnection;
+    }
+
 
 // End of File  

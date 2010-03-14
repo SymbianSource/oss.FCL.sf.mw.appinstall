@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -140,39 +140,7 @@ TBool CIAUpdateRoamingHandler::IsRoaming()
 	return iRoaming;
     }
     
-// ---------------------------------------------------------------------------
-// CIAUpdateRoamingHandler::RoamingRejectionL()
-// 
-// ---------------------------------------------------------------------------
-//    
-TBool CIAUpdateRoamingHandler::RoamingRejectionL()
-    {
-  	TBool rejected = EFalse;
-  	if ( ( iRoaming )  && ( !iRoamingConnectionAccepted ) )
-  	    {
-  		CRepository* cenrep = CRepository::NewLC( KCRUidIAUpdateSettings );
-    
-        TInt num = KErrNotFound;
-        User::LeaveIfError( cenrep->Get( KIAUpdateRoamingWarning, num ) );
-        
-        CleanupStack::PopAndDestroy( cenrep );
-        if ( num == EIAUpdateSettingValueOn ) 
-            {
-        	TInt ret = IAUpdateDialogUtil::ShowConfirmationQueryL( 
-   	                                          R_IAUPDATE_CONNECT_TO_SERVER, 
-	                                          R_AVKON_SOFTKEYS_YES_NO );
-	        if ( ret == EAknSoftkeyYes )
-	            {
-	        	iRoamingConnectionAccepted = ETrue;
-	            }
-	        else
-	            {
-	            rejected = ETrue;
-	            }
-	        }   
-  	    }
-	return rejected;
-    }
+
 
     
 // End of File  
