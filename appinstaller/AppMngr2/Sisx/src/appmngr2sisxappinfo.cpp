@@ -324,7 +324,6 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             EAppMngr2StatusInstalled );
     CleanupStack::PushL( iterator );
 
-    SwiUI::CommonUI::CCUIDetailsDialog* details = SwiUI::CommonUI::CCUIDetailsDialog::NewL();
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, isDRM %d, noRightsObj %d, CertCount %d",
             iIsDRMProtected, iIsRightsObjectMissingOrExpired, iCertificates.Count() );
 
@@ -341,6 +340,7 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             }
         }
 
+    SwiUI::CommonUI::CCUIDetailsDialog* details = SwiUI::CommonUI::CCUIDetailsDialog::NewL();
     if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired && !fileOpenError )
         {
         if( iCertificates.Count() )
@@ -364,11 +364,10 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             }
         }
 
-    if( !fileOpenError )
+    if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired && !fileOpenError )
         {
         CleanupStack::PopAndDestroy( &fileHandle );
         }
-
     CleanupStack::PopAndDestroy( iterator );
     }
 

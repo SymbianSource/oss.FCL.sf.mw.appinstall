@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -64,7 +64,7 @@ void CAppMngr2WidgetRuntime::LoadIconsL( CAknIconArray& aIconArray )
     {
     MAknsSkinInstance* skinInstance = AknsUtils::SkinInstance();
     HBufC* iconFilePath = NULL;
-    
+
     iconFilePath = FullBitmapFileNameLC( KAppMngr2WidgetIconFileNameMif );
 
     // Icon 0: Widget application icon, qgn_menu_am_widget
@@ -86,8 +86,10 @@ void CAppMngr2WidgetRuntime::LoadIconsL( CAknIconArray& aIconArray )
 void CAppMngr2WidgetRuntime::GetSupportedDataTypesL(
         CDataTypeArray& aDataTypeArray )
     {
-    TDataType zipFile( KDataTypeWidget );
-    aDataTypeArray.AppendL( zipFile );
+    TDataType wgzWidget( KDataTypeWgzWidget );
+    aDataTypeArray.AppendL( wgzWidget );
+    TDataType wgtWidget( KDataTypeWgtWidget );
+    aDataTypeArray.AppendL( wgtWidget );
     }
 
 // ---------------------------------------------------------------------------
@@ -145,14 +147,14 @@ void CAppMngr2WidgetRuntime::GetInstalledAppsL(
                 *( widgetInfoArray[ index ] ), aFsSession ) );
         if( err == KErrNone )
             {
-            CleanupStack::PushL( appObj ); 
+            CleanupStack::PushL( appObj );
             aApps.Append( appObj );
             CleanupStack::Pop( appObj );
             }
         }
-    
+
     CleanupStack::PopAndDestroy( &widgetInfoArray );
-    
+
     TRequestStatus* status = &aStatus;
     User::RequestComplete( status, KErrNone );
     }
@@ -166,11 +168,30 @@ void CAppMngr2WidgetRuntime::CancelGetInstalledApps()
     }
 
 // ---------------------------------------------------------------------------
+// CAppMngr2WidgetRuntime::GetMimeTypeL()
+// ---------------------------------------------------------------------------
+//
+HBufC8* CAppMngr2WidgetRuntime::GetMimeTypeL( const TUid& aWidgetUid )
+    {
+    CWidgetPropertyValue* prop = iWidgetRegistry.GetWidgetPropertyValueL( aWidgetUid, EMimeType );
+    CleanupStack::PushL( prop );
+
+    const TPtrC valuePtr( *prop );
+    HBufC8* retStr = HBufC8::NewLC( valuePtr.Length() );
+    TPtr8 retPtr( retStr->Des() );
+    retPtr.Copy( valuePtr );
+    CleanupStack::Pop( retStr );
+
+    CleanupStack::PopAndDestroy( prop );
+    return retStr;
+    }
+
+// ---------------------------------------------------------------------------
 // CAppMngr2WidgetRuntime::CAppMngr2WidgetRuntime()
 // ---------------------------------------------------------------------------
 //
 CAppMngr2WidgetRuntime::CAppMngr2WidgetRuntime( MAppMngr2RuntimeObserver& aObserver )
-        : CAppMngr2Runtime( aObserver ) 
+        : CAppMngr2Runtime( aObserver )
     {
     }
 

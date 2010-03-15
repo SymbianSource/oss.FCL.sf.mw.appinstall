@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,7 +37,6 @@
 #include "log.h"
 #include "swispubsubdefs.h"
 #include "securitycheckutil.h"
-#include "secutils.h"
 #include "cleanuputils.h"
 #include "sisversion.h"
 #include "sisregistrywritablesession.h"
@@ -140,6 +139,25 @@ void CRestoreMachine::ConstructL(const RMessage2& aMessage)
  		{
  		CheckVersionUpgradeL();
  		}
+		//Publish package Uid which is going to be restored.
+ 	err = SecUtils::PublishPackageUid(iPackageUid, iUidList);
+	if (err == KErrNone)
+    	{
+        DEBUG_PRINTF2(_L("CRestoreMachine::ConstructL published Uid is %x."),iPackageUid);
+    	}
+	else if (err == KErrOverflow)
+	    {
+        DEBUG_PRINTF2(_L("CRestoreMachine::ConstructL Failed to publish Uid %x as the array, holding the uids, exceeded its upper limit."),iPackageUid);
+	    }
+    else if (err == KErrNotFound)
+        {
+        DEBUG_PRINTF2(_L("CRestoreMachine::ConstructL Failed to publish Uid %x as the property is not defined."),iPackageUid);
+        }
+	else
+		{
+        DEBUG_PRINTF3(_L("CRestoreMachine::ConstructL Failed to publish Uid %x with error %d."),iPackageUid, err);
+        User::Leave(err);
+		}
 
  #ifdef SYMBIAN_USER_PROMPT_SERVICE
 	//connect to the SWI Observer

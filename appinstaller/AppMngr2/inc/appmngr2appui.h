@@ -24,6 +24,7 @@
 
 class CAppMngr2Model;
 class CIdle;
+class CAppMngr2ExitTimer;
 
 
 class CAppMngr2AppUi : public CAknViewAppUi, public MAppMngr2ModelObserver
@@ -58,6 +59,7 @@ private:    // data
         EAllDone
         } iDelayedConstructionStep;
     TBool iConstructInstallationFilesFirst;
+    CAppMngr2ExitTimer* iExitTimer;
     };
 
 #endif  // C_APPMNGR2APPUI_H

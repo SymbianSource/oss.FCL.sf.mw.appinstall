@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -33,6 +33,7 @@
 #include "siscontentprovider.h"
 #include "sishelperclient.h"
 #include "securitypolicy.h"
+#include "secutils.h"
 
 #include <swi/msisuihandlers.h>
 
@@ -1068,6 +1069,30 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 	// Process the actual controller, then return the application
 	ProcessInstallBlockL(aController.InstallBlock(), *application, aFilesToCapabilityCheck, *filesList);
 	
+	//Publishing the UID of the associated package.
+	TUid publishUid = aController.Info().Uid().Uid();
+	if(!(Swi::SecUtils::IsPackageUidPresent(publishUid, iUidList)))
+	    {
+	    TInt err = Swi::SecUtils::PublishPackageUid(publishUid, iUidList);
+	    if(err == KErrNone)
+	        {
+	        DEBUG_PRINTF2(_L("CInstallationPlanner::ProcessControllerL published Uid %x."), publishUid.iUid);
+	        }
+	    else if(err == KErrOverflow)
+	         {
+	         DEBUG_PRINTF2(_L("CInstallationPlanner::ProcessControllerL failed to publish Uid %x as the array, holding the uids, exceeded its upper limit."),publishUid.iUid);
+	         }
+        else if(err == KErrNotFound)
+             {
+             DEBUG_PRINTF2(_L("CInstallationPlanner::ProcessControllerL failed to publish Uid %x as the property is not been defined."),publishUid.iUid);
+             }
+        else
+	        {
+            DEBUG_PRINTF3(_L("CInstallationPlanner::ProcessControllerL failed to publish Uid %x with error %d."),publishUid.iUid, err);
+            User::Leave(err);
+	        }
+	    }
+
 	//Append planned controllers list
 	iFilesFromPlannedControllers.AppendL(filesList);
 	CleanupStack::Pop(filesList);

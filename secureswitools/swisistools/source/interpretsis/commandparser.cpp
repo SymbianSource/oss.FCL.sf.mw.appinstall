@@ -161,6 +161,7 @@ void CCommandParser::DisplayUsage()
 		<< "\tdrive\t\tThe drive letter on the device\n"
 		<< "\tmcard\t\tOption to generate the stub SIS file for the installing package\n"
 		<< "\tmcardnr\t\tOption to generate the non-removable stub SIS file for the installing package\n"
+		<< "\tnonremovablepkg\tOption to generate the non-removable SIS file for the installing package\n\n"
 		<< "\tmcardalone\tOption to just create a pre-installed package to the media card\n"
 		<< "\tmcardalonenr\tOption to generate the non-removable stub SIS file for the installing" << std::endl
 		<< "\t\t\tpackage without generating the SISregistry entry\n"
@@ -169,7 +170,7 @@ void CCommandParser::DisplayUsage()
 
 void CCommandParser::DisplayVersion()
 	{
-	std::cout << "\nINTERPRETSIS  " << " Version  2.1.2 ." << std::endl;
+	std::cout << "\nINTERPRETSIS  " << " Version  2.1.3 ." << std::endl;
 	std::cout << "Copyright (c) 2009 Symbian Software Ltd. All rights reserved.\n " << std::endl;
 	}
  
@@ -543,7 +544,7 @@ void CCommandParser::String2SISFileList(CParameterList& aParamList, int aArgc, c
 			else if (versionStr == "+MCARDNR")
 				{
 				sisFileName.iGenerateStub = true;
-				sisFileName.iNonRemovable = true;
+				sisFileName.iReadOnly = true;
 				}
 			else if (versionStr == "+MCARDALONE")
 				{
@@ -554,11 +555,15 @@ void CCommandParser::String2SISFileList(CParameterList& aParamList, int aArgc, c
 				{
 				sisFileName.iGenerateStub = true;
 				sisFileName.iNotRegister = true;
-				sisFileName.iNonRemovable = true;
+				sisFileName.iReadOnly = true;
 				}
 			else if (versionStr == "+SUCERT")
 				{
 				sisFileName.iSUFlag = true;
+				}
+			else if (versionStr == "+NONREMOVABLEPKG")
+				{
+				sisFileName.iNonRemovable = true;
 				}
 			else
 				throw CCommandParser::ECmdLineInvalidSISFileAttribute;

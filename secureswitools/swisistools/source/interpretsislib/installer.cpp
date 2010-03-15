@@ -128,7 +128,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 				{
 					InstallSISFile sisFileName(shortName + KDirectorySeparator + *currStr, 
 												curr->iTargetDrive, curr->iGenerateStub, 
-												curr->iNonRemovable, curr->iNotRegister, curr->iSUFlag);
+												curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, curr->iSUFlag);
 
 					sisFiles.push_back(sisFileName);
 				}
@@ -143,7 +143,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 				|| (shortName.find(L".sis",0) != std::wstring::npos))
 		{
 			InstallSISFile sisFileName(shortName, curr->iTargetDrive, curr->iGenerateStub, 
-										curr->iNonRemovable, curr->iNotRegister, curr->iSUFlag);
+										curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, curr->iSUFlag);
 
 			sisFiles.push_back(sisFileName);
 		}
@@ -275,7 +275,7 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 		return MISSING_DEPENDENCY;
 	}
 
-	if (!IsValidUpgrade(file, aInstallSISFile.iSUFlag))
+	if (!IsValidUpgrade(file, aInstallSISFile.iSUFlag, aInstallSISFile.iNonRemovable))
 	{
 		return INVALID_UPGRADE;
 	}
@@ -482,10 +482,19 @@ bool Installer::DependenciesOk(const SisFile& aFile)
 	}
 
 
-bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag)
+bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable)
 {
 	TUint32 pkg = aFile.GetPackageUid();
 	TUint32 installFlags = aFile.GetInstallFlags();
+
+	if(aNonRemovable)
+	{
+		TUint8 iFlag = 0;
+		iFlag |= CSISInfo::EInstFlagNonRemovable;
+		aFile.AddInstallFlags(iFlag);
+		installFlags = aFile.GetInstallFlags();
+	}
+	
 	bool RUFlag = ((installFlags & CSISInfo::EInstFlagROMUpgrade) &&  CSISInfo::EInstFlagROMUpgrade);
 
 	if(iParamList.RegistryVersionExists())
@@ -510,7 +519,7 @@ bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag)
 
 	if (iRegistry.IsInstalled(pkg))
 		{
-		ValidateRegistry(aFile,pkg,installFlags,RUFlag);	
+		ValidateRegistry(aFile,pkg,installFlags,RUFlag,aNonRemovable);	
 		}
 	else if (installType == CSISInfo::EInstAugmentation || installType == CSISInfo::EInstPartialUpgrade)
 		{
@@ -525,7 +534,7 @@ bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag)
 	return true;
 	}
 
-void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag)
+void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag, bool aNonRemovable)
 	{
 	bool isSisNonRemovable = aInstallFlags & CSISInfo::EInstFlagNonRemovable;
 	bool isBaseRemovable = false;
@@ -589,10 +598,13 @@ void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32
 		// The only exception is a ROM stub which is upgradable and non-removable by definition.
 		if ((isBaseRemovable == isSisNonRemovable) && !inRom )
 			{
-			std::stringstream err;
-			err << "Cannot install PU (0x" << std::hex << aPckgUid << ") to a base package with a different removable flag type";
+				if(!aNonRemovable)
+				{
+				std::stringstream err;
+				err << "Cannot install PU (0x" << std::hex << aPckgUid << ") to a base package with a different removable flag type";
 
-			throw InterpretSisError(err.str(), INVALID_UPGRADE);
+				throw InterpretSisError(err.str(), INVALID_UPGRADE);
+				}
 			}
 		}
 	else if (installType == CSISInfo::EInstPreInstalledApp)
@@ -1552,7 +1564,7 @@ void Installer::CreateStubSisFile(const InstallSISFile& aInstallSISFile, SisFile
 
 	aSis.MakeSISStub(ctrl);
 	// If the NR flag is set, change the file attribute to RO
-	if (aInstallSISFile.iNonRemovable)
+	if (aInstallSISFile.iReadOnly)
 	{
 		_wchmod(ctrl.c_str(),_S_IREAD);
 	}

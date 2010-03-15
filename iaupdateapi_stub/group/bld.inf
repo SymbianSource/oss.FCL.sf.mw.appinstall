@@ -28,7 +28,7 @@ PRJ_EXPORTS
 
 ../rom/iaupdateapi.iby             CORE_MW_LAYER_IBY_EXPORT_PATH( iaupdateapi.iby )
 
-../sis/iaupdate_stub.sis        /epoc32/data/z/system/install/stub_iaupdate_stub.sis
+../sis/iaupdate_stub.SIS        /epoc32/data/z/system/install/stub_iaupdate_stub.sis
 
 PRJ_MMPFILES
 iaupdateapi.mmp

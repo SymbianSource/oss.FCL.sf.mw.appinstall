@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -784,9 +784,23 @@ void CProcessor::RemoveFileL(const CSisRegistryFileDescription& aFileDescription
 #endif
 			// Display error dialog and leave if the file cannot be removed,
 			// ignoring missing files, media cards not present or corrupt media
+
+			TInt noOfDetletionAttempts=1;
+			while ((err == KErrInUse ||err==KErrAccessDenied )&& noOfDetletionAttempts <= KMaxNoOfDeletionAttempts )
+			    {
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+			    TRAP(err, TransactionSession().RemoveL(fileToRemove));
+#else
+			    TRAP(err, IntegrityServices().RemoveL(fileToRemove));
+#endif
+                DEBUG_PRINTF2(_L8("Deletion attempt %d"), noOfDetletionAttempts);
+                noOfDetletionAttempts++;
+                User::After(KRetryInterval);
+			    }
+
 			if(err !=KErrNone && err != KErrNotFound && err != KErrPathNotFound	&& err != KErrNotReady && err != KErrCorrupt)
 				{
-				CDisplayError* displayCannotDelete=CDisplayError::NewLC(iPlan.AppInfoL(), EUiCannotDelete, fileToRemove);
+        		CDisplayError* displayCannotDelete=CDisplayError::NewLC(iPlan.AppInfoL(), EUiCannotDelete, fileToRemove);
 				iUiHandler.ExecuteL(*displayCannotDelete);
 				CleanupStack::PopAndDestroy(displayCannotDelete);
 				User::Leave(err);
@@ -834,6 +848,20 @@ void CProcessor::RemovePrivateDirectoryL(TUid aSid)
 #else
 					TRAP(err, IntegrityServices().RemoveL(privatePath));
 #endif
+
+		            TInt noOfDetletionAttempts=1;
+		            while ((err == KErrInUse ||err==KErrAccessDenied )&& noOfDetletionAttempts <= KMaxNoOfDeletionAttempts )
+		                {
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		                TRAP(err, TransactionSession().RemoveL(privatePath));
+#else
+		                TRAP(err, IntegrityServices().RemoveL(privatePath));
+#endif
+		                DEBUG_PRINTF2(_L8("Deletion attempt %d"), noOfDetletionAttempts);
+		                noOfDetletionAttempts++;
+		                User::After(KRetryInterval);
+		                }
+
 					if (err != KErrNone && err != KErrNotReady &&
 						err != KErrNotFound && err != KErrPathNotFound && err != KErrCorrupt)
 						{

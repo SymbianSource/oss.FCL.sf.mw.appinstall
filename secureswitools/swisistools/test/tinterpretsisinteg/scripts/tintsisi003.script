@@ -41,20 +41,23 @@ LOAD_SUITE tinterpretsis
 //! @SYMTestType		CIT
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+//Backup code in SWI is modified to return error for NR packages. So restore is also not possible.
+
+
 START_TESTCASE API-SEC-SWI-INTERPRETSIS-I003-0001
 
 RUN_TEST_STEP	100	tbackuprestore	PRESENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
 
-RUN_TEST_STEP	100	tbackuprestore	BACKUP	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
 RUN_TEST_STEP	100	tbackuprestore	PRESENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
 
-RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   c:\tswi\tinterpretsisinteg\scripts\ini.ini I003removeregistrysisfile
+//RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   c:\tswi\tinterpretsisinteg\scripts\ini.ini I003removeregistrysisfile
 //DELAY is given so that the backup.ctl file will be created in this time
-DELAY 5000
-RUN_TEST_STEP	100	tbackuprestore	ABSENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
+//DELAY 5000
+//RUN_TEST_STEP	100	tbackuprestore	ABSENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
 
-RUN_TEST_STEP	100	tbackuprestore	RESTORE	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
-RUN_TEST_STEP	100	tbackuprestore	PRESENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT	c:\tswi\tinterpretsisinteg\scripts\ini.ini	I003A
 
 //RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   c:\tswi\tinterpretsisinteg\scripts\ini.ini I003removeregistrysisfile
 //DELAY 5000

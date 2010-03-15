@@ -291,6 +291,21 @@ void CAppMngr2Model::StartFetchingInstalledAppsL()
     }
 
 // ---------------------------------------------------------------------------
+// CAppMngr2Model::IsUninstall()
+// ---------------------------------------------------------------------------
+//
+TBool CAppMngr2Model::IsUninstall()
+    {       
+    if ( iActiveCommand == EAppMngr2CmdUninstall )
+        {
+        FLOG( "CAppMngr2Model::IsUninstall: ETrue" );
+        return ETrue;
+        }   
+    FLOG( "CAppMngr2Model::IsUninstall: EFalse" );
+    return EFalse;    
+    }
+
+// ---------------------------------------------------------------------------
 // CAppMngr2Model::DoCancel()
 // ---------------------------------------------------------------------------
 //

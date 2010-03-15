@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -40,6 +40,7 @@
 #include "pkgremover.h"
 #include "pkgremovererrors.h"
 #include "sisregistryaccess_client.h"
+#include <swi/swiutils.h>
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <usif/scr/scr.h>
@@ -2628,6 +2629,139 @@ TVerdict CSwisUninstallPkgsStep::doTestStepL()
 	CleanupStack::PopAndDestroy(&uninstalledPkgEntry);
 	return TestStepResult();
 	}
+
+
+//
+// CSwisCheckPublishUidStep
+//
+
+CSwisCheckPublishUidStep::CSwisCheckPublishUidStep()
+    {
+    // Call base class method to set up the human readable name for logging
+    SetTestStepName(KSwisGetPublishedUidArrayStep);
+    }
+      
+/**
+ * Override of base class virtual. Prepares for the test run of SWIS
+ * @return TVerdict code
+ */
+TVerdict CSwisCheckPublishUidStep::doTestStepPreambleL()
+    {
+    INFO_PRINTF1(_L("CSwisCheckPublishUidStep::doTestStepPreambleL"));
+    _LIT(KDefineProperty, "DefineProperty");
+    iJustDefineProperty=EFalse;
+    if (GetBoolFromConfig(ConfigSection(),KDefineProperty,iJustDefineProperty) )
+        {
+        if(iJustDefineProperty)
+            {
+            INFO_PRINTF1(_L("CSwisCheckPublishUidStep is running in define Mode..just define the property"));
+            return TestStepResult();
+            }
+        }
+    
+	_LIT(KPublishedUidCount, "PublishedUidCount");
+	_LIT(KPublishedUidValue, "PublishedUidValue");
+	TInt expectedUidCount;
+	TBuf<20> publishedUidParam;
+	
+	if (!GetIntFromConfig(ConfigSection(),KPublishedUidCount,expectedUidCount))
+		{
+        ERR_PRINTF1(_L("No uid mentioned in .ini"));
+		return TestStepResult();
+		}
+
+	iExpectedUidList[0].iUid = expectedUidCount;
+	if(expectedUidCount>=KTestMaxUidCount-1)
+	    {
+        ERR_PRINTF1(_L("The buffer available holds upto 15 Uids"));
+        return TestStepResult();
+	    }
+	
+	for (TInt i=0; i<iExpectedUidList[0].iUid; i++)
+		{
+        TInt uid;
+		publishedUidParam = KPublishedUidValue;
+		GenerateIndexedAttributeNameL(publishedUidParam, i);
+		if (!GetHexFromConfig(ConfigSection(), publishedUidParam, uid))
+			{
+   			ERR_PRINTF1(_L("Missing uid"));
+			continue;
+   			}
+		TUid pkgUid;
+		pkgUid.iUid=uid;
+		iExpectedUidList[i+1]= pkgUid;
+		}
+    return TestStepResult();
+    }
+	
+void CSwisCheckPublishUidStep::GenerateIndexedAttributeNameL(TDes& aInitialAttributeName, TInt aIndex)
+	{
+	const TInt MAX_INT_STR_LEN = 8;
+	TBuf<MAX_INT_STR_LEN> integerAppendStr;
+	integerAppendStr.Format(_L("%d"), aIndex);
+	aInitialAttributeName.Append(integerAppendStr);
+	}
+
+
+TVerdict CSwisCheckPublishUidStep::doTestStepL()
+    {
+    INFO_PRINTF1(KSwisGetPublishedUidArrayStep);
+    TInt err=0;
+    if(iJustDefineProperty)
+        {
+         err = RProperty::Define(KUidSystemCategory, KSWIUidsCurrentlyBeingProcessed, RProperty::EByteArray);
+        if (err != KErrNone && err != KErrAlreadyExists)
+            User::Leave(err);
+        return TestStepResult();
+        }
+      
+    TUid expUid;
+    TInt expCount;
+    RArray<TUid> retrivedUidList;
+    CleanupClosePushL(retrivedUidList);
+    expCount=iExpectedUidList[0].iUid;
+    if(KErrNone!=GetAllUids(retrivedUidList))
+        {
+        ERR_PRINTF1(_L("Failed to read all uids "));
+        SetTestStepResult(EFail);
+        CleanupStack::PopAndDestroy(&retrivedUidList);
+        return TestStepResult();
+        }
+    if (expCount!=retrivedUidList.Count())
+        {
+        ERR_PRINTF3(_L("expected and read count is not same , expected count is %d  read count is %d"),expCount, retrivedUidList.Count());
+        SetTestStepResult(EFail);
+        CleanupStack::PopAndDestroy(&retrivedUidList);
+        return TestStepResult();
+        }
+	for(TInt i=0;i<expCount;i++)
+        {
+        expUid=iExpectedUidList[i+1];
+        INFO_PRINTF2(_L("Expected package uid %x"), expUid.iUid);
+        if (retrivedUidList.Find(expUid)==KErrNotFound)
+            {
+            ERR_PRINTF3(_L("Expected uid %x is not found and return code for retrivedUidList.Find is %d "), expUid.iUid,err);
+            SetTestStepResult(EFail);
+            }
+        }
+    CleanupStack::PopAndDestroy(&retrivedUidList);
+    return TestStepResult();
+    }
+
+TVerdict CSwisCheckPublishUidStep::doTestStepPostambleL()
+    {
+    if(!iJustDefineProperty)
+           {
+        TInt err = RProperty::Delete(KUidSystemCategory,KSWIUidsCurrentlyBeingProcessed);
+        if(err != KErrNone)
+            {
+            ERR_PRINTF1(_L("Not able to delete property "));
+            }
+           return TestStepResult();
+           }
+           
+    return TestStepResult();
+    }
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 /**

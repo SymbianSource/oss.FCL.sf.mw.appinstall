@@ -42,6 +42,11 @@ namespace Swi
 		DEBUG_PRINTF(_L8("RBackupSession::Close"));
 		iSession.Close();		
 		}
+
+	// Format for metadata ( Ensure that nothing is added in between to maintain compatability) :
+	// Drive ( for Base SA ) + No of Controllers ( SA + PU + SP ) + Controllers for SA and PU +
+	// Controllers for Augmentation + File Count + File Names Array ( for SA,PU and SP ) + 
+	// Augmentation Drives + Matching Supported Languages ( for SA and SP with ELANGNONE as separator )
 		
 	EXPORT_C HBufC8* RBackupSession::GetMetaDataL(TUid aPackageUid, RPointerArray<HBufC>& aFilesArray)
 		{
@@ -72,63 +77,110 @@ namespace Swi
 		CleanupResetAndDestroyPushL(packages);
 		entry.AugmentationsL(packages);
 
+        TInt augmentationCount(packages.Count());
+        TInt augCount = augmentationCount;
+		
 		RBufWriteStream stream(*tempBuffer);
 		CleanupClosePushL(stream);
-		stream.WriteUint32L(drive);		
+        stream.WriteUint32L(drive); 
+        
+		if (entry.RemovableL()) //Cannot Backup non-removable (NR) packages
+	    {
+	        // backup the base package (except for PA and ROM stubs) plus partial upgrades and augmentations.		
+            entry.FilesL(aFilesArray);
 		
-		// backup the base package (except for PA and ROM stubs) plus partial upgrades and augmentations.		
-		entry.FilesL(aFilesArray);
-		
-		
-		// Filter out any files on the Z drive
-		TInt fileIndex = aFilesArray.Count() - 1;
-		while (fileIndex >= 0)
-			{
-			TChar driveCh = (*aFilesArray[fileIndex])[0];
-			if (driveCh == 'z' || driveCh == 'Z')
-				{
-				delete aFilesArray[fileIndex];
-				aFilesArray.Remove(fileIndex);
-				}
-			--fileIndex;
-			}
-
-		TInt controllersCount = controllers.Count();
-		TInt firstController = 0;
-		if (entry.PreInstalledL() || entry.IsInRomL())
-			{
-			firstController = 1;	// Don't backup the controller for the ROM stub 
-			if (controllersCount <= 1)
-				{				
-				DEBUG_PRINTF(_L8("Base package is pre-installed or in ROM and has not been upgraded"));				
-				stream.WriteInt32L(packages.Count());
-				if (entry.IsInRomL())
+            // Filter out any files on the Z drive
+            TInt fileIndex = aFilesArray.Count() - 1;
+            while (fileIndex >= 0)
+                {
+                TChar driveCh = (*aFilesArray[fileIndex])[0];
+                if (driveCh == 'z' || driveCh == 'Z')
                     {
-                    matchingSupportedLanguagesArray.Close();
+                    delete aFilesArray[fileIndex];
+                    aFilesArray.Remove(fileIndex);
                     }
-				}			
-			else 
-				{
-				// Backup any PUs for the ROM stub.
-				DEBUG_PRINTF2(_L8("Found %d partial upgrades"), controllersCount - 1);				
-				stream.WriteInt32L(controllersCount - 1 + packages.Count());
-				}
+                --fileIndex;
+                }
+
+            TInt controllersCount = controllers.Count();
+            TInt firstController = 0;
+            if (entry.PreInstalledL() || entry.IsInRomL())
+                {
+                firstController = 1;	// Don't backup the controller for the ROM stub 
+                if (controllersCount <= 1)
+                    {				
+                    DEBUG_PRINTF(_L8("Base package is pre-installed or in ROM and has not been upgraded"));				
+                    stream.WriteInt32L(packages.Count());
+                    if (entry.IsInRomL())
+                        {
+                        matchingSupportedLanguagesArray.Close();
+                        }
+                    }			
+                else 
+                    {
+                    // Backup any PUs for the ROM stub.
+                    DEBUG_PRINTF2(_L8("Found %d partial upgrades"), controllersCount - 1);				
+                    stream.WriteInt32L(controllersCount - 1 + packages.Count());
+                    }
+                }
+            else
+                {
+                // Standard SA package
+                DEBUG_PRINTF2(_L8("Found %d controllers"), controllersCount);		
+                stream.WriteInt32L(controllers.Count() + packages.Count());			
+                }
+		
+            for (TInt i = firstController; i < controllersCount; ++i)
+                {
+                stream << *controllers[i];
+                }
+            
 			}
 		else
-			{
-			// Standard SA package
-			DEBUG_PRINTF2(_L8("Found %d controllers"), controllersCount);		
-			stream.WriteInt32L(controllers.Count() + packages.Count());			
-			}
-		
-		for (TInt i = firstController; i < controllersCount; ++i)
-			{
-			stream << *controllers[i];
-			}
-		
-		TInt augmentationCount(packages.Count());
+		    {
+                if(!augmentationCount)
+                {
+                    DEBUG_PRINTF2(_L("RBackupSession::GetMetaDataL - Cannot Backup non-removable application; Uid: '0x%08x'"),aPackageUid.iUid);
+                    CleanupStack::PopAndDestroy(6, &entry); // stream, controllers, matchingSupportedLanguagesArray, tempBuffer, packages, entry
+                    User::Leave(KErrNotSupported); // cannot remove non-removable (NR) packages 
+                }
+                else
+                {
+                for (TInt i = 0; i < augmentationCount; ++i)
+                    {           
+                    RSisRegistryEntry augmentation;
+                    augmentation.OpenL(iSession, *packages[i]);
+                    CleanupClosePushL(augmentation);
+                    
+                     if (!augmentation.RemovableL())
+                        {                      
+                            augCount--;
+                            CleanupStack::PopAndDestroy(1, &augmentation);
+                            continue;
+                        }
+                     CleanupStack::PopAndDestroy(1, &augmentation);
+                    }
+                if(!augCount)
+                    {
+                    DEBUG_PRINTF2(_L("RBackupSession::GetMetaDataL - Cannot Backup non-removable augmentation; Uid: '0x%08x'"),aPackageUid.iUid);
+                    CleanupStack::PopAndDestroy(6, &entry); // stream, controllers, matchingSupportedLanguagesArray, tempBuffer, packages, entry
+                    User::Leave(KErrNotSupported); // cannot remove non-removable (NR) packages 
+                    }
+                else
+                    {
+                    stream.WriteInt32L(augCount); // Writing removable augmentations controller count  
+                    if (entry.IsInRomL())
+                        {
+                        matchingSupportedLanguagesArray.Close();
+                        }
+                    }
+                }
+		    }
+
 		RArray<TChar> augmentationDrives;
 		CleanupClosePushL(augmentationDrives);
+		
+		TBool nonRemovableAugmentation = ETrue;
 		
 		for (TInt i = 0; i < augmentationCount; ++i)
 			{			
@@ -136,6 +188,16 @@ namespace Swi
 			augmentation.OpenL(iSession, *packages[i]);
 			CleanupClosePushL(augmentation);
 			
+			if(augCount != augmentationCount)
+			    {
+                 if (!augmentation.RemovableL()) //if loops are not clubed to avoid augmentation.RemovableL() API Call
+                    {		          
+                        CleanupStack::PopAndDestroy(1, &augmentation);
+                        continue;
+                    }
+			    }
+		    nonRemovableAugmentation = EFalse;
+		    
 			augmentation.FilesL(aFilesArray);
 			
 			RPointerArray<HBufC8> augmentationControllers;
@@ -159,6 +221,13 @@ namespace Swi
 			CleanupStack::PopAndDestroy(2, &augmentation);
 			}
 			
+		if(nonRemovableAugmentation && augmentationCount)
+		    {
+            DEBUG_PRINTF2(_L("RBackupSession::GetMetaDataL - Cannot Backup non-removable Augmentation; Uid: '0x%08x'"),aPackageUid.iUid);
+            CleanupStack::PopAndDestroy(7, &entry); // augmentationDrives, stream, controllers, matchingSupportedLanguagesArray, tempBuffer, packages
+            User::Leave(KErrNotSupported); // cannot remove non-removable (NR) packages 
+		    }
+		
 		// Write the number of files originally installed,
   		// and their names to the backup metadata		
   		TInt filesCount(aFilesArray.Count());
@@ -172,7 +241,7 @@ namespace Swi
 		// Add the selected drive for each augmentation in the same order as
 		// as the list of controllers.  The augmentation controllers will
 		// be counted on restore to be sure to correct number of drives.
-  		for (TInt k = 0; k < augmentationCount; ++k)
+  		for (TInt k = 0; k < augCount; ++k)
   			{
 			stream.WriteUint32L(augmentationDrives[k]);
   			}
@@ -193,5 +262,4 @@ namespace Swi
 		return result; 
 		
 		}	
-	
 	}

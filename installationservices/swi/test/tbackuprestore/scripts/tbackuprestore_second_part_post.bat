@@ -19,3 +19,8 @@ move /Y \epoc32\winscw\c\sys_save \epoc32\winscw\c\sys
 
 del /s /f /q \epoc32\winscw\c\tswi\tbackuprestore\backup*.*
 del /s /f /q \epoc32\winscw\c\tswi\tbackuprestore\metadata*
+del /s /f /q \epoc32\winscw\c\sys\bin\backuprestore_test_*
+del /s /f /q \epoc32\winscw\c\sys\hash\backuprestore_test_*
+del /s /f /q \epoc32\winscw\c\sys\install\scr\scr.*
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\2baecde2\*.*
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\2baecde2

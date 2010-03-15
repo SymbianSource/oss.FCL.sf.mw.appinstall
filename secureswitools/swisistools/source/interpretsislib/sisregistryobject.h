@@ -201,7 +201,7 @@ public:
 
 	// Update the entry for a PU installation
 	void UpgradeEntry(const SisFile& aSis, const InstallableFiles& aFiles, 
-					TInt aInstallDrive, const bool aSUFlag, ConfigManager& aConfigManager);
+					TInt aInstallDrive, const bool aSUFlag, const bool aIsRemovable, ConfigManager& aConfigManager);
 					
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	void SetValidationStatus(bool aOriginVerificationStatus);

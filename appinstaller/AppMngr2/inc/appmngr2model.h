@@ -60,6 +60,7 @@ public:     // new functions
     void HandleCommandL( CAppMngr2InfoBase& aInfo, TInt aCommand );
     void StartFetchingInstallationFilesL();
     void StartFetchingInstalledAppsL();
+    TBool IsUninstall();
 
 protected:  // from CActive
     void DoCancel();

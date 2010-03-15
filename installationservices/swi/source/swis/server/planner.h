@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -34,6 +34,7 @@
 #include "sisregistrywritableentry.h"
 #include "sisregistrywritablesession.h"
 #include "sisregistrypackage.h"
+#include "secutils.h"
 
 namespace Swi 
 {
@@ -101,6 +102,9 @@ private:
 protected:
 	/// The drive on which to store device integrity data (hashes, registry etc) 
 	TChar iSystemDriveChar;		
+	/// To store package uids which are getting processed 
+	/////An array whose first element holds the number of uids in the subsequent indices of the array, followed by the the list of uids that are being published.
+	TUid iUidList[KMaxUidCount];
 	
 private:
 	/// Handle to UISS
@@ -120,6 +124,7 @@ private:
 
 	// Registry Session
 	RSisRegistryWritableSession iRegistrySession;
+	
 	};
 
 // inline functions from CPlanner

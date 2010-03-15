@@ -51,7 +51,7 @@ USERINCLUDE   ../../debuglogger/inc
 SOURCEPATH    ../../engine/src
 SOURCE 	      catalogsdebug.cpp
 #ifndef WINSCW
-SOURCE		  stackpointer.s
+SOURCE		  stackpointer.cia
 #endif
 
 // System include paths

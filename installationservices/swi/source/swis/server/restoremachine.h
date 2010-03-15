@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -29,6 +29,7 @@
 #include "installationprocessor.h"
 #include "swi/siscontroller.h"
 #include "sisregistrywritablesession.h"
+#include "secutils.h"
 
 namespace Swi 
 	{
@@ -170,6 +171,9 @@ namespace Swi
 		TChar iSystemDriveChar;
 		RSwiObserverSession iObserver;			///< Swi Observer session handle.
 		HBufC8 *iBuf;
+		
+		//An array whose first element holds the number of uids in the subsequent indices of the array, followed by the the list of uids that are being published.
+		TUid iUidList[KMaxUidCount];  
 		};
 		
 			

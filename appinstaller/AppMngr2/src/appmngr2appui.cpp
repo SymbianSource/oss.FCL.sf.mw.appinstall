@@ -22,6 +22,8 @@
 #include "appmngr2installedview.h"      // CAppMngr2InstalledView
 #include "appmngr2packagesview.h"       // CAppMngr2PackagesView
 #include "appmngr2.hrh"                 // Command IDs
+#include "appmngr2exittimer.h"          // Exit Timer
+
 #include <appmngr2runtime.h>            // CAppMngr2Runtime
 #include <appmngr2driveutils.h>         // TAppMngr2DriveUtils
 #include <appmngr2debugutils.h>         // FLOG macros
@@ -96,6 +98,9 @@ void CAppMngr2AppUi::ConstructL()
     FLOG( "CAppMngr2AppUi::ConstructL, starting delayed construct" );
     iIdle = CIdle::NewL( CActive::EPriorityStandard );
     iIdle->Start( TCallBack( &CAppMngr2AppUi::DelayedConstructL, this ) );
+    
+    FLOG( "CAppMngr2AppUi::ConstructL, iExitTimer = NULL" );
+    iExitTimer = NULL;    
     }
 
 // ---------------------------------------------------------------------------
@@ -111,7 +116,8 @@ CAppMngr2AppUi::~CAppMngr2AppUi()
         {
         iEikonEnv->DeleteResourceFile( iResourceFileOffset );
         }
-    FeatureManager::UnInitializeLib();
+    FeatureManager::UnInitializeLib();    
+    delete iExitTimer;
     }
 
 // ---------------------------------------------------------------------------
@@ -208,6 +214,28 @@ void CAppMngr2AppUi::HandleCommandL( TInt aCommand )
     switch ( aCommand )
         {
         case EEikCmdExit:
+            if ( iModel->IsUninstall() && iModel->IsActive() )
+                {
+                // In case we have uninstall process ongoing we need to
+                // start delay timer for Exit. This is because in some cases 
+                // like VPN plug-in the GS is closed and app.mngr exit may come 
+                // just when SWInstLauncer is completing req. in RunL (long 
+                // running task). CActive do not return from Cancel and 
+                // AppMngr2Model's destructor jams.                             
+                if ( !iExitTimer )
+                    {
+                    // If there is not exit timer already let's make one.                    
+                    iExitTimer = CAppMngr2ExitTimer::NewL( this );                       
+                    iExitTimer->StartExitTimer();                    
+                    } 
+                }
+            else
+                {
+                // if we do not have uninstall request let's do Exit now.
+                Exit();
+                }
+            break;
+            
         case EAknCmdExit:
         case EAknSoftkeyExit:
             Exit();

@@ -45,28 +45,29 @@ public:
 	 * Default constructor. 
 	 */
 	InstallSISFile() : iFileName(L""), iTargetDrive(L'$'), iGenerateStub(false),
-						iNonRemovable(false), iNotRegister(false), iSUFlag(false) {}
+						iNonRemovable(false),iReadOnly(false), iNotRegister(false), iSUFlag(false) {}
 
 	/**
 	 * Constructor
 	 */
 	InstallSISFile(std::wstring aName, int aDrive, bool aSUFlag)
 		: iFileName(aName), iTargetDrive(aDrive), iGenerateStub(false), 
-			iNonRemovable(false), iNotRegister(false), iSUFlag(aSUFlag) {}
+			iNonRemovable(false),iReadOnly(false), iNotRegister(false), iSUFlag(aSUFlag) {}
 
 	/**
 	 * Constructor
 	 */
 	InstallSISFile(std::wstring aName, int aDrive, bool aGenerateStub, bool aNonRemovable,
-					bool aNotRegister, bool aSUFlag)
+					bool aReadOnly, bool aNotRegister, bool aSUFlag)
 		: iFileName(aName), iTargetDrive(aDrive), iGenerateStub(aGenerateStub), 
-			iNonRemovable(aNonRemovable), iNotRegister(aNotRegister), iSUFlag(aSUFlag) {}
+			iNonRemovable(aNonRemovable), iReadOnly(aReadOnly), iNotRegister(aNotRegister), iSUFlag(aSUFlag) {}
 
 public:
 	std::wstring iFileName; // SIS file name
 	int iTargetDrive;		// Target drive
 	bool iGenerateStub;		// Whether to generate stub sis file for this sis or not.
 	bool iNonRemovable;		// Whether this is a non-removable SIS or not.
+	bool iReadOnly;		    // Whether this is a Readonly SIS or not.
 	bool iNotRegister;		// Whether to register the sis or not.
 	bool iSUFlag;			// Whether SU flag is set for this or not.
 	};

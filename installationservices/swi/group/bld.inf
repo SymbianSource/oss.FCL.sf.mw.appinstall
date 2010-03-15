@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1999-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -57,6 +57,7 @@ PRJ_EXPORTS
 ../inc/swi/sistruststatus.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sistruststatus.h)
 ../inc/swi/sisregistrylog.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrylog.h)
 ../inc/swi/installtypes.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/installtypes.h)
+../source/swiutils/swiutils.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiutils.h)
 
 // ROMKIT include
 ../inc/swi.iby /epoc32/rom/include/swi.iby
@@ -124,6 +125,7 @@ pkgremover.mmp
 sishelper_tshell.mmp
 sislauncherserver_tshell.mmp
 #endif
+swiutils.mmp
 #endif
 #endif
 
@@ -366,7 +368,6 @@ PRJ_TESTEXPORTS
 ../test/tsisregistrytest_legacy/Scripts/integritychecktest.ini /epoc32/winscw/c/tswi/tsisregistrytest/scripts/integritychecktest.ini
 ../test/tsisregistrytest_legacy/Scripts/integritychecktest5Install_winscw.script /epoc32/winscw/c/tswi/tsisregistrytest/scripts/integritychecktest5install_winscw.script
 ../test/tsisregistrytest_legacy/Scripts/integritychecktest5verify_winscw.script /epoc32/winscw/c/tswi/tsisregistrytest/scripts/integritychecktest5verify_winscw.script
-../test/writableswicertstore/certs/some_swicertstore.dat /epoc32/winscw/c/tswi/certstore/some_swicertstore.dat
 
 ../test/tsisregistrytest_legacy/data/backup.lst /epoc32/winscw/c/tswi/tsisregistrytest/data/backup.lst
 ../test/tsisregistrytest_legacy/data/hashForLang_txt.dat /epoc32/winscw/c/tswi/tsisregistrytest/data/hashforlang_txt.dat
@@ -1035,4 +1036,5 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg
 ../test/tuiscriptadaptors/scripts/testnoaiacert.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testnoaiacert.sis
+../test/writableswicertstore/certs/some_swicertstore.dat /epoc32/winscw/c/tswi/certstore/some_swicertstore.dat
 // End of file

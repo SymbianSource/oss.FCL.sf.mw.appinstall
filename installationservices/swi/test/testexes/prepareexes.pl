@@ -40,6 +40,7 @@ my $platform = lc($ARGV[0]);
 my $configuration = lc($ARGV[1]);
 my $packagedir = "packages";
 my $non_iby_packagedir = "non_iby_packages";
+my $packages_interpretsis_testcase = "packages_interpretsis_testcase";
 my $builddir = "buildsis_${platform}_${configuration}";
 
 usage() if $opt{h};
@@ -121,7 +122,7 @@ sub WriteFile ($$) {
 	my ($file, $data) = @_;
 
 	# Ensure directory exists
-	if ($file =~ basename($1) && ! -e $1) {
+	if ($1 && $file =~ basename($1) && ! -e $1) {
 		mkdir($1);
 	}
 
@@ -149,6 +150,8 @@ mkdir($builddir);
 print "Processing files in directory: $builddir\n\n";
 MakeSISFiles($packagedir,"yes");
 MakeSISFiles($non_iby_packagedir,"no");
+MakeSISFiles($packages_interpretsis_testcase,"yes");
+
 
 # Copy emulator version of preinstalled exes to location script expects.
 # They will be moved by the test script to the e: drive.
@@ -791,6 +794,9 @@ SignFileWithSpecifiedCert("tpropagation_spsu_winscw.sis", "tpropagation_spsu_win
 
 # non-removable test
 SignFileWithSpecifiedCert("nonremovablebase.sis", "nonremovablebase_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
+SignFileWithSpecifiedCert("int_nr_option_04.sis", "int_nr_option_04_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
+SignFileWithSpecifiedCert("int_nr_option_05.sis", "int_nr_option_05_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
+SignFileWithSpecifiedCert("sp_int_nr_option_06.sis", "sp_int_nr_option_06_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 
 SignFile("romupgrademorecapsthansucert_sucert.sis", "romupgrademorecapsthansucert_sucert_root5.sis", "root5ca", \*iby);
 

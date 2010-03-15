@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -233,6 +233,8 @@ CTestStep* CSwisTestServer::CreateTestStep(const TDesC& aStepName)
 		testStep = new CSwisUninstallPkgsStep(CSwisUninstallPkgsStep::ERemovePkgs);
 	else if (aStepName == KSwisGetPackageDetails)	// Get Package Details
 		testStep = new CSwisUninstallPkgsStep(CSwisUninstallPkgsStep::EPkgDetails);
+	else if (aStepName == KSwisGetPublishedUidArrayStep)  // Get Published Package Uid's Array
+	        testStep = new CSwisCheckPublishUidStep();
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	else if (aStepName == KCheckSCRFieldStep)	// Check the SCR components' 'Origin Verified', 'Known Revoked', 'DRM Ptotected' field values.
 		testStep = new CCheckScrFieldStep();

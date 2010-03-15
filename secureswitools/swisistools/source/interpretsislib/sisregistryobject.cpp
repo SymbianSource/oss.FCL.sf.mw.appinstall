@@ -604,7 +604,7 @@ int SisRegistryObject::NextSisControllerIndex(const std::wstring& aDrivePath) co
 	return 0;
 }
 
-void SisRegistryObject::UpgradeEntry(const SisFile& aSis, const InstallableFiles& aFiles, TInt aInstallDrive, const bool aSUFlag, ConfigManager& aConfigManager)
+void SisRegistryObject::UpgradeEntry(const SisFile& aSis, const InstallableFiles& aFiles, TInt aInstallDrive, const bool aSUFlag, const bool aIsRemovable, ConfigManager& aConfigManager)
 {
 	// Version
 	iVersion = aSis.GetVersion();
@@ -621,6 +621,8 @@ void SisRegistryObject::UpgradeEntry(const SisFile& aSis, const InstallableFiles
 
 	iSignedBySuCert = aSUFlag;
 
+	if(aIsRemovable)
+		iIsRemovable = false;
 	iTrust = KSisPackageCertificateChainValidatedToTrustAnchor;
 
 	iTrustTimeStamp = 0;

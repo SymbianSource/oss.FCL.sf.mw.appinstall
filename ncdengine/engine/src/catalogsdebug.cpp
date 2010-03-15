@@ -49,7 +49,7 @@
 #include "e32debug.h"
 
 #ifndef __WINS__
-extern "C" TUint32 GetStackPointer();
+extern TUint32 GetStackPointer();
 #endif
 
 //#define _DDPRINT( x ) RDebug::Printf x

@@ -72,9 +72,9 @@ private:
 	bool DependenciesOk(const SisFile& aFile);			// Check to see if the sis file
 														// meets it's dependencies
 
-	bool IsValidUpgrade(const SisFile& aFile, bool aSUFlag);	// Check to see if this is a valid upgrade
+	bool IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable);	// Check to see if this is a valid upgrade
 																	// to the existing packages
-	void ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag);
+	void ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag, bool aNonRemovable);
 	void InitializeRegistryDetails	( const TUint32 aPckgUid, bool& aIsBaseRemovable, bool& aInRom, bool& aIsPreInstalled, TUint32& aUid, std::wstring& aPackageName );
 
 

@@ -4,6 +4,45 @@ UID1 = 81113001
 FILE1.1 = C:\sys\bin\tswinocapability.exe
 INSTALLDRIVE1 = C
 
+[A1_NR]
+SIS1 = z:\tswi\tsis\data\int_nr_option_05_sucert.sis
+UID1 = 80000077
+DATA1.1 = C:\Documents\abc4.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[NR_SP]
+SIS1 = z:\tswi\tsis\data\sp_int_nr_option_06_sucert.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc5.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[A_NR]
+SIS1 = z:\tswi\tsis\data\int_nr_option_04_sucert.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc1.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[A_SP]
+SIS1 = z:\tswi\tsis\data\sp_int_nr_option_04.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc3.txt
+INSTALLDRIVE1 = C
+
+[A_SP_U]
+uid=80000076
+vendorName=Nokia
+packageName=Interpretsis_NR_option_SP
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[A_SP_U_NR]
+uid=80000076
+vendorName=Nokia
+packageName=Interpretsis_NR_option_SP_NR
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
 [B]
 SIS1 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
 UID1 = 81113022
@@ -859,3 +898,17 @@ FILE1.1 = C:\Documents\InstTest\testhugecontroller.txt
 FILE1.2 = C:\Documents\InstTest\testhugecontroller1.txt
 INSTALLDRIVE1 = C
 
+[defineProperty]
+DefineProperty=true
+
+[API-INST-PAS-SWI-0001]
+PublishedUidCount=1
+PublishedUidValue0=88000105
+
+[API-INST-PAS-SWI-0001-A]
+PublishedUidCount=1
+PublishedUidValue0=88000106
+
+[API-INST-PAS-SWI-0002]
+PublishedUidCount=1
+PublishedUidValue0=81113001

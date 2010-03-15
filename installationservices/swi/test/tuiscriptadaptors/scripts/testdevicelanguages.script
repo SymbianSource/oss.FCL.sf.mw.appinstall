@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -605,3 +605,108 @@ START_TESTCASE API-INST-PREQ2525-SWI-0010
 // Negative test to verify -ve language passed will not cause any crash 
 RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini pass_negative_language_id
 END_TESTCASE API-INST-PREQ2525-SWI-0010
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0001
+//! @SYMTestCaseDesc 		Install SA package  , check for published uid , Install SP , check for published uid
+
+START_TESTCASE API-INST-PAS-SWI-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-Uninstall-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+
+END_TESTCASE API-INST-PAS-SWI-0001
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0002
+//! @SYMTestCaseDesc 		Install SA embedding SP package , check for published uid
+
+//START_TESTCASE API-INST-PAS-SWI-0002
+
+//RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002
+//RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002-Uninstall
+//END_TESTCASE API-INST-PAS-SWI-0002
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0003
+//! @SYMTestCaseDesc 		Install 8 level of embeded package , check for published uid
+
+START_TESTCASE API-INST-PAS-SWI-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+END_TESTCASE API-INST-PAS-SWI-0003
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0004
+//! @SYMTestCaseDesc 		Install 3 packages A,B and C . B depends on A and C embed A , uninstall C and check for published uid  RemoveOnlyWithLastDependent = true
+
+START_TESTCASE API-INST-PAS-SWI-0004
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-Uninstall-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-Uninstall-B
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-A
+END_TESTCASE API-INST-PAS-SWI-0004
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0005
+//! @SYMTestCaseDesc 		Install mutli level dependency , Install A which embeds B and C , Both B and C further embeds xyz.... 
+
+START_TESTCASE API-INST-PAS-SWI-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+END_TESTCASE API-INST-PAS-SWI-0005
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0006
+//! @SYMTestCaseDesc 		Install SA , install another SA which embeds a PU and  SP of first SA
+
+START_TESTCASE API-INST-PAS-SWI-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+END_TESTCASE API-INST-PAS-SWI-0006
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0007
+//! @SYMTestCaseDesc 		Install sis file which embeds 17 sis file in it , Negative test to hit buffer overflow condition in secutils.dll
+
+START_TESTCASE API-INST-PAS-SWI-0007
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+RUN_TEST_STEP !Result=Fail	100 tuiscriptadaptors		GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007-Uninstall
+RUN_TEST_STEP !Result=Fail	100 tuiscriptadaptors		GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+END_TESTCASE API-INST-PAS-SWI-0007
+

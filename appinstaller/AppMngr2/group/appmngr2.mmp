@@ -52,6 +52,7 @@ SOURCE              appmngr2log.cpp
 SOURCE              appmngr2logpopuplist.cpp
 SOURCE              appmngr2logdatabase.cpp
 SOURCE              appmngr2logdatabaseentry.cpp
+SOURCE              appmngr2exittimer.cpp
 
 START RESOURCE      ../data/appmngr2.rss
 HEADER
