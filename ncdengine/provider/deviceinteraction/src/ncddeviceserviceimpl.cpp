@@ -38,7 +38,7 @@
 #endif
 
 #ifdef GET_DEVICE_ID_FROM_USERAGENT
-    #include <cuseragent.h>
+    #include <CUserAgent.h>
 #endif
 
 #include "catalogs_device_config.h"

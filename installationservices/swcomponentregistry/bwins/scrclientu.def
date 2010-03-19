@@ -1,0 +1,177 @@
+EXPORTS
+	?SetComponentNameL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@W4TLanguage@@@Z @ 1 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentNameL(int, class TDesC16 const &, enum TLanguage)
+	?CompareVersionsL@RSoftwareComponentRegistry@Usif@@SAHABVTDesC16@@0@Z @ 2 NONAME ; int Usif::RSoftwareComponentRegistry::CompareVersionsL(class TDesC16 const &, class TDesC16 const &)
+	?CommitTransactionL@RSoftwareComponentRegistry@Usif@@QAEXXZ @ 3 NONAME ; void Usif::RSoftwareComponentRegistry::CommitTransactionL(void)
+	?GetDependantComponentsL@RSoftwareComponentRegistry@Usif@@QBEXABVCGlobalComponentId@2@AAV?$RPointerArray@VCVersionedComponentId@Usif@@@@@Z @ 4 NONAME ; void Usif::RSoftwareComponentRegistry::GetDependantComponentsL(class Usif::CGlobalComponentId const &, class RPointerArray<class Usif::CVersionedComponentId> &) const
+	?SetIsComponentPresentL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 5 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentPresentL(int, int)
+	?OpenListL@RSoftwareComponentRegistryFilesList@Usif@@QAEXABVRSoftwareComponentRegistry@2@H@Z @ 6 NONAME ; void Usif::RSoftwareComponentRegistryFilesList::OpenListL(class Usif::RSoftwareComponentRegistry const &, int)
+	?SetFileL@CComponentFilter@Usif@@QAEXABVTDesC16@@@Z @ 7 NONAME ; void Usif::CComponentFilter::SetFileL(class TDesC16 const &)
+	?NewL@CGlobalComponentId@Usif@@SAPAV12@AAVRReadStream@@@Z @ 8 NONAME ; class Usif::CGlobalComponentId * Usif::CGlobalComponentId::NewL(class RReadStream &)
+	?NewL@CComponentEntry@Usif@@SAPAV12@AAVRReadStream@@@Z @ 9 NONAME ; class Usif::CComponentEntry * Usif::CComponentEntry::NewL(class RReadStream &)
+	?ExternalizeL@CLocalizableComponentInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 10 NONAME ; void Usif::CLocalizableComponentInfo::ExternalizeL(class RWriteStream &) const
+	?AddPropertyL@CComponentFilter@Usif@@QAEXABVTDesC16@@ABVTDesC8@@@Z @ 11 NONAME ; void Usif::CComponentFilter::AddPropertyL(class TDesC16 const &, class TDesC8 const &)
+	?ComponentId@CComponentEntry@Usif@@QBEABHXZ @ 12 NONAME ; int const & Usif::CComponentEntry::ComponentId(void) const
+	?BinaryValue@CBinaryPropertyEntry@Usif@@QAEABVTDesC8@@XZ @ 13 NONAME ; class TDesC8 const & Usif::CBinaryPropertyEntry::BinaryValue(void)
+	?VersionTo@CVersionedComponentId@Usif@@QBEPBVTDesC16@@XZ @ 14 NONAME ; class TDesC16 const * Usif::CVersionedComponentId::VersionTo(void) const
+	?InternalizeL@CLocalizedSoftwareTypeName@Usif@@AAEXAAVRReadStream@@@Z @ 15 NONAME ; void Usif::CLocalizedSoftwareTypeName::InternalizeL(class RReadStream &)
+	?SetKnownRevoked@CComponentFilter@Usif@@QAEXH@Z @ 16 NONAME ; void Usif::CComponentFilter::SetKnownRevoked(int)
+	?SetRemovable@CComponentFilter@Usif@@QAEXH@Z @ 17 NONAME ; void Usif::CComponentFilter::SetRemovable(int)
+	?SetIsComponentOriginVerifiedL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 18 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentOriginVerifiedL(int, int)
+	?Locale@CLocalizableCommonData@Usif@@QBE?AW4TLanguage@@XZ @ 19 NONAME ; enum TLanguage Usif::CLocalizableCommonData::Locale(void) const
+	?VendorL@CLocalizableComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 20 NONAME ; class TDesC16 const & Usif::CLocalizableComponentInfo::VendorL(void) const
+	??0RSoftwareComponentRegistryView@Usif@@QAE@XZ @ 21 NONAME ; Usif::RSoftwareComponentRegistryView::RSoftwareComponentRegistryView(void)
+	?IsOriginVerified@CComponentEntry@Usif@@QBEHXZ @ 22 NONAME ; int Usif::CComponentEntry::IsOriginVerified(void) const
+	?SoftwareTypeName@CScrLogEntry@Usif@@QBEABVTDesC16@@XZ @ 23 NONAME ; class TDesC16 const & Usif::CScrLogEntry::SoftwareTypeName(void) const
+	?NewLC@CLocalizedSoftwareTypeName@Usif@@SAPAV12@ABVTDesC16@@W4TLanguage@@@Z @ 24 NONAME ; class Usif::CLocalizedSoftwareTypeName * Usif::CLocalizedSoftwareTypeName::NewLC(class TDesC16 const &, enum TLanguage)
+	?GetPluginUidL@RSoftwareComponentRegistry@Usif@@QBE?AVTUid@@ABVTDesC16@@@Z @ 25 NONAME ; class TUid Usif::RSoftwareComponentRegistry::GetPluginUidL(class TDesC16 const &) const
+	??1CPropertyEntry@Usif@@UAE@XZ @ 26 NONAME ; Usif::CPropertyEntry::~CPropertyEntry(void)
+	?NewLC@CIntPropertyEntry@Usif@@SAPAV12@ABVTDesC16@@_J@Z @ 27 NONAME ; class Usif::CIntPropertyEntry * Usif::CIntPropertyEntry::NewLC(class TDesC16 const &, long long)
+	?SetComponentPropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@_J@Z @ 28 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentPropertyL(int, class TDesC16 const &, long long)
+	?SetComponentPropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@0W4TLanguage@@@Z @ 29 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentPropertyL(int, class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?OperationTime@CScrLogEntry@Usif@@QBE?BVTTime@@XZ @ 30 NONAME ; class TTime const Usif::CScrLogEntry::OperationTime(void) const
+	?IsComponentOrphanedL@RSoftwareComponentRegistry@Usif@@QAEHH@Z @ 31 NONAME ; int Usif::RSoftwareComponentRegistry::IsComponentOrphanedL(int)
+	?UnregisterComponentFileL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@@Z @ 32 NONAME ; void Usif::RSoftwareComponentRegistry::UnregisterComponentFileL(int, class TDesC16 const &)
+	?NewLC@CBinaryPropertyEntry@Usif@@SAPAV12@ABVTDesC16@@ABVTDesC8@@@Z @ 33 NONAME ; class Usif::CBinaryPropertyEntry * Usif::CBinaryPropertyEntry::NewLC(class TDesC16 const &, class TDesC8 const &)
+	?SetScomoStateL@CComponentFilter@Usif@@QAEXW4TScomoState@2@@Z @ 34 NONAME ; void Usif::CComponentFilter::SetScomoStateL(enum Usif::TScomoState)
+	?NewL@CVersionedComponentId@Usif@@SAPAV12@AAVRReadStream@@@Z @ 35 NONAME ; class Usif::CVersionedComponentId * Usif::CVersionedComponentId::NewL(class RReadStream &)
+	??1CGlobalComponentId@Usif@@UAE@XZ @ 36 NONAME ; Usif::CGlobalComponentId::~CGlobalComponentId(void)
+	?SetVendorNameL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@W4TLanguage@@@Z @ 37 NONAME ; void Usif::RSoftwareComponentRegistry::SetVendorNameL(int, class TDesC16 const &, enum TLanguage)
+	?RollbackTransactionL@RSoftwareComponentRegistry@Usif@@QAEXXZ @ 38 NONAME ; void Usif::RSoftwareComponentRegistry::RollbackTransactionL(void)
+	?ComponentId@CScrLogEntry@Usif@@QBEHXZ @ 39 NONAME ; int Usif::CScrLogEntry::ComponentId(void) const
+	?GlobalIdName@CGlobalComponentId@Usif@@QBEABVTDesC16@@XZ @ 40 NONAME ; class TDesC16 const & Usif::CGlobalComponentId::GlobalIdName(void) const
+	?Close@RSoftwareComponentRegistry@Usif@@QAEXXZ @ 41 NONAME ; void Usif::RSoftwareComponentRegistry::Close(void)
+	?DeleteSoftwareTypeL@RSoftwareComponentRegistry@Usif@@QAEXABVTDesC16@@AAV?$RPointerArray@VHBufC16@@@@@Z @ 42 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteSoftwareTypeL(class TDesC16 const &, class RPointerArray<class HBufC16> &)
+	?NewLC@CGlobalComponentId@Usif@@SAPAV12@XZ @ 43 NONAME ; class Usif::CGlobalComponentId * Usif::CGlobalComponentId::NewLC(void)
+	?InternalizeL@CGlobalComponentId@Usif@@QAEXAAVRReadStream@@@Z @ 44 NONAME ; void Usif::CGlobalComponentId::InternalizeL(class RReadStream &)
+	?NextComponentL@RSoftwareComponentRegistryView@Usif@@QBEPAVCComponentEntry@2@W4TLanguage@@@Z @ 45 NONAME ; class Usif::CComponentEntry * Usif::RSoftwareComponentRegistryView::NextComponentL(enum TLanguage) const
+	?LocaleL@CLocalizablePropertyEntry@Usif@@QBE?AW4TLanguage@@XZ @ 46 NONAME ; enum TLanguage Usif::CLocalizablePropertyEntry::LocaleL(void) const
+	?IsDrmProtected@CComponentEntry@Usif@@QBEHXZ @ 47 NONAME ; int Usif::CComponentEntry::IsDrmProtected(void) const
+	?PropertyType@CLocalizablePropertyEntry@Usif@@UBE?AW4TPropertyType@CPropertyEntry@2@XZ @ 48 NONAME ; enum Usif::CPropertyEntry::TPropertyType Usif::CLocalizablePropertyEntry::PropertyType(void) const
+	?InstallTimeL@CComponentEntry@Usif@@QBE?AVTTime@@XZ @ 49 NONAME ; class TTime Usif::CComponentEntry::InstallTimeL(void) const
+	??1CVersionedComponentId@Usif@@UAE@XZ @ 50 NONAME ; Usif::CVersionedComponentId::~CVersionedComponentId(void)
+	?GetComponentsL@RSoftwareComponentRegistry@Usif@@QBEXABVTDesC16@@AAV?$RArray@H@@@Z @ 51 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentsL(class TDesC16 const &, class RArray<int> &) const
+	?OperationType@CScrLogEntry@Usif@@QBE?AW4TScrComponentOperationType@2@XZ @ 52 NONAME ; enum Usif::TScrComponentOperationType Usif::CScrLogEntry::OperationType(void) const
+	?IntValue@CIntPropertyEntry@Usif@@QAEHXZ @ 53 NONAME ; int Usif::CIntPropertyEntry::IntValue(void)
+	?ScomoState@CComponentEntry@Usif@@QBEABW4TScomoState@2@XZ @ 54 NONAME ; enum Usif::TScomoState const & Usif::CComponentEntry::ScomoState(void) const
+	?ExternalizeL@CGlobalComponentId@Usif@@QBEXAAVRWriteStream@@@Z @ 55 NONAME ; void Usif::CGlobalComponentId::ExternalizeL(class RWriteStream &) const
+	?SetIsComponentHiddenL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 56 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentHiddenL(int, int)
+	?SetFilePropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@0ABVTDesC8@@@Z @ 57 NONAME ; void Usif::RSoftwareComponentRegistry::SetFilePropertyL(int, class TDesC16 const &, class TDesC16 const &, class TDesC8 const &)
+	?SetHidden@CComponentFilter@Usif@@QAEXH@Z @ 58 NONAME ; void Usif::CComponentFilter::SetHidden(int)
+	?DeleteComponentPropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@@Z @ 59 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteComponentPropertyL(int, class TDesC16 const &)
+	?NewL@CScrLogEntry@Usif@@SAPAV12@ABVTDesC16@@000W4TScrComponentOperationType@2@@Z @ 60 NONAME ; class Usif::CScrLogEntry * Usif::CScrLogEntry::NewL(class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TScrComponentOperationType)
+	?NewL@CComponentFilter@Usif@@SAPAV12@AAVRReadStream@@@Z @ 61 NONAME ; class Usif::CComponentFilter * Usif::CComponentFilter::NewL(class RReadStream &)
+	?NewL@CPropertyEntry@Usif@@SAPAV12@AAVRReadStream@@@Z @ 62 NONAME ; class Usif::CPropertyEntry * Usif::CPropertyEntry::NewL(class RReadStream &)
+	?InternalizeL@CVersionedComponentId@Usif@@QAEXAAVRReadStream@@@Z @ 63 NONAME ; void Usif::CVersionedComponentId::InternalizeL(class RReadStream &)
+	?InternalizeL@CLocalizableComponentInfo@Usif@@AAEXAAVRReadStream@@@Z @ 64 NONAME ; void Usif::CLocalizableComponentInfo::InternalizeL(class RReadStream &)
+	?ComponentSize@CComponentEntry@Usif@@QBE_JXZ @ 65 NONAME ; long long Usif::CComponentEntry::ComponentSize(void) const
+	?ExternalizeL@CPropertyEntry@Usif@@QBEXAAVRWriteStream@@@Z @ 66 NONAME ; void Usif::CPropertyEntry::ExternalizeL(class RWriteStream &) const
+	?GlobalId@CVersionedComponentId@Usif@@QBEABVCGlobalComponentId@2@XZ @ 67 NONAME ; class Usif::CGlobalComponentId const & Usif::CVersionedComponentId::GlobalId(void) const
+	?CreateTransactionL@RSoftwareComponentRegistry@Usif@@QAEXXZ @ 68 NONAME ; void Usif::RSoftwareComponentRegistry::CreateTransactionL(void)
+	?NewLC@CScrLogEntry@Usif@@SAPAV12@ABVTDesC16@@000W4TScrComponentOperationType@2@@Z @ 69 NONAME ; class Usif::CScrLogEntry * Usif::CScrLogEntry::NewLC(class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TScrComponentOperationType)
+	?SetSoftwareTypeL@CComponentFilter@Usif@@QAEXABVTDesC16@@@Z @ 70 NONAME ; void Usif::CComponentFilter::SetSoftwareTypeL(class TDesC16 const &)
+	?AddSoftwareTypeL@RSoftwareComponentRegistry@Usif@@QAEXABVTDesC16@@VTUid@@VTSecureId@@2ABV?$RPointerArray@VHBufC16@@@@PBV?$RPointerArray@VCLocalizedSoftwareTypeName@Usif@@@@@Z @ 71 NONAME ; void Usif::RSoftwareComponentRegistry::AddSoftwareTypeL(class TDesC16 const &, class TUid, class TSecureId, class TSecureId, class RPointerArray<class HBufC16> const &, class RPointerArray<class Usif::CLocalizedSoftwareTypeName> const *)
+	?NewL@CBinaryPropertyEntry@Usif@@SAPAV12@ABVTDesC16@@ABVTDesC8@@@Z @ 72 NONAME ; class Usif::CBinaryPropertyEntry * Usif::CBinaryPropertyEntry::NewL(class TDesC16 const &, class TDesC8 const &)
+	?IsKnownRevoked@CComponentEntry@Usif@@QBEHXZ @ 73 NONAME ; int Usif::CComponentEntry::IsKnownRevoked(void) const
+	?RetrieveLogEntriesL@RSoftwareComponentRegistry@Usif@@QBEXAAV?$RPointerArray@VCScrLogEntry@Usif@@@@PBVTDesC16@@@Z @ 74 NONAME ; void Usif::RSoftwareComponentRegistry::RetrieveLogEntriesL(class RPointerArray<class Usif::CScrLogEntry> &, class TDesC16 const *) const
+	?SetFilePropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@0H@Z @ 75 NONAME ; void Usif::RSoftwareComponentRegistry::SetFilePropertyL(int, class TDesC16 const &, class TDesC16 const &, int)
+	?SetVendorL@CComponentFilter@Usif@@QAEXABVTDesC16@@@Z @ 76 NONAME ; void Usif::CComponentFilter::SetVendorL(class TDesC16 const &)
+	?GetSupplierComponentsL@RSoftwareComponentRegistry@Usif@@QBEXABVCGlobalComponentId@2@AAV?$RPointerArray@VCVersionedComponentId@Usif@@@@@Z @ 77 NONAME ; void Usif::RSoftwareComponentRegistry::GetSupplierComponentsL(class Usif::CGlobalComponentId const &, class RPointerArray<class Usif::CVersionedComponentId> &) const
+	?PropertyType@CBinaryPropertyEntry@Usif@@UBE?AW4TPropertyType@CPropertyEntry@2@XZ @ 78 NONAME ; enum Usif::CPropertyEntry::TPropertyType Usif::CBinaryPropertyEntry::PropertyType(void) const
+	?NameL@CLocalizableComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 79 NONAME ; class TDesC16 const & Usif::CLocalizableComponentInfo::NameL(void) const
+	?SetIsComponentDrmProtectedL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 80 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentDrmProtectedL(int, int)
+	?ComponentVersion@CScrLogEntry@Usif@@QBEABVTDesC16@@XZ @ 81 NONAME ; class TDesC16 const & Usif::CScrLogEntry::ComponentVersion(void) const
+	?NextComponentSetL@RSoftwareComponentRegistryView@Usif@@QBEXHAAV?$RPointerArray@VCComponentEntry@Usif@@@@W4TLanguage@@@Z @ 82 NONAME ; void Usif::RSoftwareComponentRegistryView::NextComponentSetL(int, class RPointerArray<class Usif::CComponentEntry> &, enum TLanguage) const
+	?ExternalizeL@CComponentFilter@Usif@@QBEXAAVRWriteStream@@@Z @ 83 NONAME ; void Usif::CComponentFilter::ExternalizeL(class RWriteStream &) const
+	?PropertyName@CPropertyEntry@Usif@@QBEABVTDesC16@@XZ @ 84 NONAME ; class TDesC16 const & Usif::CPropertyEntry::PropertyName(void) const
+	?InstalledDrives@CComponentEntry@Usif@@QBEABV?$TBuf8@$0BK@@@XZ @ 85 NONAME ; class TBuf8<26> const & Usif::CComponentEntry::InstalledDrives(void) const
+	?NewL@CVersionedComponentId@Usif@@SAPAV12@ABVCGlobalComponentId@2@PBVTDesC16@@1@Z @ 86 NONAME ; class Usif::CVersionedComponentId * Usif::CVersionedComponentId::NewL(class Usif::CGlobalComponentId const &, class TDesC16 const *, class TDesC16 const *)
+	?SetIsComponentKnownRevokedL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 87 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentKnownRevokedL(int, int)
+	??1CComponentEntry@Usif@@UAE@XZ @ 88 NONAME ; Usif::CComponentEntry::~CComponentEntry(void)
+	?AddPropertyL@CComponentFilter@Usif@@QAEXABVTDesC16@@_J@Z @ 89 NONAME ; void Usif::CComponentFilter::AddPropertyL(class TDesC16 const &, long long)
+	?NewLC@CComponentEntry@Usif@@SAPAV12@ABHABVTDesC16@@111H_JABW4TScomoState@2@ABV?$TBuf8@$0BK@@@11HHHH@Z @ 90 NONAME ; class Usif::CComponentEntry * Usif::CComponentEntry::NewLC(int const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, int, long long, enum Usif::TScomoState const &, class TBuf8<26> const &, class TDesC16 const &, class TDesC16 const &, int, int, int, int)
+	?NextFileSetL@RSoftwareComponentRegistryFilesList@Usif@@QBEXHAAV?$RPointerArray@VHBufC16@@@@@Z @ 91 NONAME ; void Usif::RSoftwareComponentRegistryFilesList::NextFileSetL(int, class RPointerArray<class HBufC16> &) const
+	?ConstructL@CLocalizedSoftwareTypeName@Usif@@AAEXABVTDesC16@@@Z @ 92 NONAME ; void Usif::CLocalizedSoftwareTypeName::ConstructL(class TDesC16 const &)
+	?IsComponentOnReadOnlyDriveL@RSoftwareComponentRegistry@Usif@@QBEHH@Z @ 93 NONAME ; int Usif::RSoftwareComponentRegistry::IsComponentOnReadOnlyDriveL(int) const
+	?GetComponentPropertiesL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RPointerArray@VCPropertyEntry@Usif@@@@W4TLanguage@@@Z @ 94 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentPropertiesL(int, class RPointerArray<class Usif::CPropertyEntry> &, enum TLanguage) const
+	?ExternalizeL@CLocalizedSoftwareTypeName@Usif@@QBEXAAVRWriteStream@@@Z @ 95 NONAME ; void Usif::CLocalizedSoftwareTypeName::ExternalizeL(class RWriteStream &) const
+	?SetOriginVerified@CComponentFilter@Usif@@QAEXH@Z @ 96 NONAME ; void Usif::CComponentFilter::SetOriginVerified(int)
+	?NewL@CLocalizableComponentInfo@Usif@@SAPAV12@AAVRReadStream@@@Z @ 97 NONAME ; class Usif::CLocalizableComponentInfo * Usif::CLocalizableComponentInfo::NewL(class RReadStream &)
+	?SetComponentSizeL@RSoftwareComponentRegistry@Usif@@QAEXH_J@Z @ 98 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentSizeL(int, long long)
+	?NewLC@CComponentFilter@Usif@@SAPAV12@XZ @ 99 NONAME ; class Usif::CComponentFilter * Usif::CComponentFilter::NewLC(void)
+	?GetComponentIdL@RSoftwareComponentRegistry@Usif@@QBEHABVTDesC16@@0@Z @ 100 NONAME ; int Usif::RSoftwareComponentRegistry::GetComponentIdL(class TDesC16 const &, class TDesC16 const &) const
+	?NewL@CLocalizablePropertyEntry@Usif@@SAPAV12@ABVTDesC16@@0W4TLanguage@@@Z @ 101 NONAME ; class Usif::CLocalizablePropertyEntry * Usif::CLocalizablePropertyEntry::NewL(class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?StrValue@CLocalizablePropertyEntry@Usif@@QBEABVTDesC16@@XZ @ 102 NONAME ; class TDesC16 const & Usif::CLocalizablePropertyEntry::StrValue(void) const
+	?NewL@CLocalizedSoftwareTypeName@Usif@@SAPAV12@AAVRReadStream@@@Z @ 103 NONAME ; class Usif::CLocalizedSoftwareTypeName * Usif::CLocalizedSoftwareTypeName::NewL(class RReadStream &)
+	?NewLC@CVersionedComponentId@Usif@@SAPAV12@ABVCGlobalComponentId@2@PBVTDesC16@@1@Z @ 104 NONAME ; class Usif::CVersionedComponentId * Usif::CVersionedComponentId::NewLC(class Usif::CGlobalComponentId const &, class TDesC16 const *, class TDesC16 const *)
+	?Connect@RSoftwareComponentRegistry@Usif@@QAEHXZ @ 105 NONAME ; int Usif::RSoftwareComponentRegistry::Connect(void)
+	?GetComponentIdsL@RSoftwareComponentRegistry@Usif@@QBEXAAV?$RArray@H@@PAVCComponentFilter@2@@Z @ 106 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentIdsL(class RArray<int> &, class Usif::CComponentFilter *) const
+	?NewL@CGlobalComponentId@Usif@@SAPAV12@ABVTDesC16@@0@Z @ 107 NONAME ; class Usif::CGlobalComponentId * Usif::CGlobalComponentId::NewL(class TDesC16 const &, class TDesC16 const &)
+	?NewL@CLocalizableComponentInfo@Usif@@SAPAV12@ABVTDesC16@@0W4TLanguage@@@Z @ 108 NONAME ; class Usif::CLocalizableComponentInfo * Usif::CLocalizableComponentInfo::NewL(class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?Close@RSoftwareComponentRegistryView@Usif@@QAEXXZ @ 109 NONAME ; void Usif::RSoftwareComponentRegistryView::Close(void)
+	??1CBinaryPropertyEntry@Usif@@UAE@XZ @ 110 NONAME ; Usif::CBinaryPropertyEntry::~CBinaryPropertyEntry(void)
+	?AddComponentL@RSoftwareComponentRegistry@Usif@@QAEHABV?$RPointerArray@VCLocalizableComponentInfo@Usif@@@@ABVTDesC16@@PBV4@W4TScrComponentOperationType@2@@Z @ 111 NONAME ; int Usif::RSoftwareComponentRegistry::AddComponentL(class RPointerArray<class Usif::CLocalizableComponentInfo> const &, class TDesC16 const &, class TDesC16 const *, enum Usif::TScrComponentOperationType)
+	?GetComponentL@RSoftwareComponentRegistry@Usif@@QBEPAVCComponentEntry@2@ABVTDesC16@@0W4TLanguage@@@Z @ 112 NONAME ; class Usif::CComponentEntry * Usif::RSoftwareComponentRegistry::GetComponentL(class TDesC16 const &, class TDesC16 const &, enum TLanguage) const
+	??0RSoftwareComponentRegistryFilesList@Usif@@QAE@XZ @ 113 NONAME ; Usif::RSoftwareComponentRegistryFilesList::RSoftwareComponentRegistryFilesList(void)
+	?GlobalId@CScrLogEntry@Usif@@QBEABVTDesC16@@XZ @ 114 NONAME ; class TDesC16 const & Usif::CScrLogEntry::GlobalId(void) const
+	?SetDrmProtected@CComponentFilter@Usif@@QAEXH@Z @ 115 NONAME ; void Usif::CComponentFilter::SetDrmProtected(int)
+	?GetPluginUidL@RSoftwareComponentRegistry@Usif@@QBE?AVTUid@@H@Z @ 116 NONAME ; class TUid Usif::RSoftwareComponentRegistry::GetPluginUidL(int) const
+	?SetScomoStateL@RSoftwareComponentRegistry@Usif@@QBEXHW4TScomoState@2@@Z @ 117 NONAME ; void Usif::RSoftwareComponentRegistry::SetScomoStateL(int, enum Usif::TScomoState) const
+	?IsComponentPresentL@RSoftwareComponentRegistry@Usif@@QBEHH@Z @ 118 NONAME ; int Usif::RSoftwareComponentRegistry::IsComponentPresentL(int) const
+	?Name@CComponentEntry@Usif@@QBEABVTDesC16@@XZ @ 119 NONAME ; class TDesC16 const & Usif::CComponentEntry::Name(void) const
+	?DeleteFilePropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@0@Z @ 120 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteFilePropertyL(int, class TDesC16 const &, class TDesC16 const &)
+	?InternalizeL@CScrLogEntry@Usif@@QAEXAAVRReadStream@@@Z @ 121 NONAME ; void Usif::CScrLogEntry::InternalizeL(class RReadStream &)
+	??1CIntPropertyEntry@Usif@@UAE@XZ @ 122 NONAME ; Usif::CIntPropertyEntry::~CIntPropertyEntry(void)
+	?AddPropertyL@CComponentFilter@Usif@@QAEXABVTDesC16@@0W4TLanguage@@@Z @ 123 NONAME ; void Usif::CComponentFilter::AddPropertyL(class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?ExternalizeL@CComponentEntry@Usif@@QBEXAAVRWriteStream@@@Z @ 124 NONAME ; void Usif::CComponentEntry::ExternalizeL(class RWriteStream &) const
+	?DeleteComponentL@RSoftwareComponentRegistry@Usif@@QAEXH@Z @ 125 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteComponentL(int)
+	?SoftwareTypeName@CGlobalComponentId@Usif@@QBEABVTDesC16@@XZ @ 126 NONAME ; class TDesC16 const & Usif::CGlobalComponentId::SoftwareTypeName(void) const
+	?NewL@CLocalizedSoftwareTypeName@Usif@@SAPAV12@ABVTDesC16@@W4TLanguage@@@Z @ 127 NONAME ; class Usif::CLocalizedSoftwareTypeName * Usif::CLocalizedSoftwareTypeName::NewL(class TDesC16 const &, enum TLanguage)
+	?NewL@CIntPropertyEntry@Usif@@SAPAV12@ABVTDesC16@@_J@Z @ 128 NONAME ; class Usif::CIntPropertyEntry * Usif::CIntPropertyEntry::NewL(class TDesC16 const &, long long)
+	?NameL@CLocalizedSoftwareTypeName@Usif@@QBEABVTDesC16@@XZ @ 129 NONAME ; class TDesC16 const & Usif::CLocalizedSoftwareTypeName::NameL(void) const
+	?NewL@CComponentEntry@Usif@@SAPAV12@XZ @ 130 NONAME ; class Usif::CComponentEntry * Usif::CComponentEntry::NewL(void)
+	?SetInstalledDrivesL@CComponentFilter@Usif@@QAEXABV?$TBuf8@$0BK@@@@Z @ 131 NONAME ; void Usif::CComponentFilter::SetInstalledDrivesL(class TBuf8<26> const &)
+	?ExternalizeL@CVersionedComponentId@Usif@@QBEXAAVRWriteStream@@@Z @ 132 NONAME ; void Usif::CVersionedComponentId::ExternalizeL(class RWriteStream &) const
+	?SetComponentPropertyL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@ABVTDesC8@@@Z @ 133 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentPropertyL(int, class TDesC16 const &, class TDesC8 const &)
+	?GetComponentPropertyL@RSoftwareComponentRegistry@Usif@@QBEPAVCPropertyEntry@2@HABVTDesC16@@W4TLanguage@@@Z @ 134 NONAME ; class Usif::CPropertyEntry * Usif::RSoftwareComponentRegistry::GetComponentPropertyL(int, class TDesC16 const &, enum TLanguage) const
+	?IsHidden@CComponentEntry@Usif@@QBEHXZ @ 135 NONAME ; int Usif::CComponentEntry::IsHidden(void) const
+	?NextFileL@RSoftwareComponentRegistryFilesList@Usif@@QBEPAVHBufC16@@XZ @ 136 NONAME ; class HBufC16 * Usif::RSoftwareComponentRegistryFilesList::NextFileL(void) const
+	?AddComponentL@RSoftwareComponentRegistry@Usif@@QAEHABVTDesC16@@00PBV3@W4TScrComponentOperationType@2@@Z @ 137 NONAME ; int Usif::RSoftwareComponentRegistry::AddComponentL(class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const *, enum Usif::TScrComponentOperationType)
+	?ComponentName@CScrLogEntry@Usif@@QBEABVTDesC16@@XZ @ 138 NONAME ; class TDesC16 const & Usif::CScrLogEntry::ComponentName(void) const
+	?InternalizeL@CComponentEntry@Usif@@QAEXAAVRReadStream@@@Z @ 139 NONAME ; void Usif::CComponentEntry::InternalizeL(class RReadStream &)
+	?ExternalizeL@CScrLogEntry@Usif@@QBEXAAVRWriteStream@@@Z @ 140 NONAME ; void Usif::CScrLogEntry::ExternalizeL(class RWriteStream &) const
+	?OpenViewL@RSoftwareComponentRegistryView@Usif@@QAEXABVRSoftwareComponentRegistry@2@PAVCComponentFilter@2@@Z @ 141 NONAME ; void Usif::RSoftwareComponentRegistryView::OpenViewL(class Usif::RSoftwareComponentRegistry const &, class Usif::CComponentFilter *)
+	?Version@CComponentEntry@Usif@@QBEABVTDesC16@@XZ @ 142 NONAME ; class TDesC16 const & Usif::CComponentEntry::Version(void) const
+	?NewLC@CScrLogEntry@Usif@@SAPAV12@AAVRReadStream@@@Z @ 143 NONAME ; class Usif::CScrLogEntry * Usif::CScrLogEntry::NewLC(class RReadStream &)
+	?SetIsComponentRemovableL@RSoftwareComponentRegistry@Usif@@QAEXHH@Z @ 144 NONAME ; void Usif::RSoftwareComponentRegistry::SetIsComponentRemovableL(int, int)
+	?ConstructL@CLocalizableComponentInfo@Usif@@AAEXABVTDesC16@@0@Z @ 145 NONAME ; void Usif::CLocalizableComponentInfo::ConstructL(class TDesC16 const &, class TDesC16 const &)
+	?GetComponentFilesCountL@RSoftwareComponentRegistry@Usif@@QBEIH@Z @ 146 NONAME ; unsigned int Usif::RSoftwareComponentRegistry::GetComponentFilesCountL(int) const
+	?IsRemovable@CComponentEntry@Usif@@QBEHXZ @ 147 NONAME ; int Usif::CComponentEntry::IsRemovable(void) const
+	?NewL@CComponentFilter@Usif@@SAPAV12@XZ @ 148 NONAME ; class Usif::CComponentFilter * Usif::CComponentFilter::NewL(void)
+	?GlobalId@CComponentEntry@Usif@@QBEABVTDesC16@@XZ @ 149 NONAME ; class TDesC16 const & Usif::CComponentEntry::GlobalId(void) const
+	?IsMediaPresentL@RSoftwareComponentRegistry@Usif@@QBEHH@Z @ 150 NONAME ; int Usif::RSoftwareComponentRegistry::IsMediaPresentL(int) const
+	?Vendor@CComponentEntry@Usif@@QBEABVTDesC16@@XZ @ 151 NONAME ; class TDesC16 const & Usif::CComponentEntry::Vendor(void) const
+	?RegisterComponentFileL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@H@Z @ 152 NONAME ; void Usif::RSoftwareComponentRegistry::RegisterComponentFileL(int, class TDesC16 const &, TBool)
+	?NewLC@CVersionedComponentId@Usif@@SAPAV12@XZ @ 153 NONAME ; class Usif::CVersionedComponentId * Usif::CVersionedComponentId::NewLC(void)
+	?GetFilePropertyL@RSoftwareComponentRegistry@Usif@@QBEPAVCPropertyEntry@2@HABVTDesC16@@0@Z @ 154 NONAME ; class Usif::CPropertyEntry * Usif::RSoftwareComponentRegistry::GetFilePropertyL(int, class TDesC16 const &, class TDesC16 const &) const
+	?VersionFrom@CVersionedComponentId@Usif@@QBEPBVTDesC16@@XZ @ 155 NONAME ; class TDesC16 const * Usif::CVersionedComponentId::VersionFrom(void) const
+	?GetComponentL@RSoftwareComponentRegistry@Usif@@QBEHHAAVCComponentEntry@2@W4TLanguage@@@Z @ 156 NONAME ; int Usif::RSoftwareComponentRegistry::GetComponentL(int, class Usif::CComponentEntry &, enum TLanguage) const
+	??1CLocalizablePropertyEntry@Usif@@UAE@XZ @ 157 NONAME ; Usif::CLocalizablePropertyEntry::~CLocalizablePropertyEntry(void)
+	?DeleteComponentDependencyL@RSoftwareComponentRegistry@Usif@@QAEXABVCGlobalComponentId@2@0@Z @ 158 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteComponentDependencyL(class Usif::CGlobalComponentId const &, class Usif::CGlobalComponentId const &)
+	?NewLC@CLocalizablePropertyEntry@Usif@@SAPAV12@ABVTDesC16@@0W4TLanguage@@@Z @ 159 NONAME ; class Usif::CLocalizablePropertyEntry * Usif::CLocalizablePropertyEntry::NewLC(class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?Int64Value@CIntPropertyEntry@Usif@@QAE_JXZ @ 160 NONAME ; long long Usif::CIntPropertyEntry::Int64Value(void)
+	?NewLC@CComponentEntry@Usif@@SAPAV12@XZ @ 161 NONAME ; class Usif::CComponentEntry * Usif::CComponentEntry::NewLC(void)
+	?NewLC@CLocalizableComponentInfo@Usif@@SAPAV12@ABVTDesC16@@0W4TLanguage@@@Z @ 162 NONAME ; class Usif::CLocalizableComponentInfo * Usif::CLocalizableComponentInfo::NewLC(class TDesC16 const &, class TDesC16 const &, enum TLanguage)
+	?GetFilePropertiesL@RSoftwareComponentRegistry@Usif@@QBEXHABVTDesC16@@AAV?$RPointerArray@VCPropertyEntry@Usif@@@@@Z @ 163 NONAME ; void Usif::RSoftwareComponentRegistry::GetFilePropertiesL(int, class TDesC16 const &, class RPointerArray<class Usif::CPropertyEntry> &) const
+	??0RSoftwareComponentRegistry@Usif@@QAE@XZ @ 164 NONAME ; Usif::RSoftwareComponentRegistry::RSoftwareComponentRegistry(void)
+	?NewL@CComponentEntry@Usif@@SAPAV12@ABHABVTDesC16@@111H_JABW4TScomoState@2@ABV?$TBuf8@$0BK@@@11HHHH@Z @ 165 NONAME ; class Usif::CComponentEntry * Usif::CComponentEntry::NewL(int const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, int, long long, enum Usif::TScomoState const &, class TBuf8<26> const &, class TDesC16 const &, class TDesC16 const &, int, int, int, int)
+	?SetNameL@CComponentFilter@Usif@@QAEXABVTDesC16@@@Z @ 166 NONAME ; void Usif::CComponentFilter::SetNameL(class TDesC16 const &)
+	?SetComponentVersionL@RSoftwareComponentRegistry@Usif@@QAEXHABVTDesC16@@@Z @ 167 NONAME ; void Usif::RSoftwareComponentRegistry::SetComponentVersionL(int, class TDesC16 const &)
+	?AddComponentDependencyL@RSoftwareComponentRegistry@Usif@@QAEXABVCVersionedComponentId@2@ABVCGlobalComponentId@2@@Z @ 168 NONAME ; void Usif::RSoftwareComponentRegistry::AddComponentDependencyL(class Usif::CVersionedComponentId const &, class Usif::CGlobalComponentId const &)
+	?NewLC@CGlobalComponentId@Usif@@SAPAV12@ABVTDesC16@@0@Z @ 169 NONAME ; class Usif::CGlobalComponentId * Usif::CGlobalComponentId::NewLC(class TDesC16 const &, class TDesC16 const &)
+	?SoftwareType@CComponentEntry@Usif@@QBEABVTDesC16@@XZ @ 170 NONAME ; class TDesC16 const & Usif::CComponentEntry::SoftwareType(void) const
+	?PropertyType@CIntPropertyEntry@Usif@@UBE?AW4TPropertyType@CPropertyEntry@2@XZ @ 171 NONAME ; enum Usif::CPropertyEntry::TPropertyType Usif::CIntPropertyEntry::PropertyType(void) const
+	?Close@RSoftwareComponentRegistryFilesList@Usif@@QAEXXZ @ 172 NONAME ; void Usif::RSoftwareComponentRegistryFilesList::Close(void)
+	?NextComponentL@RSoftwareComponentRegistryView@Usif@@QBEHAAVCComponentEntry@2@W4TLanguage@@@Z @ 173 NONAME ; int Usif::RSoftwareComponentRegistryView::NextComponentL(class Usif::CComponentEntry &, enum TLanguage) const
+	?GetComponentSupportedLocalesListL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RArray@W4TLanguage@@@@@Z @ 174 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentSupportedLocalesListL(int, class RArray<enum TLanguage> &) const
+	?GetComponentLocalizedInfoL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RPointerArray@VCLocalizableComponentInfo@Usif@@@@@Z @ 175 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentLocalizedInfoL(int, class RPointerArray<class Usif::CLocalizableComponentInfo> &) const
+

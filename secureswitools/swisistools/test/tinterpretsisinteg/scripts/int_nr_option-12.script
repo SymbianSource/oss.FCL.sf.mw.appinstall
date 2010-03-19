@@ -1,0 +1,35 @@
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/sfl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+
+// Load Suite
+LOAD_SUITE tuiscriptadaptors
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		INT_NR_Option-12
+//! @SYMTestCaseDesc 	PU over SA(NR). This is a positive testcase 
+//! @SYMPREQ  			405-4255
+//! @SYMTestStatus		Released
+//! @SYMTestPriority 	High
+//! @SYMTestActions 	Uninstall the installed SIS file
+//! @SYMTestExpectedResults 	SIS file is never installed
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+START_TESTCASE INT_NR_Option-12
+
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep c:\tswi\tinterpretsisinteg\scripts\ini.ini  NR-OPTION-01
+
+END_TESTCASE INT_NR_Option-12

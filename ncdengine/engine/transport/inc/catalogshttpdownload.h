@@ -19,7 +19,7 @@
 #ifndef C_CATALOGSHTTPDOWNLOAD_H
 #define C_CATALOGSHTTPDOWNLOAD_H
 
-#include <downloadmgrclient.h>
+#include <DownloadMgrClient.h>
 
 #include <s32file.h>
 

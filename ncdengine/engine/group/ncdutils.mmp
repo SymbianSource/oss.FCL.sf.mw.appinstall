@@ -62,7 +62,7 @@ USERINCLUDE   ../../provider/server/inc
 
 // System include paths
 #ifndef __SERIES60_30__
-APP_LAYER_SYSTEMINCLUDE
+MW_LAYER_SYSTEMINCLUDE
 #else
 SYSTEMINCLUDE /Epoc32/include
 #endif

@@ -19,7 +19,7 @@
 #ifndef T_CATALOGSHTTPTYPES_H
 #define T_CATALOGSHTTPTYPES_H
 
-#include <httpdownloadmgrcommon.h>
+#include <HttpDownloadMgrCommon.h>
 
 class MCatalogsHttpOperation;
 

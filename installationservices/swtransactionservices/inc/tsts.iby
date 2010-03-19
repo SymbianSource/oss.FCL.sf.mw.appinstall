@@ -1,0 +1,150 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef TSTS_IBY
+#define TSTS_IBY
+
+define ZDRIVE \epoc32\data\Z
+
+REM Software Transaction Services Test Suite
+
+
+file=ABI_DIR\BUILD_DIR\tststestserver.exe	  sys\bin\tststestserver.exe
+file=ABI_DIR\BUILD_DIR\tststestserverrollbackall.exe	  sys\bin\tststestserverrollbackall.exe
+
+data = ZDRIVE\tusif\tsts\tsts.script             \tusif\tsts\tsts.script
+data = ZDRIVE\tusif\tsts\tsts_rollbackall.script \tusif\tsts\tsts_rollbackall.script
+data = ZDRIVE\tusif\tsts\tsts.ini                \tusif\tsts\tsts.ini
+data = ZDRIVE\tusif\tsts\data\tstsdummy.txt      \tusif\tsts\data\tstsdummy.txt
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8.drv    \tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8.log    \tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8\0.bak  \tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8\0.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8\1.bak  \tusif\tsts\data\rollbackall\testcase1\c_drive\61f7bbf8\1.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8.log    \tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8\0.bak  \tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8\0.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8\1.bak  \tusif\tsts\data\rollbackall\testcase1\e_drive\61f7bbf8\1.bak
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3.drv    \tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3.log    \tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3\0.bak  \tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3\0.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3\1.bak  \tusif\tsts\data\rollbackall\testcase2\c_drive\b06c42f3\1.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3.log    \tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3\0.bak  \tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3\0.bak
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3\1.bak  \tusif\tsts\data\rollbackall\testcase2\e_drive\b06c42f3\1.bak
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase3\c_drive\bd596810.drv    \tusif\tsts\data\rollbackall\testcase3\c_drive\bd596810.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase3\c_drive\bd596810.log    \tusif\tsts\data\rollbackall\testcase3\c_drive\bd596810.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase3\e_drive\bd596810.log    \tusif\tsts\data\rollbackall\testcase3\e_drive\bd596810.log
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase4\c_drive\cb94c9f0.drv    \tusif\tsts\data\rollbackall\testcase4\c_drive\cb94c9f0.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase4\c_drive\cb94c9f0.log    \tusif\tsts\data\rollbackall\testcase4\c_drive\cb94c9f0.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase4\e_drive\cb94c9f0.log    \tusif\tsts\data\rollbackall\testcase4\e_drive\cb94c9f0.log
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase5\c_drive\b630b6f0.drv    \tusif\tsts\data\rollbackall\testcase5\c_drive\b630b6f0.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase5\c_drive\b630b6f0.log    \tusif\tsts\data\rollbackall\testcase5\c_drive\b630b6f0.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase5\e_drive\b630b6f0.log    \tusif\tsts\data\rollbackall\testcase5\e_drive\b630b6f0.log
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase6\c_drive\be3d42f0.drv    \tusif\tsts\data\rollbackall\testcase6\c_drive\be3d42f0.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase6\c_drive\be3d42f0.log    \tusif\tsts\data\rollbackall\testcase6\c_drive\be3d42f0.log
+data = ZDRIVE\tusif\tsts\data\rollbackall\testcase6\e_drive\be3d42f0.log    \tusif\tsts\data\rollbackall\testcase6\e_drive\be3d42f0.log
+
+data = ZDRIVE\tusif\tsts\data\rollbackall\sec-sts-rollbackall-0002\b6da9d45.drv    \tusif\tsts\data\rollbackall\sec-sts-rollbackall-0002\b6da9d45.drv
+data = ZDRIVE\tusif\tsts\data\rollbackall\sec-sts-rollbackall-0002\b6da9d45.log    \tusif\tsts\data\rollbackall\sec-sts-rollbackall-0002\b6da9d45.log
+
+//these files are for the "legacy" tintegrityservices tests
+file=ABI_DIR\BUILD_DIR\tstsintegrityservicesclient.dll		sys\bin\tstsintegrityservicesclient.dll
+file=ABI_DIR\BUILD_DIR\tstsintegrityservicesserver.exe	  	sys\bin\tstsintegrityservicesserver.exe
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\tsts_tintegrityservices.script   \tusif\tsts\tintegrityservices\scripts\tsts_tintegrityservices.script
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini           \tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\oom.ini                          \tusif\tsts\tintegrityservices\scripts\oom.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini      \tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingTempFile.ini     \tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingTempFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailBackupFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\install_v1\EFailBackupFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailDeletingFile.ini       \tusif\tsts\tintegrityservices\scripts\install_v1\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailInstallComplete.ini    \tusif\tsts\tintegrityservices\scripts\install_v1\EFailInstallComplete.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini               \tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v1\EFailTempFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\install_v1\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailAddingNewFile.ini      \tusif\tsts\tintegrityservices\scripts\install_v2\EFailAddingNewFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailAddingTempFile.ini     \tusif\tsts\tintegrityservices\scripts\install_v2\EFailAddingTempFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailBackupFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\install_v2\EFailBackupFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailDeletingFile.ini       \tusif\tsts\tintegrityservices\scripts\install_v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailInstallComplete.ini    \tusif\tsts\tintegrityservices\scripts\install_v2\EFailInstallComplete.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailNone.ini               \tusif\tsts\tintegrityservices\scripts\install_v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\install_v2\EFailTempFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\install_v2\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailDeletingFile.ini     \tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNewFilesRemoved.ini  \tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNewFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini             \tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailOldFilesRestored.ini \tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailOldFilesRestored.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailTempFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailDeletingFile.ini     \tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailNewFilesRemoved.ini  \tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailNewFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailNone.ini             \tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailOldFilesRestored.ini \tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailOldFilesRestored.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailTempFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\rollback_install_v2\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailDeletingFile.ini     \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailNewFilesRemoved.ini  \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailNewFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailNone.ini             \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailOldFilesRestored.ini \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailOldFilesRestored.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailRestoringFile.ini    \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailRestoringFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailTempFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v1\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailDeletingFile.ini      \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailNewFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailNewFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailNone.ini              \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailOldFilesRestored.ini  \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailOldFilesRestored.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailRestoringFile.ini     \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailRestoringFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailTempFilesRemoved.ini  \tusif\tsts\tintegrityservices\scripts\rollback_uninstall_v2\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailDeletingFile.ini     \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNewFilesRemoved.ini  \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNewFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNone.ini             \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailOldFilesRestored.ini \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailOldFilesRestored.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailRestoringFile.ini    \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailRestoringFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailTempFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailBackupFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailBackupFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailDeletingFile.ini       \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailInstallComplete.ini    \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailInstallComplete.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailNone.ini               \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailRemovingFile.ini       \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailRemovingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailTempFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailBackupFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailBackupFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailDeletingFile.ini       \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailInstallComplete.ini    \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailInstallComplete.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailNone.ini               \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailRemovingFile.ini       \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailRemovingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailTempFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailTempFilesRemoved.ini
+
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingNewFile.ini      \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingNewFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingTempFile.ini     \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingTempFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailBackupFilesRemoved.ini \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailBackupFilesRemoved.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailDeletingFile.ini       \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailDeletingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailInstallComplete.ini    \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailInstallComplete.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailNone.ini               \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailNone.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailRemovingFile.ini       \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailRemovingFile.ini
+data = ZDRIVE\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailTempFilesRemoved.ini   \tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailTempFilesRemoved.ini
+
+#endif

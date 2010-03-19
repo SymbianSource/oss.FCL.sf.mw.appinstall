@@ -36,7 +36,7 @@
 #include <deflatefilterinterface.h>
 #include <httpfiltercommonstringsext.h>
 #include <httpfilterproxyinterface.h>
-#include <CookieFilterInterface.h>
+#include <cookiefilterinterface.h>
     
 #include "catalogs_device_config.h"
 #include "catalogshttptypes.h"

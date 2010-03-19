@@ -1,0 +1,7 @@
+component	security_referenceapplicationmanager
+source	\sf\mw\appinstall\installationservices\refsoftwareappmgr
+binary	\sf\mw\appinstall\installationservices\refsoftwareappmgr\group	all
+exports	\sf\mw\appinstall\installationservices\refsoftwareappmgr\group
+notes_source	\component_defs\release.src
+
+ipr T

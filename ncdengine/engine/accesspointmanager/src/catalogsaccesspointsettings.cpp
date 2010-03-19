@@ -52,15 +52,19 @@ CCatalogsAccessPointSettings::~CCatalogsAccessPointSettings()
     delete iLongTextData;
     delete iText16Data;
     delete iText8Data;
+
+#ifdef _0
     iLongTextMembers.Close();
     iText16Members.Close();
     iText8Members.Close();
     iUintMembers.Close();
     iBoolMembers.Close();
     iUintData.Close();
-    iBoolData.Close();    
+    iBoolData.Close(); 
+#endif  
     }
     
+#ifdef _0
 void CCatalogsAccessPointSettings::SetLongTextParameterL(
     const TApMember& aKey, const TDesC& aValue) 
     {
@@ -214,11 +218,13 @@ void CCatalogsAccessPointSettings::BoolParameter(
     aKey = iBoolMembers[aIndex];
     aValue = iBoolData[aIndex];
     }
-        
+#endif
+
 void CCatalogsAccessPointSettings::ExternalizeL(RWriteStream& aStream) 
     {
     DLTRACEIN((""));
     
+#ifdef _0
     // write long text parameters
     TInt longTextCount = LongTextParameterCount();
     aStream.WriteInt32L(longTextCount);
@@ -263,12 +269,15 @@ void CCatalogsAccessPointSettings::ExternalizeL(RWriteStream& aStream)
         aStream.WriteInt32L(iBoolMembers[i]);
         aStream.WriteInt8L(iBoolData[i]);
         }
-    
+
+#endif
     DLTRACEOUT((""));        
     }
     
 void CCatalogsAccessPointSettings::InternalizeL(RReadStream& aStream) 
     {
+    
+#ifdef _0
     // read long text parameters
     TInt longTextCount = aStream.ReadInt32L();
     iLongTextMembers.ReserveL(longTextCount);
@@ -327,4 +336,6 @@ void CCatalogsAccessPointSettings::InternalizeL(RReadStream& aStream)
         iBoolMembers.AppendL((TApMember)aStream.ReadInt32L());
         iBoolData.AppendL(aStream.ReadInt8L());
         }
+       
+#endif
     }

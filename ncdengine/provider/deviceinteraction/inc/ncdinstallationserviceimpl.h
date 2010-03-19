@@ -40,6 +40,8 @@
  * from 5.0 onwards because it seems that some 3.2 devices don't support
  * it entirely
  */
+ 
+ /*  HLa - temporary java remove
 #if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined ( __S60_32__ )
     #define USE_OLD_JAVA_API
     class MJavaRegistrySuiteEntry;
@@ -50,7 +52,7 @@
         class CJavaRegistry;
         }
 #endif
-
+*/
 
 class CDocumentHandler;
 
@@ -374,11 +376,14 @@ private: // new methods
      * @param aJavaRegistry Java registry
      * @return Midlet UID
      */
+     
+     /* HLa - temporary java remove
 #ifdef USE_OLD_JAVA_API
     TUid LatestMidletUidL( MJavaRegistry& aJavaRegistry ) const;
 #else    
     TUid LatestMidletUidL( Java::CJavaRegistry& aJavaRegistry ) const;
 #endif
+    */
     
     static TBool MatchJava( const TDesC& aMime );
     

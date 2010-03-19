@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2004 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -389,7 +389,7 @@ void CSWInstInstallRequest::GetMIMETypeL( const ContentAccess::CContent& aConten
     {
     HBufC* tmpMIME = HBufC::NewLC( KMaxDataTypeLength );
     TPtr mimePtr( tmpMIME->Des() );            
-    aContent.GetStringAttribute( ContentAccess::EMimeType, mimePtr );
+    User::LeaveIfError( aContent.GetStringAttribute( ContentAccess::EMimeType, mimePtr ) );
     aMIME.Copy( *tmpMIME );
     CleanupStack::PopAndDestroy( tmpMIME );
     }

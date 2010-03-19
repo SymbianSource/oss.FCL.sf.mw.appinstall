@@ -241,11 +241,11 @@ END_TESTCASE API-inst-PREQ2344-SWI-15
  RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubpu
  RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
  
- RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ RUN_TEST_STEP_RESULT -5 100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
  RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
  
- RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
- RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ //RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ //RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
  
  RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
  RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
@@ -1810,7 +1810,7 @@ START_TESTCASE API-SEC-INC126755-0002
 RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubpu
 RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
 
-RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
 RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
 
 RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
@@ -1819,8 +1819,8 @@ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		ro
 RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		romstubsaru
 RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	romstubsaru_clean
 
-RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
-RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
 
 RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
 RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
@@ -1830,6 +1830,99 @@ RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scr
 
 END_TESTCASE API-SEC-INC126755-0002
 
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-0001
+//! @SYMTestCaseDesc		Checks backup of NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, 
+//! @SYMTestExpectedResults	Install Success, Backup and Uninstall Fails.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-0001
+
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-0002
+//! @SYMTestCaseDesc		Checks backup of SP Over NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP   100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP 	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-0002
+
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-0003
+//! @SYMTestCaseDesc		Checks backup of SP Over NR SP Over NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-0003
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP_RESULT -5 100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP_RESULT -5	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U_NR
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP   100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP 	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-0003
+
+RUN_UTILS DeleteFile C:\Documents\abc*.txt
 
 // Ensure that SWIS shuts down after the above tests to make sure heap checks run
 RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

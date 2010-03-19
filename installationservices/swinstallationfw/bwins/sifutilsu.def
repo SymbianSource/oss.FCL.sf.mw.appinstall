@@ -1,0 +1,3 @@
+EXPORTS
+	?UninstallL@Usif@@YAXH@Z @ 1 NONAME ; void Usif::UninstallL(int)
+

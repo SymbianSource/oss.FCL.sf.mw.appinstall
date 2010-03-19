@@ -20,7 +20,7 @@
 #include "appmngr2widgetruntime.h"      // KAppMngr2WidgetUid
 #include "appmngr2widgetinfoiterator.h" // CAppMngr2WidgetInfoIterator
 #include "appmngr2widget.hrh"           // Widget command IDs
-#include <widgetregistrydata.h>         // CWidgetInfo
+#include <WidgetRegistryData.h>         // CWidgetInfo
 #include <appmngr2driveutils.h>         // TAppMngr2DriveUtils
 
 

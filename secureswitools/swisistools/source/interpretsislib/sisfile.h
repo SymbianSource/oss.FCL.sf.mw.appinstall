@@ -77,6 +77,7 @@ public:
 	TUint32 GetSigned() const;
 	TUint32 GetInstallType() const;
 	TUint32 GetInstallFlags() const;
+	void AddInstallFlags(const TUint8 aFlag) const;
 
 	TUint32 GetLanguage() const;
 

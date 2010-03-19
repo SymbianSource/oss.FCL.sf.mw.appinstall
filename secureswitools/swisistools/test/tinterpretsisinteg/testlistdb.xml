@@ -1649,10 +1649,244 @@
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">api-inst-preq2525-interpretsis-18  API-INST-PREQ2525-InterpretSIS-18 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-PREQ2525-InterpretSIS-18.script" "api-inst-preq2525-interpretsis-18.htm" "FAIL = 0" "FAIL = 0" </check>
 	</test>
 
-	<test id="API-INST-PREQ2525-InterpretSIS-19">
+<test id="API-INST-PREQ2525-InterpretSIS-19">
 	<title>API-INST-PREQ2525-InterpretSIS-19 Install sis having negative language id in supported_language block</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-19_db.bat API-INST-PREQ2525-InterpretSIS-19</command>
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-19 preq2525-interpretsis-19.txt 1 "positive" "none"</check>
 	</test>
 
+<test id="INT_NR_Option-01">
+	<title>INT_NR_Option-01</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-01_db.bat  INT_NR_Option-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-01  INT_NR_Option-01 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-01.script" "int_nr_option-01.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-02">
+	<title>INT_NR_Option-02</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-02_db.bat  INT_NR_Option-02</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-02  INT_NR_Option-02 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-02.script" "int_nr_option-02.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-03">
+	<title>INT_NR_Option-03</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-03_db.bat  INT_NR_Option-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-03  INT_NR_Option-03 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-03.script" "int_nr_option-03.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-04">
+	<title>INT_NR_Option-04</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-04_db.bat INT_NR_Option-04</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">INT_NR_Option-04 int_nr_option_04.txt 1 "negative" "none"</check>
+	</test>
+	
+<test id="INT_NR_Option-05">
+	<title>INT_NR_Option-05</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-05_db.bat  INT_NR_Option-05</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-05  INT_NR_Option-05 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-05.script" "int_nr_option-05.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-06">
+	<title>INT_NR_Option-06</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-06_db.bat  INT_NR_Option-06</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-06  INT_NR_Option-06 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-06.script" "int_nr_option-06.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-07">
+	<title>INT_NR_Option-07</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-07_db.bat  INT_NR_Option-07</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-07  INT_NR_Option-07 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-07.script" "int_nr_option-07.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="INT_NR_Option-08">
+	<title>INT_NR_Option-08</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-08_db.bat  INT_NR_Option-08</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-08  INT_NR_Option-08 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-08.script" "int_nr_option-08.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-09">
+	<title>INT_NR_Option-09</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-09_db.bat  INT_NR_Option-09</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-09  INT_NR_Option-09 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-09.script" "int_nr_option-09.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-10">
+	<title>INT_NR_Option-10</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-10_db.bat  INT_NR_Option-10</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-10  INT_NR_Option-10 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-10.script" "int_nr_option-10.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-11">
+	<title>INT_NR_Option-11</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-11_db.bat  INT_NR_Option-11</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-11  INT_NR_Option-11 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-11.script" "int_nr_option-11.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-12">
+	<title>INT_NR_Option-12</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-12_db.bat  INT_NR_Option-12</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-12  INT_NR_Option-12 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-12.script" "int_nr_option-12.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-13">
+	<title>INT_NR_Option-13</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-13_db.bat  INT_NR_Option-13</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-13  INT_NR_Option-13 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-13.script" "int_nr_option-13.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-14">
+	<title>INT_NR_Option-14</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-14_db.bat  INT_NR_Option-14</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-14  INT_NR_Option-14 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-14.script" "int_nr_option-14.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-15">
+	<title>INT_NR_Option-15</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-15_db.bat  INT_NR_Option-15</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-15  INT_NR_Option-15 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-15.script" "int_nr_option-15.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-16">
+	<title>INT_NR_Option-16</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-16_db.bat  INT_NR_Option-16</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-16  INT_NR_Option-16 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-16.script" "int_nr_option-16.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-17">
+	<title>INT_NR_Option-17</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-17_db.bat  INT_NR_Option-17</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-17  INT_NR_Option-17 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-17.script" "int_nr_option-17.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-18">
+	<title>INT_NR_Option-18</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-18_db.bat  INT_NR_Option-18</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-18  INT_NR_Option-18 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-18.script" "int_nr_option-18.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-19">
+	<title>INT_NR_Option-19</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-19_db.bat  INT_NR_Option-19</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-19  INT_NR_Option-19 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-19.script" "int_nr_option-19.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-20">
+	<title>INT_NR_Option-20</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-20_db.bat  INT_NR_Option-20</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-20  INT_NR_Option-20 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-20.script" "int_nr_option-20.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-21">
+	<title>INT_NR_Option-21</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-21_db.bat  INT_NR_Option-21</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-21  INT_NR_Option-21 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-21.script" "int_nr_option-21.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-22">
+	<title>INT_NR_Option-22</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-22_db.bat  INT_NR_Option-22</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-22  INT_NR_Option-22 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-22.script" "int_nr_option-22.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-23">
+	<title>INT_NR_Option-23</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-23_db.bat  INT_NR_Option-23</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-23  INT_NR_Option-23 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-23.script" "int_nr_option-23.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-24">
+	<title>INT_NR_Option-24</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-24_db.bat  INT_NR_Option-24</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-24  INT_NR_Option-24 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-24.script" "int_nr_option-24.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-25">
+	<title>INT_NR_Option-25</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-25_db.bat  INT_NR_Option-25</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-25  INT_NR_Option-25 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-25.script" "int_nr_option-25.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-26">
+	<title>INT_NR_Option-26</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-26_db.bat  INT_NR_Option-26</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-26  INT_NR_Option-26 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-26.script" "int_nr_option-26.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-27">
+	<title>INT_NR_Option-27</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-27_db.bat  INT_NR_Option-27</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-27  INT_NR_Option-27 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-27.script" "int_nr_option-27.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-28">
+	<title>INT_NR_Option-28</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-28_db.bat  INT_NR_Option-28</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-28  INT_NR_Option-28 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-28.script" "int_nr_option-28.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-29">
+	<title>INT_NR_Option-29</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-29_db.bat  INT_NR_Option-29</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-29  INT_NR_Option-29 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-29.script" "int_nr_option-29.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-30">
+	<title>INT_NR_Option-30</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-30_db.bat  INT_NR_Option-30</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-30  INT_NR_Option-30 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-30.script" "int_nr_option-30.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-31">
+	<title>INT_NR_Option-31</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-31_db.bat  INT_NR_Option-31</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-31  INT_NR_Option-31 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-31.script" "int_nr_option-31.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-32">
+	<title>INT_NR_Option-32</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-32_db.bat  INT_NR_Option-32</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-32  INT_NR_Option-32 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-32.script" "int_nr_option-32.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-33">
+	<title>INT_NR_Option-33</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-33_db.bat  INT_NR_Option-33</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-33  INT_NR_Option-33 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-33.script" "int_nr_option-33.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-34">
+	<title>INT_NR_Option-34</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-34_db.bat  INT_NR_Option-34</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-34  INT_NR_Option-34 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-34.script" "int_nr_option-34.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-35">
+	<title>INT_NR_Option-35</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-35_db.bat  INT_NR_Option-35</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-35  INT_NR_Option-35 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-35.script" "int_nr_option-35.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-36">
+	<title>INT_NR_Option-36</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-36_db.bat  INT_NR_Option-36</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-36  INT_NR_Option-36 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-36.script" "int_nr_option-36.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-37">
+	<title>INT_NR_Option-37</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-37_db.bat  INT_NR_Option-37</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-37  INT_NR_Option-37 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-37.script" "int_nr_option-37.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="INT_NR_Option-38">
+	<title>INT_NR_Option-38</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-38_db.bat  INT_NR_Option-38</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-38  INT_NR_Option-38 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-38.script" "int_nr_option-38.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-39">
+	<title>INT_NR_Option-39</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-39_db.bat  INT_NR_Option-39</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-39  INT_NR_Option-39 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-39.script" "int_nr_option-39.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
 </testlist>

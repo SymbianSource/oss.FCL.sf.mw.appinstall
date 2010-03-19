@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -836,15 +836,6 @@ RESOURCE TBUF r_iaupdate_insufficient_memory
     }
 
 //
-// Update while roaming confirmation dialog
-//
-
-RESOURCE TBUF r_iaupdate_connect_to_server
-    {
-    buf = qtn_swupdate_connect_to_server;
-    }
-
-//
 // Automatic updates check dialog resources
 //
 
@@ -1106,13 +1097,6 @@ RESOURCE DIALOG r_iaupdate_setting_dialog
                      name = qtn_swupdate_automatic_update_checks;
                      setting_page_resource = r_iaupdate_auto_update_check_setting_page;
                      associated_resource = r_iaupdate_auto_update_check_texts;
-                     },
-                 AVKON_SETTING_ITEM
-                     {
-                     identifier = EIAUpdateSettingRoamingWarning;
-                     name = qtn_swupdate_roaming_warning;
-                     setting_page_resource = r_iaupdate_roaming_warning_setting_page;
-                     associated_resource = r_iaupdate_roaming_warning_texts;
                      }
                  };
 	          };

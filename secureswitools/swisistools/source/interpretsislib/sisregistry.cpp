@@ -774,7 +774,7 @@ void SisRegistry::UpdateRegistryEntry(const SisFile& aSis,
 	TUint32 pkg = aSis.GetPackageUid();
 
 	SisRegistryObject* obj = GetRegistryObjectPtr(pkg);
-	obj->UpgradeEntry(aSis, aFiles, aInstallSISFile.iTargetDrive, aInstallSISFile.iSUFlag, iConfigManager);
+	obj->UpgradeEntry(aSis, aFiles, aInstallSISFile.iTargetDrive, aInstallSISFile.iSUFlag, aInstallSISFile.iNonRemovable, iConfigManager);
 
  	// Update/Create the .reg and .ctl files
 	GenerateRegistryEntry(*obj, aSis);

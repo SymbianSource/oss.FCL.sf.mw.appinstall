@@ -301,6 +301,11 @@ TUint32 SisFile::GetInstallFlags() const
 	return iContents.Controller().SISInfo().InstallationFlag();
 	}
 
+void SisFile::AddInstallFlags(const TUint8 aFlag) const
+	{
+	iContents.Controller().AddInstallFlag(aFlag);
+	}
+
 TUint32 SisFile::GetLanguage() const
 	{
 	return iContents.Controller().Language(0);

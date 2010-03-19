@@ -961,11 +961,7 @@ void CNcdLoadNodeOperationImpl::FolderDataL(
                 }
             }
         }
-    else if ( parentIdentifier )
-        {
-        CleanupStack::PopAndDestroy( parentIdentifier );
-        }
-
+    
     // Delete data because ownership has been transferred.
     CleanupStack::PopAndDestroy( aData );
     
@@ -1261,10 +1257,6 @@ void CNcdLoadNodeOperationImpl::ItemDataL(
                 node.NodeMetaDataL().IconL().SetIconDataReady( EFalse );
                 }
             }
-        }
-    else if ( parentIdentifier )
-        {
-        CleanupStack::PopAndDestroy( parentIdentifier );
         }
         
     // Delete data because ownership has been transferred.

@@ -21,3 +21,12 @@ del /s /f /q \epoc32\release\winscw\urel\z\sys\bin\tswisidupgradeexe.exe
 
 del /s /f /q \epoc32\winscw\c\tswi\tbackuprestore\backup*.*
 del /s /f /q \epoc32\winscw\c\tswi\tbackuprestore\metadata*
+
+rem cleanup anything from previous tests.
+del /f /q \epoc32\winscw\c\sys\install\scr\scr.*
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\802730A0
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\80000077
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\80000076
+del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\
+del /s /f /q \epoc32\winscw\c\sys\bin\
+del /s /f /q \epoc32\winscw\c\sys\hash\

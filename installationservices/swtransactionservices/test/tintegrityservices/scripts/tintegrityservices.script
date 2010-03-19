@@ -1,0 +1,427 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT IntegrityServices tests...
+//
+//LOAD_SUITE tintegrityservices
+LOAD_SUITE tststestserver
+//
+#
+z:\tusif\tsts\tintegrityservices\scripts\
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0001
+//! @SYMTestCaseDesc		Simulates successful install of version 1 followed by sucessful uninstall
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0001
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0002
+//! @SYMTestCaseDesc		Simulates successful install of version 1, then upgrade to version 2 followed by sucessful uninstall
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0002
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0003
+//! @SYMTestCaseDesc		Simulates successful install of version 2 followed by sucessful uninstall
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0003
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v2\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\uninstall_v2\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0004
+//! @SYMTestCaseDesc		Simulates failure during installation of version 1 before adding the file c:\DataFileA.dat followed by sucessful rollback.
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0004
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini EBeforeAction_c:\DataFileA.dat
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0005
+//! @SYMTestCaseDesc		Simulates failure during installation of version 1 after logging that the installation completed. Recovery rolls-forward the installation to completion. It is then uninstalled successfully.
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0005
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailInstallComplete.ini EAfterJournal
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0006
+//! @SYMTestCaseDesc		Simulates failure during installation of version 1 and again during the recovery before finally recovering successfully.
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0006
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini EBeforeAction_c:\DataFileA.dat
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailOldFilesRestored.ini EFailBeforeJournal
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0007
+//! @SYMTestCaseDesc		Simulates installation of version 1 followed by failure during upgrade to version 2. A sucessful recovery is followed by sucessfull uninstall.
+//! @SYMTestPriority		Low
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.  All files are cleaned-up.
+//! @SYMREQ			REQ2681.5
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0007
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\install_v1\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingNewFile.ini EBeforeAction_e:\DataFileC.dat
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNone.ini EFailNone
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\uninstall_v1\EFailNone.ini EFailNone
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0007
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0009
+//! @SYMTestCaseDesc		Test that rollback after adding then removing a file will not leave the file in place.
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files cleaned-up.
+//! @SYMDEF 			DEF088970
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0009
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+// Copy file into place to be removed during the rollback.
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\datafileb.dat
+RUN_UTILS MakeReadWrite c:\datafileb.dat
+
+// Run test step that removes c:\datafileb.dat, adds then removes c:\DataFileA, then fails after adding another file.
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini failafteraddandremove
+
+// Roll back from previous failure, ensure that files added in the previous step are deleted and the one deleted during the
+// previous step is recovered.
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini recoverafterfailedaddandremove
+
+// Delete test file
+RUN_UTILS DeleteFile c:\datafileb.dat
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0009
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0010
+//! @SYMTestCaseDesc		Test that transient rollback failure while deleting temp files will not block future rollbacks.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Journal addition of multiple temp files without commit, fail rollback while deleting temp files, check
+//! 				that subsequent rollback succeeds.
+//! @SYMTestExpectedResults	Last rollback succeeds, all temp files removed.
+//! @SYMDEF 			DEF088011
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0010
+
+// Run test step that adds a number of temporary files, failing after the last one so it doesn't commit
+RUN_TEST_STEP 10 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini failonlasttemp
+
+// Run a recovery step which fails deleting one of the temp files
+RUN_TEST_STEP 10 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini rollbackfailondeletetemp
+
+// Make sure that rollback can succeed on another attempt. 
+RUN_TEST_STEP 10 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini rollbacksuccess
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0010
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0011
+//! @SYMTestCaseDesc		Test that failure before adding a journal entry for removal is handled gracefully
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files present.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0011
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+RUN_UTILS MkDir c:\dummyDir
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafileb.dat
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafilea.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafileb.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafilea.dat
+
+// Run test step that fails before adding to the journal entry that dummyDir is to be removed
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_before_journal_remove_dir
+
+// Roll back from previous failure, ensure that the files are still there 
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini directory_present
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0011
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0012
+//! @SYMTestCaseDesc		Test that failure after adding a journal entry for removal is handled gracefully
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files present.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0012
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+RUN_UTILS MkDir c:\dummyDir
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafileb.dat
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafilea.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafileb.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafilea.dat
+
+// Run test step that fails after adding to the journal entry that dummyDir is to be removed
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_after_journal_remove_dir
+
+// Roll back from previous failure, ensure the files are still there
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini directory_present
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0012
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0013
+//! @SYMTestCaseDesc		Test that failure before removing a directory is handled gracefully
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files present.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0013
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+RUN_UTILS MkDir c:\dummyDir
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafileb.dat
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafilea.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafileb.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafilea.dat
+
+// Run test step that fails before removing dummyDir 
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_before_action_remove_dir
+
+// Roll back from previous failure, ensure the files are still there
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini directory_present
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0013
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0014
+//! @SYMTestCaseDesc		Test that failure after removing a directory is handled gracefully
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files present.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0014
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+RUN_UTILS MkDir c:\dummyDir
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafileb.dat
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafilea.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafileb.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafilea.dat
+
+// Run test step that fails after removing dummyDir
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_after_action_remove_dir
+
+// Roll back from previous failure, ensure the files are still there
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini directory_present
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0014
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0015
+//! @SYMTestCaseDesc		Test that roll forward of directory uninstallation works correctly
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files deleted.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0015
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+RUN_UTILS MkDir c:\dummyDir
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafileb.dat
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini c:\dummyDir\datafilea.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafileb.dat
+RUN_UTILS MakeReadWrite c:\dummyDir\datafilea.dat
+
+// Run test step that fails after removing dummyDir
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_before_action_remove_dir
+
+// Roll forward - check that files will get deleted
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini fail_none
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0015
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0016
+//! @SYMTestCaseDesc		Test that adding and removing a directory in the same transaction will remove it
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files cleaned-up.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0016
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+// Run test step that creates c:\dummyDir with a test file, and then removes it in the same transaction.
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini add_and_remove_dir
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0016
+
+
+//! @SYMTestCaseID		API-SEC-INTEGRITYSERVICES-B-0017
+//! @SYMTestCaseDesc		Test that adding and removing a directory in the same transaction with failure before removal will rollback correctly
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	The test completes with all files cleaned-up.
+//! @SYMDEF 			DEF101378
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-INTEGRITYSERVICES-B-0017
+
+// Preliminary cleanup
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+// Run test step that creates c:\dummyDir with a test file, and then removes it in the same transaction while failing before removal.
+RUN_TEST_STEP 100 tststestserver Install z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini add_and_remove_dir_fail_before_remove
+
+// Roll back from previous failure, ensure that no files are present
+RUN_TEST_STEP 100 tststestserver Recover z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini directory_absent
+
+END_TESTCASE API-SEC-INTEGRITYSERVICES-B-0017
+
+
+RUN_TEST_STEP 100 tststestserver Cleanup z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Cleanup
+
+
+//! @SYMTestCaseID		API-SEC-Journalfile_unit_tests-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-Journalfile_unit_tests-0001
+
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTest z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests
+
+END_TESTCASE API-SEC-Journalfile_unit_tests-0001
+
+
+//! @SYMTestCaseID		API-SEC-Journalfile_unit_tests_OOM-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-Journalfile_unit_tests_OOM-0001
+
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTestAdd     z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests_oom
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTestTemp    z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests_oom
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTestRemove  z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests_oom
+RUN_UTILS CopyFile z:\tusif\tsts\tintegrityservices\scripts\data\unittests\myjournal.log  c:\sts_test_dir\myjournal.log
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTestRead    z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests_oom
+RUN_UTILS DeleteFile c:\sts_test_dir\myjournal.log
+RUN_TEST_STEP 100 tststestserver JournalFileUnitTestEvent   z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini JournalFile_unit_tests_oom
+
+END_TESTCASE API-SEC-Journalfile_unit_tests_OOM-0001
+
+
+//! @SYMTestCaseID		API-SEC-Journal_unit_tests-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-Journal_unit_tests-0001
+
+RUN_TEST_STEP 100 tststestserver JournalUnitTest z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Journal_unit_tests
+
+END_TESTCASE API-SEC-Journal_unit_tests-0001
+
+
+//! @SYMTestCaseID		API-SEC-Journal_unit_tests_OOM-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-Journal_unit_tests_OOM-0001
+
+RUN_TEST_STEP 100 tststestserver JournalUnitTestInstall z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Journal_unit_tests_oom
+RUN_TEST_STEP 100 tststestserver JournalUnitTestRollback z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Journal_unit_tests_oom
+
+END_TESTCASE API-SEC-Journal_unit_tests_OOM-0001
+
+
+//START_TESTCASE Integrityservices_unit_tests_OOM
+//RUN_TEST_STEP 100 tststestserver IntegrityservicesUnitTestInstall z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Integrityservices_unit_tests_OOM
+//RUN_TEST_STEP 100 tststestserver IntegrityservicesUnitTestRollback z:\tusif\tsts\tintegrityservices\scripts\tintegrityservices.ini Integrityservices_unit_tests_OOM
+//END_TESTCASE Integrityservices_unit_tests_OOM

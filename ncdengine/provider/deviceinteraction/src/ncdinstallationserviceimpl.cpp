@@ -32,6 +32,7 @@
 #include <e32property.h>
 #include <sacls.h>
 
+/*  HLa - temporary java remove
 #ifdef USE_OLD_JAVA_API
     #include <mjavaregistry.h>
     #include <swi/minstalledappsregistry.h>
@@ -41,7 +42,7 @@
 
     using namespace Java;
 #endif
-
+*/
 #include "ncdinstallationserviceobserver.h"
 #include "ncdactiveoperationobserver.h"
 #include "ncdsilentinstallactiveobserver.h"
@@ -55,6 +56,7 @@ const TInt KDelayWhenAppListInvalid = 500000;
 
 const TUint KFileOpenFlags = EFileShareReadersOrWriters;
 
+/*  HLa - temporary java remove
 #ifdef __SERIES60_31__
 
     const TInt32 KPSUidJavaLatestInstallation = KUidJmiLatestInstallation;
@@ -67,6 +69,7 @@ const TUint KFileOpenFlags = EFileShareReadersOrWriters;
     #include <javadomainpskeys.h>
 
 #endif
+*/
 
 // length taken from WidgetRegistryData.h
 const TInt KWidgetBundleIdLength = KWidgetRegistryVal + 1;    
@@ -133,10 +136,14 @@ CNcdInstallationService::~CNcdInstallationService()
     delete iInstallationCompleteCallback;
     delete iJadFileName;
     delete iRecognizedMime;
+    
+     /*  HLa - temporary java remove
 #ifdef USE_OLD_JAVA_API    
     iMIDletUids.Close();
 #endif    
     iApaLs.Close();
+    */
+    
     if( iThemes )
         {
         iThemes->ResetAndDestroy();
@@ -493,11 +500,14 @@ void CNcdInstallationService::SisRegistryEntryLC(
 //
 // ---------------------------------------------------------------------------
 //
+
 #ifdef USE_OLD_JAVA_API
 
 TBool CNcdInstallationService::JavaAppExistsL( 
     const TUid& aUid )
     {
+    	
+    /*  HLa - temporary java remove
     DLTRACEIN((""));
 
     MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
@@ -515,6 +525,8 @@ TBool CNcdInstallationService::JavaAppExistsL(
     
     CleanupStack::PopAndDestroy( javaRegistry );
     return err == KErrNone;
+    */
+    
     }
 
 #else
@@ -523,6 +535,7 @@ TBool CNcdInstallationService::JavaAppExistsL(
     const TUid& aUid )
     {
     DLTRACEIN((""));
+    /*  HLa - temporary java remove
 
     CJavaRegistry* javaRegistry = CJavaRegistry::NewLC();    
 
@@ -530,10 +543,13 @@ TBool CNcdInstallationService::JavaAppExistsL(
     
     CleanupStack::PopAndDestroy( javaRegistry );
     return exists;
+    */
+    
     }
 
 #endif
-    
+
+  
 // ---------------------------------------------------------------------------
 // Checks the application status
 // ---------------------------------------------------------------------------
@@ -1449,11 +1465,13 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 #ifdef USE_OLD_JAVA_API
     // Store installed java app uids before installation to see
     // which one is a new java app later.
+    /*  HLa - temporary java remove
     MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
     CleanupReleasePushL( *javaRegistry );
     iMIDletUids.Reset();
     javaRegistry->InstalledMIDletUidsL( iMIDletUids );
     CleanupStack::PopAndDestroy( javaRegistry );
+    */
 #endif
     
     // In platform security systems JAR and JAD has to be in same folder
@@ -1828,21 +1846,25 @@ void CNcdInstallationService::InitializeRomApplicationListL()
 
 void CNcdInstallationService::MidletUidsL( RArray<TUid>& aUids )
     {
+    	 /*  HLa - temporary java remove
     DLTRACEIN((""));
     MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
     CleanupReleasePushL( *javaRegistry );
     javaRegistry->InstalledMIDletUidsL( aUids );
-    CleanupStack::PopAndDestroy( javaRegistry );    
+    CleanupStack::PopAndDestroy( javaRegistry ); 
+    */   
     }
 
 #else
 
 void CNcdInstallationService::MidletUidsL( RArray<TUid>& aUids )
     {
+    /*  HLa - temporary java remove
     DLTRACEIN((""));
     CJavaRegistry* javaRegistry = CJavaRegistry::NewLC();
     javaRegistry->GetRegistryEntryUidsL( aUids );          
-    CleanupStack::PopAndDestroy( javaRegistry );    
+    CleanupStack::PopAndDestroy( javaRegistry );   
+    */ 
     }
 
 #endif
@@ -1864,6 +1886,8 @@ TBool CNcdInstallationService::IsRomApplication( const TUid& aUid ) const
 // been installed since the last device restart
 // ---------------------------------------------------------------------------
 //
+
+/*  HLa - temporary java remove
 #ifdef USE_OLD_JAVA_API
 
 TUid CNcdInstallationService::LatestMidletUidL( 
@@ -1973,6 +1997,7 @@ TUid CNcdInstallationService::LatestMidletUidL(
 
 
 #endif
+*/
 
 // ---------------------------------------------------------------------------
 // Returns true if the MIME type matches a Java application or descriptor
@@ -1988,8 +2013,11 @@ TBool CNcdInstallationService::MatchJava( const TDesC& aMime )
 
 #ifdef USE_OLD_JAVA_API
 
+
 TUid CNcdInstallationService::InstalledMidletUidL()
     {
+    	
+    /* HLa - temporary java remove
     DLTRACEIN((""));
     RArray<TUid> MIDletUids;
     CleanupClosePushL( MIDletUids );
@@ -2024,17 +2052,21 @@ TUid CNcdInstallationService::InstalledMidletUidL()
 
     iMIDletUids.Reset();
     return MIDletUid;
+    */
+    
     }
 
 #else // USE_OLD_JAVA_API
 
 TUid CNcdInstallationService::InstalledMidletUidL()
     {
+    /* HLa - temporary java remove
     DLTRACEIN((""));
     CJavaRegistry* registry = CJavaRegistry::NewLC();
     TUid midletUid = LatestMidletUidL( *registry );
     CleanupStack::PopAndDestroy( registry );
     return midletUid;
+    */
     }
 
 #endif // USE_OLD_JAVA_API

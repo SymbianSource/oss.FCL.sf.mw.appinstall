@@ -1,0 +1,338 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+// Integration tests for Post manufacture installation of a Layered Execution
+// Environment run on hardware only. This is because a LEE must register a MIME
+// type recognizer in order to be invoked by the SIF. A MIME type recognizer is
+// an ECOM plug-in that cannot be uninstalled properly on the WINSCW Emulator.
+// This is because Windows locks dlls being loaded and therefore uninstallation
+// of an ECOM plug-in fails.
+// However, if you really want to launch the test below, please ensure that:
+// 1) folder \epoc32\release\winscw\udeb\z\resource\plugins doesn't contain
+// the following files: files testnonnativeplugin2.rsc, tsifpkgrec.rsc
+// 2) folder \epoc32\release\winscw\udeb doesn't contain the following files:
+// files testnonnativeplugin2.dll, tsifpkgrec.dll
+// 3) z:\resource\swicertstore.dat allows for installation of packages with
+// the TrustedUI and ProtServ capabilities. In order to do this, please overwrite
+// this file with security\swi\test\tsisfile\data\signedsis\swicertstore.dat
+
+PRINT Run integration tests for Post manufacture installation of a Layered Execution Environment
+
+// Delete the SCR Database file
+LOAD_SUITE tscr
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+
+LOAD_SUITE tUsifSuite
+
+//################################################################################
+// This test case installs a Layered Execution Environment and in turn uses
+// it to install a non-native package. Finally, the test uninstalls both packages.
+//################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0001
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0001
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Install and uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0001
+
+
+//####################################################################################
+// This test case installs a base package containing a Layered Execution Environment
+// and in turn uses it to install and uninstall a non-native package. Then, it
+// installs an upgrade package of the LEE and in turn uses it to install and uninstall
+// the non-native package again. Finally, the test uninstalls the LEE.
+//####################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0002
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0002
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed
+DELAY 3000
+
+// Install and uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Upgrade the LEE
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallUpgradeSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyUpgradeSwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc re-discover the MIME type recognizer we have just installed
+DELAY 3000
+
+// Install and uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0002
+
+//################################################################################
+// This test case installs a Layered Execution Environment. Then this LEE is
+// backuped and restored and in turn used to install and uninstall a non-native
+// package. Finally, the test uninstalls the LEE.
+//################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0003
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0003
+
+LOAD_SUITE tbackuprestore
+
+// Make sure the test directory exists
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Backup the LEE
+RUN_TEST_STEP 100 tbackuprestore BACKUP z:\tusif\tswtype\tsifswtypeintegration.ini BackupRestoreSoftwareType
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+// Restore the LEE
+RUN_TEST_STEP 100 tbackuprestore RESTORE z:\tusif\tswtype\tsifswtypeintegration.ini BackupRestoreSoftwareType
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just restored as a part of the LEE
+DELAY 3000
+
+// Install and uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0003
+
+
+//##################################################################################
+// This test case installs a Layered Execution Environment and in turn uses it to
+// install a non-native package. Then, the test uninstalls the LEE so the non-native
+// package becomes orphaned. Finally, the test installs the LEE again in order to
+// uninstall the non-native plugin and the LEE.
+//##################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0004
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0004
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Install the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+// Install the LEE again
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0004
+
+
+//##################################################################################
+// Tests the default uninstaller. The test case installs a Layered Execution 
+// Environment (LEE) and uses it to install a non-native package. The LEE is then 
+// uninstalled. It then tries to uninstall the non-native package using the default 
+// uninstaller provided in SIF Utils Library
+//##################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0005
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0005
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Install the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+// Uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendorNoOpaque
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0005
+
+
+//##################################################################################
+// This test case installs a Layered Execution Environment and in turn uses it to
+// install a non-native package through the RApaLsSession::StartDocument() API.
+// Then, the test uninstalls the LEE so the non-native package becomes orphaned.
+// Finally, the test installs the LEE again in order to uninstall the non-native
+// plugin and the LEE.
+//##################################################################################
+//! @SYMTestCaseID 		API-SEC-USIF-tsifswtypeintegration-0006
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifswtypeintegration-0006
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Install the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifGenericBrowserInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini GenericBrowserInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+
+// Uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifswtypeintegration-0006
+
+
+//##################################################################################
+// Tests the actvation of package  after uninstalling LEE . The test case installs a  
+// Layered Execution Environment (LEE) and uses it to install a non-native package.  
+// Then uninstall LEE and try to activat SCOMO state and then uninstall non-native 
+// package using the default uninstaller provided in SIF Utils Library
+//##################################################################################
+START_TESTCASE SEC-USIF-tsifswtypeintegration-0007
+
+// Install the LEE
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini InstallSwTypeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageExistence
+
+// Wait 3 seconds in order to let AppArc discover the MIME type recognizer we have just installed as part of LEE
+DELAY 3000
+
+// Install the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+
+// Uninstall the LEE
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini UninstallSwTypeByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifySwTypePackageNonExistence
+
+//Activate SCOMO state
+RUN_TEST_STEP !Result=-1 100  tUsifSuite SifActivateStep z:\tusif\tswtype\tsifswtypeintegration.ini ActivateTestPackage
+
+// Uninstall the non-native package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tswtype\tsifswtypeintegration.ini NonNativeUninstallByNameAndVendorNoOpaque
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tswtype\tsifswtypeintegration.ini VerifyNonNativePackageNonExistence
+
+END_TESTCASE SEC-USIF-tsifswtypeintegration-0007
+
+// Wait 3 seconds in order to let the SIF server shutdown itself
+DELAY 3000
+
+PRINT Complate_te_Sif_Tests

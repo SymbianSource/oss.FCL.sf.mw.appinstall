@@ -61,7 +61,7 @@ USERINCLUDE   ../../provider/deviceinteraction/inc
 
 // System include paths
 #ifndef __SERIES60_30__
-APP_LAYER_SYSTEMINCLUDE
+MW_LAYER_SYSTEMINCLUDE
 #else
 SYSTEMINCLUDE /Epoc32/include
 #endif
@@ -94,11 +94,12 @@ LIBRARY         apgrfx.lib
 LIBRARY         swinstcli.lib           // Silent install
 LIBRARY         widgetregistryclient.lib // Widget Registry
 
-#if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined( __S60_32__ )
-LIBRARY         javaregistry.lib        // Java Registry
-#else
-LIBRARY         javaregistryclient.lib
-#endif
+// HLa - temporary java remove
+//#if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined( __S60_32__ )
+//LIBRARY         javaregistry.lib        // Java Registry
+//#else
+//LIBRARY         javaregistryclient.lib
+//#endif
 
 #ifndef __SERIES60_31__
 LIBRARY         sysversioninfo.lib      // SysVersionInfo
