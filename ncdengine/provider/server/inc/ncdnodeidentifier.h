@@ -307,7 +307,7 @@ public:
      * aObject1 > aObject2
      * @note Only node id, namespace and client UID are used for comparison
      */
-    static TInt CNcdNodeIdentifier::CompareOrderByUid( 
+    static TInt CompareOrderByUid( 
         const CNcdNodeIdentifier& aObject1,
         const CNcdNodeIdentifier& aObject2 );
 

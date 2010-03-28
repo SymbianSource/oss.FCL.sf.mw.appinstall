@@ -324,7 +324,7 @@ private:
      * @param aContext Not used.
      * @exception Leave with System wide error code.
      */
-    void CNcdSubscriptionManager::CompleteSubscriptionsDataL(
+    void CompleteSubscriptionsDataL(
         TUid aClientUid,
         RPointerArray<CNcdSubscriptionGroup>& aServersGroups,
         MCatalogsContext* aContext,

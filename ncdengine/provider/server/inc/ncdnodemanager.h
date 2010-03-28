@@ -310,8 +310,8 @@ public: // Functions to get node objects from caches or from db.
      * @param aNodeIdentfier The identifier that identifies the parent of this node.
      * @return CNcdNode& Reference to the node that was found.
      */
-    CNcdNodeItem& CNcdNodeManager::CreateNodeItemL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
-                                                    const CNcdNodeIdentifier& aNodeIdentifier );
+    CNcdNodeItem& CreateNodeItemL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
+                                   const CNcdNodeIdentifier& aNodeIdentifier );
 
 
     /**
@@ -325,9 +325,9 @@ public: // Functions to get node objects from caches or from db.
      * @param aMetaDataIdentifier The identifier of metadata of this node.
      * @return CNcdNode& Reference to the node that was found.
      */
-    CNcdNodeItem& CNcdNodeManager::CreateNodeItemL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
-                                                    const CNcdNodeIdentifier& aParentNodeIdentifier,
-                                                    const CNcdNodeIdentifier& aMetaDataIdentifier );
+    CNcdNodeItem& CreateNodeItemL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
+                                   const CNcdNodeIdentifier& aParentNodeIdentifier,
+                                   const CNcdNodeIdentifier& aMetaDataIdentifier );
 
 
     /**
@@ -346,10 +346,10 @@ public: // Functions to get node objects from caches or from db.
      * if root folder should be created.
      * @return CNcdNode& Reference to the node that was found.
      */
-    CNcdNodeFolder& CNcdNodeManager::CreateNodeFolderL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
-                                                        const CNcdNodeIdentifier& aNodeIdentifier,
-                                                        CNcdNodeFactory::TNcdNodeType aFolderType
-                                                            = CNcdNodeFactory::ENcdNodeFolder );    
+    CNcdNodeFolder& CreateNodeFolderL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
+                                       const CNcdNodeIdentifier& aNodeIdentifier,
+                                       CNcdNodeFactory::TNcdNodeType aFolderType
+                                           = CNcdNodeFactory::ENcdNodeFolder );    
     /**
      * Creates a folder node accroding to the given type information. 
      * Adds the created node into the cache. If node already exists
@@ -363,11 +363,11 @@ public: // Functions to get node objects from caches or from db.
      * if root folder should be created.
      * @return CNcdNode& Reference to the node that was found.
      */
-    CNcdNodeFolder& CNcdNodeManager::CreateNodeFolderL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
-                                                        const CNcdNodeIdentifier& aParentNodeIdentifier,
-                                                        const CNcdNodeIdentifier& aMetaDataIdentifier,
-                                                        CNcdNodeFactory::TNcdNodeType aFolderType
-                                                            = CNcdNodeFactory::ENcdNodeFolder );    
+    CNcdNodeFolder& CreateNodeFolderL( CNcdNodeFactory::TNcdNodePurpose aNodePurpose,
+                                       const CNcdNodeIdentifier& aParentNodeIdentifier,
+                                       const CNcdNodeIdentifier& aMetaDataIdentifier,
+                                       CNcdNodeFactory::TNcdNodeType aFolderType
+                                           = CNcdNodeFactory::ENcdNodeFolder );    
 
     /**
      * Uses FolderL to search an existing folder. If the folder is not

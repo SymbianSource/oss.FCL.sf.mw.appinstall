@@ -251,7 +251,7 @@ class CIAUpdateAccessPointSettingItem : public CAknSettingItem
 	{
 	public:
         static CIAUpdateAccessPointSettingItem* 
-        CIAUpdateAccessPointSettingItem::NewL( TInt aSettingId, TInt& aAccessPointId );
+        NewL( TInt aSettingId, TInt& aAccessPointId );
 	    ~CIAUpdateAccessPointSettingItem();
 	private:
 	    CIAUpdateAccessPointSettingItem ( TInt aSettingId, TInt& aAccessPointId );

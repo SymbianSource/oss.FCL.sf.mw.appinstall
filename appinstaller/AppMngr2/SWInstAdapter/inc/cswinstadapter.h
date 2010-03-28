@@ -388,13 +388,13 @@ class CSWInstAdapter : public CSmlDmAdapter
         void CompleteOutstandingCmdsL();
 
     private: // New methods
-        void CSWInstAdapter::FillNodeInfoL( MSmlDmDDFObject& aDDFObject, 
-                                            TSmlDmAccessTypes& aAccessTypes, 
-                                            MSmlDmDDFObject::TScope aScope,
-                                            MSmlDmDDFObject::TDFFormat aFormat, 
-                                            MSmlDmDDFObject::TOccurence aOccurence,
-                                            const TDesC8& aDescription,
-                                            const TDesC8& aMIMEType );
+        void FillNodeInfoL( MSmlDmDDFObject& aDDFObject, 
+                            TSmlDmAccessTypes& aAccessTypes, 
+                            MSmlDmDDFObject::TScope aScope,
+                            MSmlDmDDFObject::TDFFormat aFormat, 
+                            MSmlDmDDFObject::TOccurence aOccurence,
+                            const TDesC8& aDescription,
+                            const TDesC8& aMIMEType );
     private: // Constructor
         /**
         * Symbian 2nd phase constructor

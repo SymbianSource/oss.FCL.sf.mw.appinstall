@@ -142,7 +142,7 @@ public: // Functions that will create nodes in the server side if they do not
      * @exception Leave KErrNotFound if aForceCreate has been set as EFalse,
      * and the node was not created.
      */
-    CNcdNodeProxy& CNcdNodeManagerProxy::CreateSchemeNodeL(
+    CNcdNodeProxy& CreateSchemeNodeL(
         const CNcdNodeIdentifier& aMetadataIdentifier,
         TNcdSchemeNodeType aType,
         TBool aRemoveOnDisconnect,

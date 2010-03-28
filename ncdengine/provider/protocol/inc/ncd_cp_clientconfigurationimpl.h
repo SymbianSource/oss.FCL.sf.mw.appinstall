@@ -34,7 +34,7 @@ public: // From MNcdConfigurationProtocolClientConfiguration
     TInt CookieCount() const;
     MNcdConfigurationProtocolCookie& CookieL( TInt aIndex ) const;
     TInt DetailCount() const;
-    const MNcdConfigurationProtocolDetail& CNcdConfigurationProtocolClientConfigurationImpl::DetailL( TInt aIndex ) const;
+    const MNcdConfigurationProtocolDetail& DetailL( TInt aIndex ) const;
 
 private:
     CNcdConfigurationProtocolClientConfigurationImpl();

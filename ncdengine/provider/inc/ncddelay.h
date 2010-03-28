@@ -36,7 +36,7 @@ public:
      * @param aCallBack Function that gets called after the timer goes off.
      * @return COsmDelay* Pointer to the created COsmDelay object.
      */
-    static CNcdDelay* CNcdDelay::NewL( TCallBack aCallBack );
+    static CNcdDelay* NewL( TCallBack aCallBack );
 
 private:
 

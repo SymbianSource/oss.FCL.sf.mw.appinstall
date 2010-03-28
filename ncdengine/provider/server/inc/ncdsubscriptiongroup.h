@@ -263,8 +263,7 @@ protected:
      *
      * @param aMessage Used to send data back to proxy.
      */
-    void CNcdSubscriptionGroup::IconDataRequestL(
-        MCatalogsBaseMessage& aMessage ) const;
+    void IconDataRequestL( MCatalogsBaseMessage& aMessage ) const;
         
     /**
      * This function writes the object data to the stream. The given array

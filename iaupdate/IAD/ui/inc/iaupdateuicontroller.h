@@ -517,7 +517,7 @@ private: // new functions
      * the self update. In other words, self update related data
      * has not been handled yet. Else EFalse.
      */
-    TBool CIAUpdateUiController::RestartedFromSelfUpdate();
+    TBool RestartedFromSelfUpdate();
     
     /**
      * Writes the possible parameter information into the temporary

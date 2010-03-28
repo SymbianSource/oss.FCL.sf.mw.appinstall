@@ -338,7 +338,7 @@ private:
     /**
      * @see CNcdBaseOperation::ChangeToPreviousStateL();
      */
-    void CNcdSubscriptionOperation::ChangeToPreviousStateL();
+    void ChangeToPreviousStateL();
     
     /**
      * Cancels the suboperations.

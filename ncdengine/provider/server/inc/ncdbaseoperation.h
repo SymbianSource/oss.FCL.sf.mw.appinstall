@@ -631,7 +631,7 @@ protected:
         }
         
 private:
-    CNcdAsyncRunner::CNcdAsyncRunner( CNcdBaseOperation* aOperation)
+    CNcdAsyncRunner( CNcdBaseOperation* aOperation)
     : CActive(EPriorityStandard), iOperation( aOperation )
     	{
     	CActiveScheduler::Add(this);
