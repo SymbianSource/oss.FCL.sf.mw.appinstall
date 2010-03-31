@@ -129,7 +129,8 @@ void CIAUpdateMainContainer::ConstructL(const TRect& aRect )
     iEikonEnv->CreateResourceReaderLC( reader, R_IAUPDATE_UPDATES_LIST );
     iListBox->ConstructFromResourceL( reader );
     CleanupStack::PopAndDestroy();
-    
+
+    iListBox->EnableStretching( EFalse );
     iListBox->ItemDrawer()->ColumnData()->EnableMarqueeL( ETrue );
 
     // Setup scroll bars

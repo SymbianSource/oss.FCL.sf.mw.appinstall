@@ -4,9 +4,7 @@ source	\sf\mw\appinstall\secureswitools\makekeys
 #MattD: it doesn't like 'tools rel'...
 binary	\epoc32\tools\makekeys.exe
 exports	\sf\mw\appinstall\secureswitools\makekeys\group
--export_file	\sf\mw\appinstall\secureswitools\makekeys\group\makekeys.ipr	\epoc32\engdoc\tools\makekeys.ipr
 notes_source	\component_defs\release.src
-
 
 ipr E 
 ipr T \sf\mw\appinstall\secureswitools\makekeys\tdata

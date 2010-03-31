@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -27,7 +27,7 @@
 #include <SWInstCommonUI.rsg>
 #include <pathinfo.h>
 #include <avkon.rsg>
-#include <DRMHelper.h>
+#include <drmuihandling.h>                  // DRM::CDrmUiHandling
 
 #include "CUIDetailsDialog.h"
 #include "CUICertificateDetailsDialog.h"
@@ -531,9 +531,9 @@ void CCUIDetailsDialog::DoShowCertificatesL()
 //
 void CCUIDetailsDialog::DoShowDrmL()
     {
-    CDRMHelper* helper = CDRMHelper::NewLC( *iCoeEnv );
-    helper->LaunchDetailsViewEmbeddedL( iFile );   
-    CleanupStack::PopAndDestroy( helper );    
+    DRM::CDrmUiHandling *drmUiHandler = DRM::CDrmUiHandling::NewLC();
+    drmUiHandler->ShowDetailsViewL( iFile );
+    CleanupStack::PopAndDestroy( drmUiHandler );
     }
 
 // -----------------------------------------------------------------------------

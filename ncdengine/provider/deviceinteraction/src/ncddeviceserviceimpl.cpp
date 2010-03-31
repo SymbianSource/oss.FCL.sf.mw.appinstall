@@ -166,6 +166,7 @@ void CNcdDeviceService::ConstructL()
 void CNcdDeviceService::RunL()
     {
     DLTRACEIN(( "iStatus: %d", iStatus.Int() ));
+    DLINFO(( "iState: %d", iState ));
     
     // GetSubscriberId fails with KErrNotFound if there's no SIM in the device
     switch ( iState ) 
@@ -182,7 +183,8 @@ void CNcdDeviceService::RunL()
         case EGetSubscriberId:
             {
             if ( iStatus.Int() == KErrNone ||
-                 iStatus.Int() == KErrNotFound ) 
+                 iStatus.Int() == KErrNotFound ||
+                 iStatus.Int() == KErrNotReady ) 
                 {
                 
                 DLTRACE(("Got subscriber ID"));

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -486,13 +486,13 @@ TBool CIAUpdateMainView::MarkListItemL( TBool aMark, TInt aIndex )
         //There are selected items already and type are different with the current one
         if ( selectedNodes.Count() > 0 && (iAllNodes[aIndex]->NodeType() != selectedNodes[0]->NodeType() ) )
             {       
-            HBufC* msgText = StringLoader::LoadLC(R_IAUPDATE_FIRMWARE_WITH_OTHERS);
+            /*HBufC* msgText = StringLoader::LoadLC(R_IAUPDATE_FIRMWARE_WITH_OTHERS);
 
             CAknQueryDialog* dlg = CAknQueryDialog::NewL();
        
             dlg->ExecuteLD( R_IAUPDATE_INFORMATION_QUERY, *msgText );
             
-            CleanupStack::PopAndDestroy( msgText );
+            CleanupStack::PopAndDestroy( msgText );*/
             
             //clean all of the current selection(s)
             iContainer->CleanAllSelection();

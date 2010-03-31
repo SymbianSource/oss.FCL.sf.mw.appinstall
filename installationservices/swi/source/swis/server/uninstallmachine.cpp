@@ -172,10 +172,6 @@ void CUninstallMachine::TConfirmationState::EnterL()
 	iUninstallMachine.CompleteSelf();
 	iUninstallMachine.SetActive();
 	
-	// The user hasn't cancelled so mark the un-installation as confirmed. This
-	// will allow the registry cache to be regenerated further on during the
-	// un-installation process.
-	iUninstallMachine.iOperationConfirmed = ETrue;
 	}
 
 // The next state will be planning uninstallation.
@@ -234,6 +230,10 @@ void CUninstallMachine::TPlanUninstallationState::EnterL()
 CUninstallMachine::TState* CUninstallMachine::TPlanUninstallationState::CompleteL()
 	{
 	DEBUG_PRINTF(_L8("Uninstall Machine - Completed Uninstallation Planning State"));
+	// The user hasn't cancelled so mark the un-installation as confirmed. This
+    // will allow the registry cache to be regenerated further on during the
+    // un-installation process.
+    iUninstallMachine.iOperationConfirmed = ETrue;
 	return static_cast<TState*>(&iUninstallMachine.iIntegritySupportState);
 	}
 

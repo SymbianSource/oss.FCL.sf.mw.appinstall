@@ -362,10 +362,6 @@ void CInstallMachine::TConfirmationState::EnterL()
 	iInstallMachine.CompleteSelf();
 	iInstallMachine.SetActive();
 	
-	// user hasn't cancelled so mark the installation as confirmed. This
-	// will allow the registry cache to be regenerated further on during the
-	// installation process.
-	iInstallMachine.iOperationConfirmed = ETrue;	
 	}
 
 CInstallMachine::TState* CInstallMachine::TConfirmationState::CompleteL()
@@ -1038,6 +1034,10 @@ CInstallMachine::TState* CInstallMachine::TCheckPostrequisitesState::CompleteL()
 	DEBUG_PRINTF(_L8("Install Machine - Completed Postrequisites Check State"));
 	// Inform UI of final progress bar value.
 	iInstallMachine.SetProgressBarFinalValueL();
+	// user hasn't cancelled so mark the installation as confirmed. This
+	// will allow the registry cache to be regenerated further on during the
+	// installation process.
+	iInstallMachine.iOperationConfirmed = ETrue;	
 	return static_cast<TState*>(&iInstallMachine.iIntegritySupportState);
 	}
 	
