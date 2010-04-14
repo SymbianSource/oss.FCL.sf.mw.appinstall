@@ -411,7 +411,7 @@ void CPackageParser::ParseLanguagesL()
 			dialect = CSISLanguage::IdentifyLanguage (iTokenValue.pszString);
 			if (dialect == CSISLanguage::ELangNone) throw ErrUnknownLanguagesId;
 			}
-		else if (iToken==NUMERIC_TOKEN && iTokenValue.dwNumber>=0 && iTokenValue.dwNumber<=1000)
+		else if (iToken==NUMERIC_TOKEN && iTokenValue.dwNumber>=0 )
 			{
 			dialect = static_cast <CSISLanguage::TDialect> (iTokenValue.dwNumber);
 			}

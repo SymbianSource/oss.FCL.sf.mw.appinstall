@@ -116,7 +116,7 @@ void CCommandParser::DisplayUsage()
 		#else
 		<< "Usage: " << CommandName () << " [-z dir] [-c dir] [-e] [-k [4.0 | 5.0 | 5.1 | 5.2 | 5.3 | 5.4]]\n"
 		#endif
-		<< "\t\t[-s [sisfile | dir] [+drive [+mcard | +mcardnr | +mcardalone | +mcardalonenr] [+sucert]]] [-s ...]\n"
+		<< "\t\t[-s [sisfile | dir] [+drive [+mcard | +mcardnr | +nonremovablepkg | +mcardalone | +mcardalonenr] [+sucert]]] [-s ...]\n"
 		<< "\t\t[-p param_file] [-d drive] [-r rofsbuild_log_file1,rofsbuild_log_file2,...]\n" 
 		<< "\t\t[-t romstubdir] [-n language_code] [-i config_file] \n"
 		<< "\t\t[-x pkgUID[,pkgUID2,...]] [-w [off | error | warn | info]] [-l logfile]\n\n"

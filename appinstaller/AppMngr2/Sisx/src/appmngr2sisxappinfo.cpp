@@ -28,6 +28,8 @@
 #include <appmngr2debugutils.h>         // FLOG macros
 #include <x509cert.h>                   // CX509Certificate
 #include <swi/sisregistrypackage.h>     // CSisRegistryPackage
+#include <DRMHelper.h>
+#include <drmutility.h>
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -285,24 +287,71 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
     // to show the licence information.
     RPointerArray<HBufC> files;
     TRAPD( err, aEntry.FilesL( files ) );
+    
     if( err == KErrNone )
         {
         CleanupResetAndDestroyPushL( files );
-        for( TInt fileIndex = 0; fileIndex < files.Count() && !iIsDRMProtected; fileIndex++ )
-            {
-            HBufC* fileName = files[ fileIndex ];
-            iIsDRMProtected = TAppMngr2DRMUtils::IsDRMProtected( *fileName );
-            if( iIsDRMProtected )
-                {
-                FLOG( "CAppMngr2SisxAppInfo::ConstructL, iProtectedFile %S", fileName );
-                iProtectedFile = fileName;  // takes ownership
-                files.Remove( fileIndex );
-                iIsRightsObjectMissingOrExpired =
-                    TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL( *fileName );
-                FLOG( "CAppMngr2SisxAppInfo::ConstructL, iIsRightsObjectMissingOrExpired %d",
-                        iIsRightsObjectMissingOrExpired );
+        
+        // Use DRMUtility for DRM check. Utility class is much faster then
+        // IsDRMProtected function.        
+        DRM::CDrmUtility* utility = DRM::CDrmUtility::NewLC();
+                                     
+        for ( TInt fileIndex = 0; fileIndex < files.Count(); fileIndex++ )
+            {        
+            RFile fileHandle;
+            TInt error = fileHandle.Open( iFs, *files[ fileIndex ], EFileRead );
+            FLOG( "CAppMngr2SisxAppInfo::ConstructL, File open error %d", 
+                    error );
+            
+            if ( error == KErrNone )
+                {                
+                CleanupClosePushL( fileHandle );
+                
+                iIsDRMProtected = utility->IsProtectedL( fileHandle );
+            
+                CleanupStack::PopAndDestroy( &fileHandle ); 
+                
+                if ( iIsDRMProtected )
+                    {                       
+                    HBufC* fileName = files[ fileIndex ];                            
+                    FLOG( "CAppMngr2SisxAppInfo::ConstructL, iProtectedFile %S", 
+                            fileName );
+                    
+                    iProtectedFile = fileName;  // takes ownership
+                    files.Remove( fileIndex );                    
+                    
+                    CDRMHelper* helper = CDRMHelper::NewLC();                    
+                    CDRMHelperRightsConstraints* playconst = NULL;
+                    CDRMHelperRightsConstraints* dispconst = NULL;
+                    CDRMHelperRightsConstraints* execconst = NULL;
+                    CDRMHelperRightsConstraints* printconst = NULL;            
+                    TBool sendingallowed = EFalse;
+                                    
+                    FLOG( "CAppMngr2SisxAppInfo::ConstructL: GetRightsDetailsL" );
+                    error = KErrNone;
+                    TRAP( error, helper->GetRightsDetailsL( *fileName, 
+                                                ContentAccess::EView, 
+                                                iIsRightsObjectMissingOrExpired, 
+                                                sendingallowed, 
+                                                playconst, 
+                                                dispconst, 
+                                                execconst, 
+                                                printconst ) );                     
+                    FLOG( "GetRightsDetailsL TRAP err = %d", error );
+                    
+                    delete playconst;
+                    delete dispconst;
+                    delete execconst;
+                    delete printconst;
+                    
+                    CleanupStack::PopAndDestroy( helper );
+                    
+                    FLOG( "iIsRightsObjectMissingOrExpired: %d", 
+                            iIsRightsObjectMissingOrExpired );                                        
+                    }
                 }
-            }
+            }                
+        CleanupStack::PopAndDestroy( utility );
         CleanupStack::PopAndDestroy( &files );
         }
 

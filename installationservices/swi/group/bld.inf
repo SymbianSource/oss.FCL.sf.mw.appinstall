@@ -64,7 +64,7 @@ PRJ_EXPORTS
 // swi.iby split into two part swi.iby and swiplugin.iby, swiplugin can be used by other team for implementing swi observer plug-in independently
 ../inc/swiplugin.iby /epoc32/rom/include/swiplugin.iby
 ../inc/switextshell.iby /epoc32/rom/include/switextshell.iby
-../inc/sisregistry_5.3.txt z:/system/data/sisregistry_5.3.txt
+../inc/sisregistry_5.4.txt z:/system/data/sisregistry_5.4.txt
 
 // export certstoretobin
 ../source/certstoretobin/Swicertstoretobin.pl	/epoc32/tools/swicertstoretobin.pl

@@ -19,7 +19,7 @@
 #define __SWICONFIG_IBY__
 
 data = EPOCROOT##epoc32\data\z\system\data\swipolicy.ini \system\data\swipolicy.ini
-data = EPOCROOT##epoc32\data\z\system\data\sisregistry_5.3.txt \system\data\sisregistry_5.3.txt
+data = EPOCROOT##epoc32\data\z\system\data\sisregistry_5.4.txt \system\data\sisregistry_5.4.txt
 data = MULTI_LINGUIFY(RSC ZRESOURCE\Errors\swierrors Resource\Errors\swierrors)
 
 #endif

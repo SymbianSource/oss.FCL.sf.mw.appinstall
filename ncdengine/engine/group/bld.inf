@@ -41,12 +41,12 @@ backup_registration.xml         /epoc32/release/winscw/udeb/z/private/20019119/b
 
 // The following path is a general export dir which is needed for ROM builds
 // (and perhaps pkg references).
-backup_registration.xml         /epoc32/data/z/private/20019119/backup_registration.xml
+backup_registration.xml         z:/private/20019119/backup_registration.xml
+
 
 // Config file
-config.xml                      /epoc32/release/winscw/udeb/z/private/20019119/config.xml
-config.xml                      /epoc32/data/z/private/20019119/config.xml
+config.xml                      z:/private/20019119/config.xml
+
 
 // Variant config file
-config_variant.xml                      /epoc32/release/winscw/udeb/z/private/20019119/config_variant.xml
-config_variant.xml                      /epoc32/data/z/private/20019119/config_variant.xml
+config_variant.xml                      z:/private/20019119/config_variant.xml
