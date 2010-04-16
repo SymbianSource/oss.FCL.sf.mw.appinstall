@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -369,6 +369,7 @@ _LIT(KQuerySidViaApparcPlugin, "QuerySidViaApparcPlugin");
 _LIT(KSwisListUninstallPkgsStep, "ListUninstallPkgsStep");
 _LIT(KSwisRemoveUninstallPkgsStep, "RemoveUninstallPkgsStep");
 _LIT(KSwisGetPackageDetails, "GetPackageDetails");
+_LIT(KSwisGetPublishedUidArrayStep, "GetPublishedUidArrayStep");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KCheckSCRFieldStep, "CheckSCRFieldStep");
 _LIT(KCheckSCRCompPropertyStep, "CheckSCRCompPropertyStep");
@@ -490,4 +491,26 @@ private:
 #endif
 	};
 	
+/**
+ * Check Published Uid test step class
+ * @test
+ * @internalComponent
+ */
+const TInt KTestMaxUidCount=20; //One more than the maximum number of Uids that the array, publishing the Uids, holds
+class CSwisCheckPublishUidStep : public CSwisTestStep
+    {
+public:
+    CSwisCheckPublishUidStep();
+    virtual TVerdict doTestStepPreambleL();
+    virtual TVerdict doTestStepPostambleL();
+    virtual TVerdict doTestStepL();
+
+private:
+	void GenerateIndexedAttributeNameL(TDes& aInitialAttributeName, TInt aIndex);
+	
+private:
+TUid iExpectedUidList[KTestMaxUidCount];    //An array whose first element holds the number of uids in the subsequent indices of the array, followed by the the list of uids that are being published.
+TBool iJustDefineProperty;
+	};
+
 #endif // __TSWISSTEP_H__

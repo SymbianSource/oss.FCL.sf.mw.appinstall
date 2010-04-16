@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -204,6 +204,31 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                 }
             else
                 {
+                if ( aFwNodes.Count() == 1 && aFwNodes[0]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                    {
+                    aFwNodes[0]->Base().SetSelected( EFalse );
+                    }
+                else
+                    {
+                    for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
+                        {
+                        aFwNodes[i]->Base().SetSelected( ETrue );
+                        }
+                    for ( TInt i = 0; i < aNodes.Count(); ++i )   
+                        {
+                        aNodes[i]->Base().SetSelected( EFalse );
+                        }
+                    }
+                }
+            }
+        else
+            {
+            if ( aFwNodes.Count() == 1 && aFwNodes[0]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                {
+                aFwNodes[0]->Base().SetSelected( EFalse );
+                }
+            else
+                {
                 for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
                     {
                     aFwNodes[i]->Base().SetSelected( ETrue );
@@ -212,17 +237,6 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                     {
                     aNodes[i]->Base().SetSelected( EFalse );
                     }
-                }
-            }
-        else
-            {
-            for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
-                {
-                aFwNodes[i]->Base().SetSelected( ETrue );
-                }
-            for ( TInt i = 0; i < aNodes.Count(); ++i )   
-                {
-                aNodes[i]->Base().SetSelected( EFalse );
                 }
             }
         }

@@ -27,7 +27,9 @@
 #include <f32file.h>
 #include <e32property.h>
 #include <e32uid.h>
-
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#include <usif/scr/appregentries.h>
+#endif
 #ifndef _CSISLAUNCHERSERVER_H_
 #define _CSISLAUNCHERSERVER_H_
 
@@ -91,6 +93,9 @@ public:
 	void ShutdownL();
 	void ShutdownL(TUid aUid, TInt aTimeout); 
 	void NotifyNewAppsL(const RPointerArray<TDesC>& aFiles);
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	void NotifyNewAppsL(const RPointerArray<Usif::CApplicationRegistrationData>& aApplicationRegistrationData);
+	#endif
 #endif		
 	void HandleShutdownL(TThreadId aThread, TBool aKillOnTimeout = EFalse);
 	void ForceShutdownL(TUid aUid);
@@ -100,7 +105,6 @@ private:
 	CSisLauncherServer();
 	void ConstructL();
 	CSession2* NewSessionL(const TVersion& aVersion, const RMessage2& aMessage) const;
-	
 	void LongServerShutdown();
 	void ShortServerShutdown();
 	void CancelShutdown();
@@ -108,7 +112,7 @@ private:
 	// Server Policies
 	// separate the policies into handled and not handled
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	static const TUint iRangeCount=4;
+	static const TUint iRangeCount=5;
 #else
 	static const TUint iRangeCount=2;
 #endif

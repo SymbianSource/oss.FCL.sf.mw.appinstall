@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,12 +31,10 @@
 #include <usif/scr/scr.h>
 #include <usif/scr/screntries.h>
 #include <usif/sts/sts.h>
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifdef SYMBIAN_ENABLE_SPLIT_HEADERS
 #include "stsrecovery.h"
 #include "screntries_internal.h"
 #endif //SYMBIAN_ENABLE_SPLIT_HEADERS
-#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <swi/swiobserverclient.h>
 #include "sisregistryclientserver.h"
 #include "sisregistryserver.h"
@@ -118,7 +116,7 @@ private:
 	void RequestRegistryEntryL(const RMessage2& aMessage);
 	void IsFileRegisteredL(const RMessage2& aMessage);
 	void GetComponentIdForUidL(const RMessage2& aMessage);
-
+    
 	// Subsession handling
 	void OpenRegistryUidEntryL(const RMessage2& aMessage);
 	void OpenRegistryPackageEntryL(const RMessage2& aMessage);
@@ -136,6 +134,15 @@ private:
 	void RollbackTransactionL(const RMessage2& aMessage);
 
 	void RegisterEntryL(const RMessage2& aMessage, TBool aNewEntry, TBool aRegisterSoftwareTypes);
+	void AppRegInfoEntryL(const RMessage2& aMessage);
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	void RegisterAllInRomAppL(RBuf& aRomApparcRegFilePath);
+    void GetComponentIdForPackageL(const RMessage2& aMessage);
+    void GetAppUidsForComponentL(const RMessage2& aMessage);
+    void GetComponentIdsForUidL(const RMessage2& aMessage);
+#endif
+
 	void DeleteEntryL(const RMessage2& aMessage);
 	void AddSoftwareTypeL(const RMessage2& aMessage);
 	void AddDriveL(const RMessage2& aMessage);
@@ -165,6 +172,7 @@ private:
 	TUint FixedDrivesL() const;
 	Usif::TComponentId AddRegistryEntryL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aController, Usif::TScrComponentOperationType aOpType);
 	Usif::TComponentId AddEntryL(CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
+	void AddAppEntryL(Usif::TComponentId aCompId, TUid aUid);
 	void AddControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive);
 	void AddCleanupInfrastructureL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aControllerBuffer);
 	TUint CreateSubsessionHandleL(const TUid& aPackageUid);
@@ -190,6 +198,7 @@ private:
 	TBool IsFirmwareUpdatedL();
 	 
 	void  UpdateRecentFWVersionL(); 
+	TInt GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
 
 private:
     friend class CSisRevocationManager;

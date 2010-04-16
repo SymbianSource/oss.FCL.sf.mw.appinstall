@@ -69,8 +69,13 @@ public:
          * So, its content is given as separate packages
          * that are included in this service pack.
          */
-        EPackageTypeServicePack
-
+        EPackageTypeServicePack,
+        
+       /** 
+        * The node content is widget.
+        */
+        EPackageTypeWidget
+       
         };
 
 

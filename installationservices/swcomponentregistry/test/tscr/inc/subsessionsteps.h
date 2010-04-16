@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -27,10 +27,13 @@
 #define SUBSESSIONSTEPS_H
 
 #include "tscrstep.h"
+
+
 class CScrTestServer;
 
 _LIT(KScrComponentRegistrySubsessionStep, "ScrComponentRegistrySubsession");
 _LIT(KScrFileListSubsessionStep, "ScrFileListSubsession");
+_LIT(KScrAppViewSubsessionStep, "ScrAppViewSubsession");
 
 class CScrComponentRegistrySubsessionStep : public CScrTestStep
 /**
@@ -70,6 +73,27 @@ private:
 	void TestSetModeL(const Usif::RSoftwareComponentRegistryFilesList& aSubSession, TInt aSetSize, RPointerArray<HBufC>& expectedFiles);
 	void VerifyNonReturnedFilesL(const RPointerArray<HBufC>& aExpectedFiles);
 	void ReportUnexpectedFileL(const TDesC& aUnexpectedFileName);
+	};
+
+
+class CAppInfoView : public CScrTestStep
+/**
+ 	TEF test step which exercises the SCR RApplicationInfoView interface
+ */
+	{
+public:
+    CAppInfoView(CScrTestServer& aParent);
+			
+protected:
+	// From CScrTestStep
+	void ImplTestStepPreambleL();
+	void ImplTestStepL();
+	void ImplTestStepPostambleL();
+private:
+	//
+	void TestSessionL(TInt aNoOfEntries, const Usif::RApplicationInfoView& aSubSession, RPointerArray<Usif::TAppRegInfo>& aExpectedEntries);
+	void GetAppEntryFromConfigL(RPointerArray<Usif::TAppRegInfo>& aEntries);
+	void VerifyNonReturnedEntriesL(const RPointerArray<Usif::TAppRegInfo>& aExpectedEntries);
 	};
 
 #endif /* SUBSESSIONSTEPS_H */

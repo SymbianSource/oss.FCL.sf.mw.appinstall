@@ -1,7 +1,7 @@
 // Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
-// under the terms of the License "Eclipse Public License v1.0"
+// under the terms of "Eclipse Public License v1.0"
 // which accompanies this distribution, and is available
 // at the URL "http://www.eclipse.org/legal/epl-v10.html".
 //
@@ -498,7 +498,7 @@ CMakeSIS::CMakeSIS() :
 			iVerbose(false)
 	{}
 
-int CMakeSIS::Run(int argc, wchar_t* argv[])
+int CMakeSIS::RunL(int argc, wchar_t* argv[])
 // Inputs   : argc, argv, envp - The command line passed to the process
 	{
 	int err=1;
@@ -542,7 +542,7 @@ int CMakeSIS::Run(int argc, wchar_t* argv[])
 		
 		
 		bool isStubFile= (iCmdOptions.Flags() & CParseCmd::EOptMakeStub) != 0;
-		pkgParser.MakeSis(iCmdOptions.SourceFile(), iCmdOptions.TargetFile(), isStubFile, iCmdOptions.InterpretSisReport());
+		pkgParser.MakeSisL(iCmdOptions.SourceFile(), iCmdOptions.TargetFile(), isStubFile, iCmdOptions.InterpretSisReport());
 		err = 0;
 
 		if (iCmdOptions.InterpretSisReport())
@@ -599,7 +599,7 @@ is used for wide characters stuff.
 */
 	wchar_t **argv1	= CommandLineArgs(argc,argv);
 	CMakeSIS app;
-	int reply = app.Run(argc, argv1);
+	int reply = app.RunL(argc, argv1);
 	cleanup(argc,argv1);
 	return reply;
 	}

@@ -31,6 +31,11 @@
 
 const int DbHelper::Absent = -1;
 
+DbHelper::~DbHelper()
+	{
+	delete iScrDbHandler;
+	}
+
 DbHelper::DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive)
 	{
 	std::string dllName = "sqlite3.dll";
@@ -67,6 +72,19 @@ TBool DbHelper::IsInstalled(TInt32 aUid) const
 		
 	TInt32 uid = stmtUid->IntColumn(0);
 	return (uid == aUid);
+	}
+
+TBool DbHelper::IsAppUidInstalled(TUint32 aAppUid) const
+	{
+	std::string selectUid("SELECT AppFile FROM AppRegistrationInfo WHERE AppUid=?;");
+	std::auto_ptr<CStatement> stmtUid(iScrDbHandler->PrepareStatement(selectUid));
+		
+	stmtUid->BindInt(1, aAppUid);
+	
+	if(!stmtUid->ProcessNextRow())
+		return false;
+		
+	return true;
 	}
 
 TInt32 DbHelper::GetComponentId(TInt32 aUid, const std::wstring aPackageName, const std::wstring aVendorName ) const
@@ -250,6 +268,91 @@ TInt DbHelper::GetIndex( TInt32 aComponentId) const
 
 void DbHelper::RemoveEntry( TInt32 aComponentId ) const
 	{
+
+	std::vector<TInt32> appUidList = GetAppRegistrationInfoAppUid(aComponentId);
+	std::vector<TInt32> ::iterator appUidIter;
+	for( appUidIter = appUidList.begin(); appUidIter != appUidList.end() ; ++appUidIter )
+	{
+		// delete FileOwnershipInfo
+		std::string delFileOwnerInfo("DELETE FROM FileOwnershipInfo WHERE AppUid=?;");
+		std::auto_ptr<CStatement> stmtdelFileOwnerInfo(iScrDbHandler->PrepareStatement(delFileOwnerInfo));
+		stmtdelFileOwnerInfo->BindInt(1, *appUidIter);
+		stmtdelFileOwnerInfo->ExecuteStatement();
+
+		// delete AppProperties
+		std::string delAppProperties("DELETE FROM AppProperties WHERE AppUid=?;");
+		std::auto_ptr<CStatement> stmtAppProperties(iScrDbHandler->PrepareStatement(delAppProperties));
+		stmtAppProperties->BindInt(1, *appUidIter);
+		stmtAppProperties->ExecuteStatement();
+
+		std::vector<TInt32> serviceIdList = GetServiceInfoServiceID(*appUidIter);
+		
+		std::vector<TInt32> ::iterator serviceIdIter;
+		for( serviceIdIter = serviceIdList.begin(); serviceIdIter != serviceIdList.end() ; ++serviceIdIter )
+		{
+			// delete DataType
+			std::string delDataType("DELETE FROM DataType WHERE ServiceId=?;");
+			std::auto_ptr<CStatement> stmtDataType(iScrDbHandler->PrepareStatement(delDataType));
+			stmtDataType->BindInt(1, *serviceIdIter);
+			stmtDataType->ExecuteStatement();
+		}
+
+		// delete ServiceInfo
+		std::string delServiceInfo("DELETE FROM ServiceInfo WHERE AppUid=?;");
+		std::auto_ptr<CStatement> stmtServiceInfo(iScrDbHandler->PrepareStatement(delServiceInfo));
+		stmtServiceInfo->BindInt(1, *appUidIter);
+		stmtServiceInfo->ExecuteStatement();
+
+		std::vector<TInt32> localAppInfoIdList = GetLocalAppInfoID(*appUidIter);
+		
+		std::vector<TInt32> ::iterator localAppInfoIdIter;
+		for( localAppInfoIdIter = localAppInfoIdList.begin(); localAppInfoIdIter != localAppInfoIdList.end() ; ++localAppInfoIdIter )
+		{
+			std::vector<TInt32> viewDataCaptionIdList = GetViewDataCaptionAndIconID(*localAppInfoIdIter);
+			
+			std::vector<TInt32> ::iterator viewDataCaptionIdIter;
+			for( viewDataCaptionIdIter = viewDataCaptionIdList.begin(); viewDataCaptionIdIter != viewDataCaptionIdList.end() ; ++viewDataCaptionIdIter )
+			{
+				// delete CaptionAndIconInfo
+				std::string delCaptionInfo("DELETE FROM CaptionAndIconInfo WHERE CaptionAndIconId=?;");
+				std::auto_ptr<CStatement> stmtCaptionInfo(iScrDbHandler->PrepareStatement(delCaptionInfo));
+				stmtCaptionInfo->BindInt(1, *viewDataCaptionIdIter);
+				stmtCaptionInfo->ExecuteStatement();
+			}
+
+			// delete ViewData
+			std::string delViewData("DELETE FROM ViewData WHERE LocalAppInfoId=?;");
+			std::auto_ptr<CStatement> stmtViewData(iScrDbHandler->PrepareStatement(delViewData));
+			stmtViewData->BindInt(1, *localAppInfoIdIter);
+			stmtViewData->ExecuteStatement();
+		}
+
+		std::vector<TInt32> LocalCaptionIdList = GetLocalCaptionAndIconID(*appUidIter);
+		std::vector<TInt32> ::iterator LocalCaptionIdIter;
+		for( LocalCaptionIdIter = LocalCaptionIdList.begin(); LocalCaptionIdIter != LocalCaptionIdList.end() ; ++LocalCaptionIdIter )
+		{
+			// delete CaptionAndIconInfo
+			std::string delCaptionInfo("DELETE FROM CaptionAndIconInfo WHERE CaptionAndIconId=?;");
+			std::auto_ptr<CStatement> stmtCaptionInfo(iScrDbHandler->PrepareStatement(delCaptionInfo));
+			stmtCaptionInfo->BindInt(1, *LocalCaptionIdIter);
+			stmtCaptionInfo->ExecuteStatement();
+		}
+
+		// delete LocalizableAppInfo
+		std::string delLocalizableAppInfo("DELETE FROM LocalizableAppInfo WHERE AppUid=?;");
+		std::auto_ptr<CStatement> stmtLocalizableAppInfo(iScrDbHandler->PrepareStatement(delLocalizableAppInfo));
+		stmtLocalizableAppInfo->BindInt(1, *appUidIter);
+		stmtLocalizableAppInfo->ExecuteStatement();
+
+	}
+
+	// delete AppRegistrationInfo
+	std::string delAppRegistrationInfo("DELETE FROM AppRegistrationInfo WHERE ComponentId=?;");
+	std::auto_ptr<CStatement> stmtAppRegistrationInfo(iScrDbHandler->PrepareStatement(delAppRegistrationInfo));
+	stmtAppRegistrationInfo->BindInt(1, aComponentId);
+	stmtAppRegistrationInfo->ExecuteStatement();
+
+	
 	// delete component properties
 	std::string delCompProps("DELETE FROM ComponentProperties WHERE ComponentId=?;");
 	std::auto_ptr<CStatement> stmtDelCompProps(iScrDbHandler->PrepareStatement(delCompProps));
@@ -843,6 +946,85 @@ TInt32 DbHelper::GetComponentPropertyIntValue(TInt32 aComponentId, std::wstring 
 
 	return stmtCompProperty->IntColumn(0);
 	}
+
+std::vector<TInt32> DbHelper::GetServiceInfoServiceID(TInt32 aAppUid) const
+{
+	std::vector<TInt32> serviceIdList;
+	std::string selectServiceId("SELECT ServiceId FROM ServiceInfo WHERE AppUid=?;");
+	std::auto_ptr<CStatement> stmtServiceId(iScrDbHandler->PrepareStatement(selectServiceId));
+	
+	stmtServiceId->BindInt(1, aAppUid);
+	while(stmtServiceId->ProcessNextRow())
+	{
+		serviceIdList.push_back(stmtServiceId->IntColumn(0));
+	}
+	
+	return serviceIdList;
+}
+
+
+std::vector<TInt32> DbHelper::GetLocalAppInfoID(TInt32 aAppUid) const
+{
+	std::vector<TInt32> localAppInfoIdList;
+	std::string selectLocalAppInfoId("SELECT LocalAppInfoId FROM LocalizableAppInfo WHERE AppUid=?;");
+	std::auto_ptr<CStatement> stmtLocalAppInfoId(iScrDbHandler->PrepareStatement(selectLocalAppInfoId));
+	
+	stmtLocalAppInfoId->BindInt(1, aAppUid);
+	while(stmtLocalAppInfoId->ProcessNextRow())
+	{
+		localAppInfoIdList.push_back(stmtLocalAppInfoId->IntColumn(0));
+	}
+	
+	return localAppInfoIdList;
+}
+
+
+std::vector<TInt32> DbHelper::GetLocalCaptionAndIconID(TInt32 aAppUid) const
+{
+	std::vector<TInt32> localCaptionAndIconIdList;
+	std::string selectLocalCaptionAndIconId("SELECT CaptionAndIconId FROM LocalizableAppInfo WHERE AppUid=?;");
+	std::auto_ptr<CStatement> stmtLocalCaptionAndIconId(iScrDbHandler->PrepareStatement(selectLocalCaptionAndIconId));
+	
+	stmtLocalCaptionAndIconId->BindInt(1, aAppUid);
+	while(stmtLocalCaptionAndIconId->ProcessNextRow())
+	{
+		localCaptionAndIconIdList.push_back(stmtLocalCaptionAndIconId->IntColumn(0));
+	}
+	
+	return localCaptionAndIconIdList;
+}
+
+
+std::vector<TInt32> DbHelper::GetViewDataCaptionAndIconID(TInt32 aLocalAppInfoID) const
+{
+	std::vector<TInt32> viewCaptionIdList;
+	std::string selectViewCaptionId("SELECT CaptionAndIconId FROM ViewData WHERE LocalAppInfoId=?;");
+	std::auto_ptr<CStatement> stmtViewCaptionId(iScrDbHandler->PrepareStatement(selectViewCaptionId));
+	
+	stmtViewCaptionId->BindInt(1, aLocalAppInfoID);
+	while(stmtViewCaptionId->ProcessNextRow())
+	{
+		viewCaptionIdList.push_back(stmtViewCaptionId->IntColumn(0));
+	}
+	
+	return viewCaptionIdList;
+}
+
+
+std::vector<TInt32> DbHelper::GetAppRegistrationInfoAppUid(TInt32 aComponentId) const
+{
+	std::vector<TInt32> appUidList;
+	std::string selectAppUid("SELECT AppUid FROM AppRegistrationInfo WHERE ComponentId=?;");
+	std::auto_ptr<CStatement> stmtAppUid(iScrDbHandler->PrepareStatement(selectAppUid));
+
+	stmtAppUid->BindInt(1, aComponentId);
+	while(stmtAppUid->ProcessNextRow())
+	{
+		appUidList.push_back(stmtAppUid->IntColumn(0));
+	}
+
+	return appUidList;
+}
 
 TInt32 DbHelper::GetComponentPropertyIntFormattedValue(TInt32 aComponentId, std::wstring aComponentPropertyName, TInt32 aIntFormatter) const
 	{

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -22,8 +22,10 @@
 #include "tscrdefs.h"
 #include <f32file.h>
 #include <scs/cleanuputils.h>
+#include <usif/sif/sifutils.h>
 
 using namespace Usif;
+
 
 CScrTestStep::CScrTestStep(CScrTestServer& aParent)
 // Constructor.
@@ -770,10 +772,16 @@ void CScrTestStep::GetPropertiesFromConfigL(RPointerArray<CPropertyEntry>& aProp
 	{
 	TInt propertiesCount = 0;
 	if (!GetIntFromConfig(ConfigSection(), KPropertiesCountParamName, propertiesCount))
-		PrintErrorL(_L("Properties count was not found!"), KErrNotFound);
+	    {
+	    INFO_PRINTF1(_L("Properties count was not found!"));
+	    return;
+	    }
 	
 	if (propertiesCount < 0)
-		PrintErrorL(_L("Properties count is negative!"), KErrNotFound);
+	    {
+	    INFO_PRINTF1(_L("Properties count was negative !"));
+	    return;
+	    }
 	
 	for (TInt i = 0; i < propertiesCount; ++i)
 		{
@@ -908,7 +916,7 @@ TInt CScrTestStep::GetSetSizeFromConfigL()
 	return setSize;
 	}
 
-Usif::TComponentId CScrTestStep::AddNonLocalisableComponentL()
+Usif::TComponentId CScrTestStep::AddNonLocalisableComponentL(Usif::RSoftwareComponentRegistry& aScrSession)
 	{
 	TPtrC componentName;
 	GetComponentNameFromConfigL(componentName);
@@ -918,6 +926,7 @@ Usif::TComponentId CScrTestStep::AddNonLocalisableComponentL()
 	GetSoftwareTypeNameL(swTypeName);
 	
 	TScrComponentOperationType operationType(EScrCompInstall);
+	
 	TInt opTypeInt(0);
 	if(GetIntFromConfig(ConfigSection(), KOperationType, opTypeInt))
 		{
@@ -927,9 +936,9 @@ Usif::TComponentId CScrTestStep::AddNonLocalisableComponentL()
 	Usif::TComponentId componentId;
 	TPtrC globalIdName;
 	if(GetGlobalIdNameL(globalIdName))
-		componentId = iScrSession.AddComponentL(componentName, vendorName, swTypeName, &globalIdName, operationType);
+		componentId = aScrSession.AddComponentL(componentName, vendorName, swTypeName, &globalIdName, operationType);
 	else
-		componentId = iScrSession.AddComponentL(componentName, vendorName, swTypeName, NULL, operationType);
+		componentId = aScrSession.AddComponentL(componentName, vendorName, swTypeName, NULL, operationType);
 	
 	return componentId;
 	}
@@ -1042,3 +1051,618 @@ CComponentFilter* CScrTestStep::ReadComponentFilterFromConfigLC()
 	
 	return componentFilter;
 	}
+
+void CScrTestStep::GetAppOwnedFilesL(RPointerArray<HBufC>& aOwnedFileArray)
+	{
+	TInt ownedFileCount = 0;
+	GetIntFromConfig(ConfigSection(), _L("OwnedFileCount"), ownedFileCount);
+	for (TUint i = 0; i < ownedFileCount; ++i)
+		{
+		TPtrC tOwnedFileName;
+		TBuf<20> fileName;
+		fileName = KOwnedFileName;
+		GenerateIndexedAttributeNameL(fileName, i);
+		GetStringFromConfig(ConfigSection(), fileName, tOwnedFileName);
+		HBufC* ownedFileName = tOwnedFileName.AllocLC();
+		aOwnedFileArray.AppendL(ownedFileName);
+		CleanupStack::Pop(ownedFileName);
+		}	
+	}
+
+void CScrTestStep::GetAppServiceInfoL(RPointerArray<CServiceInfo>& aServiceInfoArray)
+	{
+	TInt serviceInfoCount = 0;
+	TInt totalOpaqueDataCount = 0;
+	TInt totalServiceDataTypeCount = 0;
+	GetIntFromConfig(ConfigSection(), _L("ServiceInfoCount"), serviceInfoCount);
+	for (TUint i = 0; i < serviceInfoCount; ++i)
+		{
+		// service Uid
+        TBuf<20> uid;
+		TUid serviceUid;
+		uid = KServiceUid;
+		GenerateIndexedAttributeNameL(uid, i);
+		GetUidFromConfig(ConfigSection(), uid, serviceUid);
+		
+		// service opaque data
+		RPointerArray<COpaqueData> serviceOpaqueDataInfoArray;
+		TBuf<27> servOpaqueDataCountStr;
+		servOpaqueDataCountStr = KServiceOpaqueDataInfoCount;
+		GenerateIndexedAttributeNameL(servOpaqueDataCountStr, i);
+		TInt serviceOpaqueDataInfoCount = 0;
+		GetIntFromConfig(ConfigSection(), servOpaqueDataCountStr, serviceOpaqueDataInfoCount);
+		GetServiceOpaqueDataInfoL(serviceOpaqueDataInfoArray, serviceOpaqueDataInfoCount, totalOpaqueDataCount);
+		totalOpaqueDataCount += serviceOpaqueDataInfoCount;
+		//CleanupStack::PushL(&serviceOpaqueDataInfoArray);
+
+		// service data type
+		TBuf<21> serviceDataTypeCountString;
+		serviceDataTypeCountString = KServiceDataTypeCount;
+		GenerateIndexedAttributeNameL(serviceDataTypeCountString, i);
+		TInt serviceDataTypeCount = 0;
+		GetIntFromConfig(ConfigSection(), serviceDataTypeCountString, serviceDataTypeCount);
+		totalServiceDataTypeCount+=serviceDataTypeCount;
+		RPointerArray<CDataType> serviceDataTypeArray;
+		for (TUint j = 0; j < serviceDataTypeCount; ++j)
+			{
+			TInt indexToRead = totalServiceDataTypeCount-serviceDataTypeCount+j;
+			TInt serviceDataTypePriority;
+			TPtrC serviceType;
+			TBuf<25> priority, type;
+			priority = KServiceDataTypePriority;
+			GenerateIndexedAttributeNameL(priority, indexToRead);
+			GetIntFromConfig(ConfigSection(), priority, serviceDataTypePriority);
+			type = KServiceDataType;
+			GenerateIndexedAttributeNameL(type, indexToRead);
+			GetStringFromConfig(ConfigSection(), type, serviceType);
+			CDataType* serviceDataType = CDataType::NewLC(serviceDataTypePriority,serviceType);
+			serviceDataTypeArray.AppendL(serviceDataType);
+			CleanupStack::Pop(serviceDataType);
+			}
+		
+		CServiceInfo* serviceInfo = CServiceInfo::NewLC(serviceUid, serviceOpaqueDataInfoArray, serviceDataTypeArray);
+		aServiceInfoArray.AppendL(serviceInfo);
+		CleanupStack::Pop(serviceInfo);
+		}
+	}
+
+void CScrTestStep::GetAppLocalizableInfoL(RPointerArray<CLocalizableAppInfo>& aLocalizableAppInfoArray)
+	{
+	TInt localizableAppInfoCount = 0;
+	TInt totalViewDataCount=0;
+	GetIntFromConfig(ConfigSection(), _L("LocalizableAppInfoCount"), localizableAppInfoCount);
+	for (TUint i = 0; i < localizableAppInfoCount; ++i)
+		{
+		TPtrC locShortCaption;
+		TLanguage locLanguage;
+		TInt lang;
+		TPtrC locGroupName;
+		TBuf<20> shortCaption, language, groupName, viewDataCount;
+		shortCaption = KLocShortCaption;
+		GenerateIndexedAttributeNameL(shortCaption, i);
+		GetStringFromConfig(ConfigSection(), shortCaption, locShortCaption);
+		language = KLocAppLanguage;
+		GenerateIndexedAttributeNameL(language, i);
+		GetIntFromConfig(ConfigSection(), language, lang);
+
+		locLanguage = static_cast<TLanguage>(lang);
+		groupName = KLocGroupName;
+		GenerateIndexedAttributeNameL(groupName, i);
+		GetStringFromConfig(ConfigSection(), groupName, locGroupName);
+		
+		TPtrC locCaption;
+		TPtrC locIconFileName;
+		TInt locNoOfAppIcons = 0;
+		TBuf<20> caption, iconFileName, noOfAppIcons;
+		caption = KLocCaption;
+		GenerateIndexedAttributeNameL(caption, i);
+		GetStringFromConfig(ConfigSection(), caption, locCaption);
+		iconFileName = KLocIconFileName;
+		GenerateIndexedAttributeNameL(iconFileName, i);
+		GetStringFromConfig(ConfigSection(), iconFileName, locIconFileName);
+		noOfAppIcons = KLocNumberOfAppIcons;
+		GenerateIndexedAttributeNameL(noOfAppIcons, i);
+		GetIntFromConfig(ConfigSection(), noOfAppIcons, locNoOfAppIcons);
+		CCaptionAndIconInfo* captionAndIconInfo = NULL;
+		if(locCaption.Length() != 0 || locIconFileName.Length() !=0 || locNoOfAppIcons != 0)
+		  {
+		   captionAndIconInfo = CCaptionAndIconInfo::NewLC(locCaption,locIconFileName,locNoOfAppIcons);
+		  }
+		else
+		  CleanupStack::PushL(captionAndIconInfo);
+		
+		TInt viewDataCountForLocale = 0;
+		viewDataCount=KViewDataCount;
+		GenerateIndexedAttributeNameL(viewDataCount, i);
+		GetIntFromConfig(ConfigSection(), viewDataCount , viewDataCountForLocale);
+		totalViewDataCount+=viewDataCountForLocale;
+		RPointerArray<CAppViewData> viewDataArray;
+		for (TUint i = 0; i < viewDataCountForLocale; ++i)
+			{
+			TInt viewScreenMode,vUid,indexToRead;
+			TBuf<20> uid, screenMode;
+			uid = KVwUid;
+			indexToRead=totalViewDataCount-viewDataCountForLocale+i;
+			GenerateIndexedAttributeNameL(uid, indexToRead);
+			GetIntFromConfig(ConfigSection(), uid, vUid);
+			TUid viewUid = TUid::Uid(vUid);
+			screenMode = KVwScreenMode;
+			GenerateIndexedAttributeNameL(screenMode, indexToRead);
+			GetIntFromConfig(ConfigSection(), screenMode, viewScreenMode);
+			
+			TPtrC viewCaption;
+			TPtrC viewIconFileName;
+			TInt viewNoOfAppIcons = 0;
+			TBuf<20> caption, iconFileName, noOfAppIcons;
+			caption = KVwCaption;
+			GenerateIndexedAttributeNameL(caption, indexToRead);
+			GetStringFromConfig(ConfigSection(), caption, viewCaption);
+			iconFileName = KVwIconFileName;
+			GenerateIndexedAttributeNameL(iconFileName, indexToRead);
+			GetStringFromConfig(ConfigSection(), iconFileName, viewIconFileName);
+			noOfAppIcons = KVwNumberOfAppIcons;
+			GenerateIndexedAttributeNameL(noOfAppIcons, indexToRead);
+			GetIntFromConfig(ConfigSection(), noOfAppIcons, viewNoOfAppIcons);
+			CCaptionAndIconInfo* viewCaptionAndIconInfo = NULL;
+			if(viewCaption.Length() != 0 || viewIconFileName.Length() !=0 || viewNoOfAppIcons != 0)
+			  {
+			   viewCaptionAndIconInfo = CCaptionAndIconInfo::NewLC(viewCaption,viewIconFileName,viewNoOfAppIcons);
+			  }
+			else
+			  CleanupStack::PushL(viewCaptionAndIconInfo);			
+			
+			CAppViewData* viewData = CAppViewData::NewLC(viewUid,viewScreenMode,viewCaptionAndIconInfo);
+			viewDataArray.AppendL(viewData);
+			CleanupStack::Pop(2, viewCaptionAndIconInfo);
+			}
+
+		CLocalizableAppInfo* localizableAppInfo = CLocalizableAppInfo::NewLC(locShortCaption,locLanguage,locGroupName,captionAndIconInfo,viewDataArray);
+		aLocalizableAppInfoArray.AppendL(localizableAppInfo);
+		CleanupStack::Pop(localizableAppInfo);
+		CleanupStack::Pop(captionAndIconInfo);
+		}
+	}
+
+void CScrTestStep::GetAppOpaqueDataInfoL(RPointerArray<Usif::COpaqueData>& aAppOpaqueDataInfoArray)
+    {
+    TInt appOpaqueDataInfoCount = 0;
+    
+    GetIntFromConfig(ConfigSection(), _L("AppOpaqueDataInfoCount"), appOpaqueDataInfoCount);
+    for (TUint i = 0; i < appOpaqueDataInfoCount; ++i)
+        {
+        TBuf<16> localeAttr;
+        localeAttr = KAppOpaqueDataLocale;
+        TInt locale = 0;
+        GenerateIndexedAttributeNameL(localeAttr, i);
+        GetIntFromConfig(ConfigSection(), localeAttr, locale);
+        
+
+                    
+        TBuf<14> opaqueDataAttr;
+        opaqueDataAttr = KAppOpaqueData;
+        TPtrC opaqueData;
+        GenerateIndexedAttributeNameL(opaqueDataAttr, i);
+        GetStringFromConfig(ConfigSection(), opaqueDataAttr, opaqueData);
+                
+        TPtrC8 blobOpaqueData((TUint8*)opaqueData.Ptr(), opaqueData.Length()*2);
+
+        COpaqueData* appOpaqueData = COpaqueData::NewLC(blobOpaqueData, (TLanguage) locale);
+        aAppOpaqueDataInfoArray.AppendL(appOpaqueData);
+        CleanupStack::Pop(appOpaqueData);
+        }    
+    }
+
+void CScrTestStep::GetServiceOpaqueDataInfoL(RPointerArray<Usif::COpaqueData>& aServiceOpaqueDataInfoArray, TInt aServiceOpaqueDataInfoCount, TInt aStartingIndex)
+    {
+    for (TUint i = 0; i < aServiceOpaqueDataInfoCount; ++i)
+        {
+        TBuf<20> localeAttr;
+        localeAttr = KServiceOpaqueLocale;
+        TInt locale = 0;
+        TInt indexToRead = i + aStartingIndex;
+        GenerateIndexedAttributeNameL(localeAttr, indexToRead);
+        GetIntFromConfig(ConfigSection(), localeAttr, locale);
+                    
+        TBuf<18> opaqueDataAttr;
+        opaqueDataAttr = KServiceOpaqueData;
+        TPtrC opaqueData;
+        GenerateIndexedAttributeNameL(opaqueDataAttr, indexToRead);
+        GetStringFromConfig(ConfigSection(), opaqueDataAttr, opaqueData);
+                
+        TPtrC8 blobOpaqueData((TUint8*)opaqueData.Ptr(), opaqueData.Length()*2);
+
+        COpaqueData* serviceOpaqueData = COpaqueData::NewLC(blobOpaqueData, (TLanguage) locale);
+        aServiceOpaqueDataInfoArray.AppendL(serviceOpaqueData);
+        CleanupStack::Pop(serviceOpaqueData);
+        }    
+    }
+
+CApplicationRegistrationData* CScrTestStep::GetAppRegInfoFromConfigLC()
+	{
+	TUid appUid;
+	GetAppUidL(appUid);
+
+	TPtrC appFile; 
+	TBuf<128> appFileBuf;
+	_LIT(KAppFileName, "appName%d");
+	if(!GetStringFromConfig(ConfigSection(), _L("AppFile"), appFile))
+	    {
+	    TBool generateNewUid(EFalse);
+		//Generate appFile Name from the appUid.
+	    if (GetBoolFromConfig(ConfigSection(), _L("GenerateNewUid"), generateNewUid))
+	         {
+	         appFileBuf.Format(KAppFileName, appUid);
+	         appFile.Set(appFileBuf);
+	         }
+	    }
+
+	TInt attributes, hidden, embeddability, newFile, launch, defScreenNo;
+	GetIntFromConfig(ConfigSection(), _L("Attributes"), attributes);
+	GetIntFromConfig(ConfigSection(), _L("Hidden"), hidden);
+	GetIntFromConfig(ConfigSection(), _L("Embeddability"), embeddability);
+	GetIntFromConfig(ConfigSection(), _L("NewFile"), newFile);
+	GetIntFromConfig(ConfigSection(), _L("Launch"), launch);
+
+	TPtrC groupName; 
+	GetStringFromConfig(ConfigSection(), _L("GroupName"), groupName);
+	
+	GetIntFromConfig(ConfigSection(), _L("DefaultScreenNumber"), defScreenNo);
+	
+	RPointerArray<HBufC> ownedFileArray;
+	GetAppOwnedFilesL(ownedFileArray);
+	CleanupStack::PushL(&ownedFileArray);
+	RPointerArray<CServiceInfo> serviceInfoArray;
+	GetAppServiceInfoL(serviceInfoArray);
+	CleanupStack::PushL(&serviceInfoArray);
+	RPointerArray<CLocalizableAppInfo> localizableAppInfoArray;
+	GetAppLocalizableInfoL(localizableAppInfoArray);
+	CleanupStack::PushL(&localizableAppInfoArray);
+
+	RPointerArray<COpaqueData> appOpaqueDataInfoArray;
+	GetAppOpaqueDataInfoL(appOpaqueDataInfoArray);
+	CleanupStack::PushL(&appOpaqueDataInfoArray);
+
+	RPointerArray<CPropertyEntry> appPropertyArray;
+	GetPropertiesFromConfigL(appPropertyArray, ETrue);
+	CleanupStack::PushL(&appPropertyArray);
+	INFO_PRINTF1(_L("Going to create CApplicationRegistrationData obj."));
+	
+	TBool ObjectWithoutOptionalFields = EFalse;
+	GetBoolFromConfig(ConfigSection(), _L("ObjectWithoutOptionalFields"), ObjectWithoutOptionalFields);
+	CApplicationRegistrationData* appRegData = NULL;
+	if(ObjectWithoutOptionalFields)
+	    {
+	    appRegData = CApplicationRegistrationData::NewLC(ownedFileArray, serviceInfoArray, localizableAppInfoArray, appPropertyArray, appUid, appFile);
+	    }
+	else
+	    {
+	    TApplicationCharacteristics appCharacteristics;
+	    appCharacteristics.iAttributes = attributes;
+	    appCharacteristics.iAppIsHidden = hidden;
+	    appCharacteristics.iEmbeddability = TApplicationCharacteristics::TAppEmbeddability(embeddability);
+	    appCharacteristics.iGroupName = groupName;
+	    appCharacteristics.iLaunchInBackground = launch;
+	    
+        appRegData = CApplicationRegistrationData::NewLC(ownedFileArray, serviceInfoArray, localizableAppInfoArray, appPropertyArray, appOpaqueDataInfoArray, appUid, appFile, appCharacteristics, defScreenNo);	    
+	    }
+	
+	INFO_PRINTF1(_L("Created CApplicationRegistrationData obj."));
+	CleanupStack::Pop(6);
+	CleanupStack::PushL(appRegData);
+	return appRegData;
+	}
+
+TComponentId CScrTestStep::GetCompIdFromConfigL()
+	{
+	TInt cId;
+	GetIntFromConfig(ConfigSection(), _L("ComponentId"), cId);
+	INFO_PRINTF1(_L("returning compid value from CScrTestStep::GetCompIdFromConfigL."));
+	return static_cast<TComponentId>(cId);
+	}
+
+void CScrTestStep::GetAppUidL(TUid& aAppUid)
+    {
+    TBool generateNewUid(EFalse);
+    if (!GetUidFromConfig(ConfigSection(), _L("AppUid"), aAppUid))
+        {
+        if (GetBoolFromConfig(ConfigSection(), _L("GenerateNewUid"), generateNewUid))
+            {
+            INFO_PRINTF1(_L("Generating new UID"));
+			//Find an unused UID and return it.
+            aAppUid = GenerateNewAppUidL();
+            }
+        else
+            {
+            PrintErrorL(_L("AppUid was not found!"), KErrNotFound);
+            }
+        }  
+    INFO_PRINTF2(_L("AppUid is 0x%x"), aAppUid.iUid);
+    }
+	
+TUid CScrTestStep::GetServiceUidL()
+    {
+    TUid serviceUid;
+    TInt tmpuid=0, i=0;
+    TBuf<25> uid;
+    
+    uid = KServiceUid;
+    GenerateIndexedAttributeNameL(uid, i);
+    if(!GetIntFromConfig(ConfigSection(), uid, tmpuid))
+         PrintErrorL(_L("Service Uid was not found!"), KErrNotFound);
+    serviceUid.iUid=tmpuid;
+    INFO_PRINTF2(_L("Service Uid %d"), serviceUid.iUid);
+    return serviceUid;
+    }
+
+TBool CScrTestStep::GetUidFromConfig(const TDesC& aSectName, const TDesC& aKeyName, TUid& aUid)
+    {
+    TInt val;
+    if(GetHexFromConfig(aSectName, aKeyName, val))
+        {
+        aUid = TUid::Uid(val);
+        return ETrue;
+        }
+    else
+        {
+        return EFalse;
+        }
+    }
+
+Usif::TAppRegInfo* CScrTestStep::GetAppInfoFromConfigL(TBool aIsSingle , TInt aIndex )
+	{
+    Usif::TAppRegInfo *appinfo=NULL;
+    
+    TBuf<MAX_SCR_PARAM_LENGTH> applicationUidParam, applicationFileNameParam, applicationCaptionParam, applicationShortCaptionParam;
+    applicationUidParam = KIntTAppInfoUID;
+    applicationFileNameParam = KStringTAppInfoFileName;
+    applicationCaptionParam = KStringTAppInfoCaption;
+    applicationShortCaptionParam = KStringTAppInfoShortCaption;
+            
+    if (!aIsSingle)
+        {
+        INFO_PRINTF1(_L("Preparing Index "));
+        GenerateIndexedAttributeNameL(applicationUidParam, aIndex);
+        GenerateIndexedAttributeNameL(applicationFileNameParam, aIndex);
+        GenerateIndexedAttributeNameL(applicationCaptionParam, aIndex);
+        GenerateIndexedAttributeNameL(applicationShortCaptionParam, aIndex);
+        }
+
+    TUid applicationUid;
+    if (!GetUidFromConfig(ConfigSection(), applicationUidParam, applicationUid))
+        {
+         ERR_PRINTF2(_L("The application Uid type param %S could not be found in configuration."), &applicationUidParam);
+         User::Leave(KErrNotFound);
+        }
+        
+    TPtrC applicationFileName;
+    if (!GetStringFromConfig(ConfigSection(), applicationFileNameParam, applicationFileName))
+        {
+        ERR_PRINTF2(_L("The application file name param %S could not be found in configuration."), &applicationFileNameParam);
+        User::Leave(KErrNotFound);
+        }
+    TPtrC applicationCaption;
+    if (!GetStringFromConfig(ConfigSection(), applicationCaptionParam, applicationCaption))
+        {
+        INFO_PRINTF2(_L("The application caption param %S could not be found in configuration."), &applicationCaptionParam);
+       
+        }
+    TPtrC applicationShortCaption;
+    if (!GetStringFromConfig(ConfigSection(), applicationShortCaptionParam, applicationShortCaption))
+        {
+        appinfo = new TAppRegInfo(applicationUid , applicationFileName, applicationCaption);
+        INFO_PRINTF2(_L("The application short caption param %S could not be found in configuration."), &applicationShortCaptionParam);
+        }
+    else
+        appinfo = new TAppRegInfo(applicationUid , applicationFileName, applicationCaption,applicationShortCaption);
+
+    return appinfo;
+    }
+
+void CScrTestStep::ReadAppInfoFilterFromConfigL(Usif::CAppInfoFilter** aFilter)
+    {
+    *aFilter=CAppInfoFilter::NewL();
+    Usif::CAppInfoFilter *aAppInfoFilter=*aFilter;
+      
+    TBool filterToSet(EFalse);
+    TInt screenMode(0);
+    if (GetBoolFromConfig(ConfigSection(), _L("AIFAllApps"), filterToSet))
+        {
+        if (filterToSet)
+            aAppInfoFilter->SetAllApps();
+        if (GetIntFromConfig(ConfigSection(), _L("AIFAllAppsScreenMode"), screenMode ))
+            aAppInfoFilter->SetAllApps(screenMode);
+        return ;
+        }
+    if (GetBoolFromConfig(ConfigSection(), _L("AIFEmbApps"), filterToSet))
+        {
+        if (filterToSet)
+            aAppInfoFilter->SetEmbeddableApps();
+        if (GetIntFromConfig(ConfigSection(), _L("AIFEmbAppScreanMode"), screenMode ))
+            aAppInfoFilter->SetEmbeddableApps(screenMode);
+        return ;
+        }
+    TInt filterValue(0);
+    if (GetIntFromConfig(ConfigSection(), _L("AIFFilEmbAppsEmbedabilityFilter"), filterValue))
+        {
+		TInt readFilterVal(0);
+        Usif::TEmbeddableFilter embadibilityFilter ;
+        for (TInt i=0 ; i <filterValue;i++)
+            {
+            TBuf<20>  filterName=_L("EFilterVal");
+            GenerateIndexedAttributeNameL(filterName, i);
+            if(GetIntFromConfig(ConfigSection(), filterName, readFilterVal))
+			embadibilityFilter.AddEmbeddability(TApplicationCharacteristics::TAppEmbeddability(readFilterVal));
+            }
+        if (GetIntFromConfig(ConfigSection(), _L("AIFFilEmbAppsEmbedableScreenMode"), screenMode ))
+            aAppInfoFilter->SetEmbeddabilityFilterWithScreenMode(embadibilityFilter,screenMode);
+        else
+            aAppInfoFilter->SetEmbeddabilityFilter(embadibilityFilter);
+        return ;
+        }
+    if (GetIntFromConfig(ConfigSection(), _L("AIFFilAppsWithCapMask"), filterValue))
+        {
+        TInt capValue(0);
+        if (GetIntFromConfig(ConfigSection(), _L("AIFFilAppsWithCapValue"), capValue))
+           {
+           if (GetIntFromConfig(ConfigSection(), _L("AIFFilAppsWithCapScreenMode"), screenMode ))
+               aAppInfoFilter->SetCapabilityAttributeMaskAndValue(filterValue,capValue,screenMode);
+           else
+               aAppInfoFilter->SetCapabilityAttributeMaskAndValue(filterValue,capValue);
+           }
+        return ;
+        }
+    TUid filterUId;
+    if (GetUidFromConfig(ConfigSection(), _L("AIFServerApps"), filterUId))
+        {
+        if (GetIntFromConfig(ConfigSection(), _L("AIFServerAppsScreenMode"), screenMode ))
+            aAppInfoFilter->SetServerApps(filterUId,screenMode);
+        else
+            aAppInfoFilter->SetServerApps(filterUId);
+        return ;
+        }
+    User::Leave(KErrNotFound);
+    }
+
+void CScrTestStep::GetViewDataInfoFromConfigL(RPointerArray<CAppViewData>& aAppViewInfoArray)
+    {
+    TInt viewDataCount=0;
+    GetIntFromConfig(ConfigSection(), _L("ViewDataCount"), viewDataCount);
+    for (TUint i = 0; i < viewDataCount; ++i)
+        {
+        TInt viewScreenMode,vUid;
+        TBuf<20> uid, screenMode;
+        uid = KVwUid;
+        GenerateIndexedAttributeNameL(uid, i);
+        GetIntFromConfig(ConfigSection(), uid, vUid);
+        TUid viewUid = TUid::Uid(vUid);
+        screenMode = KVwScreenMode;
+        GenerateIndexedAttributeNameL(screenMode, i);
+        GetIntFromConfig(ConfigSection(), screenMode, viewScreenMode);
+           
+        TPtrC viewCaption;
+        TPtrC viewIconFileName;
+        TInt viewNoOfAppIcons = 0;
+        TBuf<20> caption, iconFileName, noOfAppIcons;
+        caption = KVwCaption;
+        GenerateIndexedAttributeNameL(caption, i);
+        GetStringFromConfig(ConfigSection(), caption, viewCaption);
+        iconFileName = KVwIconFileName;
+        GenerateIndexedAttributeNameL(iconFileName, i);
+        GetStringFromConfig(ConfigSection(), iconFileName, viewIconFileName);
+        noOfAppIcons = KVwNumberOfAppIcons;
+        GenerateIndexedAttributeNameL(noOfAppIcons, i);
+        GetIntFromConfig(ConfigSection(), noOfAppIcons, viewNoOfAppIcons);
+        CCaptionAndIconInfo* viewCaptionAndIconInfo = NULL;
+        if(viewCaption.Length() != 0 || viewIconFileName.Length() !=0 || viewNoOfAppIcons != 0)
+            {
+            viewCaptionAndIconInfo = CCaptionAndIconInfo::NewLC(viewCaption,viewIconFileName,viewNoOfAppIcons);
+            }
+        else
+            {
+            CleanupStack::PushL(viewCaptionAndIconInfo);          
+            }
+        CAppViewData* viewData = CAppViewData::NewLC(viewUid,viewScreenMode,viewCaptionAndIconInfo);
+        aAppViewInfoArray.AppendL(viewData);
+        CleanupStack::Pop(2, viewCaptionAndIconInfo);
+        }
+    }
+
+TBool CScrTestStep::NotEqual(const Usif::CCaptionAndIconInfo *aLhsEntry, const Usif::CCaptionAndIconInfo *aRhsEntry) const
+    {
+    if(aLhsEntry != NULL  && aRhsEntry != NULL )
+        {
+        if ((aLhsEntry->Caption() != aRhsEntry->Caption())||(aLhsEntry->IconFileName() != aRhsEntry->IconFileName() )||(aLhsEntry->NumOfAppIcons() != aRhsEntry->NumOfAppIcons()))
+        return ETrue;
+        else 
+        return EFalse;
+        }
+    else
+        {
+        if(aLhsEntry == NULL && aRhsEntry == NULL)
+            return EFalse;
+        else return ETrue;
+        }
+    }
+
+TBool CScrTestStep::NotEqualL(
+        const RPointerArray<Usif::CServiceInfo>& aLhsEntry,
+        const RPointerArray<Usif::CServiceInfo>& aRhsEntry) const
+    {
+    TInt result(EFalse);
+    if (aLhsEntry.Count() != aRhsEntry.Count())
+        result = ETrue;
+
+    else
+        {
+        for (TInt i = 0; i < aLhsEntry.Count(); i++)
+            {
+            // Compare Uids
+            if (aLhsEntry[i]->Uid() != aRhsEntry[i]->Uid())
+                {
+                result = ETrue;
+                break;
+                }
+
+            // Compare Opaque Data Array
+            RPointerArray<Usif::COpaqueData> lhsOpaqueData =
+                    aLhsEntry[i]->OpaqueData();
+            CleanupResetAndDestroyPushL(lhsOpaqueData);
+            RPointerArray<Usif::COpaqueData> rhsOpaqueData =
+                    aRhsEntry[i]->OpaqueData();
+            CleanupResetAndDestroyPushL(rhsOpaqueData);
+            if (lhsOpaqueData.Count() != rhsOpaqueData.Count())
+                {
+                CleanupStack::Pop(2, &lhsOpaqueData);
+                result = ETrue;
+                break;
+                }
+            else
+                {
+                for (TInt j = 0; j < rhsOpaqueData.Count(); j++)
+                    {
+                    if (lhsOpaqueData[j]->Language()
+                            != rhsOpaqueData[j]->Language()
+                            || lhsOpaqueData[j]->OpaqueData()
+                                    != rhsOpaqueData[j]->OpaqueData())
+                        {
+                        CleanupStack::Pop(2, &lhsOpaqueData);
+                        result = ETrue;
+                        break;
+                        }
+                    }
+                }
+            CleanupStack::Pop(2, &lhsOpaqueData);
+
+            // Data Entry
+            RPointerArray<Usif::CDataType> aLhsDataEntry =
+                    aLhsEntry[i]->DataTypes();
+            CleanupResetAndDestroyPushL(aLhsDataEntry);
+            RPointerArray<Usif::CDataType> aRhsDataEntry =
+                    aRhsEntry[i]->DataTypes();
+            CleanupResetAndDestroyPushL(aRhsDataEntry);
+            if (aLhsDataEntry.Count() != aRhsDataEntry.Count())
+                {
+                CleanupStack::Pop(2, &aLhsDataEntry);
+                result = ETrue;
+                break;
+                }
+            else
+                {
+                for (TInt j = 0; j < aLhsDataEntry.Count(); j++)
+                    {
+                    if (aLhsDataEntry[j]->Priority()
+                            != aRhsDataEntry[j]->Priority()
+                            || aLhsDataEntry[j]->Type()
+                                    != aRhsDataEntry[j]->Type())
+                        {
+                        CleanupStack::Pop(2, &aLhsDataEntry);
+                        result = ETrue;
+                        break;
+                        }
+                    }
+                }
+            CleanupStack::Pop(2, &aLhsDataEntry);
+            }
+        }
+    return result;
+    }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,8 +31,10 @@
 #include <iostream>
 #include <stdexcept>
 #include <iostream>
-
+#include "dirparse.h"
+#include "parse.h"
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
 // constants 
 #define IGNORE_FORMATTING -1
 #define ENABLE 1
@@ -1447,32 +1449,29 @@ void SisRegistry::SetOriginVerification(XmlDetails::TScrPreProvisionDetail::TCom
 
 void SisRegistry::UpdateInstallationInformation(XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail)
 	{
-	CXmlGenerator xmlgenerator;
+	CXmlGenerator xmlGenerator;
 	char* tmpFileName = tmpnam(NULL);
 	std::wstring filename(string2wstring(tmpFileName));
-	
-	xmlgenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail);						
+
+	int isRomApplication = 0;
+	xmlGenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail, isRomApplication);
 						
 	std::string executable = "scrtool.exe";
 	std::string command;
 	command = executable + " -d " + GetDbPath() + " -p " + tmpFileName;
-	
+
 	int error = system(command.c_str());
-	
+
+	int err = remove(tmpFileName);
+	if(err != 0)
+		LERROR(L"Temporary file removal failed.");
+
 	if(error != 0)
-		{
+	{
 		std::string err = "Scrtool failed to upload the database registry entry.";
 		LERROR(L"Scrtool failed to upload the database registry entry.");
 		throw InterpretSisError(err, DATABASE_UPDATE_FAILED);
-		}
-		
-	error = remove(tmpFileName);
-
-	if(error != 0)
-		{
-		LERROR(L"Temporary file removal failed.");
-		}
-	
+	}
 	}
 
 std::string SisRegistry::GetDbPath()
@@ -1573,7 +1572,11 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 	    {
 		if (*currFile != L"." && *currFile != L"..")
 		    {
-			RemoveFile(path + *currFile);
+			#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+				int pos = 0;
+				if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
+			#endif
+					RemoveFile(path + *currFile);
 		    }
 
 		++currFile;
@@ -1604,7 +1607,11 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 				{
 				if (*currFile != L"." && *currFile != L"..")
 					{
-					RemoveFile(path + *currFile);
+					#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+						int pos = 0;
+						if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
+					#endif
+							RemoveFile(path + *currFile);
 					}
 				++currFile;
 				}
@@ -1619,6 +1626,91 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 		iDbHelper->RemoveEntry(*compIter);
 		}
 	}
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void SisRegistry::BackupCtl(TUint32 aUid)
+{
+	std::list<std::wstring> regDirFiles;
+	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
+    GetDirContents(path, regDirFiles);
+	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
+
+	std::wstring  path1 = FixPathDelimiterstap(path);
+	// Backup all .ctl files in the system drive for this package
+	while (currFile != regDirFiles.end())
+	{
+		if (*currFile != L"." && *currFile != L"..")
+	    {
+			std::string ifile = wstring2string(path1 +*currFile);
+			std::string ibackupfile(ifile);
+			ibackupfile.append("_backup");
+
+			int err=FileCopyA(ifile.c_str(),ibackupfile.c_str(),0);
+			if (err == 0)
+				LERROR(L"Failed to Backup .ctl ");
+		}
+		++currFile;
+    }
+}
+
+void SisRegistry::RestoreCtl(TUint32 aUid, TBool& aBackupFlag)
+{
+	std::list<std::wstring> regDirFiles;
+	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
+    GetDirContents(path, regDirFiles);
+	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
+
+	// Restore all .ctl files in the system drive for this package
+	while (currFile != regDirFiles.end())
+	{
+		if (*currFile != L"." && *currFile != L"..")
+	    {
+			if(aBackupFlag)
+			{
+				int pos =0;
+				if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
+				{
+					std::string ifile = wstring2string(path +*currFile);
+					std::string ibackupfile(ifile);
+					ibackupfile.append("_backup");
+
+					RemoveFile(path + *currFile);
+				 	int err = FileMoveA(ibackupfile.c_str(),ifile.c_str());
+					if (err == 0)
+						LERROR(L"Failed to Restore .ctl ");
+				}
+			}
+			else
+			{
+				RemoveFile(path + *currFile);
+			}
+		}
+		++currFile;
+    }
+}
+
+void SisRegistry::RemoveCtlBackup(TUint32 aUid)
+{
+	std::list<std::wstring> regDirFiles;
+	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
+    GetDirContents(path, regDirFiles);
+	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
+	
+	// Remove all .ctl backup files in the system drive for this package
+	while (currFile != regDirFiles.end())
+	{
+		if (*currFile != L"." && *currFile != L"..")
+	    {
+			std::wstring ifile(path +*currFile);
+			ifile.append(L"_backup");
+			
+			if (FileExists(ifile))
+				RemoveFile(ifile);
+		}
+		++currFile;
+    }
+}
+#endif
 
 TUint32 SisRegistry::GetUid(TUint32 aSid) const
 	{
@@ -1655,6 +1747,9 @@ XmlDetails::TScrPreProvisionDetail::TComponent SisRegistry::CreateRegistryEntry(
 	AddEmbeddedPackages(component, aSisRegistryObject.GetEmbeddedPackages());
 	AddProperties(component, aSisRegistryObject.GetProperties());
 	AddFileDescription(component, aSisRegistryObject.GetFileDescriptions());
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	AddApplicationRegistrationInfoL(component, aSisRegistryObject.GetFileDescriptions(), aSisRegistryObject.GetInRom());
+	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	
 	// inROM
 	if(DbConstants::KDefaultIsInRom != aSisRegistryObject.GetInRom())
@@ -1959,6 +2054,7 @@ void SisRegistry::AddFileDescription(XmlDetails::TScrPreProvisionDetail::TCompon
 		// add the location in the component files table
 		XmlDetails::TScrPreProvisionDetail::TComponentFile componentFile;
 		componentFile.iLocation = (*filedesIter)->GetTarget();
+
 		AddFileDescriptionAsFileProperty(componentFile, *filedesIter);
 		aComponent.iComponentFiles.push_back(componentFile);
 		}
@@ -1966,6 +2062,77 @@ void SisRegistry::AddFileDescription(XmlDetails::TScrPreProvisionDetail::TCompon
 	if (DbConstants::KDefaultWildCardFileCount != wildcardFileCount)
 		AddComponentProperty(aComponent, DbConstants::CompWildCardFileCount, wildcardFileCount, IGNORE_FORMATTING);	
 	}
+
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void SisRegistry::AddApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::vector<FileDescription*>& aFileDescription, int aInRom )
+{
+	std::vector<FileDescription*>::const_iterator filedesIter;
+	std::wstring iLocalFile;
+	std::string RegistrationFileName;
+	
+	//Find Registration File from list of filelist
+	for(filedesIter = aFileDescription.begin() ; filedesIter != aFileDescription.end(); ++filedesIter)
+	{
+		// if it has wild card characters then donot process. Continue.
+		if( IsFileWideCard((*filedesIter)->GetLocalFile()) ) 
+		{
+			continue;
+		}
+
+		iLocalFile = (*filedesIter)->GetLocalFile();
+		RegistrationFileName = wstring2string(iLocalFile);
+
+		std::string iRomPath = wstring2string(iParamList.RomDrivePath());
+		if(aInRom)
+		{
+			std::string localpath = FullNameWithoutDrive(RegistrationFileName);
+			RegistrationFileName = iRomPath + localpath;
+		}
+
+		//Return 0 for Registration file else 1
+		TInt err = FindRegistrationResourceFileL(RegistrationFileName);
+
+		if(err)
+			continue;
+
+		size_t found;
+		std::string folder;
+		found=RegistrationFileName.find("private\\10003a3f\\");
+
+		if( found != string::npos ) 
+			folder = RegistrationFileName.substr(0,found); 
+		else
+			folder = RegistrationFileName; 
+
+		CAppInfoReader* appInfoReader = NULL;
+		appInfoReader = CAppInfoReader::NewL(RegistrationFileName, NullUid, folder); 
+		if (!appInfoReader)
+		{
+			std::string errMsg= "Error in Reading File. Memory Allocation Failed";
+			throw CResourceFileException(errMsg);
+		}
+		else
+		{
+			TBool readSuccessful=EFalse;
+
+			readSuccessful= appInfoReader->ReadL(aFileDescription, iRomPath, aInRom);
+		
+			if (readSuccessful)
+			{
+				CreateApplicationRegistrationInfoL(aComponent,appInfoReader);
+			}
+			else
+			{
+				delete appInfoReader;
+				std::string errMsg= "Reading Resource File failed.";
+				throw CResourceFileException(errMsg);
+			}
+		}
+		delete appInfoReader;
+	}
+}
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 void SisRegistry::AddFileDescriptionAsFileProperty	(	XmlDetails::TScrPreProvisionDetail::TComponentFile& aComponentFile, 
 												const FileDescription* aFileDescription

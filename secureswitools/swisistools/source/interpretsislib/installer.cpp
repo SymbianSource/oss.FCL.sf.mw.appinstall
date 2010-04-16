@@ -21,7 +21,10 @@
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 #include "dbhelper.h" 
-
+#include "dirparse.h"
+#ifndef __TOOLS2_LINUX__
+#include <windows.h>
+#endif 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <exception>
 #include <sstream>
@@ -283,6 +286,11 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 	InstallableFiles installable;
 	GetInstallableFiles(file, installable, *iExpressionEvaluator, aInstallSISFile.iTargetDrive);
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	TBool iBackupFlag = false;
+	Backup(file, installable, iBackupFlag);
+#endif
+
 	// Uninstall the same package (if found) prior to any installation
 	UninstallPkg(file);
 
@@ -290,8 +298,37 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 
 	InstallFiles(installable, iParamList.SystemDriveLetter());
 
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	UpdateRegistry(file, installable, aInstallSISFile, aInstallSISFile.iSUFlag);
-	
+#else
+	try {
+
+		UpdateRegistry(file, installable, aInstallSISFile, aInstallSISFile.iSUFlag);
+	}
+	catch  (...)
+	{//Update Registry Failed. UnInstall the files.
+		InstallableFiles::const_iterator filedesIter; 
+		std::wstring itargetLocalFile;
+
+		for(filedesIter = installable.begin() ; filedesIter != installable.end(); ++filedesIter)
+		{
+		    itargetLocalFile = (*filedesIter)->GetLocalTarget();
+			
+			if (FileExists(itargetLocalFile))
+			{
+				RemoveFile(itargetLocalFile);
+				RemoveHashForFile(itargetLocalFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
+			}
+		}
+		Restore(file, installable, iBackupFlag);
+		FreeInstallableFiles(installable);
+		return RSC_PARSING_ERROR;
+	}
+
+	if(iBackupFlag)
+		RemoveBackup(file, installable);
+#endif
+
 	if (aInstallSISFile.iGenerateStub)
 	{
 		CreateStubSisFile(aInstallSISFile, file);
@@ -419,6 +456,145 @@ void Installer::UninstallPkg(const SisFile& aSis)
 	iRegistry.GenerateStubRegistry();
 }
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+// Backup all installed files for this Uid's packages and all the SisRegistry Entries
+void Installer::Backup(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag)
+{
+	TUint32 uid = aFile.GetPackageUid();
+	TUint32 installType = aFile.GetInstallType();
+
+	// Check to see the SA is installed, else backup is not required.
+	if (iRegistry.IsInstalled(uid) && ((installType == CSISInfo::EInstInstallation) || (installType == CSISInfo::EInstPartialUpgrade)))
+	{
+		aBackupFlag = true;
+		int err = 0;
+		LINFO(L"Backup package \"" << aFile.GetPackageName() << L"\" prior to re-installation");
+
+		// Backup all installed files for this Uid's packages and all the SisRegistry Entries
+		iRegistry.BackupCtl(uid);
+
+		//Backup SCR DB
+		std::string DbPath = iRegistry.GetDbPath();
+		if (FileExists(string2wstring(DbPath)))
+		{	
+			std::string BackupDb(DbPath);
+			BackupDb.append("_backup");
+
+		 	err=FileCopyA(DbPath.c_str(),BackupDb.c_str(),0);
+			if (err == 0)
+				LERROR(L"Failed to Backup Database scr.db ");
+		}
+
+		// Backup all installed files for this Uid's packages and all the SisRegistry Entries
+		InstallableFiles::const_iterator filedesIter; 
+		//Backup files
+		for(filedesIter = aInstallable.begin() ; filedesIter != aInstallable.end(); ++filedesIter)
+		{
+			std::wstring itargetLocalFile = (*filedesIter)->GetLocalTarget();
+			if (FileExists(itargetLocalFile))
+			{
+				std::wstring itargetBackupFile = (*filedesIter)->GetLocalTarget();
+				itargetBackupFile.append(L"_backup");
+				int pos =0;
+				if((pos = itargetBackupFile.find(L"\\sys\\bin\\", 0)) != std::wstring::npos)
+				{
+					BackupHashForFile(itargetLocalFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
+				}
+
+				std::string iLocalFile = wstring2string(itargetLocalFile);
+				std::string iBackupFile = wstring2string(itargetBackupFile);
+
+				err=FileCopyA(iLocalFile.c_str(),iBackupFile.c_str(),0);
+				if (err == 0)
+					LERROR(L"Failed to Backup installable file ");
+			}
+		}
+	}
+}
+
+// Remove Backup of all installed files for this Uid's packages and all the SisRegistry Entries
+void Installer::RemoveBackup(const SisFile& aFile, InstallableFiles& aInstallable)
+{
+	TUint32 uid = aFile.GetPackageUid();
+	TUint32 installType = aFile.GetInstallType();
+
+	// Check to see the SA is installed, else backup is not required.
+	if (iRegistry.IsInstalled(uid) && ((installType == CSISInfo::EInstInstallation) || (installType == CSISInfo::EInstPartialUpgrade)))
+	{
+		LINFO(L"Remove Backup of package \"" << aFile.GetPackageName() << L"\" after re-installation success");
+		// Remove all installed files for this Uid's packages and all the SisRegistry Entries
+		iRegistry.RemoveCtlBackup(uid);
+
+		//Remove Backup SCR DB
+		std::string DbPath = iRegistry.GetDbPath();
+		std::string BackupDb(DbPath);
+		BackupDb.append("_backup");
+		std::wstring DbBackup = string2wstring(BackupDb);
+
+		if (FileExists(DbBackup))
+			RemoveFile(DbBackup);
+	
+		// Remove all installed files for this Uid's packages and all the SisRegistry Entries
+		InstallableFiles::const_iterator filedesIter; 
+		std::wstring itargetLocalFile;
+		std::wstring itargetBackupFile;
+
+		for(filedesIter = aInstallable.begin() ; filedesIter != aInstallable.end(); ++filedesIter)
+		{
+		    itargetLocalFile = (*filedesIter)->GetLocalTarget();
+			itargetBackupFile = (*filedesIter)->GetLocalTarget();
+			itargetBackupFile.append(L"_backup");
+			
+			if (FileExists(itargetBackupFile))
+			{
+				RemoveFile(itargetBackupFile);
+				RemoveHashForFile(itargetBackupFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
+			}
+		}
+	}
+}
+
+// Restore all installed files for this Uid's packages and all the SisRegistry Entries
+void Installer::Restore(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag)
+{
+	TUint32 uid = aFile.GetPackageUid();
+	TUint32 installType = aFile.GetInstallType();
+
+	// Check to see the SA is installed, else backup is not required.
+	if((installType == CSISInfo::EInstInstallation) || (installType == CSISInfo::EInstPartialUpgrade))
+	{
+		LINFO(L"Restoring Installed Package ");
+
+		// Restore all .ctl file for this Uid's packages and all the SisRegistry Entries
+		iRegistry.RestoreCtl(uid, aBackupFlag);
+
+		// Restore all installed files for this Uid's packages and all the SisRegistry Entries
+		InstallableFiles::const_iterator filedesIter; 
+		for(filedesIter = aInstallable.begin() ; filedesIter != aInstallable.end(); ++filedesIter)
+		{
+			std::wstring itargetLocalFile = (*filedesIter)->GetLocalTarget();
+			std::wstring itargetBackupFile = (*filedesIter)->GetLocalTarget();
+			itargetBackupFile.append(L"_backup");
+			if (FileExists(itargetBackupFile))
+			{
+				int pos =0;
+				if((pos = itargetBackupFile.find(L"\\sys\\bin\\", 0)) != std::wstring::npos)
+				{
+					RestoreHashForFile(itargetLocalFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
+				}
+
+				std::string iLocalFile = wstring2string(itargetLocalFile);
+				std::string iBackupFile = wstring2string(itargetBackupFile);
+				
+				int err = FileMoveA(iBackupFile.c_str(),iLocalFile.c_str());
+
+				if (err == 0)
+					LERROR(L"Failed to Restore file ");
+			}
+		}
+	}
+}
+#endif
 
 struct CheckDependencyMet
 {

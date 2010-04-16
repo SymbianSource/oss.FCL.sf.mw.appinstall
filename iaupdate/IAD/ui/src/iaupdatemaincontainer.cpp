@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -129,7 +129,8 @@ void CIAUpdateMainContainer::ConstructL(const TRect& aRect )
     iEikonEnv->CreateResourceReaderLC( reader, R_IAUPDATE_UPDATES_LIST );
     iListBox->ConstructFromResourceL( reader );
     CleanupStack::PopAndDestroy();
-    
+
+    iListBox->EnableStretching( EFalse );
     iListBox->ItemDrawer()->ColumnData()->EnableMarqueeL( ETrue );
 
     // Setup scroll bars
@@ -426,19 +427,17 @@ void CIAUpdateMainContainer::RefreshL( const RPointerArray<MIAUpdateAnyNode>& aN
             CleanupStack::PopAndDestroy( buffer );
             CleanupStack::PopAndDestroy( name );
             }
-
         
         if ( node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw ) 
             {
-            MIAUpdateFwNode* fwnode = static_cast<MIAUpdateFwNode*>( node );
+            HBufC* firmwareHeader = StringLoader::LoadLC(R_IAUPDATE_MAIN_DEVICE_FW);
             HBufC* firmwarename = HBufC::NewLC( node->Base().Name().Length() +
-                                                KSpace.iTypeLength +
-                                                fwnode->FwVersion1().Length() );  
+                                                KSpace.iTypeLength + 
+                                                firmwareHeader->Length() );
             firmwarename->Des() = node->Base().Name();
             firmwarename->Des() += KSpace();
-            firmwarename->Des() += fwnode->FwVersion1();
-            
-            
+            firmwarename->Des() += *firmwareHeader;
+                     
             HBufC* buffer = HBufC::NewLC( KOne.iTypeLength +
                                           KTabulator.iTypeLength + 
                                           firmwarename->Length() + 
@@ -457,6 +456,7 @@ void CIAUpdateMainContainer::RefreshL( const RPointerArray<MIAUpdateAnyNode>& aN
             iItemTextArray->AppendL( *buffer );
             CleanupStack::PopAndDestroy( buffer );
             CleanupStack::PopAndDestroy( firmwarename );
+            CleanupStack::PopAndDestroy( firmwareHeader );
             }
         
         CleanupStack::PopAndDestroy( importanceDescription );

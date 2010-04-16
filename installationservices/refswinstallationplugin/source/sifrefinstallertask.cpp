@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -368,6 +368,8 @@ TInt CSifRefGetComponentInfoTask::CreateComponentInfoNodeL()
 		const TInt KExampleFileSize = 1024;
 		const TInt maxInstalledSize = iParser->Files().Count() * KExampleFileSize;
 		const TBool hasExe = EFalse;
+		const TBool driveSelectionRequired = EFalse;
+		RPointerArray<Usif::CComponentInfo::CApplicationInfo>* applications = NULL;
 		// The example capabilities below are hardcoded due to the same reason. The reference package file doesn't contain
 		// user grantable capabilities but a real package file should provide them.
 		TCapabilitySet userGrantableCaps(ECapabilityReadUserData, ECapabilityWriteUserData);
@@ -376,7 +378,7 @@ TInt CSifRefGetComponentInfoTask::CreateComponentInfoNodeL()
 		CComponentInfo::CNode* compInfoNode = CComponentInfo::CNode::NewLC(InstallHelper::KSifReferenceSoftwareType,
 							*iCompSearchData.iName, iCompSearchData.iVersion, *iCompSearchData.iVendor,
 							iCompSearchData.iScomoState, iCompSearchData.iInstallStatus, iCompSearchData.iComponentId,
-							*iCompSearchData.iName, ENotAuthenticated, userGrantableCaps, maxInstalledSize, hasExe);
+							*iCompSearchData.iName, ENotAuthenticated, userGrantableCaps, maxInstalledSize, hasExe, driveSelectionRequired, applications);
 		
 		auxNode.SetNodeL(compInfoNode);
 		CleanupStack::Pop(compInfoNode);

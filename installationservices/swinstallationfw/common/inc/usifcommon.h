@@ -43,20 +43,35 @@ namespace Usif
 		};
 
 	/**
+		This enumeration defines the possible options for user dialogs. 
+		If EAllowed is selected then the response to the user option dialog is treated as 'Yes'
+		If ENotAllowed is selected then the response to the user option dialog is treated as 'No'
+		If EUserConfirm is selected then user option dialog is presented to the user.
+	*/
+	enum TSifPolicy
+		{
+		EAllowed		= 0,
+		ENotAllowed		= 1,
+		EUserConfirm	= 2
+		};
+
+	/**
 		TComponentId defines an instance of a software component in the Software Component Registry. Two different components cannot 
 		have the same id on the system, however, it is not global and different components may have the same component id
 		on separate devices.Please refer to @see GlobalId for a unique identifier for software components across different devices.
 	*/
 	typedef TInt TComponentId;
-
 	
 	/**
 		Pre-defined software type names for the Universal Software Install Framework. 
 		'native' stands for Symbian native components delivered in the SIS/SISX packages.
 		'java' stands for Java MIDlets.
+		'widget' stands for Widgets
 	*/
 	_LIT(KSoftwareTypeNative, "native");
 	_LIT(KSoftwareTypeJava, "java");
+	_LIT(KSoftwareTypeWidget, "widget");
+
 	
 	} // end namespace Usif
 

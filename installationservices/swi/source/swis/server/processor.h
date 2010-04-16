@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -43,6 +43,8 @@
 
 namespace Swi
 {
+const TInt KMaxNoOfDeletionAttempts=3;
+const TInt KRetryInterval=250000;
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 class CIntegrityServices;
 #endif
@@ -75,6 +77,9 @@ protected:
 		EVerifyPaths,
 		ERemovePrivateDirectories,
 		EInstallFiles,
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		EParseApplicationRegistrationFiles,
+#endif		
 		EDisplayFiles, 
 		ERunFiles,
 		EUpdateRegistry,
@@ -112,6 +117,9 @@ protected:
 	virtual TBool DoStateProcessFilesL();
 	virtual TBool DoStateInstallFilesL() = 0;
 	virtual TBool DoStateDisplayFilesL() = 0;
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	virtual TBool DoParseApplicationRegistrationFilesL() = 0;
+#endif	
 	virtual TBool DoStateUpdateRegistryL() = 0;
 	virtual TBool DoStateRemoveFilesL();
 	virtual TBool DoStateRemovePrivateDirectoriesL();
@@ -198,6 +206,7 @@ protected:
 
 private:
 	TBool IsSafeUninstallModeSetL();
+	TInt  RemoveWithRetryAttemptL(TDesC& aFileName);
 private:
 	/// Installation plan
 	const CPlan& iPlan;

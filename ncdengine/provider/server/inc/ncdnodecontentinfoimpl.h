@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -128,7 +128,15 @@ public:
      * @return The UID of the application item.
      */
     const TUid& Uid() const;
-
+    
+    /**
+     * This function is the indicative identifier for the
+     * contents that are widgets. This can be used e.g. for checking
+     * if the widget has already been installed to the phone.
+     *
+     * @return The Identifier of the application item.
+     */
+    const TDesC& Identifier() const;
 
     /**
      * Different versions of the content items may exist. Thus,
@@ -261,7 +269,8 @@ private: // data
 
     TUint iPurpose;
     HBufC* iMimeType;
-    TUid iUid;
+    TUid iUid;         // UID is an identifier for sis 
+    HBufC* iIdentifier; // a string identifier for widget
     HBufC* iVersion;
     TInt iSize;
 

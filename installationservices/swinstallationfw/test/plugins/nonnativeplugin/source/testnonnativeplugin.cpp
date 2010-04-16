@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -34,6 +34,7 @@ namespace
 	const TInt KUserGrantableCapsBitMask = 49152; // ECapabilityReadUserData, ECapabilityWriteUserData
 	const TInt KMaxInstalledSize = 1234;
 	const TBool KHasExe = EFalse;
+	const TBool KDriveSelectionRequired = EFalse;	
 	const TAuthenticity KAuthenticity = EAuthenticated;
 	_LIT_SECURE_ID(KSifTestSuiteSecureId, 0x10285BCC);
 	_LIT_SECURE_ID(KSifRefInstallerServerSecureId, 0x1028634E);
@@ -251,13 +252,14 @@ namespace
 		{
 		// Prepare capabilities
 		TCapabilitySet capSet;
+		RPointerArray<Usif::CComponentInfo::CApplicationInfo>* applications = NULL;
 		capSet.SetEmpty();
 		UnpackCapabilitySet(KUserGrantableCapsBitMask, capSet);
 		
 		// Create the root node of the CComponentInfo object
 		CComponentInfo::CNode* rootNode = CComponentInfo::CNode::NewLC(KSifTestSoftwareType, KSifTestComponentName,
 						KSifTestComponentVersion, KSifTestComponentVendor, EDeactivated, ENewComponent,
-						KSifTestComponentId, KSifTestGlobalComponentId, KAuthenticity, capSet, KMaxInstalledSize, KHasExe);
+						KSifTestComponentId, KSifTestGlobalComponentId, KAuthenticity, capSet, KMaxInstalledSize, KHasExe, KDriveSelectionRequired, applications);
 
 		// Create a long string used for overflow tests
 		HBufC* longStr = NULL;
@@ -277,7 +279,7 @@ namespace
 				{
 				CComponentInfo::CNode* childNode = CComponentInfo::CNode::NewLC(KSifTestSoftwareType, *longStr,
 						KSifTestComponentVersion, *longStr, EDeactivated, ENewComponent,
-						KSifTestComponentId, *longStr, KAuthenticity, capSet, KMaxInstalledSize, KHasExe);
+						KSifTestComponentId, *longStr, KAuthenticity, capSet, KMaxInstalledSize, KHasExe, KDriveSelectionRequired, applications);
 				
 				rootNode->AddChildL(childNode);
 				CleanupStack::Pop(childNode);

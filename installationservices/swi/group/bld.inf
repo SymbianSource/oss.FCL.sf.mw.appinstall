@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1999-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -57,6 +57,8 @@ PRJ_EXPORTS
 ../inc/swi/sistruststatus.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sistruststatus.h)
 ../inc/swi/sisregistrylog.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrylog.h)
 ../inc/swi/installtypes.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/installtypes.h)
+../source/swiutils/swiutils.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiutils.h)
+../inc/swi/ipcutil.h 	  SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/ipcutil.h)
 
 // ROMKIT include
 ../inc/swi.iby /epoc32/rom/include/swi.iby
@@ -90,6 +92,7 @@ devinfosupport.mmp
 devinfosupportclient.mmp
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+apprscparser.mmp
 swtypereginfo.mmp
 #else
 integrityservices.mmp
@@ -124,9 +127,9 @@ pkgremover.mmp
 sishelper_tshell.mmp
 sislauncherserver_tshell.mmp
 #endif
+swiutils.mmp
 #endif
 #endif
-
 
 PRJ_TESTMMPFILES
 
@@ -210,7 +213,7 @@ PRJ_TESTEXPORTS
 ../test/tsisfile/data/signedsis/swicertstore.dat /epoc32/winscw/c/tswi/certstore/tsis_swicertstore.dat
 ../test/tsisfile/data/signedsis/swicertstore_mandatory.dat /epoc32/winscw/c/tswi/certstore/swicertstore_mandatory.dat
 ../test/tsisfile/data/signedsis/swicertstore_sucert.dat /epoc32/winscw/c/tswi/certstore/swicertstore_sucert.dat
-
+../test/trevocation/swicertstore.dat /epoc32/winscw/c/tswi/trevocation/swicertstore.dat
 
 ../test/tsishelper/scripts/script /epoc32/winscw/c/tswi/tsishelper/scripts/tsishelper.script
 ../test/tsishelper/scripts/ini /epoc32/winscw/c/tswi/tsishelper/scripts/tsishelper.ini
@@ -514,6 +517,10 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.ini
 ../test/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.script
 ../test/tsisfile/data/files/uninstall_cdrive.log /epoc32/winscw/c/tswi/tuiscriptadaptors/data/uninstall_cdrive.log
+../test/tuiscriptadaptors/scripts/tswiappregintegration.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration.script
+../test/tuiscriptadaptors/scripts/tswiappregintegration_stub.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration_stub.script
+../test/tuiscriptadaptors/scripts/tswiappregintegration.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration.ini
+../test/tuiscriptadaptors/scripts/swiappregintegration_base01_stub.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/swiappregintegration_base01_stub.sis 
 #else
 ../test/tuiscriptadaptors/scripts/tcleanupinfrastructure_legacy.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tcleanupinfrastructure_legacy.ini
 ../test/tuiscriptadaptors/scripts/tcleanupinfrastructure_legacy.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tcleanupinfrastructure.script
@@ -890,6 +897,8 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/testfotaupdate.ini		/epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testfotaupdate.ini
 ../test/tuiscriptadaptors/scripts/testfotaupdate1.script	/epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testfotaupdate1.script
 ../test/tuiscriptadaptors/scripts/testfotaupdate2.script	/epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testfotaupdate2.script
+../test/tuiscriptadaptors/scripts/fotaupdatestubapp1.sis		/epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/fotaupdatestubapp1.sis
+../test/tuiscriptadaptors/scripts/fotaupdatestubapp2.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/fotaupdatestubapp2.sis
 
 // path substitution
 ../test/tpathsubst/scripts/tpathsubst.script /epoc32/winscw/c/tswi/tpathsubst/scripts/tpathsubst.script
@@ -929,19 +938,43 @@ PRJ_TESTEXPORTS
 ../test/trevocation/scripts/tRevocation.ini	/epoc32/winscw/c/tswi/trevocation/scripts/trevocation.ini
 ../test/trevocation/scripts/tRevocation.script	/epoc32/winscw/c/tswi/trevocation/scripts/trevocation.script
 ../test/trevocation/scripts/tRevocation_unsigned.script	/epoc32/winscw/c/tswi/trevocation/scripts/trevocation_unsigned.script
-../test/trevocation/sisInteg/winscw/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_01.sis
-../test/trevocation/sisInteg/winscw/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_02.sis
-../test/trevocation/sisInteg/winscw/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_03.sis
-../test/trevocation/sisInteg/winscw/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_04.sis
-../test/trevocation/sisInteg/winscw/ocsp_05.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_05.sis
-../test/trevocation/sisInteg/winscw/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation.sis
-../test/trevocation/sisInteg/winscw/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation-sub1.sis
-../test/trevocation/sisInteg/armv5/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_01.sis
-../test/trevocation/sisInteg/armv5/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_02.sis
-../test/trevocation/sisInteg/armv5/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_03.sis
-../test/trevocation/sisInteg/armv5/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_04.sis
-../test/trevocation/sisInteg/armv5/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation.sis
-../test/trevocation/sisInteg/armv5/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation-sub1.sis
+../test/trevocation/scripts/trevocationocsp_emulator.script	/epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator.script
+../test/trevocation/scripts/trevocationocsp_emulator_pre.bat /epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator_pre.bat
+../test/trevocation/scripts/trevocationocsp_emulator_post.bat /epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator_post.bat
+../test/trevocation/sisinteg/winscw/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_01.sis
+../test/trevocation/sisinteg/winscw/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_02.sis
+../test/trevocation/sisinteg/winscw/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_03.sis
+../test/trevocation/sisinteg/winscw/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_04.sis
+../test/trevocation/sisinteg/winscw/ocsp_05.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_05.sis
+../test/trevocation/sisinteg/winscw/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedval.sis
+../test/trevocation/sisinteg/winscw/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignval.sis
+../test/trevocation/sisinteg/winscw/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedval.sis
+../test/trevocation/sisinteg/winscw/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedval.sis
+../test/trevocation/sisinteg/winscw/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedval.sis
+../test/trevocation/sisinteg/winscw/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedrev.sis
+../test/trevocation/sisinteg/winscw/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignrev.sis
+../test/trevocation/sisinteg/winscw/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedrev.sis
+../test/trevocation/sisinteg/winscw/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedrev.sis
+../test/trevocation/sisinteg/winscw/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedrev.sis
+../test/trevocation/sisinteg/winscw/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation.sis
+../test/trevocation/sisinteg/winscw/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation-sub1.sis
+../test/trevocation/sisinteg/armv5/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_01.sis
+../test/trevocation/sisinteg/armv5/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_02.sis
+../test/trevocation/sisinteg/armv5/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_03.sis
+../test/trevocation/sisinteg/armv5/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_04.sis
+../test/trevocation/sisinteg/armv5/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedval.sis
+../test/trevocation/sisinteg/armv5/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignval.sis
+../test/trevocation/sisinteg/armv5/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedval.sis
+../test/trevocation/sisinteg/armv5/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedval.sis
+../test/trevocation/sisinteg/armv5/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedval.sis
+../test/trevocation/sisinteg/armv5/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedrev.sis
+../test/trevocation/sisinteg/armv5/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignrev.sis
+../test/trevocation/sisinteg/armv5/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedrev.sis
+../test/trevocation/sisinteg/armv5/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedrev.sis
+../test/trevocation/sisinteg/armv5/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedrev.sis
+
+../test/trevocation/sisinteg/armv5/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation.sis
+../test/trevocation/sisinteg/armv5/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation-sub1.sis
 
 // legacy SIS file
 ../test/tsisfile/data/files/legacy.sis /epoc32/winscw/c/tswi/tsis/data/legacy.sis
@@ -992,6 +1025,8 @@ PRJ_TESTEXPORTS
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 ../test/tsisregistrytest/Scripts/batchfiles/tsisregistrytest_post.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/tsisregistrytest_post.bat
 ../test/tsisregistrytest/Scripts/batchfiles/testlogging_pre.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/testlogging_pre.bat
+../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_pre.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_pre.bat
+../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_post.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_post.bat
 #else
 ../test/tsisregistrytest_legacy/Scripts/batchfiles/tsisregistrytest_post.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/tsisregistrytest_post.bat
 ../test/tsisregistrytest_legacy/Scripts/batchfiles/testlogging_pre.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/testlogging_pre.bat

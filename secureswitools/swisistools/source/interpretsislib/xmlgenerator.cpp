@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -67,7 +67,10 @@ CXmlGenerator::~CXmlGenerator()
 	{}
 
 
-void CXmlGenerator::WritePreProvisionDetails(const std::wstring aXmlFileName, const XmlDetails::TScrPreProvisionDetail& aPreProvisionDetail)
+void CXmlGenerator::WritePreProvisionDetails(const std::wstring aXmlFileName, 
+												const XmlDetails::TScrPreProvisionDetail& aPreProvisionDetail,
+												int& aRomApplication
+												)
 	{
 	try 
 		{
@@ -112,7 +115,7 @@ void CXmlGenerator::WritePreProvisionDetails(const std::wstring aXmlFileName, co
 			DOMElement*  component = domDocument->createElement(L"Component");
 			rootElement->appendChild(component);
 
-			WriteComponent(component,domDocument.get(), *compIter);
+			WriteComponent(component,domDocument.get(), *compIter, aRomApplication);
 			}
 		
 		// do the serialization through DOMWriter::writeNode();
@@ -163,8 +166,19 @@ void CXmlGenerator::SetWriterFeatures(DOMWriter* aDomWriter)
 	aDomWriter->setEncoding(L"UTF-16");
 	}
 
-void CXmlGenerator::WriteComponent( DOMElement* aRootElement, DOMDocument* aDocument, const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent)
+void CXmlGenerator::WriteComponent( DOMElement* aRootElement, DOMDocument* aDocument, 
+										const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, 
+										int& aRomApplication
+										)
 	{
+
+	if (aRomApplication) 
+	{
+		int isRomApplication = 1;
+		std::wstring isRomApp = Utils::IntegerToWideString(isRomApplication);
+		AddChildElement(aRootElement, aDocument, L"RomApplication", isRomApp.c_str());
+	}
+	
 	std::wstring isRemovable = Utils::IntegerToWideString(aComponent.iComponentDetails.iIsRemovable);
 	AddChildElement(aRootElement, aDocument, L"Removable", isRemovable.c_str() );
 	
@@ -191,6 +205,9 @@ void CXmlGenerator::WriteComponent( DOMElement* aRootElement, DOMDocument* aDocu
 	WriteComponentFiles(aRootElement, aDocument, aComponent.iComponentFiles);
 
 	WriteComponentDependencies(aRootElement, aDocument, aComponent.iComponentDependency);
+
+	WriteAppRegInfo(aRootElement, aDocument, aComponent.iApplicationRegistrationInfo);
+
 	}
 
 void CXmlGenerator::WriteComponentVersion
@@ -259,6 +276,261 @@ void CXmlGenerator::WriteComponentProperties
 		
 		}
 	}
+
+
+/**
+ * Writes Class TAppRegistrationInfo Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppRegInfo	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppRegistrationInfo>& aAppRegInfo 
+					)
+{
+	std::vector<AppRegistrationInfo>::const_iterator compFileIter;
+	for( compFileIter = aAppRegInfo.begin() ; compFileIter != aAppRegInfo.end() ; ++compFileIter)
+	{
+		DOMElement* compFileRoot = AddTag(aRootElement, aDocument, L"ApplicationRegistrationInfo");
+
+		WriteAppAttributes(compFileRoot, aDocument, compFileIter->iApplicationAttribute);
+
+		const std::vector<AppOpaqueDataType>& aAppOpaqueDataType = compFileIter->iOpaqueDataType;
+		std::vector<AppOpaqueDataType>::const_iterator fileAppOpaqueDataType;
+
+		for( fileAppOpaqueDataType = aAppOpaqueDataType.begin() ; fileAppOpaqueDataType != aAppOpaqueDataType.end() ; ++fileAppOpaqueDataType)
+		{
+			if(0 == fileAppOpaqueDataType->iServiceUid)
+			{
+				DOMElement* filePropValueRoot = AddTag(compFileRoot, aDocument, L"OpaqueData");
+				AddChildElement(filePropValueRoot,aDocument, L"Data", fileAppOpaqueDataType->iOpaqueData.c_str());
+				std::wstring iLocale = Utils::IntegerToWideString(fileAppOpaqueDataType->iLocale);
+				AddChildElement(filePropValueRoot,aDocument, L"OpaqueLocale", iLocale.c_str());
+			}
+		}
+
+		for(vector<std::wstring>::iterator mimeiter = compFileIter->iFileOwnershipInfo.begin() ; mimeiter != compFileIter->iFileOwnershipInfo.end() ; ++mimeiter )
+		{
+			DOMElement* filePropRoot = AddTag(compFileRoot, aDocument, L"FileOwnershipinfo");
+
+			AddChildElement(filePropRoot,aDocument, L"FileName",  mimeiter->c_str());
+		}
+
+		WriteAppServiceInfo(compFileRoot, aDocument, compFileIter->iApplicationServiceInfo, compFileIter->iOpaqueDataType);
+		WriteAppLocalizableInfo(compFileRoot, aDocument, compFileIter->iApplicationLocalizableInfo);
+	}
+}
+
+/**
+ * Writes Class TAppLocalizableInfo Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppLocalizableInfo	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppLocalizableInfo>& aAppLocalizableInfo
+					)
+{
+	std::vector<AppLocalizableInfo>::const_iterator filePropIter;
+	for( filePropIter = aAppLocalizableInfo.begin() ; filePropIter != aAppLocalizableInfo.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ApplicationLocalizableInfo");
+
+		WriteAppLocalizableAttribute(filePropRoot, aDocument, filePropIter->iLocalizableAttribute);
+		WriteAppLocalizableViewData(filePropRoot, aDocument, filePropIter->iViewData);
+	}
+}
+
+/**
+ * Writes Class TAppLocalizableAttribute Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppLocalizableAttribute	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppLocalizableAttribute>& aAppLocalizableAttribute 
+					)
+{
+	std::vector<AppLocalizableAttribute>::const_iterator filePropIter;
+	for( filePropIter = aAppLocalizableAttribute.begin() ; filePropIter != aAppLocalizableAttribute.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"LocalizableAttribute");
+		DOMElement* filePropValueRoot = AddTag(filePropRoot, aDocument, L"LocalizableAttribute_Value");
+
+		if(filePropIter->iIsIntValue)
+		{
+			AddChildElement(filePropValueRoot, aDocument, L"LocalizableAttribute_IntValue", filePropIter->iValue.c_str());
+		}
+		else
+		{
+			AddChildElement(filePropValueRoot, aDocument, L"LocalizableAttribute_StrValue", filePropIter->iValue.c_str());
+		}
+		filePropRoot->setAttribute(L"Name", filePropIter->iName.c_str());
+	}
+}
+
+/**
+ * Writes Class TAppViewData Info in XML. 
+ */
+
+ void CXmlGenerator::WriteAppLocalizableViewData 
+					 ( 
+						 DOMElement* aRootElement, DOMDocument* aDocument, 
+						 const std::vector<AppViewData>& aAppViewData 
+					 )
+ {
+	 std::vector<AppViewData>::const_iterator filePropIter;
+	 for( filePropIter = aAppViewData.begin() ; filePropIter != aAppViewData.end() ; ++filePropIter)
+	 {
+		 DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ViewData");
+		 WriteAppLocalizableViewDataAttributes(filePropRoot, aDocument, filePropIter->iViewDataAttributes);
+	 }
+ }
+
+ void CXmlGenerator::WriteAppLocalizableViewDataAttributes 
+					 ( 
+						 DOMElement* aRootElement, DOMDocument* aDocument, 
+						 const std::vector<AppViewDataAttributes>& aAppViewDataAttributes 
+					 )
+ {
+	 std::vector<AppViewDataAttributes>::const_iterator filePropIter;
+	 for( filePropIter = aAppViewDataAttributes.begin() ; filePropIter != aAppViewDataAttributes.end() ; ++filePropIter)
+	 {
+		 DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ViewDataAttribute");
+		 DOMElement* filePropValueRoot = AddTag(filePropRoot, aDocument, L"ViewData_Value");
+ 
+		 if(filePropIter->iIsIntValue)
+		 {
+			 AddChildElement(filePropValueRoot, aDocument, L"ViewData_IntValue", filePropIter->iValue.c_str());
+		 }
+		 else
+		 {
+			 AddChildElement(filePropValueRoot, aDocument, L"ViewData_StrValue", filePropIter->iValue.c_str());
+		 }
+		 filePropRoot->setAttribute(L"Name", filePropIter->iName.c_str());
+	 }
+ }
+
+/**
+ * Writes Class TAppServiceInfo Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppServiceInfo	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppServiceInfo>& aAppServiceInfo,
+						const std::vector<AppOpaqueDataType>& aAppOpaqueData 
+					)
+{
+	std::vector<AppServiceInfo>::const_iterator filePropIter;
+	std::vector<AppOpaqueDataType>::const_iterator fileAppPropIter;
+	for( filePropIter = aAppServiceInfo.begin() ; filePropIter != aAppServiceInfo.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ApplicationServiceInfo");
+	
+		std::wstring iUid = Utils::IntegerToWideString(filePropIter->iUid);
+		AddChildElement(filePropRoot,aDocument, L"Uid", iUid.c_str());
+
+		for( fileAppPropIter = aAppOpaqueData.begin() ; fileAppPropIter != aAppOpaqueData.end() ; ++fileAppPropIter)
+		{
+			if(filePropIter->iUid == fileAppPropIter->iServiceUid)
+			{
+				if(!fileAppPropIter->iOpaqueData.empty())
+				{
+					DOMElement* filePropValueRoot = AddTag(filePropRoot, aDocument, L"ServiceOpaqueData");
+					AddChildElement(filePropValueRoot,aDocument, L"ServiceData", fileAppPropIter->iOpaqueData.c_str());
+					std::wstring iLocale = Utils::IntegerToWideString(fileAppPropIter->iLocale);
+					AddChildElement(filePropValueRoot,aDocument, L"ServiceOpaqueLocale", iLocale.c_str());
+				}
+			}
+		}
+
+		WriteAppDataType(filePropRoot, aDocument, filePropIter->iDataType);
+	}
+}
+
+/**
+ * Writes Class TDataType Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppDataType	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppDataType>& aAppDataType 
+					)
+{
+	std::vector<AppDataType>::const_iterator filePropIter;
+	for( filePropIter = aAppDataType.begin() ; filePropIter != aAppDataType.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ApplicationDataType");
+
+		std::wstring iPriority = Utils::IntegerToWideString(filePropIter->iPriority);
+		AddChildElement(filePropRoot,aDocument, L"Priority", iPriority.c_str());
+		AddChildElement(filePropRoot, aDocument, L"Type", filePropIter->iType.c_str());
+	}
+}
+
+/**
+ * Writes Class TApplicationAttribute Info in XML. 
+ */
+
+void CXmlGenerator::WriteAppAttributes	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<ApplicationAttribute>& aAppAttributes 
+					)
+{
+	std::vector<ApplicationAttribute>::const_iterator filePropIter;
+	for( filePropIter = aAppAttributes.begin() ; filePropIter != aAppAttributes.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ApplicationAttribute");
+		DOMElement* filePropValueRoot = AddTag(filePropRoot, aDocument, L"ApplicationAttribute_Value");
+
+		if(filePropIter->iIsIntValue)
+		{
+			AddChildElement(filePropValueRoot, aDocument, L"ApplicationAttribute_IntValue", filePropIter->iValue.c_str());
+		}
+		else
+		{
+			AddChildElement(filePropValueRoot, aDocument, L"ApplicationAttribute_StrValue", filePropIter->iValue.c_str());
+		}
+		filePropRoot->setAttribute(L"Name", filePropIter->iName.c_str());
+	}
+}
+
+/**
+ * Writes Class TApplicationProperty Info in XML. 
+ */
+void CXmlGenerator::WriteAppProperty	
+					( 
+						DOMElement* aRootElement, DOMDocument* aDocument, 
+						const std::vector<AppProperty>& aAppProperty 
+					)
+{
+	std::vector<AppProperty>::const_iterator filePropIter;
+	for( filePropIter = aAppProperty.begin() ; filePropIter != aAppProperty.end() ; ++filePropIter)
+	{
+		DOMElement* filePropRoot = AddTag(aRootElement, aDocument, L"ApplicationProperty");
+
+
+		std::wstring iLocale = Utils::IntegerToWideString(filePropIter->iLocale);
+		AddChildElement(filePropRoot,aDocument, L"Locale", iLocale.c_str());
+
+		AddChildElement(filePropRoot,aDocument, L"Name", filePropIter->iName.c_str());
+
+		std::wstring iServiceUid = Utils::IntegerToWideString(filePropIter->iServiceUid);
+		AddChildElement(filePropRoot,aDocument, L"ServiceUid", iServiceUid.c_str());
+
+		std::wstring iIntValue = Utils::IntegerToWideString(filePropIter->iIntValue);
+		AddChildElement(filePropRoot,aDocument, L"IntValue", iIntValue.c_str());
+
+		AddChildElement(filePropRoot, aDocument, L"StrValue", filePropIter->iStrValue.c_str());
+
+		std::wstring iIsStr8Bit = Utils::IntegerToWideString(filePropIter->iIsStr8Bit);
+		AddChildElement(filePropRoot,aDocument, L"IsStr8Bit", iIsStr8Bit.c_str());
+
+	}
+}
 
 void CXmlGenerator::WriteComponentFiles	
 					( 

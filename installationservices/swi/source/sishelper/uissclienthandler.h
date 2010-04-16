@@ -28,10 +28,7 @@
 #include "swi/msisuihandlers.h"
 #include "swi/launcher.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-namespace Usif
-	{
-	class CComponentInfo;
-	}
+#include <usif/sif/sifcommon.h>
 #include "swi/nativecomponentinfo.h"
 #endif
 
@@ -186,7 +183,7 @@ private:
 	void AllocCompInfoBufL(TInt aBufSize);
 	void ConstructCompInfoFromBufferL();
 	Usif::CComponentInfo::CNode* MapToComponentInfoL(CNativeComponentInfo& aNativeComponentInfo);
-	
+	void MapToApplicationInfoL(RCPointerArray<Swi::CNativeComponentInfo::CNativeApplicationInfo>& aNativeApplicationsInfo, RPointerArray<Usif::CComponentInfo::CApplicationInfo>& aApplicationsInfo);
 	HBufC8* iCompInfoBuffer;		//< Component Information storage buffer
 	TPtr8   iCompInfoBufPtr;
 	

@@ -898,3 +898,17 @@ FILE1.1 = C:\Documents\InstTest\testhugecontroller.txt
 FILE1.2 = C:\Documents\InstTest\testhugecontroller1.txt
 INSTALLDRIVE1 = C
 
+[defineProperty]
+DefineProperty=true
+
+[API-INST-PAS-SWI-0001]
+PublishedUidCount=1
+PublishedUidValue0=88000105
+
+[API-INST-PAS-SWI-0001-A]
+PublishedUidCount=1
+PublishedUidValue0=88000106
+
+[API-INST-PAS-SWI-0002]
+PublishedUidCount=1
+PublishedUidValue0=81113001

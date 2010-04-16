@@ -53,7 +53,7 @@ class CDbLayer
 		
 		void AddPreProvisionDetails(const XmlDetails::TScrPreProvisionDetail& aPreProvisionDetailList);
 		
-		void AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::wstring& aSoftwareTypeName);
+		bool AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::wstring& aSoftwareTypeName);
 		
 		int GetInstalledDrives(const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile>& aComponentFiles );
 		
@@ -84,7 +84,26 @@ class CDbLayer
 		void AddFileProperties(int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty>& aFileProperty);
 		
 		void ExecuteStatement(const std::string& aStmtStr);
+		
 
+		void AddApplicationRegistrationInfo( int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo>& aApplicationRegistrationInfo);
+
+		int AddAppAttribute(int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute>& aAppAttribute);
+
+		void AddFileOwnershipInfo(int aAppUid, const std::vector<std::wstring>& aFileOwnershipInfo);
+
+		void AddServiceInfo( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo>& aApplicationServiceInfo);
+
+		void AddAppLocalizableInfo( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo>& aApplicationLocalizableInfo);
+
+		void AddLocalizableAttribute( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute>& aApplicationLocalizableAttribute);
+
+		void AddViewData( int alocalAppInfoId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData>& aViewData);
+
+		void AddViewDataAttributes( int alocalAppInfoId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes>& aViewDataAttribute);
+			
+		void AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty>& aApplicationProperty);
+				
 		const std::wstring GetLocalTime();
 			
 	private:

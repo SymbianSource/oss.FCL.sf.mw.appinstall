@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,7 +32,7 @@ SOURCEPATH			../source/client
 
 SOURCE				scrclient.cpp
 SOURCE				screntries.cpp
-SOURCE				scrclientsubsessions.cpp
+SOURCE				scrclientsubsessions.cpp appregentries.cpp appreginfo.cpp
 
 DEFFILE				../~/scrclient.def
 
@@ -42,5 +42,5 @@ VENDORID			0x70000001
 
 LIBRARY				euser.lib 
 LIBRARY 			estor.lib 
-LIBRARY				scsclient.lib ipcstream.lib efsrv.lib
+LIBRARY				scsclient.lib ipcstream.lib efsrv.lib 
 SMPSAFE

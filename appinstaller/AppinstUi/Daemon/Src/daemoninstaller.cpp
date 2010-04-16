@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -15,6 +15,8 @@
 *
 */
 
+#include <usif/scr/scr.h>
+#include <usif/scr/screntries.h>
 
 #include "daemoninstaller.h"
 #include "DialogWrapper.h"
@@ -47,8 +49,11 @@ const static TInt KWaitUninstallerTime = 1000000; // 1 secs
 
 _LIT(KMCSisInstaller,"Daemon-Installer"); // Minor-Component name
 
-// Two phased construction
 
+// -----------------------------------------------------------------------
+// Two phased construction
+// -----------------------------------------------------------------------
+// 
 CSisInstaller* CSisInstaller::NewL(    
    MDaemonInstallBehaviour* aDaemonBehaviour, 
    CProgramStatus& aMainStatus)
@@ -60,8 +65,10 @@ CSisInstaller* CSisInstaller::NewL(
     return self;
     }
 	
+// -----------------------------------------------------------------------
 // Install Request constructor
-	
+// -----------------------------------------------------------------------
+//	
 CSisInstaller::CSisInstaller( MDaemonInstallBehaviour* aDaemonBehaviour ) 
     : CActive(CActive::EPriorityStandard),
     iDaemonBehaviour( aDaemonBehaviour ),
@@ -69,14 +76,14 @@ CSisInstaller::CSisInstaller( MDaemonInstallBehaviour* aDaemonBehaviour )
     iFileIndex(0),
     iInstallErr( KErrNone )
     {
-    CActiveScheduler::Add(this);
-#ifdef RD_MULTIPLE_DRIVE      
-    iInstallerState = EDSisInstallerStateIdle;
-#endif       
+    CActiveScheduler::Add(this);    
+    iInstallerState = EDSisInstallerStateIdle;       
     }
 	
-// Install Request destructor
-
+// -----------------------------------------------------------------------
+// Destructor
+// -----------------------------------------------------------------------
+//
 CSisInstaller::~CSisInstaller()
     {
     Cancel();
@@ -92,8 +99,10 @@ CSisInstaller::~CSisInstaller()
     delete iShutdownWatcher;  
     }
 	
+// -----------------------------------------------------------------------
 // 2nd phase construction
-
+// -----------------------------------------------------------------------
+//
 void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     {
     User::LeaveIfError( iTimer.CreateLocal() );
@@ -111,9 +120,12 @@ void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     iUpdateCache = ETrue;       
     }
 		
+// -----------------------------------------------------------------------
+// CSisInstaller::AddFileToInstallL
 // Set the location of all sis files and the list of them
 // also take ownership of the pointers to memory
-		
+// -----------------------------------------------------------------------
+//		
 void CSisInstaller::AddFileToInstallL(const TDesC& aFileName)
     {
     HBufC* fileName = aFileName.AllocLC();
@@ -121,8 +133,12 @@ void CSisInstaller::AddFileToInstallL(const TDesC& aFileName)
     CleanupStack::Pop( fileName );
     }
 	
-// Start the request to process the Sisx file
 
+// -----------------------------------------------------------------------
+// CSisInstaller::StartInstallingL
+// Start the request to process the Sisx file
+// -----------------------------------------------------------------------
+//
 void CSisInstaller::StartInstallingL()
     {
     FLOG( _L("Daemon: StartInstallingL") );
@@ -159,14 +175,22 @@ void CSisInstaller::StartInstallingL()
     if ( iState == EDSisInstallerStateIdle )
         {
         // Reset the error
-        iInstallErr = KErrNone;        
+        iInstallErr = KErrNone; 
+        // Update cache so we do not try to start install for
+        // components which are installed.
+        FLOG( _L("Daemon: StartInstallingL: Update installed cache") );
+        TRAP_IGNORE( iPreviouslyInstalledAppsCache->UpdateAllL() );
+        TRAP_IGNORE( iPreviouslyInstalledAppsCache->FlushToDiskL() );    
+        
         CompleteSelf();
         }
     }
     
-#ifdef RD_MULTIPLE_DRIVE 
+// -----------------------------------------------------------------------
+// CSisInstaller::IsInstalling
 // Returns state of Installer. 
-
+// -----------------------------------------------------------------------
+//
 TBool CSisInstaller::IsInstalling()
     {
     if ( iInstallerState == EDSisInstallerStateCompleted )
@@ -178,12 +202,15 @@ TBool CSisInstaller::IsInstalling()
         return ETrue;
         }    
     }  
-#endif //RD_MULTIPLE_DRIVE       
-
+       
+// -----------------------------------------------------------------------
+// CSisInstaller::CompleteSelf
 // Complete the request manually
-		
+// -----------------------------------------------------------------------
+//		
 void CSisInstaller::CompleteSelf()
     {
+    FLOG( _L("Daemon: CSisInstaller::CompleteSelf") );
     if ( !IsActive() )
         {        
         TRequestStatus* status = &iStatus;
@@ -192,10 +219,14 @@ void CSisInstaller::CompleteSelf()
         }    
     }
 
+// -----------------------------------------------------------------------
+// CSisInstaller::DoCancel
 // Cancel the active request
-
+// -----------------------------------------------------------------------
+//
 void CSisInstaller::DoCancel()
     {
+    FLOG( _L("Daemon: CSisInstaller::DoCancel") ); 
     iTimer.Cancel();
 
     iFileIndex = 0;
@@ -219,9 +250,12 @@ void CSisInstaller::DoCancel()
         }    
     }
 	
-// When the software installer has changed state
-// attemp to install a sisx file
-
+// -----------------------------------------------------------------------
+// CSisInstaller::RunL
+// When the software installer has changed state attemp to install a 
+// sisx file
+// -----------------------------------------------------------------------
+//
 void CSisInstaller::RunL()
     {
     FLOG_2( _L("Daemon: Installer RunL status:%d, state:%d"), iStatus.Int(), iState );                
@@ -235,10 +269,8 @@ void CSisInstaller::RunL()
         TTimeIntervalMicroSeconds32 time( KWaitUninstallerTime );                        
         iTimer.After(iStatus,time);          
         // Set to idle, installer has not yet started.
-        iState = EDSisInstallerStateIdle;
- #ifdef RD_MULTIPLE_DRIVE                
-        iInstallerState = iState;
- #endif                                
+        iState = EDSisInstallerStateIdle;                
+        iInstallerState = iState;                                 
         SetActive();                                
         }    
     else
@@ -261,10 +293,8 @@ void CSisInstaller::RunL()
                     // User might be installing something, wait before retrying 
                     TTimeIntervalMicroSeconds32 time( KInstallRetryWaitTime );                        
                     iTimer.After(iStatus,time);
-                    iState = EDSisInstallerStateInstallerBusy;
-    #ifdef RD_MULTIPLE_DRIVE                
-                    iInstallerState = iState;
-    #endif                                
+                    iState = EDSisInstallerStateInstallerBusy;               
+                    iInstallerState = iState;                                  
                     SetActive();                        
                     break;                        
                     }                
@@ -303,11 +333,8 @@ void CSisInstaller::RunL()
                 if ( iFileIndex < iFilesToInstall.Count() )
                     {
                     // Kick of the next installation
-                    iState = EDSisInstallerStateIdle;
-    #ifdef RD_MULTIPLE_DRIVE                
-                    iInstallerState = iState;
-    #endif                
-                    
+                    iState = EDSisInstallerStateIdle;                  
+                    iInstallerState = iState;                                       
                     CompleteSelf();
                     }   
                 else
@@ -358,10 +385,9 @@ void CSisInstaller::RunL()
                             // Let's continue to give all packages to plug-in. 
                             // Note that we do not have iStatus as this is not async. call 
                             // so we can not use EDSisInstallerStateInstalling state.                             
-                            iState = EDSisInstallerStateIdle;                           
-        #ifdef RD_MULTIPLE_DRIVE                
+                            iState = EDSisInstallerStateIdle;                                                 
                             iInstallerState = iState;
-        #endif           
+                
                             // Plugin interface is not asyncronous. We need to 
                             // complete self to get all packages to plugin.                            
                             CompleteSelf(); 
@@ -371,20 +397,16 @@ void CSisInstaller::RunL()
                             FLOG_1( _L("Daemon: Kick off the install for %S"), &iSisFile );
                             iInstallLauncher->InstallL( iSisFile, iStatus );
                             iDialogs->ShowWaitingNoteL(); 
-                            iState = EDSisInstallerStateInstalling;
-        #ifdef RD_MULTIPLE_DRIVE                
-                            iInstallerState = iState;
-        #endif                                            
+                            iState = EDSisInstallerStateInstalling;                       
+                            iInstallerState = iState;                                                   
                             SetActive();
                             }
                         }               
                     else
                         {                  
                         FLOG_1( _L("Daemon: No need to install %S"), &iSisFile );                                
-                        iState = EDSisInstallerStateIdle;
-    #ifdef RD_MULTIPLE_DRIVE                
-                        iInstallerState = iState;
-    #endif                    
+                        iState = EDSisInstallerStateIdle;                
+                        iInstallerState = iState;                   
                         // Clear current pkg UID                    
                         iCurrentPackageId = TUid::Null();                                   
                         
@@ -406,11 +428,8 @@ void CSisInstaller::RunL()
                 FLOG( _L("Daemon: RunL: EDSisInstallerStateInstallerBusy") );  
                 FLOG_1( _L("Daemon: Kick off the install for %S"), &iSisFile );
                 iInstallLauncher->InstallL( iSisFile, iStatus );
-                iState = EDSisInstallerStateInstalling;
-    #ifdef RD_MULTIPLE_DRIVE                
-                iInstallerState = iState;
-    #endif                
-                
+                iState = EDSisInstallerStateInstalling;                   
+                iInstallerState = iState;                                   
                 SetActive(); 
                 break;                       
                 
@@ -420,18 +439,26 @@ void CSisInstaller::RunL()
                 break;
             }
         } // else for uninstaller
+    FLOG( _L("Daemon: RunL END") ); 
     }
 	
+// -----------------------------------------------------------------------
+// CSisInstaller::RunError
 // If RunL leaves then ignore errors
-
+// -----------------------------------------------------------------------
+//
 TInt CSisInstaller::RunError(TInt aError)
     {
-    FLOG_1( _L("Daemon: Installer RunL error %d"), aError );                
+    FLOG_1( _L("Daemon: Installer Run error %d"), aError );                
     TInt err( KErrNone );
     InstallationCompleted( aError );                
     return err;
     }	
-    
+
+// -----------------------------------------------------------------------
+// CSisInstaller::NotifyShuttingDown
+// -----------------------------------------------------------------------
+//    
 void CSisInstaller::NotifyShuttingDown()
     {
     // System is closing down, we need to stop installations and save
@@ -439,8 +466,12 @@ void CSisInstaller::NotifyShuttingDown()
     // Application server receives EApaSystemEventShutdown event that
     // closes it down.
     Cancel();
-    }    	
+    }   
 
+// -----------------------------------------------------------------------
+// CSisInstaller::InstallationCompleted
+// -----------------------------------------------------------------------
+//
 void CSisInstaller::InstallationCompleted( TInt aResult )
     {
     FLOG_1( _L("Daemon: InstallationCompleted with result = %d"), aResult );  
@@ -452,14 +483,12 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
     // It may be that plug-in does install packages after cache is updated.
     iUpdateCache = ETrue;
     
-#ifdef RD_MULTIPLE_DRIVE 
     // If all files are installed set status to completed.
     if ( iFileIndex >= iFilesToInstall.Count() )
         {                
         iInstallerState = EDSisInstallerStateCompleted; 
         }
-#endif                          
-   
+                            
     TRAP_IGNORE( iDialogs->CancelWaitingNoteL() );
     
     if ( aResult != KErrNone && 
@@ -475,12 +504,13 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
             TRAP_IGNORE( iDialogs->ShowErrorResultL() );
             }    
         }
-    
-    FLOG( _L("Daemon: InstallationCompleted: Update installed cache") );
+
+//TODO: remove this update. This is done in start installing !!!!     
+    //FLOG( _L("Daemon: InstallationCompleted: Update installed cache") );
     // Update cache so we do not start to install those packages 
     // which are installed by the user manyally. 
     // NOTE! plugin will install stuff after this call.
-    TRAP_IGNORE(iPreviouslyInstalledAppsCache->UpdateAllL());
+    //TRAP_IGNORE(iPreviouslyInstalledAppsCache->UpdateAllL());
     
     TRAP_IGNORE(iPreviouslyInstalledAppsCache->FlushToDiskL(););    
     TRAP_IGNORE(iInstallationFailedAppsCache->FlushToDiskL());   
@@ -499,12 +529,16 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
           }       
     }  
 
+// -----------------------------------------------------------------------
+// CSisInstaller::NeedsInstallingL
 // Indicates if this package is installed or not.
-	
+// -----------------------------------------------------------------------
+//	
 TBool CSisInstaller::NeedsInstallingL( const TDesC& aPackageName )
     {
-    FLOG( _L("Daemon: NeedsInstallingL") ); 
-    TBool result( ETrue );
+    FLOG( _L("Daemon: CSisInstaller::NeedsInstallingL") ); 
+    //TBool result( ETrue );
+    TBool needsInstalling( ETrue );
     
     // Read the controller data from the package
     CFileSisDataProvider* fileProvider = CFileSisDataProvider::NewLC( iFs, aPackageName ); 
@@ -517,7 +551,6 @@ TBool CSisInstaller::NeedsInstallingL( const TDesC& aPackageName )
     CleanupStack::PushL( controller );                            
 
     // Code to read UID
-
 	CDesDataProvider* controllerProvider= CDesDataProvider::NewLC(*controller);
 	CController* controllerObject = NULL;
 	controllerObject = CController::NewL(*controllerProvider);
@@ -525,15 +558,25 @@ TBool CSisInstaller::NeedsInstallingL( const TDesC& aPackageName )
 
 	TUid packageId = controllerObject->Info().Uid().Uid();
 
-	CleanupStack::PopAndDestroy(controllerObject);
-	CleanupStack::PopAndDestroy(controllerProvider);
+	CleanupStack::PopAndDestroy( controllerObject );
+	CleanupStack::PopAndDestroy( controllerProvider );
 
-	FLOG_1( _L("Daemon: NeedsInstallingL: Is UID installed = 0x%x"), packageId.iUid );
-	result = !iPreviouslyInstalledAppsCache->HasBeenPreviouslyInstalled(packageId);
-	FLOG_1( _L("Daemon: NeedsInstallingL: Has been installed (cache) = %d"), !result ); 
+	// Check if sw is installed previously. 
+	// Note if UID is found sw will not be installed even if user 
+	// has uninstall it bacause cache is not updated from SCR.
+	FLOG_1( _L("Daemon: Is UID installed = 0x%x"), packageId.iUid );
+	needsInstalling = !iPreviouslyInstalledAppsCache->
+                            HasBeenPreviouslyInstalled(packageId);
+	FLOG_1( _L("Daemon: Has been installed (cache) = %d"), !needsInstalling );
 	
-	if (result)
-	    {
+// TODO: Onko rom stubien tarkistus tarpeen jos upgrade ei ole sallittu.
+// Ei taida kannattaa tarksitaan RU ei pitäisi mennä läpi.
+	FLOG( _L("Daemon: HUOM ROM STUBEJA EI TARKISTETA") ); 	
+	/*	
+	// Huom! edellinen koodi ollut väärin koska UID on jo cachessä !
+	// Tarkistus pitää tehdä vain jos UID löytyy cachestä.
+	if ( !needsInstalling )
+        {
         RSisRegistrySession registry;
         User::LeaveIfError( registry.Connect() );  
         CleanupClosePushL( registry );  
@@ -548,32 +591,40 @@ TBool CSisInstaller::NeedsInstallingL( const TDesC& aPackageName )
             User::LeaveIfError( entry.Open( registry, packageId ) );
             CleanupClosePushL( entry ); 
             
-            result = entry.IsInRomL();
+            needsInstalling = entry.IsInRomL();
             
-            FLOG_1( _L("Daemon: NeedsInstallingL: Is in ROM = %d"), result );              
+            FLOG_1( _L("Daemon: NeedsInstallingL: Is in ROM = %d"), needsInstalling );              
             CleanupStack::PopAndDestroy( &entry );           
             }
         CleanupStack::PopAndDestroy( &registry ); 
-		}
-		
+        }
+	*/	
+	
     // Check that previous install attempt did not fail.		
-	if (result)
+	if ( needsInstalling )
 	    {
-	    result = !iInstallationFailedAppsCache->HasPreviousInstallationFailed( packageId );
-	    FLOG_1( _L("Daemon: NeedsInstallingL: Has failed (cache) = %d"), !result ); 
+	    needsInstalling = !iInstallationFailedAppsCache->
+	            HasPreviousInstallationFailed( packageId );
+	    FLOG_1( _L("Daemon: Has failed (cache) = %d"), !needsInstalling ); 
 	    }
 
     // Update pkg ID. ID is added to cache after installation.
-    if (result)
+    if ( needsInstalling )
         {        
         iCurrentPackageId = packageId;
         }
     
+    // fileProvider, content, controller
     CleanupStack::PopAndDestroy( 3 );
-        
-    return result;            
+    
+    FLOG_1( _L("Daemon: NeedsInstallingL = %d"), needsInstalling );    
+    return needsInstalling;            
     }  
 
+// -----------------------------------------------------------------------
+// CSisInstaller::IsMediaPresent
+// -----------------------------------------------------------------------
+//
 TBool CSisInstaller::IsMediaPresent( TChar aDrive )
     {
     TInt drive( 0 );
@@ -595,6 +646,10 @@ TBool CSisInstaller::IsMediaPresent( TChar aDrive )
         }
     }
 
+// -----------------------------------------------------------------------
+// CSisInstaller::IsValidPackageL
+// -----------------------------------------------------------------------
+//
 TBool CSisInstaller::IsValidPackageL( const TDesC& aPackageName )
     {
     TBool result( EFalse );
@@ -611,6 +666,7 @@ TBool CSisInstaller::IsValidPackageL( const TDesC& aPackageName )
         result = ETrue;
         }
 
+    FLOG_1( _L("Daemon: IsValidPackageL = %d"), result );  
     return result;    
     }
     

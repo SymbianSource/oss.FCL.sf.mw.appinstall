@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -58,11 +58,16 @@ PRJ_TESTEXPORTS
 
 ../test/tusif/scripts/tsifswtypeintegration.ini			z:/tusif/tswtype/tsifswtypeintegration.ini
 ../test/tusif/scripts/tsifswtypeintegration.script		z:/tusif/tswtype/tsifswtypeintegration.script
-../test/tusif/scripts/data/test.siftestpkg				z:/tusif/tswtype/data/test.siftestpkg
-../test/tusif/scripts/data/swtypereginfo.xml				z:/tusif/tswtype/data/swtypereginfo.xml
+
+../test/tusif/scripts/tsif_appuidgen.script			z:/tusif/tsif/tsif_appuidgen.script
+../test/tusif/scripts/tsif_appuidgen.ini			z:/tusif/tsif/tsif_appuidgen.ini
+
+../test/tusif/scripts/data/test.siftestpkg			z:/tusif/tswtype/data/test.siftestpkg
+../test/tusif/scripts/data/swtypereginfo.xml			z:/tusif/tswtype/data/swtypereginfo.xml
+../test/tusif/scripts/data/corrupt_reg.rsc			z:/tusif/tsif/data/corrupt_reg.rsc
 
 // ROMKIT includes
-../inc/tsif.iby												/epoc32/rom/include/tsif.iby
+../inc/tsif.iby							/epoc32/rom/include/tsif.iby
 
 PRJ_MMPFILES
 
@@ -102,6 +107,8 @@ makefile ../test/group/cleansiflauncher.makefile
 ../test/tusif/group/sifintegusercapsbasepackage.mmp
 ../test/tusif/group/siftestintegrationlockfile.mmp
 ../test/tusif/group/sifintegsufficientusercaps.mmp
+../test/tusif/group/sifgetcompapparcinfotest.mmp
+../test/tusif/group/sifgetcompapparcinfotestmultilang.mmp
 // Creation of SIS files for SIF tests
 makefile ../test/tusif/group/siftest.makefile
 

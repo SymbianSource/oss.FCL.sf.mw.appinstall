@@ -1,0 +1,174 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// This script tests SCR Application Registration APIs which can only be accessed by apparc.
+// 
+//
+
+PRINT Run SCR Application Registration API Tests for Apparc Subsession
+
+// Load Suite
+LOAD_SUITE tscr -SharedData
+LOAD_SUITE tscrapparc
+LOAD_SUITE tSisRegistryTest
+SHARED_DATA z:\tusif\tscr\tscr_appreginfo.ini shared_data
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0001
+//! @SYMTestCaseDesc 		Complete appregistration data for nearest locale, subsession opened without locale
+START_TESTCASE APPINS-SCR-APPARC-API-0001
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_nearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_complete_for_nearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0001
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0002
+//! @SYMTestCaseDesc 		Complete appregistration data for current locale(english), subsession opened without locale
+START_TESTCASE APPINS-SCR-APPARC-API-0002
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_complete_for_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0002
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0003
+//! @SYMTestCaseDesc 		No view data exist for the nearest locale (subsession opened without locale)
+START_TESTCASE APPINS-SCR-APPARC-API-0003
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_noviewdatafornearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0003
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0004
+//! @SYMTestCaseDesc 		No app owned files exist for an appliction info (subsession opened without locale)
+START_TESTCASE APPINS-SCR-APPARC-API-0004
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_onlylocalizedinfo
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_noappownedfiles
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0004
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0005
+//! @SYMTestCaseDesc 		multiple appliction registration info exist for the locale(subsession opened without locale).
+START_TESTCASE APPINS-SCR-APPARC-API-0005
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_21
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_MultipleApp_NoLocale
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0005
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0006
+//! @SYMTestCaseDesc 		multiple appliction registration info exist for the locale(subsession opened with locale).
+START_TESTCASE APPINS-SCR-APPARC-API-0006
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_MultipleApp_for_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0006
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0007
+//! @SYMTestCaseDesc 		no corrosponding app reg info exist for the locale(subsession opened without locale).
+START_TESTCASE APPINS-SCR-APPARC-API-0007
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nolocalizedinfoforenglish
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_NotExist
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0007
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0008
+//! @SYMTestCaseDesc 		Number of entries to be opened is negative(subsession opened with locale).
+START_TESTCASE APPINS-SCR-APPARC-API-0008
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP_RESULT -6 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_Negative_NoOfEntries
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0008
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0009
+//! @SYMTestCaseDesc 		Compare app opaque data
+START_TESTCASE APPINS-SCR-APPARC-API-0009
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_array_of_opaque_data_new
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini test_app_opaque_data_1
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini test_app_opaque_data_2
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini test_app_opaque_data_3
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini test_app_opaque_data_4
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0009
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0014
+//! @SYMTestCaseDesc 		Appregistration data of current locale(english) for user defined AppUids.
+//! @SYMTestActions 		Add One(1) Appregistration data. Fetch Appregistration data for Three(3) user defined AppUids.
+//					 		[1 AppUid is present in DB, 2 AppUid not present].
+START_TESTCASE APPINS-SCR-APPARC-API-0014
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_complete_for_english_Test09
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0014
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0010
+//! @SYMTestCaseDesc 		Appregistration data of current locale(english) for user defined AppUids. [No AppUid present in DB]
+//! @SYMTestActions 		Add no Appregistration data. Fetch Appregistration data for One(1) user defined AppUids.
+START_TESTCASE APPINS-SCR-APPARC-API-0010
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_complete_for_english_Test10
+END_TESTCASE APPINS-SCR-APPARC-API-0010
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0011
+//! @SYMTestCaseDesc 		multiple appliction registration info exist for user defined AppUid.
+//! @SYMTestActions 		Add Three(3) Appregistration data. Fetch Appregistration data for Two(2) user defined AppUids.
+//					 		[All 3 AppUid is present in DB].
+START_TESTCASE APPINS-SCR-APPARC-API-0011
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_MultipleApp_for_english_test11
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0011
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0012
+//! @SYMTestCaseDesc 		Fetch AppRegistration data corresponding to user defined AppUids.
+//! @SYMTestActions 		Add Two(2) Appregistration data. Fetch Appregistration data for One(1) user
+//					 		defined AppUids which is not present in DB. [2 AppUid is present in DB, Requested AppUid not present].
+START_TESTCASE APPINS-SCR-APPARC-API-0012
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_MultipleApp_for_english_test12
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0012
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPARC-API-0013
+//! @SYMTestCaseDesc 		Test for Concurrent Application Registration View Entry API
+//! @SYMTestActions 		Add Four(4) Appregistration data. Fetch Appregistration data for Two(2) Entries using 
+//					 		ApplicationRegistrationViewEntry API. Then fetch user defined AppUids.
+START_TESTCASE APPINS-SCR-APPARC-API-0013
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_complete_for_english
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage_english
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_4
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_5
+RUN_TEST_STEP 100 tscrapparc ScrMultipleSubsessionsForAppRegistryView z:\tusif\tscr\tscr_appreginfo.ini ApplicationRegistrationData_MultipleApp_for_english_test13
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPARC-API-0013
+
+

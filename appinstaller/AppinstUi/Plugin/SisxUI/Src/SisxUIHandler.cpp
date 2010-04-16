@@ -28,7 +28,7 @@
 #include <SWInstCommonUI.rsg>
 #include <SWInstDefs.h>
 #include <featmgr.h>
-#include <csxhelp/am.hlp.hrh>
+//#include <csxhelp/am.hlp.hrh>
 #include <swi/sisinstallerrors.h>
 #include <AknUtils.h>
 #include <eikfrlb.h> //for the marquee effect
@@ -1837,9 +1837,9 @@ void CSisxUIHandler::Finalize()
 //
 TInt CSisxUIHandler::ShowCapabilitiesHelp( TAny* aPtr )
     {
-    TRAP_IGNORE( 
-        reinterpret_cast<CSisxUIHandler*>(aPtr)->iCommonDialogs->LaunchHelpL( KAM_HLP_INSTALL_CAPAB )    
-        );    
+    //TRAP_IGNORE( 
+    //    reinterpret_cast<CSisxUIHandler*>(aPtr)->iCommonDialogs->LaunchHelpL( KAM_HLP_INSTALL_CAPAB )    
+    //    );    
 
     return KErrNone;    
     }

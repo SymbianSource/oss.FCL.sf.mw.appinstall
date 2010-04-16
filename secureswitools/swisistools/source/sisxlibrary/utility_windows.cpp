@@ -129,7 +129,9 @@ int FullPath(wchar_t * pszAbsolutePath, const wchar_t * pszRelativePath, size_t 
 HANDLE MakeSISOpenFile(LPCWSTR pszFilename, DWORD dwAccessMode, DWORD dwCreateFlags)
 // Open file with Unicode filename correctly under Win95 and WinNT
 	{
-	return CreateFileW(pszFilename, dwAccessMode, 0, NULL, dwCreateFlags, FILE_ATTRIBUTE_NORMAL, NULL);
+	// Opening the file with FILE_SHARE_READ access, so that other processes can access
+	// the package file in parallel( Issue observed in Raptor with parallel builds udeb and urel)
+	return CreateFileW(pszFilename, dwAccessMode, 1, NULL, dwCreateFlags, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 
 BOOL MakeSISDeleteFile(LPCWSTR pszFilename)
@@ -182,4 +184,16 @@ int GetErrorValue()
 	{
 	return ::GetLastError();
 	}
+
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
+{
+	int err=CopyFileA(aSrc,aDest,aFlag);
+	return err;
+}
+
+int FileMoveA(const char* aSrc, const char* aDest)
+{
+	int err=MoveFileA(aSrc,aDest);
+	return err;
+}
 

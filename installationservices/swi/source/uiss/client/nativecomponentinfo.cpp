@@ -56,6 +56,105 @@ namespace
 
 namespace Swi
 {
+
+CNativeComponentInfo::CNativeApplicationInfo::CNativeApplicationInfo()
+    {
+    }
+
+EXPORT_C CNativeComponentInfo::CNativeApplicationInfo::~CNativeApplicationInfo()
+    {
+    delete iName;
+    delete iGroupName;
+    delete iIconFileName;
+    }
+
+EXPORT_C CNativeComponentInfo::CNativeApplicationInfo* CNativeComponentInfo::CNativeApplicationInfo::NewLC(const TUid& aAppUid, const TDesC& aName, const TDesC& aGroupName, const TDesC& aIconFileName)
+    {
+        _LIT(emptyString,"");
+        // Leave if aName, aGroupName or aIconFileName exceeds KMaxDescriptorLength
+       if ((&aName != NULL && aName.Length() > KMaxDescriptorLength) || 
+               (&aGroupName != NULL && aGroupName.Length() > KMaxDescriptorLength) ||
+               (&aIconFileName != NULL && aIconFileName.Length() > KMaxDescriptorLength))
+            {
+            User::Leave(KErrOverflow);
+            }
+        
+    CNativeComponentInfo::CNativeApplicationInfo* self = new (ELeave) CNativeComponentInfo::CNativeApplicationInfo();
+        CleanupStack::PushL(self);
+
+        self->iAppUid = aAppUid;  
+        if(&aName == NULL)
+            {
+            self->iName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iName = aName.AllocL();
+            }
+   
+        if(&aGroupName == NULL)
+            {
+            self->iGroupName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iGroupName = aGroupName.AllocL();
+            }
+        
+        if(&aIconFileName == NULL)
+            {
+            self->iIconFileName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iIconFileName = aIconFileName.AllocL();
+            }
+        
+        return self;
+    }
+
+EXPORT_C const TUid& CNativeComponentInfo::CNativeApplicationInfo::AppUid() const
+    {
+    return iAppUid;
+    }
+
+EXPORT_C const TDesC& CNativeComponentInfo::CNativeApplicationInfo::Name() const
+    {
+    return *iName;
+    }
+
+EXPORT_C const TDesC& CNativeComponentInfo::CNativeApplicationInfo::GroupName() const
+    {
+    return *iGroupName;
+    }
+
+EXPORT_C const TDesC& CNativeComponentInfo::CNativeApplicationInfo::IconFileName() const            
+    {
+    return *iIconFileName;
+    }
+
+CNativeComponentInfo::CNativeApplicationInfo* CNativeComponentInfo::CNativeApplicationInfo::NewL(RReadStream& aStream)
+    {    
+    CNativeComponentInfo::CNativeApplicationInfo* self = new (ELeave) CNativeComponentInfo::CNativeApplicationInfo();
+    CleanupStack::PushL(self);
+    
+    self->iAppUid = TUid::Uid(aStream.ReadInt32L());
+    self->iName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    self->iGroupName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    self->iIconFileName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+void CNativeComponentInfo::CNativeApplicationInfo::ExternalizeL(RWriteStream& aStream) const
+    {
+    aStream.WriteInt32L(iAppUid.iUid);    
+    aStream << *iName;
+    aStream << *iGroupName;
+    aStream << *iIconFileName;
+    }
+
 CNativeComponentInfo::CNativeComponentInfo() : iAuthenticity(Usif::ENotAuthenticated)
 	{
 	iUserGrantableCaps.SetEmpty();
@@ -66,8 +165,8 @@ EXPORT_C CNativeComponentInfo::~CNativeComponentInfo()
 	delete iComponentName;
 	delete iGlobalComponentId;
 	delete iVersion;
-	delete iVendor;
-	
+	delete iVendor;		
+	iApplications.ResetAndDestroy();
 	iChildren.Close();
 	}
 
@@ -104,6 +203,14 @@ EXPORT_C void CNativeComponentInfo::ExternalizeL(RWriteStream& aStream) const
 	aStream.WriteInt32L(PackCapabilitySet(iUserGrantableCaps));
 	aStream.WriteInt32L(iMaxInstalledSize);
 	aStream.WriteInt32L(iHasExe);
+	aStream.WriteInt32L(iIsDriveSelectionRequired);
+	
+	const TInt numApplications = iApplications.Count();
+	aStream.WriteInt32L(numApplications);
+	for (TInt i=0; i<numApplications; ++i)
+	    {
+	    iApplications[i]->ExternalizeL(aStream);
+	    }
 	
 	// Recursively internalize all other childrens as well.
 	const TInt numChildren = iChildren.Count();
@@ -151,6 +258,16 @@ EXPORT_C void CNativeComponentInfo::InternalizeL(RReadStream& aStream)
 	UnpackCapabilitySet(capsBitMask, iUserGrantableCaps);	
 	iMaxInstalledSize = aStream.ReadInt32L();
 	iHasExe = aStream.ReadInt32L();
+	iIsDriveSelectionRequired = aStream.ReadInt32L();
+	
+	const TInt numApplications = aStream.ReadInt32L();
+	for (TInt i=0; i<numApplications; ++i)
+	    {
+	    Swi::CNativeComponentInfo::CNativeApplicationInfo* app =  Swi::CNativeComponentInfo::CNativeApplicationInfo::NewL(aStream);
+	    CleanupStack::PushL(app);
+	    iApplications.AppendL(app);
+	    CleanupStack::Pop(app);
+	    }
 	
 	// Recursively internalize all other childrens as well.
 	const TInt numChildren = aStream.ReadInt32L();

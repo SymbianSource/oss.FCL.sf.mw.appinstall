@@ -65,4 +65,6 @@ EXPORTS
 	?MaxNumOfLogEntries@CSecurityPolicy@Swi@@QBEHXZ @ 64 NONAME ; int Swi::CSecurityPolicy::MaxNumOfLogEntries(void) const
 	?VerifyControllerL@CSecurityManager@Swi@@QAEXAAVTDesC8@@ABVCController@Sis@2@PAW4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCX509Certificate@@@@PAVTCapabilitySet@@AAH6AAVTRequestStatus@@H@Z @ 65 NONAME ; void Swi::CSecurityManager::VerifyControllerL(class TDesC8 &, class Swi::Sis::CController const &, enum Swi::TSignatureValidationResult *, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class CX509Certificate> &, class TCapabilitySet *, int &, int &, class TRequestStatus &, int)
 	?AllowOverwriteOnRestore@CSecurityPolicy@Swi@@QBEHXZ @ 66 NONAME ; int Swi::CSecurityPolicy::AllowOverwriteOnRestore(void) const
+	?IsPackageUidPresent@SecUtils@Swi@@SAHVTUid@@AAY0BA@V3@@Z @ 67 NONAME ; int Swi::SecUtils::IsPackageUidPresent(class TUid, class TUid [16] &)
+	?PublishPackageUid@SecUtils@Swi@@SAHVTUid@@AAY0BA@V3@@Z @ 68 NONAME ; int Swi::SecUtils::PublishPackageUid(class TUid, class TUid [16] &)
 

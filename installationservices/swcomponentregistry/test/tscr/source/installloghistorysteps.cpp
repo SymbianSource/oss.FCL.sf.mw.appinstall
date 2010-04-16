@@ -134,8 +134,23 @@ TBool CScrGetLogEntriesStep::CompareLogEntriesL(RPointerArray<CScrLogEntry>& aFo
 		{
 		if (*aFoundLogEntries[i] != *aExpectedLogEntries[i])
 			{
-			ERR_PRINTF2(_L("Log entry %d did not match."), i);
-			return EFalse;
+            ERR_PRINTF2(_L("Log entry %d did not match."), i);
+            ERR_PRINTF2(_L("current device lang is %d"), User::Language());
+			
+			ERR_PRINTF6(_L("found values are name %S, type %S, version %S, globalid %S, optype is %d"),
+                            &(aFoundLogEntries[i]->ComponentName()),
+                            &(aFoundLogEntries[i]->SoftwareTypeName()), 
+                            &(aFoundLogEntries[i]->ComponentVersion()), 
+                            &(aFoundLogEntries[i]->GlobalId()),
+                            aFoundLogEntries[i]->OperationType());
+
+            ERR_PRINTF6(_L("expected values were name %S, type %S, version %S, globalid %S, optype is %d"),
+							&(aExpectedLogEntries[i]->ComponentName()) ,
+                            &(aExpectedLogEntries[i]->SoftwareTypeName()) , 
+                            &(aExpectedLogEntries[i]->ComponentVersion()), 
+                            &(aExpectedLogEntries[i]->GlobalId()), 
+                            aExpectedLogEntries[i]->OperationType() );
+            return EFalse;
 			}
 		}	
 	return ETrue;

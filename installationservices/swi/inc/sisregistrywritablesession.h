@@ -30,6 +30,7 @@
 #include "sisregistrysession.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <usif/usifcommon.h>
+#include <usif/scr/appregentries.h>
 #endif
 namespace Swi
 {
@@ -203,8 +204,11 @@ public:
 	 */
 	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
 
+	IMPORT_C void AddEntryL(const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);
+	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);
 private:
 	void SetComponentStateL(TComponentId aComponentId, TScomoState aState);
+	TInt UserSelectedLanguageIndexL(const CApplication& aApplication) const;
 #endif
 	void AddEntryImplL(TInt aMessage, const CApplication& aApplication, const TDesC8& aController, TInt64 aTransactionID, TIpcArgs& aIpcArgs);
 	void UpdateEntryImplL(TInt aMessage, const CApplication& aApplication, const TDesC8& aController, TInt64 aTransactionID, TIpcArgs& aIpcArgs);

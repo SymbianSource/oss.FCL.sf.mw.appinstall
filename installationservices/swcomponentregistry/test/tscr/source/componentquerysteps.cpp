@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -595,64 +595,161 @@ void CScrValuesNegativeStep::ImplTestStepPostambleL()
 // -----------CScrOom-----------------
 SCROufOfMemory::SCROufOfMemory(CScrTestServer& aParent)	: CScrTestStep(aParent)
 	{
-	iFailRate = 0;
+	iFailRate = 0;		
 	}
 
 void SCROufOfMemory::ImplTestStepPreambleL()
 	{
+	CScrTestStep::ImplTestStepPreambleL();
 	}
 
 void SCROufOfMemory::ImplTestStepL()
 	{
-	TInt i = 5000;
+	TInt i = 5000;		
 	while(i--)
-		{
+		{    
+		iScrSession.SetServerHeapFail(++iFailRate);
 		TRAPD(err, ExecuteL());
-		if (err == KErrNone)
+		if (err != KErrNone || err != KErrNoMemory)		    
 			{
-			}
+			INFO_PRINTF2(_L("Error in oom Test : %d "),err);
+			}	
+		iScrSession.ResetServerHeapFail();		
 		}
+	
 	}
 
 void SCROufOfMemory::ImplTestStepPostambleL()
 	{
+	CScrTestStep::ImplTestStepPostambleL();
 	}
+
+void SCROufOfMemory::ApplicationRegistrationOperationsL(Usif::RSoftwareComponentRegistry& aScrSession)
+    {    
+    TComponentId compId = 0;
+    TBool newComponentAdded(EFalse);
+   
+    // Checking if have already inserted the component
+    TBool isMultiApp(EFalse);
+    GetBoolFromConfig(ConfigSection(), _L("IsMultiApp"), isMultiApp);
+    if (isMultiApp)
+        {
+        INFO_PRINTF1(_L("Checking if the component is already present"));
+        CGlobalComponentId *globalId = GetGlobalComponentIdLC();
+        TRAP_IGNORE(compId = aScrSession.GetComponentIdL(globalId->GlobalIdName(), globalId->SoftwareTypeName()););
+        CleanupStack::PopAndDestroy(globalId);
+        }
+
+    // Try adding the app to a component. The add operation will fail if the component is not present.
+    if (!compId) 
+        {
+        if (GetIntFromConfig(ConfigSection(), _L("UseComponentId"), compId))
+            INFO_PRINTF2(_L("Adding a new AppRegInfo to component %d"), compId);
+        }
+    
+    // The component is not present already
+    if (!compId)   
+        {
+        INFO_PRINTF1(_L("Adding a new component."));
+        compId = AddNonLocalisableComponentL(aScrSession);
+        newComponentAdded = ETrue;
+        }
+
+    INFO_PRINTF1(_L("Get reg info from config file."));
+    const CApplicationRegistrationData* appRegData = GetAppRegInfoFromConfigLC();
+    TRAPD(err, aScrSession.AddApplicationEntryL(compId, *appRegData));  
+    
+    if (err != KErrNone && err != KErrAlreadyExists )
+        {
+        if (newComponentAdded)
+            {
+            // We are going to delete the component with no apps
+            aScrSession.DeleteComponentL(compId);
+            }
+        User::Leave(err);
+        }
+
+    CleanupStack::PopAndDestroy();
+    
+    //Read from DB the AppRegInfo
+    CAppInfoFilter* appInfoFilter=NULL ;
+    INFO_PRINTF1(_L("Read appinfo filter from configuration"));
+    TRAP(err, ReadAppInfoFilterFromConfigL(&appInfoFilter));    
+    if (KErrNotFound==err)
+        {
+        delete appInfoFilter;
+        appInfoFilter=NULL;
+        }   
+    
+    CleanupStack::PushL(appInfoFilter);
+    RApplicationInfoView  subSession;
+    CleanupClosePushL(subSession);
+    subSession.OpenViewL(aScrSession,appInfoFilter);
+    if(appInfoFilter)
+        {        
+        delete appInfoFilter;
+        appInfoFilter = NULL;
+        }
+    
+    RPointerArray<Usif::TAppRegInfo> appRegInfoSet;   
+    do
+      {
+      subSession.GetNextAppInfoL(5, appRegInfoSet);       
+      appRegInfoSet.ResetAndDestroy();
+      }while(0 != appRegInfoSet.Count()); 
+    
+    CleanupStack::Pop(&subSession);
+    subSession.Close();
+    CleanupStack::Pop();
+        
+    // Delete the component
+    aScrSession.DeleteComponentL(compId);
+    }
+
 
 void SCROufOfMemory::ExecuteL()
 	{
-	// Connect to the SCR server
-	RSoftwareComponentRegistry scr;
-	TInt err = scr.Connect();
-	if (err != KErrNone)
-		{
-		INFO_PRINTF1(_L("Failed to connect to the SCR server"));
-		User::Leave(err);
-		}
-	CleanupClosePushL(scr);
+	TBool isAppInfoOomTest(EFalse);
+	GetBoolFromConfig(ConfigSection(), _L("IsAppInfoOomTest"), isAppInfoOomTest);
+	//Connect to the SCR server
+    Usif::RSoftwareComponentRegistry scr;
+    TInt err = scr.Connect();
+    
+    if (err != KErrNone)
+        {
+        INFO_PRINTF1(_L("Failed to connect to the SCR server"));
+        User::Leave(err);
+        }
+    CleanupClosePushL(scr);
 
-	scr.SetServerHeapFail(++iFailRate);
 	INFO_PRINTF2(_L("HeapFail set for %d allocation"),iFailRate);
-	
-	// Create an SCR view
-	RSoftwareComponentRegistryView scrView;
-	scrView.OpenViewL(scr);
-	CleanupClosePushL(scrView);
 
-	// Iterate over the matching components
-	CComponentEntry* entry = CComponentEntry::NewLC();
-	while (scrView.NextComponentL(*entry))
-	    {
-		RPointerArray<Usif::CLocalizableComponentInfo> compLocalizedInfoArray;
-		CleanupResetAndDestroyPushL(compLocalizedInfoArray);
-		scr.GetComponentLocalizedInfoL(entry->ComponentId(), compLocalizedInfoArray);
-		CleanupStack::Pop(&compLocalizedInfoArray);
-		compLocalizedInfoArray.ResetAndDestroy();
-	    }
-	
-	scrView.Close();
-	// Disconnect from the SCR server and cleanup the entry
-	scr.ResetServerHeapFail();
-	CleanupStack::PopAndDestroy();
-	CleanupStack::Pop();
-	CleanupStack::PopAndDestroy();
+    if(isAppInfoOomTest)
+        {
+        ApplicationRegistrationOperationsL(scr);
+        }
+    else
+        {
+        // Create an SCR view
+        RSoftwareComponentRegistryView scrView;
+        scrView.OpenViewL(scr);
+        CleanupClosePushL(scrView);
+    
+        // Iterate over the matching components
+        CComponentEntry* entry = CComponentEntry::NewLC();
+        while (scrView.NextComponentL(*entry))
+            {
+            RPointerArray<Usif::CLocalizableComponentInfo> compLocalizedInfoArray;
+            CleanupResetAndDestroyPushL(compLocalizedInfoArray);
+            scr.GetComponentLocalizedInfoL(entry->ComponentId(), compLocalizedInfoArray);
+            CleanupStack::Pop(&compLocalizedInfoArray);
+            compLocalizedInfoArray.ResetAndDestroy();
+            }
+        
+        scrView.Close();
+        CleanupStack::PopAndDestroy();
+        CleanupStack::Pop();
+        }	
+    CleanupStack::PopAndDestroy();
 	}
+

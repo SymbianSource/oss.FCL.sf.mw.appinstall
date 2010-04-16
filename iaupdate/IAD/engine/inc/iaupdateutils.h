@@ -96,6 +96,11 @@ IMPORT_C TBool IsAppInstalledL( const TUid& aUid );
  **/
 IMPORT_C TBool IsAppInstalledL( const TUid& aUid, TIAUpdateVersion &aVersion );
 
+/**
+ * This function is added to check whether certain widget with given identifier are installed
+ * the function calls widget registry API
+ **/
+IMPORT_C TBool IsWidgetInstalledL( const TDesC& aIdentifier, TIAUpdateVersion &aVersion );
 
 IMPORT_C TBool SpaceAvailableInInternalDrivesL( 
                                          RPointerArray<MIAUpdateNode>& aNodes );

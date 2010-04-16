@@ -218,7 +218,11 @@ CONSECUTIVE
 RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
 RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
 
+//Run the AppUid Generation tests.
+RUN_SCRIPT z:\tusif\tsif\tsif_appuidgen.script
+
 // Wait 3 seconds in order to let the SIF server shutdown itself
 DELAY 3000
+
 
 PRINT Completed SIF component tests

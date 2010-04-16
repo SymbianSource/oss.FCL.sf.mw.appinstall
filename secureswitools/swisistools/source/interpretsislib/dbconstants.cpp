@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -62,6 +62,28 @@ std::wstring DbConstants::FileHashData = L"FileHashData";
 // file description properties
 std::wstring DbConstants::CompWildCardFileCount = L"CompWildCardFileCount";
 std::wstring DbConstants::CompSidFileName = L"CompSidFileName";
+
+// file description - Registration File Properties
+std::wstring DbConstants::CompAppFile = L"AppFile";
+std::wstring DbConstants::CompAppUid = L"AppUid";
+std::wstring DbConstants::CompTypeId = L"TypeId";
+std::wstring DbConstants::CompAttributes = L"Attributes";
+std::wstring DbConstants::CompHidden = L"Hidden";
+std::wstring DbConstants::CompEmbeddable = L"Embeddable";
+std::wstring DbConstants::CompNewfile = L"Newfile";
+std::wstring DbConstants::CompLaunch = L"Launch";
+std::wstring DbConstants::CompDefaultScreenNumber = L"DefaultScreenNumber";
+std::wstring DbConstants::CompOpaqueData = L"OpaqueData";
+
+// file description - Localization File Properties
+std::wstring DbConstants::CompShortCaption = L"ShortCaption";
+std::wstring DbConstants::CompCaption = L"Caption";
+std::wstring DbConstants::CompNumberOfIcons = L"NumberOfIcons";
+std::wstring DbConstants::CompLocale = L"Locale";
+std::wstring DbConstants::CompIconFile = L"IconFile";
+std::wstring DbConstants::CompGroupName = L"GroupName";
+std::wstring DbConstants::CompUID = L"Uid";
+std::wstring DbConstants::CompScreenMode = L"ScreenMode";
 
 // inROM
 std::wstring DbConstants::CompInRom = L"CompInRom";

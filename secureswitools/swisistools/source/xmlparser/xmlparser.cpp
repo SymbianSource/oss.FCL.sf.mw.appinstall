@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -248,8 +248,8 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagUniqueSoftwareTypeName( &XMLString::release, XMLString::transcode("UniqueSoftwareTypeName") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagLocalizableSwTypeName( &XMLString::release, XMLString::transcode("LocalizableSoftwareTypeName") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSifPluginUid( &XMLString::release, XMLString::transcode("SifPluginUid") );
-	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagInstallerSid( &XMLString::release, XMLString::transcode("InstallerSid") );
-	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagExecutionLayerSid( &XMLString::release, XMLString::transcode("ExecutionLayerSid") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagLauncherExecutable( &XMLString::release, XMLString::transcode("LauncherExecutable") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagCustomAcess( &XMLString::release, XMLString::transcode("CustomAcess") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagMIMEDetails( &XMLString::release, XMLString::transcode("MIMEDetails") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagMIMEType( &XMLString::release, XMLString::transcode("MIMEType") );
 	
@@ -278,19 +278,23 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 	sscanf(sifPluginUidText.get(),"%x",&sifPluginUidValue);
 	scrEnvDetails.iSifPluginUid = sifPluginUidValue;
 	
-	DOMNodeList* installerSid = aEnvironment->getElementsByTagName(tagInstallerSid.get());
-	textContent = installerSid->item(0)->getTextContent();
-	fn_auto_ptr<releaseChPtr,char> installerSidText(&XMLString::release, XMLString::transcode(textContent));
-	int installerSidValue = 0;
-	sscanf(installerSidText.get(),"%x",&installerSidValue);
-	scrEnvDetails.iInstallerSid = installerSidValue;
-	
-	DOMNodeList* executionLayerSid = aEnvironment->getElementsByTagName(tagExecutionLayerSid.get());
-	textContent = executionLayerSid->item(0)->getTextContent();
-	fn_auto_ptr<releaseChPtr,char> executionLayerSidText(&XMLString::release, XMLString::transcode(textContent));
-	int executionLayerSidValue = 0;
-	sscanf(executionLayerSidText.get(),"%x",&executionLayerSidValue);
-	scrEnvDetails.iExecutionLayerSid = executionLayerSidValue;
+    DOMNodeList* launcherExecutable = aEnvironment->getElementsByTagName(tagLauncherExecutable.get());
+    if(0 != launcherExecutable->getLength())
+        {
+		textContent = launcherExecutable->item(0)->getTextContent();
+		fn_auto_ptr<releaseXmlChPtr, XMLCh> launcherExecutableText( &XMLString::release,textContent );
+		const XMLCh* launcherExecutableValue = launcherExecutableText.get();
+		scrEnvDetails.iLauncherExecutable = launcherExecutableValue;
+		}
+    DOMNodeList* customAcessList = aEnvironment->getElementsByTagName(tagCustomAcess.get());
+	const  XMLSize_t customAcessDataCount = customAcessList->getLength();
+	for( XMLSize_t count=0 ; count<customAcessDataCount ; ++count )
+		{
+		DOMNode* customAcessRoot = customAcessList->item(count);
+		DOMElement* customAcessNode = static_cast< xercesc::DOMElement* >( customAcessRoot );
+		XmlDetails::TScrEnvironmentDetails::TCustomAcessList customAcessData = GetCustomAcessList(customAcessNode);
+		scrEnvDetails.iCustomAcessList.push_back(customAcessData);
+		}
 	
 	DOMNodeList* mimeDetails = aEnvironment->getElementsByTagName(tagMIMEDetails.get());
 	DOMNode* mimeDetailRoot	= mimeDetails->item(0);
@@ -381,6 +385,7 @@ XmlDetails::TScrPreProvisionDetail CScrXmlParser::GetPreProvisionDetails( const 
 
 XmlDetails::TScrPreProvisionDetail::TComponent CScrXmlParser::GetPreProvisionData( const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetPreProvisionData()");
 	XmlDetails::TScrPreProvisionDetail::TComponent component;
 	
 	DOMNodeList* childNodes = aDOMElement->getChildNodes();
@@ -392,6 +397,7 @@ XmlDetails::TScrPreProvisionDetail::TComponent CScrXmlParser::GetPreProvisionDat
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentFile( &XMLString::release, XMLString::transcode("ComponentFile") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentDetails( &XMLString::release, XMLString::transcode("ComponentDetails") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentDependency( &XMLString::release, XMLString::transcode("ComponentDependency") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfo( &XMLString::release, XMLString::transcode("ApplicationRegistrationInfo") );
 
 	XmlDetails::TScrPreProvisionDetail::TComponentDetails componentDetails = GetComponentDetails(aDOMElement);
 	component.iComponentDetails = componentDetails;
@@ -422,13 +428,19 @@ XmlDetails::TScrPreProvisionDetail::TComponent CScrXmlParser::GetPreProvisionDat
 			XmlDetails::TScrPreProvisionDetail::TComponentDependency componentDependency = GetComponentDependency(currentElement);
 			component.iComponentDependency = componentDependency;
 			}
+		else if( XMLString::equals(currentElement->getTagName(), tagApplicationRegistrationInfo.get()))
+			{
+			XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo appRegistrationInfo = GetApplicationRegistrationInfo(currentElement);
+			component.iApplicationRegistrationInfo.push_back(appRegistrationInfo);
+			}
 		}
-
+	LOGEXIT("CScrXmlParser::GetPreProvisionData()");
 	return component;
 	}
 
 XmlDetails::TScrPreProvisionDetail::TComponentLocalizable CScrXmlParser::GetComponentLocalizable(const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetComponentLocalizable()");
 	// tags in ComponentLocalizable
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentLocalizableLocale( &XMLString::release, XMLString::transcode("ComponentLocalizable_Locale") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentLocalizableName( &XMLString::release, XMLString::transcode("ComponentLocalizable_Name") );
@@ -454,13 +466,14 @@ XmlDetails::TScrPreProvisionDetail::TComponentLocalizable CScrXmlParser::GetComp
 		const XMLCh* textVendor = vendor->item(0)->getTextContent();
 		componentLocalizable.iVendor = textVendor;
 		}
-
+	LOGEXIT("CScrXmlParser::GetComponentLocalizable()");
 	return componentLocalizable;
 	
 	}
 
 XmlDetails::TScrPreProvisionDetail::TComponentProperty CScrXmlParser::GetComponentProperty(const DOMElement* aEnvironment)
 	{
+	LOGENTER("CScrXmlParser::GetComponentProperty()");
 	// tags in ComponentProperty
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentPropertyName( &XMLString::release, XMLString::transcode("Name") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagComponentPropertyLocale( &XMLString::release, XMLString::transcode("ComponentProperty_Locale") );
@@ -515,13 +528,14 @@ XmlDetails::TScrPreProvisionDetail::TComponentProperty CScrXmlParser::GetCompone
 		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
 		componentProperty.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
 		}
-
+	LOGEXIT("CScrXmlParser::GetComponentProperty()");
 	return componentProperty;
 	
 	}
 
 XmlDetails::TScrPreProvisionDetail::TComponentFile CScrXmlParser::GetComponentFile( const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetComponentFile()");
 	XmlDetails::TScrPreProvisionDetail::TComponentFile componentFile;
 	
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagFileProperty( &XMLString::release, XMLString::transcode("FileProperty") );
@@ -543,12 +557,13 @@ XmlDetails::TScrPreProvisionDetail::TComponentFile CScrXmlParser::GetComponentFi
 	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
 	DOMNode* location = attributes->getNamedItem(tagLocation.get());
 	componentFile.iLocation = location->getTextContent();
-	
+	LOGEXIT("CScrXmlParser::GetComponentFile()");
 	return componentFile;
 	}
 
 XmlDetails::TScrPreProvisionDetail::TComponentDependency CScrXmlParser::GetComponentDependency( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetComponentDependency()");
 	XmlDetails::TScrPreProvisionDetail::TComponentDependency componentDependency;
 	
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagDepList( &XMLString::release, XMLString::transcode("DependencyList") );
@@ -586,13 +601,14 @@ XmlDetails::TScrPreProvisionDetail::TComponentDependency CScrXmlParser::GetCompo
 	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
 	DOMNode* dependentId = attributes->getNamedItem(tagDependentId.get());
 	componentDependency.iDependentId = dependentId->getTextContent();
-	
+	LOGEXIT("CScrXmlParser::GetComponentDependency()");
 	return componentDependency;
 	}
 
 XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty 
 	CScrXmlParser::GetFileProperty( const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetFileProperty()");
 	// tag for FileProperty
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagFilePropertyName( &XMLString::release, XMLString::transcode("Name") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagFilePropertyValue( &XMLString::release, XMLString::transcode("FileProperty_Value") );
@@ -638,13 +654,16 @@ XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty
 				}
 			}
 		}
+	LOGEXIT("CScrXmlParser::GetFileProperty()");
 	return fileProperty;
 	}
 		
 XmlDetails::TScrPreProvisionDetail::TComponentDetails 
 	CScrXmlParser::GetComponentDetails( const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetComponentDetails()");
 	// tags for ComponentDetails
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagRomApplication( &XMLString::release, XMLString::transcode("RomApplication") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagRemovable( &XMLString::release, XMLString::transcode("Removable") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSize( &XMLString::release, XMLString::transcode("Size") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagScomoState( &XMLString::release, XMLString::transcode("ScomoState") );
@@ -655,6 +674,7 @@ XmlDetails::TScrPreProvisionDetail::TComponentDetails
 	
 	XmlDetails::TScrPreProvisionDetail::TComponentDetails componentDetails;
 	
+	DOMNodeList* romApplication	= aDOMElement->getElementsByTagName(tagRomApplication.get());
 	DOMNodeList* removable	= aDOMElement->getElementsByTagName(tagRemovable.get());
 	DOMNodeList* size		= aDOMElement->getElementsByTagName(tagSize.get());
 	DOMNodeList* scomoState = aDOMElement->getElementsByTagName(tagScomoState.get());
@@ -663,6 +683,13 @@ XmlDetails::TScrPreProvisionDetail::TComponentDetails
 	DOMNodeList* originVerified	= aDOMElement->getElementsByTagName(tagOriginVerified.get());
 	DOMNodeList* hidden	= aDOMElement->getElementsByTagName(tagHidden.get());
 	
+	if( romApplication->getLength() != 0)
+		{
+		LOGINFO("CScrXmlParser::GetComponentDetails()- rom app");
+		const XMLCh* textRomApplication = romApplication->item(0)->getTextContent();
+		componentDetails.iIsRomApplication = Util::WideCharToInteger(textRomApplication);
+		}
+
 	if( removable->getLength() != 0)
 		{
 		const XMLCh* textRemovable = removable->item(0)->getTextContent();
@@ -716,13 +743,14 @@ XmlDetails::TScrPreProvisionDetail::TComponentDetails
 		const XMLCh* textHidden = hidden->item(0)->getTextContent();
 		componentDetails.iIsHidden = Util::WideCharToInteger(textHidden);
 		}
-	
+	LOGEXIT("CScrXmlParser::GetComponentDetails()");
 	return componentDetails;
 	}
 
 XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName 
 	CScrXmlParser::GetLocalizedSoftwareTypeName(const DOMElement* aDOMElement)
 	{
+	LOGENTER("CScrXmlParser::GetLocalizedSoftwareTypeName()");
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSwTypeNameLocale( &XMLString::release, XMLString::transcode("Locale") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSwTypeNameValue( &XMLString::release, XMLString::transcode("Value") );
 	
@@ -737,8 +765,567 @@ XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName
 	
 	const XMLCh* textName = name->getTextContent();
 	localizedSwTypeName.iName = textName;
-
+	LOGEXIT("CScrXmlParser::GetLocalizedSoftwareTypeName()");
 	return localizedSwTypeName;
+	}
+
+XmlDetails::TScrEnvironmentDetails::TCustomAcessList 
+	CScrXmlParser::GetCustomAcessList(const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetCustomAcessList()");
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSecureId( &XMLString::release, XMLString::transcode("SecureId") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAccessMode( &XMLString::release, XMLString::transcode("AccessMode") );
+	
+	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
+	DOMNode* secureId = attributes->getNamedItem(tagSecureId.get());
+	DOMNode* accessMode = attributes->getNamedItem(tagAccessMode.get());
+	
+	XmlDetails::TScrEnvironmentDetails::TCustomAcessList customAcessList;
+
+	fn_auto_ptr<releaseChPtr,char> textSecureId(&XMLString::release, XMLString::transcode(secureId->getTextContent()));
+	int secureIdVal=0;	
+	sscanf(textSecureId.get(),"%x",&secureIdVal);
+	customAcessList.iSecureId = secureIdVal;
+	
+	const XMLCh* textAccessMode = accessMode->getTextContent();
+	customAcessList.iAccessMode = Util::WideCharToInteger(textAccessMode);
+	LOGEXIT("CScrXmlParser::GetCustomAcessList()");
+	return customAcessList;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo CScrXmlParser::GetApplicationRegistrationInfo(const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetApplicationRegistrationInfo()");
+	// tags in ApplicationRegistrationInfo
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoAppAttribute( &XMLString::release, XMLString::transcode("ApplicationAttribute") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoOpaqueData ( &XMLString::release, XMLString::transcode("OpaqueData") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoFileOwnershipInfo( &XMLString::release, XMLString::transcode("FileOwnershipinfo") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoAppDataType( &XMLString::release, XMLString::transcode("ApplicationDataType") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoAppServiceInfo( &XMLString::release, XMLString::transcode("ApplicationServiceInfo") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoAppLocalizableInfo( &XMLString::release, XMLString::transcode("ApplicationLocalizableInfo") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationRegistrationInfoAppProperty( &XMLString::release, XMLString::transcode("ApplicationProperty") );
+
+	DOMNodeList* appAttributes = aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoAppAttribute.get());
+	const XMLSize_t appAttributeCount = appAttributes->getLength();
+	DOMNodeList* OpaqueData	= aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoOpaqueData.get());
+	const XMLSize_t OpaqueDataCount = OpaqueData->getLength();
+	DOMNodeList* fileOwnershipInfos	= aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoFileOwnershipInfo.get());
+	const XMLSize_t fileOwnershipInfoCount = fileOwnershipInfos->getLength();
+	DOMNodeList* appServiceInfos = aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoAppServiceInfo.get());
+	const XMLSize_t appServiceInfoCount = appServiceInfos->getLength();
+	DOMNodeList* appLocalizableInfos	= aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoAppLocalizableInfo.get());
+	const XMLSize_t appLocalizableInfoCount = appLocalizableInfos->getLength();
+	DOMNodeList* appProperties = aDOMElement->getElementsByTagName(tagApplicationRegistrationInfoAppProperty.get());
+	const XMLSize_t appPropertyCount = appProperties->getLength();
+
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo appRegistrationInfo;
+
+	// for each AppAttribute retrieve all tags
+	for( XMLSize_t index = 0; index < appAttributeCount; ++index )
+		{
+		DOMElement* currentappAttribute = static_cast< xercesc::DOMElement* >( appAttributes->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute appAttribute = GetAppAttribute(currentappAttribute);
+		appRegistrationInfo.iApplicationAttribute.push_back(appAttribute);
+		}
+
+	// for each OpaqueData retrieve all tags
+	for( XMLSize_t index = 0; index < OpaqueDataCount; ++index )
+		{
+		DOMElement* currentOpaqueData = static_cast< xercesc::DOMElement* >( OpaqueData->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty appProperty;
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType = GetOpaqueDataType(currentOpaqueData);
+
+		appProperty.iLocale = opaqueDataType.iLocale;
+		appProperty.iName = L"OpaqueData";
+		appProperty.iIntValue = 0;
+		appProperty.iIsStr8Bit = true;
+		appProperty.iServiceUid = 0;
+		appProperty.iStrValue = opaqueDataType.iOpaqueData;
+		
+		appRegistrationInfo.iApplicationProperty.push_back(appProperty);
+		}
+
+	// for each FileOwnershipInfo retrieve all tags
+	for( XMLSize_t index = 0; index < fileOwnershipInfoCount; ++index )
+		{
+		DOMElement* currentFileOwnershipInfo = static_cast< xercesc::DOMElement* >( fileOwnershipInfos->item(index) );
+
+		std::wstring file = GetFileOwnershipInfo(currentFileOwnershipInfo);
+
+		appRegistrationInfo.iFileOwnershipInfo.push_back(file);
+		}
+
+	// for each appServiceInfo retrieve all tags
+	for( XMLSize_t index = 0; index < appServiceInfoCount; ++index )
+		{
+		DOMElement* currentappServiceInfo = static_cast< xercesc::DOMElement* >( appServiceInfos->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo appServiceInfo = GetAppServiceInfo(currentappServiceInfo, appRegistrationInfo);
+		appRegistrationInfo.iApplicationServiceInfo.push_back(appServiceInfo);
+		}
+
+	// for each appLocalizableInfo retrieve all tags
+	for( XMLSize_t index = 0; index < appLocalizableInfoCount; ++index )
+		{
+		DOMElement* currentAppLocalizableInfo = static_cast< xercesc::DOMElement* >( appLocalizableInfos->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo appLocalizableInfo = GetAppLocalizableInfo(currentAppLocalizableInfo);
+		appRegistrationInfo.iApplicationLocalizableInfo.push_back(appLocalizableInfo);
+		}
+
+	// for each AppProperty retrieve all tags
+	for( XMLSize_t index = 0; index < appPropertyCount; ++index )
+		{
+		DOMElement* currentAppProperty = static_cast< xercesc::DOMElement* >( appProperties->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty appProperty = GetAppProperty(currentAppProperty);
+		appRegistrationInfo.iApplicationProperty.push_back(appProperty);
+		}
+	LOGEXIT("CScrXmlParser::GetApplicationRegistrationInfo()");
+	return appRegistrationInfo;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute 
+	CScrXmlParser::GetAppAttribute( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppAttribute()");
+	// tags in AppAttribute
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppAttributeName( &XMLString::release, XMLString::transcode("Name") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppAttributeValue( &XMLString::release, XMLString::transcode("ApplicationAttribute_Value") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppAttributeIsBinary( &XMLString::release, XMLString::transcode("ApplicationAttribute_IsBinary") );
+		
+	// tags of ComponentProperty_Value
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationAttributeIntValue( &XMLString::release, XMLString::transcode("ApplicationAttribute_IntValue") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagApplicationAttributeStrValue( &XMLString::release, XMLString::transcode("ApplicationAttribute_StrValue") );
+	
+	// attribute - name
+	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
+	DOMNode* name = attributes->getNamedItem(tagAppAttributeName.get());
+		
+	DOMNodeList* value = aDOMElement->getElementsByTagName(tagAppAttributeValue.get());
+	DOMNodeList* isBinary = aDOMElement->getElementsByTagName(tagAppAttributeIsBinary.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute appAttribute;
+	
+	const XMLCh* textName = name->getTextContent();
+	appAttribute.iName	= textName;
+	
+	DOMNodeList* childNodes = value->item(0)->getChildNodes();
+	const XMLSize_t nodeCount = childNodes->getLength();
+
+	for(int index = 0; index< nodeCount; ++index)
+		{
+		DOMElement* currentElement = static_cast< xercesc::DOMElement* >( childNodes->item(index) );
+		if( XMLString::equals(currentElement->getTagName(), tagApplicationAttributeIntValue.get()))
+			{
+			appAttribute.iIsIntValue = true;
+			appAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		else if( XMLString::equals(currentElement->getTagName(), tagApplicationAttributeStrValue.get()))
+			{
+			appAttribute.iIsIntValue = false;
+			appAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		}
+		
+	if(isBinary->getLength() != 0)
+		{
+		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
+		appAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		}
+	LOGEXIT("CScrXmlParser::GetAppAttribute()");
+	return appAttribute;
+	}
+
+std::wstring CScrXmlParser::GetFileOwnershipInfo( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetFileOwnershipInfo()");
+	// tags in FileOwnershipInfo 
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagFileName( &XMLString::release, XMLString::transcode("FileName") );
+
+	DOMNodeList* fileName = aDOMElement->getElementsByTagName(tagFileName.get());
+	
+	std::wstring file;
+
+	if( fileName->getLength() != 0)
+		{
+		const XMLCh* fil = fileName->item(0)->getTextContent();
+		file = fil;
+		}
+
+	LOGEXIT("CScrXmlParser::GetFileOwnershipInfo()");
+	return file;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType 
+	CScrXmlParser::GetDataType( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetDataType()");
+	// tags in DataType 
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagDataTypePriority( &XMLString::release, XMLString::transcode("Priority") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagDataType( &XMLString::release, XMLString::transcode("Type") );
+
+	DOMNodeList* priority = aDOMElement->getElementsByTagName(tagDataTypePriority.get());
+	DOMNodeList* type = aDOMElement->getElementsByTagName(tagDataType.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType dataType;
+
+	if( priority->getLength() != 0)
+		{
+		const XMLCh* pri = priority->item(0)->getTextContent();
+		dataType.iPriority = Util::WideCharToInteger(pri);
+		}
+
+	if( type->getLength() != 0)
+		{
+		const XMLCh* typ = type->item(0)->getTextContent();
+		dataType.iType = typ;
+		}
+	LOGEXIT("CScrXmlParser::GetDataType()");
+	return dataType;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType 
+	CScrXmlParser::GetOpaqueDataType( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetOpaqueDataType()");
+	// tags in OpaqueDataType 
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagData( &XMLString::release, XMLString::transcode("Data") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagOpaqueLocale( &XMLString::release, XMLString::transcode("OpaqueLocale") );
+
+	DOMNodeList* Data = aDOMElement->getElementsByTagName(tagData.get());
+	DOMNodeList* OpaqueLocale = aDOMElement->getElementsByTagName(tagOpaqueLocale.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType;
+
+	if( OpaqueLocale->getLength() != 0)
+		{
+		const XMLCh* pri = OpaqueLocale->item(0)->getTextContent();
+		opaqueDataType.iLocale = Util::WideCharToInteger(pri);
+		}
+
+	if( Data->getLength() != 0)
+		{
+		const XMLCh* typ = Data->item(0)->getTextContent();
+		opaqueDataType.iOpaqueData = typ;
+		}
+	LOGEXIT("CScrXmlParser::GetOpaqueDataType()");
+	return opaqueDataType;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType 
+	CScrXmlParser::GetServiceOpaqueDataType( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetServiceOpaqueDataType()");
+	// tags in OpaqueDataType 
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagServiceData( &XMLString::release, XMLString::transcode("ServiceData") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagServiceOpaqueLocale( &XMLString::release, XMLString::transcode("ServiceOpaqueLocale") );
+
+	DOMNodeList* ServiceData = aDOMElement->getElementsByTagName(tagServiceData.get());
+	DOMNodeList* ServiceOpaqueLocale = aDOMElement->getElementsByTagName(tagServiceOpaqueLocale.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType;
+
+	if( ServiceOpaqueLocale->getLength() != 0)
+		{
+		const XMLCh* pri = ServiceOpaqueLocale->item(0)->getTextContent();
+		opaqueDataType.iLocale = Util::WideCharToInteger(pri);
+		}
+
+	if( ServiceData->getLength() != 0)
+		{
+		const XMLCh* typ = ServiceData->item(0)->getTextContent();
+		opaqueDataType.iOpaqueData = typ;
+		}
+	LOGEXIT("CScrXmlParser::GetServiceOpaqueDataType()");
+	return opaqueDataType;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo 
+	CScrXmlParser::GetAppServiceInfo( const DOMElement* aDOMElement, XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppRegistrationInfo )
+	{
+	LOGENTER("CScrXmlParser::GetAppServiceInfo()");
+	// tags in AppServiceInfo
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppServiceInfoUid( &XMLString::release, XMLString::transcode("Uid") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppServiceAppProperty( &XMLString::release, XMLString::transcode("ServiceOpaqueData") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppServiceInfoDataType( &XMLString::release, XMLString::transcode("ApplicationDataType") );
+
+	DOMNodeList* uid = aDOMElement->getElementsByTagName(tagAppServiceInfoUid.get());
+
+	DOMNodeList* ServiceOpaqueData = aDOMElement->getElementsByTagName(tagAppServiceAppProperty.get());
+	const XMLSize_t ServiceOpaqueDataCount = ServiceOpaqueData->getLength();
+	
+	DOMNodeList* dataTypes = aDOMElement->getElementsByTagName(tagAppServiceInfoDataType.get());
+	const XMLSize_t dataTypeCount = dataTypes->getLength();
+
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo appServiceInfo;
+
+	if( uid->getLength() != 0)
+		{
+		const XMLCh* priority = uid->item(0)->getTextContent();
+		appServiceInfo.iUid = Util::WideCharToInteger(priority);
+		}
+
+	// for each OpaqueData retrieve all tags
+	for( XMLSize_t index = 0; index < ServiceOpaqueDataCount; ++index )
+		{
+		DOMElement* currentOpaqueData = static_cast< xercesc::DOMElement* >( ServiceOpaqueData->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty appProperty;
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType = GetServiceOpaqueDataType(currentOpaqueData);
+
+		appProperty.iLocale = opaqueDataType.iLocale;
+		appProperty.iName = L"OpaqueData";
+		appProperty.iIntValue = 0;
+		appProperty.iIsStr8Bit = true;
+		appProperty.iServiceUid = appServiceInfo.iUid;
+		appProperty.iStrValue = opaqueDataType.iOpaqueData;
+		
+		aAppRegistrationInfo.iApplicationProperty.push_back(appProperty);
+		}
+
+	// for each DataType retrieve all tags
+	for( XMLSize_t index = 0; index < dataTypeCount; ++index )
+		{
+		DOMElement* currentDataType = static_cast< xercesc::DOMElement* >( dataTypes->item(index) );
+		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType dataType = GetDataType(currentDataType);
+		appServiceInfo.iDataType.push_back(dataType);
+		}
+	LOGEXIT("CScrXmlParser::GetAppServiceInfo()");
+	return appServiceInfo;
+
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo 
+	CScrXmlParser::GetAppLocalizableInfo( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppLocalizableInfo()");
+	// tags in AppLocalizableInfo  
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttribute( &XMLString::release, XMLString::transcode("LocalizableAttribute") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoViewData ( &XMLString::release, XMLString::transcode("ViewData") );
+	
+	DOMNodeList* localizableAttributes = aDOMElement->getElementsByTagName(tagAppLocalizableInfoAttribute.get());
+	const XMLSize_t attributeCount = localizableAttributes->getLength();
+	DOMNodeList* viewData = aDOMElement->getElementsByTagName(tagAppLocalizableInfoViewData.get());
+	const XMLSize_t viewDataCount = viewData->getLength();
+
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo appLocalizableInfo;
+
+	LOGINFO("for each AppLocalizableInfoAttribute retrieve all tags");
+	// for each AppLocalizableInfoAttribute retrieve all tags
+	for( XMLSize_t index = 0; index < attributeCount; ++index )
+		{
+		DOMElement* currentLocalizableAttribute = static_cast< xercesc::DOMElement* >( localizableAttributes->item(index) );
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute appLocalizableAttribute = GetAppLocalizableAttribute(currentLocalizableAttribute);
+		appLocalizableInfo.iLocalizableAttribute.push_back(appLocalizableAttribute);
+		}
+
+	LOGINFO("for each AppLocalizableViewData retrieve all tags");
+	// for each AppLocalizableViewData retrieve all tags
+	
+	for( XMLSize_t index = 0; index < viewDataCount; ++index )
+		{
+		DOMElement* currentLocalizableViewData = static_cast< xercesc::DOMElement* >( viewData->item(index) );
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData appLocalizableViewData = GetAppLocalizableViewData(currentLocalizableViewData);
+		LOGINFO("push_back viewdata");
+		appLocalizableInfo.iViewData.push_back(appLocalizableViewData);
+		}
+
+	LOGEXIT("CScrXmlParser::GetAppLocalizableInfo()");
+	return appLocalizableInfo;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute 
+	CScrXmlParser::GetAppLocalizableAttribute( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppLocalizableAttribute()");
+	// tags in AppLocalizableInfo  
+	// tags in AppLocalizableInfoAttribute
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttributeName( &XMLString::release, XMLString::transcode("Name") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttributeValue( &XMLString::release, XMLString::transcode("LocalizableAttribute_Value") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttributeIsBinary( &XMLString::release, XMLString::transcode("LocalizableAttribute_IsBinary") );
+		
+	// tags of AppLocalizableInfoAttribute_Value
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttributeIntValue( &XMLString::release, XMLString::transcode("LocalizableAttribute_IntValue") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoAttributeStrValue( &XMLString::release, XMLString::transcode("LocalizableAttribute_StrValue") );
+	
+	LOGINFO("attribute - name");
+	// attribute - name
+	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
+	DOMNode* name = attributes->getNamedItem(tagAppLocalizableInfoAttributeName.get());
+		
+	DOMNodeList* value = aDOMElement->getElementsByTagName(tagAppLocalizableInfoAttributeValue.get());
+	DOMNodeList* isBinary = aDOMElement->getElementsByTagName(tagAppLocalizableInfoAttributeIsBinary.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute appLocalizableAttribute;
+	
+	LOGINFO("name->getTextContent");
+	const XMLCh* textName = name->getTextContent();
+	appLocalizableAttribute.iName = textName;
+	
+	DOMNodeList* childNodes = value->item(0)->getChildNodes();
+	const XMLSize_t nodeCount = childNodes->getLength();
+
+	for(int index = 0; index< nodeCount; ++index)
+		{
+		DOMElement* currentElement = static_cast< xercesc::DOMElement* >( childNodes->item(index) );
+		if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableInfoAttributeIntValue.get()))
+			{
+			appLocalizableAttribute.iIsIntValue = true;
+			appLocalizableAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		else if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableInfoAttributeStrValue.get()))
+			{
+			appLocalizableAttribute.iIsIntValue = false;
+			appLocalizableAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		}
+		
+	if(isBinary->getLength() != 0)
+		{
+		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
+		appLocalizableAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		}
+
+	LOGEXIT("CScrXmlParser::GetAppLocalizableAttribute()");
+	return appLocalizableAttribute;
+	}
+
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData 
+	CScrXmlParser::GetAppLocalizableViewData( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppLocalizableViewData()");
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableInfoViewDataAttribute ( &XMLString::release, XMLString::transcode("ViewDataAttribute") );
+
+	DOMNodeList* viewDataAttr = aDOMElement->getElementsByTagName(tagAppLocalizableInfoViewDataAttribute.get());
+	const XMLSize_t viewDataAttrCount = viewDataAttr->getLength();
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData appViewData;
+
+	for( XMLSize_t index = 0; index < viewDataAttrCount; ++index )
+	{
+		DOMElement* currentLocalizableViewData = static_cast< xercesc::DOMElement* >( viewDataAttr->item(index) );
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes appLocalizableViewData = GetAppLocalizableViewDataAttributes(currentLocalizableViewData);
+		LOGINFO("push_back viewdata");
+		appViewData.iViewDataAttributes.push_back(appLocalizableViewData);
+	}
+	LOGEXIT("CScrXmlParser::GetAppLocalizableViewData()");
+	return appViewData;
+	}
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes 
+	CScrXmlParser::GetAppLocalizableViewDataAttributes( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppLocalizableViewDataAttributes()");
+	// tags in AppLocalizableViewData
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableViewDataName( &XMLString::release, XMLString::transcode("Name") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableViewDataValue( &XMLString::release, XMLString::transcode("ViewData_Value") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableViewDataIsBinary( &XMLString::release, XMLString::transcode("ViewData_IsBinary") );
+		
+	// tags of AppLocalizableViewData_Value
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableViewDataIntValue( &XMLString::release, XMLString::transcode("ViewData_IntValue") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppLocalizableViewDataStrValue( &XMLString::release, XMLString::transcode("ViewData_StrValue") );
+		
+	LOGINFO("attribute - name");
+	// attribute - name
+	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
+	DOMNode* name = attributes->getNamedItem(tagAppLocalizableViewDataName.get());
+		
+	DOMNodeList* value = aDOMElement->getElementsByTagName(tagAppLocalizableViewDataValue.get());
+	DOMNodeList* isBinary = aDOMElement->getElementsByTagName(tagAppLocalizableViewDataIsBinary.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes appLocalizableViewDataAttribute;
+	
+	LOGINFO("name->getTextContent");
+	const XMLCh* textName = name->getTextContent();
+	LOGINFO("assign name");
+	appLocalizableViewDataAttribute.iName = textName;
+
+	LOGINFO("getChildNodes()");
+	DOMNodeList* childNodes = value->item(0)->getChildNodes();
+	LOGINFO("childNodes->getLength()");
+	const XMLSize_t nodeCount = childNodes->getLength();
+
+	for(int index = 0; index< nodeCount; ++index)
+		{
+		DOMElement* currentElement = static_cast< xercesc::DOMElement* >( childNodes->item(index) );
+		if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableViewDataIntValue.get()))
+			{
+			LOGINFO("int value");
+			appLocalizableViewDataAttribute.iIsIntValue = true;
+			appLocalizableViewDataAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		else if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableViewDataStrValue.get()))
+			{
+			LOGINFO("str value");
+			appLocalizableViewDataAttribute.iIsIntValue = false;
+			appLocalizableViewDataAttribute.iValue = currentElement->getTextContent();
+			break;
+			}
+		}
+		
+	if(isBinary->getLength() != 0)
+		{
+		LOGINFO("bin value");
+		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
+		appLocalizableViewDataAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		}
+	LOGEXIT("CScrXmlParser::GetAppLocalizableViewDataAttributes()");
+	return appLocalizableViewDataAttribute;
+	}
+
+
+XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty 
+	CScrXmlParser::GetAppProperty( const DOMElement* aDOMElement)
+	{
+	LOGENTER("CScrXmlParser::GetAppProperty()");
+	// tags in AppProperty
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppPropertyLocale( &XMLString::release, XMLString::transcode("Locale") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppPropertyName( &XMLString::release, XMLString::transcode("Name") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppPropertyIntValue( &XMLString::release, XMLString::transcode("IntValue") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAppPropertyStrValue( &XMLString::release, XMLString::transcode("StrValue") );
+
+	DOMNodeList* locale = aDOMElement->getElementsByTagName(tagAppPropertyLocale.get());
+	DOMNodeList* name = aDOMElement->getElementsByTagName(tagAppPropertyName.get());
+	DOMNodeList* intvalue = aDOMElement->getElementsByTagName(tagAppPropertyIntValue.get());
+	DOMNodeList* strvalue = aDOMElement->getElementsByTagName(tagAppPropertyStrValue.get());
+	
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty appProperty;
+
+	if( locale->getLength() != 0)
+		{
+		const XMLCh* loc = locale->item(0)->getTextContent();
+		appProperty.iLocale = Util::WideCharToInteger(loc);
+		}
+
+	if( name->getLength() != 0)
+		{
+		const XMLCh* nam = name->item(0)->getTextContent();
+		appProperty.iName = nam;
+		}
+	
+	if( intvalue->getLength() != 0)
+		{
+		const XMLCh* intval = intvalue->item(0)->getTextContent();
+		appProperty.iIntValue = Util::WideCharToInteger(intval);
+		}
+
+	if( strvalue->getLength() != 0)
+		{
+		const XMLCh* strval = strvalue->item(0)->getTextContent();
+		appProperty.iStrValue = strval;
+		}
+	LOGEXIT("CScrXmlParser::GetAppProperty()");
+	return appProperty;
 	}
 
 void CScrXmlParser::ConfigDomParser(xercesc::XercesDOMParser& aDomParser)

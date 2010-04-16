@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -34,6 +34,8 @@
 const TInt KKiloByte = 1024;
 const TInt KMegaByte = 1024 * 1024;
 const TInt KMaxShownInKiloBytes = 10 * KMegaByte;
+
+_LIT( KSpace, " ");
 
 
 /*******************************************************************************
@@ -139,8 +141,29 @@ void CIAUpdateFwDetailsDialog::ConstructTextL()
  
     TInt contentSize =   iFwNode->Base().ContentSizeL();
      
+    HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_APP_NAME );
+    ptr.Append( KOpeningBoldTag );
+    ptr.Append( *hBuf );
+    ptr.Append( KClosingBoldTag );
+    CleanupStack::PopAndDestroy( hBuf );
     
-    HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_DESCRIPTION );
+    HBufC* firmwareHeader = StringLoader::LoadLC(R_IAUPDATE_MAIN_DEVICE_FW);
+    HBufC* firmwarename = HBufC::NewLC( iFwNode->Base().Name().Length() +
+                                        KSpace.iTypeLength + 
+                                        firmwareHeader->Length() );
+    firmwarename->Des() = iFwNode->Base().Name();
+    firmwarename->Des() += KSpace();
+    firmwarename->Des() += *firmwareHeader;
+     
+    ptr.Append( KNewLine );
+    ptr.Append( *firmwarename );
+    CleanupStack::PopAndDestroy( firmwarename );
+    CleanupStack::PopAndDestroy( firmwareHeader );
+    ptr.Append( KNewLine );
+    ptr.Append( KNewLine );
+  
+    
+    hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_DESCRIPTION );
     ptr.Append( KOpeningBoldTag );
     ptr.Append( *hBuf );
     ptr.Append( KClosingBoldTag );
@@ -195,12 +218,11 @@ void CIAUpdateFwDetailsDialog::ConstructTextL()
 TBool CIAUpdateFwDetailsDialog::ShowDialogL()
 	{
 	ConstructTextL();
-	HBufC* firmwarename = iFwNode->Base().Name().AllocLC();
-	IAUpdateDialogUtil::ShowMessageQueryL( *firmwarename, *iBuf );
-    CleanupStack::PopAndDestroy( firmwarename );
+	HBufC* hBuf = StringLoader::LoadLC( R_IAUPDATE_DETAILS_DIALOG_TITLE );
+	IAUpdateDialogUtil::ShowMessageQueryL( *hBuf, *iBuf );
+	CleanupStack::PopAndDestroy( hBuf );
     return ETrue;
 	}
-
 
 // -----------------------------------------------------------------------------
 // CIAUpdateFwDetailsDialog::FileSizeTextLC

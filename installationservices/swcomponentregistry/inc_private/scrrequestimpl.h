@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,6 +30,8 @@
 #include "screntries_internal.h"
 #endif //SYMBIAN_ENABLE_SPLIT_HEADERS
 #include "screntries.h"
+#include "appregentries.h"
+#include "appreginfo.h"
 
 namespace Usif
 	{
@@ -45,6 +47,10 @@ namespace Usif
 	class CScrSession;
 	class CScrSubsession;
 	class CCompViewSubsessionContext;
+	class CAppInfoViewSubsessionContext;
+	class CRegInfoForApplicationSubsessionContext;
+	class CAppRegistrySubsessionContext;
+	class CApplicationRegInfoSubsessionContext; 
 
 	class CScrRequestImpl : public CBase
 		{
@@ -124,11 +130,16 @@ namespace Usif
 		void GetPluginUidWithComponentIdL(const RMessage2& aMessage) const;
 		
 		// Security Layer Requests
-		TBool GetInstallerSidForComponentL(TComponentId aComponentId, TSecureId& aSid) const;
-		TBool GetSidsForSoftwareTypeL(const HBufC* aSoftwareTypeName, TSecureId& aInstallerSid, TSecureId& aExecutableEnvSid) const;
-		TBool GetExecutionEnvSidForComponentL(TComponentId aComponentId, TSecureId& aSid) const;
+		TBool GetInstallerOrExecutionEnvSidsForComponentL(TComponentId aComponentId, RArray<TSecureId>& aSids) const;
+		TBool GetSidsForSoftwareTypeIdL(TInt aSoftwareTypeId, RArray<TSecureId>& aSids) const;
+		TBool GetSidsForSoftwareTypeL(const HBufC* aSoftwareTypeName, RArray<TSecureId>& aSids) const;
 		TBool IsInstallerOrExecutionEnvSidL(TSecureId& aSid) const;
 		TBool GetIsComponentOrphanedL(TComponentId aComponentId) const;
+		TInt GetSoftwareTypeForComponentL(TComponentId aComponentId) const;
+		
+		// AppArc Requests
+		void GetApplicationLaunchersSizeL(const RMessage2& aMessage) const;
+		void GetApplicationLaunchersDataL(const RMessage2& aMessage) const;
 		
 		// Component's view operations
 		CComponentFilter* ReadComponentFilterL(const RMessage2& aMessage) const;
@@ -137,7 +148,7 @@ namespace Usif
 		void NextComponentDataL(const RMessage2& aMessage, CComponentEntry*& aEntry) const;
 		void NextComponentSetSizeL(const RMessage2& aMessage, CStatement* aStmt, CComponentFilter* aFilter, RPointerArray<CComponentEntry>& aEntryList, CCompViewSubsessionContext* aSubsessionContext) const;
 		void NextComponentSetDataL(const RMessage2& aMessage, RPointerArray<CComponentEntry>& aEntryList) const;
-				
+		
 		// Files's list operations
 		CStatement* OpenFileListL(const RMessage2& aMessage) const; 	 
 		void NextFileSizeL(const RMessage2& aMessage, CStatement* aStmt, HBufC*& aFilePath) const;
@@ -155,6 +166,89 @@ namespace Usif
 		void DeleteSoftwareTypeL(const RMessage2& aMessage);
 		void GetDeletedMimeTypesL(const RMessage2& aMessage) const;
 		
+		// AppInfo's view operations
+		//CAppRegistrySubsession
+        void OpenApplicationRegistrationViewL(const RMessage2& aMessage, CAppRegistrySubsessionContext*  aSubsessionContext);
+        void OpenApplicationRegistrationForAppUidsViewL(const RMessage2& aMessage, CAppRegistrySubsessionContext*  aSubsessionContext);
+        void NextApplicationRegistrationInfoSizeL(const RMessage2& aMessage, CApplicationRegistrationData*& aApplicationRegistration, CAppRegistrySubsessionContext*  aSubsessionContext);
+        void NextApplicationRegistrationInfoDataL(const RMessage2& aMessage, CApplicationRegistrationData*& aApplicationRegistration);
+        
+		//CAppInfoViewSubsession
+        CAppInfoFilter* ReadAppInfoFilterL(const RMessage2& aMessage) const;
+        void OpenAppInfoViewL(CAppInfoFilter& aFilter, CAppInfoViewSubsessionContext* aSubsessionContext);
+        TBool DoesAppWithScreenModeExistL(TUid aUid, TInt aScreenMode, TLanguage aLocale) const;
+        void GetAppUidsL(CAppInfoViewSubsessionContext* aSubsessionContext, TBool aScreenModePresent = EFalse) const;
+        void GetEmbeddableAppUidsL(CAppInfoViewSubsessionContext* aSubsessionContext, TBool aScreenModePresent = EFalse) const;
+        void GetServerAppUidsL(CAppInfoViewSubsessionContext* aSubsessionContext, TUid aServiceUid, TBool aScreenModePresent = EFalse) const;
+        void GetAppUidsWithEmbeddabilityFilterL(CAppInfoViewSubsessionContext* aSubsessionContext, TEmbeddableFilter& aFilter, TBool aScreenModePresent = EFalse) const;
+        void GetAppUidsWithCapabilityMaskAndValueL(CAppInfoViewSubsessionContext* aSubsessionContext,TUint aCapabilityAttrFilterMask, TUint aCapabilityAttrFilterValue, TBool aScreenModePresent = EFalse) const;
+        void GetAppServicesL(TUid aAppUid, RPointerArray<CServiceInfo>& aServiceInfoArray, TLanguage aLocale) const;
+        void GetServiceImplementationsL(TUid aServiceUid, RPointerArray<CServiceInfo>& aServiceInfoArray, TLanguage aLocale) const;
+        void GetServiceImplementationsL(TUid aServiceUid, TDesC& aDataType, RPointerArray<CServiceInfo>& aServiceInfoArray, TLanguage aLocale) const;
+        void GetAppServiceOpaqueDataL(TUid aAppUid, TUid aServiceUid, RPointerArray<CServiceInfo>& aServiceInfoArray, TLanguage aLocale) const;
+        void GetOpaqueDataArrayL(TUid aAppUid, TUid aServiceUid, RPointerArray<COpaqueData>& aOpaqueDataArray, TLanguage aLanguage) const;
+        void NextAppInfoSizeL(const RMessage2& aMessage, TAppRegInfo*& aAppInfo, CAppInfoViewSubsessionContext* aSubsessionContext);
+        void NextAppInfoDataL(const RMessage2& aMessage, TAppRegInfo*& aAppInfo);
+
+        //CRegInfoForApplicationSubsession
+        void GetServiceUidSizeL(const RMessage2& aMessage, TUid aAppUid,CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetServiceUidDataL(const RMessage2& aMessage, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void SetLocaleForRegInfoForApplicationSubsessionContextL(const RMessage2& aMessage, CRegInfoForApplicationSubsessionContext *aSubsessionContext);
+        void GetApplicationLanguageL(const RMessage2& aMessage, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetDefaultScreenNumberL(const RMessage2& aMessage, TUid aAppUid) const;
+        void GetNumberOfOwnDefinedIconsL(const RMessage2& aMessage, TUid aAppUid,CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetViewSizeL(const RMessage2& aMessage, TUid aAppUid, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetViewDataL(const RMessage2& aMessage, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetViewsL(RPointerArray<Usif::CAppViewData>& aViewInfoArray,TUid aAppUid, TLanguage aLanguage)const;
+        void GetAppOwnedFilesSizeL(const RMessage2& aMessage, TUid aAppUid, CRegInfoForApplicationSubsessionContext *aSubsessionContext)const ;
+        void GetAppOwnedFilesDataL(const RMessage2& aMessage, CRegInfoForApplicationSubsessionContext *aSubsessionContext)const ;
+        void GetAppCharacteristicsL(const RMessage2& aMessage, TUid aAppUid) const;
+        void GetAppIconForFileNameL(const RMessage2& aMessage, TUid aAppUid, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+        void GetAppViewIconFileNameL(const RMessage2& aMessage, TUid aAppUid, CRegInfoForApplicationSubsessionContext *aSubsessionContext) const;
+		void GetAppPropertiesInfoL(CApplicationRegistrationData& aApplicationRegistrationaApplicationRegistration,TUid aAppUid, TLanguage aLanguage);
+		//CApplicationRegInfoSubsession
+        void GetAppForDataTypeAndServiceL(const RMessage2& aMessage) const;
+        void GetAppForDataTypeL(const RMessage2& aMessage) const;
+        void GetAppServiceInfoSizeL(const RMessage2& aMessage, CApplicationRegInfoSubsessionContext *aSubsessionContext) const;
+        void GetAppServiceInfoDataL(const RMessage2& aMessage, CApplicationRegInfoSubsessionContext *aSubsessionContext) const;
+        void GetApplicationInfoL(const RMessage2& aMessage);
+        
+        //General functions to retrieve various application information, mostly used by CAppRegistrySubsession
+        TBool GetApplicationRegistrationInfoL(CApplicationRegistrationData& aApplicationRegistrationaApplicationRegistration,TUid aAppUid) const;
+        void GetFileOwnershipInfoL(CApplicationRegistrationData& aApplicationRegistrationaApplicationRegistration,TUid aAppUid) const;
+        void GetDataTypesL(RPointerArray<Usif::CDataType> & aDataTypes,TInt aServiceId)const;
+        void GetServiceInfoL(CApplicationRegistrationData& aApplicationRegistrationaApplicationRegistration,TUid aAppUid,TLanguage aLanguage) const;
+        void GetLocalizableAppInfoL(CApplicationRegistrationData& aApplicationRegistrationaApplicationRegistration,TUid aAppUid, TLanguage aLanguage);
+        CCaptionAndIconInfo* GetCaptionAndIconInfoL(TInt aCaptionAndIconId)const;
+        void GetAppRegOpaqueDataL(CApplicationRegistrationData& aApplicationRegistration,TUid aAppUid,TLanguage aLanguage) const;
+        
+        //General functions
+		void GetLocalesForAppIdL(RArray<TInt>& aLocales, TUid aAppUid) const;
+		TBool CheckIfAppUidExistsL(const TUid aAppUid) const;
+        CStatement* CreateStatementForAppInfoL(const TDesC& aStatement, TLanguage aLocale, TInt aValuesNum,...) const;
+        void GetCaptionAndShortCaptionInfoForLocaleL(TUid aAppUid, TLanguage aLocale, TAppCaption& aShortCaption, TAppCaption& aCaption);
+        void GenerateNonNativeAppUidL(const RMessage2& aMessage);
+
+		//Application related
+		void AddApplicationEntryL(const RMessage2& aMessage);		
+		void DeleteAllAppsWithinPackageL(const RMessage2& aMessage);
+		void DeleteAllAppsWithinPackageInternalL(const TComponentId aComponentId);
+		void DeleteApplicationEntryL(const RMessage2& aMessage);
+		void DeleteApplicationEntryInternalL(const TInt aAppUid);
+		void GetComponentIdForAppL(const RMessage2& aMessage) const;
+	    TBool GetComponentIdForAppInternalL(TUid aAppUid, TComponentId& aComponentId) const;
+		void GetAppUidsForComponentSizeL(const RMessage2& aMessage) const;
+		void GetAppUidsForComponentDataL(const RMessage2& aMessage)const; 
+
+		void AddFileOwnershipInfoL(TUid aAppUid, const TDesC& aFileName);
+		void AddServiceInfoL(TUid aAppUid, CServiceInfo*  aAppServiceInfoEntry);
+		void AddServiceDataTypeL(TInt aServiceUid, Usif::CDataType* aDataTypeEntry);
+		void AddLocalizableAppInfoL(TUid aAppUid, Usif::CLocalizableAppInfo* aLocalizableAppInfoEntry);
+		void AddViewDataL(TInt aLocalAppInfoId, Usif::CAppViewData* aViewDataEntry);
+		TInt AddCaptionAndIconInfoL(CCaptionAndIconInfo* aCaptionAndIconEntry);
+		void AddPropertyL(TUid aAppUid, Usif::CPropertyEntry* aAppPropertiesEntry);
+		void AddOpaqueDataL(TUid aAppUid, Usif::COpaqueData*  aOpaqueDataEntry, TUid aServiceUid = TUid::Null());
+		void DeleteFromTableL(const TDesC& aTableName, const TDesC& aAttribute, const TInt aValue);		
 	private:
 		CScrRequestImpl(RFs& aFs);
 		void ConstructL(RFile& aDatabaseFile, RFile& aJournalFile);
@@ -182,6 +276,12 @@ namespace Usif
 			EFileRegistered,
 			EFileUnregistered
 			};
+		
+		enum TAccessMode
+            {
+            ETransactionalSid   = 0x0001,    // Sids requiring component/application transactional support, usually Installers/Execution layers
+            EMaxAccessMode      = 0xFFFF
+            };
 		
 		class TRollbackParams
 			{
@@ -241,7 +341,7 @@ namespace Usif
         TInt GetDriveFromFilePath(const TDesC& aFilePath, TDriveUnit& aDriveUnit) const;
 		TInt InstalledDrivesToBitmaskL(const TDriveList& aDriveList) const;
 		void UpdateInstalledDrivesL(TComponentId aComponentId, const TDesC& aFilePath, TFileOperationType aType);
-		TBool GetIntSoftwareTypeDataForComponentLC(TComponentId aComponentId, const TDesC& aColumnName, TInt& aValue) const;
+		TBool GetSifPluginUidIInternalL(TInt aSoftwareTypeId, TInt& aValue) const;
 		TInt GetInstalledDrivesBitmaskL(TComponentId aComponentId) const;
 		CGlobalComponentId* ParseGlobalComponendIdLC(const TDesC& aGlobalId) const;
 		void GetGeneralDependencyListL(const TDesC& aSelectColumn, const TDesC& aConditionColumn, const TDesC& aConditionValue, RPointerArray<CVersionedComponentId> &aVerCompIdList) const;
@@ -253,6 +353,11 @@ namespace Usif
 		TBool IsDriveReadOnlyL(TInt driveIndex) const;
 		TBool CheckForMediaPresenceL(TComponentId aComponentId) const;
 		
+		TBool GetIntforConditionL(const TDesC& aSelectColumn, const TDesC& aTableInfo, const TDesC& aConditionColumn,TInt aConditionValue,TInt& aRetrievedValue) const;
+		TInt  GetServiceIdForDataTypeL(const TDesC& aType) const;
+		TBool GetAppUidForServiceIdL(const TInt ServiceId, TUid& aAppUid) const;
+		TBool GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid appUid,TLanguage& aFinalAppLocale) const;
+
 		// DB Version management
 		void InitializeDbVersionL();
 		void VerifyDbVersionCompatibilityL() const;
@@ -270,7 +375,9 @@ namespace Usif
 		mutable RPointerArray<HBufC> iDeletedMimeTypes; // The list of MIME types deleted as the result of software type deletion.
 		mutable RPointerArray<CScrLogEntry> iLogEntries; // The list of log entries recorded in a session
 		mutable RArray<TLanguage> iMatchingSupportedLanguageList; // The list of matching supported language list recorded in a session
-		mutable RPointerArray<CLocalizableComponentInfo> iCompLocalizedInfoArray; //Component's localized information (name, vendor, locale) 
+		mutable RPointerArray<CLocalizableComponentInfo> iCompLocalizedInfoArray; //Component's localized information (name, vendor, locale)
+		mutable RArray<TUid> iComponentAppUids;  //List of Application Uids associated with a component
+		mutable RPointerArray<CLauncherExecutable> iLaunchers;
 		};
 	
 	} // End of namespace Usif

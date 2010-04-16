@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -882,7 +882,9 @@ void CNcdNodeMetaData::InternalizeInstallL( const MNcdPurchaseDetails& aDetails 
 void CNcdNodeMetaData::InternalizeInstallFromContentInfoL()
     {
     DLTRACEIN((""));
-    if ( iContentInfo && iContentInfo->Uid() != TUid::Null() )
+
+    // continue either UID or identifier exists.
+    if ( iContentInfo && (iContentInfo->Uid() != TUid::Null() || iContentInfo->Identifier().Length() != 0 ) )
         {
         TBool create = !iInstall;
         if ( create ) 
@@ -1002,12 +1004,25 @@ TBool CNcdNodeMetaData::HandleContentUpgradeL()
                     DLTRACE(("Creating upgrade"));
                     iUpgrade = CNcdNodeUpgrade::NewL( *this );
                     }
-                
-                // content is an upgrade
-                iUpgrade->SetContentUpgradesL(
-                    ETrue,
-                    iContentInfo->Uid(),
-                    iContentInfo->Version() );  
+             
+                if ((iContentInfo->Uid() == KNullUid) &&
+                    (iContentInfo->MimeType().Compare( KMimeTypeMatchWidget ) == 0 ))
+                    { 
+                    // Get widget Uid
+                        iUpgrade->SetContentUpgradesL(
+                        ETrue,
+                        CNcdProviderUtils::WidgetUidL(iContentInfo->Identifier()),
+                        iContentInfo->Version() );
+                    }
+                else
+                    {
+                    // content is an application upgrade
+                    iUpgrade->SetContentUpgradesL(
+                        ETrue,
+                        iContentInfo->Uid(),
+                        iContentInfo->Version() );
+                    }
+                    
                 return ETrue;                  
                 }
             }        
@@ -1043,6 +1058,38 @@ TBool CNcdNodeMetaData::HandleContentUpgradeL()
                 
                 DLTRACEOUT(("Content upgrades"));    
                 return ETrue;
+                }
+            }
+        // Widget?
+        else if (iContentInfo->Identifier() != KNullDesC) 
+            {
+            TNcdApplicationStatus contentVersion( 
+            ENcdApplicationNotInstalled );
+
+            TRAPD( err, 
+                contentVersion = CNcdProviderUtils::IsWidgetInstalledL( 
+                iContentInfo->Identifier(), 
+                iContentInfo->Version() ) );
+
+            // Ignore errors in version conversion                
+            LeaveIfNotErrorL( err, KErrArgument, KErrGeneral );
+                        
+            if ( contentVersion == ENcdApplicationOlderVersionInstalled ) 
+                {
+                if ( !iUpgrade ) 
+                    {
+                    DLTRACE(("Creating upgrade"));
+                    iUpgrade = CNcdNodeUpgrade::NewL( *this );
+                    }
+                            
+                // Set upgrade data which will be available through the API
+                iUpgrade->SetContentUpgradesL( 
+                    ETrue, 
+                    CNcdProviderUtils::WidgetUidL(iContentInfo->Identifier()), 
+                    iContentInfo->Version() );
+                        
+                    DLTRACEOUT(("Content upgrades"));    
+                    return ETrue;
                 }
             }
         }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,11 +37,22 @@ typedef std::vector<std::string>::const_iterator ConstStringIterator;
 typedef std::vector<std::wstring>::const_iterator ConstWstringIterator;
 typedef std::vector<XmlDetails::TScrEnvironmentDetails>::const_iterator ScrEnvIterator;
 typedef std::vector<XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName>::const_iterator ScrEnvLocSwTypeNameIterator;
+typedef std::vector<XmlDetails::TScrEnvironmentDetails::TCustomAcessList>::const_iterator ScrEnvCustomAccessIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponent>::const_iterator CompIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentLocalizable>::const_iterator CompLocIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentProperty>::const_iterator CompPropIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile>::const_iterator CompFileIter;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty>::const_iterator FilePropIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo>::const_iterator CompApplicationRegistrationInfoIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute>::const_iterator ApplicationAttributeIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType>::const_iterator ApplicationDataTypeIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo>::const_iterator ApplicationServiceInfoIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo>::const_iterator ApplicationLocalizableInfoIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute>::const_iterator LocalizableAttributeIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData>::const_iterator ViewDataIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes>::const_iterator ViewDataAttributeIterator;
+typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty>::const_iterator ApplicationPropertyIterator;
+
 
 const int KMaxDrives=26;
 
@@ -87,13 +98,14 @@ void CDbLayer::PopulatePreProvisionDetails(const XmlDetails::TScrPreProvisionDet
 	{
 	try
 		{
+		LOGENTER("CDbLayer::PopulatePreProvisionDetails()");
 		AddPreProvisionDetails(aPreProvisionDetailList);
 		}
 		catch(CException& aException)
 			{
 			std::string rollbackTransaction("ROLLBACK;");
 			ExecuteStatement(rollbackTransaction);
-			std::string errMsg = "Failed to populate SCR database with environment details.";
+			std::string errMsg = "Failed to populate SCR database with pre provision details.";
 			LOGERROR(aException.GetMessageA());
 			throw CException(errMsg,ExceptionCodes::ESqlCorrupt);
 			}
@@ -110,8 +122,15 @@ void ExecuteSwTypeNameStatement(const std::auto_ptr<CStatement>& aStatement, uns
 
 void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDetails>& aScrEnvDetails)
 	{
-	std::string insertSoftwareType("INSERT INTO SoftwareTypes(SoftwareTypeId,SifPluginUid,InstallerSecureId,ExecutionLayerSecureId) VALUES(?,?,?,?);");
+	LOGENTER("CDbLayer::PopulateDatabase()");
+	std::string insertSoftwareType("INSERT INTO SoftwareTypes(SoftwareTypeId,SifPluginUid,LauncherExecutable) VALUES(?,?,?);");
 	std::auto_ptr<CStatement> stmtSwType(iScrDbHandler->PrepareStatement(insertSoftwareType));
+	
+	std::string insertSTWithoutLE("INSERT INTO SoftwareTypes(SoftwareTypeId,SifPluginUid) VALUES(?,?);");
+	std::auto_ptr<CStatement> stmtSwTypeWithoutLE(iScrDbHandler->PrepareStatement(insertSTWithoutLE));
+	
+    std::string insertCustomAccessList("INSERT INTO CustomAccessList(SoftwareTypeId,SecureId,AccessMode) VALUES(?,?,?);");
+	std::auto_ptr<CStatement> stmtCustomAccessList(iScrDbHandler->PrepareStatement(insertCustomAccessList));
 	
 	std::string insertSwTypeName("INSERT INTO SoftwareTypeNames(SoftwareTypeId,Locale,Name) VALUES(?,?,?);");
 	std::auto_ptr<CStatement> stmtSwTypeName(iScrDbHandler->PrepareStatement(insertSwTypeName));
@@ -122,12 +141,21 @@ void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDet
 	for(ScrEnvIterator aScrEnvIterator = aScrEnvDetails.begin(); aScrEnvIterator != aScrEnvDetails.end(); ++aScrEnvIterator)
 		{
 		unsigned int swTypeId = Util::Crc32(aScrEnvIterator->iUniqueSoftwareTypeName.c_str(),aScrEnvIterator->iUniqueSoftwareTypeName.length()*2);
+		if (!aScrEnvIterator->iLauncherExecutable.empty())
+		{
 		stmtSwType->BindInt(1, swTypeId);
 		stmtSwType->BindInt(2, aScrEnvIterator->iSifPluginUid);
-		stmtSwType->BindInt(3, aScrEnvIterator->iInstallerSid);
-		stmtSwType->BindInt(4, aScrEnvIterator->iExecutionLayerSid);
+		stmtSwType->BindStr(3, aScrEnvIterator->iLauncherExecutable);
 		stmtSwType->ExecuteStatement();
 		stmtSwType->Reset();
+		}
+		else
+		{
+		stmtSwTypeWithoutLE->BindInt(1, swTypeId);
+		stmtSwTypeWithoutLE->BindInt(2, aScrEnvIterator->iSifPluginUid);
+		stmtSwTypeWithoutLE->ExecuteStatement();
+		stmtSwTypeWithoutLE->Reset();
+		}
 		// First insert unique sw type name
 		const TInt uniqueSwTypeNameLocale = 0;
 		ExecuteSwTypeNameStatement(stmtSwTypeName, swTypeId, uniqueSwTypeNameLocale, aScrEnvIterator->iUniqueSoftwareTypeName);
@@ -136,6 +164,16 @@ void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDet
 			{
 			ExecuteSwTypeNameStatement(stmtSwTypeName, swTypeId, swTypeNameIter->iLocale, swTypeNameIter->iName);
 			}
+                
+        for(ScrEnvCustomAccessIterator customAccessIter = aScrEnvIterator->iCustomAcessList.begin(); customAccessIter != aScrEnvIterator->iCustomAcessList.end(); ++customAccessIter)
+			{
+        	stmtCustomAccessList->BindInt(1, swTypeId);
+            stmtCustomAccessList->BindInt(2, customAccessIter->iSecureId);
+            stmtCustomAccessList->BindInt(3, customAccessIter->iAccessMode);
+            stmtCustomAccessList->ExecuteStatement();
+            stmtCustomAccessList->Reset();
+			}
+		
 		for(ConstWstringIterator mimeIter= aScrEnvIterator->iMIMEDetails.begin(); mimeIter != aScrEnvIterator->iMIMEDetails.end(); ++mimeIter)
 			{
 			stmtMimeType->BindInt(1, swTypeId);
@@ -144,35 +182,48 @@ void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDet
 			stmtMimeType->Reset();
 			}
 		}
+	LOGEXIT("CDbLayer::PopulateDatabase()");
 
 	}
 
 void CDbLayer::AddPreProvisionDetails(const XmlDetails::TScrPreProvisionDetail& aPreProvisionDetailList)
 	{
+	LOGENTER("CDbLayer::AddPreProvisionDetails()");
 	for(CompIterator aCompIterator = aPreProvisionDetailList.iComponents.begin(); aCompIterator != aPreProvisionDetailList.iComponents.end(); ++aCompIterator)
 		{	
 		std::string beginTransaction("BEGIN;");
 		ExecuteStatement(beginTransaction);
 		
-		AddComponentDetails(*aCompIterator, aPreProvisionDetailList.iSoftwareTypeName);
-		int componentId = iScrDbHandler->LastInsertedId();
-		AddComponentLocalizables(componentId,aCompIterator->iComponentLocalizables);
-		AddComponentProperties(componentId,aCompIterator->iComponentProperties);
-		AddComponentFiles(componentId,aCompIterator->iComponentFiles);
-		AddComponentDependencies(componentId, aCompIterator->iComponentDependency, aPreProvisionDetailList.iSoftwareTypeName);
-
+		int componentId = 0;
+		if (!AddComponentDetails(*aCompIterator, aPreProvisionDetailList.iSoftwareTypeName))
+			{
+			componentId = iScrDbHandler->LastInsertedId();
+			AddComponentLocalizables(componentId,aCompIterator->iComponentLocalizables);
+			AddComponentProperties(componentId,aCompIterator->iComponentProperties);
+			AddComponentFiles(componentId,aCompIterator->iComponentFiles);
+			AddComponentDependencies(componentId, aCompIterator->iComponentDependency, aPreProvisionDetailList.iSoftwareTypeName);
+			}
+		AddApplicationRegistrationInfo(componentId,aCompIterator->iApplicationRegistrationInfo);
 		std::string commitTransaction("COMMIT;");
 		ExecuteStatement(commitTransaction);
 
 		}
+	LOGEXIT("CDbLayer::AddPreProvisionDetails()");
 	}
 
-void CDbLayer::AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::wstring& aSoftwareTypeName)
+bool CDbLayer::AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::wstring& aSoftwareTypeName)
 	{
+	LOGENTER("CDbLayer::AddComponentDetails()");
 	std::string insertComponents;
 	XmlDetails::TScrPreProvisionDetail::TComponentDetails 
 		componentDetail = aComponent.iComponentDetails;
 
+	if (aComponent.iComponentDetails.iIsRomApplication)
+		{
+		LOGINFO("Is rom app");
+		return true;
+		}
+	LOGINFO("Not rom app");
 	unsigned int swTypeId = Util::Crc32(aSoftwareTypeName.c_str(),aSoftwareTypeName.length()*2);
 	std::wstring strGlobalId = componentDetail.iGlobalId;
 	
@@ -225,7 +276,8 @@ void CDbLayer::AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TCo
 	
 	stmtComponents->ExecuteStatement();
 	stmtComponents->Reset();
-
+	LOGEXIT("CDbLayer::AddComponentDetails()");
+	return false;
 	}
 
 int CDbLayer::GetInstalledDrives(const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile>& aComponentFiles )
@@ -277,6 +329,7 @@ const std::wstring CDbLayer::GetLocalTime()
 
 void CDbLayer::AddComponentLocalizables( int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentLocalizable>& aComponentLocalizable)
 	{
+	LOGENTER("CDbLayer::AddComponentLocalizables()");
 	std::string insertComponentLocalizable("INSERT INTO ComponentLocalizables(ComponentId,Locale,Name,Vendor) VALUES(?,?,?,?);");
 	std::auto_ptr<CStatement> stmtComponentLocalizable(iScrDbHandler->PrepareStatement(insertComponentLocalizable));
 
@@ -289,13 +342,14 @@ void CDbLayer::AddComponentLocalizables( int aComponentId, const std::vector<Xml
 		stmtComponentLocalizable->ExecuteStatement();
 		stmtComponentLocalizable->Reset();
 		}
+	LOGEXIT("CDbLayer::AddComponentLocalizables()");
 	}
 
 void CDbLayer::AddComponentProperties( 
 	int aComponentId, 
 	const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentProperty>& aComponentProperty)
 	{
-	
+	LOGENTER("CDbLayer::AddComponentProperties()");
 	std::string insertComponentProperties;
 	
 	for(CompPropIterator compPropIter = aComponentProperty.begin(); compPropIter != aComponentProperty.end() ; ++compPropIter )
@@ -338,18 +392,19 @@ void CDbLayer::AddComponentProperties(
 		stmtComponentProperty->ExecuteStatement();
 		stmtComponentProperty->Reset();
 		}
-	
+	LOGEXIT("CDbLayer::AddComponentProperties()");
 	}
 
 void CDbLayer::AddComponentFiles(int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TComponentFile>& aComponentFiles)
 	{
+	LOGENTER("CDbLayer::AddComponentFiles()");
 	for(CompFileIter compFile = aComponentFiles.begin() ; compFile != aComponentFiles.end() ; ++compFile)
 		{
 		AddLocation(aComponentId,compFile->iLocation);
 		int cmpFileId = iScrDbHandler->LastInsertedId();
 		AddFileProperties(cmpFileId,compFile->iFileProperties);
-		
 		}
+	LOGEXIT("CDbLayer::AddComponentFiles()");
 	}
 
 
@@ -358,6 +413,7 @@ void CDbLayer::AddComponentDependencies	(	int aComponentId,
 											const std::wstring& aSoftwareTypeName
 										)
 	{
+	LOGENTER("CDbLayer::AddComponentDependencies()");
 	std::wstring dependentId = aComponentDependency.iDependentId;
 
 	if(dependentId.empty())
@@ -393,6 +449,7 @@ void CDbLayer::AddComponentDependencies	(	int aComponentId,
 		stmtComponentDeps->Reset();
 	
 		}	
+	LOGEXIT("CDbLayer::AddComponentDependencies()");
 	}
 
 
@@ -456,6 +513,395 @@ void CDbLayer::AddFileProperties(int aCmpFileId, const std::vector<XmlDetails::T
 		stmtFileProperty->ExecuteStatement();
 		stmtFileProperty->Reset();
 		}
+	}
+
+
+void CDbLayer::AddApplicationRegistrationInfo( int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo>& aApplicationRegistrationInfo)
+	{
+	LOGENTER("CDbLayer::AddApplicationRegistrationInfo()");
+	int appflag = 0;
+	int appUid = 0;
+	int error = 0;
+
+	for(CompApplicationRegistrationInfoIterator compApplicationRegistrationInfoIter = aApplicationRegistrationInfo.begin(); compApplicationRegistrationInfoIter != aApplicationRegistrationInfo.end() ; ++compApplicationRegistrationInfoIter )
+	{
+		try {
+			appflag = 0;
+			appUid = AddAppAttribute(aComponentId, compApplicationRegistrationInfoIter->iApplicationAttribute);
+		}
+		catch(CException& aException)
+		{
+			LOGERROR(aException.GetMessageA());
+			LOGERROR("one of AddAppAttribute is already present in database");
+			appflag = 1;
+			error = 1;
+		}
+
+		if(appflag)
+			continue;
+				
+		if (appUid != 0)
+			{
+			AddFileOwnershipInfo(appUid, compApplicationRegistrationInfoIter->iFileOwnershipInfo);
+			AddServiceInfo(appUid, compApplicationRegistrationInfoIter->iApplicationServiceInfo);
+			AddAppLocalizableInfo(appUid, compApplicationRegistrationInfoIter->iApplicationLocalizableInfo);
+			AddProperty(appUid, compApplicationRegistrationInfoIter->iApplicationProperty);
+			}
+		else
+			{
+			std::string errMsg = "AppUid is null.";
+			LOGERROR(errMsg);
+			throw CException(errMsg,ExceptionCodes::ESqlArgumentError);
+			}
+	}
+
+	if(error)
+	{
+		std::string errMsg = "Duplicate entry present in database.";
+		LOGERROR(errMsg);
+		throw CException(errMsg,ExceptionCodes::EFileExists);
+	}
+
+	LOGEXIT("CDbLayer::AddApplicationRegistrationInfo()");
+	}
+
+int CDbLayer::AddAppAttribute( int aComponentId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute>& aAppAttribute)
+	{
+	LOGENTER("CDbLayer::AddAppAttribute()");
+	std::string insertAppAttributes;
+	
+	insertAppAttributes = "INSERT INTO AppRegistrationInfo(AppUid,ComponentId,AppFile,TypeId,Attributes,Hidden,Embeddable,Newfile,Launch,GroupName,DefaultScreenNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?);";
+	std::auto_ptr<CStatement> stmtAppAttribute(iScrDbHandler->PrepareStatement(insertAppAttributes));
+
+	stmtAppAttribute->BindInt64(2, aComponentId);
+	int appUid = 0;
+	std::string appfile;
+	for(ApplicationAttributeIterator applicationAttributeIter = aAppAttribute.begin(); applicationAttributeIter != aAppAttribute.end() ; ++applicationAttributeIter )
+		{
+		if (applicationAttributeIter->iName == L"AppUid")
+			{
+			LOGINFO("CDbLayer::AddAppAttribute()- appuid");
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(1, intValue);
+			appUid = intValue;
+			}
+		else if (applicationAttributeIter->iName == L"AppFile")
+			{
+			stmtAppAttribute->BindStr(3, applicationAttributeIter->iValue);
+			if (applicationAttributeIter->iValue.length() == 0)
+				{
+				std::string errMsg = "Invalid app file.";
+				LOGERROR(errMsg);
+				throw CException(errMsg,ExceptionCodes::ESqlArgumentError);
+				}
+			
+			}
+		else if (applicationAttributeIter->iName == L"TypeId")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(4, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"Attributes")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(5, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"Hidden")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(6, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"Embeddable")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(7, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"Newfile")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(8, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"Launch")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(9, intValue);
+			}
+		else if (applicationAttributeIter->iName == L"GroupName")
+			{
+			stmtAppAttribute->BindStr(10, applicationAttributeIter->iValue);
+			}
+		else if (applicationAttributeIter->iName == L"DefaultScreenNumber")
+			{
+			TInt64 intValue = Util::WideCharToInt64(applicationAttributeIter->iValue.c_str());
+			stmtAppAttribute->BindInt64(11, intValue);
+			}
+		else
+			{
+			std::string errMsg = "Invalid application attribute.";
+			LOGERROR(errMsg);
+			throw CException(errMsg,ExceptionCodes::ESqlArgumentError);
+			}
+		}
+
+		try
+		{
+			stmtAppAttribute->ExecuteStatement();
+			stmtAppAttribute->Reset();
+		}
+		catch(CException& aException)
+		{
+			LOGERROR(aException.GetMessageA());
+			LOGERROR("AppUid Already Present in Database");
+		}
+
+	LOGEXIT("CDbLayer::AddAppAttribute()");
+	return appUid;
+	}
+
+void CDbLayer::AddFileOwnershipInfo( int aAppUid, const std::vector<std::wstring>& aFileOwnershipInfo)
+	{
+	LOGENTER("CDbLayer::AddFileOwnershipInfo()");
+	std::string insertFileOwnershipInfo;
+	
+	for(ConstWstringIterator cWstringIter = aFileOwnershipInfo.begin(); cWstringIter != aFileOwnershipInfo.end() ; ++cWstringIter )
+		{  
+		insertFileOwnershipInfo = "INSERT INTO FileOwnershipInfo(AppUid,FileName) VALUES(?,?);";
+		std::auto_ptr<CStatement> stmtFileOwnershipInfo(iScrDbHandler->PrepareStatement(insertFileOwnershipInfo));
+		
+		stmtFileOwnershipInfo->BindInt64(1, aAppUid);
+		stmtFileOwnershipInfo->BindStr(2, *cWstringIter);
+			
+		stmtFileOwnershipInfo->ExecuteStatement();
+		stmtFileOwnershipInfo->Reset();
+		}
+	LOGEXIT("CDbLayer::AddFileOwnershipInfo()");
+	}
+
+void CDbLayer::AddServiceInfo( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo>& aApplicationServiceInfo)
+	{
+	LOGENTER("CDbLayer::AddServiceInfo()");
+	std::string insertServiceInfo;
+	
+	for(ApplicationServiceInfoIterator serviceInfoIter = aApplicationServiceInfo.begin(); serviceInfoIter != aApplicationServiceInfo.end() ; ++serviceInfoIter )
+		{  
+		insertServiceInfo = "INSERT INTO ServiceInfo(AppUid,Uid) VALUES(?,?);";
+		std::auto_ptr<CStatement> stmtServiceInfo(iScrDbHandler->PrepareStatement(insertServiceInfo));
+		
+		stmtServiceInfo->BindInt64(1, aAppUid);
+		stmtServiceInfo->BindInt64(2, serviceInfoIter->iUid);
+		stmtServiceInfo->ExecuteStatement();
+		stmtServiceInfo->Reset();
+		
+		int serviceId = iScrDbHandler->LastInsertedId();
+		std::string insertDataType;
+		
+		const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType>& datatype = serviceInfoIter->iDataType;
+		for(ApplicationDataTypeIterator dataTypeIter = datatype.begin(); dataTypeIter != datatype.end() ; ++dataTypeIter )
+			{  
+			insertDataType = "INSERT INTO DataType(ServiceId,Priority,Type) VALUES(?,?,?);";
+			std::auto_ptr<CStatement> stmtDataType(iScrDbHandler->PrepareStatement(insertDataType));
+			
+			stmtDataType->BindInt64(1, serviceId);
+			stmtDataType->BindInt64(2, dataTypeIter->iPriority);
+			stmtDataType->BindStr(3, dataTypeIter->iType);
+				
+			stmtDataType->ExecuteStatement();
+			stmtDataType->Reset();
+			}
+		}
+	LOGEXIT("CDbLayer::AddServiceInfo()");
+	}
+
+void CDbLayer::AddAppLocalizableInfo( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo>& aApplicationLocalizableInfo)
+{
+	LOGENTER("CDbLayer::AddAppLocalizableInfo()");
+	for(ApplicationLocalizableInfoIterator localizableInfoIter = aApplicationLocalizableInfo.begin(); localizableInfoIter != aApplicationLocalizableInfo.end() ; ++localizableInfoIter )
+	{
+		AddLocalizableAttribute(aAppUid, localizableInfoIter->iLocalizableAttribute);
+		int localAppInfoId = iScrDbHandler->LastInsertedId();
+		AddViewData(localAppInfoId, localizableInfoIter->iViewData);
+	}
+	LOGEXIT("CDbLayer::AddAppLocalizableInfo()");
+}
+
+void CDbLayer::AddLocalizableAttribute( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute>& aApplicationLocalizableAttribute)
+{
+	LOGENTER("CDbLayer::AddLocalizableAttribute()");
+	std::string insertAppLocalizableInfo;
+		
+	insertAppLocalizableInfo = "INSERT INTO LocalizableAppInfo(AppUid,ShortCaption,GroupName,Locale,CaptionAndIconId) VALUES(?,?,?,?,?);";
+	std::auto_ptr<CStatement> stmtAppLocalizableInfo(iScrDbHandler->PrepareStatement(insertAppLocalizableInfo));
+
+	std::string insertCaptionAndIconInfo;
+		
+	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
+	std::auto_ptr<CStatement> stmtCaptionAndIconInfo(iScrDbHandler->PrepareStatement(insertCaptionAndIconInfo));
+
+	bool captionAndIconInfoPresent = 0;
+	//for every TLocalizableAttribute
+	stmtAppLocalizableInfo->BindInt64(1, aAppUid);
+	for(LocalizableAttributeIterator localizableAttributeIter = aApplicationLocalizableAttribute.begin(); localizableAttributeIter != aApplicationLocalizableAttribute.end() ; ++localizableAttributeIter )
+	{
+		if (localizableAttributeIter->iName == L"ShortCaption")
+		{
+			stmtAppLocalizableInfo->BindStr(2, localizableAttributeIter->iValue);
+		}
+		else if(localizableAttributeIter->iName == L"GroupName")
+		{
+			stmtAppLocalizableInfo->BindStr(3, localizableAttributeIter->iValue);
+		}
+		else if(localizableAttributeIter->iName == L"Locale")
+		{
+			TInt64 intValue = Util::WideCharToInt64(localizableAttributeIter->iValue.c_str());
+			stmtAppLocalizableInfo->BindInt64(4, intValue);
+		}
+		else if(localizableAttributeIter->iName == L"Caption")
+		{
+			stmtCaptionAndIconInfo->BindStr(1, localizableAttributeIter->iValue);
+			captionAndIconInfoPresent = 1;
+		}
+		else if(localizableAttributeIter->iName == L"NumberOfIcons")
+		{
+			TInt64 intValue = Util::WideCharToInt64(localizableAttributeIter->iValue.c_str());
+			stmtCaptionAndIconInfo->BindInt64(2, intValue);
+			captionAndIconInfoPresent = 1;
+		}
+		else if(localizableAttributeIter->iName == L"IconFile")
+		{
+			stmtCaptionAndIconInfo->BindStr(3, localizableAttributeIter->iValue);
+			captionAndIconInfoPresent = 1;
+		}
+		else
+		{
+			std::string errMsg = "Invalid localizable attribute.";
+			LOGERROR(errMsg);
+			throw CException(errMsg,ExceptionCodes::ESqlArgumentError);
+		}
+	}
+	if (captionAndIconInfoPresent)
+	{
+		stmtCaptionAndIconInfo->ExecuteStatement();
+		stmtCaptionAndIconInfo->Reset();
+		int captionAndIconIdForLocalizableInfo = iScrDbHandler->LastInsertedId();
+		stmtAppLocalizableInfo->BindInt64(5, captionAndIconIdForLocalizableInfo);
+	}
+	stmtAppLocalizableInfo->ExecuteStatement();
+	stmtAppLocalizableInfo->Reset();
+	LOGEXIT("CDbLayer::AddLocalizableAttribute()");
+}
+
+
+void CDbLayer::AddViewData( int alocalAppInfoId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData>& aViewData)
+{
+	LOGENTER("CDbLayer::AddViewData()");
+
+	for(ViewDataIterator viewDataIter = aViewData.begin(); viewDataIter != aViewData.end() ; ++viewDataIter )
+	{
+		AddViewDataAttributes(alocalAppInfoId, viewDataIter->iViewDataAttributes);
+	}
+
+	LOGEXIT("CDbLayer::AddViewData()");
+}
+
+
+void CDbLayer::AddViewDataAttributes( int alocalAppInfoId, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes>& aViewDataAttribute)
+	{
+	LOGENTER("CDbLayer::AddViewData()");
+	std::string insertViewData;
+
+	insertViewData = "INSERT INTO ViewData(LocalAppInfoId,Uid,ScreenMode,CaptionAndIconId) VALUES(?,?,?,?);";
+	std::auto_ptr<CStatement> stmtViewData(iScrDbHandler->PrepareStatement(insertViewData));
+
+	std::string insertCaptionAndIconInfo;
+		
+	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
+	std::auto_ptr<CStatement> stmtCaptionAndIconInfo(iScrDbHandler->PrepareStatement(insertCaptionAndIconInfo));
+
+	bool captionAndIconInfoPresent = 0;
+	//for every TViewData
+	stmtViewData->BindInt64(1, alocalAppInfoId);
+
+	for(ViewDataAttributeIterator viewDataIter = aViewDataAttribute.begin(); viewDataIter != aViewDataAttribute.end() ; ++viewDataIter )
+		{
+		if (viewDataIter->iName == L"Uid")
+			{
+			TInt64 intValue = Util::WideCharToInt64(viewDataIter->iValue.c_str());
+			stmtViewData->BindInt64(2, intValue);
+			}
+		else if(viewDataIter->iName == L"ScreenMode")
+			{
+			TInt64 intValue = Util::WideCharToInt64(viewDataIter->iValue.c_str());
+			stmtViewData->BindInt64(3, intValue);
+			}
+		else if(viewDataIter->iName == L"Caption")
+			{
+			stmtCaptionAndIconInfo->BindStr(1, viewDataIter->iValue);
+			captionAndIconInfoPresent = 1;
+			}
+		else if(viewDataIter->iName == L"NumberOfIcons")
+			{
+			TInt64 intValue = Util::WideCharToInt64(viewDataIter->iValue.c_str());
+			stmtCaptionAndIconInfo->BindInt64(2, intValue);
+			captionAndIconInfoPresent = 1;
+			}
+		else if(viewDataIter->iName == L"IconFile")
+			{
+			stmtCaptionAndIconInfo->BindStr(3, viewDataIter->iValue);
+			captionAndIconInfoPresent = 1;
+			}
+		else
+			{
+			std::string errMsg = "Invalid view data attribute.";
+			LOGERROR(errMsg);
+			throw CException(errMsg,ExceptionCodes::ESqlArgumentError);
+			}
+		}
+	if (captionAndIconInfoPresent)
+		{
+		stmtCaptionAndIconInfo->ExecuteStatement();
+		stmtCaptionAndIconInfo->Reset();
+		int captionAndIconIdForViewData = iScrDbHandler->LastInsertedId();
+		stmtViewData->BindInt64(4, captionAndIconIdForViewData);
+		}
+	stmtViewData->ExecuteStatement();
+	stmtViewData->Reset();
+	LOGEXIT("CDbLayer::AddViewData()");
+	}
+
+void CDbLayer::AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty>& aApplicationProperty)
+	{
+	LOGENTER("CDbLayer::AddProperty()");
+	std::string insertApplicationProperty;
+
+	for(ApplicationPropertyIterator appPropertyIter = aApplicationProperty.begin(); appPropertyIter != aApplicationProperty.end() ; ++appPropertyIter )
+		{  
+
+		insertApplicationProperty = "INSERT INTO AppProperties(AppUid,Locale,Name,ServiceUid,IntValue,StrValue,IsStr8Bit) VALUES(?,?,?,?,?,?,?);";
+		std::auto_ptr<CStatement> stmtAppProperty(iScrDbHandler->PrepareStatement(insertApplicationProperty));
+		
+		stmtAppProperty->BindInt64(1, aAppUid);
+		stmtAppProperty->BindInt(2, appPropertyIter->iLocale);
+		stmtAppProperty->BindStr(3, appPropertyIter->iName);
+		stmtAppProperty->BindInt(4, appPropertyIter->iServiceUid);
+		stmtAppProperty->BindInt(5, appPropertyIter->iIntValue);
+
+		if(appPropertyIter->iIsStr8Bit)
+			{
+			std::string str = Util::wstring2string(appPropertyIter->iStrValue);
+			std::string decodedString = Util::Base64Decode(str);
+			stmtAppProperty->BindBinary(6, str);
+			}
+		else
+			{
+			stmtAppProperty->BindStr(6, appPropertyIter->iStrValue);
+			}
+		
+		stmtAppProperty->BindInt(7, appPropertyIter->iIsStr8Bit);
+
+		stmtAppProperty->ExecuteStatement();
+		stmtAppProperty->Reset();
+		}
+	LOGEXIT("CDbLayer::AddProperty()");
 	}
 
 void CDbLayer::ExecuteStatement(const std::string& aStmtStr)

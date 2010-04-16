@@ -22,7 +22,7 @@
 */
 
 #include "scrnonrestricted.h"
-
+#include <usif/scr/appregentries.h>
 #include <usif/scr/scr.h>
 #include <scs/cleanuputils.h>
 #include <e32def.h>
@@ -164,6 +164,102 @@ void CScrNonRestrictedSecTest::RunTestL()
 	
 	CleanupStack::PopAndDestroy(&compFilesListView);
 	
+	
+	// Check sub-session APIs for InfoQueryApp		
+	
+	TUid appUid = TUid::Uid(305419896);
+	
+	HBufC* filename = NULL;
+	RRegistrationInfoForApplication AppRegInfoQueryAppSubSession;
+	AppRegInfoQueryAppSubSession.OpenL(scrSession,appUid);
+	
+	TRAP(err,AppRegInfoQueryAppSubSession.GetAppViewIconL(appUid,filename));
+	CheckFailL(err, _L("RApplicationRegistrationInfoQueryApp::GetAppViewIcon"));
+	if(NULL != filename)
+	    delete filename;
+	
+	TRAP(err,AppRegInfoQueryAppSubSession.GetAppIconL(filename));
+	CheckFailL(err, _L("RApplicationRegistrationInfoQueryApp::GetAppIcon"));
+	if(NULL != filename)
+	    delete filename;
+	
+	Usif::TApplicationCharacteristics appCharacteristics ;
+	TRAP(err,AppRegInfoQueryAppSubSession.GetAppCharacteristicsL(appCharacteristics));
+	CheckFailL(err, _L("RApplicationRegistrationInfoQueryApp::GetAppCharacteristics"));
+	
+	RPointerArray<HBufC> appOwnedFilesArray; 
+	TRAP(err,AppRegInfoQueryAppSubSession.GetAppOwnedFilesL(appOwnedFilesArray));
+	CheckFailL(err, _L("RApplicationRegistrationInfoQueryApp::GetAppOwnedFiles"));
+	    
+	
+    RRegistrationInfoForApplication infoQuerySubSession;
+    CleanupClosePushL(infoQuerySubSession); 
+    
+    infoQuerySubSession.OpenL(scrSession, appUid);
+
+    RPointerArray<Usif::CAppViewData> appViewInfoArray;
+    CleanupResetAndDestroyPushL(appViewInfoArray);   
+
+    TRAP(err,infoQuerySubSession.GetAppViewsL(appViewInfoArray));
+    CheckFailL(err, _L("RRegistrationInfoForApplication::GetAppViewsL"));
+
+    appViewInfoArray.ResetAndDestroy();
+    CleanupStack::PopAndDestroy(2,&infoQuerySubSession); 
+
+	//for RSoftwareComponentRegistryAppInfoView
+
+	CAppInfoFilter* appinfoFilter = CAppInfoFilter::NewL();
+	CleanupStack::PushL(appinfoFilter);
+	
+	RApplicationInfoView  appInfoViewsubSession;
+	CleanupClosePushL(appInfoViewsubSession);
+	TRAP(err, appInfoViewsubSession.OpenViewL(scrSession,appinfoFilter));
+	CheckFailL(err, _L("RSoftwareComponentRegistryAppInfoView::OpenAppInfoViewL"));
+	
+	RPointerArray<Usif::TAppRegInfo> appRegInfoSet;
+     
+	TRAP(err, appInfoViewsubSession.GetNextAppInfoL(5, appRegInfoSet));
+    CheckFailL(err, _L("RSoftwareComponentRegistryAppInfoView::GetNextAppInfoL"));
+ 
+	TInt count = appRegInfoSet.Count();
+	Usif::TAppRegInfo* tp=NULL;
+	for (TInt i = 0; i<count; i++ )
+	    {
+	    tp=appRegInfoSet[i];
+	    delete tp;
+	    }
+	appRegInfoSet.Close();
+	CleanupStack::PopAndDestroy(2,appinfoFilter);
+    
+	//For GetAppServiceInfo
+	RApplicationRegistrationInfo appRegInfoQuerySubSession;
+    CleanupClosePushL(appRegInfoQuerySubSession); 
+    appRegInfoQuerySubSession.OpenL(scrSession);
+	
+	RPointerArray<Usif::CServiceInfo> appServiceInfoArray;
+    CleanupResetAndDestroyPushL(appServiceInfoArray);  
+
+	CAppServiceInfoFilter* appServiceInfoFilter = CAppServiceInfoFilter::NewLC();
+
+	TRAP(err,appRegInfoQuerySubSession.GetServiceInfoL(appServiceInfoFilter, appServiceInfoArray));
+    CheckFailL(err, _L("RApplicationRegistrationInfo::GetServiceInfoL"));
+
+    CleanupStack::PopAndDestroy(3, &appRegInfoQuerySubSession); 
+
+	//GetComponentIdForAppL
+    TUid testAppUid;
+    testAppUid.iUid = 1;  
+	TRAP(err, scrSession.GetComponentIdForAppL(testAppUid));
+    CheckFailL(err, _L("RSoftwareComponentRegistry::GetComponentIdForAppL"));
+
+	//GetAppUidsForComponentL
+	TComponentId compId = 1;
+	RArray<TUid> appUids;
+	TRAP(err, scrSession.GetAppUidsForComponentL(compId, appUids));
+	CheckFailL(err, _L("RSoftwareComponentRegistry::GetAppUidsForComponentL"));
+	appUids.Close();
+    
 	CleanupStack::PopAndDestroy(&scrSession);
+        
 	}
 

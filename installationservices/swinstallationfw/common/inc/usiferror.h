@@ -26,6 +26,28 @@
 #ifndef USIFERROR_H
 #define USIFERROR_H
 
+
+namespace Usif
+	{
+
+		enum TErrorCategory {
+			ENone						= 0, // No Error
+			ELowMemory					= 1, // Low on RAM
+			ELowDiskSpace				= 2, // Low diskspace
+			ENetworkUnavailable			= 3, // Network not available
+			EInstallerBusy				= 4, // Installer is in use
+			ECorruptedPackage			= 5, // Package corrupt
+			EApplicationNotCompatible	= 6, // Not compatible
+			ESecurityError				= 7, // Security Error
+			EUnexpectedError			= 8, // Unexpected Error
+			EUserCancelled				= 9, // Install Cancelled
+			EUninstallationBlocked		= 10,// Uninstallation blocked
+			EUnknown					= 11 // Unknown error
+		};
+
+	}
+
+
 /** A general error in one of the Unified Installer Framework components. */
 const TInt KErrSifUnknown = -10300;
 

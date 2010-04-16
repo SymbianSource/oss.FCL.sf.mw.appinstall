@@ -22,7 +22,8 @@
 //  INCLUDES
 #include <e32base.h>
 #include <f32file.h>
-#include <barsc.h>
+// TODO probably removed in 10.1
+// #include <barsc.h>
 #include "dialogwatcher.h"
 
 namespace Swi
@@ -107,7 +108,7 @@ class CDialogWrapper : public CBase
 
     private: //  Data
 
-        RResourceFile iResourceFile;        
+        //RResourceFile iResourceFile;        
         RFs& iFs;        
         TInt iNoteId;  
         TInt iDisableAllNotes;

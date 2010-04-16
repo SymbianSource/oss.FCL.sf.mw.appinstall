@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -28,6 +28,7 @@
 #include "deletescrdbstep.h"
 #include "pluginmanagementsteps.h"
 #include "installloghistorysteps.h"
+#include "appreginfosteps.h"
 
 CScrTestServer* CScrTestServer::NewL()
 /**
@@ -215,7 +216,46 @@ CTestStep* CScrTestServer::CreateTestStep(const TDesC& aStepName)
   		testStep = new CScrValuesNegativeStep(*this);		
   	else if (strippedStepName == KScrOutOfMemoryStep)
   		testStep = new SCROufOfMemory(*this);
-	
+  	else if (strippedStepName == KScrAddApplicationEntry)
+  	    testStep = new CScrAddApplicationEntryStep(*this);
+  	else if (strippedStepName == KScrDeleteApplicationEntry)
+	  	testStep = new CScrDeleteApplicationEntriesStep(*this);
+	else if (strippedStepName == KSCRGetAppServicesUids)
+  	    testStep = new CSCRGetAppServicesUids(*this);
+	else if (strippedStepName == KSCRGetAppForDataType)
+	    testStep = new CSCRGetAppForDataType(*this);	    
+	else if (strippedStepName == KSCRGetAppForDataTypeAndService)
+	    testStep = new CSCRGetAppForDataTypeAndService(*this);	    
+	else if (strippedStepName == KSCRGetDefaultScreenNumber)
+	    testStep = new CSCRGetDefaultScreenNumber(*this);
+    else if (strippedStepName == KSCRGetNumberOfDefinedIcons)
+        testStep = new CSCRGetNumberOfDefinedIcons(*this);	    
+    else if (strippedStepName == KSCRGetApplicationLanguage)
+        testStep = new CSCRGetApplicationLanguage(*this);	
+    else if (strippedStepName == KScrGetAppOwnedFilesEntry)
+        testStep = new CScrGetAppOwnedFilesEntryStep(*this);
+    else if (strippedStepName == KScrGetAppCapabilityEntry)
+        testStep = new CScrGetAppCharacteristicsEntryStep(*this);
+    else if (strippedStepName == KScrGetAppIconEntry)
+        testStep = new CScrGetAppIconEntryStep(*this);
+    else if (strippedStepName == KScrGetAppViewIconEntry)
+        testStep = new CScrGetAppViewIconEntryStep(*this);	
+	else if (strippedStepName == KScrGetAppViewInfoStep)
+            testStep = new CScrGetAppViewsStep(*this);
+	else if (strippedStepName == KScrAppViewSubsessionStep)
+  		testStep = new CAppInfoView(*this);
+    else if (strippedStepName == KScrGetAppServiceInfoStep)
+        testStep = new CScrGetAppServiceInfoStep(*this);
+    else if (strippedStepName == KScrGetComponentIdForAppStep)
+        testStep = new CScrGetComponentIdForApp(*this);
+    else if (strippedStepName == KScrGetAppUidsForComponentStep)
+        testStep = new CScrGetAppUidsForComponent(*this);
+	else if (strippedStepName == KScrAddConcurrentApplicationEntryStep)
+        testStep = new CScrAddConcurrentApplicationEntryStep(*this);	
+    else if (strippedStepName == KScrGetAppInfoStep)
+        testStep = new CScrGetAppInfoStep(*this);
+  	
+
 	if(performanceStep)
 		{
 		CScrTestStep *scrTestStep = dynamic_cast<CScrTestStep*>(testStep);

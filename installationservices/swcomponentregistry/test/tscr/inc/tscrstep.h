@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -29,6 +29,7 @@
 #include <scs/oomteststep.h>
 #include <usif/usifcommon.h>
 #include <usif/scr/scr.h>
+#include <usif/scr/appreginfo.h>
 
 class CScrTestServer;
 
@@ -92,14 +93,32 @@ protected:
 	TBool GetScomoStateFromConfigL(Usif::TScomoState& aScomoState, const TDesC& aAttributeName);
 	TInt GetSetSizeFromConfigL();
 	TBool Get64BitIntegerFromConfigL(const TDesC& aConfigKeyName, TInt64& aRetVal);
+	Usif::CApplicationRegistrationData* GetAppRegInfoFromConfigLC();
+	void GetAppOwnedFilesL(RPointerArray<HBufC>& aOwnedFileArray);
+	void GetAppServiceInfoL(RPointerArray<Usif::CServiceInfo>& aServiceInfoArray);
+	void GetAppLocalizableInfoL(RPointerArray<Usif::CLocalizableAppInfo>& aLocalizableAppInfoArray);
+	void GetAppOpaqueDataInfoL(RPointerArray<Usif::COpaqueData>& aAppOpaqueDataInfoArray);
+	void GetServiceOpaqueDataInfoL(RPointerArray<Usif::COpaqueData>& aServiceOpaqueDataInfoArray, TInt aServiceOpaqueDataInfoCount, TInt aStartingIndex);
+	Usif::TComponentId GetCompIdFromConfigL();
+    TBool GetUidFromConfig(const TDesC& aSectName, const TDesC& aKeyName, TUid& aUid);
+	
+	TUid GetServiceUidL();
+	void GetAppUidL(TUid& aAppUid);
+	void GetViewDataInfoFromConfigL(RPointerArray<Usif::CAppViewData>& aAppViewInfoArray);
+	TBool NotEqual(const Usif::CCaptionAndIconInfo *aLhsEntry, const Usif::CCaptionAndIconInfo *aRhsEntry) const;
+	TBool NotEqualL(const RPointerArray<Usif::CServiceInfo>& aLhsEntry, const RPointerArray<Usif::CServiceInfo>& aRhsEntry) const;
 	
 	// Read component names from config file and add a new component
-	Usif::TComponentId AddNonLocalisableComponentL();
+	Usif::TComponentId AddNonLocalisableComponentL(Usif::RSoftwareComponentRegistry& aScrSession);
 	
 	// Read filter properties from config file
 	Usif::CComponentFilter* ReadComponentFilterFromConfigLC();
 	void ReadFilterPropertiesL(Usif::CComponentFilter* aFilter, TInt aPropertiesCount);
+	// Read Application info filter from config file
+	void ReadAppInfoFilterFromConfigL(Usif::CAppInfoFilter** aFilter);
+	Usif::TAppRegInfo* CScrTestStep::GetAppInfoFromConfigL(TBool aIsSingle , TInt aIndex=0 );
 	void StartTimer();
+	
 	
 protected:
 	CScrTestServer& iParent;

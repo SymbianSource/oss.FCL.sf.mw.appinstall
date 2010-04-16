@@ -161,6 +161,7 @@ const TInt CSisLauncherServer::iRanges[iRangeCount] =
 	// Range of utility services for Post manufacture management of Layered Execution Environemnts
 	EParseSwTypeRegFile,
 	EUnregisterSifLauncherMimeTypes,
+	EAsyncParseResourceFileSize,
 #endif
 	ESeparatorEndAll,
 	};
@@ -171,16 +172,16 @@ const TUint8 CSisLauncherServer::iElementsIndex[iRangeCount] =
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	1, // Utility services used by InstallServer
 	2, // Utility services used by SisRegistryServer
-#endif
+	CPolicyServer::EAlwaysPass,
+#endif	
 	CPolicyServer::ENotSupported,
 	};
-
 const CPolicyServer::TPolicyElement CSisLauncherServer::iPolicyElements[] = 
 	{
 	{_INIT_SECURITY_POLICY_C1(ECapabilityTCB), CPolicyServer::EFailClient},
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	{_INIT_SECURITY_POLICY_S0(KInstallServerUid), CPolicyServer::EFailClient},
-	{_INIT_SECURITY_POLICY_S0(KSisRegistryServerUid), CPolicyServer::EFailClient},
+	{_INIT_SECURITY_POLICY_S0(KSisRegistryServerUid), CPolicyServer::EFailClient},	
 #endif
 	};
 
@@ -265,8 +266,6 @@ void CSisLauncherServer::RunExecutableL(const TDesC& aFileName, TBool aWait)
 	if (aWait)
 		HandleShutdownL(threadId, ETrue);
 	}
-
-
 
 void CSisLauncherServer::ForceShutdownL(TUid aUid)
 	{
@@ -553,6 +552,22 @@ void CSisLauncherServer::NotifyNewAppsL(const RPointerArray<TDesC>& aFiles)
 
 	CleanupStack::PopAndDestroy();
 	}
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void CSisLauncherServer::NotifyNewAppsL(const RPointerArray<Usif::CApplicationRegistrationData>& aApplicationRegistrationData)
+	{
+	RApaLsSession apaSession;
+	User::LeaveIfError(apaSession.Connect());
+	CleanupClosePushL(apaSession);
+
+	// UI frameworks advise ignoring the return code
+	// Uncomment below line when apparc has implemented the following
+	// apaSession.ForceRegistration(aApplicationRegistrationData);
+	TInt appCount = aApplicationRegistrationData.Count(); //TODO: A fix for compiler warning, to be removed
+
+	CleanupStack::PopAndDestroy();
+	}
+#endif
 #endif
 
 	

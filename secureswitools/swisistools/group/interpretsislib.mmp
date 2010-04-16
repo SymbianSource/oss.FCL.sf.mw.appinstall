@@ -28,6 +28,7 @@ USERINCLUDE 	../../swianalysistoolkit/source/common
 USERINCLUDE		../source/xmlparser
 USERINCLUDE 	../source/common
 USERINCLUDE 	../source/dbmanager
+USERINCLUDE 	../source/rscparser
 #endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
@@ -76,7 +77,22 @@ SOURCE			dbhelper.cpp
 SOURCEPATH		../source/common
 SOURCE			util.cpp
 
-#endif 
+SOURCEPATH		../source/rscparser
+SOURCE			barsc2.cpp
+SOURCE			barscimpl.cpp
+SOURCE			commontypes.cpp
+SOURCE			barsread2.cpp
+SOURCE			barsreadimpl.cpp
+SOURCE			parse.cpp
+SOURCE			apmstd.cpp
+SOURCE			apaid.cpp
+SOURCE			aplapplistitem.cpp
+SOURCE			aplappinforeader.cpp
+SOURCE			uidtype.cpp
+SOURCE			dirparse.cpp
+SOURCE			apsecutils.cpp
+
+#endif
 
 #ifndef TOOLS2_LINUX
 MACRO	_UNICODE _CONSOLE _STLP_THREADS _WIN32 UNICODE __GNUG__ XML_LIBRARY

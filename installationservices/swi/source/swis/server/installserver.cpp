@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -336,8 +336,40 @@ inline void CInstallServerShutdown::Start()
 // Initiate server exit when the timer expires
 void CInstallServerShutdown::RunL()
 	{
+    DeleteTempRscFilesL();
 	CActiveScheduler::Stop();
 	}
+
+void CInstallServerShutdown::DeleteTempRscFilesL()
+    {
+    DEBUG_PRINTF(_L8("Deleting temporary application registration rsource files"));
+    TChar systemDrive = RFs::GetSystemDriveChar();
+    TFileName tempResourceFileLocation; 
+    _LIT(KTempRscFileLocation, "%c:\\resource\\install\\temp\\");
+    tempResourceFileLocation.Format(KTempRscFileLocation, TUint(systemDrive));
+    RFs fileSession;    
+    User::LeaveIfError(fileSession.Connect());
+    CleanupClosePushL(fileSession);   
+    CFileMan* fileManager = NULL;
+    TRAPD(err, fileManager = CFileMan::NewL(fileSession))
+    if (KErrNone != err)
+        {
+        DEBUG_PRINTF2(_L8("Can not delete temp app rsc files %d"), err);
+        if(NULL != fileManager)
+            delete fileManager;
+        CleanupStack::Pop(&fileSession);
+        fileSession.Close();  
+        return;
+        }        
+    
+    err = fileManager->RmDir(tempResourceFileLocation);
+    if (KErrNone != err)
+        DEBUG_PRINTF2(_L8("Deleting temp app rsc file resulted in an error %d"), err);
+    
+    delete fileManager;
+    CleanupStack::Pop(&fileSession);
+    fileSession.Close();    
+    }
 
 //
 // CInstallServer

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -86,9 +86,12 @@ namespace Usif
 		TBool LoadCompInfoNodeBoolParamL(const TDesC& aNodePrefix, const TDesC& aParamName, TBool aMandatory = ETrue);
 		CComponentInfo::CNode* LoadCompInfoNodeLC(const TDesC& aNodeName);
 		TBool CompareCompInfoNodeL(const CComponentInfo::CNode& aExpectedNode, const CComponentInfo::CNode& aObtainedNode);
-
+		TBool CompareAppInfoL(const CComponentInfo::CNode& aExpectedNode, const CComponentInfo::CNode& aObtainedNode);
 		TBool iOperationByFileHandle;
 		TBool iCompareMaxInstalledSize;
+		TBool iCompareIconFileSize;
+		RArray<TInt> iIconFileSizes;
+		TInt iconIndex;
 		};
 
 	class CSifInstallStep : public CSifOperationStep

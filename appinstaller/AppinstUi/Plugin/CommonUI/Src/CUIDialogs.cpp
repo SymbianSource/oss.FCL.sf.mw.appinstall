@@ -28,7 +28,7 @@
 #include <SWInstCommonUI.rsg>
 #include <aknmessagequerydialog.h>
 #include <hlplch.h>
-#include <csxhelp/am.hlp.hrh>
+//#include <csxhelp/am.hlp.hrh>
 #include <coehelp.h>
 #include <featmgr.h>
 #include <sysutil.h>
@@ -772,7 +772,7 @@ void CCUIDialogs::SetProgressDialogCallback( MCUIWaitDialogCallback* aCallback )
 //
 TInt CCUIDialogs::ShowSecurityWarningHelp( TAny* aPtr )
     {
-    TRAP_IGNORE( reinterpret_cast<CCUIDialogs*>(aPtr)->LaunchHelpL( KAM_HLP_INSTALL_UNTRUSTED ) );    
+    //TRAP_IGNORE( reinterpret_cast<CCUIDialogs*>(aPtr)->LaunchHelpL( KAM_HLP_INSTALL_UNTRUSTED ) );    
 
     return KErrNone;    
     }

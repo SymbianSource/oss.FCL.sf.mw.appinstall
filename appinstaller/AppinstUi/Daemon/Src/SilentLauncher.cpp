@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -44,14 +44,49 @@ CSilentLauncher::CSilentLauncher( RFs& aFs )
 //
 void CSilentLauncher::ConstructL()
     {
-    iOptions.iUpgrade = SwiUI::EPolicyNotAllowed;
-    iOptions.iOCSP = SwiUI::EPolicyNotAllowed;
-#ifndef RD_MULTIPLE_DRIVE 
-    iOptions.iDrive = 'E';
-#endif       
-    iOptions.iUntrusted = SwiUI::EPolicyNotAllowed; 
-    iOptions.iCapabilities = SwiUI::EPolicyNotAllowed;    
-    iOptionsPckg = iOptions;    
+    iConnected = EFalse;
+    
+    iSifOptions = Usif::COpaqueNamedParams::NewL();
+    iSifResults = Usif::COpaqueNamedParams::NewL();
+    
+    // Set needed parameters for silent install.
+    iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue ); 
+/*    
+    iSifOptions->AddIntL( Usif::KSifInParam_PerformOCSP, EFalse );   
+    // Note if upgrade is allowed, see NeedsInstallingL function.
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, EFalse );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, EFalse );
+    iSifOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, EFalse ); 
+    // Defined for the install.
+    iSifOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, ETrue );          
+    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue );   
+    iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );     
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
+*/    
+// TODO: is this defined in USIF?    
+    //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );
+    
+// TODO: remove old params.
+    /*
+    // Old swinstdefs.inl defines for install.   
+    iUpgrade( EPolicyAllowed ),
+    iOptionalItems( EPolicyAllowed ),
+    iOCSP( EPolicyAllowed ),    
+    iIgnoreOCSPWarnings( EPolicyAllowed ),
+    iUntrusted( EPolicyNotAllowed ),
+    iPackageInfo( EPolicyAllowed ),
+    iCapabilities( EPolicyAllowed ),
+    iKillApp( EPolicyAllowed ),
+    iDownload( EPolicyAllowed ),
+    iOverwrite( EPolicyAllowed ),
+    iDrive( 'C' ),
+    iLang( ELangNone ),
+    iUsePhoneLang( ETrue ),
+    iUpgradeData( EPolicyAllowed )
+    */        
     }
 
 // -----------------------------------------------------------------------------
@@ -67,11 +102,21 @@ CSilentLauncher* CSilentLauncher::NewL( RFs& aFs )
     CleanupStack::Pop( self );
     return self;    
     }
-    
-// Destructor
+
+// -----------------------------------------------------------------------------
+// CSilentLauncher::~CSilentLauncher()
+// Destructor.
+// -----------------------------------------------------------------------------
+//    
 CSilentLauncher::~CSilentLauncher()
     {
-    iLauncher.Close();
+    delete iSifOptions;
+    delete iSifResults;
+    
+    if ( iConnected )
+        {
+        iSWInstallerFW.Close();
+        }
     }
 
 // -----------------------------------------------------------------------------
@@ -82,23 +127,33 @@ CSilentLauncher::~CSilentLauncher()
 //
 void CSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aStatus )
     {
+    FLOG( _L("Daemon: CSilentLauncher::InstallL START") );
+    
     if ( !iConnected )
-        {
-        FLOG( _L("Daemon: Connect to installer server") );    
-        User::LeaveIfError( iLauncher.Connect() );    
-        FLOG( _L("Daemon: Connected to installer server") );
-        iConnected = ETrue;            
-        }
+         {
+         FLOG( _L("Daemon: Connect to sif installer server") );    
+         User::LeaveIfError( iSWInstallerFW.Connect() );             
+         iConnected = ETrue;            
+         }
         
-#ifdef RD_MULTIPLE_DRIVE 
-    FLOG( _L("Daemon: InstallL: Set drive for install") );   
-    // Set drive for installer.          
-    iOptions.iDrive = aFile[0];
-#endif                
-
-    // Launch the installation
+    // Set drive for installer.
+//    delete iDrive  
+//    iDrive = NULL;
+//    iDrive = HBufC::NewLC( 8 );
+//    TPtr drivePtr = iDrive->Des();
+//    drivePtr.Append( aFile[0] );
+    
+// TODO: how is this used? Is this drive letter?      
+//    iSifOptions->AddStringL( Usif::KSifInParam_Drive , *drive );
+//          
     FLOG( _L("Daemon: Launch install") );
-    iLauncher.SilentInstall( aStatus, aFile, iOptionsPckg );
+    iSWInstallerFW.Install( aFile, 
+                           *iSifOptions, 
+                           *iSifResults,
+                           aStatus,
+                           ETrue );
+    
+    FLOG( _L("Daemon: CSilentLauncher::InstallL END") );       
     }
        
 // -----------------------------------------------------------------------------
@@ -109,8 +164,8 @@ void CSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aStatus )
 // 
 void CSilentLauncher::Cancel()
     {
-    FLOG( _L("Daemon: Install cancel requested") );        
-    iLauncher.CancelAsyncRequest( SwiUI::ERequestSilentInstall );   
+    FLOG( _L("Daemon: Cancel Install operation") );            
+    iSWInstallerFW.CancelOperation();
     }
 
 //  End of File  

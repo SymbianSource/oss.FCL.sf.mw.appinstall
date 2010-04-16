@@ -21,6 +21,7 @@
 PRINT Run Software Component Registry (SCR) API Tests
 
 // Load Suite
+LOAD_SUITE tSisRegistryTest
 LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
 SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
 
@@ -28,10 +29,11 @@ SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
 RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
 
 //! @SYMTestCaseID		API-SEC-SCR-API-0001
-//! @SYMTestCaseDesc 		Add a single software component with component name and vendor
+//! @SYMTestCaseDesc 		Change current locale to english as some test cases assume it & Add a single software component with component name and vendor
 
 START_TESTCASE API-SEC-SCR-API-0001
 
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
 RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
 RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini common_component_attributes
 
@@ -1454,8 +1456,8 @@ RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini test76_component_w
 // Register same files to both components, while setting the flag to false for the first component
 RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_files_consider_drives_false_test76
 RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_files_consider_drives_true_test76
-// Check that filter on components which have files on drive C does not return component 1, but returns component 2
-RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveC_test76
+// Check that filter on components which have files on drive P does not return component 1, but returns component 2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveP_test76
 // Verify that files were registered to the first component
 RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini component_files_test76
 // Verify that the first component does not list any registered drives

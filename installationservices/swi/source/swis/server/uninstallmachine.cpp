@@ -418,3 +418,34 @@ void CUninstallMachine::SignalCompletedL()
 	HandleInstallationEventL(iPlan, EEventCompletedUnInstall);
 	}
 	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void CUninstallMachine::PostJournalFinalizationL(TInt)
+    {    
+    if (!iPlan)
+        {
+        return;
+        }
+    
+    DEBUG_PRINTF(_L8("Uninstall Machine - PostJournalFinalization"));
+    RSisLauncherSession launcher;
+        
+    if (launcher.Connect() != KErrNone)
+        {
+        DEBUG_PRINTF(_L8("Uninstall Machine - Failed to connect to SisLauncher"));
+        return;
+        }
+    CleanupClosePushL(launcher);
+        
+    //Notify apparc for the the change in the Applications
+    RArray<TAppUpdateInfo> affectedApps;
+    CleanupClosePushL(affectedApps);
+    iPlan->GetAffectedApps(affectedApps);
+    if (affectedApps.Count() > 0)
+        {
+        launcher.NotifyNewAppsL(affectedApps);
+        }
+    affectedApps.Close();
+    CleanupStack::PopAndDestroy(2, &launcher);  //affectedApps
+    }
+#endif
+

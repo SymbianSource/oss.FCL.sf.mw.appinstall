@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -384,6 +384,7 @@ CSifGetComponentInfoStep::CSifGetComponentInfoStep() : iCompareMaxInstalledSize(
 */
 	{
 	SetTestStepName(KSifGetComponentInfoStep);
+	iconIndex = 0;
 	}
 
 namespace
@@ -499,6 +500,53 @@ CComponentInfo::CNode* CSifGetComponentInfoStep::LoadCompInfoNodeLC(const TDesC&
 	TInt authenticity(LoadCompInfoNodeIntParamL(aNodeName, KTe_Authenticity));
 	TInt size(LoadCompInfoNodeIntParamL(aNodeName, KTe_MaxInstalledSize));
 	TBool hasexe(LoadCompInfoNodeBoolParamL(aNodeName, KTe_HasExecutable));
+	TBool driveSelectionRequired(LoadCompInfoNodeBoolParamL(aNodeName, KTe_DriveSelectionRequired));
+	TInt noOfApps(LoadCompInfoNodeIntParamL(aNodeName,KTe_NumberOfApplications));
+	
+	TBuf<20> appUidTxt;
+	TBuf<20> appFileNameTxt;
+	TBuf<20> appGroupNameTxt;
+	TBuf<20> appIconFileNameTxt;
+	TBuf<20> appIconFileSize;
+	const TInt MAX_INT_STR_LEN = 8;
+    TBuf<MAX_INT_STR_LEN> integerAppendStr;
+    RPointerArray<Usif::CComponentInfo::CApplicationInfo> applications;
+	
+	for(TInt index = 0; index < noOfApps ; index++)
+	   {
+	   integerAppendStr.Format(_L("%d"), index);
+	   appUidTxt = KTe_ApplicationUid; 
+	   appUidTxt.Append(integerAppendStr);
+	   TInt val = 0;
+	   HBufC* name = CompInfoParamNameLC(aNodeName, appUidTxt);	   
+	   GetHexFromConfig(ConfigSection(),*name, val);
+	   TUid appuid = TUid::Uid(val);
+	   CleanupStack::PopAndDestroy(name);
+	   
+	   appFileNameTxt=KTe_ApplicationName;
+	   appFileNameTxt.Append(integerAppendStr);
+	   TPtrC appFileName(LoadCompInfoNodeStringParamL(aNodeName,appFileNameTxt));
+	   
+	   appGroupNameTxt=KTe_ApplicationGroupName;
+	   appGroupNameTxt.Append(integerAppendStr);
+	   TPtrC appGroupName(LoadCompInfoNodeStringParamL(aNodeName,appGroupNameTxt));
+	   
+	   appIconFileNameTxt=KTe_ApplicationIconFileName;
+	   appIconFileNameTxt.Append(integerAppendStr);
+	   TPtrC appIconFileName(LoadCompInfoNodeStringParamL(aNodeName,appIconFileNameTxt));
+	   	   
+	   Usif::CComponentInfo::CApplicationInfo* app = NULL;
+	   app = Usif::CComponentInfo::CApplicationInfo::NewLC(appuid, appFileName, appGroupName, appIconFileName);
+	   
+	   appIconFileSize = KTe_ApplicationIconFileSize;
+	   appIconFileSize.Append(integerAppendStr);
+	   TInt fileSize(LoadCompInfoNodeIntParamL(aNodeName,appIconFileSize));
+	   iIconFileSizes.Append(fileSize);
+	   
+	   applications.AppendL(app);
+	   CleanupStack::Pop(app);
+	   }	
+	
 	
 	TInt packedCaps(LoadCompInfoNodeIntParamL(aNodeName, KTe_UserGrantableCaps));
 	TCapabilitySet capSet;
@@ -508,7 +556,8 @@ CComponentInfo::CNode* CSifGetComponentInfoStep::LoadCompInfoNodeLC(const TDesC&
 	CComponentInfo::CNode* node = CComponentInfo::CNode::NewLC(swType, name, version, vendor,
 					static_cast<TScomoState>(scomoState), static_cast<TInstallStatus>(installStatus),
 					static_cast<TComponentId>(componentId), globalId, static_cast<TAuthenticity>(authenticity),
-					capSet, size, hasexe);
+					capSet, size, hasexe, driveSelectionRequired, &applications);
+	
 	
 	// Load children
 	TInt numChildren(LoadCompInfoNodeIntParamL(aNodeName, KTe_CompInfoNumChildren, EFalse));
@@ -526,12 +575,79 @@ CComponentInfo::CNode* CSifGetComponentInfoStep::LoadCompInfoNodeLC(const TDesC&
 		
 		CleanupStack::PopAndDestroy(childNodeName);
 		}
-
+	applications.Close();
 	return node;
 	}
 
+
+TBool CSifGetComponentInfoStep::CompareAppInfoL(const CComponentInfo::CNode& aExpectedNode, const CComponentInfo::CNode& aObtainedNode)
+    {
+    RPointerArray<Usif::CComponentInfo::CApplicationInfo> obtainedApplicationInfo; 
+    RPointerArray<Usif::CComponentInfo::CApplicationInfo> expectedApplicationInfo;
+    obtainedApplicationInfo = aObtainedNode.Applications();
+    expectedApplicationInfo = aExpectedNode.Applications();
+    TInt obtainedApplicationInfoCount = obtainedApplicationInfo.Count();
+    TInt expectedApplicationInfoCount = expectedApplicationInfo.Count();       
+    
+    if(obtainedApplicationInfoCount != expectedApplicationInfoCount)
+        {
+        INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application Info Count: %d/%d"), expectedApplicationInfoCount, obtainedApplicationInfoCount);
+        return EFalse;
+        }
+    if(0 != expectedApplicationInfoCount)
+        {                   
+        for(TInt i=0 ; i < expectedApplicationInfoCount ; i++)
+            {
+            
+            if(expectedApplicationInfo[i]->AppUid() != obtainedApplicationInfo[i]->AppUid())
+               {
+               INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application UID: 0x%08x/0x%08x"), expectedApplicationInfo[i]->AppUid(), obtainedApplicationInfo[i]->AppUid());
+               return EFalse;
+               }
+                
+            if(expectedApplicationInfo[i]->Name().Compare(obtainedApplicationInfo[i]->Name()))
+               {
+               INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application Name: %S/%S"), &expectedApplicationInfo[i]->Name(), &obtainedApplicationInfo[i]->Name());
+               return EFalse;
+               }
+    
+            if(expectedApplicationInfo[i]->GroupName().Compare(obtainedApplicationInfo[i]->GroupName()))
+               {
+               INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application Group Name: %S/%S"), &expectedApplicationInfo[i]->GroupName(), &obtainedApplicationInfo[i]->GroupName());
+               return EFalse;
+               }
+            
+            _LIT(emtyString,"");
+            if(obtainedApplicationInfo[i]->IconFileName().Compare(emtyString))
+                {
+                //Opening a file server session for icon file size comparison
+                RFs fs;            
+                User::LeaveIfError(fs.Connect());
+                CleanupClosePushL(fs);       
+                TEntry entry;
+                User::LeaveIfError(fs.Entry(obtainedApplicationInfo[i]->IconFileName(),entry));  
+                CleanupStack::Pop(&fs);
+                fs.Close();
+                
+                if(iCompareIconFileSize && iIconFileSizes[iconIndex++] != entry.iSize)
+                   {
+                   INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application Icon File Size: %d/%d"), iIconFileSizes[--iconIndex], entry.iSize);                                  
+                   return EFalse;
+                   }                 
+                }
+            if(expectedApplicationInfo[i]->IconFileName().Compare(obtainedApplicationInfo[i]->IconFileName()))
+               {
+               INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Application Icon File Name: %S/%S"), &expectedApplicationInfo[i]->IconFileName(), &obtainedApplicationInfo[i]->IconFileName());
+               return EFalse;
+               }            
+            }
+        }
+    return ETrue;
+    }
+
+
 TBool CSifGetComponentInfoStep::CompareCompInfoNodeL(const CComponentInfo::CNode& aExpectedNode, const CComponentInfo::CNode& aObtainedNode)
-	{
+	{	
 	INFO_PRINTF2(_L("Checking CComponentInfo for component: '%S'"), &aExpectedNode.ComponentName());
 	if (aExpectedNode.SoftwareTypeName() != aObtainedNode.SoftwareTypeName())
 		{
@@ -605,6 +721,18 @@ TBool CSifGetComponentInfoStep::CompareCompInfoNodeL(const CComponentInfo::CNode
 		return EFalse;
 		}
 	
+	if (aExpectedNode.DriveSeletionRequired() != aObtainedNode.DriveSeletionRequired())
+	    {
+	    INFO_PRINTF3(_L("CComponentInfo doesn't match: expected/obtained Drive selection required: %d/%d"), aExpectedNode.DriveSeletionRequired(), aObtainedNode.DriveSeletionRequired());
+	    return EFalse;
+	    }
+	
+	if(!CompareAppInfoL(aExpectedNode, aObtainedNode))
+	    {
+	    iIconFileSizes.Close();
+	    return EFalse;
+	    }
+	
 	const RPointerArray<CComponentInfo::CNode>& expectedChildren = aExpectedNode.Children();
 	const RPointerArray<CComponentInfo::CNode>& obtainedChildren = aObtainedNode.Children();
 	if (expectedChildren.Count() != obtainedChildren.Count())
@@ -622,8 +750,7 @@ TBool CSifGetComponentInfoStep::CompareCompInfoNodeL(const CComponentInfo::CNode
 			INFO_PRINTF3(_L("CComponentInfo tree comparison failed at component: %S, vendor: %S"), &aExpectedNode.ComponentName(), &aExpectedNode.Vendor());
 			return EFalse;
 			}
-		}
-	
+		}		
 	return ETrue;
 	}
 
@@ -645,6 +772,8 @@ void CSifGetComponentInfoStep::ImplTestStepPreambleL()
 		GetBoolFromConfig(ConfigSection(),KTe_OperationByFileHandle, iOperationByFileHandle);
 		
 		GetBoolFromConfig(ConfigSection(),KTe_CompareMaxInstalledSize, iCompareMaxInstalledSize);
+		
+		GetBoolFromConfig(ConfigSection(),KTe_CompareIconFileSize, iCompareIconFileSize);
 		}
 	}
 
@@ -693,8 +822,9 @@ void CSifGetComponentInfoStep::ImplTestStepL()
 	
 	User::LeaveIfError(iStatus.Int());
 
-	SetTestStepResult(CompareCompInfoNodeL(iComponentInfo->RootNodeL(), compInfo->RootNodeL()) ? EPass : EFail);
-
+	TInt err = 0;
+	TRAP(err, SetTestStepResult(CompareCompInfoNodeL(iComponentInfo->RootNodeL(), compInfo->RootNodeL()) ? EPass : EFail););
+	iIconFileSizes.Close();
 	CleanupStack::PopAndDestroy(compInfo);
 	}
 

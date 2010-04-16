@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2004 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -23,6 +23,8 @@
 #include <e32base.h>
 #include <f32file.h>
 #include <SWInstApi.h>
+#include <usif/sif/sif.h>
+#include <usif/sif/sifcommon.h>
 
 namespace Swi
 {
@@ -73,15 +75,20 @@ class CSilentLauncher : public CBase
         * 2nd phase constructor.
         */
         void ConstructL();
+                  
 
     private: //  Data
-            
-        SwiUI::RSWInstSilentLauncher iLauncher;    
-        SwiUI::TInstallOptions iOptions;
-        SwiUI::TInstallOptionsPckg iOptionsPckg;   
-
-        RFs& iFs;        
-        TBool iConnected;
+        
+        // SW installer framework
+        Usif::RSoftwareInstall iSWInstallerFW;
+        // Install parameters
+        Usif::COpaqueNamedParams* iSifOptions;
+        // Result parameters like error codes.
+        Usif::COpaqueNamedParams* iSifResults;
+        // File server
+        RFs& iFs;
+        // Defines if we have connected to SWI server.
+        TBool iConnected;                    
     };
 }
 

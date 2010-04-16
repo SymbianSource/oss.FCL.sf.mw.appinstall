@@ -85,6 +85,7 @@ makefile ../test/testmakesis/testmakesis.fil
 #ifndef TOOLS
 #ifndef TOOLS2
 ../test/tinterpretsisinteg/tintsistef/tinterpretsis.mmp  
+../test/tinterpretsisinteg/data/regfiles/tstapp.mmp
 #endif
 #endif
 
@@ -626,6 +627,7 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/testlist.dtd /epoc32/winscw/c/tswi/tinterpretsisinteg/testlist.dtd
 ../test/tinterpretsisinteg/testlist.xml /epoc32/winscw/c/tswi/tinterpretsisinteg/testlist.xml
 
+../test/tinterpretsisinteg/data/Hello_sis.sis /epoc32/winscw/c/tswi/tinterpretsisinteg/data/hello_sis.sis
 ../test/tinterpretsisinteg/data/config-drives.ini /epoc32/winscw/c/tswi/tinterpretsisinteg/data/config-drives.ini
 ../test/tinterpretsisinteg/data/config-drives2.ini /epoc32/winscw/c/tswi/tinterpretsisinteg/data/config-drives2.ini
 ../test/tinterpretsisinteg/data/config-drives-invalid.ini /epoc32/winscw/c/tswi/tinterpretsisinteg/data/config-drives-invalid.ini
@@ -815,6 +817,19 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/data/802730a9_0.sis /epoc32/winscw/c/tswi/tinterpretsisinteg/data/802730a9_0.sis
 ../test/tinterpretsisinteg/data/test_stub.sis /epoc32/data/z/system/install/test_stub.sis
 ../test/tinterpretsisinteg/data/int_nr_option_01_stub.sis /epoc32/winscw/c/tswi/tinterpretsisinteg/data/int_nr_option_01_stub.sis
+
+../test/tinterpretsisinteg/data/interpretsis_testcase_stub.sis /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_stub.sis
+../test/tinterpretsisinteg/data/interpretsis_testcase_01_reg.rsc /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_01_reg.rsc
+../test/tinterpretsisinteg/data/interpretsis_testcase_02_reg.rsc /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_02_reg.rsc
+../test/tinterpretsisinteg/data/interpretsis_testcase_01.r01 /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_01.r01
+../test/tinterpretsisinteg/data/interpretsis_testcase_01.r03 /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_01.r03
+../test/tinterpretsisinteg/data/interpretsis_testcase_01.r04 /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_01.r04
+../test/tinterpretsisinteg/data/interpretsis_testcase_01.r24 /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_01.r24
+../test/tinterpretsisinteg/data/interpretsis_testcase_02.r03 /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase_02.r03
+../test/tinterpretsisinteg/data/interpretsis_testcase01.mbm /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase01.mbm
+../test/tinterpretsisinteg/data/interpretsis_testcase03.mbm /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase03.mbm
+../test/tinterpretsisinteg/data/interpretsis_testcase04.mbm /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase04.mbm
+../test/tinterpretsisinteg/data/interpretsis_testcase24.mbm /epoc32/winscw/c/tswi/tinterpretsisinteg/data/interpretsis_testcase24.mbm 
 
 ../test/tinterpretsisinteg/parameters_file/parameters.ini /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/parameters.ini
 ../test/tinterpretsisinteg/parameters_file/int001-006.txt /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/int001-006.txt
@@ -1508,6 +1523,14 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/int_nr_option-39.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/int_nr_option-39.bat
 
 ../test/tinterpretsisinteg/scripts/api-inst-preq2525-interpretsis-18.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-preq2525-interpretsis-18.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-01.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-01.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-02.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-02.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-03.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-03.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-04.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-04.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-05.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-05.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-06.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-06.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-08.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-08.script
+
 ../test/tinterpretsisinteg/scripts/int_nr_option-01.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-01.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-02.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-02.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-03.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-03.script
@@ -1584,7 +1607,11 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/preq2525-interpretsis-16/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-16/argumentfile.ini
 ../test/tinterpretsisinteg/preq2525-interpretsis-17/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-17/argumentfile.ini
 ../test/tinterpretsisinteg/preq2525-interpretsis-19/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-19/argumentfile.ini
+../test/tinterpretsisinteg/testcase-interpretsis-01/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/testcase-interpretsis-01/argumentfile.ini
+../test/tinterpretsisinteg/testcase-interpretsis-01/argumentfile_05.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/testcase-interpretsis-01/argumentfile_05.ini
+../test/tinterpretsisinteg/testcase-interpretsis-01/argumentfile_10.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/testcase-interpretsis-01/argumentfile_10.ini
 
+../test/tinterpretsisinteg/parameters_file/testcase-interpretsis-07.txt  /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/testcase-interpretsis-07.txt
 ../test/tinterpretsisinteg/parameters_file/preq2525-interpretsis-01.txt  /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/preq2525-interpretsis-01.txt
 ../test/tinterpretsisinteg/parameters_file/preq2525-interpretsis-02.txt  /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/preq2525-interpretsis-02.txt
 ../test/tinterpretsisinteg/parameters_file/preq2525-interpretsis-03.txt  /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/preq2525-interpretsis-03.txt
@@ -1891,6 +1918,12 @@ PRJ_TESTEXPORTS
 ../test/tscrtool/data/preprovision_symbian.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_symbian.xml
 ../test/tscrtool/data/preprovision_attribute_missing.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_attribute_missing.xml
 ../test/tscrtool/data/preprovision_coverage.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_coverage.xml
+../test/tscrtool/data/preprovision_appreginfo.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_appreginfo.xml
+../test/tscrtool/data/preprovision_nullappuid.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_nullappuid.xml
+../test/tscrtool/data/preprovision_appregattribmissing.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_appregattribmissing.xml
+../test/tscrtool/data/preprovision_noappattrib.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_noappattrib.xml
+../test/tscrtool/data/preprovision_nullappfile.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_nullappfile.xml
+../test/tscrtool/data/preprovision_nocaptioniconinfo.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_nocaptioniconinfo.xml
 
 //script files for PREQ2525 installing equivalent language
 ../test/tinterpretsisinteg/api-inst-preq2525-interpretsis-01_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-preq2525-interpretsis-01_db.bat
@@ -1912,6 +1945,14 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/api-inst-preq2525-interpretsis-17_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-preq2525-interpretsis-17_db.bat
 ../test/tinterpretsisinteg/api-inst-preq2525-interpretsis-18_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-preq2525-interpretsis-18_db.bat
 ../test/tinterpretsisinteg/api-inst-preq2525-interpretsis-19_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-preq2525-interpretsis-19_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-01_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-01_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-02_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-02_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-03_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-03_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-04_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-04_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-05_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-05_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-06_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-06_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-07_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-07_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-08_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-08_db.bat
 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 

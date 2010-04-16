@@ -62,6 +62,8 @@ public:
 	 * Un-install installed applications specified while creating this class.
 	 */
 	void Uninstall();
+
+	const SisRegistry* GetSisRegistry() const;	
 	
 private:
 	void ConstructL();

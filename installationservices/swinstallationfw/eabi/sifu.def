@@ -3,7 +3,7 @@ EXPORTS
 	_ZN4Usif14CComponentInfo14PrepareForIpcLER8TIpcArgsi @ 2 NONAME
 	_ZN4Usif14CComponentInfo19SetRootNodeAsChildLERNS0_5CNodeE @ 3 NONAME
 	_ZN4Usif14CComponentInfo4NewLEv @ 4 NONAME
-	_ZN4Usif14CComponentInfo5CNode5NewLCERK7TDesC16S4_S4_S4_NS_11TScomoStateENS_14TInstallStatusEiS4_NS_13TAuthenticityERK14TCapabilitySetiiP13RPointerArrayIS1_E @ 5 NONAME
+	_ZN4Usif14CComponentInfo5CNode5NewLCERK7TDesC16S4_S4_S4_NS_11TScomoStateENS_14TInstallStatusEiS4_NS_13TAuthenticityERK14TCapabilitySetiiiP13RPointerArrayINS0_16CApplicationInfoEEPSB_IS1_E @ 5 NONAME
 	_ZN4Usif14CComponentInfo5CNode9AddChildLEPS1_ @ 6 NONAME
 	_ZN4Usif14CComponentInfo5CNodeD0Ev @ 7 NONAME
 	_ZN4Usif14CComponentInfo5CNodeD1Ev @ 8 NONAME
@@ -70,4 +70,16 @@ EXPORTS
 	_ZTVN4Usif14CComponentInfoE @ 69 NONAME
 	_ZTVN4Usif18COpaqueNamedParamsE @ 70 NONAME
 	_ZNK4Usif14CComponentInfo5CNode13HasExecutableEv @ 71 NONAME
+	_ZN4Usif14CComponentInfo16CApplicationInfo5NewLCERK4TUidRK7TDesC16S7_S7_ @ 72 NONAME
+	_ZN4Usif14CComponentInfo16CApplicationInfoD0Ev @ 73 NONAME
+	_ZN4Usif14CComponentInfo16CApplicationInfoD1Ev @ 74 NONAME
+	_ZN4Usif14CComponentInfo16CApplicationInfoD2Ev @ 75 NONAME
+	_ZNK4Usif14CComponentInfo16CApplicationInfo12IconFileNameEv @ 76 NONAME
+	_ZNK4Usif14CComponentInfo16CApplicationInfo4NameEv @ 77 NONAME
+	_ZNK4Usif14CComponentInfo16CApplicationInfo6AppUidEv @ 78 NONAME
+	_ZNK4Usif14CComponentInfo16CApplicationInfo9GroupNameEv @ 79 NONAME
+	_ZNK4Usif14CComponentInfo5CNode12ApplicationsEv @ 80 NONAME
+	_ZNK4Usif14CComponentInfo5CNode21DriveSeletionRequiredEv @ 81 NONAME
+	_ZTIN4Usif14CComponentInfo16CApplicationInfoE @ 82 NONAME
+	_ZTVN4Usif14CComponentInfo16CApplicationInfoE @ 83 NONAME
 

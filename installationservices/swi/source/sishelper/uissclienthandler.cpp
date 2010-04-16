@@ -627,6 +627,22 @@ void CUissClientHandler::ConstructCompInfoFromBufferL()
 	CleanupStack::PopAndDestroy(&stream);
     }
 
+ void CUissClientHandler::MapToApplicationInfoL(RCPointerArray<Swi::CNativeComponentInfo::CNativeApplicationInfo>& aNativeApplicationsInfo, RPointerArray<Usif::CComponentInfo::CApplicationInfo>& aApplicationsInfo)
+    {        
+        TInt count = aNativeApplicationsInfo.Count();
+        for (TInt i = 0; i < count; ++i)
+            {
+            Usif::CComponentInfo::CApplicationInfo* app ;
+            app =  Usif::CComponentInfo::CApplicationInfo::NewLC(aNativeApplicationsInfo[i]->AppUid(), aNativeApplicationsInfo[i]->Name(), aNativeApplicationsInfo[i]->GroupName(), aNativeApplicationsInfo[i]->IconFileName());                       
+            DEBUG_PRINTF2(_L("App Uid 0x%08x"),app->AppUid());
+            DEBUG_PRINTF2(_L("File Name %S"),&app->Name());
+            DEBUG_PRINTF2(_L("Group Name %S"),&app->GroupName());
+            DEBUG_PRINTF2(_L("Icon File Name %S"),&app->IconFileName());            
+            aApplicationsInfo.AppendL(app);
+            CleanupStack::Pop(app);
+            }        
+    }
+
 Usif::CComponentInfo::CNode* CUissClientHandler::MapToComponentInfoL(CNativeComponentInfo& aNativeComponentInfo)
 	{
 	// Create the array to store the children nodes.
@@ -643,8 +659,11 @@ Usif::CComponentInfo::CNode* CUissClientHandler::MapToComponentInfoL(CNativeComp
 		CleanupStack::PushL(node);
 		children.AppendL(node);
 		CleanupStack::Pop(node);
-		}
-		
+		}		
+	
+	RPointerArray<Usif::CComponentInfo::CApplicationInfo> applicationInfo;	
+	CleanupResetAndDestroyPushL(applicationInfo);
+	MapToApplicationInfoL(aNativeComponentInfo.iApplications, applicationInfo);	
 	// Create the CNode object using the appropriate parameters.
 	// children for leaf nodes (bottom most nodes in the embedded tree) will be null.
 	Usif::CComponentInfo::CNode* node = Usif::CComponentInfo::CNode::NewLC(
@@ -660,8 +679,12 @@ Usif::CComponentInfo::CNode* CUissClientHandler::MapToComponentInfoL(CNativeComp
 										aNativeComponentInfo.iUserGrantableCaps,
 										aNativeComponentInfo.iMaxInstalledSize,
 										aNativeComponentInfo.iHasExe,
+										aNativeComponentInfo.iIsDriveSelectionRequired,
+										&applicationInfo,
 										&children);
-	CleanupStack::Pop(node);
+	CleanupStack::Pop(node);	
+	CleanupStack::Pop(&applicationInfo);
+	applicationInfo.Close();
 	CleanupStack::Pop(&children);
 	children.Close();
 	return (node);

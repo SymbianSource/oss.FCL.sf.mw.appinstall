@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -37,7 +37,8 @@ RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
   
 // Add a dummy component for the APIs tests
 RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\securitytests\usifsecuritytests.ini add_test_component
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\securitytests\usifsecuritytests.ini add_app_reg_info
 RUN_TEST_STEP 100 aprcaptestframework RunThoroughCapabilityChecks z:\tusif\securitytests\usifsecuritytests.ini usifsecuritytests
 RUN_TEST_STEP 100 aprcaptestframework RunThoroughCapabilityChecks z:\tusif\securitytests\usifsecuritytests.ini usifsecuritytests-tcb
-
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\securitytests\usifsecuritytests.ini del_app_entry
 END_TESTCASE API-SEC-USIF-SecurityTests-0001

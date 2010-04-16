@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -43,6 +43,12 @@
 #include "arrayutils.h"  // from source/sisregistry/common/ 
 #include "log.h"
 #include "queueprocessor.h"
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#include "apprscparser.h"
+#include "ipcutil.h"
+#include <usif/scr/appregentries.h>
+#include "sislauncherclient.h" 
+#endif
 
 namespace Swi 
 {
@@ -75,6 +81,9 @@ void CSisLauncherSession::CreateL()
 
 CSisLauncherSession::~CSisLauncherSession()
 	{
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	delete iCurrentAppRegData;
+	#endif
 	Server().DropSession();
 	}
 void CSisLauncherSession::DoRunExecutableL(const RMessage2& aMessage) 
@@ -330,6 +339,7 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
 			RDesReadStream stream(*buf);
 			RPointerArray<TDesC> files;
 			InternalizePointerArrayL(files, stream);
+			
 			if (Server().BootUpMode() == KTextShell) 
 				{
 				// emulator tests running in textshell or in textshell ROM (#def SWI_TEXTSHELL_ROM)
@@ -340,12 +350,12 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
 				// emulatore running with GUI
 				#ifndef SWI_TEXTSHELL_ROM
 				Server().NotifyNewAppsL(files);
-				#endif
+				#endif // SWI_TEXTSHELL_ROM
 				}
+			
 			files.ResetAndDestroy();
-
 			CleanupStack::PopAndDestroy(buf);
-
+			
 			aMessage.Complete(KErrNone);
 			break;
 			}
@@ -373,6 +383,62 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
 			#endif
 			aMessage.Complete(KErrNone);
 			break;
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	    case EAsyncParseResourceFileSize:
+            {
+            TRAPD(err,err = AsyncParseResourceFileSizeL(aMessage));            
+            aMessage.Complete(err);            
+            break;
+            }
+        case EAsyncParseResourceFileData:
+            {
+            TRAPD(err,AsyncParseResourceFileDataL(aMessage));
+            aMessage.Complete(err);
+            break;
+            }
+ 		case ENotifyNewAppsData:
+			{
+			RIpcReadStream readStream;
+			readStream.Open(aMessage, 0);
+			CleanupClosePushL(readStream);
+
+			RPointerArray<Usif::CApplicationRegistrationData> appRegInfo;
+			CleanupClosePushL(appRegInfo);
+
+			const TInt numElems = readStream.ReadInt32L();
+			for (TInt i=0; i<numElems; ++i)
+				{
+				Usif::CApplicationRegistrationData* info = Usif::CApplicationRegistrationData::NewL(readStream);
+				CleanupStack::PushL(info);
+				appRegInfo.AppendL(info);
+				CleanupStack::Pop(info);
+				}
+
+			if (Server().BootUpMode() == KTextShell) 
+				{
+				// emulator tests running in textshell or in textshell ROM (#def SWI_TEXTSHELL_ROM)
+				DEBUG_PRINTF(_L8("Sis Launcher Server - textshell - skipping notification of new applications."));
+				}
+			else
+				{
+				// emulatore running with GUI
+				#ifndef SWI_TEXTSHELL_ROM
+				Server().NotifyNewAppsL(appRegInfo);
+			#endif // SWI_TEXTSHELL_ROM
+				}
+			appRegInfo.ResetAndDestroy();
+			CleanupStack::PopAndDestroy(2);
+			aMessage.Complete(KErrNone);
+			break;
+			}
+ 		case ENotifyApparcForApps:
+ 		    {
+            #ifndef SWI_TEXTSHELL_ROM
+ 		    NotifyApparcForApps(aMessage); 	
+            #endif
+ 		    break;
+ 		    }
+#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	    case EQueueRunExecutable:
 	    	//fall through
 	    case EQueueStartDocumentByHandle:
@@ -428,9 +494,80 @@ void CSisLauncherSession::CheckApplicationInUseL(TUid aUid)
 	}
 
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	 
+TInt CSisLauncherSession::AsyncParseResourceFileSizeL(const RMessage2& aMessage)
+    {
+    // We only support one call at once currently
+    if (iInAsyncParseResourceFile)
+        {
+        return KErrInUse;
+        }
+    else
+        {
+        iInAsyncParseResourceFile=ETrue;
+        delete iCurrentAppRegData;
+        iCurrentAppRegData=NULL;
 
+        RFs fs;
+        RFile file;
+        User::LeaveIfError(fs.Connect());
+		CleanupClosePushL(fs);
+        file.AdoptFromClient(aMessage, 0, 1);   
+		CleanupClosePushL(file);
+        //Read languages need to pass
+        TInt bufSize=0;
+        bufSize = aMessage.GetDesMaxLength(2);
+        HBufC8* bufToHoldLanguages = HBufC8::NewLC(bufSize);
+        TPtr8 bufPtrDscToHoldLanguages = bufToHoldLanguages->Des();
+        aMessage.ReadL(2, bufPtrDscToHoldLanguages, 0);
+      
+        RDesReadStream inStream(bufPtrDscToHoldLanguages);
+        CleanupClosePushL(inStream);
+        TInt32 languageCount = inStream.ReadInt32L();
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		RArray<TLanguage> appLanguages;
+        CleanupClosePushL(appLanguages);
+
+        for (TInt i=0; i<languageCount; i++)
+           appLanguages.AppendL((TLanguage)inStream.ReadInt32L());
+                           
+        CAppRegInfoReader *appRegInfoReader = CAppRegInfoReader::NewL(fs,file);
+        CleanupStack::PushL(appRegInfoReader);
+        
+        TRAPD(err,iCurrentAppRegData = appRegInfoReader->ReadL(appLanguages));
+      	if (KErrNone != err)
+			{
+			iInAsyncParseResourceFile=EFalse;
+            User::Leave(err);
+			}
+		
+		iInAsyncParseResourceFile=EFalse;	
+        TInt objectSize=0;
+        objectSize= GetObjectSizeL(iCurrentAppRegData);
+        if (objectSize > 0)
+            {
+            //Everything went fine so return the buffer size.            
+            CleanupStack::PopAndDestroy(6,&fs);  
+            return objectSize;			
+            }
+        else
+            User::Leave(KErrUnknown);
+        }
+    return KErrNone;
+    }
+   
+void CSisLauncherSession::AsyncParseResourceFileDataL(const RMessage2& aMessage)
+    {
+    if (iCurrentAppRegData)
+        {
+        WriteObjectDataL(aMessage, 0, iCurrentAppRegData); 
+        delete iCurrentAppRegData;
+        iCurrentAppRegData=NULL;
+        }
+    else
+        User::Leave(KErrArgument);
+    }
+
 void CSisLauncherSession::ParseSwTypeRegFileL(const RMessage2& aMessage)
 	{
 	// Unpack the file handle
@@ -463,6 +600,46 @@ void CSisLauncherSession::ParseSwTypeRegFileL(const RMessage2& aMessage)
 	}
 
 #ifndef SWI_TEXTSHELL_ROM
+void CSisLauncherSession::NotifyApparcForApps(const RMessage2& aMessage)
+    {
+    /*RIpcReadStream readStream;
+    readStream.Open(aMessage, 0);
+    CleanupClosePushL(readStream);    
+    RArray<TApaAppUpdateInfo> apparcAppInfoArray;
+    CleanupClosePushL(apparcAppInfoArray);        
+    RApaLsSession apaSession;
+    User::LeaveIfError(apaSession.Connect());
+    CleanupClosePushL(apaSession);
+    TApaAppAction appaction;
+    const TInt numElems = readStream.ReadInt32L();
+    //Convert the local structure into the structure required by apparc
+    for (TInt i=0; i<numElems; ++i)
+        {
+        TAppUpdateInfo appInfo;
+        appInfo.InternalizeL(readStream);   
+        if(appInfo.iAction == EAppInstalled)
+            {
+            appaction = EApparcAppInstalled;
+            }
+        else if(appInfo.iAction == EAppUninstalled)
+            {
+            appaction = EApparcAppUninstalled;
+            }
+        TApaAppUpdateInfo apparcAppUpdateInfo(appInfo.iAppUid, appaction);
+        apparcAppInfoArray.Append(apparcAppUpdateInfo);                    
+        DEBUG_PRINTF2(_L("AppUid is 0x%x"), appInfo.iAppUid);
+        DEBUG_PRINTF2(_L("Action is %d"), appInfo.iAction);         
+        }    
+    
+    if(numElems)
+        {
+        apaSession.UpdateAppListL(apparcAppInfoArray);
+        }
+        
+    CleanupStack::PopAndDestroy(3, &readStream);
+    */aMessage.Complete(KErrNone);       
+    }
+
 void CSisLauncherSession::RegisterSifLauncherMimeTypesL(const RMessage2& aMessage)
 	{
 	RegisterSifLauncherMimeTypesImplL(aMessage, ETrue);

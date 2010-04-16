@@ -50,6 +50,12 @@ SOURCE application.cpp
 SOURCEPATH	../source/swis/server
 SOURCE securityinfo.cpp
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		plan.DEF
+#else
+DEFFILE		plan_legacy.def
+#endif
+
 LIBRARY euser.lib
 LIBRARY estor.lib
 LIBRARY uissclient.lib // Needed for TAppInfo

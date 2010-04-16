@@ -217,4 +217,5 @@ EXPORTS
 	_ZThn4_N21CIAUpdateXmlSubParser22OnIgnorableWhiteSpaceLERK6TDesC8i @ 216 NONAME ; #<thunk>#
 	_ZThn4_N21CIAUpdateXmlSubParser24OnProcessingInstructionLERK6TDesC8S2_i @ 217 NONAME ; #<thunk>#
 	_ZThn4_N21CIAUpdateXmlSubParser7OnErrorEi @ 218 NONAME ; #<thunk>#
+	_ZN13IAUpdateUtils18IsWidgetInstalledLERK7TDesC16R16TIAUpdateVersion @ 219 NONAME
 

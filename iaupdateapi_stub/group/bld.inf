@@ -29,7 +29,7 @@ PRJ_EXPORTS
 ../rom/iaupdateapi.iby             CORE_MW_LAYER_IBY_EXPORT_PATH( iaupdateapi.iby )
 
 #ifndef FF_IAUPDATE
-../sis/iaupdate_stub.sis        /epoc32/data/z/system/install/iaupdate_stub.sis
+../sis/iaupdate_stub.SIS        /epoc32/data/z/system/install/iaupdate_stub.sis
 #endif //FF_IAUPDATE
 
 PRJ_MMPFILES

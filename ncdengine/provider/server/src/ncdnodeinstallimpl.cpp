@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -344,9 +344,11 @@ TBool CNcdNodeInstall::InternalizeL( const MNcdPurchaseDetails& aDetails )
         }
 
     
-    if ( iInstalledContent ) 
+    // Identifier might be Null
+    if ( iInstalledContent && iInstalledContent->ApplicationUid() != TUid::Null() ) 
         {
-        DASSERT( iInstalledContent->ApplicationUid() != TUid::Null() );
+        
+         DASSERT( iInstalledContent->ApplicationUid() != TUid::Null() );
         
         // Disable launching if protocol says so. 
         // By default apps defined in content info are launchable
@@ -542,7 +544,6 @@ TBool CNcdNodeInstall::IsAllContentInstalledL()
     return ETrue;
     }
 
-
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
@@ -561,13 +562,26 @@ TBool CNcdNodeInstall::InternalizeContentInfoL()
     TRAPD( err, info = &iMetadata.ContentInfoL() );
     
     TBool installed = EFalse;
-    if ( err == KErrNone && info->Uid() != TUid::Null() ) 
+
+    // Either UID or Identifier exists, we can continue here
+    if ( err == KErrNone && ( info->Uid() != TUid::Null()|| info->Identifier().Length() != 0 ) ) 
         {
-        DLINFO(("Uid: %x", info->Uid().iUid ));
-        TNcdApplicationStatus status = 
-            CNcdProviderUtils::IsApplicationInstalledL(
-                info->Uid(), 
-                info->Version() );
+        TNcdApplicationStatus status = ENcdApplicationNotInstalled;
+        
+        if (info->MimeType().Compare( KMimeTypeMatchWidget ) == 0 && info->Identifier().Length() != 0  )
+            {
+            status = CNcdProviderUtils::IsWidgetInstalledL(
+                    info->Identifier(), 
+                    info->Version() );
+            }
+        else if ( info->Uid() != TUid::Null() ) 
+            {
+            DLINFO(("Uid: %x", info->Uid().iUid ));
+            status = 
+                CNcdProviderUtils::IsApplicationInstalledL(
+                                   info->Uid(), 
+                                   info->Version() );
+            }
         
         // Application can be older version for it to be considered installed
         // Upgrade will be available for the user
@@ -578,34 +592,42 @@ TBool CNcdNodeInstall::InternalizeContentInfoL()
 
         iInstalled = installed;    
         iLaunchable = installed;
-                            
+                                        
         if ( installed ) 
             {
             DLTRACE(("Application installed"));
             CNcdExtendedInstallInfo* install = CNcdExtendedInstallInfo::NewLC();
-            install->SetApplicationUid( info->Uid() );
-            
-            // This ensures that CNcdInstalledApplication actually checks the 
-            // application's version number when it checks if it's installed
-            // or not
-            install->SetUriExists( ETrue );
 
-            // This will be used to determine whether the app is actually installed
-            // or not
-            install->SetApplicationVersionL( info->Version() );
-            install->SetLaunchable( ETrue );
+            if (info->MimeType().Compare( KMimeTypeMatchWidget ) == 0 )
+                {                          
+                install->SetApplicationUid(CNcdProviderUtils::WidgetUidL(info->Identifier()));
+                }
+            else
+                {
+                install->SetApplicationUid( info->Uid() );
+                }
             
-            // don't set because it can mess upgrade handling in 
-            // CNcdNodeMetadata::HandleContentUpgradeL
-            iContentVersion = TCatalogsVersion();
+             // This ensures that CNcdInstalledApplication actually checks the 
+             // application's version number when it checks if it's installed
+             // or not
+             install->SetUriExists( ETrue );
 
-            iInstalledContent = install;
-            CleanupStack::Pop( install );
+             // This will be used to determine whether the app is actually installed
+             // or not
+             install->SetApplicationVersionL( info->Version() );
+             install->SetLaunchable( ETrue );
+
+             // don't set because it can mess upgrade handling in 
+             // CNcdNodeMetadata::HandleContentUpgradeL
+              iContentVersion = TCatalogsVersion();
+
+              iInstalledContent = install;
+              CleanupStack::Pop( install );
+              }
+        
             }
-        }
     return installed;
     }
-
 
 // ---------------------------------------------------------------------------
 // Content version getter

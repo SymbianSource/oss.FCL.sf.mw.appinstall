@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -89,6 +89,106 @@ EXPORT_C TSecureId TSecurityContext::SecureId() const
 
 // ##########################################################################################
 
+CComponentInfo::CApplicationInfo::CApplicationInfo()
+    {
+    }
+
+EXPORT_C CComponentInfo::CApplicationInfo::~CApplicationInfo()
+    {
+    delete iName;
+    delete iGroupName;
+    delete iIconFileName;
+    }
+
+EXPORT_C CComponentInfo::CApplicationInfo* CComponentInfo::CApplicationInfo::NewLC(const TUid& aAppUid, const TDesC& aName, const TDesC& aGroupName, const TDesC& aIconFileName)
+    {
+        _LIT(emptyString,"");
+        // Leave if aName, aGroupName or aIconFileName exceeds KMaxDescriptorLength
+       if ((&aName != NULL && aName.Length() > KMaxDescriptorLength) || 
+               (&aGroupName != NULL && aGroupName.Length() > KMaxDescriptorLength) ||
+               (&aIconFileName != NULL && aIconFileName.Length() > KMaxDescriptorLength))
+            {
+            User::Leave(KErrOverflow);
+            }
+        
+       CComponentInfo::CApplicationInfo* self = new (ELeave) CComponentInfo::CApplicationInfo();
+       CleanupStack::PushL(self);
+
+        self->iAppUid = aAppUid;  
+        if(&aName == NULL)
+            {
+            self->iName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iName = aName.AllocL();
+            }
+   
+        if(&aGroupName == NULL)
+            {
+            self->iGroupName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iGroupName = aGroupName.AllocL();
+            }
+        
+        if(&aIconFileName == NULL)
+            {
+            self->iIconFileName = emptyString().AllocL();
+            }
+        else
+            {
+            self->iIconFileName = aIconFileName.AllocL();
+            }     
+    
+        return self;
+    }
+
+EXPORT_C const TUid& CComponentInfo::CApplicationInfo::AppUid() const
+    {
+    return iAppUid;
+    }
+
+EXPORT_C const TDesC& CComponentInfo::CApplicationInfo::Name() const
+    {
+    return *iName;
+    }
+
+EXPORT_C const TDesC& CComponentInfo::CApplicationInfo::GroupName() const
+    {
+    return *iGroupName;
+    }
+
+EXPORT_C const TDesC& CComponentInfo::CApplicationInfo::IconFileName() const            
+    {
+    return *iIconFileName;
+    }
+
+CComponentInfo::CApplicationInfo* CComponentInfo::CApplicationInfo::NewL(RReadStream& aStream)
+    {    
+    CApplicationInfo* self = new (ELeave) CApplicationInfo();
+    CleanupStack::PushL(self);
+    
+    self->iAppUid = TUid::Uid(aStream.ReadInt32L());
+    self->iName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    self->iGroupName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    self->iIconFileName = HBufC::NewL(aStream, KMaxDescriptorLength);
+    
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+void CComponentInfo::CApplicationInfo::ExternalizeL(RWriteStream& aStream) const
+    {
+    aStream.WriteInt32L(iAppUid.iUid);    
+    aStream << *iName;
+    aStream << *iGroupName;
+    aStream << *iIconFileName;
+    }
+            
+// ##########################################################################################
+
 CComponentInfo::CNode::CNode() : iAuthenticity(ENotAuthenticated)
 	{
 	iUserGrantableCaps.SetEmpty();
@@ -102,7 +202,8 @@ EXPORT_C CComponentInfo::CNode::~CNode()
 	delete iVersion;
 	delete iVendor;
 
-	iChildren.Close();
+	iApplications.Close();
+	iChildren.Close();	
 	}
 
 EXPORT_C CComponentInfo::CNode* CComponentInfo::CNode::NewLC(const TDesC& aSoftwareTypeName, const TDesC& aComponentName,
@@ -110,8 +211,8 @@ EXPORT_C CComponentInfo::CNode* CComponentInfo::CNode::NewLC(const TDesC& aSoftw
 															TInstallStatus aInstallStatus, TComponentId aComponentId,
 															const TDesC& aGlobalComponentId, TAuthenticity aAuthenticity,
 															const TCapabilitySet& aUserGrantableCaps, TInt aMaxInstalledSize,
-															TBool aHasExe,
-															RPointerArray<CNode>* aChildren)
+															TBool aHasExe, TBool aIsDriveSelectionRequired,
+															RPointerArray<CApplicationInfo>* aApplications, RPointerArray<CNode>* aChildren)
 	{
 	// We leave if aSoftwareTypeName, aComponentName, aVersion, aVendor or aGlobalComponentId exceeds KMaxDescriptorLength
 	if (aSoftwareTypeName.Length() > KMaxDescriptorLength ||
@@ -147,7 +248,17 @@ EXPORT_C CComponentInfo::CNode* CComponentInfo::CNode::NewLC(const TDesC& aSoftw
 	self->iUserGrantableCaps = aUserGrantableCaps;
 	self->iMaxInstalledSize = aMaxInstalledSize;
 	self->iHasExe = aHasExe;
+	self->iIsDriveSelectionRequired = aIsDriveSelectionRequired;
 
+	if(aApplications != NULL)
+        {
+        for (TInt i=aApplications->Count()-1; i>=0; --i)
+            {
+            self->iApplications.InsertL((*aApplications)[i], 0);
+            aApplications->Remove(i);
+            }
+        }
+	
 	// Embedded Components
 	if(aChildren != NULL)
 		{
@@ -189,7 +300,17 @@ CComponentInfo::CNode* CComponentInfo::CNode::NewL(RReadStream& aStream)
 	UnpackCapabilitySet(aStream.ReadInt32L(), self->iUserGrantableCaps);
 	self->iMaxInstalledSize = aStream.ReadInt32L();
 	self->iHasExe = aStream.ReadInt32L();
-
+	self->iIsDriveSelectionRequired = aStream.ReadInt32L();	
+	
+	const TInt numApplications = aStream.ReadInt32L();
+    for (TInt i=0; i<numApplications; ++i)
+        {
+        CApplicationInfo* app = CApplicationInfo::NewL(aStream);
+        CleanupStack::PushL(app);
+        self->iApplications.AppendL(app);
+        CleanupStack::Pop(app);
+        }
+	
 	const TInt numChildren = aStream.ReadInt32L();
 	for (TInt i=0; i<numChildren; ++i)
 		{
@@ -220,6 +341,14 @@ void CComponentInfo::CNode::ExternalizeL(RWriteStream& aStream) const
 	aStream.WriteInt32L(PackCapabilitySet(iUserGrantableCaps));
 	aStream.WriteInt32L(iMaxInstalledSize);
 	aStream.WriteInt32L(iHasExe);
+	aStream.WriteInt32L(iIsDriveSelectionRequired);
+	
+	const TInt numApplications = iApplications.Count();
+    aStream.WriteInt32L(numApplications);
+    for (TInt i=0; i<numApplications; ++i)
+        {
+        iApplications[i]->ExternalizeL(aStream);
+        }
 	
 	const TInt numChildren = iChildren.Count();
 	aStream.WriteInt32L(numChildren);
@@ -288,6 +417,16 @@ EXPORT_C TBool CComponentInfo::CNode::HasExecutable() const
 	{
 	return iHasExe;
 	}
+
+EXPORT_C TBool CComponentInfo::CNode::DriveSeletionRequired() const
+    {
+    return iIsDriveSelectionRequired;
+    }
+
+EXPORT_C const RPointerArray<CComponentInfo::CApplicationInfo>& CComponentInfo::CNode::Applications() const
+    {
+    return iApplications;
+    }
 
 EXPORT_C const RPointerArray<CComponentInfo::CNode>& CComponentInfo::CNode::Children() const
 	{

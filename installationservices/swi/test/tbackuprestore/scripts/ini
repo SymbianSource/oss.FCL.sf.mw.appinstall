@@ -1323,3 +1323,14 @@ FILE1.6 = C:\Documents\InstTest\devlang_ge_upgrade.txt
 [ROM_SP_backup_restore]
 UID1 = 88000110
 SIS1 = z:\tswi\tsis\data\a_sp.sis
+
+[defineProperty]
+DefineProperty=true
+
+[API-INST-PAS-SWI-0001]
+PublishedUidCount=1
+PublishedUidValue0=88000105
+
+[API-INST-PAS-SWI-0001-A]
+PublishedUidCount=1
+PublishedUidValue0=88000106

@@ -55,7 +55,7 @@ namespace IAUpdateCtrlConsts
      *
      * @since S60 v3.2
      */
-    _LIT( KSoftwareVersion, "2.0.8" );
+    _LIT( KSoftwareVersion, "2.1.0" );
     
     /**
      * Product code value that is used when emulator is used.

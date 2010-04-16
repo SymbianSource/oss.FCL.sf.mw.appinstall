@@ -99,6 +99,36 @@ int ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTa
  */
 int ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage = 0);
 
+/*
+Copies an existing file to a new file.
+@Parameters : The name of an existing file. 
+If lpExistingFileName does not exist, CopyFile fails, and GetLastError returns ERROR_FILE_NOT_FOUND.
+
+@Parameters : The name of the new file. 
+
+@Parameters : If this parameter is TRUE and the new file specified by lpNewFileName already exists, the function fails. If this parameter is FALSE and the new file already exists, the function overwrites the existing file and succeeds.
+
+Return Value
+If the function succeeds, the return value is nonzero.
+If the function fails, the return value is zero.
+*/
+
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag);
+
+
+/*
+Moves an existing file or a directory, including its children
+@Parameters : The current name of the file or directory on the local computer. 
+@Parameters : The new name for the file or directory. The new name must not already exist. A new file may be on a different file system or drive. A new directory must be on the same drive. 
+
+Return Value
+If the function succeeds, the return value is nonzero.
+If the function fails, the return value is zero.
+*/
+
+int FileMoveA(const char* aSrc, const char* aDest);
+
+
 // interface for only Linux
 
 #ifdef __TOOLS2_LINUX__

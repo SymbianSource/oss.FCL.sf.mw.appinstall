@@ -63,6 +63,7 @@
 #include "iaupdatefileconsts.h"
 #include "iaupdatefirsttimeinfo.h"
 #include "iaupdaterefreshhandler.h"
+#include "iaupdatenodeid.h"
 #include "iaupdatedebug.h"
 
 
@@ -256,6 +257,7 @@ CIAUpdateUiController::~CIAUpdateUiController()
     iFwNodes.Reset();
     iSelectedNodesArray.Reset();
     iServicePackNodes.Reset();
+    iPreviousSelections.Reset();
     delete iFilter;
     delete iControllerFile;
     delete iIdle;
@@ -264,7 +266,6 @@ CIAUpdateUiController::~CIAUpdateUiController()
     delete iRoamingHandler;
     delete iParams;
     delete iRefreshHandler;
-    delete iPreviousSelections;
 
     // If dialogs have not been released yet, release them now.
     // ProcessFinishedL() should normally be used for dialogs but
@@ -1576,29 +1577,32 @@ void CIAUpdateUiController::HandleUiRefreshL()
         if ( appUi->UiRefreshAllowed() )
 		    {
 	    	iState = EUiRefreshing;
-	        // store node identification (package UID and version) of currently selected nodes
+	        // store node identification (Id and namespace) of currently selected nodes
 	        // to restore selections after refresh
-	        delete iPreviousSelections;
-	        iPreviousSelections = NULL;
-	        iPreviousSelections = new( ELeave ) CArrayFixFlat<SIAUpdateNodeId>( iNodes.Count() + 1 );
-	        for ( TInt i = 0; i < iNodes.Count(); ++i )
+	        iPreviousSelections.Reset();
+	    	for ( TInt i = 0; i < iNodes.Count(); ++i )
                 {
                 MIAUpdateNode* node( iNodes[ i ] );
-                SIAUpdateNodeId nodeId;
-                nodeId.iNodeType = MIAUpdateAnyNode::ENodeTypeNormal;
-                nodeId.iPackageUid = node->Base().Uid();
-                nodeId.iVersion = node->Base().Version();
-                nodeId.iSelected = node->Base().IsSelected();
-                iPreviousSelections->AppendL( nodeId );
+                CIAUpdateNodeId* nodeId = CIAUpdateNodeId::NewLC();
+                nodeId->SetIdL( node->Base().MetaId() );
+                nodeId->SetNamespaceL( node->Base().MetaNamespace() );
+                nodeId->SetNodeType( MIAUpdateAnyNode::ENodeTypeNormal );
+                nodeId->SetSelected( node->Base().IsSelected() );
+                iPreviousSelections.AppendL( nodeId );
+                CleanupStack::Pop( nodeId );
+                
                 }
 
             if ( iFwNodes.Count() > 0 )
-                {   
+                {
                 MIAUpdateFwNode* fwNode( iFwNodes[ 0 ] );
-                SIAUpdateNodeId nodeId;
-                nodeId.iNodeType = MIAUpdateAnyNode::ENodeTypeFw;
-                nodeId.iSelected = fwNode->Base().IsSelected();
-                iPreviousSelections->AppendL( nodeId );
+                CIAUpdateNodeId* nodeId = CIAUpdateNodeId::NewLC();
+                nodeId->SetIdL( fwNode->Base().MetaId() );
+                nodeId->SetNamespaceL( fwNode->Base().MetaNamespace() );
+                nodeId->SetNodeType( MIAUpdateAnyNode::ENodeTypeFw );
+                nodeId->SetSelected( fwNode->Base().IsSelected() );
+                iPreviousSelections.AppendL( nodeId );
+                CleanupStack::Pop( nodeId );
                 }
         
    	        iController->StartRefreshL( EFalse );
@@ -1717,10 +1721,10 @@ void CIAUpdateUiController::RefreshUiCompleteL(
     // Find out if there was umarked firmware update in old selections,
     // that case needs special handling
     TBool unmarkedFw = EFalse;
-    for ( TInt i = 0; i < iPreviousSelections->Count(); ++i )
+    for ( TInt i = 0; i < iPreviousSelections.Count(); ++i )
         {
-        SIAUpdateNodeId prevNodeId = iPreviousSelections->At( i );
-        if ( prevNodeId.iNodeType == MIAUpdateAnyNode::ENodeTypeFw  && !prevNodeId.iSelected )
+        CIAUpdateNodeId* prevNodeId( iPreviousSelections[ i ] );
+        if ( prevNodeId->NodeType() == MIAUpdateAnyNode::ENodeTypeFw  && !prevNodeId->Selected() )
              {
              unmarkedFw = ETrue;
              }
@@ -1763,13 +1767,13 @@ void CIAUpdateUiController::RefreshUiCompleteL(
     for ( TInt i = 0; i < iNodes.Count(); ++i )
         {
         MIAUpdateNode* node( iNodes[ i ] );
-        for ( TInt j = 0; j < iPreviousSelections->Count(); ++j )
+        for ( TInt j = 0; j < iPreviousSelections.Count(); ++j )
             {
-            SIAUpdateNodeId prevNodeId = iPreviousSelections->At(j);
-        	if ( node->Base().Uid() == prevNodeId.iPackageUid &&
-        	     node->Base().Version() == prevNodeId.iVersion )
-                {
-        		node->Base().SetSelected( prevNodeId.iSelected );
+            CIAUpdateNodeId* prevNodeId( iPreviousSelections[ j ] );
+        	if ( node->Base().MetaId() == prevNodeId->Id() && 
+        	     node->Base().MetaNamespace() == prevNodeId->Namespace() )
+        	    {
+        	    node->Base().SetSelected( prevNodeId->Selected() );
         	    }
             }
         }
@@ -1788,12 +1792,12 @@ void CIAUpdateUiController::RefreshUiCompleteL(
     for ( TInt i = 0; i < iFwNodes.Count(); ++i )
         {
         MIAUpdateFwNode* fwNode( iFwNodes[ i ] );
-    	for ( TInt j = 0; j < iPreviousSelections->Count(); ++j )
+    	for ( TInt j = 0; j < iPreviousSelections.Count(); ++j )
     	    {
-    	    SIAUpdateNodeId prevNodeId = iPreviousSelections->At(j);
-    		if ( prevNodeId.iNodeType == MIAUpdateAnyNode::ENodeTypeFw )
+    	    CIAUpdateNodeId* prevNodeId( iPreviousSelections[ j ] );
+    		if ( prevNodeId->NodeType() == MIAUpdateAnyNode::ENodeTypeFw )
     		    {
-    			fwNode->Base().SetSelected( prevNodeId.iSelected );
+    			fwNode->Base().SetSelected( prevNodeId->Selected() );
     		    }
     	    }
     	if ( fwNode->Base().IsSelected() )

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,11 +32,8 @@
 #include <swi/sisregistrylog.h>
 #include <scs/ipcstream.h>
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include "sislauncherclient.h"
 #include "swtypereginfo.h"
-#endif
-
 #include "scrhelperutil.h"
 #include "scrdbconstants.h"
 #include "log.h"
@@ -72,6 +69,7 @@ using namespace Usif;
 
 const TInt KUidHexLength = 8;
 _LIT(KSWIRegFirstInitFile, "\\sys\\install\\sisregistry\\swiregfirstinit.log");
+_LIT(KApparcRegFileNameFormat, "*10003a3f*");
 
 // Function to panic an offending client
 void CSisRegistrySession::PanicClient(const RMessagePtr2& aMessage, Swi::TSisRegistryPanic aPanic)
@@ -99,14 +97,13 @@ void CSisRegistrySession::CreateL()
 		{
 		isFwUpdated = ETrue;
 		FirstInvocationInitL();
+		TRAP(res, UpdateRecentFWVersionL(););
+		if (res != KErrNone)
+			{
+			// log that
+			DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
+			}
 		}
-		
-    TRAP(res, UpdateRecentFWVersionL(););
-    if (res != KErrNone)
-        {
-        // log that
-        DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
-        }
 	}
 
 CSisRegistrySession::~CSisRegistrySession()
@@ -148,6 +145,25 @@ void CSisRegistrySession::FirstInvocationInitL()
 	iScrSession.CreateTransactionL();
 	ProcessRomDriveL();
 	iScrSession.CommitTransactionL();
+	
+	TComponentId compId = 0;
+	DEBUG_PRINTF(_L8("SIS Registry Server - Deleteing all existing ROM applications."));
+	ScrHelperUtil::DeleteApplicationEntriesL(iScrSession, compId);
+
+	//Register all apps found in \private\10003a3f\apps
+	TDriveUnit romDrive(SisRegistryUtil::SystemRomDrive());
+	RBuf romApparcRegFilePath;
+	romApparcRegFilePath.CreateL(romDrive.Name(), KMaxPath);
+	CleanupClosePushL(romApparcRegFilePath);
+    romApparcRegFilePath.Append(KApparcRegFilePath);
+	RegisterAllInRomAppL(romApparcRegFilePath);
+
+	//Register all apps found in \private\10003a3f\import\apps.
+	romApparcRegFilePath = romDrive.Name();
+	romApparcRegFilePath.Append(KApparcRegFileImportPath);
+	RegisterAllInRomAppL(romApparcRegFilePath);
+	CleanupStack::PopAndDestroy(&romApparcRegFilePath);
+	
 	// Create a file in <systemdrive>:\sys to mark a successful initialization
 	// so that we don't come here again (unless firmware is upgraded in which case <systemdrive>:\sys 
 	// should be cleaned
@@ -332,6 +348,12 @@ void CSisRegistrySession::ServiceL(const RMessage2& aMessage)
 	case EAddSoftwareTypeEntry:
 		RegisterEntryL(aMessage, ETrue, ETrue);
 		break;
+    case EAddAppRegEntry:
+        AppRegInfoEntryL(aMessage);
+        break;
+    case EUpdateAppRegEntry:
+        AppRegInfoEntryL(aMessage);
+        break;
 	case EUpdateEntry:
 		RegisterEntryL(aMessage, EFalse, EFalse);
 		break;
@@ -401,6 +423,15 @@ void CSisRegistrySession::ServiceL(const RMessage2& aMessage)
 	case EComponentIdForUid:
 		GetComponentIdForUidL(aMessage);
 		break;
+	case EComponentIdForPackage:
+        GetComponentIdForPackageL(aMessage);
+        break;
+	case EAppUidsForComponent:
+	    GetAppUidsForComponentL(aMessage);
+        break;
+	case EComponentIdsForPackageUid:	    
+        GetComponentIdsForUidL(aMessage);        
+        break;	    
 	default:
 		PanicClient(aMessage,EPanicIllegalFunction);
 		break;
@@ -817,6 +848,7 @@ void CSisRegistrySession::DeleteEntryL(const RMessage2& aMessage)
 		// Re-add the ROM installed stub details to SCR (only those missing will be added)
 		ProcessRomDriveL();
 		}
+	
  	CleanupStack::PopAndDestroy(2, object);// STS 
 	
 	aMessage.Complete(KErrNone);
@@ -932,8 +964,6 @@ void CSisRegistrySession::CloseRegistryEntryL(const RMessage2& aMessage)
 // The output will be based on the request parameters (operational mode) sent as input.
 void CSisRegistrySession::RequestStubFileEntriesL(const RMessage2& aMessage)
 	{
-	TBool stubNotFound(ETrue);
-	
 	TUid tUid;	
 	TPckg<TUid> packageUid(tUid);
 	aMessage.ReadL(EIpcArgument0, packageUid, 0);
@@ -942,117 +972,151 @@ void CSisRegistrySession::RequestStubFileEntriesL(const RMessage2& aMessage)
 	TPckg<TStubExtractionMode> packageMode(tMode);
 	aMessage.ReadL(EIpcArgument1, packageMode, 0);
 	
-	// Prepare the stub file path.
-	TDriveUnit romDrive(EDriveZ);
-	RBuf romRegistryPath;
-	romRegistryPath.CreateL(romDrive.Name(), KMaxPath);
-	CleanupClosePushL(romRegistryPath);
-	romRegistryPath.Append(KPreInstalledPath);	
-
-	RFs tFs;
-	CDir* dir;
+	TInt startingFileNo = 0;
+	if (tMode == EGetFiles)
+	    {
+        TPckg<TInt> start(startingFileNo);
+        aMessage.ReadL(EIpcArgument2, start, 0);
+	    }
 	
-	// Get stub files under the ROM stub directory (Z:\system\install\).
-	User::LeaveIfError(tFs.Connect());
-	CleanupClosePushL(tFs);
-		
-	TInt err = tFs.GetDir(romRegistryPath, KEntryAttMatchExclude | KEntryAttDir, ESortNone, dir);
-
-	if (err == KErrNone)
-		{
-		CleanupStack::PushL(dir);	
-		TInt count(dir->Count());
-		RBuf controllerFileName;
-		controllerFileName.CreateL(KMaxFileName);
-		CleanupClosePushL(controllerFileName);
-		for (TInt index = 0; index < count; ++index)
-			{
-			controllerFileName = romRegistryPath;
-			controllerFileName.Append((*dir)[index].iName);
-
-			// Read the ROM stub controller
-  			CFileSisDataProvider* fileProvider = CFileSisDataProvider::NewLC(tFs, controllerFileName);
-  			Swi::Sis::CController* stubController = NULL;
-  			TRAPD(errCode, stubController = Swi::Sis::CController::NewL(*fileProvider));
-  			if (errCode != KErrNone)
-	  			{
-	  			// Ignore the broken stub file under the ROM stub directory.
-	  			DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to read the stub controller. Error code %d."), errCode);
-	  			CleanupStack::PopAndDestroy(fileProvider);
-	  			continue;
-	  			}
-  			CleanupStack::PushL(stubController);
-  			
-  			// If the UID in a stub file matches the current package's UID,
-  			// populate the list of eclipsable files from the same stub file.
-  			if ( stubController->Info().Uid().Uid() == tUid )
-  				{
-  				stubNotFound = EFalse;
-  				const RPointerArray<Sis::CFileDescription>& depArray = stubController->InstallBlock().FileDescriptions();
-  				// Get as many number of files as possible that can be accomodate in client allocated buffer.
-  				if (tMode == EGetFiles)
-  					{
-  					TInt sizeRed = 0;
-  					TInt startingFileNo;	
-					TPckg<TInt> start(startingFileNo);
-					aMessage.ReadL(EIpcArgument2, start, 0);
-  						
-  					RPointerArray<TPtrC> fileNames;
-  					CleanupResetAndDestroy<RPointerArray<TPtrC> >::PushL(fileNames);
-
-  					TInt totalDepArrayCount = depArray.Count();
-  					// Populate the files in to a temporary array.
-  					for(TInt fileCount = startingFileNo; fileCount < totalDepArrayCount; ++fileCount )
-  						{
-  						sizeRed += depArray[fileCount]->Target().Data().Size();
-  						// If amount of data red exceeds the client buffer size, break reading.
-  						if (sizeRed > KDefaultBufferSize)
-  							{
-  							break;
-  							}
-  							
-  						// Only create a TPtrC when we know we have space available
-  						TPtrC* fileName = new(ELeave) TPtrC(depArray[fileCount]->Target().Data());
-  						CleanupStack::PushL(fileName);
-  						fileNames.AppendL(fileName);
-  						CleanupStack::Pop(fileName);   						
-	  					}	  	
-  					// Stream via multiple IPC writes instead of
-  					// copying to a buffer and streaming from there.
-  					RIpcWriteStream ipcstream;
-  					ipcstream.Open(aMessage, EIpcArgument3);
-  					CleanupClosePushL(ipcstream);
-  					ExternalizePointerArrayL(fileNames,ipcstream);
-  					ipcstream.CommitL();
-  					aMessage.Complete(KErrNone);
-  					CleanupStack::PopAndDestroy(&ipcstream);
-  					CleanupStack::PopAndDestroy(&fileNames);					
-  					}
-  				// If only the count needed, send the stub file's total entrie's count.
-  				else if (tMode == EGetCount)
-  					{
-  					TPckgBuf<TInt> fileCount(depArray.Count());
-					aMessage.WriteL(EIpcArgument2, fileCount);
-					aMessage.Complete(KErrNone);					
-  					}  				
-	  			CleanupStack::PopAndDestroy(2, fileProvider);
-	  			break;	
-  				}
-  			CleanupStack::PopAndDestroy(2, fileProvider);  		
-			}
-		CleanupStack::PopAndDestroy(2, dir); // controllerFileName
-		// If the stub file itself not found, leave with the same error info'
-		if (stubNotFound)
-  			{
-  			aMessage.Complete(KErrNotFound);
-  			}		
-		}
-	else if(err != KErrPathNotFound)
-		{
-		aMessage.Complete(err);		
-		}
-	CleanupStack::PopAndDestroy(2, &romRegistryPath); // tFs
+	TInt fileCount = 0;
+	RPointerArray<HBufC> fileNames;
+	CleanupResetAndDestroy<RPointerArray<HBufC> >::PushL(fileNames);
+	                    
+	TInt ret = GetStubFileInfoL(tUid, tMode, startingFileNo, fileCount, fileNames);
+	if (KErrNone == ret)
+	    {
+	    if (tMode == EGetFiles)
+	        {
+	        // Stream via multiple IPC writes instead of
+	        // copying to a buffer and streaming from there.
+	        RIpcWriteStream ipcstream;
+	        ipcstream.Open(aMessage, EIpcArgument3);
+	        CleanupClosePushL(ipcstream);
+	        ExternalizePointerArrayL(fileNames,ipcstream);
+	        ipcstream.CommitL();
+	        aMessage.Complete(KErrNone);
+	        CleanupStack::PopAndDestroy(&ipcstream);
+	        }
+	    else if (tMode == EGetCount)
+	        {
+	        TPckgBuf<TInt> fileCnt(fileCount);
+	        aMessage.WriteL(EIpcArgument2, fileCnt);
+            aMessage.Complete(KErrNone);      
+	        }
+	    }
+	else
+	    {
+	    aMessage.Complete(ret);
+	    }
+	CleanupStack::PopAndDestroy();
 	}
+
+TInt CSisRegistrySession::GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames)
+    {
+    TBool stubNotFound(ETrue);
+    
+    // Prepare the stub file path.
+    TDriveUnit romDrive(EDriveZ);
+    RBuf romRegistryPath;
+    romRegistryPath.CreateL(romDrive.Name(), KMaxPath);
+    CleanupClosePushL(romRegistryPath);
+    romRegistryPath.Append(KPreInstalledPath);  
+
+    RFs tFs;
+    CDir* dir;
+        
+    // Get stub files under the ROM stub directory (Z:\system\install\).
+    User::LeaveIfError(tFs.Connect());
+    CleanupClosePushL(tFs);
+    
+    TInt err = tFs.GetDir(romRegistryPath, KEntryAttMatchExclude | KEntryAttDir, ESortNone, dir);
+
+    if (err == KErrNone)
+        {
+        CleanupStack::PushL(dir);   
+        TInt count(dir->Count());
+        RBuf controllerFileName;
+        controllerFileName.CreateL(KMaxFileName);
+        CleanupClosePushL(controllerFileName);
+        for (TInt index = 0; index < count; ++index)
+            {
+            controllerFileName = romRegistryPath;
+            controllerFileName.Append((*dir)[index].iName);
+
+            // Read the ROM stub controller
+            CFileSisDataProvider* fileProvider = CFileSisDataProvider::NewLC(tFs, controllerFileName);
+            Swi::Sis::CController* stubController = NULL;
+            TRAPD(errCode, stubController = Swi::Sis::CController::NewL(*fileProvider));
+            if (errCode != KErrNone)
+                {
+                // Ignore the broken stub file under the ROM stub directory.
+                DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to read the stub controller. Error code %d."), errCode);
+                CleanupStack::PopAndDestroy(fileProvider);
+                continue;
+                }
+            CleanupStack::PushL(stubController);
+                
+            // If the UID in a stub file matches the current package's UID,
+            // populate the list of eclipsable files from the same stub file.
+            if ( stubController->Info().Uid().Uid() == aUid )
+                {
+                stubNotFound = EFalse;
+                const RPointerArray<Sis::CFileDescription>& depArray = stubController->InstallBlock().FileDescriptions();
+                // Get as many number of files as possible that can be accomodate in client allocated buffer.
+                if (aMode == EGetFiles)
+                    {
+                    TInt sizeRed = 0;
+                    TInt totalDepArrayCount = depArray.Count();
+                    // Populate the files in to a temporary array.
+                    for(TInt fileCount = aStartingFileNo; fileCount < totalDepArrayCount; ++fileCount )
+                        {
+                        sizeRed += depArray[fileCount]->Target().Data().Size();
+                        // If amount of data red exceeds the client buffer size, break reading.
+                        if (sizeRed > KDefaultBufferSize)
+                            {
+                            break;
+                            }
+                                
+                        // Only create a TPtrC when we know we have space available
+                        HBufC* fileName = depArray[fileCount]->Target().Data().AllocL();
+						// Adding drive letter of rom if not mentioned in stub sis file
+                        TPtr a=fileName->Des();
+                        if (a[0] == '!')
+							a[0] = 'z';                        
+                       
+						CleanupStack::PushL(fileName);
+                        aFileNames.AppendL(fileName);
+                        CleanupStack::Pop(fileName);                        
+                        } 
+                    }
+                // If only the count needed, send the stub file's total entrie's count.
+                else if (aMode == EGetCount)
+                    {
+                    aFileCount = depArray.Count();
+                    }               
+                CleanupStack::PopAndDestroy(2, fileProvider);
+                break;  
+                }
+            CleanupStack::PopAndDestroy(2, fileProvider);       
+            }
+        CleanupStack::PopAndDestroy(2, dir); // controllerFileName
+        // If the stub file itself not found, leave with the same error info'
+        
+        if (stubNotFound)
+            {  
+			CleanupStack::PopAndDestroy(2, &romRegistryPath); // tFs          
+            return (KErrNotFound);
+            }       
+        }
+    else if(err != KErrPathNotFound)
+        {     
+		CleanupStack::PopAndDestroy(2, &romRegistryPath); // tFs   
+        return err;
+        }
+	CleanupStack::PopAndDestroy(2, &romRegistryPath); // tFs	
+    return KErrNone;
+    }
 
 void CSisRegistrySession::RequestRegistryEntryL(const RMessage2& aMessage)
 	{
@@ -1120,7 +1184,6 @@ void CSisRegistrySession::RequestSidToPackageL(const RMessage2& aMessage)
 void CSisRegistrySession::RequestSidToFileNameL(const RMessage2& aMessage)
 	{
 	TInt thirdParameter; 
-	TDriveUnit expectedDrive;
 	TUid sid;
 	TPckg<TUid> fileSid(sid);
 
@@ -1222,8 +1285,8 @@ void CSisRegistrySession::GetComponentIdForUidL(const RMessage2& aMessage)
 	TPckgC<Usif::TComponentId> componentIdPckg(componentId);
 	aMessage.WriteL(EIpcArgument1, componentIdPckg);
 	aMessage.Complete(KErrNone);
-	}
-	
+	}	
+
 void CSisRegistrySession::RequestHashL(const RMessage2& aMessage)
 	{
 	// get file name
@@ -1454,7 +1517,7 @@ void CSisRegistrySession::RemoveEntryL(const CSisRegistryPackage& aPackage)
 			aPackage.Uid().iUid, &aPackage.Name(), &aPackage.Vendor());
 		User::Leave(KErrNotFound);
 		}
-
+	iScrSession.DeleteApplicationEntriesL(compId);
 	iScrSession.DeleteComponentL(compId);
 	}
 
@@ -1628,12 +1691,74 @@ TComponentId CSisRegistrySession::AddEntryL(CSisRegistryObject& aObject, Usif::T
 	// Store the SIS Registry Object in to the Software Component Registry.
 	TComponentId compId = 0;
 	ScrHelperUtil::AddComponentL(iScrSession, compId, aObject, aOpType);
+	
+	
+	
 	// Set SCOMO state to activated - when SWI Registry supports de-activation, should be changed accordingly
 	iScrSession.SetScomoStateL(compId, EActivated);
 	
 	return compId;
 	}
 	
+void CSisRegistrySession::AddAppEntryL(TComponentId aCompId, TUid aUid)
+    {
+    TInt startingFileNo = 0;
+    TInt fileCount = 0;
+    RPointerArray<HBufC> romFiles;
+    CleanupResetAndDestroy<RPointerArray<HBufC> >::PushL(romFiles);
+    TInt ret = GetStubFileInfoL(aUid, EGetFiles, startingFileNo, fileCount, romFiles);
+
+    RPointerArray<HBufC> apparcRegFiles;
+    CleanupResetAndDestroy<RPointerArray<HBufC> >::PushL(apparcRegFiles);
+       
+    for(TInt i=0; i< romFiles.Count(); i++)
+        {
+        TInt ret = romFiles[i]->Match(KApparcRegFileNameFormat);
+        
+        TBuf<100> fileName(*romFiles[i]);
+        if (KErrNotFound != ret)
+            {
+            HBufC* file = romFiles[i]->AllocL();
+            apparcRegFiles.Append(file);
+            }
+        }
+             
+	const TInt appCount = apparcRegFiles.Count();
+	if (appCount)
+		{
+		RSisLauncherSession launcher;
+		CleanupClosePushL(launcher);
+		User::LeaveIfError(launcher.Connect());
+		RFs fs;
+		CleanupClosePushL(fs);
+		User::LeaveIfError(fs.Connect());
+		User::LeaveIfError(fs.ShareProtected());
+		RArray<TLanguage> appLanguages;
+		CleanupClosePushL(appLanguages);
+		appLanguages.AppendL(User::Language());
+    
+		for (TInt i=0; i<appCount; ++i)
+			{
+			TInt bufLen = apparcRegFiles[i]->Size();
+			HBufC* buf = HBufC::NewLC(bufLen);
+			TPtr appFile = buf->Des();
+			appFile.Format(_L("%S"), apparcRegFiles[i]);
+			appFile.Replace(0, 1, _L("z"));
+			
+			RFile file;
+			CleanupClosePushL(file);
+			User::LeaveIfError(file.Open(fs, appFile, EFileRead));
+			Usif::CApplicationRegistrationData* appRegData  = launcher.SyncParseResourceFileL(file, appLanguages);
+			CleanupStack::PushL(appRegData);
+			ScrHelperUtil::AddApplicationEntryL(iScrSession, aCompId, *appRegData);
+			CleanupStack::PopAndDestroy(appRegData);
+			CleanupStack::PopAndDestroy(2, buf);
+			}
+		CleanupStack::PopAndDestroy(3, &launcher); 
+		}
+	CleanupStack::PopAndDestroy(2, &romFiles);        
+    }
+
 void CSisRegistrySession::AddControllerL(const CSisRegistryObject& aObject, 
 							RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive)		
 	{
@@ -2368,7 +2493,8 @@ void CSisRegistrySession::RegisterInRomControllerL(const TDesC& aFileName)
 	if ( !isStubRegistered || overwriteRegEntry )
 		{
 		// update cache or just call refresh
-		AddEntryL(*object, Usif::EScrCompHidden); // EScrCompHidden is supplied not to create any log for the ROM controller on the SCR side.
+		TComponentId compId = AddEntryL(*object, Usif::EScrCompHidden); // EScrCompHidden is supplied not to create any log for the ROM controller on the SCR side.
+	    AddAppEntryL(compId, object->Uid());
 		
 		// store a copy of the controller
 		HBufC* name = SisRegistryUtil::BuildControllerFileNameLC(object->Uid(), object->Index(),
@@ -2658,3 +2784,146 @@ void CSisRegistrySession::UpdateRecentFWVersionL()
         CleanupStack::PopAndDestroy(2); //romVerStream, romVersionCacheFileName
     }
 
+void CSisRegistrySession::AppRegInfoEntryL(const RMessage2& aMessage)
+    {
+    Usif::TComponentId componentId = aMessage.Int0();
+
+	RIpcReadStream stream;
+	CleanupClosePushL(stream);
+	stream.Open(aMessage, 1);
+	CApplicationRegistrationData *applicationData = CApplicationRegistrationData::NewL(stream);
+	CleanupStack::PopAndDestroy(&stream);
+	CleanupStack::PushL(applicationData);
+
+    TRAPD(err, ScrHelperUtil::AddApplicationEntryL(iScrSession, componentId, *applicationData));
+    if (err == KErrAlreadyExists)
+        {
+        //Delete the existing application
+        ScrHelperUtil::DeleteApplicationEntryL(iScrSession, applicationData->AppUid());
+        err = KErrNone;
+        TRAP(err, ScrHelperUtil::AddApplicationEntryL(iScrSession, componentId, *applicationData));
+        }
+    aMessage.Complete(err);
+    CleanupStack::PopAndDestroy(applicationData);
+    }
+
+void CSisRegistrySession::GetComponentIdForPackageL(const RMessage2& aMessage)
+    {
+    Usif::TComponentId componentId(0);
+    TInt strLen = aMessage.GetDesLengthL(EIpcArgument0);
+    HBufC* packageName = HBufC::NewLC(strLen);
+    TPtr pkgname = packageName->Des();
+    aMessage.ReadL(EIpcArgument0, pkgname, 0);
+    
+    strLen = aMessage.GetDesLengthL(EIpcArgument1);
+    HBufC* vendorName = HBufC::NewLC(strLen);
+    TPtr vndrname = vendorName->Des();
+    aMessage.ReadL(EIpcArgument1, vndrname, 0);
+    componentId = ScrHelperUtil::GetComponentIdL(iScrSession, *packageName, *vendorName);
+    if (!componentId)
+        {
+        DEBUG_PRINTF2(_L8("Sis Registry Server - Component id for package Name %S was not found."), packageName);
+        User::Leave(KErrNotFound);
+        } 
+    CleanupStack::PopAndDestroy(2, packageName); //vendorName
+    TPckgC<Usif::TComponentId> componentIdPckg(componentId);
+    aMessage.WriteL(EIpcArgument2, componentIdPckg);
+    aMessage.Complete(KErrNone);
+    }
+
+void CSisRegistrySession::GetAppUidsForComponentL(const RMessage2& aMessage)
+    {
+    Usif::TComponentId compId;
+    TPckg<Usif::TComponentId> componentId(compId);
+    RArray<TUid> appUids;
+    CleanupClosePushL(appUids);
+    aMessage.ReadL(EIpcArgument0, componentId);
+    iScrSession.GetAppUidsForComponentL(compId, appUids);        
+    SisRegistryUtil::SendDataArrayL(aMessage, appUids, EIpcArgument1);        
+    CleanupStack::PopAndDestroy(&appUids);
+    }
+
+void CSisRegistrySession::GetComponentIdsForUidL(const RMessage2& aMessage)
+    {
+    TUid Uid;
+    TPckg<TUid> pkgUid(Uid);
+    aMessage.ReadL(EIpcArgument0, pkgUid);
+    
+    // Setup a filter based on the input parameters
+    Usif::CComponentFilter* compFilter = Usif::CComponentFilter::NewLC();
+    compFilter->AddPropertyL(KCompUid, Uid.iUid);   
+    compFilter->SetSoftwareTypeL(Usif::KSoftwareTypeNative);    
+    RArray<Usif::TComponentId> componentIdList;
+    CleanupClosePushL(componentIdList);
+    iScrSession.GetComponentIdsL(componentIdList, compFilter);    
+    if(componentIdList.Count() == 0)
+        {
+        // No components are found in the SCR. So, return false
+        CleanupStack::PopAndDestroy(2, compFilter); // componentIdList
+        DEBUG_PRINTF2(_L8("Sis Registry Server - Unable to find component for UID: %x"), Uid.iUid);  
+        SisRegistryUtil::SendDataArrayL(aMessage, componentIdList, EIpcArgument1);
+        return;
+        }
+    SisRegistryUtil::SendDataArrayL(aMessage, componentIdList, EIpcArgument1);        
+    CleanupStack::PopAndDestroy(2, compFilter);    
+    }
+
+void CSisRegistrySession::RegisterAllInRomAppL(RBuf& aRomApparcRegFilePath)
+    {
+	CDir* dir;
+	TInt err = iFs.GetDir(aRomApparcRegFilePath, KEntryAttMatchExclude | KEntryAttDir, ESortNone, dir);	
+	DEBUG_PRINTF2(_L8("Sis Registry Server - Reading ROM apparc registration file directory returned %d."), err);
+	
+	if (err == KErrNone)
+		{
+		CleanupStack::PushL(dir);
+
+		TInt count(dir->Count());
+		RBuf appRegFileName;
+		appRegFileName.CreateL(KMaxFileName);
+		CleanupClosePushL(appRegFileName);
+		RSisLauncherSession launcher;
+		CleanupClosePushL(launcher);
+		User::LeaveIfError(launcher.Connect());
+		RFs fs;
+		CleanupClosePushL(fs);
+		User::LeaveIfError(fs.Connect());
+		User::LeaveIfError(fs.ShareProtected());
+		RArray<TLanguage> appLanguages;
+		CleanupClosePushL(appLanguages);
+		appLanguages.AppendL(User::Language());
+		for (TInt index = 0; index < count; ++index)
+			{
+			appRegFileName = aRomApparcRegFilePath;
+			appRegFileName.Append((*dir)[index].iName);
+			RFile file;
+			CleanupClosePushL(file);
+			User::LeaveIfError(file.Open(fs, appRegFileName, EFileRead));
+			
+			Usif::CApplicationRegistrationData* appRegData = NULL;			
+			TRAPD(result, appRegData = launcher.SyncParseResourceFileL(file, appLanguages));
+			if (result == KErrNone)
+			    {
+                CleanupStack::PushL(appRegData);
+                TComponentId compId = 0; // ROM application
+                TRAPD(res, ScrHelperUtil::AddApplicationEntryL(iScrSession, compId, *appRegData););
+                if (res != KErrNone)
+                    {
+                    // log it only, we cannot stop as the next might be ok
+                    DEBUG_PRINTF3(_L("Sis Registry Server - Failed to register in ROM application %S. Error code %d."), &appRegFileName, res);
+                    }
+                CleanupStack::PopAndDestroy(appRegData);
+			    }
+			else
+			    DEBUG_PRINTF2(_L8("Sis Registry Server - Parsing in ROM application . Error code %d."), result);
+			                
+			CleanupStack::PopAndDestroy(&file);
+			}
+
+		CleanupStack::PopAndDestroy(5, dir); // appRegFileName, launcher, fs, appLanguages
+		}
+	else if(err != KErrPathNotFound)
+		{
+		User::Leave(err);
+		}
+    }

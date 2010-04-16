@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -309,6 +309,34 @@ TBool CScrSession::DoServiceL(TInt aFunction, const RMessage2& aMessage)
 		case EGetLocalizedComponentData:
 		    server->RequestImpL()->GetComponentLocalizedEntryDataL(aMessage);
 		    break;
+		case EAddApplicationEntry:
+		    server->RequestImpL()->AddApplicationEntryL(aMessage);
+		    break;
+		case EDeleteApplicationEntries:
+		    server->RequestImpL()->DeleteAllAppsWithinPackageL(aMessage);
+		    break;
+		case EDeleteApplicationEntry:
+		    server->RequestImpL()->DeleteApplicationEntryL(aMessage);
+		    break;
+        case EGetComponentIdForApp:
+            server->RequestImpL()->GetComponentIdForAppL(aMessage);
+            break;
+        case EGetAppUidsForComponentSize:
+            server->RequestImpL()->GetAppUidsForComponentSizeL(aMessage);
+            break;
+        case EGetAppUidsForComponentData:
+            server->RequestImpL()->GetAppUidsForComponentDataL(aMessage);
+            break;
+        case EGenerateNonNativeAppUid:
+            server->RequestImpL()->GenerateNonNativeAppUidL(aMessage);
+            break;
+        case EGetApplicationLaunchersSize:
+            server->RequestImpL()->GetApplicationLaunchersSizeL(aMessage);
+            break;
+        case EGetApplicationLaunchersData:
+            server->RequestImpL()->GetApplicationLaunchersDataL(aMessage);
+            break;          
+		    
 		default:
 			User::Leave(KErrNotSupported);
 			break;
@@ -424,6 +452,9 @@ void CScrSession::MutatingOperationsPreambleL(CScrServer& aServer, TScrSessionFu
 		case EAddSoftwareType:
 		case EDeleteSoftwareType:
 		case EGetDeletedMimeTypes:
+		case EAddApplicationEntry:
+		case EDeleteApplicationEntries:
+		case EDeleteApplicationEntry:
 			{
 			ApplySubsessionConstraintL(aServer);
 			// These mutating operations consist of two or more mutating database statements.
@@ -467,9 +498,17 @@ CScsSubsession* CScrSession::DoCreateSubsessionL(TInt aFunction, const RMessage2
 	switch(f)
 		{
 		case ESubSessCreateComponentsView:
-			return CComponentViewSubsession::NewL(*this);	
+			return CComponentViewSubsession::NewL(*this);
 		case ESubSessCreateFileList:
 			return CFileListSubsession::NewL(*this);
+		case ESubSessCreateAppInfoView:
+		    return CAppInfoViewSubsession::NewL(*this);
+		case ESubSessCreateAppRegInfo:
+			return CApplicationRegInfoSubsession::NewL(*this);
+		case ESubSessCreateRegInfoForApp:
+		    return CRegInfoForApplicationSubsession::NewL(*this);
+		case ESubSessCreateAppRegistryView:
+		    return CAppRegistrySubsession::NewL(*this);
 		default:
 			User::Leave(KErrNotSupported);
 			/*lint -unreachable */

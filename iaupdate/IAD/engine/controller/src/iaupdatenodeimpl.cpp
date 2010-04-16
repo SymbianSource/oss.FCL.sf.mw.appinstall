@@ -20,6 +20,7 @@
 #include <ncdnodepurchase.h>
 #include <ncdnodedownload.h>
 #include <ncdnodeinstall.h>
+#include <ncdnodecontentinfo.h>
 
 #include "iaupdatenodeimpl.h"
 #include "iaupdatenodeobserver.h"
@@ -28,7 +29,9 @@
 #include "iaupdatecontrollerimpl.h"
 #include "iaupdateutils.h"
 #include "iaupdatecontentoperationmanager.h"
+#include "iaupdateprotocolconsts.h"
 #include "iaupdatedebug.h"
+
 
 
 // -----------------------------------------------------------------------------
@@ -150,9 +153,18 @@ TInt CIAUpdateNode::ContentSizeL() const
 //    
 MIAUpdateNode::TPackageType CIAUpdateNode::Type() const
     {
+    MIAUpdateNode::TPackageType packageType;
+    if ( Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+        {
+        packageType = MIAUpdateNode::EPackageTypeWidget;
+        }
+    else
+        {
+        packageType = Details().ContentType();
+        }
     IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateNode::Type() = %d", 
-                     Details().ContentType());
-    return Details().ContentType();
+                             packageType );
+    return packageType;
     }
 
 
@@ -758,14 +770,26 @@ const RPointerArray< CIAUpdateNode >& CIAUpdateNode::DependantNodes() const
 void CIAUpdateNode::AddDependantL( CIAUpdateNode& aDependantNode ) 
     {
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNode::AddDependantL() begin");
+	
 
 	for ( TInt i = 0; i < iDependants.Count(); ++i )
 	    {
 	    CIAUpdateNode* node( iDependants[ i ] );
-	    if ( node->Uid() == aDependantNode.Uid() )
+	    if ( node->Mime().Compare( IAUpdateProtocolConsts::KMimeWidget) == 0 )
 	        {
-	        // Corresponding node is already in the array.
-	        return;
+	        if ( node->Identifier() == aDependantNode.Identifier() )
+	            {
+	            // Corresponding node is already in the array.
+	            return;
+	            }
+	        }
+	    else 
+	        {
+	        if ( node->Uid() == aDependantNode.Uid() )
+	            {
+	            // Corresponding node is already in the array.
+	            return;
+	            }
 	        }
 	    }
 
@@ -898,7 +922,18 @@ TBool CIAUpdateNode::IsInstalledL() const
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNode::IsInstalledL() begin");
 
     TIAUpdateVersion installedVersion;
-    TBool installed( IAUpdateUtils::IsAppInstalledL( Uid(), installedVersion ) );
+
+    TBool installed = EFalse;
+        
+    if ( Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+        {
+        installed = IAUpdateUtils::IsWidgetInstalledL( Identifier(), installedVersion );
+        }
+    else 
+        {
+        installed = IAUpdateUtils::IsAppInstalledL( Uid(), installedVersion );
+        }    
+		
     IAUPDATE_TRACE_3("CIAUpdateNode::IsInstalledL() Installed version  %d.%d.%d", 
             installedVersion.iMajor, 
             installedVersion.iMinor, 

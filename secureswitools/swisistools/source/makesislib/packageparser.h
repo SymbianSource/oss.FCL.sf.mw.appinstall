@@ -194,7 +194,7 @@ public:
 	 * @param aMakeStub boolean which tells whether to create stub or not.
 	 * @param aReportInterpretSisError whether to report interpretsis failure or not.
 	 */
-	void MakeSis(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError);
+	void MakeSisL(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError);
 	
 	/**
 	 * This function will parse the package file. In case of any error it will

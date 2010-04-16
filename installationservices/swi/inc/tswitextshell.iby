@@ -250,6 +250,10 @@ data = ZDRIVE\tswi\tsis\data\armv5\filesp-signed_root5.sis 			tswi\tsis\data\fil
 data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu.sis 			tswi\tsis\data\eclipsingromexepu.sis
 data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu_root5.sis 			tswi\tsis\data\eclipsingromexepu_root5.sis
 
+//temporary fix to include cenrep file for timezone server
+data = \epoc32\data\z\private\10202be9\1020383e.txt					private\10202be9\1020383e.txt
+
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 // Used for registry management
 file=ABI_DIR\BUILD_DIR\sisregistryaccessserver.exe 		sys\bin\sisregistryaccessserver.exe

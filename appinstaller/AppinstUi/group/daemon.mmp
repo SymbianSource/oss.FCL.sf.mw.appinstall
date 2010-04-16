@@ -21,7 +21,13 @@
 
 MACRO __DATA_CAGING__
 
-CAPABILITY    TrustedUI ReadUserData AllFiles WriteDeviceData
+//CAPABILITY    TrustedUI ReadUserData AllFiles WriteDeviceData ReadDeviceData
+
+CAPABILITY 		AllFiles ProtServ ReadDeviceData WriteDeviceData TrustedUI ReadUserData  
+
+// TCB, WriteUserData, DRM, PowerMgmt, MultimediaDD, CommDD, DiskAdmin, NetworkControl, SwEvent, NetworkServices, LocalServices
+// Location, SurroundingsDD, UserEnvironment
+
 // AllFiles needed because uninstaller have to search sys\bin folder.
 // WriteDeviceData for PS keys.
  
@@ -71,8 +77,6 @@ LIBRARY        apmime.lib
 LIBRARY        apparc.lib
 LIBRARY        sisregistryclient.lib
 LIBRARY        swinstcli.lib
-LIBRARY        aknnotify.lib
-LIBRARY        bafl.lib            // Resource access
 LIBRARY        swidataprovider.lib
 LIBRARY        sisxfile.lib
 LIBRARY        estor.lib
@@ -80,6 +84,10 @@ LIBRARY        siscontroller.lib
 LIBRARY        platformenv.lib
 LIBRARY        sysutil.lib         // For Uninstaller
 LIBRARY        ecom.lib            // For Plug-in support
+LIBRARY        stsclient.lib
+LIBRARY        swiobserverclient.lib
+LIBRARY        sif.lib               // USIF SW Installer FW
+LIBRARY        scrclient.lib
 
 DEBUGLIBRARY   flogger.lib
 

@@ -33,8 +33,11 @@
 #include "iaupdatecontentoperationmanager.h"
 #include "iaupdateutils.h"
 #include "iaupdatectrlnodeconsts.h"
-#include "iaupdatedebug.h"
 #include "iaupdateprotocolconsts.h"
+#include "iaupdatedebug.h"
+
+
+
 
 
 // -----------------------------------------------------------------------------
@@ -102,7 +105,20 @@ void CIAUpdateBaseNode::ConstructL( MNcdNode* aNode )
         {
         iMime = contentInfo->MimeType().AllocL();
         iVersion.InternalizeL( contentInfo->Version() );
-        iUid = contentInfo->Uid(); 
+
+        //Initialize iUid or iIdentifier according to the mime-type
+        iUid = KNullUid;
+
+        if ( iMime->Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+            {
+            iIdentifier = contentInfo->Identifier().AllocL();
+            }
+        else
+           {
+           iUid = contentInfo->Uid();
+           iIdentifier = KNullDesC().AllocL();
+           }
+
         // Release content info.
         // So, we can later check if it still exists and then get 
         // new one if it exists.
@@ -144,6 +160,7 @@ CIAUpdateBaseNode::~CIAUpdateBaseNode()
     delete iName;    
     delete iDescription;
     delete iMime;
+	delete iIdentifier;
     delete iDetails;
     
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateBaseNode::~CIAUpdateBaseNode() end");
@@ -191,7 +208,17 @@ const TUid& CIAUpdateBaseNode::Uid() const
     IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateBaseNode::Uid() = %x", iUid);
     return iUid;
     }
-   
+
+
+// ---------------------------------------------------------------------------
+// CIAUpdateBaseNode::Identifier
+// 
+// ---------------------------------------------------------------------------
+//
+const TDesC& CIAUpdateBaseNode::Identifier() const
+    {
+    return *iIdentifier;
+    }
     
 // ---------------------------------------------------------------------------
 // CIAUpdateBaseNode::Name
@@ -370,6 +397,17 @@ void CIAUpdateBaseNode::SetInstallStatusToPurchaseHistoryL(
     return;
     }
 
+// ---------------------------------------------------------------------------
+// CIAUpdateBaseNode::Mime
+// 
+// ---------------------------------------------------------------------------
+// 
+const TDesC& CIAUpdateBaseNode::Mime() const
+    {
+    return *iMime;
+    }
+
+
 
 // ---------------------------------------------------------------------------
 // Public functions
@@ -435,18 +473,29 @@ void CIAUpdateBaseNode::SetIdleErrorToPurchaseHistoryL(
 // 
 TBool CIAUpdateBaseNode::Equals( const CIAUpdateBaseNode& aNode ) const
     {
-    if ( aNode.MetaNamespace() == MetaNamespace()
-            && aNode.MetaId() == MetaId()
-         || ( aNode.Uid() == Uid()
-            && aNode.Version() == Version() 
-            && aNode.iMime->Match( IAUpdateProtocolConsts::KMimeServicePackPattern()) == KErrNotFound ) ) 
+    TBool equals = EFalse;
+    if ( iMime->Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
         {
-        return ETrue;
+        if ( aNode.MetaNamespace() == MetaNamespace()
+                && aNode.MetaId() == MetaId()
+             || ( aNode.Identifier() == Identifier() 
+                && aNode.Version() == Version() ) )
+            {
+            equals = ETrue;
+            }
         }
-    else 
+    else
         {
-        return EFalse;
+        if ( aNode.MetaNamespace() == MetaNamespace()
+                && aNode.MetaId() == MetaId()
+             || ( aNode.Uid() == Uid()
+                && aNode.Version() == Version() 
+                && aNode.iMime->Match( IAUpdateProtocolConsts::KMimeServicePackPattern()) == KErrNotFound ) ) 
+            {
+            equals = ETrue;
+            }
         }
+    return equals;
     }
 
 

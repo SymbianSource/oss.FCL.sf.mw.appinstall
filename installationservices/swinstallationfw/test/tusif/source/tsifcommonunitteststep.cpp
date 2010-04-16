@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -99,7 +99,7 @@ void CSifCommonUnitTestStep::ImplTestStepPreambleL()
 void CSifCommonUnitTestStep::TestComponentInfoL()
 	{
 	TCapabilitySet capSet(ECapabilityReadDeviceData);
-	
+	RPointerArray<Usif::CComponentInfo::CApplicationInfo>* applications = NULL;
 	CComponentInfo* compInfo = CComponentInfo::NewLC();
 	
 	/* Internalize from an empty descriptor and read invalid root node */
@@ -116,7 +116,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	CleanupStack::PopAndDestroy(compInfo);
 
 	/* Add invalid child */
-	CComponentInfo::CNode* node = CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, 1234, EFalse);
+	CComponentInfo::CNode* node = CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, 1234, EFalse, EFalse, applications);
 	TRAP(err, node->AddChildL(NULL));
 	if (err != KErrArgument)
 		{
@@ -136,13 +136,14 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	const TInt tooBigLen = maxDescriptorLength + 1;
 	const TInt maxSize = 1234;
 	const TBool hasExe = EFalse;
+	const TBool driveSelectionRequired = EFalse;
 
 	HBufC* tooBigStr = HBufC::NewLC(tooBigLen);
 	TPtr tooBigStrPtr = tooBigStr->Des();
 	tooBigStrPtr.FillZ(tooBigLen);
 	
 	// for SoftwareTypeName
-	TRAP(err, CComponentInfo::CNode::NewLC(*tooBigStr, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe));
+	TRAP(err, CComponentInfo::CNode::NewLC(*tooBigStr, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications));
 	if (err != KErrOverflow)
 		{
 		INFO_PRINTF1(_L("TestComponentInfoL: Overflow detection for SoftwareTypeName"));
@@ -150,7 +151,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 		}
 
 	// for ComponentName
-	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, *tooBigStr, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe));
+	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, *tooBigStr, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications));
 	if (err != KErrOverflow)
 		{
 		INFO_PRINTF1(_L("TestComponentInfoL: Overflow detection for ComponentName"));
@@ -158,7 +159,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 		}
 
 	// for Version
-	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, *tooBigStr, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe));
+	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, *tooBigStr, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications));
 	if (err != KErrOverflow)
 		{
 		INFO_PRINTF1(_L("TestComponentInfoL: Overflow detection for aVersion"));
@@ -166,7 +167,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 		}
 
 	// for Vendor
-	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, *tooBigStr, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe));
+	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, *tooBigStr, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications));
 	if (err != KErrOverflow)
 		{
 		INFO_PRINTF1(_L("TestComponentInfoL: Overflow detection for aVendor"));
@@ -174,7 +175,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 		}
 
 	// for GlobalComponentId
-	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, *tooBigStr, ENotAuthenticated, capSet, maxSize, hasExe));
+	TRAP(err, CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, *tooBigStr, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications));
 	if (err != KErrOverflow)
 		{
 		INFO_PRINTF1(_L("TestComponentInfoL: Overflow detection for GlobalComponentId"));
@@ -194,7 +195,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 		User::Leave(err);
 		}
 
-	CComponentInfo::CNode* emptyNode = CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, 1234, EFalse);
+	CComponentInfo::CNode* emptyNode = CComponentInfo::CNode::NewLC(KNullDesC, KNullDesC, KNullDesC, KNullDesC, EDeactivated, ENewComponent, 12345678, KNullDesC, ENotAuthenticated, capSet, 1234, EFalse, EFalse, applications);
 	const TDesC& globalComponentId(emptyNode->GlobalComponentId());
 	ASSERT(globalComponentId.Length() == 0);
 	TRAP(err, compInfo->SetRootNodeAsChildL(*emptyNode));
@@ -213,7 +214,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	_LIT(KTxtRootGlobalComponentId, "Root Component Global Id");
 	CComponentInfo::CNode* root = CComponentInfo::CNode::NewLC(KTxtRootSoftwareTypeName,
 				KTxtRootComponentName, KTxtRootVersion, KTxtRootVendor, EDeactivated,
-				ENewComponent, 12345678, KTxtRootGlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe);
+				ENewComponent, 12345678, KTxtRootGlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications);
 	
 	// Create an array of nodes
 	RCPointerArray<CComponentInfo::CNode> children;
@@ -227,7 +228,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	_LIT(KTxtChild2GlobalComponentId, "Child2 Component Global Id");
 	CComponentInfo::CNode* child2 = CComponentInfo::CNode::NewLC(KTxtChild2SoftwareTypeName,
 				KTxtChild2ComponentName, KTxtChild2Version, KTxtChild2Vendor, EDeactivated,
-				ENewComponent, 12345678, KTxtChild2GlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe);
+				ENewComponent, 12345678, KTxtChild2GlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications);
 	children.AppendL(child2);
 	CleanupStack::Pop(child2);
 	
@@ -239,7 +240,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	_LIT(KTxtChild3GlobalComponentId, "Child3 Component Global Id");
 	CComponentInfo::CNode* child3 = CComponentInfo::CNode::NewLC(KTxtChild3SoftwareTypeName,
 				KTxtChild3ComponentName, KTxtChild3Version, KTxtChild3Vendor, EDeactivated,
-				ENewComponent, 12345678, KTxtChild3GlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe);
+				ENewComponent, 12345678, KTxtChild3GlobalComponentId, ENotAuthenticated, capSet, maxSize, hasExe, driveSelectionRequired, applications);
 	children.AppendL(child3);
 	CleanupStack::Pop(child3);
 	
@@ -252,7 +253,7 @@ void CSifCommonUnitTestStep::TestComponentInfoL()
 	CComponentInfo::CNode* child1 = CComponentInfo::CNode::NewLC(KTxtChild1SoftwareTypeName,
 				KTxtChild1ComponentName, KTxtChild1Version, KTxtChild1Vendor, EDeactivated,
 				ENewComponent, 12345678, KTxtChild1GlobalComponentId, ENotAuthenticated, capSet,
-				maxSize, hasExe, &children);
+				maxSize, hasExe, driveSelectionRequired, applications, &children);
 	root->AddChildL(child1);
 	CleanupStack::Pop(child1);
 	CleanupStack::PopAndDestroy(&children);

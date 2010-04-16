@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,6 +31,7 @@ namespace Usif
 	_LIT(KTe_CancelAfter,"cancelAfter");
 	_LIT(KTe_OperationByFileHandle,"operationByFileHandle");
 	_LIT(KTe_CompareMaxInstalledSize,"compareMaxInstalledSize");
+	_LIT(KTe_CompareIconFileSize,"compareIconFileSize");	
 	_LIT(KTe_UseEnhancedApi,"useEnhancedApi");
 	_LIT(KTe_PackageFile,"packageFile");
 	_LIT(KTe_ComponentId,"componentId");
@@ -51,6 +52,13 @@ namespace Usif
 	_LIT(KTe_UserGrantableCaps,"userGrantableCapsBitMask");
 	_LIT(KTe_MaxInstalledSize,"maxInstalledSize");
 	_LIT(KTe_HasExecutable,"hasExecutable");
+	_LIT(KTe_DriveSelectionRequired,"driveSelectionRequired");
+	_LIT(KTe_NumberOfApplications,"noOfApps");
+	_LIT(KTe_ApplicationUid,"appUid");
+	_LIT(KTe_ApplicationName,"appName");
+	_LIT(KTe_ApplicationGroupName,"appGroupName");
+	_LIT(KTe_ApplicationIconFileName,"appIconFileName");
+	_LIT(KTe_ApplicationIconFileSize,"appIconFileSize");
 	_LIT(KTe_VerifyPackageExistence,"verifyExistence");
 	_LIT(KTe_CheckSisRegistry,"checkSisRegistry");
 	_LIT(KTe_ExecutableName,"executableName");

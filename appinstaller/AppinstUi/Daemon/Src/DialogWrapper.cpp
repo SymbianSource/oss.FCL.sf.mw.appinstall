@@ -18,16 +18,19 @@
 
 
 // INCLUDE FILES
-#include <AknGlobalNote.h>
-#include <avkon.rsg>
-#include <bautils.h>
-#include <data_caging_path_literals.hrh> 
-#include <swidaemon.rsg>
+// TODO needs to be removed in 10.1
+//#include <AknGlobalNote.h> 
+//#include <avkon.rsg>
+// TODO maybe removed 10.1
+//#include <bautils.h>  // file operations like FileMan
+//#include <data_caging_path_literals.hrh> // resource paths
+// TODO probably not needed in QT.
+//#include <swidaemon.rsg>
 
 #include "DialogWrapper.h"
 #include "SWInstDebug.h"
 
-_LIT( KDaemonResourceFile, "swidaemon.rsc" );
+//_LIT( KDaemonResourceFile, "swidaemon.rsc" );
 
 using namespace Swi;
 
@@ -51,18 +54,19 @@ CDialogWrapper::CDialogWrapper( RFs& aFs )
 //
 void CDialogWrapper::ConstructL()
     {
+//TODO: All resoureces nees to be rewriten for device dialogs (QT)    
     // Get resource file path
-    TFileName fileName;
-    fileName.Copy( TParsePtrC( RProcess().FileName() ).Drive() );
-    fileName.Append( KDC_RESOURCE_FILES_DIR );
-    fileName.Append( KDaemonResourceFile );
+    //TFileName fileName;
+    //fileName.Copy( TParsePtrC( RProcess().FileName() ).Drive() );
+    //fileName.Append( KDC_RESOURCE_FILES_DIR );
+    //fileName.Append( KDaemonResourceFile );
     
     // Get language of resource file        
-    BaflUtils::NearestLanguageFile( iFs, fileName );
+    //BaflUtils::NearestLanguageFile( iFs, fileName );
 
     // Open resource file
-    iResourceFile.OpenL( iFs, fileName );
-    iResourceFile.ConfirmSignatureL();
+    //iResourceFile.OpenL( iFs, fileName );
+    //iResourceFile.ConfirmSignatureL();
   
     // By default Daemon will show all notes.
     iDisableAllNotes = EFalse;
@@ -92,11 +96,16 @@ CDialogWrapper* CDialogWrapper::NewL( RFs& aFs )
     CleanupStack::Pop( self );
     return self;    
     }
-    
+
+// -----------------------------------------------------------------------------
+// CDialogWrapper::~CDialogWrapper
 // Destructor
+// -----------------------------------------------------------------------------
+//    
 CDialogWrapper::~CDialogWrapper()
     {
-    iResourceFile.Close();
+    //iResourceFile.Close();
+    
     if ( iWatcher )
         {
         iWatcher->StopWatcher();
@@ -111,17 +120,18 @@ CDialogWrapper::~CDialogWrapper()
 // -----------------------------------------------------------------------------
 // 
 void CDialogWrapper::ShowUntrustedResultL()
-    {  
+    {
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)    
     // Let watcher to know that waiting note is canceled.
-    iWatcher->CancelNoteRequest();
+    //iWatcher->CancelNoteRequest();
     
-    if ( iDisableAllNotes == EFalse )
-        {    
-        HBufC* string = ReadResourceLC( R_DAEMON_UNTRUSTED_FOUND );    
-        CAknGlobalNote* note = CAknGlobalNote::NewLC();
-        note->ShowNoteL( EAknGlobalInformationNote, *string );   
-        CleanupStack::PopAndDestroy( 2, string ); 
-        }
+    //if ( iDisableAllNotes == EFalse )
+    //    {    
+    //    HBufC* string = ReadResourceLC( R_DAEMON_UNTRUSTED_FOUND );    
+    //    CAknGlobalNote* note = CAknGlobalNote::NewLC();
+    //    note->ShowNoteL( EAknGlobalInformationNote, *string );   
+    //    CleanupStack::PopAndDestroy( 2, string ); 
+    //    }
     }
 
 // -----------------------------------------------------------------------------
@@ -132,15 +142,18 @@ void CDialogWrapper::ShowUntrustedResultL()
 // 
 void CDialogWrapper::ShowErrorResultL()
     { 
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
     // Let watcher to know that waiting note is canceled.
     iWatcher->CancelNoteRequest();   
     
     if ( iDisableAllNotes == EFalse )
         {
+        /*
         HBufC* string = ReadResourceLC( R_DAEMON_INSTALLATION_ERROR );    
         CAknGlobalNote* note = CAknGlobalNote::NewLC();
         note->ShowNoteL( EAknGlobalInformationNote, *string );   
-        CleanupStack::PopAndDestroy( 2, string );  
+        CleanupStack::PopAndDestroy( 2, string );
+        */  
         }
     }
 
@@ -152,16 +165,19 @@ void CDialogWrapper::ShowErrorResultL()
 // 
 void CDialogWrapper::ShowWaitingNoteL()
 	{
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
     if ( iDisableAllNotes == EFalse )
         {
+        /*
         if ( iNoteId == 0 )
-            {
+            {            
             HBufC* string = ReadResourceLC( R_DAEMON_INSTALLING );   
             CAknGlobalNote* note = CAknGlobalNote::NewLC();
             note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
             iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
-            CleanupStack::PopAndDestroy( 2, string );
+            CleanupStack::PopAndDestroy( 2, string );           
             }
+        */    
         }
     else if ( iDisableAllNotes )
         {
@@ -179,6 +195,8 @@ void CDialogWrapper::ShowWaitingNoteL()
 // 
 void CDialogWrapper::CancelWaitingNoteL()
 	{
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
+    /*
 	if ( iNoteId )
 		{
 		CAknGlobalNote* note = CAknGlobalNote::NewLC();
@@ -186,16 +204,21 @@ void CDialogWrapper::CancelWaitingNoteL()
 		iNoteId = 0;
 		CleanupStack::PopAndDestroy();
 		}
+	*/	
     // Let watcher to know that waiting note is canceled.
 	iWatcher->CancelNoteRequest();
  	}
-// CDialogWrapper::LoadResourceLC
+
+// -----------------------------------------------------------------------------
+// CDialogWrapper::LoadResourceLC  
 // Read resource string.
 // (other items were commented in a header).
 // -----------------------------------------------------------------------------
 // 
 HBufC* CDialogWrapper::ReadResourceLC( TInt aResourceId )
     {
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
+    /*
     TResourceReader reader;
     HBufC8* buff = iResourceFile.AllocReadLC( aResourceId );    
     reader.SetBuffer( buff );
@@ -203,6 +226,8 @@ HBufC* CDialogWrapper::ReadResourceLC( TInt aResourceId )
     CleanupStack::PopAndDestroy( buff );
     CleanupStack::PushL( text );
     return text;
+    */
+    return NULL;
     }
 
 // -----------------------------------------------------------------------------
@@ -222,8 +247,10 @@ void CDialogWrapper::SetUIFlag( TInt aUIFlag )
 // 
 void CDialogWrapper::ShowWaitingNoteForUninstallerL()
     {
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
     if ( iDisableAllNotes == EFalse )
         {
+        /*
         if ( iNoteId == 0 )
             {
             HBufC* string = ReadResourceLC( R_UNINSTALLER_INSTALL );   
@@ -232,6 +259,7 @@ void CDialogWrapper::ShowWaitingNoteForUninstallerL()
             iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
             CleanupStack::PopAndDestroy( 2, string );
             }
+        */    
         }
     else if ( iDisableAllNotes )
         {

@@ -116,11 +116,16 @@ void CCommandParser::DisplayUsage()
 		#else
 		<< "Usage: " << CommandName () << " [-z dir] [-c dir] [-e] [-k [4.0 | 5.0 | 5.1 | 5.2 | 5.3 | 5.4]]\n"
 		#endif
-		<< "\t\t[-s [sisfile | dir] [+drive [+mcard | +mcardnr | +mcardalone | +mcardalonenr] [+sucert]]] [-s ...]\n"
+		<< "\t\t[-s [sisfile | dir] [+drive [+mcard | +mcardnr | +nonremovablepkg | +mcardalone | +mcardalonenr] [+sucert]]] [-s ...]\n"
 		<< "\t\t[-p param_file] [-d drive] [-r rofsbuild_log_file1,rofsbuild_log_file2,...]\n" 
 		<< "\t\t[-t romstubdir] [-n language_code] [-i config_file] \n"
 		<< "\t\t[-x pkgUID[,pkgUID2,...]] [-w [off | error | warn | info]] [-l logfile]\n\n"
 		<< "Where:\t-h\t\tDisplays help\n"
+		#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		<< "\t-a\t\tThe path representing the location of Resource files\n"
+		<< "\t  \t\tSpecifying the ROM Drive (-z) is mandatory.\n"
+		<< "\t  \t\tLocalize resource file is read from (Rom_drive\\path_specified_in_resource_file)\n"
+		#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		<< "\t-c\t\tThe directory representing the system drive on the device\n"
 		<< "\t-d\t\tThe system drive letter [default to 'C']\n"
 		<< "\t-e\t\tDisable eclipsing and SID checks using Z drive \n"
@@ -170,7 +175,7 @@ void CCommandParser::DisplayUsage()
 
 void CCommandParser::DisplayVersion()
 	{
-	std::cout << "\nINTERPRETSIS  " << " Version  2.1.3 ." << std::endl;
+	std::cout << "\nINTERPRETSIS  " << " Version  3.0.0 ." << std::endl;
 	std::cout << "Copyright (c) 2009 Symbian Software Ltd. All rights reserved.\n " << std::endl;
 	}
  
@@ -208,6 +213,17 @@ bool CCommandParser::ParseParam(int argc, const char**argv, CParameterList* aPar
 
 		switch (toupper(*++optPtr))
 		    {
+			#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+			case 'A':
+				{
+				if (argc <= 1)
+					throw CCommandParser::ECmdLineNoDirArgument;
+				
+				--argc;
+				aParamList->SetResourceFilePath(*(++argv));
+				break;	
+				}
+			#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 			case 'C':
 				{
 				if (argc <= 1)
@@ -216,6 +232,7 @@ bool CCommandParser::ParseParam(int argc, const char**argv, CParameterList* aPar
 				--argc;
 				aParamList->SetSystemDrive(*(++argv));
 				break;
+				
 				}
 			case 'D':
 				{	
@@ -224,7 +241,7 @@ bool CCommandParser::ParseParam(int argc, const char**argv, CParameterList* aPar
 				ConvertMultiByteToWideChar(*++argv,-1, buf, 2048);
 				aParamList->SetSystemDriveLetter(tolower(buf[0]));
 				break;
-				}
+				}					
 			case 'E':
 				{
 				aParamList->SetFlag(CParameterList::EFlagsDisableZDriveChecksSet);

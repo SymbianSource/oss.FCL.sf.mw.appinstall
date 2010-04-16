@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,7 +31,9 @@
 #include <e32base.h>
 #include <usif/usifcommon.h>
 #include <usif/scr/screntries.h>
+#include <usif/scr/appregentries.h>
 #include <scs/scsclient.h>
+#include <usif/scr/appreginfo.h>
 
 namespace Usif
 	{	 
@@ -137,12 +139,12 @@ namespace Usif
 				
 			@param aName The non-localizable name of the component being added.
 			@param aVendor The non-localizable vendor name of the component being added.
-			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see Usif::KSoftwareTypeNative and @see Usif::KSoftwareTypeJava.
+			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see KSoftwareTypeNative and @see KSoftwareTypeJava.
 			@param aGlobalId A named, nullable, case-sensitive string used to specify a deterministic identifier for the component 
 						that is unique within the context of that software type. The global component id might be 
 						the package UID for native applications or the MIDlet name/vendor pair for Java MIDLets, etc. 
 						Note that if KNullDesC is provided, the global identifier will be empty.
-			@param aCompOpType The type of the component operation. Typical operations are install or upgrade. @see Usif::TScrComponentOperationType
+			@param aCompOpType The type of the component operation. Typical operations are install or upgrade. @see TScrComponentOperationType
 			@return  The component ID of the newly added entry.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
@@ -164,7 +166,7 @@ namespace Usif
 							that is unique within the context of that software type. The global component id would be 
 							the package UID for native applications or the midlet-names for Java, etc. 
 							Note that if KNullDesC is provided, the global identifier will be empty.
-			@param aCompOpType The type of the component operation. Typical operations are install or upgrade. @see Usif::TScrComponentOperationType
+			@param aCompOpType The type of the component operation. Typical operations are install or upgrade. @see TScrComponentOperationType
 			@return  The component ID of the newly added entry. 
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
@@ -555,7 +557,7 @@ namespace Usif
 		IMPORT_C TBool GetComponentL(TComponentId aComponentId, CComponentEntry& aEntry, TLanguage aLocale=KUnspecifiedLocale) const;							
 		
 		/**
-			Retrieves the localized information from ComponentLocalizable table for a given component id.
+		    Retrieves the localized information from ComponentLocalizable table for a given component id.
 							
 			@param aComponentId The unique ID of the given software component.
 			@param aCompLocalizedInfoArray An output parameter for returning localized information for a given component id. 
@@ -581,7 +583,7 @@ namespace Usif
 			Retrieves the local component id of a given global component id.
 			
 			@param aGlobalIdName A deterministic identifier for the component that is unique within the context of that software type.
-			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see Usif::KSoftwareTypeNative and @see Usif::KSoftwareTypeJava.
+			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see KSoftwareTypeNative and @see KSoftwareTypeJava.
 			@return The local unique component id.
 			
 			@leave KErrNotFound Software component with this global id is not present in the system.
@@ -593,7 +595,7 @@ namespace Usif
 			Retrieves a specific software component entry with the specified global id and software type name for a given locale. 
 							
 			@param aGlobalIdName A deterministic identifier for the component that is unique within the context of that software type.
-			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see Usif::KSoftwareTypeNative and @see Usif::KSoftwareTypeJava.
+			@param aUniqueSwTypeName The non-localized, unique software type name, such as @see KSoftwareTypeNative and @see KSoftwareTypeJava.
 			@param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
 						   If KUnspecifiedLocale is provided, the current locale with its downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
 						   the names. If it fails, then the non-localized names are returned. If non-localized versions
@@ -693,7 +695,7 @@ namespace Usif
 						   leaves with KErrNotFound.
 			@return Returns a pointer to the property object containing the requested component property entry.
 					The ownership is transferred. If the property couldn't be found, then NULL is returned.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C CPropertyEntry* GetComponentPropertyL(TComponentId aComponentId, const TDesC& aPropertyName, TLanguage aLocale=KUnspecifiedLocale) const;
 		
@@ -713,7 +715,7 @@ namespace Usif
 						   If non-localized versions don't exist, then the function will leave with KErrNotFound.
 						   If a particular language is provided, then the properties are searched for this particular language
 						   and its downgraded languages. Otherwise, the function leaves with KErrNotFound.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		*/
 		IMPORT_C void GetComponentPropertiesL(TComponentId aComponentId, RPointerArray<CPropertyEntry>& aProperties, TLanguage aLocale=KUnspecifiedLocale) const;
 				
@@ -735,7 +737,7 @@ namespace Usif
 			
 			@param aComponentId The unique ID of the given software component. 	
 			@param aScomoState The new SCOMO state of the component.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C void SetScomoStateL(TComponentId aComponentId, TScomoState aScomoState) const;
 		
@@ -745,7 +747,7 @@ namespace Usif
 			@param aMimeType The MIME type. 	
 			@return The UID of the plug-in.
 			@leave KErrSifUnsupportedSoftwareType There is no corresponding plug-in for this MIME type.
-			@leave System-wide error codes.			
+            @leave A system-wide error code.			
 			@internalTechnology
 		 */
 		IMPORT_C TUid GetPluginUidL(const TDesC& aMimeType) const;
@@ -755,7 +757,7 @@ namespace Usif
 							
 			@param aComponentId Component's local identifier. 	
 			@return The UID of the plug-in.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 			@internalTechnology
 		 */
 		IMPORT_C TUid GetPluginUidL(TComponentId aComponentId) const;
@@ -773,7 +775,7 @@ namespace Usif
 			                               This paramater is optional. If it doesn't exist, it should be equal to the installer's secure id.                                
 			@param aMimeTypes The list of MIME types associated with this software type.
 			@param aLocalizedSwTypeNames A pointer to the list of optional localized software type names.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 			@internalTechnology
 		 */
 		IMPORT_C void AddSoftwareTypeL(const TDesC& aUniqueSwTypeName, TUid aSifPluginUid, TSecureId aInstallerSecureId, TSecureId aExecutionLayerSecureId, const RPointerArray<HBufC>& aMimeTypes, const RPointerArray<CLocalizedSoftwareTypeName>* aLocalizedSwTypeNames = NULL);
@@ -786,7 +788,7 @@ namespace Usif
 			
 			@param aUniqueSwTypeName Non-localized unique software type name.
 			@param aDeletedMimeTypes An output parameter, where the MIME types deleted from SCR as a result of this operation will be stored.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 			@internalTechnology
 		 */
 		IMPORT_C void DeleteSoftwareTypeL(const TDesC& aUniqueSwTypeName, RPointerArray<HBufC>& aDeletedMimeTypes);
@@ -796,7 +798,7 @@ namespace Usif
 					
 			@param aComponentId The unique ID of the given software component. 
 			@return ETrue, if the software installer of the given component is present; otherwise EFalse.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C TBool IsComponentOrphanedL(TComponentId aComponentId);
 		
@@ -809,7 +811,7 @@ namespace Usif
 					will be zero. The caller is responsible for deleting all memory.
 			@param aUniqueSwTypeName Optional parameter for non-localized unique software type name.
 									 If provided, only the log entries of the given software type are returned.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 			@capability ReadUserData
 		 */
 		IMPORT_C void RetrieveLogEntriesL(RPointerArray<CScrLogEntry>& aLogEntries, const TDesC* aUniqueSwTypeName=NULL) const;
@@ -822,7 +824,7 @@ namespace Usif
 			@return A positive value indicates that the left version is greater than the right version. 
 				    A negative value indicates that the left version is less than the right version. 
 				    Zero indicates that the left and right versions are equal. 
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C static TInt CompareVersionsL(const TDesC& aVersionLeft, const TDesC& aVersionRight);
 
@@ -831,7 +833,7 @@ namespace Usif
 
 			@param aComponentId The unique ID of the software component. 
 			@return ETrue, if the component is present on a read only drive; otherwise EFalse.
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C TBool IsComponentOnReadOnlyDriveL(TComponentId aComponentId) const;
 		
@@ -847,7 +849,7 @@ namespace Usif
 			@param aComponentId The unique ID of the component.
 			@return ETrue, if the component is present; otherwise EFalse.
 			
-			@leave System-wide error codes.
+            @leave A system-wide error code.
 		 */
 		IMPORT_C TBool IsComponentPresentL(TComponentId aComponentId) const;
 		
@@ -862,7 +864,7 @@ namespace Usif
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
 			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
-			@leave Or system-wide error codes.
+			@leave Or a system-wide error code.
 		 */
 		IMPORT_C void SetIsComponentPresentL(TComponentId aComponentId, TBool aValue);
 		
@@ -872,11 +874,72 @@ namespace Usif
 			@param aComponentId The unique ID of the given software component.
 			@param aMatchingSupportedLanguages RArray containing the list of installed supported languages
 			
-			@leave Or system-wide error codes.
-			@capability  ReadUserData Accessing the installed supported language ID's array requires ReadUserData
+			@leave A system-wide error code.
+            @capability  ReadUserData Accessing the installed supported language ID's array requires ReadUserData
 		 */
 		IMPORT_C void GetComponentSupportedLocalesListL(TComponentId aComponentId, RArray<TLanguage>& aMatchingSupportedLanguages) const;
 		
+		/**
+		    Adds a new application entry to the SCR database.
+		    
+		    N.B. This is a mutating function. Please see @see Usif::RSoftwareComponentRegistry.
+		    
+		    @param aComponentId The componentId associated to the application   
+		    @param aApplicationRegistrationData The information associated with the application.         
+		    @leave KErrArgument If the AppUid or AppFile in aApplicationRegistrationData is NULL
+                   Or a system-wide error code.
+		*/
+	
+		IMPORT_C void AddApplicationEntryL(const TComponentId aComponentId, const CApplicationRegistrationData& aApplicationRegistrationData);
+		
+		/**
+		    Deletes the information of all applications associated to an existing component entry from the SCR database.
+		    
+		    N.B. This is a mutating function. Please see @see Usif::RSoftwareComponentRegistry.
+		    
+		    @param aComponentId The componentId, associated to which, all applications are deleted.
+		    @leave A system-wide error code.
+		*/
+		IMPORT_C void DeleteApplicationEntriesL(TComponentId aComponentId);
+		
+		/**
+            Deletes an application entry from the SCR database.
+            
+            N.B. This is a mutating function. Please see @see Usif::RSoftwareComponentRegistry.
+            
+            @param aApplicationUid Uid of the application to be deleted.
+            @leave A system-wide error code.            
+        */
+        IMPORT_C void DeleteApplicationEntryL(TUid aApplicationUid);
+
+        /**
+            Gets the Component Id associated to a given Application Uid
+
+            @param aAppUid The AppUid of an application.
+            @return The componentId associated with the given application.  
+            @leave A system-wide error code.                      
+         */
+        IMPORT_C TComponentId GetComponentIdForAppL(TUid aAppUid) const;
+
+        /**
+            Gets the array of Application Uids associated to a given Component.
+
+            @param aCompId ComponentId of a component whose associated applications need to be fetched.
+            @param aAppUids Returns the array of application Uids associated with the component.
+            @leave A system-wide error code.            
+         */
+        IMPORT_C void GetAppUidsForComponentL(TComponentId aCompId, RArray<TUid>& aAppUids) const;
+        
+        /**
+            Returns the array of application launchers.
+                N.B. This function can only be used by AppArc to determine the launcher associated with 
+                an application.
+    
+            @param aLaunchers The current list of launchers present on the device.
+            @leave A system-wide error code.            
+         */
+        IMPORT_C void GetApplicationLaunchersL(RPointerArray<CLauncherExecutable>& aLaunchers) const;
+        		
 	private:
 
 		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
@@ -948,7 +1011,7 @@ namespace Usif
 			@return Returns the next component matching the given filter. If no more components can be found, returns NULL.
 				     The ownership is transferred to the calling client.	     
 			@leave KErrScrUnsupportedLocale The requested component name/vendor couldn't be found for the specified locale.
-			@leave A system-wide error code.
+			@leave Or a system-wide error code.
 
 			@capability  ReadUserData Accessing list of components installed by the user requires ReadUserData
 		 */
@@ -972,7 +1035,7 @@ namespace Usif
 						   then the function leaves with KErrScrUnsupportedLocale.		
 			@return EFalse, if the end of the view has been reached. Otherwise, ETrue.  		
 			@leave KErrScrUnsupportedLocale The requested component name/vendor couldn't be found for the specified locale.
-			@leave A system-wide error code.
+			@leave Or a system-wide error code.
 
 			@capability  ReadUserData Accessing list of components installed by the user requires ReadUserData
 	     */
@@ -997,13 +1060,14 @@ namespace Usif
 						   and its downgraded languages. If there is no name and vendor with the provided language, 
 						   then the function leaves with KErrScrUnsupportedLocale.		
 			@leave KErrScrUnsupportedLocale The requested component name/vendor couldn't be found for the specified locale.
-			@leave A system-wide error code.
+			@leave Or a system-wide error code.
 
 			@capability  ReadUserData Accessing list of components installed by the user requires ReadUserData
 		 */
 		IMPORT_C void NextComponentSetL(TInt aMaxCount, RPointerArray<CComponentEntry>& aComponentList, TLanguage aLocale=KUnspecifiedLocale) const;
 	
 	private:
+		void CheckSubSessionHandleL() const;     //Checks for Valid SubSessionHandle
 		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
 		template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
 		template <class T, class C> friend TBool GetObjectL(const C& aConnection, T& aObject, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
@@ -1019,7 +1083,7 @@ namespace Usif
 	public:
 		/**
 			Default constructor of registry file list sub-session.
-		 */
+			*/
 		IMPORT_C RSoftwareComponentRegistryFilesList();
 		
 		/**
@@ -1063,12 +1127,371 @@ namespace Usif
 		IMPORT_C void NextFileSetL(TInt aMaxCount, RPointerArray<HBufC>& aFileList) const;
 	
 	private:
+		void CheckSubSessionHandleL() const;     //Checks for Valid SubSessionHandle
 		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
 		template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
 		template <class T, class C> friend T* GetObjectL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
 		template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RPointerArray<T>& aArray);
-		};
-			
-	}// End of namespace Usif
+	};
 
+
+	NONSHARABLE_CLASS(RApplicationRegistryView) : public RScsClientSubsessionBase
+	/**
+        This class opens a sub-session to the SCR server and sends a request to create a complete Application Registration view.
+        This class can only be used by Apparc.
+	*/
+	{
+	public:
+	    /**
+	      Default constructor of registry view sub-session.
+	     */
+	      IMPORT_C RApplicationRegistryView();
+	            
+	      /**
+	           Closes the registry view on the SCR server.
+	      */
+	      IMPORT_C void Close();
+
+
+	      /**
+	           Opens a complete view of Application Registration in the SCR.
+	            
+	           If the call to this function completes successfully, then the interface client will access 
+	           the enumerated records by using @see RApplicationRegistryView::GetNextApplicationRegistrationInfoL.
+	                
+	           If a transaction owned by another session is in progress on the SCR server, the open view request 
+	           will be rejected.
+	               
+	           N.B. After this function completes successfully, GetNextApplicationRegistrationInfoL function
+	           can be used  
+	                
+	           @param aCompReg An active SCR connection.
+	           @param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
+	           if aLocale is provided, then Application Registration Info for that locale is returned(if present in SCR).
+	           If aLocale is provided but the localizable info for that locale is not present in the SCR then 
+	           its(aLocale) downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
+	           the reg details. If it fails, then application registration info for that application is not returned.
+	           If alocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
+	           @leave A system-wide error code.
+	     */
+	     IMPORT_C void OpenViewL(const RSoftwareComponentRegistry& aCompReg, TLanguage aLocale=KUnspecifiedLocale);                 
+	     
+		 /**
+	           Opens a view of the Application Registration information for a list of AppUids.
+	            
+	           If the call to this function completes successfully, then the interface client will access 
+	           the enumerated records by using @see RApplicationRegistryView::GetNextApplicationRegistrationInfoL.
+	                
+	           If a transaction owned by another session is in progress on the SCR server, the open view request 
+	           will be rejected.
+	               
+	           N.B. After this function completes successfully, GetNextApplicationRegistrationInfoL function
+	           can be used  
+	                
+	           @param aCompReg An active SCR connection.
+			   @param aAppRegAppUids Array of AppUids to be fetched.
+	           @param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
+	           if aLocale is provided, then Application Registration Info for that locale is returned(if present in SCR).
+	           If aLocale is provided but the localizable info for that locale is not present in the SCR then 
+	           its(aLocale) downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
+	           the reg details. If it fails, then application registration info for that application is not returned.
+	           If alocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
+	           @leave A system-wide error code.
+	     */
+		 
+	     IMPORT_C void OpenViewL(const RSoftwareComponentRegistry& aCompReg, const RArray<TUid>& aAppRegAppUids, TLanguage aLocale=KUnspecifiedLocale);
+	                
+	     /**
+	           Retrieves the next Application Registration entry from the view which has already been 
+	           created in the SCR with @see RApplicationRegistryView::OpenApplicationRegistrationViewL.                                
+	                                                  
+            @param aNoOfEntries Number of AppInfo Entries to be fetched in a single call.
+            @param aApplicationRegistration An output parameter for returning the array of CApplicationRegistrationData.                 
+            @leave A system-wide error code
+         */
+	     IMPORT_C void GetNextApplicationRegistrationInfoL(TInt aNoOfEntries, RPointerArray<CApplicationRegistrationData>& aApplicationRegistration) const; 
+	            
+        private:
+	            TInt iNoOfEntries;
+	            TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
+	            template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
+	            template <class T, class C> friend TBool GetObjectL(const C& aConnection, T& aObject, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+	            template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RArray<T>& aArray);
+	            template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RPointerArray<T>& aArray);
+	            
+	};  //End of RApplicationRegistryView
+	
+	
+	
+NONSHARABLE_CLASS(RApplicationInfoView) : public RScsClientSubsessionBase
+/**
+	This class opens a sub-session to the SCR server and sends a request to create a AppInfo view
+	by using the supplied filter on the server side. 
+	It returns information associated to a list of applications, information includes the full pathname to the application and the application's caption and short caption informtion @see TAppRegInfo, 
+	however localizable specific information is retrieved only if the app has localizable information 
+	matching the locale with which the subsession was opened or matching the current device language.
+	It is different from class RApplicationRegistryView in the following ways:
+	1. This subsession has the ability to filter the applciations based on certain parameters @see CAppInfoFilter.
+	2. This returns specific information contained in TAppRegInfo, however class RApplicationRegistryView returns all the information associated with an app in CApplicationRegistrationData.
+	3. Functionality provided by this class can be used by all, however class RApplicationRegistryView can be used only by AppArc.
+	 
+*/
+{
+	public:
+		/**
+			Default constructor of AppInfo sub-session.
+		 */
+		IMPORT_C RApplicationInfoView();
+		
+		/**
+			Closes the registry view on the SCR server.
+		*/
+		IMPORT_C void Close();
+
+		/**
+	    	Opens a view of Application Info in the SCR.
+		
+			If the call to this function completes successfully, then the interface client can access 
+			the enumerated records by using @see RAppInfoView::GetNextAppInfoL.
+			
+			If a transaction owned by another session is in progress on the SCR server, the open view request 
+			will be rejected.
+			
+			N.B. After this function completes successfully, GetNextAppInfoL function
+			can be used  
+			
+			@param aCompReg An active SCR connection.
+			@param aAppInfoFilter Pointer to the filter object which will be used by the SCR to enumerate the Application Info. Also @see CAppInfoFilter.
+                   			
+			@leave A system-wide error code.
+			@capability  ReadUserData, Accessing list of App Info requires ReadUserData
+		*/
+		IMPORT_C void OpenViewL(const RSoftwareComponentRegistry& aCompReg, CAppInfoFilter* aAppInfoFilter = NULL,TLanguage aLocale = KUnspecifiedLocale);
+
+		/**
+			Retrieves the next AppInfo entry from the view which has already been 
+			created in the SCR with @see RSoftwareComponentRegistryView::OpenAppInfoViewL.
+			
+			@param aNoOfEntries Number of AppInfo Entries to be fetched in a single call.
+			@param aAppInfo An output parameter for returning the array of AppInfo.			   		
+			@leave A system-wide error code.
+	     */
+		IMPORT_C void GetNextAppInfoL(TInt aNoOfEntries, RPointerArray<TAppRegInfo>& aAppInfo) const;
+
+	private:
+		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
+		template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
+		template <class T, class C> friend TBool GetObjectL(const C& aConnection, T& aObject, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+		template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RArray<T>& aArray);
+		template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RPointerArray<T>& aArray);
+
+};//End of RApplicationInfoView
+
+NONSHARABLE_CLASS(RRegistrationInfoForApplication) : public RScsClientSubsessionBase
+/**
+	This class opens a sub-session to the SCR server with a particular application uid 
+	and fetches the respective details for this particular application only.
+*/
+    {
+    public:
+		/**
+			Default constructor of registry view sub-session.
+		*/
+		IMPORT_C RRegistrationInfoForApplication();
+
+		/**
+			Closes the registry view on the SCR server.
+		 */
+		IMPORT_C void Close();
+
+		/**
+            Creates a new subsession for the given App Uid. 
+		    @param aCompReg An active SCR connection.                            
+		    @param aAppUid The Application ID to be used for further queries.
+			@param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
+						   If KUnspecifiedLocale is provided, the current locale with its nearest language
+						   (@see  BaflUtils::GetEquivalentLanguageList) will be used .
+		    @leave KErrNotFound If aAppUid is not found.
+                   Or a system-wide error code.
+		*/
+		IMPORT_C void OpenL(const RSoftwareComponentRegistry& aCompReg,const TUid aAppUid,TLanguage aLocale=KUnspecifiedLocale);
+
+		/**
+			Returns the list of Service Uids for the application. 
+                                                    
+            @param aServiceUids The list of Service Uids retrieved for the application. 
+            @leave A system-wide error code.
+        */		
+		IMPORT_C void GetAppServicesUidsL(RArray<TUid>& aServiceUids) const;
+
+        /**
+            Returns the Application Language(Locale) for the application. 
+			This is identified after mapping the Application languages to the nearest device language.                                       
+            @return TLanguage The Application Language(Locale) retrieved for the application. 
+            @leave A system-wide error code.
+        */		
+        IMPORT_C TLanguage ApplicationLanguageL() const;
+
+        /**
+            Returns the default Screen Number for the application. 
+                                        
+            @return  The default Screen Number retrieved for the application. 
+            @leave A system-wide error code.
+        */        
+        IMPORT_C TInt DefaultScreenNumberL() const;
+
+        /**
+            Returns the number of defined icons for the application and locale. 
+            
+            @return  The number of defined icons retrieved for the given locale of the application. 
+            @leave A system-wide error code.
+        */         
+		IMPORT_C TInt NumberOfOwnDefinedIconsL() const;
+		
+		/**
+            Returns the array of files owned by the application .
+		                                                
+            @param aAppOwnedFiles returns array of Files owned by the application. 
+            @leave A system-wide error code.                     		           
+		*/     
+		IMPORT_C void GetAppOwnedFilesL(RPointerArray<HBufC>& aAppOwnedFiles) const;
+		
+		/**
+            Returns the characteristics of the application. 
+		                                                        
+            @param aApplicationCharacteristics returns capabilty of the application.  
+            @leave A system-wide error code.                       		                    
+		*/        
+		IMPORT_C void GetAppCharacteristicsL(TApplicationCharacteristics& aApplicationCharacteristics) const;
+		/**
+            Returns the file name of the icon associated with the application. 
+		                                                                
+            @param aFullFileName  returns file name of the icon associated with the application. 
+            @leave A system-wide error code.                        		                            
+		*/                
+		IMPORT_C void GetAppIconL(HBufC*&  aFullFileName) const;
+		        
+		/**
+            Returns the file name of the icon associated with the application, given a View Uid. 
+
+            @param aViewUid view Uid of the app                                                            
+            @param aFullFileName  returns file name of the icon of the application.   
+            @leave A system-wide error code.                 		                                   
+		*/ 
+		IMPORT_C void GetAppViewIconL(TUid aViewUid,HBufC*& aFullFileName) const;
+		
+		/** Returns the view information published by the application for the current locale.
+
+		    @param aAppViewInfoArray On return, the array contains information on all of the views 
+		    published by the specified application for the current locale.
+		    @see CAppViewData 
+            @leave A system-wide error code.		    
+		**/
+
+		 IMPORT_C void GetAppViewsL(RPointerArray<CAppViewData>& aAppViewInfoArray) const;
+
+	private:
+		void CheckSubSessionHandleL() const;     //Checks for Valid SubSessionHandle
+		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
+		template <class C> void SendDependencyArgsL(TInt aFunction, const C& aSupplierId, const CGlobalComponentId& aDependantGlobalCompId);
+		template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
+		template <class T, class C> friend T* GetObjectL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+		template <class T, class C> friend TBool GetObjectL(const C& aConnection, T& aObject, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+		template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RArray<T>& aArray);
+		template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RPointerArray<T>& aArray);
+		
+	}; //End of RRegistrationInfoForApplication
+
+NONSHARABLE_CLASS(RApplicationRegistrationInfo) : public RScsClientSubsessionBase
+/**
+    This class opens a sub-session to the SCR server and is used to retrieve application information.
+
+ */   
+    {
+    public:
+        /**
+            Default constructor of registry view sub-session.
+         */
+        IMPORT_C RApplicationRegistrationInfo();
+        
+        /**
+            Closes the registry view sub-session on the SCR server.
+         */
+        IMPORT_C void Close();
+
+        /**
+            Creates a new subsession with SCR. 
+            
+            Once the call to this function succeeds, the client will be able to query SCR for various information 
+            such as data type and service information. 
+            
+            If a transaction is owned by another session is in progress on the SCR server, then this request 
+            will be rejected.
+            
+            @param aCompReg An active SCR connection.                          
+            @leave A system-wide error code.
+        */
+        IMPORT_C void OpenL(const RSoftwareComponentRegistry& aCompReg);
+
+        /**
+            Returns the App Uid for a given Service Uid that handles the specified datatype with the highest priority. 
+                                        
+            @param aName The Data Type Text.
+            @param aServiceUid  The Service Uid.
+            @return  The App Uid for the given Data type and Service Uid. 
+            @leave A system-wide error code.
+        */      
+        IMPORT_C TUid GetAppForDataTypeAndServiceL(const TDesC &aName,const TUid aServiceUid) const;
+        
+        /**
+            Return the App Uid for the given Data type with the highest priority. 
+                                        
+            @param aName The Data Type Text.
+            @return  The App Uid for the given Data type. 
+            @leave KErrNotFound If the AppUid is not found
+                   Or a system-wide error code.
+        */
+        IMPORT_C TUid GetAppForDataTypeL(const TDesC &aName) const;
+
+        /**
+            Return the Service Info details for the set parameters of the filter. 
+                                        
+            @param aAppServiceInfoFilter A pointer to AppServiceInfoFilter enumerating the parameters on the basis of which serviceinfo details are to be fetched.
+            @param aAppServiceInfoArray  On return contains the service info details assoicated with the parameters set in the filter.
+            @param aLocale               The language code of the requested locale. The default value is KUnspecifiedLocale.
+                                         If KUnspecifiedLocale is provided, the current locale with its nearest language (@see  BaflUtils::GetEquivalentLanguageList) is used to find
+                                         the names.             
+            @leave KErrNotFound If the Service Info details are not found
+                   Or a system-wide error code.
+        */
+        IMPORT_C void GetServiceInfoL(CAppServiceInfoFilter* aAppServiceInfoFilter, RPointerArray<CServiceInfo>& aAppServiceInfoArray, TLanguage aLocale=KUnspecifiedLocale) const;
+
+        /**
+            Return the basic application information contained in  TAppRegInfo for a given application present in the SCR DB.
+                    
+            @param aAppUid  An application's Uid.                  
+            @param aAppInfo An output parameter for returning the array of AppInfo. 
+            @param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
+                           If KUnspecifiedLocale is provided, the current locale with its nearest language (@see  BaflUtils::GetEquivalentLanguageList) is used to find
+                           the names.  
+            @return ETrue if found, EFalse if application is not found
+                                    
+            @leave A system-wide error code.
+        */
+        IMPORT_C TBool GetAppInfoL(TUid aAppUid, TAppRegInfo& aAppInfo, TLanguage aLocale=KUnspecifiedLocale);
+        
+        
+    private:
+        void CheckSubSessionHandleL() const;     //Checks for Valid SubSessionHandle
+        TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;
+        template <class C> void SendDependencyArgsL(TInt aFunction, const C& aSupplierId, const CGlobalComponentId& aDependantGlobalCompId);
+        template <class C> friend HBufC8* GetObjectDataLC(const C& aConnection, TInt aFunction, TInt aDataSize);
+        template <class T, class C> friend T* GetObjectL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+        template <class T, class C> friend TBool GetObjectL(const C& aConnection, T& aObject, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs);
+        template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RArray<T>& aArray);
+        template <class C, class T> friend void GetObjectArrayL(const C& aConnection, TInt aSizeFunction, TInt aDataFunction, TInt aArgNum, TIpcArgs& aArgs, RPointerArray<T>& aArray);
+        
+    }; //End of RApplicationRegistrationInfo       
+
+}// End of namespace Usif
 #endif // SOFTWARECOMPONENTREGISTRY_H

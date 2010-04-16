@@ -116,6 +116,14 @@ private:
      @param aDirectory The directory to search for PreInstalled Files   
      */
     void ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory);
+    
+    /**
+     * Update component status to SCR and AppArc.
+     *
+     * @param aChangeType Defines if drive is mounted or unmounted.
+     * @param aDrive Drive which is mounted or unmounted.
+     */    
+    void UpdateComponentStatusL( TChangeType aChangeType, TInt aDrive );
 
           
 private:

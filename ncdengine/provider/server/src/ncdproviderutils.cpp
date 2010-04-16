@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -279,7 +279,29 @@ TNcdApplicationStatus CNcdProviderUtils::IsApplicationInstalledL(
     return InstallationServiceL().IsApplicationInstalledL( aUid, version );
     }
 
+// ---------------------------------------------------------------------------
+// Checks if the widget with the given identifier is installed
+// call CNcdInstallationService in deviceinteraction dll
+// ---------------------------------------------------------------------------
+//
+TNcdApplicationStatus CNcdProviderUtils::IsWidgetInstalledL( 
+    const TDesC& aIdentifier, const TDesC& aVersion )
+    {
+    TCatalogsVersion version;
+    TRAPD( err, TCatalogsVersion::ConvertL( version, aVersion ) );
+    LeaveIfNotErrorL( err, KErrArgument, KErrGeneral );
+                             
+    return InstallationServiceL().IsWidgetInstalledL( aIdentifier, version );
+    }
 
+// ---------------------------------------------------------------------------
+// Calling widget registry API to return the Uid of the widget with given ident
+// ---------------------------------------------------------------------------
+//
+TUid CNcdProviderUtils::WidgetUidL( const TDesC& aIdentifier)
+    {
+    return InstallationServiceL().WidgetUidL( aIdentifier );
+    }
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------

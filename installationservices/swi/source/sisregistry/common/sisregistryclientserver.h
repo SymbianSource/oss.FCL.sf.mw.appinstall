@@ -69,7 +69,7 @@ enum TSisRegistryMessages
 	EInstalledDrives,			 
 	ERemoveWithLastDependent,
 	ESetRemoveWithLastDependent,
-	EGetMatchingSupportedLanguages,					
+	EGetMatchingSupportedLanguages,		
 	// daemon interface
 	EAddDrive,
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
@@ -121,7 +121,7 @@ enum TSisRegistryMessages
 	EloggingFile,	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
 	EIsFileRegistered, 
-	EComponentIdForUid,
+	EComponentIdForUid,	
 #endif
 	// NOTE : The security policy range ESeparatorMinimumWriteUserData-
 	// ESeparatorMinimumTCB also requires NetworkServices as well as
@@ -144,6 +144,8 @@ enum TSisRegistryMessages
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	EAddSoftwareTypeEntry,
 	EUpdateSoftwareTypeEntry,
+    EAddAppRegEntry,
+    EUpdateAppRegEntry,
 #endif
 
 	// Additional RegistryWritableSession clients 
@@ -153,6 +155,7 @@ enum TSisRegistryMessages
 #endif
 	// All clients 
 	ERegistryFiles = 128,
+	
 	// Additional ReadUserData calls
 	ESeparatorMinimumReadUserData2 = 256,
 	ERemovablePackages,	
@@ -165,6 +168,9 @@ enum TSisRegistryMessages
 	ESignedBySuCert,
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	EComponentIdForPackage,
+	EAppUidsForComponent,  
+	EComponentIdsForPackageUid,
 	ESetComponentState, //SIF only
 #endif
 	ESeparatorEndAll

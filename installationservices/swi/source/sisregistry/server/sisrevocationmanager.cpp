@@ -61,7 +61,7 @@ CSisRevocationManager::CSisRevocationManager(CSisRegistrySession& aSession) :
 	CActiveScheduler::Add(this);	
 	}
 
-CSisRevocationManager::~CSisRevocationManager()
+EXPORT_C CSisRevocationManager::~CSisRevocationManager()
 	{
 	// Remove active object from active scheduler
 	Deque(); 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -23,9 +23,13 @@
  @internalTechnology
 */
 
+#ifndef __SECUTILS_H__
+#define __SECUTILS_H__
+
 #include <e32std.h>
 #include <f32file.h>
 #include <e32uid.h>
+#include "swi/swiutils.h"
 
 namespace Swi
 {
@@ -83,6 +87,20 @@ public:
 	 *              caller.
 	 */	
 	IMPORT_C static HBufC* HexHashL(const TDesC& aName);
+	   
+    /**
+     * Appends a Uid to the buffer and publishes the same.
+     * @param aBuf The buffer containing the list of Uids that is published.
+     * @param aUid The UID of the package which has been processed.
+     */
+    IMPORT_C static TInt PublishPackageUid(TUid aUid, TUid (&aUidList)[KMaxUidCount]);
+    
+    /**
+     * Checks if the given Uid is present in the buffer that contains the list of Uids published.
+     * @param aBuf The buffer containing the list of Uids that is published.
+     * @param aUid The UID of the package which to be verified.
+     */
+    IMPORT_C static TBool IsPackageUidPresent(TUid aUid, const TUid (&aUidList)[KMaxUidCount]);
 	};
 
 inline TBool SecUtils::IsExe(const TEntry& aEntry)
@@ -95,3 +113,5 @@ inline TBool SecUtils::IsDll(const TEntry& aEntry)
 	return (aEntry[0].iUid == KDynamicLibraryUidValue) ? ETrue : EFalse;
 	}
 } // namespace Swi
+
+#endif

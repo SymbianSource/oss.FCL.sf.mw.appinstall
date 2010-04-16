@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -27,6 +27,24 @@ TBool IsEqual(const CComponentEntry& aLhsEntry, const CComponentEntry& aRhsEntry
 	{
 	return (aLhsEntry == aRhsEntry);
 	}
+
+TBool operator ==(const Usif::TAppRegInfo& aLhsEntry, const Usif::TAppRegInfo& aRhsEntry)
+    {
+    return (aLhsEntry.Uid() == aRhsEntry.Uid() && 
+            aLhsEntry.FullName() == aRhsEntry.FullName() &&  
+            aLhsEntry.Caption() == aRhsEntry.Caption() &&  
+            aLhsEntry.ShortCaption() == aRhsEntry.ShortCaption());
+    }
+TBool operator !=(const TAppRegInfo& aLhsEntry, const TAppRegInfo& aRhsEntry)
+    {
+    return !operator ==(aLhsEntry, aRhsEntry);
+    }
+
+TBool IsEqual(const TAppRegInfo& aLhsEntry, const TAppRegInfo& aRhsEntry)
+    {
+    return (aLhsEntry == aRhsEntry);
+    }
+
 
 TBool IsEqual(const HBufC& aLhs, const HBufC& aRhs)
 	{
@@ -316,6 +334,178 @@ void CScrFileListSubsessionStep::ImplTestStepL()
 	}
 
 void CScrFileListSubsessionStep::ImplTestStepPostambleL()
+	{
+	CScrTestStep::ImplTestStepPostambleL();
+	}
+
+// -----------CAppInfoView-----------------
+
+CAppInfoView::CAppInfoView(CScrTestServer& aParent)	: CScrTestStep(aParent)
+	{
+	}
+
+void CAppInfoView::ImplTestStepPreambleL()
+	{
+	CScrTestStep::ImplTestStepPreambleL();
+	}
+
+void CAppInfoView::GetAppEntryFromConfigL(RPointerArray<Usif::TAppRegInfo>& aEntries)
+    {
+    TInt appEntriesCount(0);
+    TAppRegInfo *appRegInfo=NULL;
+    if (!GetIntFromConfig(ConfigSection(), KAppEntriesCountName, appEntriesCount))
+        {
+        appRegInfo = GetAppInfoFromConfigL(ETrue);
+        aEntries.AppendL(appRegInfo);
+        }
+    
+    for (TInt i = 0; i < appEntriesCount; ++i)
+        {
+        appRegInfo = GetAppInfoFromConfigL(EFalse,i);
+        aEntries.AppendL(appRegInfo);
+        }
+    }
+
+void CAppInfoView::VerifyNonReturnedEntriesL(const RPointerArray<Usif::TAppRegInfo>& aExpectedEntries)
+    {
+    // Check if we need to verify the returned components
+    // Performance tests don't need verification.
+    TBool noVerification = EFalse;
+    GetBoolFromConfig(ConfigSection(), _L("NoVerification"), noVerification);
+    if(noVerification) return;
+
+    if (aExpectedEntries.Count() > 0)
+        {
+        TUid appUid = aExpectedEntries[0]->Uid(); 
+        const TDesC& appName = aExpectedEntries[0]->FullName();
+        ERR_PRINTF3(_L("At least one expected entry was not returned by the API - id %d, name %S"), appUid, &appName);
+        SetTestStepResult(EFail);
+        }   
+    }
+
+void CAppInfoView::TestSessionL(TInt aNoOfEntries, const RApplicationInfoView& aSubSession, RPointerArray<Usif::TAppRegInfo>& aExpectedEntries)
+    {
+    // Check if we need to verify the returned components
+    // Performance tests don't need verification.
+    TBool isVerification = EFalse;
+    GetBoolFromConfig(ConfigSection(), _L("IsVerification"), isVerification);
+    while (1)
+            {
+            RPointerArray<Usif::TAppRegInfo> appRegInfoSet;
+            aSubSession.GetNextAppInfoL(aNoOfEntries, appRegInfoSet);
+            TInt returnedAppRegInfoCount = appRegInfoSet.Count(); 
+            if (returnedAppRegInfoCount <= 0)
+                {
+                INFO_PRINTF2(_L("May be negative case... no entries found ...Entries count read is %d "),returnedAppRegInfoCount);
+				appRegInfoSet.Close();
+                break;
+                }
+            
+            if(!isVerification) 
+                {
+                //INFO_PRINTF2(_L("Read Appuid is  %S"),appRegInfoSet[0]->iFullName );
+                INFO_PRINTF3(_L("No of entries read is %d and first appuid is %d "),returnedAppRegInfoCount,  appRegInfoSet[0]->Uid());
+               
+                    TAppRegInfo* tp=NULL;
+                    for (TInt i = 0; i<returnedAppRegInfoCount; i++ )
+                        {
+                    tp=appRegInfoSet[i];
+                    delete tp;
+                        }
+                appRegInfoSet.Close();
+				continue;
+                }
+                    
+            for (TInt i = 0; i < returnedAppRegInfoCount; ++i)
+                {
+                if (!VerifyMatchingL(appRegInfoSet[i], aExpectedEntries))
+                   {
+                   
+                   SetTestStepResult(EFail);
+                   ERR_PRINTF2(_L("The API returned an unexpected entry with id 0x%x "), appRegInfoSet[i]->Uid());
+                   TAppRegInfo* tp=NULL;
+                   for (TInt i = 0; i<returnedAppRegInfoCount; i++ )
+                       {
+                       tp=appRegInfoSet[i];
+                       delete tp;
+                       }
+                   appRegInfoSet.Close();
+                   return;
+                   }
+                }
+                                TAppRegInfo* tp=NULL;
+                               for (TInt i = 0; i<returnedAppRegInfoCount; i++ )
+                                   {
+                               tp=appRegInfoSet[i];
+                               delete tp;
+                                   }
+            appRegInfoSet.Close();
+            }
+        
+    VerifyNonReturnedEntriesL(aExpectedEntries); 
+    
+    }
+
+void CAppInfoView::ImplTestStepL()
+	{	
+	CAppInfoFilter* appinfoFilter=NULL ;
+
+	INFO_PRINTF1(_L("Read appinfo filter from configuration"));
+	TRAPD(err, ReadAppInfoFilterFromConfigL(&appinfoFilter));
+	if (KErrNotFound==err)
+	    {
+	    delete appinfoFilter;
+	    appinfoFilter=NULL;
+	    }
+	RPointerArray<TAppRegInfo> expectedAppRegEntries;
+    CleanupResetAndDestroyPushL(expectedAppRegEntries);
+	TInt noOfEntries(1);
+	GetIntFromConfig(ConfigSection(), _L("NoOfEntries"), noOfEntries);
+	
+	TBool isVerification = EFalse;
+	GetBoolFromConfig(ConfigSection(), _L("IsVerification"), isVerification);
+	if(isVerification) 
+	{
+        GetAppEntryFromConfigL(expectedAppRegEntries);
+        INFO_PRINTF1(_L("Read expected entries for verification "));
+	}
+    
+	INFO_PRINTF1(_L("Opened subsession to SCR"));
+    TBool callGetNextAppWithLocale=EFalse;
+    TInt appLocale;
+    if (GetIntFromConfig(ConfigSection(), _L("LocaleValue"), appLocale))
+        callGetNextAppWithLocale=ETrue;
+	RApplicationInfoView  subSession;
+	CleanupClosePushL(subSession);
+
+	if(callGetNextAppWithLocale)
+	    {
+	    subSession.OpenViewL(iScrSession,appinfoFilter, (TLanguage)appLocale);
+	    }
+	else
+	    {
+	    subSession.OpenViewL(iScrSession,appinfoFilter);
+	    }
+
+	if(appinfoFilter)
+	    delete appinfoFilter;
+
+	TRAPD(err1,TestSessionL(noOfEntries, subSession, expectedAppRegEntries));
+	
+	TInt count = expectedAppRegEntries.Count();
+	TAppRegInfo* tp=NULL;
+	for (TInt i = 0; i<count; i++ )
+	    {
+	    tp=expectedAppRegEntries[i];
+	    delete tp;
+	    }
+	expectedAppRegEntries.Close();
+	CleanupStack::PopAndDestroy(2, &expectedAppRegEntries); //expectedAppRegEntries, subSession
+	if (KErrNone!=err1)
+	    User::Leave(err1);
+	}
+
+void CAppInfoView::ImplTestStepPostambleL()
 	{
 	CScrTestStep::ImplTestStepPostambleL();
 	}

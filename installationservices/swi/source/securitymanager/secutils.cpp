@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -18,6 +18,9 @@
 
 #include "secutils.h"
 #include <hash.h> 
+#include <e32property.h>
+#include <sacls.h>
+#include "log.h"
 
 namespace Swi
 {
@@ -65,5 +68,39 @@ EXPORT_C HBufC* SecUtils::HexHashL(const TDesC& aName)
 	CleanupStack::PopAndDestroy(digester);
 	return hashBuf;
 	}
-	
+
+EXPORT_C TInt SecUtils::PublishPackageUid(TUid aUid, TUid (&aUidList)[KMaxUidCount])
+    {
+    TInt i=0;
+    TInt count = aUidList[0].iUid;
+    
+    if (count>=KMaxUidCount-1)
+        return KErrOverflow;
+    
+    aUidList[++count] = aUid;    
+    aUidList[0].iUid++;
+    
+    TInt *tempUidList = (TInt*)aUidList;
+    TBuf<KMaxUidCount*sizeof(TUid)+1> buffer;
+    TInt *bufPtr = (TInt*)buffer.Ptr();
+    buffer.SetLength((count+1)*sizeof(TUid));
+    do        
+        {
+        *bufPtr = *tempUidList;
+        }while(++i<=count && bufPtr++ && tempUidList++);
+
+    return(RProperty::Set(KUidSystemCategory, KSWIUidsCurrentlyBeingProcessed, buffer));
+    }
+
+EXPORT_C TBool SecUtils::IsPackageUidPresent(TUid aUid, const TUid (&aUidList)[KMaxUidCount])
+    {
+    TInt count = aUidList[0].iUid;
+    for(TInt i=1;i<=count;i++)
+        {
+        if(aUidList[i]==aUid)
+            return ETrue;
+        }
+    return EFalse;
+    }
+
 } // namespace Swi

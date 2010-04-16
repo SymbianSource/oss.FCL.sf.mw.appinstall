@@ -114,4 +114,8 @@ void CInterpretSIS::Uninstall()
 		}
 	}
 
+const SisRegistry* CInterpretSIS::GetSisRegistry() const
+	{
+	return iSisRegistry;
+	}
 // End of File

@@ -31,6 +31,7 @@
 #include "stsfilepathprotection.h"
 #include "stsrollbackalltest.h"
 #include "scrpluginmanagement.h"
+#include "scrapparccomponentspecific.h"
 
 #include <s32file.h>
 
@@ -51,6 +52,7 @@ MCapabilityTestFactory* CapabilityTestFactoryL()
 	factory->AddTestL(CStsPublicPathSecTest::NewL());
 	factory->AddTestL(CStsRollbackAllSecTest::NewL());
 	factory->AddTestL(CScrPluginManagementSecTest::NewL());
+	factory->AddTestL(CScrApparcComponentSpecificSecTest::NewL());
 
 	return factory;
 	}

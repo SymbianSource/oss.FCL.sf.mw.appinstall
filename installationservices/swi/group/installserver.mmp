@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -90,6 +90,7 @@ SOURCE globalidformat.cpp
 SOURCEPATH	../source/swis/server
 SOURCE registrywrapper.cpp
 SOURCE installswtypehelper.cpp
+SOURCE appregextractor.cpp
 #endif
 
 // The following is also included in sishelper; to avoid creating a new 
@@ -131,8 +132,10 @@ LIBRARY hash.lib
 LIBRARY sectcbutil.lib
 LIBRARY swiobserverclient.lib
 LIBRARY swiobservedinfo.lib
-
-
+LIBRARY secsettingsclient.lib
+LIBRARY x509.lib
+LIBRARY pkixcertbase.lib
+ 
 #ifdef WINS
 library			emulator.lib
 #endif
@@ -141,3 +144,4 @@ start wins
 WIN32_LIBRARY		kernel32.lib
 end
 SMPSAFE
+

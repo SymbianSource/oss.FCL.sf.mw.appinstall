@@ -1,0 +1,32 @@
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+/**
+ @file swiappregintegration04_noappfile_reg.rss
+ @internalComponent - Internal Symbian test code
+*/
+
+#include <appinfo.rh>
+#include <swiappregintegration04_loc.rsg>
+
+UID2 KUidAppRegistrationResourceFile
+UID3 0x90000010
+
+RESOURCE APP_REGISTRATION_INFO
+	{
+	localisable_resource_file = "C:\\resource\\apps\\swiappregintegration04_loc";
+	localisable_resource_id = R_LAI;	    
+	}
+    

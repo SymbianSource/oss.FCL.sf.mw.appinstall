@@ -325,6 +325,9 @@ REM Tests for Post manufacture installation of a Layered Execution Environment
 testexecute z:\tswi\tuiscriptadaptors\scripts\tswtype.script
 move c:\logs\testexecute\tswtype.htm e:\testresults\tswtype.htm
 
+testexecute z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.script
+move c:\logs\testexecute\tswiappregintegration.htm e:\testresults\tswiappregintegration.htm
+
 del c:\temp\*.*
 attrib c:\tswi\*.* -r
 del c:\tswi\*.*

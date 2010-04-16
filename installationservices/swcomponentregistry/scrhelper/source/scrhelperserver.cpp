@@ -161,7 +161,6 @@ void CopyDbFromROMToSystemL(RFs& aFs, const TDesC& aTargetPath)
 	User::LeaveIfError(fileManager->Copy(KScrDbRomPath, aTargetPath, 0));
 
 	// Reset the read-only attribute on the copied file
-	TTime time;
 	User::LeaveIfError(aFs.SetAtt(aTargetPath, 0, KEntryAttReadOnly));
 	CleanupStack::PopAndDestroy(fileManager);
 	}

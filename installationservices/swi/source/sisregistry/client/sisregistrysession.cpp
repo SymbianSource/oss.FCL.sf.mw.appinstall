@@ -449,11 +449,39 @@ EXPORT_C TBool RSisRegistrySession::IsFileRegisteredL(const TDesC& aFileName)
 EXPORT_C Usif::TComponentId RSisRegistrySession::GetComponentIdForUidL(const TUid& aUid)
 	{
 	Usif::TComponentId componentId(0);
-	TPckg<Usif::TComponentId> componentIdPckg(componentId);
-	
+	TPckg<Usif::TComponentId> componentIdPckg(componentId);	
 	User::LeaveIfError(SendReceive(EComponentIdForUid, TIpcArgs(aUid.iUid, &componentIdPckg)));
 	return componentId;		
 	}
+
+EXPORT_C Usif::TComponentId RSisRegistrySession::GetComponentIdForPackageL(const TDesC& aPackageName, const TDesC& aVendorName) const
+    {           
+    Usif::TComponentId componentId(0);
+    TPckg<Usif::TComponentId> componentIdPckg(componentId);
+    User::LeaveIfError(SendReceive(EComponentIdForPackage, TIpcArgs(&aPackageName, &aVendorName, &componentIdPckg)));    
+    return componentId;     
+    }
+
+EXPORT_C void RSisRegistrySession::GetAppUidsForComponentL(Usif::TComponentId& aCompId, RArray<TUid>& aAppUids)
+    {
+    TPckgC<Usif::TComponentId> compId(aCompId);    
+    HBufC8* buffer = SendReceiveBufferLC(EAppUidsForComponent, static_cast<TPtrC8>(compId));        
+    RDesReadStream stream(*buffer);
+    CleanupClosePushL(stream);    
+    InternalizeArrayL(aAppUids, stream);
+    CleanupStack::PopAndDestroy(2, buffer);           
+    }
+
+EXPORT_C void RSisRegistrySession::GetComponentIdsForUidL(TUid& aPackageUid, RArray<Usif::TComponentId>& aComponentIds)
+    {
+    TPckgC<TUid> pkgUid(aPackageUid);    
+    HBufC8* buffer = SendReceiveBufferLC(EComponentIdsForPackageUid, static_cast<TPtrC8>(pkgUid));        
+    RDesReadStream stream(*buffer);
+    CleanupClosePushL(stream);    
+    InternalizeArrayL(aComponentIds, stream);
+    CleanupStack::PopAndDestroy(2, buffer);           
+    }
+
 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 

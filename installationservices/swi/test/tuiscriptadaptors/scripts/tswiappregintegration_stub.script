@@ -1,0 +1,45 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// SWI integreation test cases for appreg parsing
+//
+
+PRINT Run all SWI integreation test cases for appreg parsing
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-STUB-0001
+//! @SYMTestCaseDesc	Upgrades an existing ROM pacakge with an SA,RU having new application and new details for FR and GE
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-STUB-0001
+// Check for the app reg entires from ROM, base_01 is present in ROM
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_EN_base
+// Upgarde the ROM based package with an SA,RU
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base02_ru
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN_romupgrade
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR_romupgrade
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE_romupgrade
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN_romupgrade
+// Uninstall the ROM Upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+// Going back to the base version in ROM
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_EN_base
+END_TESTCASE APPINSTALL-SWI-APPREG-STUB-0001

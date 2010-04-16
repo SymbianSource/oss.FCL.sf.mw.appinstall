@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -36,6 +36,7 @@ file=ABI_DIR\BUILD_DIR\sislauncherclient.dll		sys\bin\sislauncherclient.dll
 file=ABI_DIR\BUILD_DIR\sislauncherserver.exe		sys\bin\sislauncherserver.exe
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\apprscparser.dll			sys\bin\apprscparser.dll
 file=ABI_DIR\BUILD_DIR\swtypereginfo.dll		sys\bin\swtypereginfo.dll
 #endif
 
@@ -54,6 +55,7 @@ file=ABI_DIR\BUILD_DIR\backuprestore.dll		sys\bin\backuprestore.dll
 file=ABI_DIR\BUILD_DIR\cafdataprovider.dll		sys\bin\cafdataprovider.dll
 file=ABI_DIR\BUILD_DIR\pkgremover.dll			sys\bin\pkgremover.dll
 file=ABI_DIR\BUILD_DIR\swiobserver.exe			sys\bin\swiobserver.exe
+file=ABI_DIR\BUILD_DIR\swiutils.dll			sys\bin\swiutils.dll
 
 #include "swiplugin.iby"
 

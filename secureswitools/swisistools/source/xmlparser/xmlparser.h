@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -113,9 +113,7 @@ namespace XmlDetails
 			{
 		public:
 			TScrEnvironmentDetails()
-			:iSifPluginUid(0),
-			iInstallerSid(0),
-			iExecutionLayerSid(0)
+			:iSifPluginUid(0)
 			{}
 			
 			class TLocalizedSoftwareTypeName
@@ -128,12 +126,23 @@ namespace XmlDetails
 				int iLocale;
 				std::wstring iName;
 				};
+
+            class TCustomAcessList
+				{
+			public:
+				TCustomAcessList()
+				:iAccessMode(1)
+				{}
+								
+				int iSecureId;
+				int iAccessMode;;
+				};
 			
 			std::wstring iUniqueSoftwareTypeName;
 			std::vector<TLocalizedSoftwareTypeName> iLocalizedSoftwareTypeNames;
 			int iSifPluginUid;
-			int iInstallerSid;
-			int iExecutionLayerSid;
+            std::wstring iLauncherExecutable;
+			std::vector<TCustomAcessList> iCustomAcessList;
 			std::vector<std::wstring> iMIMEDetails;
 			};
 
@@ -218,7 +227,8 @@ namespace XmlDetails
 			public:
 			TComponentDetails()
 
-			:iIsRemovable(1),
+			:iIsRomApplication(0),
+			iIsRemovable(1),
 			iSize(0),
 			iScomoState(1),
 			iOriginVerified(1),
@@ -238,6 +248,7 @@ namespace XmlDetails
 				std::wstring iBuild;
 				};
 
+			int iIsRomApplication;
 			int iIsRemovable;
 			__int64 iSize;
 			int iScomoState;
@@ -246,7 +257,123 @@ namespace XmlDetails
 			int iOriginVerified;
 			int iIsHidden;
 			};
+		
+		class TApplicationRegistrationInfo
+			{
+			public:
+				TApplicationRegistrationInfo()
+				{}
 
+				class TAppAttribute
+					{
+					public:
+					TAppAttribute()
+					:iIsIntValue(false),
+					iIsStr8Bit(false)
+					{}
+					std::wstring iName;
+					std::wstring iValue;
+					bool iIsIntValue;
+					int iIsStr8Bit;
+					};
+
+				class TDataType
+					{
+					public:
+					TDataType()
+					{}
+					int iPriority;
+					std::wstring iType;
+					};
+
+				class TOpaqueDataType
+					{
+					public:
+					TOpaqueDataType()
+					:iLocale(0)
+					{}
+					int iLocale;
+					int iServiceUid;
+					std::wstring iOpaqueData;
+					};
+
+				class TAppServiceInfo
+					{
+					public:
+					TAppServiceInfo()
+					{}
+					int iUid;
+					std::vector<TDataType> iDataType;
+					};
+
+				class TAppLocalizableInfo
+					{
+					public:
+					TAppLocalizableInfo()
+					{}
+
+					class TLocalizableAttribute
+						{
+						public:
+						TLocalizableAttribute()
+						:iIsIntValue(false),
+						iIsStr8Bit(false)
+						{}
+						std::wstring iName;
+						std::wstring iValue;
+						bool iIsIntValue;
+						int iIsStr8Bit;
+						};
+
+					class TViewData
+						{
+						public:
+						TViewData()
+						{}
+
+						class TViewDataAttributes
+						{
+						public:
+						TViewDataAttributes()
+						:iIsIntValue(false),
+						iIsStr8Bit(false)
+						{}
+						std::wstring iName;
+						std::wstring iValue;
+						bool iIsIntValue;
+						int iIsStr8Bit;
+						};
+						
+						std::vector<TViewDataAttributes> iViewDataAttributes;
+						};
+
+					std::vector<TLocalizableAttribute> iLocalizableAttribute;
+					std::vector<TViewData> iViewData;
+					};
+
+				class TAppProperty
+					{
+					public:
+					TAppProperty()
+					:iLocale(0),
+					iIntValue(0)
+					{}
+					int iLocale;
+					std::wstring iName;
+					int iServiceUid;
+					int iIntValue;
+					std::wstring iStrValue;
+					bool iIsStr8Bit;
+					};
+
+			std::vector<TAppAttribute> iApplicationAttribute;
+			std::vector<std::wstring> iFileOwnershipInfo;
+			std::vector<TAppServiceInfo> iApplicationServiceInfo;
+			std::vector<TAppLocalizableInfo> iApplicationLocalizableInfo;
+			std::vector<TAppProperty> iApplicationProperty;
+			std::vector<TOpaqueDataType> iOpaqueDataType;
+			};
+		
 		class TComponent
 			{
 			public:
@@ -258,6 +385,7 @@ namespace XmlDetails
 			std::vector<TComponentProperty>		iComponentProperties;
 			std::vector<TComponentFile>			iComponentFiles;
 			TComponentDependency iComponentDependency;
+			std::vector<TApplicationRegistrationInfo> iApplicationRegistrationInfo;
 			TComponentDetails iComponentDetails;
 			};
 
@@ -316,8 +444,34 @@ class CScrXmlParser
 		
 		XmlDetails::TScrPreProvisionDetail::TComponentDetails GetComponentDetails( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
 		
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo GetApplicationRegistrationInfo(const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute GetAppAttribute( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		std::wstring GetFileOwnershipInfo( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType GetDataType( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType GetOpaqueDataType( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType GetServiceOpaqueDataType( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInfo GetAppServiceInfo( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement, XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppRegistrationInfo);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo GetAppLocalizableInfo( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TLocalizableAttribute GetAppLocalizableAttribute( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData GetAppLocalizableViewData( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes GetAppLocalizableViewDataAttributes( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
+		XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty GetAppProperty( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
 		XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName GetLocalizedSoftwareTypeName( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
 		
+        XmlDetails::TScrEnvironmentDetails::TCustomAcessList GetCustomAcessList(const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+
 		void ConfigDomParser(xercesc::XercesDOMParser& aDomParser);
 	};
 

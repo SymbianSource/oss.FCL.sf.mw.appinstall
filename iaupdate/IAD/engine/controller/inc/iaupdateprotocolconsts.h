@@ -199,6 +199,11 @@ namespace IAUpdateProtocolConsts
      * MIME for FOTA DP2 firmware update.
      */
     _LIT( KMimeFotiNsu, "application/x-nokia-foti-nsu" );
+    
+    /**
+     * MIME for widgets
+     */
+    _LIT( KMimeWidget, "application/x-nokia-widget" );
 
     }
     

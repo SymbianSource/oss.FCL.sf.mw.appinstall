@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -57,6 +57,34 @@ _LIT(KGlobalIdName, "GlobalIdName");
 _LIT(KGlobalIdCount,"GlobalIdCount");
 _LIT(KOperationType, "OperationType");
 _LIT(KLogsCountParamName, "LogsCount");
+// appreg related attribute names
+_LIT(KOwnedFileName, "FileName");
+_LIT(KServiceUid, "ServiceUid");
+_LIT(KServiceOpaqueLocale, "ServiceOpaqueLocale");
+_LIT(KServiceOpaqueData, "ServiceOpaqueData");
+_LIT(KAppOpaqueDataLocale, "AppOpaqueLocale");
+_LIT(KAppOpaqueData, "AppOpaqueData");
+_LIT(KServiceDataTypePriority, "ServiceDataTypePriority");
+_LIT(KServiceDataType, "ServiceDataType");
+_LIT(KLocShortCaption, "LocShortCaption");
+_LIT(KLocAppLanguage, "LocAppLanguage");
+_LIT(KLocGroupName, "LocGroupName");
+_LIT(KLocCaption, "LocCaption");
+_LIT(KLocIconFileName, "LocIconFileName");
+_LIT(KLocNumberOfAppIcons, "LocNumberOfAppIcons");
+_LIT(KVwUid, "VwUid");
+_LIT(KVwScreenMode, "VwScreenMode");
+_LIT(KVwCaption, "VwCaption");
+_LIT(KVwIconFileName, "VwIconFileName");
+_LIT(KVwNumberOfAppIcons, "VwNumberOfAppIcons");
+_LIT(KPropertyLocale, "PropertyLocale");
+_LIT(KPropertyName, "PropertyName");
+_LIT(KPropertyIntValue, "PropertyIntValue");
+_LIT(KPropertyStrValue, "PropertyStrValue");
+_LIT(KViewDataCount, "ViewDataCount");
+_LIT(KServiceOpaqueDataInfoCount, "ServiceOpaqueDataInfoCount");
+_LIT(KServiceDataTypeCount,"ServiceDataTypeCount");
+_LIT(KAppUid, "AppUid");
 
 // File related attribute names
 _LIT(KSetSizeName, "SetSize");
@@ -98,5 +126,14 @@ _LIT(KExpectedResult, "ExpectedResult");
 
 // Constants
 const TChar KComponentIdDelimeter = ',';
+
+//Apparc related attributes
+_LIT(KAppEntriesCountName, "AppEntriesCount");
+// TAppRegInfo related attribute  names
+_LIT(KIntTAppInfoUID, "TAppInfoUID");
+_LIT(KStringTAppInfoFileName, "TAppInfoFileName");
+_LIT(KStringTAppInfoCaption, "TAppInfoCaption");
+_LIT(KStringTAppInfoShortCaption, "TAppInfoShortCaption");
+
 
 #endif /* TSCRDEFS_H */

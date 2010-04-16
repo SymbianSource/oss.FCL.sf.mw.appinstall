@@ -175,7 +175,7 @@ void CPackageParser::SetSearchDirectory(LPCWSTR pszPath)
 
 	}
 
-void CPackageParser::MakeSis(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError)
+void CPackageParser::MakeSisL(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError)
 	{
 	iMakeStub = aMakeStub;
 	iReportInterpretSisError = aReportInterpretSisError;

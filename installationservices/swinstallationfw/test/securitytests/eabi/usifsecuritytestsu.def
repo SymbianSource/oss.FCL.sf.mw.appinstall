@@ -24,4 +24,6 @@ EXPORTS
 	_ZTV19CScrAllFilesSecTest @ 23 NONAME
 	_ZTI27CScrPluginManagementSecTest @ 24 NONAME
 	_ZTV27CScrPluginManagementSecTest @ 25 NONAME
+	_ZTI34CScrApparcComponentSpecificSecTest @ 26 NONAME
+	_ZTV34CScrApparcComponentSpecificSecTest @ 27 NONAME
 

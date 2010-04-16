@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -22,6 +22,7 @@
 #include "scrclient.inl"
 #include "scrcommon.h"
 #include "usiflog.h"
+#include "scr_internal.h"
 #include <e32cmn.h>
 #include <scs/streamingarray.h>
 #include <scs/scscommon.h>
@@ -654,4 +655,101 @@ EXPORT_C void RSoftwareComponentRegistry::GetComponentSupportedLocalesListL(TCom
 	TInt argNum = 1;
 	GetObjectArrayL(*this, EGetComponentSupportedLocalesListSize, EGetComponentSupportedLocalesListData, argNum, args, aMatchingSupportedLanguages);
 	}
+
+
+EXPORT_C void RSoftwareComponentRegistry::AddApplicationEntryL(const TComponentId aComponentId, const CApplicationRegistrationData& aApplicationRegistrationData) 
+    {
+    DEBUG_PRINTF2(_L("Sending a request to add an application to be associated with component (%d) from SCR"), aComponentId);
+
+    if(aApplicationRegistrationData.AppUid() == KNullUid || !((aApplicationRegistrationData.AppFile()).CompareF(KNullDesC())) ) 
+        {
+        DEBUG_PRINTF(_L8("AppUid is zero or the App filename is absent. In either of the above cases values cannot be inserted into the db"));
+        User::Leave(KErrArgument);
+        }    
+    RBuf8 buf;
+    buf.CleanupClosePushL();
+    ExternalizeObjectL(&aApplicationRegistrationData, buf);
+      
+    TIpcArgs args(aComponentId, &buf);
+    User::LeaveIfError(CallSessionFunction(EAddApplicationEntry, args));
+    CleanupStack::PopAndDestroy(&buf);
+    }
+
+EXPORT_C void RSoftwareComponentRegistry::DeleteApplicationEntriesL(TComponentId aComponentId) 
+    {
+    TIpcArgs args(aComponentId);
+    DEBUG_PRINTF2(_L("Sending a request to delete the applications associated with component (%d) from SCR"), aComponentId);
+    User::LeaveIfError(CallSessionFunction(EDeleteApplicationEntries, args));
+    }
+
+EXPORT_C void RSoftwareComponentRegistry::DeleteApplicationEntryL(TUid aApplicationUid) 
+    {
+    TIpcArgs args(aApplicationUid.iUid);
+    DEBUG_PRINTF2(_L("Sending a request to delete an application 0x%x from SCR" ), aApplicationUid.iUid);
+    User::LeaveIfError(CallSessionFunction(EDeleteApplicationEntry, args));
+    }
+
+EXPORT_C TComponentId RSoftwareComponentRegistry::GetComponentIdForAppL(TUid aAppUid) const
+    {
+    DEBUG_PRINTF2(_L("Sending a request to retrieve the component id for AppUid(%d)."), aAppUid);
+    TPckg<TUid> appUidPckg(aAppUid);
+    TComponentId compId;
+    TPckg<TComponentId> compIdPckg(compId);
+    TIpcArgs args(&appUidPckg, &compIdPckg);
+    User::LeaveIfError(CallSessionFunction(EGetComponentIdForApp, args));
+    return compId;
+    }
+
+EXPORT_C void RSoftwareComponentRegistry::GetAppUidsForComponentL(TComponentId aCompId, RArray<TUid>& aAppUids) const
+    {
+    DEBUG_PRINTF2(_L("Sending a request to retrieve the list of apps associated with component(%d)."), aCompId);
+    TIpcArgs args(aCompId);
+    TInt argNum = 1; // size descriptor will be added to this slot
+    GetObjectArrayL(*this, EGetAppUidsForComponentSize, EGetAppUidsForComponentData, argNum, args, aAppUids);    
+    }
+
+EXPORT_C void RSoftwareComponentRegistry::GetApplicationLaunchersL(RPointerArray<CLauncherExecutable>& aLaunchers) const
+	{
+    DEBUG_PRINTF(_L("Getting the list of applicaiton launchers."));
+    TIpcArgs args;
+    TInt argNum = 1;
+    GetObjectArrayL(*this, EGetApplicationLaunchersSize, EGetApplicationLaunchersData, argNum, args, aLaunchers);
+	}
+
+/*
+ * RScrInternalClient Implementation.
+ */
+EXPORT_C RScrInternalClient::RScrInternalClient()
+    :   RScsClientBase()
+    {
+    // empty
+    }
+
+EXPORT_C TInt RScrInternalClient::Connect()
+    {
+    DEBUG_PRINTF2(_L("Connecting to %S using the internal client(RScrInternalClient)."), &KSoftwareComponentRegistryName);
+    TVersion version = ScrServerVersion();
+    TUidType scrFullUid = ScrServerImageFullUid();
+    
+    return RScsClientBase::Connect(KSoftwareComponentRegistryName(), version, KScrServerImageName(), scrFullUid);
+    }
+
+EXPORT_C void RScrInternalClient::Close()
+    {
+    DEBUG_PRINTF2(_L("Closing connection to %S using the internal client(RScrInternalClient)."), &KSoftwareComponentRegistryName);
+    RScsClientBase::Close();
+    }
+
+
+EXPORT_C TUid RScrInternalClient::GenerateNewAppUidL() const
+    {
+    DEBUG_PRINTF(_L("Sending a request to generate a new Application Uid for non native applications."));
+
+    TUid newUid = TUid::Null();
+    TPckg<TUid> appUidPckg(newUid);
+    
+    TIpcArgs args(&appUidPckg);
+    User::LeaveIfError(CallSessionFunction(EGenerateNonNativeAppUid, args));
+    return newUid;
+    }
 

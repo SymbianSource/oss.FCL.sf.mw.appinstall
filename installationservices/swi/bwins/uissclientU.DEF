@@ -107,4 +107,10 @@ EXPORTS
 	?ExternalizeL@CNativeComponentInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 106 NONAME ; void Swi::CNativeComponentInfo::ExternalizeL(class RWriteStream &) const
 	?InternalizeL@CNativeComponentInfo@Swi@@QAEXAAVRReadStream@@@Z @ 107 NONAME ; void Swi::CNativeComponentInfo::InternalizeL(class RReadStream &)
 	?GetComponentInfo@RUissSession@Swi@@QAEXABVTDesC8@@AAVTDes8@@AAVTRequestStatus@@@Z @ 108 NONAME ; void Swi::RUissSession::GetComponentInfo(class TDesC8 const &, class TDes8 &, class TRequestStatus &)
+	?IconFileName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 109 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::IconFileName(void) const
+	?GroupName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 110 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::GroupName(void) const
+	?AppUid@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTUid@@XZ @ 111 NONAME ; class TUid const & Swi::CNativeComponentInfo::CNativeApplicationInfo::AppUid(void) const
+	?Name@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 112 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::Name(void) const
+	??1CNativeApplicationInfo@CNativeComponentInfo@Swi@@UAE@XZ @ 113 NONAME ; Swi::CNativeComponentInfo::CNativeApplicationInfo::~CNativeApplicationInfo(void)
+	?NewLC@CNativeApplicationInfo@CNativeComponentInfo@Swi@@SAPAV123@ABVTUid@@ABVTDesC16@@11@Z @ 114 NONAME ; class Swi::CNativeComponentInfo::CNativeApplicationInfo * Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(class TUid const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
 

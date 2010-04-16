@@ -621,5 +621,14 @@ int ConvertMultiByteToWideChar(const char* aSource, int /*aSourceLen*/, wchar_t*
 	}
 
 
-
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
+	{
+		int err= 0;
+		return err;
+	}
+int FileMoveA(const char* aSrc, const char* aDest)
+	{
+		int err= 0;
+		return err;
+	}
 

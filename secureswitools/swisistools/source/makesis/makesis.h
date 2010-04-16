@@ -51,7 +51,7 @@ class CMakeSIS : public MParserObserver
 public:
 	CMakeSIS();
 		
-	int  Run(int argc, wchar_t* argv[]);
+	int  RunL(int argc, wchar_t* argv[]);
 	
 	bool ParseSource();
 	bool WriteTarget();

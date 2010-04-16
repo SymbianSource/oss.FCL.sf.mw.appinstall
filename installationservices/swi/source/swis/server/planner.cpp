@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -493,6 +493,27 @@ CApplication* CPlanner::CreatePlannedApplicationL(CUninstallationNode& aRootNode
 		}
 	
 	UpdateAppForUninstallL(*rootApplication, aRootNode);
+	if(!(Swi::SecUtils::IsPackageUidPresent(aRootNode.PackageL().Uid(), iUidList)))
+	    {
+	    TInt err = SecUtils::PublishPackageUid(aRootNode.PackageL().Uid(), iUidList);
+		if(err==KErrNone)
+            {
+            DEBUG_PRINTF2(_L("CPlanner::CreatePlannedApplicationL published Uid is %x."),aRootNode.PackageL().Uid());
+		    }
+		else if(err == KErrOverflow)
+		    {
+            DEBUG_PRINTF2(_L("CPlanner::CreatePlannedApplicationL failed to publish Uid %x as the array, holding the uids, exceeded its upper limit."),aRootNode.PackageL().Uid());
+		    }
+        else if(err == KErrNotFound)
+            {
+            DEBUG_PRINTF2(_L("CPlanner::CreatePlannedApplicationL failed to publish Uid %x as the property is not defined."),aRootNode.PackageL().Uid());
+            }
+		else
+		    {
+            DEBUG_PRINTF3(_L("CPlanner::CreatePlannedApplicationL failed to publish Uid %x with error."),aRootNode.PackageL().Uid(), err);
+            User::Leave(err);
+		    }
+		}
 	CleanupStack::Pop(rootApplication);
 	
 	return rootApplication;

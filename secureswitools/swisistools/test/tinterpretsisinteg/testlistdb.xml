@@ -1654,6 +1654,54 @@
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-19_db.bat API-INST-PREQ2525-InterpretSIS-19</command>
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-19 preq2525-interpretsis-19.txt 1 "positive" "none"</check>
 	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-01">
+	<title>API-INST-testcase-InterpretSIS-01</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-01_db.bat  API-INST-testcase-InterpretSIS-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-01  API-INST-testcase-InterpretSIS-01 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-01.script" "API-INST-testcase-InterpretSIS-01.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-02">
+	<title>API-INST-testcase-InterpretSIS-02</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-02_db.bat  API-INST-testcase-InterpretSIS-02</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-02  API-INST-testcase-InterpretSIS-02 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-02.script" "API-INST-testcase-InterpretSIS-02.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-03">
+	<title>API-INST-testcase-InterpretSIS-03</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-03_db.bat  API-INST-testcase-InterpretSIS-03</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-03  API-INST-testcase-InterpretSIS-03 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-03.script" "API-INST-testcase-InterpretSIS-03.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-04">
+	<title>API-INST-testcase-InterpretSIS-04</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-04_db.bat  API-INST-testcase-InterpretSIS-04</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-04  API-INST-testcase-InterpretSIS-04 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-04.script" "API-INST-testcase-InterpretSIS-04.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-05">
+	<title>API-INST-testcase-InterpretSIS-05</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-05_db.bat  API-INST-testcase-InterpretSIS-05</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-05  API-INST-testcase-InterpretSIS-05 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-05.script" "API-INST-testcase-InterpretSIS-05.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+	<test id="API-INST-testcase-InterpretSIS-06">
+	<title>API-INST-testcase-InterpretSIS-06</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-06_db.bat  API-INST-testcase-InterpretSIS-06</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-06  API-INST-testcase-InterpretSIS-06 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-06.script" "API-INST-testcase-InterpretSIS-06.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-07">
+	<title>API-INST-testcase-InterpretSIS-07 Install sis</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-07_db.bat API-INST-testcase-InterpretSIS-07</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-testcase-InterpretSIS-07 testcase-interpretsis-07.txt 1 "negative" "none"</check>
+	</test>
+	
+	<test id="API-INST-testcase-InterpretSIS-08">
+	<title>API-INST-testcase-InterpretSIS-08</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-08_db.bat  API-INST-testcase-InterpretSIS-08</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-08  API-INST-testcase-InterpretSIS-08 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-08.script" "API-INST-testcase-InterpretSIS-08.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
 
 <test id="INT_NR_Option-01">
 	<title>INT_NR_Option-01</title>

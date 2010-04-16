@@ -124,6 +124,9 @@ LIBRARY         etelmm.lib          // RMobilePhone
 // Updater files dll
 LIBRARY         iaupdaterfiles.lib
 
+// widget registry API library
+LIBRARY         widgetregistryclient.lib
+
 // NCD Engine
 LIBRARY         ncdengine_20019119.lib
 LIBRARY         ncdutils_20019119.lib

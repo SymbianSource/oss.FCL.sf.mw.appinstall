@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,6 +31,8 @@ PRJ_EXPORTS
 // SCR exported headers
 
 ../inc/screntries.h			SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/screntries.h)
+../inc/appregentries.h			SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/appregentries.h)
+../inc/appreginfo.h			SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/appreginfo.h)
 ../inc/scr.h 				SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/scr.h)
 ../inc/scrcommon.h 			SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(usif/scr/scrcommon.h)
 ../inc/scrcommon.inl 		SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(usif/scr/scrcommon.inl)
@@ -66,6 +68,7 @@ PRJ_TESTMMPFILES
 ../test/group/tscr.mmp		// SCR Test Harness
 ../test/group/tscrdatalayer.mmp		// SCR Data Layer Test Harness
 ../test/group/tscraccessor.mmp		// SCR Accessor
+../test/group/tscrapparc.mmp		// SCR-Apparc Test Harness
 
 #endif // TOOLS2
 #endif // TOOLS
@@ -83,6 +86,10 @@ PRJ_TESTEXPORTS
 ../test/tscr/scripts/tscr_versioning.script		z:/tusif/tscr/tscr_versioning.script
 ../test/tscr/scripts/tscr_oom.script		z:/tusif/tscr/tscr_oom.script
 
+../test/tscr/scripts/tscr_appreginfo.ini	z:/tusif/tscr/tscr_appreginfo.ini
+../test/tscr/scripts/tscr_appreginfo.script	z:/tusif/tscr/tscr_appreginfo.script
+../test/tscr/scripts/tscrapparc.script	        z:/tusif/tscr/tscrapparc.script
+
 ../test/tscrdatalayer/scripts/tscr_datalayer.script		z:/tusif/tscrdatalayer/tscr_datalayer.script
 ../test/tscrdatalayer/scripts/tscr_datalayer_oom.script	z:/tusif/tscrdatalayer/tscr_datalayer_oom.script
 ../test/tscrdatalayer/scripts/tscr_datalayer_oom.ini	z:/tusif/tscrdatalayer/tscr_datalayer_oom.ini
@@ -99,6 +106,7 @@ PRJ_TESTEXPORTS
 ../test/tscr/scripts/data/scr-noentriesinversiontable.db			z:/tusif/tscr/data/scr-noentriesinversiontable.db
 ../test/tscr/scripts/data/scr-newerminordbversion.db 	z:/tusif/tscr/data/scr-newerminordbversion.db
 ../test/tscr/scripts/data/scr-oldermajordbversion.db 	z:/tusif/tscr/data/scr-oldermajordbversion.db
+../test/tscr/scripts/data/scr-multiapp.db 	z:/tusif/tscr/data/scr-multiapp.db
 
 ../test/testdb/scr.db			z:/sys/install/scr/provisioned/scr.db
 

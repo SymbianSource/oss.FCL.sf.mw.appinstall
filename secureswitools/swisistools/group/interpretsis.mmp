@@ -27,6 +27,11 @@ USERINCLUDE 		../source/sisxlibrary
 USERINCLUDE 		../source/common
 USERINCLUDE 		../../swianalysistoolkit/source/common
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+USERINCLUDE 		../source/rscparser
+USERINCLUDE		../source/xmlparser
+#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 SYSTEMINCLUDE 		../../openssllib/import/inc/openssl 
 SYSTEMINCLUDE 		../../openssllib/import/inc

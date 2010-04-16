@@ -193,6 +193,28 @@ public:
 	 * Returns the SCR component id for the base component (i.e. not an SP package/augmentation) with the given UID. 
 	 */
 	IMPORT_C Usif::TComponentId GetComponentIdForUidL(const TUid& aUid);	
+	
+	/**
+     * Returns the SCR component id for the component with the given packagename and vendor name
+     * @param aPackageName package name of the existing component 
+     * @param aVendorName vendor name of the existing component 
+     */
+	IMPORT_C Usif::TComponentId GetComponentIdForPackageL(const TDesC& aPackageName, const TDesC& aVendorName) const;
+	
+	 /**
+     * Gets the array of application uids associated with a given component Id
+     * @param aCompId component Id of the component whose associated applications need to be fetched
+     * @param aAppUids array of application uids associated with the component
+     */
+	IMPORT_C void GetAppUidsForComponentL(Usif::TComponentId& aCompId, RArray<TUid>& aAppUids);
+	
+	/**
+     * Gets the array of Component Ids associated with a given package.
+     * @param aPackageUid package uid of the component
+     * @param aComponentIds array of component id's associated with the package uid
+     */
+	IMPORT_C void GetComponentIdsForUidL(TUid& aPackageUid, RArray<Usif::TComponentId>& aComponentIds);
+		
 #endif
 
 protected:

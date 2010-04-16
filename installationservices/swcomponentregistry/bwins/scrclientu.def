@@ -174,4 +174,174 @@ EXPORTS
 	?NextComponentL@RSoftwareComponentRegistryView@Usif@@QBEHAAVCComponentEntry@2@W4TLanguage@@@Z @ 173 NONAME ; int Usif::RSoftwareComponentRegistryView::NextComponentL(class Usif::CComponentEntry &, enum TLanguage) const
 	?GetComponentSupportedLocalesListL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RArray@W4TLanguage@@@@@Z @ 174 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentSupportedLocalesListL(int, class RArray<enum TLanguage> &) const
 	?GetComponentLocalizedInfoL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RPointerArray@VCLocalizableComponentInfo@Usif@@@@@Z @ 175 NONAME ; void Usif::RSoftwareComponentRegistry::GetComponentLocalizedInfoL(int, class RPointerArray<class Usif::CLocalizableComponentInfo> &) const
+	?Close@RApplicationRegistryView@Usif@@QAEXXZ @ 176 NONAME ; void Usif::RApplicationRegistryView::Close(void)
+	?NewL@CAppViewData@Usif@@SAPAV12@XZ @ 177 NONAME ; class Usif::CAppViewData * Usif::CAppViewData::NewL(void)
+	?NewLC@CApplicationRegistrationData@Usif@@SAPAV12@AAV?$RPointerArray@VHBufC16@@@@AAV?$RPointerArray@VCServiceInfo@Usif@@@@AAV?$RPointerArray@VCLocalizableAppInfo@Usif@@@@AAV?$RPointerArray@VCPropertyEntry@Usif@@@@VTUid@@ABVTDesC16@@@Z @ 178 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewLC(class RPointerArray<class HBufC16> &, class RPointerArray<class Usif::CServiceInfo> &, class RPointerArray<class Usif::CLocalizableAppInfo> &, class RPointerArray<class Usif::CPropertyEntry> &, class TUid, class TDesC16 const &)
+	?AddEmbeddability@TEmbeddableFilter@Usif@@QAEXW4TAppEmbeddability@TApplicationCharacteristics@2@@Z @ 179 NONAME ; void Usif::TEmbeddableFilter::AddEmbeddability(enum Usif::TApplicationCharacteristics::TAppEmbeddability)
+	?GetApplicationLaunchersL@RSoftwareComponentRegistry@Usif@@QBEXAAV?$RPointerArray@VCLauncherExecutable@Usif@@@@@Z @ 180 NONAME ; void Usif::RSoftwareComponentRegistry::GetApplicationLaunchersL(class RPointerArray<class Usif::CLauncherExecutable> &) const
+	?NewL@COpaqueData@Usif@@SAPAV12@AAVTDesC8@@W4TLanguage@@@Z @ 181 NONAME ; class Usif::COpaqueData * Usif::COpaqueData::NewL(class TDesC8 &, enum TLanguage)
+	?TypeId@CLauncherExecutable@Usif@@QBEHXZ @ 182 NONAME ; int Usif::CLauncherExecutable::TypeId(void) const
+	?AppUid@CApplicationRegistrationData@Usif@@QBE?BVTUid@@XZ @ 183 NONAME ; class TUid const Usif::CApplicationRegistrationData::AppUid(void) const
+	?OpenViewL@RApplicationInfoView@Usif@@QAEXABVRSoftwareComponentRegistry@2@PAVCAppInfoFilter@2@W4TLanguage@@@Z @ 184 NONAME ; void Usif::RApplicationInfoView::OpenViewL(class Usif::RSoftwareComponentRegistry const &, class Usif::CAppInfoFilter *, enum TLanguage)
+	?Caption@TAppRegInfo@Usif@@QBE?AV?$TBuf@$0BAA@@@XZ @ 185 NONAME ; class TBuf<256> Usif::TAppRegInfo::Caption(void) const
+	?SetAppUidForServiceInfo@CAppServiceInfoFilter@Usif@@QAEXVTUid@@@Z @ 186 NONAME ; void Usif::CAppServiceInfoFilter::SetAppUidForServiceInfo(class TUid)
+	?NewL@CServiceInfo@Usif@@SAPAV12@AAVRReadStream@@@Z @ 187 NONAME ; class Usif::CServiceInfo * Usif::CServiceInfo::NewL(class RReadStream &)
+	?ExternalizeL@CCaptionAndIconInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 188 NONAME ; void Usif::CCaptionAndIconInfo::ExternalizeL(class RWriteStream &) const
+	?NewL@CDataType@Usif@@SAPAV12@HABVTDesC16@@@Z @ 189 NONAME ; class Usif::CDataType * Usif::CDataType::NewL(int, class TDesC16 const &)
+	?NewL@CAppServiceInfoFilter@Usif@@SAPAV12@XZ @ 190 NONAME ; class Usif::CAppServiceInfoFilter * Usif::CAppServiceInfoFilter::NewL(void)
+	?ExternalizeL@CAppInfoFilter@Usif@@QBEXAAVRWriteStream@@@Z @ 191 NONAME ; void Usif::CAppInfoFilter::ExternalizeL(class RWriteStream &) const
+	?OwnedFileArray@CApplicationRegistrationData@Usif@@QBEABV?$RPointerArray@VHBufC16@@@@XZ @ 192 NONAME ; class RPointerArray<class HBufC16> const & Usif::CApplicationRegistrationData::OwnedFileArray(void) const
+	?NewL@CServiceInfo@Usif@@SAPAV12@VTUid@@AAV?$RPointerArray@VCOpaqueData@Usif@@@@AAV?$RPointerArray@VCDataType@Usif@@@@@Z @ 193 NONAME ; class Usif::CServiceInfo * Usif::CServiceInfo::NewL(class TUid, class RPointerArray<class Usif::COpaqueData> &, class RPointerArray<class Usif::CDataType> &)
+	?ExternalizeL@CAppServiceInfoFilter@Usif@@QBEXAAVRWriteStream@@@Z @ 194 NONAME ; void Usif::CAppServiceInfoFilter::ExternalizeL(class RWriteStream &) const
+	??0TAppRegInfo@Usif@@QAE@XZ @ 195 NONAME ; Usif::TAppRegInfo::TAppRegInfo(void)
+	?Type@CDataType@Usif@@QBEABVTDesC16@@XZ @ 196 NONAME ; class TDesC16 const & Usif::CDataType::Type(void) const
+	?ViewDataList@CLocalizableAppInfo@Usif@@QBEABV?$RPointerArray@VCAppViewData@Usif@@@@XZ @ 197 NONAME ; class RPointerArray<class Usif::CAppViewData> const & Usif::CLocalizableAppInfo::ViewDataList(void) const
+	?DataTypes@CServiceInfo@Usif@@QBEABV?$RPointerArray@VCDataType@Usif@@@@XZ @ 198 NONAME ; class RPointerArray<class Usif::CDataType> const & Usif::CServiceInfo::DataTypes(void) const
+	?NewL@CAppViewData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 199 NONAME ; class Usif::CAppViewData * Usif::CAppViewData::NewL(class RReadStream &)
+	?NewL@CDataType@Usif@@SAPAV12@AAVRReadStream@@@Z @ 200 NONAME ; class Usif::CDataType * Usif::CDataType::NewL(class RReadStream &)
+	?TypeId@CApplicationRegistrationData@Usif@@QBEHXZ @ 201 NONAME ; int Usif::CApplicationRegistrationData::TypeId(void) const
+	?SetCapabilityAttributeMaskAndValue@CAppInfoFilter@Usif@@QAEXHH@Z @ 202 NONAME ; void Usif::CAppInfoFilter::SetCapabilityAttributeMaskAndValue(int, int)
+	??0TAppRegInfo@Usif@@QAE@VTUid@@ABV?$TBuf@$0BAA@@@1@Z @ 203 NONAME ; Usif::TAppRegInfo::TAppRegInfo(class TUid, class TBuf<256> const &, class TBuf<256> const &)
+	?SetServerApps@CAppInfoFilter@Usif@@QAEXVTUid@@H@Z @ 204 NONAME ; void Usif::CAppInfoFilter::SetServerApps(class TUid, int)
+	?MatchesEmbeddability@TEmbeddableFilter@Usif@@QBEHW4TAppEmbeddability@TApplicationCharacteristics@2@@Z @ 205 NONAME ; int Usif::TEmbeddableFilter::MatchesEmbeddability(enum Usif::TApplicationCharacteristics::TAppEmbeddability) const
+	?CaptionAndIconInfo@CLocalizableAppInfo@Usif@@QBEPBVCCaptionAndIconInfo@2@XZ @ 206 NONAME ; class Usif::CCaptionAndIconInfo const * Usif::CLocalizableAppInfo::CaptionAndIconInfo(void) const
+	?Close@RRegistrationInfoForApplication@Usif@@QAEXXZ @ 207 NONAME ; void Usif::RRegistrationInfoForApplication::Close(void)
+	?NewL@CApplicationRegistrationData@Usif@@SAPAV12@AAV?$RPointerArray@VHBufC16@@@@AAV?$RPointerArray@VCServiceInfo@Usif@@@@AAV?$RPointerArray@VCLocalizableAppInfo@Usif@@@@AAV?$RPointerArray@VCPropertyEntry@Usif@@@@AAV?$RPointerArray@VCOpaqueData@Usif@@@@VTUid@@ABVTDesC16@@AAVTApplicationCharacteristics@2@HH@Z @ 208 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewL(class RPointerArray<class HBufC16> &, class RPointerArray<class Usif::CServiceInfo> &, class RPointerArray<class Usif::CLocalizableAppInfo> &, class RPointerArray<class Usif::CPropertyEntry> &, class RPointerArray<class Usif::COpaqueData> &, class TUid, class TDesC16 const &, class Usif::TApplicationCharacteristics &, int, int)
+	?ApplicationLanguage@CLocalizableAppInfo@Usif@@QBE?AW4TLanguage@@XZ @ 209 NONAME ; enum TLanguage Usif::CLocalizableAppInfo::ApplicationLanguage(void) const
+	?AppProperties@CApplicationRegistrationData@Usif@@QBEABV?$RPointerArray@VCPropertyEntry@Usif@@@@XZ @ 210 NONAME ; class RPointerArray<class Usif::CPropertyEntry> const & Usif::CApplicationRegistrationData::AppProperties(void) const
+	?NewL@CLocalizableAppInfo@Usif@@SAPAV12@AAVRReadStream@@@Z @ 211 NONAME ; class Usif::CLocalizableAppInfo * Usif::CLocalizableAppInfo::NewL(class RReadStream &)
+	?InternalizeL@CServiceInfo@Usif@@QAEXAAVRReadStream@@@Z @ 212 NONAME ; void Usif::CServiceInfo::InternalizeL(class RReadStream &)
+	?DefaultScreenNumber@CApplicationRegistrationData@Usif@@QBEHXZ @ 213 NONAME ; int Usif::CApplicationRegistrationData::DefaultScreenNumber(void) const
+	?InternalizeL@CAppViewData@Usif@@QAEXAAVRReadStream@@@Z @ 214 NONAME ; void Usif::CAppViewData::InternalizeL(class RReadStream &)
+	?LocalizableAppInfoList@CApplicationRegistrationData@Usif@@QBEABV?$RPointerArray@VCLocalizableAppInfo@Usif@@@@XZ @ 215 NONAME ; class RPointerArray<class Usif::CLocalizableAppInfo> const & Usif::CApplicationRegistrationData::LocalizableAppInfoList(void) const
+	?NewL@COpaqueData@Usif@@SAPAV12@XZ @ 216 NONAME ; class Usif::COpaqueData * Usif::COpaqueData::NewL(void)
+	?NewL@CServiceInfo@Usif@@SAPAV12@XZ @ 217 NONAME ; class Usif::CServiceInfo * Usif::CServiceInfo::NewL(void)
+	?NumOfAppIcons@CCaptionAndIconInfo@Usif@@QBEHXZ @ 218 NONAME ; int Usif::CCaptionAndIconInfo::NumOfAppIcons(void) const
+	?NewLC@CAppViewData@Usif@@SAPAV12@XZ @ 219 NONAME ; class Usif::CAppViewData * Usif::CAppViewData::NewLC(void)
+	?InternalizeL@CDataType@Usif@@QAEXAAVRReadStream@@@Z @ 220 NONAME ; void Usif::CDataType::InternalizeL(class RReadStream &)
+	?InternalizeL@CLauncherExecutable@Usif@@QAEXAAVRReadStream@@@Z @ 221 NONAME ; void Usif::CLauncherExecutable::InternalizeL(class RReadStream &)
+	?Uid@TAppRegInfo@Usif@@QBE?AVTUid@@XZ @ 222 NONAME ; class TUid Usif::TAppRegInfo::Uid(void) const
+	?NewL@CLocalizableAppInfo@Usif@@SAPAV12@ABVTDesC16@@W4TLanguage@@0PAVCCaptionAndIconInfo@2@AAV?$RPointerArray@VCAppViewData@Usif@@@@@Z @ 223 NONAME ; class Usif::CLocalizableAppInfo * Usif::CLocalizableAppInfo::NewL(class TDesC16 const &, enum TLanguage, class TDesC16 const &, class Usif::CCaptionAndIconInfo *, class RPointerArray<class Usif::CAppViewData> &)
+	?ScreenMode@CAppViewData@Usif@@QBEHXZ @ 224 NONAME ; int Usif::CAppViewData::ScreenMode(void) const
+	??0RApplicationInfoView@Usif@@QAE@XZ @ 225 NONAME ; Usif::RApplicationInfoView::RApplicationInfoView(void)
+	?OpenViewL@RApplicationRegistryView@Usif@@QAEXABVRSoftwareComponentRegistry@2@W4TLanguage@@@Z @ 226 NONAME ; void Usif::RApplicationRegistryView::OpenViewL(class Usif::RSoftwareComponentRegistry const &, enum TLanguage)
+	?NewLC@CAppInfoFilter@Usif@@SAPAV12@XZ @ 227 NONAME ; class Usif::CAppInfoFilter * Usif::CAppInfoFilter::NewLC(void)
+	?GetComponentIdForAppL@RSoftwareComponentRegistry@Usif@@QBEHVTUid@@@Z @ 228 NONAME ; int Usif::RSoftwareComponentRegistry::GetComponentIdForAppL(class TUid) const
+	?NewLC@CDataType@Usif@@SAPAV12@HABVTDesC16@@@Z @ 229 NONAME ; class Usif::CDataType * Usif::CDataType::NewLC(int, class TDesC16 const &)
+	?NewL@COpaqueData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 230 NONAME ; class Usif::COpaqueData * Usif::COpaqueData::NewL(class RReadStream &)
+	?NewL@CAppViewData@Usif@@SAPAV12@VTUid@@HPAVCCaptionAndIconInfo@2@@Z @ 231 NONAME ; class Usif::CAppViewData * Usif::CAppViewData::NewL(class TUid, int, class Usif::CCaptionAndIconInfo *)
+	?NewL@CApplicationRegistrationData@Usif@@SAPAV12@AAV?$RPointerArray@VHBufC16@@@@AAV?$RPointerArray@VCServiceInfo@Usif@@@@AAV?$RPointerArray@VCLocalizableAppInfo@Usif@@@@AAV?$RPointerArray@VCPropertyEntry@Usif@@@@VTUid@@ABVTDesC16@@@Z @ 232 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewL(class RPointerArray<class HBufC16> &, class RPointerArray<class Usif::CServiceInfo> &, class RPointerArray<class Usif::CLocalizableAppInfo> &, class RPointerArray<class Usif::CPropertyEntry> &, class TUid, class TDesC16 const &)
+	?Embeddability@CApplicationRegistrationData@Usif@@QBE?AW4TAppEmbeddability@TApplicationCharacteristics@2@XZ @ 233 NONAME ; enum Usif::TApplicationCharacteristics::TAppEmbeddability Usif::CApplicationRegistrationData::Embeddability(void) const
+	?ShortCaption@CLocalizableAppInfo@Usif@@QBEABVTDesC16@@XZ @ 234 NONAME ; class TDesC16 const & Usif::CLocalizableAppInfo::ShortCaption(void) const
+	?IconFileName@CCaptionAndIconInfo@Usif@@QBEABVTDesC16@@XZ @ 235 NONAME ; class TDesC16 const & Usif::CCaptionAndIconInfo::IconFileName(void) const
+	?OpenL@RApplicationRegistrationInfo@Usif@@QAEXABVRSoftwareComponentRegistry@2@@Z @ 236 NONAME ; void Usif::RApplicationRegistrationInfo::OpenL(class Usif::RSoftwareComponentRegistry const &)
+	?NewLC@CAppServiceInfoFilter@Usif@@SAPAV12@XZ @ 237 NONAME ; class Usif::CAppServiceInfoFilter * Usif::CAppServiceInfoFilter::NewLC(void)
+	?NewL@CAppInfoFilter@Usif@@SAPAV12@XZ @ 238 NONAME ; class Usif::CAppInfoFilter * Usif::CAppInfoFilter::NewL(void)
+	?NewLC@COpaqueData@Usif@@SAPAV12@XZ @ 239 NONAME ; class Usif::COpaqueData * Usif::COpaqueData::NewLC(void)
+	??0TAppRegInfo@Usif@@QAE@VTUid@@ABV?$TBuf@$0BAA@@@11@Z @ 240 NONAME ; Usif::TAppRegInfo::TAppRegInfo(class TUid, class TBuf<256> const &, class TBuf<256> const &, class TBuf<256> const &)
+	?InternalizeL@CApplicationRegistrationData@Usif@@QAEXAAVRReadStream@@@Z @ 241 NONAME ; void Usif::CApplicationRegistrationData::InternalizeL(class RReadStream &)
+	?Connect@RScrInternalClient@Usif@@QAEHXZ @ 242 NONAME ; int Usif::RScrInternalClient::Connect(void)
+	?Hidden@CApplicationRegistrationData@Usif@@QBEHXZ @ 243 NONAME ; int Usif::CApplicationRegistrationData::Hidden(void) const
+	?NewLC@CLocalizableAppInfo@Usif@@SAPAV12@ABVTDesC16@@W4TLanguage@@0PAVCCaptionAndIconInfo@2@AAV?$RPointerArray@VCAppViewData@Usif@@@@@Z @ 244 NONAME ; class Usif::CLocalizableAppInfo * Usif::CLocalizableAppInfo::NewLC(class TDesC16 const &, enum TLanguage, class TDesC16 const &, class Usif::CCaptionAndIconInfo *, class RPointerArray<class Usif::CAppViewData> &)
+	?NewLC@CLauncherExecutable@Usif@@SAPAV12@XZ @ 245 NONAME ; class Usif::CLauncherExecutable * Usif::CLauncherExecutable::NewLC(void)
+	?InternalizeL@CCaptionAndIconInfo@Usif@@QAEXAAVRReadStream@@@Z @ 246 NONAME ; void Usif::CCaptionAndIconInfo::InternalizeL(class RReadStream &)
+	?GetAppServicesUidsL@RRegistrationInfoForApplication@Usif@@QBEXAAV?$RArray@VTUid@@@@@Z @ 247 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppServicesUidsL(class RArray<class TUid> &) const
+	?Close@RApplicationRegistrationInfo@Usif@@QAEXXZ @ 248 NONAME ; void Usif::RApplicationRegistrationInfo::Close(void)
+	?NewLC@CDataType@Usif@@SAPAV12@XZ @ 249 NONAME ; class Usif::CDataType * Usif::CDataType::NewLC(void)
+	?SetServiceUidAndDatatTypeForServiceImplementationsL@CAppServiceInfoFilter@Usif@@QAEXVTUid@@ABVTDesC16@@@Z @ 250 NONAME ; void Usif::CAppServiceInfoFilter::SetServiceUidAndDatatTypeForServiceImplementationsL(class TUid, class TDesC16 const &)
+	?NumberOfOwnDefinedIconsL@RRegistrationInfoForApplication@Usif@@QBEHXZ @ 251 NONAME ; int Usif::RRegistrationInfoForApplication::NumberOfOwnDefinedIconsL(void) const
+	?NewL@CLauncherExecutable@Usif@@SAPAV12@XZ @ 252 NONAME ; class Usif::CLauncherExecutable * Usif::CLauncherExecutable::NewL(void)
+	?SetAllApps@CAppInfoFilter@Usif@@QAEXXZ @ 253 NONAME ; void Usif::CAppInfoFilter::SetAllApps(void)
+	??0TApplicationCharacteristics@Usif@@QAE@XZ @ 254 NONAME ; Usif::TApplicationCharacteristics::TApplicationCharacteristics(void)
+	?NewLC@CServiceInfo@Usif@@SAPAV12@XZ @ 255 NONAME ; class Usif::CServiceInfo * Usif::CServiceInfo::NewLC(void)
+	?NewLC@CServiceInfo@Usif@@SAPAV12@VTUid@@AAV?$RPointerArray@VCOpaqueData@Usif@@@@AAV?$RPointerArray@VCDataType@Usif@@@@@Z @ 256 NONAME ; class Usif::CServiceInfo * Usif::CServiceInfo::NewLC(class TUid, class RPointerArray<class Usif::COpaqueData> &, class RPointerArray<class Usif::CDataType> &)
+	?SetEmbeddabilityFilter@CAppInfoFilter@Usif@@QAEXAAVTEmbeddableFilter@2@@Z @ 257 NONAME ; void Usif::CAppInfoFilter::SetEmbeddabilityFilter(class Usif::TEmbeddableFilter &)
+	?Close@RScrInternalClient@Usif@@QAEXXZ @ 258 NONAME ; void Usif::RScrInternalClient::Close(void)
+	?GetNextApplicationRegistrationInfoL@RApplicationRegistryView@Usif@@QBEXHAAV?$RPointerArray@VCApplicationRegistrationData@Usif@@@@@Z @ 259 NONAME ; void Usif::RApplicationRegistryView::GetNextApplicationRegistrationInfoL(int, class RPointerArray<class Usif::CApplicationRegistrationData> &) const
+	??0RRegistrationInfoForApplication@Usif@@QAE@XZ @ 260 NONAME ; Usif::RRegistrationInfoForApplication::RRegistrationInfoForApplication(void)
+	?NewL@CLauncherExecutable@Usif@@SAPAV12@AAVRReadStream@@@Z @ 261 NONAME ; class Usif::CLauncherExecutable * Usif::CLauncherExecutable::NewL(class RReadStream &)
+	?GroupName@CLocalizableAppInfo@Usif@@QBEABVTDesC16@@XZ @ 262 NONAME ; class TDesC16 const & Usif::CLocalizableAppInfo::GroupName(void) const
+	?OpaqueData@COpaqueData@Usif@@QAEAAVHBufC8@@XZ @ 263 NONAME ; class HBufC8 & Usif::COpaqueData::OpaqueData(void)
+	?GetAppUidsForComponentL@RSoftwareComponentRegistry@Usif@@QBEXHAAV?$RArray@VTUid@@@@@Z @ 264 NONAME ; void Usif::RSoftwareComponentRegistry::GetAppUidsForComponentL(int, class RArray<class TUid> &) const
+	?GetAppForDataTypeAndServiceL@RApplicationRegistrationInfo@Usif@@QBE?AVTUid@@ABVTDesC16@@V3@@Z @ 265 NONAME ; class TUid Usif::RApplicationRegistrationInfo::GetAppForDataTypeAndServiceL(class TDesC16 const &, class TUid) const
+	?ExternalizeL@TApplicationCharacteristics@Usif@@QBEXAAVRWriteStream@@@Z @ 266 NONAME ; void Usif::TApplicationCharacteristics::ExternalizeL(class RWriteStream &) const
+	?SetAppUidAndServiceUidForOpaqueData@CAppServiceInfoFilter@Usif@@QAEXVTUid@@0@Z @ 267 NONAME ; void Usif::CAppServiceInfoFilter::SetAppUidAndServiceUidForOpaqueData(class TUid, class TUid)
+	?DeleteApplicationEntryL@RSoftwareComponentRegistry@Usif@@QAEXVTUid@@@Z @ 268 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteApplicationEntryL(class TUid)
+	?ExternalizeL@CLauncherExecutable@Usif@@QBEXAAVRWriteStream@@@Z @ 269 NONAME ; void Usif::CLauncherExecutable::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@COpaqueData@Usif@@QBEXAAVRWriteStream@@@Z @ 270 NONAME ; void Usif::COpaqueData::ExternalizeL(class RWriteStream &) const
+	?NewFile@CApplicationRegistrationData@Usif@@QBEHXZ @ 271 NONAME ; int Usif::CApplicationRegistrationData::NewFile(void) const
+	??0RApplicationRegistrationInfo@Usif@@QAE@XZ @ 272 NONAME ; Usif::RApplicationRegistrationInfo::RApplicationRegistrationInfo(void)
+	?NewLC@COpaqueData@Usif@@SAPAV12@AAVTDesC8@@W4TLanguage@@@Z @ 273 NONAME ; class Usif::COpaqueData * Usif::COpaqueData::NewLC(class TDesC8 &, enum TLanguage)
+	?AddApplicationEntryL@RSoftwareComponentRegistry@Usif@@QAEXHABVCApplicationRegistrationData@2@@Z @ 274 NONAME ; void Usif::RSoftwareComponentRegistry::AddApplicationEntryL(int, class Usif::CApplicationRegistrationData const &)
+	?NewLC@CApplicationRegistrationData@Usif@@SAPAV12@XZ @ 275 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewLC(void)
+	?Uid@CAppViewData@Usif@@QBE?BVTUid@@XZ @ 276 NONAME ; class TUid const Usif::CAppViewData::Uid(void) const
+	?FullName@TAppRegInfo@Usif@@QBE?AV?$TBuf@$0BAA@@@XZ @ 277 NONAME ; class TBuf<256> Usif::TAppRegInfo::FullName(void) const
+	?AppFile@CApplicationRegistrationData@Usif@@QBEABVTDesC16@@XZ @ 278 NONAME ; class TDesC16 const & Usif::CApplicationRegistrationData::AppFile(void) const
+	?GenerateNewAppUidL@RScrInternalClient@Usif@@QBE?AVTUid@@XZ @ 279 NONAME ; class TUid Usif::RScrInternalClient::GenerateNewAppUidL(void) const
+	?InternalizeL@CLocalizableAppInfo@Usif@@QAEXAAVRReadStream@@@Z @ 280 NONAME ; void Usif::CLocalizableAppInfo::InternalizeL(class RReadStream &)
+	?SetEmbeddableApps@CAppInfoFilter@Usif@@QAEXH@Z @ 281 NONAME ; void Usif::CAppInfoFilter::SetEmbeddableApps(int)
+	?NewL@CAppServiceInfoFilter@Usif@@SAPAV12@AAVRReadStream@@@Z @ 282 NONAME ; class Usif::CAppServiceInfoFilter * Usif::CAppServiceInfoFilter::NewL(class RReadStream &)
+	?OpaqueData@CServiceInfo@Usif@@QBEABV?$RPointerArray@VCOpaqueData@Usif@@@@XZ @ 283 NONAME ; class RPointerArray<class Usif::COpaqueData> const & Usif::CServiceInfo::OpaqueData(void) const
+	?InternalizeL@COpaqueData@Usif@@QAEXAAVRReadStream@@@Z @ 284 NONAME ; void Usif::COpaqueData::InternalizeL(class RReadStream &)
+	?AppOpaqueData@CApplicationRegistrationData@Usif@@QBEABV?$RPointerArray@VCOpaqueData@Usif@@@@XZ @ 285 NONAME ; class RPointerArray<class Usif::COpaqueData> const & Usif::CApplicationRegistrationData::AppOpaqueData(void) const
+	?ApplicationLanguageL@RRegistrationInfoForApplication@Usif@@QBE?AW4TLanguage@@XZ @ 286 NONAME ; enum TLanguage Usif::RRegistrationInfoForApplication::ApplicationLanguageL(void) const
+	?ServiceArray@CApplicationRegistrationData@Usif@@QBEABV?$RPointerArray@VCServiceInfo@Usif@@@@XZ @ 287 NONAME ; class RPointerArray<class Usif::CServiceInfo> const & Usif::CApplicationRegistrationData::ServiceArray(void) const
+	?CaptionAndIconInfo@CAppViewData@Usif@@QBEPBVCCaptionAndIconInfo@2@XZ @ 288 NONAME ; class Usif::CCaptionAndIconInfo const * Usif::CAppViewData::CaptionAndIconInfo(void) const
+	?ExternalizeL@CServiceInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 289 NONAME ; void Usif::CServiceInfo::ExternalizeL(class RWriteStream &) const
+	?SetAllApps@CAppInfoFilter@Usif@@QAEXH@Z @ 290 NONAME ; void Usif::CAppInfoFilter::SetAllApps(int)
+	?NewLC@CLauncherExecutable@Usif@@SAPAV12@HABVTDesC16@@@Z @ 291 NONAME ; class Usif::CLauncherExecutable * Usif::CLauncherExecutable::NewLC(int, class TDesC16 const &)
+	??0RScrInternalClient@Usif@@QAE@XZ @ 292 NONAME ; Usif::RScrInternalClient::RScrInternalClient(void)
+	?ExternalizeL@CApplicationRegistrationData@Usif@@QBEXAAVRWriteStream@@@Z @ 293 NONAME ; void Usif::CApplicationRegistrationData::ExternalizeL(class RWriteStream &) const
+	?Priority@CDataType@Usif@@QBEHXZ @ 294 NONAME ; int Usif::CDataType::Priority(void) const
+	?GetAppInfoL@RApplicationRegistrationInfo@Usif@@QAEHVTUid@@AAVTAppRegInfo@2@W4TLanguage@@@Z @ 295 NONAME ; int Usif::RApplicationRegistrationInfo::GetAppInfoL(class TUid, class Usif::TAppRegInfo &, enum TLanguage)
+	?ExternalizeL@CDataType@Usif@@QBEXAAVRWriteStream@@@Z @ 296 NONAME ; void Usif::CDataType::ExternalizeL(class RWriteStream &) const
+	?GetAppForDataTypeL@RApplicationRegistrationInfo@Usif@@QBE?AVTUid@@ABVTDesC16@@@Z @ 297 NONAME ; class TUid Usif::RApplicationRegistrationInfo::GetAppForDataTypeL(class TDesC16 const &) const
+	?SetCapabilityAttributeMaskAndValue@CAppInfoFilter@Usif@@QAEXHHH@Z @ 298 NONAME ; void Usif::CAppInfoFilter::SetCapabilityAttributeMaskAndValue(int, int, int)
+	?NewL@CLauncherExecutable@Usif@@SAPAV12@HABVTDesC16@@@Z @ 299 NONAME ; class Usif::CLauncherExecutable * Usif::CLauncherExecutable::NewL(int, class TDesC16 const &)
+	?ExternalizeL@CLocalizableAppInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 300 NONAME ; void Usif::CLocalizableAppInfo::ExternalizeL(class RWriteStream &) const
+	?GetServiceInfoL@RApplicationRegistrationInfo@Usif@@QBEXPAVCAppServiceInfoFilter@2@AAV?$RPointerArray@VCServiceInfo@Usif@@@@W4TLanguage@@@Z @ 301 NONAME ; void Usif::RApplicationRegistrationInfo::GetServiceInfoL(class Usif::CAppServiceInfoFilter *, class RPointerArray<class Usif::CServiceInfo> &, enum TLanguage) const
+	?NewLC@CCaptionAndIconInfo@Usif@@SAPAV12@XZ @ 302 NONAME ; class Usif::CCaptionAndIconInfo * Usif::CCaptionAndIconInfo::NewLC(void)
+	?Uid@CServiceInfo@Usif@@QBE?BVTUid@@XZ @ 303 NONAME ; class TUid const Usif::CServiceInfo::Uid(void) const
+	?SetServerApps@CAppInfoFilter@Usif@@QAEXVTUid@@@Z @ 304 NONAME ; void Usif::CAppInfoFilter::SetServerApps(class TUid)
+	?NewLC@CLocalizableAppInfo@Usif@@SAPAV12@XZ @ 305 NONAME ; class Usif::CLocalizableAppInfo * Usif::CLocalizableAppInfo::NewLC(void)
+	?Language@COpaqueData@Usif@@QAE?AW4TLanguage@@XZ @ 306 NONAME ; enum TLanguage Usif::COpaqueData::Language(void)
+	?Close@RApplicationInfoView@Usif@@QAEXXZ @ 307 NONAME ; void Usif::RApplicationInfoView::Close(void)
+	?GroupName@CApplicationRegistrationData@Usif@@QBEABVTDesC16@@XZ @ 308 NONAME ; class TDesC16 const & Usif::CApplicationRegistrationData::GroupName(void) const
+	?NewLC@CApplicationRegistrationData@Usif@@SAPAV12@AAV?$RPointerArray@VHBufC16@@@@AAV?$RPointerArray@VCServiceInfo@Usif@@@@AAV?$RPointerArray@VCLocalizableAppInfo@Usif@@@@AAV?$RPointerArray@VCPropertyEntry@Usif@@@@AAV?$RPointerArray@VCOpaqueData@Usif@@@@VTUid@@ABVTDesC16@@AAVTApplicationCharacteristics@2@HH@Z @ 309 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewLC(class RPointerArray<class HBufC16> &, class RPointerArray<class Usif::CServiceInfo> &, class RPointerArray<class Usif::CLocalizableAppInfo> &, class RPointerArray<class Usif::CPropertyEntry> &, class RPointerArray<class Usif::COpaqueData> &, class TUid, class TDesC16 const &, class Usif::TApplicationCharacteristics &, int, int)
+	?NewL@CApplicationRegistrationData@Usif@@SAPAV12@XZ @ 310 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewL(void)
+	?NewL@CCaptionAndIconInfo@Usif@@SAPAV12@XZ @ 311 NONAME ; class Usif::CCaptionAndIconInfo * Usif::CCaptionAndIconInfo::NewL(void)
+	?NewL@CLocalizableAppInfo@Usif@@SAPAV12@XZ @ 312 NONAME ; class Usif::CLocalizableAppInfo * Usif::CLocalizableAppInfo::NewL(void)
+	?NewLC@CCaptionAndIconInfo@Usif@@SAPAV12@ABVTDesC16@@0H@Z @ 313 NONAME ; class Usif::CCaptionAndIconInfo * Usif::CCaptionAndIconInfo::NewLC(class TDesC16 const &, class TDesC16 const &, int)
+	?SetEmbeddabilityFilterWithScreenMode@CAppInfoFilter@Usif@@QAEXAAVTEmbeddableFilter@2@H@Z @ 314 NONAME ; void Usif::CAppInfoFilter::SetEmbeddabilityFilterWithScreenMode(class Usif::TEmbeddableFilter &, int)
+	?EmbeddabilityFlags@TEmbeddableFilter@Usif@@QBEIXZ @ 315 NONAME ; unsigned int Usif::TEmbeddableFilter::EmbeddabilityFlags(void) const
+	?GetAppCharacteristicsL@RRegistrationInfoForApplication@Usif@@QBEXAAVTApplicationCharacteristics@2@@Z @ 316 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppCharacteristicsL(class Usif::TApplicationCharacteristics &) const
+	?Launch@CApplicationRegistrationData@Usif@@QBEHXZ @ 317 NONAME ; int Usif::CApplicationRegistrationData::Launch(void) const
+	?NewL@CCaptionAndIconInfo@Usif@@SAPAV12@ABVTDesC16@@0H@Z @ 318 NONAME ; class Usif::CCaptionAndIconInfo * Usif::CCaptionAndIconInfo::NewL(class TDesC16 const &, class TDesC16 const &, int)
+	?Launcher@CLauncherExecutable@Usif@@QBEABVTDesC16@@XZ @ 319 NONAME ; class TDesC16 const & Usif::CLauncherExecutable::Launcher(void) const
+	?NewL@CDataType@Usif@@SAPAV12@XZ @ 320 NONAME ; class Usif::CDataType * Usif::CDataType::NewL(void)
+	?SetEmbeddableApps@CAppInfoFilter@Usif@@QAEXXZ @ 321 NONAME ; void Usif::CAppInfoFilter::SetEmbeddableApps(void)
+	??0RApplicationRegistryView@Usif@@QAE@XZ @ 322 NONAME ; Usif::RApplicationRegistryView::RApplicationRegistryView(void)
+	?GetAppIconL@RRegistrationInfoForApplication@Usif@@QBEXAAPAVHBufC16@@@Z @ 323 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppIconL(class HBufC16 * &) const
+	?ExternalizeL@TAppRegInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 324 NONAME ; void Usif::TAppRegInfo::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CAppViewData@Usif@@QBEXAAVRWriteStream@@@Z @ 325 NONAME ; void Usif::CAppViewData::ExternalizeL(class RWriteStream &) const
+	?GetAppOwnedFilesL@RRegistrationInfoForApplication@Usif@@QBEXAAV?$RPointerArray@VHBufC16@@@@@Z @ 326 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppOwnedFilesL(class RPointerArray<class HBufC16> &) const
+	?SetServiceUidForServiceImplementations@CAppServiceInfoFilter@Usif@@QAEXVTUid@@@Z @ 327 NONAME ; void Usif::CAppServiceInfoFilter::SetServiceUidForServiceImplementations(class TUid)
+	?Caption@CCaptionAndIconInfo@Usif@@QBEABVTDesC16@@XZ @ 328 NONAME ; class TDesC16 const & Usif::CCaptionAndIconInfo::Caption(void) const
+	?NewL@CAppInfoFilter@Usif@@SAPAV12@AAVRReadStream@@@Z @ 329 NONAME ; class Usif::CAppInfoFilter * Usif::CAppInfoFilter::NewL(class RReadStream &)
+	?NewL@CCaptionAndIconInfo@Usif@@SAPAV12@AAVRReadStream@@@Z @ 330 NONAME ; class Usif::CCaptionAndIconInfo * Usif::CCaptionAndIconInfo::NewL(class RReadStream &)
+	?GetNextAppInfoL@RApplicationInfoView@Usif@@QBEXHAAV?$RPointerArray@VTAppRegInfo@Usif@@@@@Z @ 331 NONAME ; void Usif::RApplicationInfoView::GetNextAppInfoL(int, class RPointerArray<class Usif::TAppRegInfo> &) const
+	??0TEmbeddableFilter@Usif@@QAE@XZ @ 332 NONAME ; Usif::TEmbeddableFilter::TEmbeddableFilter(void)
+	?OpenViewL@RApplicationRegistryView@Usif@@QAEXABVRSoftwareComponentRegistry@2@ABV?$RArray@VTUid@@@@W4TLanguage@@@Z @ 333 NONAME ; void Usif::RApplicationRegistryView::OpenViewL(class Usif::RSoftwareComponentRegistry const &, class RArray<class TUid> const &, enum TLanguage)
+	?GetAppViewIconL@RRegistrationInfoForApplication@Usif@@QBEXVTUid@@AAPAVHBufC16@@@Z @ 334 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppViewIconL(class TUid, class HBufC16 * &) const
+	?DeleteApplicationEntriesL@RSoftwareComponentRegistry@Usif@@QAEXH@Z @ 335 NONAME ; void Usif::RSoftwareComponentRegistry::DeleteApplicationEntriesL(int)
+	?InternalizeL@TAppRegInfo@Usif@@QAEXAAVRReadStream@@@Z @ 336 NONAME ; void Usif::TAppRegInfo::InternalizeL(class RReadStream &)
+	?OpenL@RRegistrationInfoForApplication@Usif@@QAEXABVRSoftwareComponentRegistry@2@VTUid@@W4TLanguage@@@Z @ 337 NONAME ; void Usif::RRegistrationInfoForApplication::OpenL(class Usif::RSoftwareComponentRegistry const &, class TUid, enum TLanguage)
+	?DefaultScreenNumberL@RRegistrationInfoForApplication@Usif@@QBEHXZ @ 338 NONAME ; int Usif::RRegistrationInfoForApplication::DefaultScreenNumberL(void) const
+	?NewLC@CAppViewData@Usif@@SAPAV12@VTUid@@HPAVCCaptionAndIconInfo@2@@Z @ 339 NONAME ; class Usif::CAppViewData * Usif::CAppViewData::NewLC(class TUid, int, class Usif::CCaptionAndIconInfo *)
+	?GetAppViewsL@RRegistrationInfoForApplication@Usif@@QBEXAAV?$RPointerArray@VCAppViewData@Usif@@@@@Z @ 340 NONAME ; void Usif::RRegistrationInfoForApplication::GetAppViewsL(class RPointerArray<class Usif::CAppViewData> &) const
+	?Attributes@CApplicationRegistrationData@Usif@@QBEIXZ @ 341 NONAME ; unsigned int Usif::CApplicationRegistrationData::Attributes(void) const
+	?ShortCaption@TAppRegInfo@Usif@@QBE?AV?$TBuf@$0BAA@@@XZ @ 342 NONAME ; class TBuf<256> Usif::TAppRegInfo::ShortCaption(void) const
+	?NewL@CApplicationRegistrationData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 343 NONAME ; class Usif::CApplicationRegistrationData * Usif::CApplicationRegistrationData::NewL(class RReadStream &)
+	?InternalizeL@TApplicationCharacteristics@Usif@@QAEXAAVRReadStream@@@Z @ 344 NONAME ; void Usif::TApplicationCharacteristics::InternalizeL(class RReadStream &)
+	??1CLauncherExecutable@Usif@@UAE@XZ @ 345 NONAME ; Usif::CLauncherExecutable::~CLauncherExecutable(void)
 

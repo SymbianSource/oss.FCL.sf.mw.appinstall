@@ -24,6 +24,7 @@
 #include "scrcomponentspecific.h"
 
 #include <usif/scr/scr.h>
+#include <usif/scr/appregentries.h>
 #include <scs/cleanuputils.h>
 #include <e32def.h>
 
@@ -138,6 +139,23 @@ void CScrComponentSpecificSecTest::RunTestL()
 	CheckFailL(err, _L("DeleteComponentDependencyL"));
 	CleanupStack::PopAndDestroy(3, dependantGlobalId); // dependantGlobalId, supplierGlobalId, supplierVerCompId
 	
+	//TODO: The addition of AppRegInfo needs to be optimized
+	RPointerArray<HBufC> ownedFileArray;
+    RPointerArray<Usif::CServiceInfo> serviceInfoArray;
+    RPointerArray<Usif::CLocalizableAppInfo> localizableAppInfoArray;
+    RPointerArray<Usif::CPropertyEntry> appPropertyArray;
+	RPointerArray<Usif::COpaqueData> opaqueDataArray;
+    TUid appUid = TUid::Uid(123454321);
+     
+    TApplicationCharacteristics appCharacteristics;
+    const Usif::CApplicationRegistrationData* appRegData = Usif::CApplicationRegistrationData::NewLC(ownedFileArray, serviceInfoArray, localizableAppInfoArray, appPropertyArray, opaqueDataArray, appUid, _L("SomeFile"), appCharacteristics, 0);
+    TRAP(err, scrSession.AddApplicationEntryL(componentId, *appRegData));
+	CleanupStack::PopAndDestroy();
+	CheckFailL(err, _L("AddApplicationEntryL"));
+	
+	TRAP(err, scrSession.DeleteApplicationEntriesL(componentId));
+	CheckFailL(err, _L("DeleteApplicationEntryL"));
+
 	// Verify transaction APIs - can be invoked only by an installer
 	TRAP(err, scrSession.CreateTransactionL());
 	CheckFailL(err, _L("CreateTransactionL"));

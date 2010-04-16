@@ -32,6 +32,11 @@
 #include "iaupdatedebug.h"
 
 
+#include "ncdnodecontentinfo.h"
+#include "ncdnode.h"
+#include "iaupdateprotocolconsts.h"
+
+
 // Constant that is used to inform that dependency node
 // was not found when dependencies were checked.
 const TInt KDependencyNotFound( -1 );
@@ -665,8 +670,10 @@ void CIAUpdateNodeContainer::UpdateHeadNodeListL( CIAUpdateNode& aNode )
         
         for ( TInt i = 0; i < iHeadNodes.Count(); ++i )
             {
-            CIAUpdateNode& tmpNode( *iHeadNodes[ i ] );            
-            if( aNode.Uid() == tmpNode.Uid() && aNode.Type() != MIAUpdateNode::EPackageTypeServicePack ) 
+            CIAUpdateNode& tmpNode( *iHeadNodes[ i ] );   
+            
+            if( NodeExists( aNode, tmpNode ) &&  
+                  aNode.Type() != MIAUpdateNode::EPackageTypeServicePack ) 
                 {
                 IAUPDATE_TRACE("[IAUPDATE] Head node already in the list.");
                 
@@ -726,7 +733,8 @@ TBool CIAUpdateNodeContainer::ReplaceRecommendedL(
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeContainer::ReplaceRecommendedL() begin");
     
-    if ( aCurrentNode.Uid() != aNewNode.Uid() )
+    
+    if ( !NodeExists( aCurrentNode, aNewNode ) )
         {
         IAUPDATE_TRACE("[IAUPDATE] LEAVE: Nodes do not match.");
         User::Leave( KErrArgument );
@@ -766,10 +774,11 @@ TBool CIAUpdateNodeContainer::PackageTypeAcceptedL(
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeContainer::PackageTypeAcceptedL() begin");
     
     if ( aNode.Type() == MIAUpdateNode::EPackageTypeServicePack
-         || aNode.Type() == MIAUpdateNode::EPackageTypeSA )
+         || aNode.Type() == MIAUpdateNode::EPackageTypeSA 
+         || aNode.Type() == MIAUpdateNode::EPackageTypeWidget )
         {
-        // Service packs and SA type always accepted.
-        IAUPDATE_TRACE("[IAUPDATE] Upgrade packet type SA or node is service pack");
+        // Service packs, SA types and Widgets are always accepted.
+        IAUPDATE_TRACE("[IAUPDATE] Upgrade packet type SA, service pack or widget");
         IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeContainer::PackageTypeAcceptedL() end: ETrue");
         return ETrue;
         }
@@ -1053,9 +1062,17 @@ TBool CIAUpdateNodeContainer::InstallCheckL( CIAUpdateNode& aNode ) const
         {
         IAUPDATE_TRACE("[IAUPDATE] Not a service pack");
 
+     
         TIAUpdateVersion installedVersion;
-        TBool installed( 
-            IAUpdateUtils::IsAppInstalledL( aNode.Uid(), installedVersion ) );
+        TBool installed = EFalse;
+        if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+            {
+            installed = IAUpdateUtils::IsWidgetInstalledL( aNode.Identifier(), installedVersion );
+            }
+        else
+            {
+            installed = IAUpdateUtils::IsAppInstalledL( aNode.Uid(), installedVersion );
+            }
         // Notice that here we let the check pass also if node has the same version
         // as the installed content. By accepting same version, the dependency chains
         // will contain the currently installed node dependency information. Then,
@@ -1086,4 +1103,34 @@ TBool CIAUpdateNodeContainer::InstallCheckL( CIAUpdateNode& aNode ) const
                      checkPassed);
 
     return checkPassed;
+    }
+
+// Checks if  the head node ids / identifers are equal
+TBool CIAUpdateNodeContainer::NodeExists( const CIAUpdateNode& aNode, 
+                                          const CIAUpdateNode& tmpNode )const 
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeContainer::NodeExists begin");
+    
+    TBool exists = EFalse;
+
+    if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+        {
+        if ( aNode.Identifier() == tmpNode.Identifier() )
+            {
+            exists = ETrue;
+            }
+        }
+    else
+        {
+        if ( aNode.Uid() == tmpNode.Uid() )
+            {
+            exists = ETrue;
+            }
+        }
+    
+    
+    IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateNodeContainer::NodeExists end: %d",
+                     exists);
+    
+    return exists;
     }

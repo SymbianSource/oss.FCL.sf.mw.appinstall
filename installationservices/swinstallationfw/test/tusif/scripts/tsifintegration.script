@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -18,6 +18,7 @@ PRINT Run all USIF integration tests
 
 // Delete the SCR Database file
 LOAD_SUITE tscr
+LOAD_SUITE tSisRegistryTest
 RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
 
 LOAD_SUITE tUsifSuite
@@ -428,6 +429,282 @@ RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\
 RUN_TEST_STEP !Result=-5 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SignedLessCapsPkg
 RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedLessCapsNonExistence
 END_TESTCASE API-SEC-USIF-tsifintegration-00029
+
+
+// Get the component information for a PU Upgrade, first base SA package with drive hard coded is installed
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0030
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0030
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForPuUpgradeWithDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0030
+
+
+// Get the component information for a sis file where drive is not hard coded
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0031
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0031
+
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForBaseWithDriveDialog
+
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0031
+
+// Get the component information for a pu upgrade sis file without drive dialog,base package with drive dialog
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0032
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0032
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep  z:\tusif\tsifintegration\tsifintegration.ini InstallByFileWithDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForPuUpgradeWithioutDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0032
+
+// Get the component information for a sis file(pu upgrade) embedded within another sis file, outer sis(with drive info) is the base package for this pu upgrade
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0033
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0033
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForEmbeddedInnnerWithUpgrade
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0033
+
+// Get the component information for a sis file(pu upgrade) embedded within another sis file, outer sis(without drive info) is the base package for this pu upgrade
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0034
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0034
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForEmbeddedInnnerWithUpgradeOuterAsBaseWithDriveDialog
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0034
+
+// Get the component information inclusing application info for a sis file having onle locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0035
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0035
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0035
+
+
+// Get the component information inclusing application info for a sis file having multiple locales
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0036
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0036
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0036
+
+
+
+// Get the component information(for the current locale) including application info for a sis file having multiple locales
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0037
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0037
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_German
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_ge
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0037
+
+
+// Get the component information inclusing application info for a sis file having an app with non apparc files in addtion to appac files
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0038
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0038
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultiplefiles
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0038
+
+
+// Get the component information inclusing application info for a sis file having one locale, it will give the default loacle info
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0039
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0039
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0039
+
+
+// Get the component information inclusing application info for a sis file having one locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0040
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0040
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NonApparcRegRsc
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0040
+
+
+// Get the component information inclusing application info for a sis file having multiple application with one app with non apparc reg rsc
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0041
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0041
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_MultiApp_OneAppWithNonApparcRsc
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0041
+
+
+// Get the component information including application info for a sis file having an application where target of reg rsc in not apparc's pvt folder
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0042
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0042
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NonApparcPath
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0042
+
+// Get the component information including application info for a sis file having multiple applications
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0043
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0043
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_MultiApp
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0043
+
+// Get the component information including application info for a sis file having multiple applications,where we have an equivalent match
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0044
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0044
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_EquivalentMatch
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_fr
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0044
+
+// Get the component information including application info for a sis file having an application with corrupt reg rsc
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0045
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0045
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_CorruptRsc
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0045
+
+
+// Get the component information including application info for an embedded sis file both ineer and ourt having different icon file
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0012
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0046
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoEmbedded_InnerWithDiffIcon
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0046
+
+
+// Get the component information including application info for two sis file both having same icon file
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0047
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0047
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_WithSameIcon
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_edited
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0047
+
+
+// Get the component information including application info for a sis file not having any locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0048
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0048
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NoLocale
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0048
+
+// Get the component information including application info for a sis file having lagre and small extns
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0049
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0049
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_largeandsmallextn
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0049
+
+// Get the component information inclusing application info for a sis file having multiple locales, first check for german then for english
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0050
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0050
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_German
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_ge
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0050
 
 // Wait 3 seconds in order to let the SIF server shutdown itself
 DELAY 3000

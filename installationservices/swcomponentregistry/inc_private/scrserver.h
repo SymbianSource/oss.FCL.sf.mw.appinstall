@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,6 +30,9 @@
 #include <scs/scsserver.h>
 #include "scrcommon.h"
 #include "usifcommon.h"
+
+_LIT_SECURE_ID(KSisRegistryServerSid, 0x10202DCA); 
+_LIT_SECURE_ID(KApparcServerSid, 0x10003A3F);
 
 namespace Usif
 	{
@@ -98,7 +101,7 @@ namespace Usif
 		void ConstructL();
 		void SetupL();
 		CPolicyServer::TCustomResult CheckDeleteComponentAllowedL(const RMessage2& aMsg);
-		CPolicyServer::TCustomResult CheckComponentIdMatchingEnvironmentL(const RMessage2& aMsg);				
+		CPolicyServer::TCustomResult CheckComponentIdMatchingEnvironmentL(const RMessage2& aMsg, TBool aCheckForSingleApp=EFalse);				
 		CPolicyServer::TCustomResult CheckSoftwareNameMatchingEnvironmentL(const RMessage2& aMsg);
 		CPolicyServer::TCustomResult CheckAllowedFilePathL(const RMessage2& aMsg);
 		CPolicyServer::TCustomResult CheckClientIsInstallerL(const RMessage2& aMsg);

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,9 +32,7 @@
 
 using namespace Usif;
 
-_LIT_SECURE_ID(KSisRegistryServerSid, 0x10202DCA); 
-
-static const TUint scrRangeCount = 11;
+static const TUint scrRangeCount = 13;
 
 static const TInt scrRanges[scrRangeCount] =
 	{
@@ -42,13 +40,15 @@ static const TInt scrRanges[scrRangeCount] =
 	CScsServer::EBaseSession,	 // Range-1 - EBaseSession to EBaseMustAllow exclusive.
 	CScsServer::EBaseSession | EGetSingleComponentSize, // Modification and transaction APIs have custom checks
 	CScsServer::EBaseSession | EGetComponentIdListSize, // Component-specific APIs are free for all
-	CScsServer::EBaseSession | EGetIsMediaPresent, // Getting all component IDs is restricted to ReadUserData
-	CScsServer::EBaseSession | ESetScomoState, // Component-specific APIs are free for all
-	CScsServer::EBaseSession | EGetPluginUidWithMimeType, // SetScomoState has custom checks (as with the rest of modification APIs)
-	CScsServer::EBaseSession | EAddSoftwareType, // File filter sub-sessions and plugin-fetching APIs are free for all
+	CScsServer::EBaseSession | EGetApplicationLaunchersSize, // Getting all component IDs is restricted to ReadUserData
+	CScsServer::EBaseSession | EGetIsMediaPresent, // Only allowed by apparc
+	CScsServer::EBaseSession | EAddApplicationEntry, // Component-specific APIs are free for all
+	CScsServer::EBaseSession | EGetPluginUidWithMimeType, // Custom checks (as with the rest of modification APIs)
+	CScsServer::EBaseSession | EAddSoftwareType, // File filter sub-sessions and plugin-fetching APIs are free for all	
 	CScsServer::EBaseSubSession | EOpenComponentsView, // Software Type management APIs are only allowed for SWI 
 	CScsServer::EBaseSubSession | EOpenFileList, // Component filter sub-sessions require ReadUserData	
-	CScsServer::EBaseMustAllow // File filter sub-session are free for all, the rest of the range is reserved for SCS, and must be allowed( EBaseMustAllow to KMaxTInt inclusive)
+	CScsServer::EBaseSubSession | EOpenApplicationRegistrationInfoView, // Always pass
+	CScsServer::EBaseMustAllow // Application Registration view to be only allowed by apparc, the rest of the range is reserved for SCS, and must be allowed( EBaseMustAllow to KMaxTInt inclusive)	
 	};
 
 static const TUint8 scrElementsIndex[scrRangeCount] =
@@ -57,19 +57,22 @@ static const TUint8 scrElementsIndex[scrRangeCount] =
 	CPolicyServer::ECustomCheck,
 	CPolicyServer::EAlwaysPass,
 	0, // Require ReadUserData
+	2, // Only Apparc process can invoke	
 	CPolicyServer::EAlwaysPass,
 	CPolicyServer::ECustomCheck,
-	CPolicyServer::EAlwaysPass,
-	1, // Only SWI process can invoke
+	CPolicyServer::EAlwaysPass,	
+	1, // Only SWI process can invoke	
 	0, // Require ReadUserData
 	CPolicyServer::EAlwaysPass,
+	2, // Only Apparc process can invoke
 	CPolicyServer::EAlwaysPass 
 	};							
 
 static const CPolicyServer::TPolicyElement scrElements[] =
 	{
 	{_INIT_SECURITY_POLICY_C1(ECapabilityReadUserData), CPolicyServer::EFailClient},
-	{_INIT_SECURITY_POLICY_S0(KSisRegistryServerSid.iId), CPolicyServer::EFailClient}
+	{_INIT_SECURITY_POLICY_S0(KSisRegistryServerSid.iId), CPolicyServer::EFailClient},
+	{_INIT_SECURITY_POLICY_S0(KApparcServerSid.iId), CPolicyServer::EFailClient}	
 	};
 
 static const CPolicyServer::TPolicy scrPolicy =
@@ -187,29 +190,52 @@ CScsSession* CScrServer::DoNewSessionL(const RMessage2& aMessage)
 	return CScrSession::NewL(*this, aMessage);
 	}
 
-CPolicyServer::TCustomResult CScrServer::CheckComponentIdMatchingEnvironmentL(const RMessage2& aMsg)
+CPolicyServer::TCustomResult CScrServer::CheckComponentIdMatchingEnvironmentL(const RMessage2& aMsg, TBool aCheckForSingleApp)
 	{	
-	TComponentId componentId = CScrRequestImpl::GetComponentIdFromMsgL(aMsg); 
+	TComponentId componentId = 0;
+	if(aCheckForSingleApp)
+	    {
+        // Get the application uid from RMessage2
+        TInt applicationUid = aMsg.Int0();        
+        // Get the component id for the application            
+        if(!iRequestImpl->GetComponentIdForAppInternalL(TUid::Uid(applicationUid), componentId))
+            return EFail;
+	    }
+	else
+	    {
+	    componentId = CScrRequestImpl::GetComponentIdFromMsgL(aMsg);
+	    }
+	
 	TSecureId clientSid = aMsg.SecureId();
+
+    if (componentId == 0)
+        {
+        if (clientSid == KSisRegistryServerSid)
+            return EPass;
+        }   
+    
+    TBool vaildSid = EFalse;
+	RArray<TSecureId> installerSids;
+	CleanupClosePushL(installerSids);
+	if (iRequestImpl->GetInstallerOrExecutionEnvSidsForComponentL(componentId, installerSids))
+	    {
+        TInt count = installerSids.Count();
+        for (TInt i = 0; i < count; i++)
+            {
+            if (clientSid == installerSids[i])
+                {
+                vaildSid = ETrue;
+                break;
+                }
+            }
+	    }
+	CleanupStack::PopAndDestroy(&installerSids);
 	
-	TSecureId installerSid (0);
-	if(iRequestImpl->GetInstallerSidForComponentL(componentId, installerSid))
-		{
-		if (clientSid == installerSid)
-			return EPass;
-		}
-	
-	// Minor optimisation - in most legal cases, the installer is the one which should be doing operations,
-	// so we check it first to reduce the second query
-	TSecureId executionEnvironmentSid (0);
-	if(iRequestImpl->GetExecutionEnvSidForComponentL(componentId, executionEnvironmentSid))	
-		{
-		if (clientSid == executionEnvironmentSid)
-			return EPass;
-		}
+	if (vaildSid)
+		return EPass;
 			
-	DEBUG_PRINTF5(_L("Neither installer nor execution environment matched the client while checking for component-matching environment. Installer SID %d, execution environment SID %d, client SID %d, component ID %d"), 
-			TUint32(installerSid), TUint32(executionEnvironmentSid), TUint32(clientSid), componentId);
+	DEBUG_PRINTF3(_L("Neither installer nor execution environment matched the client while checking for component-matching environment. Client SID %d, Component ID %d"), 
+			TUint32(clientSid), componentId);
 	return EFail;
 	}
 	
@@ -235,22 +261,29 @@ CPolicyServer::TCustomResult CScrServer::CheckDeleteComponentAllowedL(const RMes
 CPolicyServer::TCustomResult CScrServer::CheckSoftwareNameMatchingEnvironmentL(const RMessage2& aMsg)
 	{
 	HBufC* softwareTypeName = CScrRequestImpl::GetSoftwareTypeNameFromMsgLC(aMsg);
-	
-	TSecureId installerSid, executionEnvSid;	
-	if(!iRequestImpl->GetSidsForSoftwareTypeL(softwareTypeName, installerSid, executionEnvSid))
-		{
-		DEBUG_PRINTF2(_L("SID couldn't be found for software type (%S)!"), softwareTypeName);
-		CleanupStack::PopAndDestroy(softwareTypeName);
-		return EFail;
-		}
-	CleanupStack::PopAndDestroy(softwareTypeName);
-	
 	TSecureId clientSid = aMsg.SecureId();
-	if (clientSid == installerSid || clientSid == executionEnvSid)
+	
+	TBool vaildSid = EFalse;
+    RArray<TSecureId> installerSids;
+    CleanupClosePushL(installerSids);
+    if (iRequestImpl->GetSidsForSoftwareTypeL(softwareTypeName, installerSids))
+        {
+        TInt count = installerSids.Count();
+        for (TInt i = 0; i < count; i++)
+            {
+            if (clientSid == installerSids[i])
+                {
+                vaildSid = ETrue;
+                break;
+                }
+            }
+        }
+    CleanupStack::PopAndDestroy(2, softwareTypeName);
+	
+	if (vaildSid)	
 		return EPass;	
 
-	DEBUG_PRINTF4(_L("Neither installer nor execution environment matched the client while checking for component-matching environment. Installer SID %d, execution environment SID %d, client SID %d"), 
-			TUint32(installerSid), TUint32(executionEnvSid), TUint32(clientSid));	
+	DEBUG_PRINTF(_L("Client Sid is not a valid one software type!"));	
 	return EFail;
 	}
 
@@ -337,6 +370,11 @@ CPolicyServer::TCustomResult CScrServer::CustomSecurityCheckL(const RMessage2& a
 		case ESetIsComponentKnownRevoked:
 		case ESetIsComponentOriginVerified:		
 			return CheckCommonComponentPropertySettableL(aMsg, ECapabilityWriteDeviceData);
+		case EAddApplicationEntry:
+		case EDeleteApplicationEntries:
+			return CheckComponentIdMatchingEnvironmentL(aMsg);
+		case EDeleteApplicationEntry:
+		    return CheckComponentIdMatchingEnvironmentL(aMsg, ETrue);
 		default:
 			DEBUG_PRINTF2(_L("Unknown function was invoked in CustomSecurityCheck - %d"), functionId);							
 			__ASSERT_DEBUG(0, User::Invariant());
