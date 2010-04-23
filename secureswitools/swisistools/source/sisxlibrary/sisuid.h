@@ -74,8 +74,10 @@ public:
 	 * @param aStream - Stream in which the package entries need to be written.
 	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	inline void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	inline void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 private:
 	CSISUInt32 iUID;
@@ -122,7 +124,7 @@ inline std::string CSISUid::Name () const
 	return "Uid";
 	}
 
-inline void CSISUid::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSISUid::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	aStream << L"0x" << std::hex << iUID << std::dec;
 	}
