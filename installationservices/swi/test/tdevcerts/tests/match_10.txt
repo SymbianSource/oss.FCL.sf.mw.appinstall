@@ -1,0 +1,22 @@
+# Check that unprotected VIDs can still be installed even if there is a non empty VID constraint that doesn't match.
+[main]
+name=match_10
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_vid1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiunprotectedvid.exe"-"!:\sys\bin\tswiunprotectedvid.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswiunprotectedvid.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiunprotectedvid.exe
+

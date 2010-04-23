@@ -1,0 +1,45 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Installation file supporting English & German and having embaded package .
+
+;Languages
+&EN, GE
+
+#{"devlangsup_outer_EN","devlangsup_outer_GE"},(0x88000106),1,0,0,TYPE=SA
+
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_GE"}
+
+;Unique Vendor name
+:"Vendor"
+
+;Embedded package supporting device languages
+@"tbackup_devlang_embedded.sis",(0x88000105)
+
+
+if language=01
+"text\option1.txt"		  -"!:\Documents\InstTest\devlang_en_out.txt"
+endif
+
+
+if supported_language=01
+"text\option1.txt"		  -"!:\Documents\InstTest\devsuplang_en_out.txt"
+endif
+
+if supported_language=03
+"text\option2.txt"		  -"!:\Documents\InstTest\devsuplang_ge_out.txt"
+endif

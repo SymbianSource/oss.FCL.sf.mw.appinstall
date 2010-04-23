@@ -1,0 +1,13 @@
+<!ELEMENT LayeredExecutionEnvironments (softwareType+)>
+
+<!ELEMENT softwareType (localizedName*,mimeType+,sifPluginUid,installerSecureId,executionLayerSecureId)>
+<!ATTLIST softwareType name CDATA #REQUIRED>
+
+<!ELEMENT localizedName (#PCDATA)>
+<!ATTLIST localizedName language CDATA #REQUIRED>
+
+<!ELEMENT sifPluginUid (#PCDATA)>
+
+<!ELEMENT installerSecureId (#PCDATA)>
+
+<!ELEMENT executionLayerSecureId (#PCDATA)>

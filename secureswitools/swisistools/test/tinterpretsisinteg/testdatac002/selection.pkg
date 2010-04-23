@@ -1,0 +1,51 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package for User-selection
+
+; Languages
+; none -  English only by default
+
+; Installation header
+; Only one component name as we only support English
+
+#{"user-selection"},(0x89334517),1,0,0
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+; for the PREQ1230
+
+!({"Add-on 1 (20KB)"},{"Add-on 2 (75KB)"},
+ {"Add-on 3 (80KB)"}) 
+if option1
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\selecta.txt"-"C:\selecta.txt"
+
+elseif option2
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\selectb.txt"-"C:\selectb.txt"
+
+
+elseif option3
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\selectc.txt"-"C:\selectc.txt"
+
+
+else 
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\notselected.txt"-"C:\notselected.txt"
+endif
+; Required files
+; None
+
+; Component .sis files
+; None

@@ -1,0 +1,102 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+/! @file
+// SWIS unit (integration) tests
+PRINT Run SWI Daemon Stub tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID 		API-SEC-SWIDaemonStub-I-HW-0001
+//! @SYMTestCaseDesc 		Install SA and SP on the media card
+//! @SYMDEF			DEF107470
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install SA,Install SP , Unmount, DeleteRegistry, Mount
+//! @SYMTestExpectedResults 	SA and SP should be propogated to another device
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SWIDaemonStub-I-HW-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Install to MMC card first
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini InstallBase_arm
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini InstallAug_arm
+
+RUN_UTILS CopyFile e:\private\10202dce\81111207_0.sis  e:\81111207_0.sis
+RUN_UTILS CopyFile e:\Documents\InstTest\abase1.txt e:\abase1.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\abase4.txt e:\abase4.txt
+
+// Simulate a new phone by deleting the registry (SWIRegistry folder as well as the SCR store)
+// Also remove the folder containing the uninstall log (after making a copy of it)
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini DeleteUninstallLogs_arm
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini DeleteUninstallLogs_arm
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+
+// Mount the card back and wait for registy to be rebuilt (for ROM stubs)
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 4000
+
+// Ensure files on the removable drive aren't cleaned up and also the SA stub tries to propagate
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini CheckStub_arm
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini TestTagsBase
+
+// Really install base package(SA) 
+RUN_UTILS CopyFile e:\abase1.txt e:\Documents\InstTest\abase1.txt
+RUN_UTILS CopyFile e:\abase4.txt  e:\Documents\InstTest\abase4.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini InstallBaseStub_arm
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Check that the patch tries to propagate
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini TestTagsAug
+
+RUN_UTILS DeleteFile e:\Documents\InstTest\abase1.txt
+RUN_UTILS DeleteFile e:\Documents\InstTest\abase4.txt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini u_InstallBase_arm
+
+// Restore card contents back to installed status and simulate card inserted back to original phone (after app has been uninstalled on it).
+// This should result in card cleanup.
+RUN_UTILS CopyFile e:\abase1.txt e:\Documents\InstTest\abase1.txt
+RUN_UTILS CopyFile e:\abase4.txt e:\Documents\InstTest\abase4.txt
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini RestoreUninstallLogs_arm
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini CheckCleanup_arm
+
+// Finally cleanup the removable drive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+END_TESTCASE API-SEC-SWIDaemonStub-I-HW-0001
+
+
+
+

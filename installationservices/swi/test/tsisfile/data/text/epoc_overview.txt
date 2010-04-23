@@ -1,0 +1,158 @@
+/*
+* Portions Copyright (c) 1999 - 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+EPOC Technical Paper  
+
+EPOC Overview: Summary
+Revision 1.0(007), 11th June 1999
+
+Summary
+EPOC is an operating system, application framework and application suite optimized for the needs of wireless information devices such as smartphones and communicators, and for handheld, battery-powered, computers. EPOC also includes connectivity software for synchronization with data on PCs and servers.
+
+Contents
+ 1. Introduction 
+2. Application suite 
+3. System Architecture 
+4. Software development  
+
+1. Introduction
+EPOC is Symbian’s technology for wireless information devices, comprising
+
+a full application suite for wireless information devices, including messaging, browsing, office, PIM, and utility applications 
+connectivity software for synchronization with data on PCs and servers 
+a flexible architecture and programming systems to support compact but powerful software on wireless information devices, and software development 
+software development kits for wireless information device programs in C++, Java™ and OPL, and PC-based connectivity/datasync programming in any language supporting COM, such as Visual C++, Visual Basic, Delphi etc 
+OEM tools for building and localizing wireless information devices 
+Wireless information devices include
+
+smartphones: essentially phone-like devices, with added applications and PC connectivity using EPOC technology 
+communicators: essentially handheld computer-like devices, with tight or loose integration to mobile phones for data and voice applications 
+EPOC Release 5 is a high-end communicator which adds significantly to the integration and data communication capabilities of previous EPOC releases.
+
+EPOC’s GUIs and applications are now being developed for a range of device families in the smartphone and communicator categories. One design, codenamed Crystal, will retain and develop EPOC Release 5’s communicator capabilities. Others, codenamed Quartz, Sapphire and Emerald, will address the requirements of other smartphones and communicator devices, with different user interface requirements and, indeed, different types of end-use.
+
+2. Application suite
+EPOC’s application suite includes applications in the following categories:
+
+Communications
+ Internet e-mail, fax and short messaging, full integration with contacts database and synchronization with PC-based e-mail and contacts; web browser with full Java integration
+ 
+PIM
+ Contacts manager, Agenda, world map and alarm clock
+ 
+Office
+ Word processor, spreadsheet, database, spell checker, jotter
+ 
+Utilities
+ Calculator, Sketch, Voice Notes, serial comms
+ 
+System
+ File/apps browser, control panel with settings for time/date, sound, screen, power, keyboard, printer, modems, dialling, internet service provider, and locale; user information including password, extras bar configuration tool, and program installer/uninstaller
+ 
+Development
+ OPL program editor/translator
+ 
+Game
+ Bombs
+ 
+Data sync
+ PC-based EPOC Connect for data synchronization, file management, printing via PC, application installation from PC, and other utility functions to allow EPOC-based wireless information devices to integrate effectively with PC and server-based data
+ 
+
+Common application features include
+
+user interface designed specifically for the usability requirements of hand-portable computers and communicators 
+data formats designed for efficient memory use, for synchronization with PC applications, and exchange of data with other industry-standard systems 
+easy document embedding: for instance, word processor memos may be attached to agenda items to provide further detail, or spreadsheets or sketches can be embedded in word processor documents 
+transfer to other applications on the same machine via clipboard, to PCs via CopyAnywhere inter-machine clipboard transfer, and to other EPOC machines via infrared 
+printing to directly connected printer, to printer via PC, or on-screen preview 
+instant zooming to optimize for clarity of display or quantity of information, depending on lighting conditions and user preferences 
+easy-to-use help 
+instant task switching between concurrently running applications 
+a level of user customizability appropriate to hand-portable computers and communicators 
+robustness and speed 
+For more information on EPOC’s applications, and its integration with PC- and server-based data, see EPOC Overview: Applications.
+
+3. System Architecture
+EPOC has been designed for the specific requirements of portable, battery-powered, wireless information devices. The primary requirements are
+
+effective use of battery power, requiring efficient applications, small ROM and RAM footprint, effective power management during normal operation, robust response to low power conditions and sudden power supply failure 
+instant access to user data, requiring an effective multi-tasking system at the lowest-level, and a very easy user interface at the highest level 
+reliable handling of user data, requiring very robust software design achieved through object orientation, effective software re-use and compactness, a client-server architecture allowing most code to run with user privilege, and good software engineering disciplines 
+adaptability to different device types, requiring a base adaptable to different CPUs and hardware configurations, a GUI that may be changed to support different device families, and telephony support that is neutral to both air protocols and the tightness of coupling between EPOC and the phone 
+integration with other wireless information devices, handportable computers, PCs and servers, requiring link protocols such as infrared, RS232 and sockets, and suitable higher-level application protocols including industry standards such as vCard and vCalendar 
+communication using internet and phone protocols, requiring TCP/IP and dial-up networking support, telephony API with call control and phonebook support, and integrated contacts database 
+EPOC implements these requirements using the following major components:
+
+core
+ EPOC’s core components provide the APIs and runtime environment on which all other components are built. The core includes
+
+the base, a runtime adaptable to different hardware and PC-based emulation, with multi-tasking, power management, and support for an efficient client-server architecture 
+engine support, fundamental APIs for data management, text, clipboard, graphics, sound, alarms, world city/country information etc 
+graphics, font and bitmap management, bit-blitting, printing, and the low-level frameworks for user interaction 
+the EIKON GUI, which forms the basis for all EPOC release 5 application GUIs but which may be replaced (along with these GUIs) to implement new EPOC device families 
+These components are described in EPOC Overview: Core.
+ 
+comms
+ EPOC’s communications components provide the APIs, drivers, link and higher-level protocols for a wide range of communication and data interchange requirements. Comms infrastructure includes
+
+serial and sockets APIs 
+telephony API supporting call control, phonebook and short messaging 
+TCP/IP and dial-up networking 
+PC connectivity 
+infrared including IrDA and IrOBEX, used for convenient interface with infrared modems on mobile phones, swapping data with other wireless information devices and handportable computers, printing to IR-equipped printers, etc 
+These components are described in EPOC Communications: Design and EPOC Communications: Implementation.
+ 
+languages
+ EPOC includes a runtime environment for Java to JDK 1.1.4 specification including AWT, and both a runtime and development environment for OPL, a basic-like rapid application development language.
+
+For more information on Java, see EPOC’s Java Implementation.
+ 
+applications
+ The engines and GUIs which directly implement end-user applications.
+ 
+
+The technical paper on Application Technology provides a useful overview of how these components are used as the basis of the applications delivered with EPOC.
+
+4. Software development
+EPOC supports a wide range of software development options. For the wireless information device, programs may be written in three languages:
+
+C++, optimized for EPOC system development and high-performance application programming 
+Java, an industry-standard object-oriented language for development or deployment of applications, applets and APIs 
+OPL, a proprietary BASIC-like language with a long heritage in Symbian’s  EPOC and SIBO software, for rapid application development 
+For all these languages, the typical development cycle involves use of a PC-based emulator to do initial development and debugging, transfer to an EPOC device for final testing, and then packaging and distribution to end-users. For C++, programs must be rebuilt before transferring to an EPOC device, since the EPOC machine uses a different instruction set from the PC-based emulator. For OPL, programs can be developed on an EPOC machine directly by end-users.
+
+EPOC Connect, the PC-based connectivity and data synchronization program, provides APIs allowing you to implement extra converters, synchronizers and other utility software. Most of EPOC Connect’s APIs are delivered in COM format, allowing you to program in any compatible Windows-oriented language, such as Visual C++, Visual Basic or Delphi.
+
+Symbian provides SDKs to support development in all the above languages. These SDKs are available free (or at nominal distribution cost) from Symbian via the EPOC World website, where you can also find out more about EPOC, and about developer support options.
+
+Further Reading
+Symbian licenses, develops and supports the EPOC operating system, providing leading software, user interfaces, application frameworks and development tools for Wireless Information Devices such as Communicators and Smartphones. Symbian is based in London, with offices worldwide. See Symbian’s website for more technical papers, information about Symbian, and information about EPOC.
+
+Trademarks and acknowledgements
+Symbian and the Symbian logo, EPOC and the EPOC logo are the trademarks of Symbian Ltd.
+
+Java™ is a trademark of Sun Microsystems Inc.
+
+Visual C++ and Visual Basic are trademarks of Microsoft Corporation.
+
+Delphi is a trademark of Inprise Corporation.
+
+All other trademarks are acknowledged.
+
+  
+

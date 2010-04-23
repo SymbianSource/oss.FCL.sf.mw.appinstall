@@ -1,0 +1,147 @@
+# Microsoft Developer Studio Generated Dependency File, included by dumpswiregistrytool.mak
+
+.\dumpswiregistrytool.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\options.cpp : \
+	".\options.h"\
+	
+
+..\common\osinterface.cpp : \
+	"..\common\osinterface.h"\
+	
+
+.\registrypackage.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\registrytoken.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\siscontrollerinfo.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\sisdependency.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\sisembeds.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\sisfiledescription.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+.\sisproperty.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+..\common\streamreader.cpp : \
+	"..\common\osinterface.h"\
+	"..\common\streamreader.h"\
+	"..\Common\symbiantypes.h"\
+	"..\Common\ucmp.h"\
+	"..\Common\utf8\utf8.h"\
+	".\dumpswiregistrytool.h"\
+	".\options.h"\
+	".\registrypackage.h"\
+	".\registrytoken.h"\
+	".\siscontrollerinfo.h"\
+	".\sisdependency.h"\
+	".\sisembeds.h"\
+	".\sisfiledescription.h"\
+	".\sisproperty.h"\
+	
+
+..\Common\ucmp.cpp : \
+	"..\Common\symbiantypes.h"\
+	"..\Common\ucmp.h"\
+	
+
+..\Common\utf8\utf8.cpp : \
+	"..\Common\utf8\utf8.h"\
+	

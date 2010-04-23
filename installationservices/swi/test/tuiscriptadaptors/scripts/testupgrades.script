@@ -1,0 +1,619 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests for upgrades
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0001
+//! @SYMTestCaseDesc		Test upgrades
+//! @SYMTestPriority		High
+//! @SYMTestActions		Perform various upgrades.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0001
+
+// Make sure none of the files we overwrite are present
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade2.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade3.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\file.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+//Test different localized vendor name, but same unique vendor name, for DEF63237
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF63237_1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF63237_2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+// Test different unique vendor name - As of DEF087696 should pass
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_invalid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+//Test reinstall with different language selected, DEF072900
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF072900_1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF072900_2
+RUN_TEST_STEP !Result=Fail tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF072900_2_wrong_exp_text
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF072900_U
+
+// Temporary while test fails
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+// Temporary while test fails
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+// Temporary while test fails
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+// File clashes with base, 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+// Added this test for defect DEF054437
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base_C
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-DEF124063-0001
+//! @SYMTestCaseDesc		Test upgrades with invalid PU eclipse
+//! @SYMTestPriority		High
+//! @SYMTestActions		Perform PU upgrade.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-DEF124063-0001
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial4_drive_e
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade1
+
+// Temporary while test fails
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-DEF124063-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0002
+//! @SYMTestCaseDesc		Test upgrades with embedded fiels
+//! @SYMTestPriority		High
+//! @SYMTestActions		Perform various upgrades.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_baseembed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_baseembed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_embed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_baseembed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_baseembed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_embed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0003
+//! @SYMTestCaseDesc		Test Partial Upgrades to private directories 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Perform various upgrades.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_sid_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_sid_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade_sid
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-B-0003
+//! @SYMTestCaseDesc		Test Partial Upgrades with different version numbers
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Partially upgrades a base packge
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_sid_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_version_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade_sid
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0003
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0004
+//! @SYMTestCaseDesc		Test upgrades with filenull entries, ensure they are processed only on uninstall.
+//! @SYMDEF 			INC075997
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Partially upgrades a base packge
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_copyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_checkfiles
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_checkfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filenullmmc
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0004
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0005
+//! @SYMTestCaseDesc		Test Upgrades SP Packages(Replace the SP with SA Package)
+//! @SYMTestPriority		High
+//! @SYMTestActions		Perform various upgrades.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini augmentation_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini augmentation_A
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini augmentation_base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_augmentation
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0005
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0006
+//! @SYMTestCaseDesc		Tests that PUs attempting to overwrite files from SPs are rejected
+//! @SYMDEF 			DEF084118
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a base package, SP then a PU. Uninstalls the base package.
+//! @SYMTestExpectedResults	PU will be rejected, all other installs/uninstalls suceed.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini augmentation_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini augmentation_A
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini testaugmentations_A_PU
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_augmentation
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0006
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-B-0005
+//! @SYMTestCaseDesc		Test attempts to upgrade trusted entries with untrusted upgrades
+//! @SYMDEF 			DEF077470 
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Installs a trusted base package, then fails to install various upgrades
+//! @SYMTestExpectedResults	Untrusted upgrades fail to install
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini trusted_base
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini untrusted_upgrade
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini untrusted_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_trusted_base
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0005
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-B-0006
+//! @SYMTestCaseDesc		Tests a SIS file with embedded ROM upgrade SP
+//! @SYMDEF 			INC084157 
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS with an embedded upgrade to a ROM stub, uninstalls it again 
+//! @SYMTestExpectedResults	Expects both install and uninstall to suceed, taking the SP with it
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedromsp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_embedromsp
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-B-0006
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0007
+//! @SYMTestCaseDesc		Tests a SIS file with embedded ROM upgrade PU
+//! @SYMDEF 			INC084157 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a SIS with an embedded upgrade to a ROM stub, uninstalls it again 
+//! @SYMTestExpectedResults	Expects both install and uninstall to suceed, leaving the PU in place
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedrompu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_embedrompu
+
+// rip the pu out of the registry
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0007
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0008
+//! @SYMTestCaseDesc		Tests overwriting files in an SP with a PU to the same package
+//! @SYMDEF 			DEF084882 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a base package, and an SP, then a PU
+//! @SYMTestExpectedResults	Expects SA and SP to suceed, PU to fail
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filepu
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filebase
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0008
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0009
+//! @SYMTestCaseDesc		Same as test case 8, only upgrades are embedded in other packages
+//! @SYMDEF 			DEF084882 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a base package, and an SP, then a PU both embedded in other packages
+//! @SYMTestExpectedResults	Expects SA and SP to suceed, PU to fail
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilesp
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilepu
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_fileembedpu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_fileembedsp
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filebase
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0009
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0010
+//! @SYMTestCaseDesc		Installs a package that embeds a ROM SP, then upgrades the same package.
+//! @SYMDEF 			DEF087126 
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a package that embeds a ROM SP, then installs an SA upgrade
+//! @SYMTestExpectedResults	Expect install to suceed, then the upgrade to uninstall the SP
+//! @SYMDevelopedForRelease	Argus 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedromsp
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedspsa
+
+// ensure the ROM ugprade no longer exists
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_romsp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_embedromsp
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0010
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-I-0011
+//! @SYMTestCaseDesc		Tests patch upgrades and embedded patch upgrades.
+//! @SYMDEF 			DEF085448 
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Installs a base package and various SP upgrades to it
+//! @SYMTestExpectedResults	All sane SP upgrades should suceed
+//! @SYMDevelopedForRelease	Argus 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-I-0011
+
+// install the base package 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase
+
+// install a patch to it, and make sure we can install it again (upgrade)
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+
+// upgrade that one with a different patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp2
+
+// now upgrade it to a different drive entirely
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp2_e
+
+// and back again
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+
+// uninstall the patch
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filesp
+
+// patch with same name as base package, should fail with KErrInvalidUpgrade
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp3
+
+// install a package that embeds the original patch, twice
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilesp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilesp
+
+// upgrade it with a different patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilesp2
+
+// and back again
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedfilesp
+
+// uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_fileembedsp
+
+// finally, check we must be trusted enough to upgrade patches
+// install the self-signed verstion
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+
+// now the trusted version
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp-signed
+
+// now we shouldn't be able to go back to the self-signed version
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+
+// uninstall everything
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filebase
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-I-0011
+
+
+//! @SYMTestCaseID		API-SEC-UpgradeTest-DEF085506-0001
+//! @SYMTestCaseDesc		Test for removal of PU control files, after SA upgrade.
+//! @SYMDEF 			DEF085506
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a base package, then a PU, then a SA upgrade
+//! @SYMTestExpectedResults	Expects SA upgrade should remove PU control files from registry.
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UpgradeTest-DEF085506-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgradeX
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+END_TESTCASE API-SEC-UpgradeTest-DEF085506-0001
+
+
+//! @SYMTestCaseID		API-SEC-UpgradeTest-DEF085506-0002
+//! @SYMTestCaseDesc		Test for non removal of SP control files, after SA upgrade.
+//! @SYMDEF 			DEF085506
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a base package, then a SP, then a SA upgrade
+//! @SYMTestExpectedResults	Expects SA upgrade should not remove SP control files from registry.
+//! @SYMDevelopedForRelease	Mike 
+
+START_TESTCASE API-SEC-UpgradeTest-DEF085506-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filebase
+
+END_TESTCASE API-SEC-UpgradeTest-DEF085506-0002
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF085444-0001
+//! @SYMTestCaseDesc		Tests that SA upgrades of SA with SP applied.
+//! @SYMDEF 			DEF085444
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Installs a base package SA, and an SP, then upgrade with SA
+//! @SYMTestExpectedResults	Expects SA upgrade will succeed without affecting SP files. And SP files are not uninstalled as a //  part of upgrade.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini testupgrade_sp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base_sa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade_base
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF085444-0002
+//! @SYMTestCaseDesc		Tests that SA upgrades of SA with SP applied.
+//! @SYMDEF 			DEF085444
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Installs a base package SA, and an SP, then upgrade with SA
+//! @SYMTestExpectedResults	Expects SA upgrade will fail with the overwrite dialog correctly identifying the SP as the file //  owner.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini testupgrade_sp
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini testupgrade_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade_base
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF085444-0003
+//! @SYMTestCaseDesc		Tests that SA upgrades of SA with SP adding files for an exe in the base package.
+//! @SYMDEF 			DEF085444
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Installs a base package with exe, and an SP add files for an exe in the base, then SA upgrade without exe
+//! @SYMTestExpectedResults	Expects upgrade SA will succeed if the exe is removed and private directory for sid also removed.
+//  				else fails. 
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base_sid
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgradesid_sp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base_sid1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade_base_sid
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF085444-0003
+
+
+//! @SYMTestCaseID		API-SEC-DEF092376-0001
+//! @SYMTestCaseDesc		Verify that it is not possible to make an application non-removable by installing
+//!  				multiple partial upgrades. Previously, this caused InstallServer / SisRegistryServer to run out
+//!  				out memory.
+//! @SYMDEF 			DEF092376
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install a base package containing 250 files.
+//!                 		Install several partial upgrades each containing 250 files.
+//!                 		Uninstall the application.
+//! @SYMTestExpectedResults	Installation, upgrades and un-installation should be successful.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DEF092376-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini bigcontroller
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini bigcontrollerpu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini bigcontrollerpu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini bigcontrollerpu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini bigcontrollerpu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_bigcontroller
+
+END_TESTCASE API-SEC-DEF092376-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF100499-0001
+//! @SYMTestCaseDesc		Test upgrades of augmentations. Check that they do not added twice as embedded in the embedding package. Use a PU as an embedding package.
+//! @SYMDEF 			DEF100499
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs two packages, while the second one embeds an augmentation to the first. Then it installs a partial update to the second package while embedding again an augmentation to the first package. Then it uninstalls both packages.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall2
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF100499-SP-0001
+//! @SYMTestCaseDesc		Test upgrades of augmentations. Check that they do not added twice as embedded in the embedding package. Use an SP upgrade as an embedding package.
+//! @SYMDEF 			DEF100499-SP
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs two packages, while the second one embeds an augmentation to the first. Then it installs an SP upgrade to the second package while embedding again an augmentation to the first package. Then it uninstalls both packages.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-SP-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_3_sp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall2
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-SP-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF100499-PU-0001
+//! @SYMTestCaseDesc		Test embedded partial upgrades. Check that they do not added twice as embedded in the embedding package.
+//! @SYMDEF 			DEF100499-PU
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		First, application A which embeds application B is installed. Then, a partial upgrade to A which installs a partial upgrade to B is added. Then A gets uninstalled.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-PU-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_additional_inst
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_pu_test
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall2
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-PU-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF100499-SA-0001
+//! @SYMTestCaseDesc		Test embedded full upgrades. Check that they do not added twice as embedded in the embedding package.
+//! @SYMDEF 			DEF100499-SA
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		First, application A which embeds application B is installed. Then, a partial upgrade to A which installs a full upgrade to B is added. Then A gets uninstalled.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-SA-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_additional_inst
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_sa_test
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini DEF100499_uninstall2
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF100499-SA-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-UpgradeTest-DEF102144-0001
+//! @SYMTestCaseDesc		SWI supports installing a package embedding both another base and its upgrade packages
+//! @SYMDEF 			DEF102144
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a package embedding another base package and its PU/SP
+//! @SYMTestExpectedResults	Both installations are successful
+//! @SYMDevelopedForRelease	Argus 
+
+START_TESTCASE API-SEC-UISA-UpgradeTest-DEF102144-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedsapu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_embedsapu
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedsasp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_embedsasp
+
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedsasp2
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedsasa
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini embedsa2
+
+END_TESTCASE API-SEC-UISA-UpgradeTest-DEF102144-0001

@@ -1,0 +1,9 @@
+EXPORTS
+	?ListL@UninstalledSisPackages@Swi@@SAXW4TDriveNumber@@AAV?$RPointerArray@VCUninstalledPackageEntry@Swi@@@@@Z @ 1 NONAME ; void Swi::UninstalledSisPackages::ListL(enum TDriveNumber, class RPointerArray<class Swi::CUninstalledPackageEntry> &)
+	?Name@CUninstalledPackageEntry@Swi@@QBEABVTDesC16@@XZ @ 2 NONAME ; class TDesC16 const & Swi::CUninstalledPackageEntry::Name(void) const
+	?PackageType@CUninstalledPackageEntry@Swi@@QBEABW4TPackageType@12@XZ @ 3 NONAME ; enum Swi::CUninstalledPackageEntry::TPackageType const & Swi::CUninstalledPackageEntry::PackageType(void) const
+	?RemoveL@UninstalledSisPackages@Swi@@SAXABVCUninstalledPackageEntry@2@@Z @ 4 NONAME ; void Swi::UninstalledSisPackages::RemoveL(class Swi::CUninstalledPackageEntry const &)
+	?Uid@CUninstalledPackageEntry@Swi@@QBEABVTUid@@XZ @ 5 NONAME ; class TUid const & Swi::CUninstalledPackageEntry::Uid(void) const
+	?Vendor@CUninstalledPackageEntry@Swi@@QBEABVTDesC16@@XZ @ 6 NONAME ; class TDesC16 const & Swi::CUninstalledPackageEntry::Vendor(void) const
+	?Version@CUninstalledPackageEntry@Swi@@QBEABVTVersion@@XZ @ 7 NONAME ; class TVersion const & Swi::CUninstalledPackageEntry::Version(void) const
+

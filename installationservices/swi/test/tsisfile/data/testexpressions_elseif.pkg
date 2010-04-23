@@ -1,0 +1,77 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test file tests else if statements
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_elseif"}, (0x811111FC), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+!({"Option1"},{"Option2"},{"Option3"})
+
+if (option3 = 1)
+	if (option2 = 1)
+		if (option1 = 1)
+			"files\option1.txt"-"!:\Documents\InstTest\option321.txt";
+		elseif (option1 = 0)
+			"files\option1.txt"-"!:\Documents\InstTest\option32-.txt";
+		endif
+	elseif (option2 = 0)
+		if (option1 = 1)
+			"files\option1.txt"-"!:\Documents\InstTest\option3-1.txt";
+		elseif (option1 = 0)
+			"files\option1.txt"-"!:\Documents\InstTest\option3--.txt";
+		endif
+	endif
+elseif (option3 = 0)
+	if (option2 = 1)
+		if (option1 = 1)
+			"files\option1.txt"-"!:\Documents\InstTest\option-21.txt";
+		elseif (option3 = 0)
+			"files\option1.txt"-"!:\Documents\InstTest\option-2-.txt";
+		endif
+	elseif (option2 = 0)
+		if (option1 = 1)
+			"files\option1.txt"-"!:\Documents\InstTest\option--1.txt";
+		elseif (option1 = 0)
+			"files\option1.txt"-"!:\Documents\InstTest\option---.txt";
+		endif
+	endif
+endif
+
+if (option1 = 7)
+	"files\option1.txt"-"!:\Documents\InstTest\elseif7.txt";
+elseif (option1 = 6)
+	"files\option1.txt"-"!:\Documents\InstTest\elseif6.txt";
+elseif (option1 = 5)
+	"files\option1.txt"-"!:\Documents\InstTest\elseif5.txt";
+elseif (option1 = 4)
+	"files\option1.txt"-"!:\Documents\InstTest\elseif4.txt";
+elseif (option1 = 3)
+	"files\option1.txt"-"!:\Documents\InstTest\elseif3.txt";
+else
+	if (option1 = 2)
+		"files\option1.txt"-"!:\Documents\InstTest\elseif2.txt";
+	elseif (option1 = 1)
+		"files\option1.txt"-"!:\Documents\InstTest\elseif1.txt";
+	else
+		"files\option1.txt"-"!:\Documents\InstTest\elseif-.txt";
+	endif
+endif

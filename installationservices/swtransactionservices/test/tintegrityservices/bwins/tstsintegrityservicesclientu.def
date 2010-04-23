@@ -1,0 +1,11 @@
+EXPORTS
+	?AddL@RIntegrityServicesServerSession@@QAEXABVTDesC16@@@Z @ 1 NONAME ; void RIntegrityServicesServerSession::AddL(class TDesC16 const &)
+	?CommitL@RIntegrityServicesServerSession@@QAEXXZ @ 2 NONAME ; void RIntegrityServicesServerSession::CommitL(void)
+	?Connect@RIntegrityServicesServerSession@@QAEHXZ @ 3 NONAME ; int RIntegrityServicesServerSession::Connect(void)
+	?CreateNewTestFileL@RIntegrityServicesServerSession@@QAEXABVTDesC16@@@Z @ 4 NONAME ; void RIntegrityServicesServerSession::CreateNewTestFileL(class TDesC16 const &)
+	?CreateTempTestFileL@RIntegrityServicesServerSession@@QAEXABVTDesC16@@@Z @ 5 NONAME ; void RIntegrityServicesServerSession::CreateTempTestFileL(class TDesC16 const &)
+	?RemoveL@RIntegrityServicesServerSession@@QAEXABVTDesC16@@@Z @ 6 NONAME ; void RIntegrityServicesServerSession::RemoveL(class TDesC16 const &)
+	?RollBackL@RIntegrityServicesServerSession@@QAEXH@Z @ 7 NONAME ; void RIntegrityServicesServerSession::RollBackL(int)
+	?SetSimulatedFailureL@RIntegrityServicesServerSession@@QAEXVTPtrC16@@00@Z @ 8 NONAME ; void RIntegrityServicesServerSession::SetSimulatedFailure(class TPtrC16, class TPtrC16, class TPtrC16)
+	?TemporaryL@RIntegrityServicesServerSession@@QAEXABVTDesC16@@@Z @ 9 NONAME ; void RIntegrityServicesServerSession::TemporaryL(class TDesC16 const &)
+

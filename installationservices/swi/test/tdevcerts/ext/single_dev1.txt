@@ -1,0 +1,3 @@
+# A single device id 
+[device_id_list]
+dev1=11111111-222222-3-01

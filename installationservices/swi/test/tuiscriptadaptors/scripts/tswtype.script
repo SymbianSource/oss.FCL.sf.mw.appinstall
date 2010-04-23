@@ -1,0 +1,93 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Install/uninstall a SIS package containing a Layered Execution Environment registration file
+PRINT Install/uninstall a Layered Execution Environment
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWI-SWTYPE-LEE-0001
+//! @SYMTestCaseDesc 		Post manufacture installation of a Layered Execution Environment
+//! @SYMREQ 			REQ9832
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Installs/uninstalls a valid SIS file containing a Layered Execution Environment
+//! @SYMTestExpectedResults 	All steps must finish with KErrNone
+//! @SYMDevelopedForRelease 	Diran
+
+START_TESTCASE API-SEC-SWI-SWTYPE-LEE-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_valid1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini uninstall_swtype
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_valid2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini uninstall_swtype
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_valid3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini uninstall_swtype
+
+END_TESTCASE API-SEC-SWI-SWTYPE-LEE-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SWTYPE-LEE-0002
+//! @SYMTestCaseDesc 		Post manufacture installation of a Layered Execution Environment
+//! @SYMREQ 			REQ9832
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Tries to install an invalid SIS file containing a Layered Execution Environment
+//! @SYMTestExpectedResults 	All steps must fail with KErrInvalidSoftwareTypeRegistrationFile = -10271
+//! @SYMDevelopedForRelease 	Diran
+
+START_TESTCASE API-SEC-SWI-SWTYPE-LEE-0002
+
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid1
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid2
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid3
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid4
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid5
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid6
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid7
+RUN_TEST_STEP_RESULT -10271 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalid8
+
+END_TESTCASE API-SEC-SWI-SWTYPE-LEE-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SWTYPE-LEE-0003
+//! @SYMTestCaseDesc 		Post manufacture installation of a Layered Execution Environment - negative test for native environment
+//! @SYMREQ 			REQ9844
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Tries to install a SIS file which contains the native environment
+//! @SYMTestExpectedResults 	All steps must fail with KErrSecurityViolation
+//! @SYMDevelopedForRelease 	Diran
+
+START_TESTCASE API-SEC-SWI-SWTYPE-LEE-0003
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_native_invalid
+
+END_TESTCASE API-SEC-SWI-SWTYPE-LEE-0003
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SWTYPE-LEE-0004
+//! @SYMTestCaseDesc 		Upgrade of a Layered Execution Environment
+//! @SYMREQ 			REQ9832
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Tries to install a SIS file which contains a valid/invalid upgrade of a LEE
+//! @SYMTestExpectedResults 	All steps but invalid upgrade (fails with KErrSecurityViolation) must pass
+//! @SYMDevelopedForRelease 	Diran
+
+START_TESTCASE API-SEC-SWI-SWTYPE-LEE-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_valid1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_upgrade
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini install_swtype_invalidupgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswtype.ini uninstall_swtype
+
+END_TESTCASE API-SEC-SWI-SWTYPE-LEE-0004

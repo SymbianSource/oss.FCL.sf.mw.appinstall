@@ -1,0 +1,77 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+NAME HEWO
+
+#include <techview/eikon.rh>
+#include <uiklafgt/eikcore.rsg>
+#include <appinfo.rh>
+
+#include "../interpretsis_testcase/interpretsis_testcase.hrh"
+RESOURCE RSS_SIGNATURE { }
+// Conditional compile, depending on locale
+#ifdef LANGUAGE_01    // if language code is for UK
+ #include "01/01-strings.rls"
+#elif defined LANGUAGE_03  // if language code is for German
+ #include "03/03-strings.rls"
+#endif      
+// end conditional compile
+
+RESOURCE LOCALISABLE_APP_INFO r_lai
+	{
+		short_caption = STRING_r_example_short_caption;
+	    caption_and_icon =
+	        {
+	        CAPTION_AND_ICON_INFO
+	            {
+	            caption = STRING_r_example_caption;
+	            number_of_icons = 2; // each icon must be a bitmap/mask pair
+	            icon_file = STRING_r_example_iconfile;
+	            }
+	        };                          
+	    //
+	    view_list =
+	        {
+	        VIEW_DATA
+	            {
+	            uid = 268123123;
+	            screen_mode = 0x00;
+	            caption_and_icon =
+	                {
+	                CAPTION_AND_ICON_INFO
+	                    {
+	                    caption = STRING_r_view_268123123_caption;
+	                    number_of_icons = 5; // each icon must be a bitmap/mask pair
+	                    icon_file = "z:\\resource\\apps\\interpretsis_testcase01.mbm";
+	                    }
+	                };                          
+	            },
+	        VIEW_DATA
+	            {
+	            uid = 268123124;
+	            screen_mode = 0x01;
+	            caption_and_icon =
+	                {
+	                CAPTION_AND_ICON_INFO
+	                    {
+	                    caption = STRING_r_view_268123124_caption;
+	                    number_of_icons = 6; // each icon must be a bitmap/mask pair
+	                    icon_file = "\\resource\\apps\\interpretsis_testcase01.mbm";
+	                    }
+	                };
+	            }
+	        };
+	    group_name = "Tapash_Group";		
+	}

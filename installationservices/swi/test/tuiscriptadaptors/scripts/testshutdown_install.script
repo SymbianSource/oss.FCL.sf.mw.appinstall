@@ -1,0 +1,39 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+// give emulator time to start up so APPARC can initialize
+DELAY 5000
+
+//! @SYMTestCaseID 		API-SEC-UISA-ShutdownTest-I-B-0001
+//! @SYMTestCaseDesc 		Install / Uninstall SIS files, shutdown all running applications first.
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-ShutdownTest-I-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini shutdown
+
+END_TESTCASE API-SEC-UISA-ShutdownTest-I-B-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

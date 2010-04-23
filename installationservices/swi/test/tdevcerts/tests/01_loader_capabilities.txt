@@ -1,0 +1,23 @@
+# User grantable capabilitiers constraint with an executable that requires a system capability that
+# is granted by the loader. 
+# Should install
+[main]
+name=01_loader_capabilities
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,user_caps
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiswevent.exe"-"!:\sys\bin\tswiswevent.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswiswevent.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiswevent.exe

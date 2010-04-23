@@ -1,0 +1,236 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for AppMngr2 GS Settings plugin
+*
+*/
+
+
+NAME    AMGS
+
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <data_caging_paths_strings.hrh>
+#include <appinfo.rh>
+#include "appmngr2.hrh"                 // Command IDs
+#include <appmngr2.loc>                 // UI strings
+#include <avkon.loc>                    // UI strings
+#include <appmngrgsplugin.loc>
+
+RESOURCE RSS_SIGNATURE { }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_SETTINGS_VIEW
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_appmngr2_settings_view
+    {
+    menubar = r_appmngr2_settigs_menubar;
+    cba = r_appmngr2_cba_options_back_change;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_SETTIGS_MENUBAR
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_BAR r_appmngr2_settigs_menubar
+    {
+    titles =
+        {
+        MENU_TITLE { menu_pane = r_appmngr2_settings_menu; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_SETTINGS_MENU
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_PANE r_appmngr2_settings_menu
+    {
+    items=
+        {
+        MENU_ITEM
+            {
+            command = EAppMngr2CmdChange;
+            txt = qtn_options_change;
+            flags = EEikMenuItemSpecific;
+            },
+        MENU_ITEM
+            {
+            command = EAknCmdHelp;
+            txt = qtn_options_help;
+            },
+        MENU_ITEM
+            {
+            command = EAknCmdExit;
+            txt = qtn_options_exit;
+            }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_CBA_OPTIONS_BACK_CHANGE
+// ---------------------------------------------------------------------------
+//
+RESOURCE CBA r_appmngr2_cba_options_back_change
+    {
+    buttons =
+        {
+        CBA_BUTTON
+            {
+            id = EAknSoftkeyOptions;
+            txt = text_softkey_option;
+            },
+        CBA_BUTTON
+            {
+            id = EAknSoftkeyBack;
+            txt = text_softkey_back;
+            },
+        CBA_BUTTON
+            {
+            id = EAknSoftkeyChange;
+            txt = qtn_msk_change;
+            }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_SETTING_ARRAY
+// ---------------------------------------------------------------------------
+//
+RESOURCE ARRAY r_appmngr2_setting_array
+    {
+    items =
+        {
+        LBUF { txt = " \t"qtn_am_setting_sw_install"\t\t"; },
+        LBUF { txt = " \t"qtn_am_setting_ocsp"\t\t"; },
+        LBUF { txt = " \t"qtn_am_setting_ocsp_url"\t\t"; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_ALLOW_UNTRUSTED_VALUE_ARRAY
+// ---------------------------------------------------------------------------
+//
+RESOURCE ARRAY r_appmngr2_allow_untrusted_value_array
+    {
+    items =
+        {
+        LBUF { txt = qtn_am_set_sw_install_signed; },
+        LBUF { txt = qtn_am_set_sw_install_all; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_SET_PAGE_ALLOW_UNTRUSTED
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_SETTING_PAGE r_appmngr2_set_page_allow_untrusted
+    {
+    label = qtn_am_setting_sw_install;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__OK;
+    type = EAknSetListBox;
+    editor_resource_id = r_appmngr2_ocsp_editor;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_OCSP_CHECK_VALUE_ARRAY
+// ---------------------------------------------------------------------------
+//
+RESOURCE ARRAY r_appmngr2_ocsp_check_value_array
+    {
+    items =
+        {
+        LBUF { txt = qtn_am_set_ocsp_must_pass; },
+        LBUF { txt = qtn_am_set_ocsp_on; },
+        LBUF { txt = qtn_am_set_ocsp_off; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_OCSP_CHECK_PAGE
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_SETTING_PAGE r_appmngr2_ocsp_check_page
+    {
+    label = qtn_am_setting_ocsp;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__OK;
+    type = EAknSetListBox;
+    editor_resource_id = r_appmngr2_ocsp_editor;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_OCSP_EDITOR
+// ---------------------------------------------------------------------------
+//
+RESOURCE LISTBOX r_appmngr2_ocsp_editor
+    {
+    flags = EEikListBoxMultipleSelection;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_OCSP_URL_SETTING_PAGE
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_SETTING_PAGE r_appmngr2_ocsp_url_setting_page
+    {
+    number = EAknSettingPageNoOrdinalDisplayed;
+    label = qtn_am_setting_ocsp_url;
+    softkey_resource = R_AVKON_SOFTKEYS_OK_CANCEL__OK;
+    type = EEikCtEdwin;
+    editor_resource_id = r_appmngr2_url_editor;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_URL_EDITOR
+// ---------------------------------------------------------------------------
+//
+RESOURCE EDWIN r_appmngr2_url_editor
+    {
+    width = KAppMngr2OcspUrlControlWidth;
+    lines = KAppMngr2OcspUrlControlLines;
+    maxlength = KAppMngr2MaxOcspUrlLength;
+    numeric_keymap = EAknEditorCalculatorNumberModeKeymap;
+    allowed_input_modes = EAknEditorTextInputMode | EAknEditorNumericInputMode;
+    default_input_mode = EAknEditorTextInputMode;
+    special_character_table = R_AVKON_URL_SPECIAL_CHARACTER_TABLE_DIALOG;
+    default_case = EAknEditorLowerCase;
+    flags = EEikEdwinAutoSelection | EAknEditorLowerCase | EEikEdwinNoLineOrParaBreaks;
+    avkon_flags = EAknEditorFlagNoT9 | EAknEditorFlagLatinInputModesOnly;
+    }
+
+// ---------------------------------------------------------------------------
+// TBUF resources
+// ---------------------------------------------------------------------------
+//
+RESOURCE TBUF r_set_folder_application_manager
+    {
+    buf = qtn_cp_folder_installation_settings;
+    }
+
+RESOURCE TBUF r_am_installation_settings_title
+    {
+    buf = qtn_am_installation_settings_title;
+    }
+
+RESOURCE TBUF r_am_note_locked_settigs
+    {
+    buf = qtn_am_note_locked_settings;
+    }
+
+RESOURCE TBUF r_am_set_ocsp_none
+    {
+    buf = qtn_selec_sett_val_field_none;
+    } 
+

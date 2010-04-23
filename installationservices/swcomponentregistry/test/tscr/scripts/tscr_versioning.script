@@ -1,0 +1,118 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// This script implements Software Component Registry compatibility and versioning tests.
+// For more information about the test cases, please see TMS:\Security,Privacy and Control Protection\USIF\SCR\tscr_versioning
+// 
+//
+
+PRINT Run Software Component Registry (SCR) Versioning Tests
+
+// Load Suite
+LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0001
+//! @SYMTestCaseDesc 		Negative test - check that version table is required
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0001
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a corrupted DB file - does not contain version table
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini corrupted_db_file_no_version_table
+RUN_TEST_STEP !Result=-2 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0001
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0002
+//! @SYMTestCaseDesc 		Negative test - check that entries in version table are required
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0002
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a corrupted DB file - does not have entries in the version table
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini corrupted_db_file_no_version_entries
+RUN_TEST_STEP !Result=-2 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0002
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0003
+//! @SYMTestCaseDesc 		Negative test - check that older major versions are not allowed
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0003
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a DB file with an older major version
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini db_file_older_major_version
+RUN_TEST_STEP !Result=-2 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0003
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0004
+//! @SYMTestCaseDesc 		Negative test - check that newer major versions are not allowed
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0004
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a DB file with an newer major version
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini db_file_newer_major_version
+RUN_TEST_STEP !Result=-2 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0004
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0005
+//! @SYMTestCaseDesc 		Positive test - check that newer minor versions are allowed
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0005
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a DB file with an newer minor version
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini db_file_newer_minor_version
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0005
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0006
+//! @SYMTestCaseDesc 		Positive test - check that older minor versions are allowed
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0006
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a DB file with an older minor version
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini db_file_older_minor_version
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0006
+
+
+//! @SYMTestCaseID		API-SEC-SCR-VERSIONING-0007
+//! @SYMTestCaseDesc 		Positive test - check that different build numbers are allowed
+
+START_TESTCASE API-SEC-SCR-VERSIONING-0007
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Copy a DB file with a different build number
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini db_file_different_build_number
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+END_TESTCASE API-SEC-SCR-VERSIONING-0007
+
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 

@@ -1,0 +1,159 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; testexpressions_version1.pkg
+;
+; Test PKG for the following CR1125 Test Cases:
+; SEC-SWI-PKGVER-B001 - Installing a SIS containing a VERSION condition exercising each relational operator
+; SEC-SWI-PKGVER-B002 - Installing a SIS containing a VERSION condition with a Package UID not identified by the SIS Registry
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_version1"}, (0xE000B001), 1, 0, 0,TYPE=SA
+
+%{"Symbian Software Limited"}
+:"Symbian Software Limited"
+
+
+; ---------------------------
+; Equal To (=)
+; ---------------------------
+
+if VERSION(0xE1285B8F,=,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_a.txt";
+endif
+
+
+if VERSION(0xE1285B8F,=,3,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_b.txt";
+endif
+
+
+if VERSION(0xE1285B8F,=,4,2,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_c.txt";
+endif
+
+
+if VERSION(0xE1285B8F,=,4,3,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_d.txt";
+endif
+
+
+
+; ---------------------------
+; Not Equal (<>)
+; ---------------------------
+
+if VERSION(0xE1285B8F,<>,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_e.txt";
+endif
+
+
+if VERSION(0xE1285B8F,<>,3,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_f.txt";
+endif
+
+
+if VERSION(0xE1285B8F,<>,4,2,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_g.txt";
+endif
+
+
+if VERSION(0xE1285B8F,<>,4,3,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_h.txt";
+endif
+
+
+
+; ---------------------------
+; Less Than (<)
+; ---------------------------
+
+if VERSION(0xE1285B8D,<,1,99,32767)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_i.txt";
+endif
+
+
+if VERSION(0xE1285B8D,<,2,0,0)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_j.txt";
+endif
+
+
+if VERSION(0xE1285B8D,<,2,0,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_k.txt";
+endif
+
+
+
+; ---------------------------
+; Less Than Or Equal To (<=)
+; ---------------------------
+
+if VERSION(0xE1285B8D,<=,1,99,32767)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_l.txt";
+endif
+
+
+if VERSION(0xE1285B8D,<=,2,0,0)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_m.txt";
+endif
+
+
+if VERSION(0xE1285B8D,<=,2,0,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_n.txt";
+endif
+
+
+
+; ---------------------------
+; Greater Than (>)
+; ---------------------------
+
+if VERSION(0xE1285B8E,>,3,0,32767)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_o.txt";
+endif
+
+
+if VERSION(0xE1285B8E,>,3,1,0)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_p.txt";
+endif
+
+
+if VERSION(0xE1285B8E,>,3,1,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_q.txt";
+endif
+
+
+
+; ---------------------------
+; Greater Than Or Equal (>=)
+; ---------------------------
+
+if VERSION(0xE1285B8E,>=,3,0,32767)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_r.txt";
+endif
+
+
+if VERSION(0xE1285B8E,>=,3,1,0)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_s.txt";
+endif
+
+
+if VERSION(0xE1285B8E,>=,3,1,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version1_case_t.txt";
+endif
+

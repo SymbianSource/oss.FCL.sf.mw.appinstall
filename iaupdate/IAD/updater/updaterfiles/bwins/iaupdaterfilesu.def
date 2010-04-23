@@ -1,0 +1,75 @@
+EXPORTS
+	??1CIAUpdaterFileInfo@@UAE@XZ @ 1 NONAME ; CIAUpdaterFileInfo::~CIAUpdaterFileInfo(void)
+	??1CIAUpdaterFileList@@UAE@XZ @ 2 NONAME ; CIAUpdaterFileList::~CIAUpdaterFileList(void)
+	??1CIAUpdaterFileListFile@@UAE@XZ @ 3 NONAME ; CIAUpdaterFileListFile::~CIAUpdaterFileListFile(void)
+	??1CIAUpdaterIdentifier@@UAE@XZ @ 4 NONAME ; CIAUpdaterIdentifier::~CIAUpdaterIdentifier(void)
+	??1CIAUpdaterResult@@UAE@XZ @ 5 NONAME ; CIAUpdaterResult::~CIAUpdaterResult(void)
+	??1CIAUpdaterResultsFile@@UAE@XZ @ 6 NONAME ; CIAUpdaterResultsFile::~CIAUpdaterResultsFile(void)
+	?AddFileInfoL@CIAUpdaterFileList@@QAEXPAVCIAUpdaterFileInfo@@@Z @ 7 NONAME ; void CIAUpdaterFileList::AddFileInfoL(class CIAUpdaterFileInfo *)
+	?BundleName@CIAUpdaterFileList@@QBEABVTDesC16@@XZ @ 8 NONAME ; class TDesC16 const & CIAUpdaterFileList::BundleName(void) const
+	?CancelCount@CIAUpdaterResultsFile@@QBEHXZ @ 9 NONAME ; int CIAUpdaterResultsFile::CancelCount(void) const
+	?ErrorCode@CIAUpdaterResult@@QBEHXZ @ 10 NONAME ; int CIAUpdaterResult::ErrorCode(void) const
+	?ExternalizeL@CIAUpdaterFileInfo@@UAEXAAVRWriteStream@@@Z @ 11 NONAME ; void CIAUpdaterFileInfo::ExternalizeL(class RWriteStream &)
+	?ExternalizeL@CIAUpdaterIdentifier@@QAEXAAVRWriteStream@@@Z @ 12 NONAME ; void CIAUpdaterIdentifier::ExternalizeL(class RWriteStream &)
+	?FailCount@CIAUpdaterResultsFile@@QBEHXZ @ 13 NONAME ; int CIAUpdaterResultsFile::FailCount(void) const
+	?FileInfos@CIAUpdaterFileList@@QBEABV?$RPointerArray@VCIAUpdaterFileInfo@@@@XZ @ 14 NONAME ; class RPointerArray<class CIAUpdaterFileInfo> const & CIAUpdaterFileList::FileInfos(void) const
+	?FileList@CIAUpdaterFileListFile@@QAEAAV?$RPointerArray@VCIAUpdaterFileList@@@@XZ @ 15 NONAME ; class RPointerArray<class CIAUpdaterFileList> & CIAUpdaterFileListFile::FileList(void)
+	?FilePath@CIAUpdaterFileInfo@@QBEABVTDesC16@@XZ @ 16 NONAME ; class TDesC16 const & CIAUpdaterFileInfo::FilePath(void) const
+	?FilePath@CIAUpdaterFileListFile@@QBEABVTDesC16@@XZ @ 17 NONAME ; class TDesC16 const & CIAUpdaterFileListFile::FilePath(void) const
+	?FilePath@CIAUpdaterResultsFile@@QBEABVTDesC16@@XZ @ 18 NONAME ; class TDesC16 const & CIAUpdaterResultsFile::FilePath(void) const
+	?Hidden@CIAUpdaterFileList@@QBEHXZ @ 19 NONAME ; int CIAUpdaterFileList::Hidden(void) const
+	?Hidden@CIAUpdaterResult@@QBEHXZ @ 20 NONAME ; int CIAUpdaterResult::Hidden(void) const
+	?Id@CIAUpdaterIdentifier@@QBEABVTDesC16@@XZ @ 21 NONAME ; class TDesC16 const & CIAUpdaterIdentifier::Id(void) const
+	?Identifier@CIAUpdaterFileList@@QAEAAVCIAUpdaterIdentifier@@XZ @ 22 NONAME ; class CIAUpdaterIdentifier & CIAUpdaterFileList::Identifier(void)
+	?Identifier@CIAUpdaterResult@@QAEAAVCIAUpdaterIdentifier@@XZ @ 23 NONAME ; class CIAUpdaterIdentifier & CIAUpdaterResult::Identifier(void)
+	?InternalizeL@CIAUpdaterFileInfo@@UAEXAAVRReadStream@@@Z @ 24 NONAME ; void CIAUpdaterFileInfo::InternalizeL(class RReadStream &)
+	?InternalizeL@CIAUpdaterIdentifier@@QAEXAAVRReadStream@@@Z @ 25 NONAME ; void CIAUpdaterIdentifier::InternalizeL(class RReadStream &)
+	?Namespace@CIAUpdaterIdentifier@@QBEABVTDesC16@@XZ @ 26 NONAME ; class TDesC16 const & CIAUpdaterIdentifier::Namespace(void) const
+	?NewL@CIAUpdaterFileInfo@@SAPAV1@XZ @ 27 NONAME ; class CIAUpdaterFileInfo * CIAUpdaterFileInfo::NewL(void)
+	?NewL@CIAUpdaterFileList@@SAPAV1@XZ @ 28 NONAME ; class CIAUpdaterFileList * CIAUpdaterFileList::NewL(void)
+	?NewL@CIAUpdaterFileListFile@@SAPAV1@XZ @ 29 NONAME ; class CIAUpdaterFileListFile * CIAUpdaterFileListFile::NewL(void)
+	?NewL@CIAUpdaterIdentifier@@SAPAV1@XZ @ 30 NONAME ; class CIAUpdaterIdentifier * CIAUpdaterIdentifier::NewL(void)
+	?NewL@CIAUpdaterResult@@SAPAV1@XZ @ 31 NONAME ; class CIAUpdaterResult * CIAUpdaterResult::NewL(void)
+	?NewL@CIAUpdaterResultsFile@@SAPAV1@XZ @ 32 NONAME ; class CIAUpdaterResultsFile * CIAUpdaterResultsFile::NewL(void)
+	?NewLC@CIAUpdaterFileInfo@@SAPAV1@XZ @ 33 NONAME ; class CIAUpdaterFileInfo * CIAUpdaterFileInfo::NewLC(void)
+	?NewLC@CIAUpdaterFileList@@SAPAV1@XZ @ 34 NONAME ; class CIAUpdaterFileList * CIAUpdaterFileList::NewLC(void)
+	?NewLC@CIAUpdaterFileListFile@@SAPAV1@XZ @ 35 NONAME ; class CIAUpdaterFileListFile * CIAUpdaterFileListFile::NewLC(void)
+	?NewLC@CIAUpdaterIdentifier@@SAPAV1@XZ @ 36 NONAME ; class CIAUpdaterIdentifier * CIAUpdaterIdentifier::NewLC(void)
+	?NewLC@CIAUpdaterResult@@SAPAV1@XZ @ 37 NONAME ; class CIAUpdaterResult * CIAUpdaterResult::NewLC(void)
+	?NewLC@CIAUpdaterResultsFile@@SAPAV1@XZ @ 38 NONAME ; class CIAUpdaterResultsFile * CIAUpdaterResultsFile::NewLC(void)
+	?PckgStartIndex@CIAUpdaterFileListFile@@QBEHXZ @ 39 NONAME ; int CIAUpdaterFileListFile::PckgStartIndex(void) const
+	?PckgStartIndex@CIAUpdaterResultsFile@@QBEHXZ @ 40 NONAME ; int CIAUpdaterResultsFile::PckgStartIndex(void) const
+	?ReadDataL@CIAUpdaterFileListFile@@QAEHXZ @ 41 NONAME ; int CIAUpdaterFileListFile::ReadDataL(void)
+	?ReadDataL@CIAUpdaterResultsFile@@QAEHXZ @ 42 NONAME ; int CIAUpdaterResultsFile::ReadDataL(void)
+	?RemoveFile@CIAUpdaterFileListFile@@QAEHXZ @ 43 NONAME ; int CIAUpdaterFileListFile::RemoveFile(void)
+	?RemoveFile@CIAUpdaterResultsFile@@QAEHXZ @ 44 NONAME ; int CIAUpdaterResultsFile::RemoveFile(void)
+	?RemoveFileInfo@CIAUpdaterFileList@@QAEXH@Z @ 45 NONAME ; void CIAUpdaterFileList::RemoveFileInfo(int)
+	?Reset@CIAUpdaterFileList@@QAEXXZ @ 46 NONAME ; void CIAUpdaterFileList::Reset(void)
+	?Reset@CIAUpdaterFileListFile@@QAEXXZ @ 47 NONAME ; void CIAUpdaterFileListFile::Reset(void)
+	?Reset@CIAUpdaterIdentifier@@QAEXXZ @ 48 NONAME ; void CIAUpdaterIdentifier::Reset(void)
+	?Reset@CIAUpdaterResultsFile@@QAEXXZ @ 49 NONAME ; void CIAUpdaterResultsFile::Reset(void)
+	?Results@CIAUpdaterResultsFile@@QAEAAV?$RPointerArray@VCIAUpdaterResult@@@@XZ @ 50 NONAME ; class RPointerArray<class CIAUpdaterResult> & CIAUpdaterResultsFile::Results(void)
+	?SetBundleNameL@CIAUpdaterFileList@@QAEXABVTDesC16@@@Z @ 51 NONAME ; void CIAUpdaterFileList::SetBundleNameL(class TDesC16 const &)
+	?SetErrorCode@CIAUpdaterResult@@QAEXH@Z @ 52 NONAME ; void CIAUpdaterResult::SetErrorCode(int)
+	?SetFilePathL@CIAUpdaterFileInfo@@QAEXABVTDesC16@@@Z @ 53 NONAME ; void CIAUpdaterFileInfo::SetFilePathL(class TDesC16 const &)
+	?SetFilePathL@CIAUpdaterFileListFile@@QAEXABVTDesC16@@@Z @ 54 NONAME ; void CIAUpdaterFileListFile::SetFilePathL(class TDesC16 const &)
+	?SetFilePathL@CIAUpdaterResultsFile@@QAEXABVTDesC16@@@Z @ 55 NONAME ; void CIAUpdaterResultsFile::SetFilePathL(class TDesC16 const &)
+	?SetHidden@CIAUpdaterFileList@@QAEXH@Z @ 56 NONAME ; void CIAUpdaterFileList::SetHidden(int)
+	?SetHidden@CIAUpdaterResult@@QAEXH@Z @ 57 NONAME ; void CIAUpdaterResult::SetHidden(int)
+	?SetIdL@CIAUpdaterIdentifier@@QAEXABVTDesC16@@@Z @ 58 NONAME ; void CIAUpdaterIdentifier::SetIdL(class TDesC16 const &)
+	?SetNamespaceL@CIAUpdaterIdentifier@@QAEXABVTDesC16@@@Z @ 59 NONAME ; void CIAUpdaterIdentifier::SetNamespaceL(class TDesC16 const &)
+	?SetPckgStartIndex@CIAUpdaterFileListFile@@QAEXH@Z @ 60 NONAME ; void CIAUpdaterFileListFile::SetPckgStartIndex(int)
+	?SetPckgStartIndex@CIAUpdaterResultsFile@@QAEXABH@Z @ 61 NONAME ; void CIAUpdaterResultsFile::SetPckgStartIndex(int const &)
+	?SetSilent@CIAUpdaterFileListFile@@QAEXH@Z @ 62 NONAME ; void CIAUpdaterFileListFile::SetSilent(int)
+	?SetTotalPckgCount@CIAUpdaterFileListFile@@QAEXH@Z @ 63 NONAME ; void CIAUpdaterFileListFile::SetTotalPckgCount(int)
+	?SetTotalPckgCount@CIAUpdaterResultsFile@@QAEXABH@Z @ 64 NONAME ; void CIAUpdaterResultsFile::SetTotalPckgCount(int const &)
+	?SetUid@CIAUpdaterIdentifier@@QAEXABVTUid@@@Z @ 65 NONAME ; void CIAUpdaterIdentifier::SetUid(class TUid const &)
+	?SetUid@CIAUpdaterIdentifier@@QAEXH@Z @ 66 NONAME ; void CIAUpdaterIdentifier::SetUid(int)
+	?Silent@CIAUpdaterFileListFile@@QBEHXZ @ 67 NONAME ; int CIAUpdaterFileListFile::Silent(void) const
+	?SuccessCount@CIAUpdaterResultsFile@@QBEHXZ @ 68 NONAME ; int CIAUpdaterResultsFile::SuccessCount(void) const
+	?TotalPckgCount@CIAUpdaterFileListFile@@QBEHXZ @ 69 NONAME ; int CIAUpdaterFileListFile::TotalPckgCount(void) const
+	?TotalPckgCount@CIAUpdaterResultsFile@@QBEHXZ @ 70 NONAME ; int CIAUpdaterResultsFile::TotalPckgCount(void) const
+	?Uid@CIAUpdaterIdentifier@@QBEABVTUid@@XZ @ 71 NONAME ; class TUid const & CIAUpdaterIdentifier::Uid(void) const
+	?WriteDataL@CIAUpdaterFileListFile@@QAEXXZ @ 72 NONAME ; void CIAUpdaterFileListFile::WriteDataL(void)
+	?WriteDataL@CIAUpdaterResultsFile@@QAEXXZ @ 73 NONAME ; void CIAUpdaterResultsFile::WriteDataL(void)
+

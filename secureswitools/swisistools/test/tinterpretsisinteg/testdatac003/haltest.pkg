@@ -1,0 +1,35 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;To test the HAL conditionals
+;Languages
+&EN
+
+;Header
+#{"HAL-conditionals-CPU"}, (0x89334308), 1, 0, 0
+
+%{"Vendor"}
+:"Vendor"
+
+
+IF  CPU=0 
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\cpu.txt"-"c:\cpu.txt"
+ELSEIF CPU=1 
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\mcore.txt"-"c:\mcore.txt"
+ELSE   
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\Nocpu.txt"-"", FILETEXT, TEXTEXIT
+ENDIF
+
+

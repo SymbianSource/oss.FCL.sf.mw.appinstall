@@ -1,0 +1,32 @@
+@echo off
+rem
+rem Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+rem All rights reserved.
+rem This component and the accompanying materials are made available
+rem under the terms of "Eclipse Public License v1.0"
+rem which accompanies this distribution, and is available
+rem at the URL "http://www.eclipse.org/legal/epl-v10.html".
+rem
+rem Initial Contributors:
+rem Nokia Corporation - initial contribution.
+rem
+rem Contributors:
+rem
+rem Description:  Module tests for SW install progress indicator.
+rem
+
+echo ----------------------------------------------------------------------
+echo.
+echo Instrumenting code (winscw udeb, function coverage)
+echo.
+echo ----------------------------------------------------------------------
+echo.
+pushd ..\..
+if exist MON.sym del MON.sym
+if exist MON.dat del MON.dat
+call qmake
+call bldmake bldfiles
+call abld reallyclean winscw udeb
+call ctcwrap -i f -C "EXCLUDE+moc_*.cpp" -C "EXCLUDE+*.UID.CPP" -C "SKIP_FUNCTION_NAME+qt_plugin_query_verification_data" -C "SKIP_FUNCTION_NAME+qt_plugin_instance" abld build winscw udeb
+popd
+

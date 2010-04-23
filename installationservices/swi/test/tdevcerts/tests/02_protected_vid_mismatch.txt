@@ -1,0 +1,24 @@
+# CIT_EGUO-6G9J6M_05
+# DLL with no capabilities that has a protected VID which is not included in the 
+# list of constrained VIDs.
+#
+# Installation should be rejected because the VID constraint is not matched.
+
+[main]
+name=02_protected_vid_mismatch
+template=simple.txt
+inifile=mismatch.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,bad_single_vid
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswidllnocapabilityprotectedvid.dll"-"!:\sys\bin\tswidllnocapabilityprotectedvid.dll";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswidllnocapabilityprotectedvid.dll
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml

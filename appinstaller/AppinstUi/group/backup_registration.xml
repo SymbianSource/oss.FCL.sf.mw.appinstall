@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+
+<backup_registration>
+  <passive_backup>
+    <include_directory name="startup"/>
+  </passive_backup>
+  <proxy_data_manager sid="0x10202BE9" />
+  <dbms_backup policy="10207216"/>    
+  <restore requires_reboot="no"/>
+</backup_registration>

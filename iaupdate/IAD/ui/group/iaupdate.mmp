@@ -1,0 +1,141 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project definition file of iaupdate.exe
+*
+*/
+
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+#include "../inc/iaupdateuids.h"
+
+CAPABILITY CAP_APPLICATION TrustedUI PowerMgmt
+
+VENDORID   VID_DEFAULT 
+
+PAGED
+
+TARGETPATH	/sys/bin
+TARGET      iaupdate.exe
+TARGETTYPE  exe
+
+UID               0x100039CE KIAUpdateUiUid
+
+SOURCEPATH        ../src
+SOURCE            iaupdateapplication.cpp 
+SOURCE            iaupdateappui.cpp
+SOURCE            iaupdatedocument.cpp 
+SOURCE            iaupdatemainview.cpp
+SOURCE            iaupdatemaincontainer.cpp
+SOURCE            iaupdateuicontroller.cpp
+SOURCE            iaupdatewaitdialog.cpp
+SOURCE            iaupdateprogressdialog.cpp
+SOURCE            iaupdateserver.cpp
+SOURCE            iaupdatesession.cpp
+SOURCE            iaupdatenodefilter.cpp
+SOURCE 		      iaupdatesettingdialog.cpp
+SOURCE 		      iaupdatedialogutil.cpp
+SOURCE            iaupdatehistorycontainer.cpp
+SOURCE            iaupdatehistoryview.cpp
+SOURCE            iaupdatestarter.cpp
+SOURCE            iaupdatestatusdialog.cpp 
+SOURCE            iaupdatedetailsdialog.cpp 
+SOURCE            iaupdatefwdetailsdialog.cpp 
+SOURCE            iaupdateuiconfigdata.cpp
+SOURCE            iaupdateagreement.cpp
+SOURCE            iaupdateautomaticcheck.cpp
+SOURCE            iaupdatefirsttimeinfo.cpp
+SOURCE            iaupdatefirsttimedatefile.cpp
+SOURCE            iaupdatequeryhistory.cpp
+SOURCE            iaupdatestatuspanehandler.cpp
+SOURCE            iaupdatenavipanehandler.cpp
+SOURCE            iaupdateaccesspointhandler.cpp
+SOURCE            iaupdateroaminghandler.cpp
+SOURCE            iaupdateparametersfilemanager.cpp
+SOURCE            iaupdategloballockhandler.cpp
+SOURCE            iaupdaterefreshhandler.cpp
+SOURCE            iaupdateinstallationlistener.cpp
+SOURCE            iaupdatedeputils.cpp
+SOURCE            iaupdateuitimer.cpp
+SOURCE            iaupdatenodeid.cpp
+
+USERINCLUDE       ../inc
+USERINCLUDE       ../../tools/inc
+USERINCLUDE       ../../api/client/inc
+USERINCLUDE       ../../engine/inc 
+USERINCLUDE       ../../updater/inc
+USERINCLUDE       ../../updater/updaterfiles/inc
+USERINCLUDE       ../../loc
+USERINCLUDE       ../../firmwareupdate/inc
+USERINCLUDE       ../../launcher/inc
+
+APP_LAYER_SYSTEMINCLUDE
+
+LIBRARY           iaupdatetools.lib
+LIBRARY           iaupdateapi.lib
+LIBRARY           iaupdateengine.lib
+LIBRARY           iaupdaterfiles.lib
+LIBRARY           bafl.lib              // CDesC16Array
+LIBRARY           commonengine.lib      // StringLoader
+LIBRARY           euser.lib
+LIBRARY           apparc.lib
+LIBRARY           cone.lib 
+LIBRARY           eikcore.lib 
+LIBRARY           eikcoctl.lib          // CEikStatusPanelBase
+LIBRARY           avkon.lib  
+LIBRARY           sisregistryclient.lib // RSisRegistrySession RSisRegistryEntry
+LIBRARY           egul.lib
+LIBRARY           aknicon.lib
+LIBRARY           estor.lib
+LIBRARY			  efsrv.lib		        //RF
+LIBRARY           eikcdlg.lib
+LIBRARY           eikctl.lib
+LIBRARY           apgrfx.lib
+LIBRARY           ws32.lib 
+LIBRARY	          FeatMgr.lib
+LIBRARY           commdb.lib
+LIBRARY	          apsettingshandlerui.lib
+LIBRARY           ConnectionUiUtilities.lib
+LIBRARY           eikdlg.lib
+LIBRARY           centralrepository.lib
+LIBRARY           cmmanager.lib
+LIBRARY           xmlframework.lib	// Xml::CParser
+LIBRARY           aknskins.lib
+LIBRARY           hlplch.lib 
+LIBRARY           sysutil.lib
+LIBRARY           commonui.lib  //CErrorUi
+LIBRARY           ConnMon.lib
+LIBRARY           iaupdatefwupdate.lib
+LIBRARY           starterclient.lib
+
+DEBUGLIBRARY      flogger.lib
+
+
+// Path for resources
+SOURCEPATH .
+
+START RESOURCE	iaupdate.rss
+HEADER
+TARGETPATH	    APP_RESOURCE_DIR
+LANGUAGE_IDS
+END //RESOURCE
+
+
+START RESOURCE	iaupdate_reg.rss
+DEPENDS iaupdate.rsg
+TARGETPATH	/private/10003a3f/apps
+END //RESOURCE
+
+SMPSAFE

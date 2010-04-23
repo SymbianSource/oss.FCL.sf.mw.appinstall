@@ -1,0 +1,7 @@
+EXPORTS
+	?EndMaintenanceL@CCatalogsEngine@@SAXXZ @ 1 NONAME ; void CCatalogsEngine::EndMaintenanceL(void)
+	?NewL@CCatalogsEngine@@SAPAV1@AAVMCatalogsEngineObserver@@@Z @ 2 NONAME ; class CCatalogsEngine * CCatalogsEngine::NewL(class MCatalogsEngineObserver &)
+	?NewLC@CCatalogsEngine@@SAPAV1@AAVMCatalogsEngineObserver@@@Z @ 3 NONAME ; class CCatalogsEngine * CCatalogsEngine::NewLC(class MCatalogsEngineObserver &)
+	?StartMaintenanceL@CCatalogsEngine@@SAXXZ @ 4 NONAME ; void CCatalogsEngine::StartMaintenanceL(void)
+	?StateL@CCatalogsEngine@@SA?AW4TState@1@XZ @ 5 NONAME ; enum CCatalogsEngine::TState CCatalogsEngine::StateL(void)
+

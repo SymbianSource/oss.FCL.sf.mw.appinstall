@@ -1,0 +1,25 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Image description file for AppMngr2 Runtime API STIF test
+*
+*/
+
+
+#ifndef APPMNGR2RUNTIMEAPITEST_IBY
+#define APPMNGR2RUNTIMEAPITEST_IBY
+
+data=\epoc32\release\armv5\urel\appmngr2runtimeapitest.dll        \sys\bin\appmngr2runtimeapitest.dll
+
+#endif // APPMNGR2RUNTIMEAPITEST_IBY
+

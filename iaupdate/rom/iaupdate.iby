@@ -1,0 +1,54 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   IAUpdate ROM files.
+*
+*/
+
+
+
+#ifndef __IAUPDATE_IBY__
+#define __IAUPDATE_IBY__
+#include <bldvariant.hrh>
+
+#ifdef FF_IAUPDATE
+
+S60_APP_EXE(iaupdate)
+S60_APP_BITMAP(iaupdate)
+S60_APP_AIF_ICONS(iaupdate)
+S60_UPGRADABLE_APP_REG_RSC(iaupdate)
+S60_APP_EXE(iaupdater)
+S60_UPGRADABLE_APP_REG_RSC(iaupdater)
+S60_APP_EXE(iaupdatelauncher)
+S60_UPGRADABLE_APP_REG_RSC(iaupdatelauncher)
+
+
+file=ABI_DIR\BUILD_DIR\iaupdatetools.dll         SHARED_LIB_DIR\iaupdatetools.dll
+file=ABI_DIR\BUILD_DIR\iaupdateapi.dll           SHARED_LIB_DIR\iaupdateapi.dll
+file=ABI_DIR\BUILD_DIR\iaupdateengine.dll        SHARED_LIB_DIR\iaupdateengine.dll
+file=ABI_DIR\BUILD_DIR\iaupdaterfiles.dll        SHARED_LIB_DIR\iaupdaterfiles.dll
+
+file=ABI_DIR\BUILD_DIR\iaupdatebg.exe            SHARED_LIB_DIR\iaupdatebg.exe 
+file=ABI_DIR\BUILD_DIR\iaupdatefwupdate.dll      SHARED_LIB_DIR\iaupdatefwupdate.dll
+
+data=ZPRIVATE\2000F85A\iaupdateengineconfig.xml  PRIVATE\2000F85A\iaupdateengineconfig.xml
+data=ZPRIVATE\2000F85A\backup_registration.xml   PRIVATE\2000F85A\backup_registration.xml
+
+data=ZSYSTEM\install\iaupdate_stub.sis           system\install\iaupdate_stub.sis
+data=ZSYSTEM\install\iaupdater_stub.sis          system\install\iaupdater_stub.sis
+
+data= ZPRIVATE\200211f4\qgn_note_swupdate_notification.svg PRIVATE\200211f4\qgn_note_swupdate_notification.svg
+
+#endif //FF_IAUPDATE
+
+#endif //__IAUPDATE_IBY__

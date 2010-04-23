@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Secure Software Install">
+  <purpose>
+  </purpose>
+
+  <defect number="PDEF131499" title="OpenSSL licence text missing" revision="002">
+	Added licence file.
+  </defect>
+  <preq number="1182" title="GNU Make-based build system" revision="001">
+    Libeay32.a is added for both release and debug version for MinGW compiler. This is a statically linked library and readme.txt file is added to know how to build the library
+  </preq>
+</relnotes>

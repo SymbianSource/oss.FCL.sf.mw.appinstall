@@ -1,0 +1,673 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+//
+
+PRINT Run all eclipsing tests
+LOAD_SUITE tuiscriptadaptors
+
+// clean up before we start the tests, just in case
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+RUN_UTILS deletefile C:\private\101f7295\sidcache.cache
+
+//! @SYMTestCaseID		API-SEC-DllEclipsingPatch-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DllEclipsingPatch-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipsedllz
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsingupgradesp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipsedllc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+
+END_TESTCASE API-SEC-DllEclipsingPatch-0001
+
+
+//! @SYMTestCaseID		API-SEC-DllEclipsingPartialUpgrade-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DllEclipsingPartialUpgrade-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipsedllz
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsingupgradepu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipsedllc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse
+
+// install the same PU again, to check if file overwrite works for hashes.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsingupgradepu
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+
+END_TESTCASE API-SEC-DllEclipsingPartialUpgrade-0001
+
+
+//! @SYMTestCaseID		API-SEC-UntrustedEclipsing-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-UntrustedEclipsing-0001
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini untrustedeclipse
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_untrustedeclipse
+
+END_TESTCASE API-SEC-UntrustedEclipsing-0001
+
+
+//! @SYMTestCaseID		API-SEC-TestFileEclipsing-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TestFileEclipsing-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+END_TESTCASE API-SEC-TestFileEclipsing-0001
+
+
+//! @SYMTestCaseID		API-SEC-TestDoubleEclipse-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TestDoubleEclipse-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses1
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+END_TESTCASE API-SEC-TestDoubleEclipse-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0001
+//! @SYMTestCaseDesc 		Test excliping a file in the rom on e drive , and a orphaned file with the same name also on c drive
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse the file. the orphaned file should be overwritten and not be overwritten in different cases
+//! @SYMTestExpectedResults 	Sucessfully if it is overwritable, otherwise fails to overwrite
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0001
+
+// Copy a file with the same name to c drive as orphaned file
+RUN_UTILS MkDir c:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\file1.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\file1.txt
+
+// Eclipse the file should fail
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_NoOverwrite
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+
+// Eclipse the file should overwrite the orphan file if overwrite is allowed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_Overwrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-TestDoublePuEclipse-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TestDoublePuEclipse-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini fileeclipsepu
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini fileeclipsepu2
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+
+END_TESTCASE API-SEC-TestDoublePuEclipse-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0003
+//! @SYMTestCaseDesc 		Test excliping an application not included in any romstub on z drive
+//! @SYMDEF 			PDEF115151
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse the file which is not eclipsable
+//! @SYMTestExpectedResults 	KErrAlreadyExists
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0003
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini fileeclipsepu3
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini fileeclipsesa
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-StubPrivatePath-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-StubPrivatePath-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini stubprivateupgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_stubprivateupgrade
+
+END_TESTCASE API-SEC-StubPrivatePath-0001
+
+
+//! @SYMTestCaseID		API-SEC-StubWildCardUpgrade-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-StubWildCardUpgrade-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini stubwildcardupgrade
+
+END_TESTCASE API-SEC-StubWildCardUpgrade-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0004
+//! @SYMTestCaseDesc 		Test excliping a non-eclipsable file in the rom on e drive
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse the file which is not eclipsable
+//! @SYMTestExpectedResults 	KErrSISInvalidTargetFile
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0004
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tnoteclipsable
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_tnoteclipsable
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini ticonnoteclipsable
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_tnoteclipsable
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0004
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0005
+//! @SYMTestCaseDesc 		Test excliping multiple non-orphaned files
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse multiple non-orphaned files
+//! @SYMTestExpectedResults 	KErrSISInvalidTargetFile
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti1install
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti2overwrite
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti2overwrite
+
+RUN_TEST_STEP_RESULT -10257 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti3overwriteTBlocking
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti3overwrite
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti1install
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0005
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0006
+//! @SYMTestCaseDesc 		Test excliping multiple orphaned files
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse multiple orphaned files
+//! @SYMTestExpectedResults 	KErrSISInvalidTargetFile or KErrNone
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0006
+
+// Copy a file with the same name to c drive as orphaned file
+RUN_UTILS MkDir e:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm e:\eclipsetest\eclipsemulti1.txt
+RUN_UTILS MakeReadWrite e:\eclipsetest\eclipsemulti1.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm e:\eclipsetest\eclipsemulti2.txt
+RUN_UTILS MakeReadWrite e:\eclipsetest\eclipsemulti2.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm e:\eclipsetest\eclipsemulti3.txt
+RUN_UTILS MakeReadWrite e:\eclipsetest\eclipsemulti3.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm e:\eclipsetest\eclipsemulti4.txt
+RUN_UTILS MakeReadWrite e:\eclipsetest\eclipsemulti4.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm e:\eclipsetest\eclipsemulti5.txt
+RUN_UTILS MakeReadWrite e:\eclipsetest\eclipsemulti5.txt
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti1overwriteF
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti1overwriteF
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti1overwriteT
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti1install
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0006
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0007
+//! @SYMTestCaseDesc 		Test excliping multiple orphaned files by a embedded SIS file
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Try to eclipse multiple orphaned files
+//! @SYMTestExpectedResults 	KErrSISInvalidTargetFile or KErrNone
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0007
+
+// Copy a file with the same name to c drive as orphaned file
+RUN_UTILS MkDir c:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\eclipsemulti1.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\eclipsemulti1.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\eclipsemulti2.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\eclipsemulti2.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\eclipsemulti3.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\eclipsemulti3.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\eclipsemulti4.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\eclipsemulti4.txt
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\eclipsemulti5.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\eclipsemulti5.txt
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti3overwriteF
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti3overwrite
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini teclipsemulti3overwriteT
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_teclipsemulti3overwrite
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0007
+
+
+//! @SYMTestCaseID 		API-SEC-INC072696-0001
+//! @SYMTestCaseDesc 		Test a properly signed eclipse, where the file being eclipsed does not appear in the base package
+//! @SYMDEF 			INC072696
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Install a correctly signed file that eclipses a data file on Z: not accounted for the base package
+//! @SYMTestExpectedResults 	KErrInvalidEclipsing
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC072696-0001
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsenotpresent
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_eclipsenotpresent
+
+END_TESTCASE API-SEC-INC072696-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipseOverWriteEmbeddedfiles-0001
+//! @SYMTestCaseDesc 		Test that an embedding package cannot eclipse or overwrite files in an embedded package, but that a single
+//! 				non-embedded package can still eclipse or overwrite its own files
+//! @SYMDEF 			DEF083512
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Attempt to install a package which embeds another package and also installs one of the same target files,
+//! 				once to the same drive and once to a different drive, both of which should fail.  Also install a single package which
+//! 				installs two files to the same target, plus eclipses that target on a different drive.
+//! @SYMTestExpectedResults 	KErrAlreadyExists and KErrInvalidEclipsing for failure cases, successful install for third.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipseOverWriteEmbeddedfiles-0001
+
+RUN_TEST_STEP_RESULT -11 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testembedoverwritefiles_overwrite
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testembedoverwritefiles_eclipse
+RUN_TEST_STEP_RESULT -1 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testembedoverwritefiles
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipseoverwriteself
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipseoverwriteself
+
+END_TESTCASE API-SEC-TestEclipseOverWriteEmbeddedfiles-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipseExes-0001
+//! @SYMTestCaseDesc 		Test scenarios for eclipsing exes, to cover some additional code paths specific to exes.
+//! @SYMDEF 			INC084207
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Install a correctly signed file that eclipses a data file on Z: not accounted for the base package
+//! @SYMTestExpectedResults 	KErrInvalidEclipsing for invalid eclipsing, KErrAlready exists for new exe name for
+//! 				non-removed SID, KErrInvalidUpgrade for SA upgrade of stub, success for valid eclipsing and replacement.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TestEclipseExes-0001
+
+// Test that PU eclipse of exe in rom works.
+RUN_TEST_STEP_RESULT -10256 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini untrustedromstubpu
+RUN_TEST_STEP_RESULT -5 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_untrustedromstubpu
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsingromexepu
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini removepuentry
+
+// Create file in private directory of SID from base package.  This should
+// be preserved over the install and uninstall of the SP (DEF087470.)
+// The next uninstall step will check this.
+RUN_UTILS MkDir c:\private\10273581\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\private\10273581\pleaseletmelive.txt
+RUN_UTILS makereadwrite c:\private\10273581\pleaseletmelive.txt
+
+// Test that SP eclipse of exe in rom works.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini eclipsingromexesp
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_eclipsingromexesp
+
+// Remove the temporary file created above.
+RUN_UTILS deletefile c:\private\10273581\pleaseletmelive.txt
+
+// Test that Installation of SA upgrade over ROM stub is Not-ALLOWED due to difference in package name.
+RUN_TEST_STEP_RESULT -10256 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini  eclipsingromsaupgrade
+// Test that Installation of SA upgrade over Empty ROM stub is Not-ALLOWED.
+RUN_TEST_STEP_RESULT -10256 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   romstubupgradesa
+
+// Test that SA upgrade moving exe to new drive works.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilitye
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilityc
+
+// Test that PU and SP eclipse of non-ROM base is disallowed.
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilitypueclipse
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilityspeclipse
+
+// Test that SA upgrade replacing exe with new name but same SID works.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilitynewname
+
+// Test that PUs and SPs cannot add a new exe with the same SID as one in the base package.
+RUN_TEST_STEP_RESULT -11 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilitypueclipsenew
+RUN_TEST_STEP_RESULT -11 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini tswinocapabilityspeclipsenew
+
+// Uninstall test package.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_tswinocapability
+
+END_TESTCASE API-SEC-TestEclipseExes-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipseNoEarlyRemoval-0001
+//! @SYMTestCaseDesc 		Test that an orphaned file will not be removed at all when eclipsed by
+//! 				a target file in a directory prohibited for the install of the package.
+//! @SYMDEF 			DEF087111
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Install a correctly signed file that eclipses a data file on Z: not accounted for the base package
+//! @SYMTestExpectedResults 	KErrInvalidEclipsing for invalid eclipsing, KErrAlready exists for new exe name for
+//! 				non-removed SID, KErrInvalidUpgrade for SA upgrade of stub, success for valid eclipsing and replacement.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipseNoEarlyRemoval-0001
+
+RUN_UTILS mkdir e:\private\
+RUN_UTILS mkdir e:\private\FFFAAFFF\
+RUN_UTILS copyfile c:\auto.cfg e:\private\FFFAAFFF\file.txt
+RUN_UTILS MakeReadWrite e:\private\FFFAAFFF\file.txt
+
+// fails as attempts to install to a private dir with no matching executable, but the test also checks that a file
+// eclipsed by the target is not touched during the install.
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini privatedir4
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_privatedir4
+
+RUN_UTILS deletefile e:\private\FFFAAFFF\file.txt
+
+END_TESTCASE API-SEC-TestEclipseNoEarlyRemoval-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestSidCacheSubDir-0001
+//! @SYMTestCaseDesc 		Verify that SWI searches sub-directories of z:\sys\bin\ when the SID cache is built
+//! @SYMDEF 			DEF093956 
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Attempts to install SIS files containing exes with SIDs that conflict with
+//!                 		executables in sub-directories of z:\sys\bin\
+//! @SYMTestExpectedResults 	Installation fails with KErrAlreadyExists
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestSidCacheSubDir-0001
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini sidcachesubdir1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_sidcachesubdir1
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini sidcachesubdir2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_sidcachesubdir2
+
+END_TESTCASE API-SEC-TestSidCacheSubDir-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipse-0001
+//! @SYMTestCaseDesc 		Verify that testeclipse1.SIS cannot be installed 
+//! @SYMDEF 			DEF096830: SWI does not implement all eclipsing use cases 
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Attempts to install testeclipse1.SIS which contains 
+// 				testeclipse{00010002}.dll when the ROM contains z:\sys\bin\testeclipse{00010001}.dll"
+//! @SYMTestExpectedResults 	Installation fails with -10257 
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipse-0001
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse1
+
+END_TESTCASE API-SEC-TestEclipse-0001
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipse-0002
+//! @SYMTestCaseDesc 		Verify that testeclipse2.SIS cannot be installed 
+//! @SYMDEF 			DEF096830: SWI does not implement all eclipsing use cases 
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Attempts to install testeclipse2.SIS which contains 
+// 				testeclipse{00010002}.dll when the ROM contains z:\sys\bin\testeclipse{00010001}.dll"
+//! @SYMTestExpectedResults 	Installation fails with -10257 
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipse-0002
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse2
+
+END_TESTCASE API-SEC-TestEclipse-0002
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipse-0003
+//! @SYMTestCaseDesc 		Verify that testeclipse3.SIS cannot be installed 
+//! @SYMDEF 			DEF096830: SWI does not implement all eclipsing use cases 
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Attempts to install testeclipse3.SIS which contains 
+// 				swidaemon{00010002}.dll when the ROM contains z:\sys\bin\swidaemon.dll"
+//! @SYMTestExpectedResults 	Installation fails with -10257 
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipse-0003
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse3
+
+END_TESTCASE API-SEC-TestEclipse-0003
+
+
+//! @SYMTestCaseID 		API-SEC-TestEclipse-0004
+//! @SYMTestCaseDesc 		Verify that testeclipse5.SIS cannot be installed 
+//! @SYMDEF 			DEF096830: SWI does not implement all eclipsing use cases 
+//! @SYMTestPriority 		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		First installs testclipse4.dll which contains testappeclipse.dll
+//  				then attempts to install testeclipse5.SIS which contains testappeclipse{000A0001}.dll
+//! @SYMTestExpectedResults 	Installation fails with 10257 
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-TestEclipse-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse4
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse5
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse4
+
+END_TESTCASE API-SEC-TestEclipse-0004
+
+
+//! @SYMTestCaseID 		API-SEC-CR1027SAROMUPGRADE-0001
+//! @SYMCR 			CR1027 
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-CR1027SAROMUPGRADE-0001
+
+//CR1027 - ROM Upgrade with SA SIS.
+
+// Copy the private file cr1027_config3.txt fom Z to C ( file is used as run-time created one ).
+RUN_TEST_STEP 20 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini copy_config3
+
+// Test that Installation of SA upgrade over ROM stub is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+// Test that Un-Installation of SA upgrade over ROM stub is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+
+// Test that Installation of SA over ROM Upgraded SA (ROM+SA+SA  hear the second SA replaces the first one) is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+// Test that Un-Installation of ROM+SA+SA is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+
+// Test that Installation of ROM+SA+PU is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_PU
+// Test that Un-Installation of ROM+SA+PU is ALLOWED (only SA and PU will be removed).
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+
+// Test that Installation of ROM+SA+SP is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SP
+// Test that Un-Installation of SP from ROM+SA+SP is ALLOWED (only the SP will be removed SA will be left as it is).
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SP
+// Clean the remining before next test - Remove the SA from ROM+SA package
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+
+// Test that Installation of ROM+SA+PU+SP is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_PU
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SP
+// Test the Un-installation of SA is allowed after ROM+SA+PU+SP, which removes only SA and PU but not the SP.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+// Clean the remining before the next test - Remove the remining SP
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SP
+
+// Test that Installation of ROM+PU+SA is ALLOWED (PU will be removed as part of SA installation).
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_PU
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+// Test the Un-installation of SA is allowed after ROM+PU+SA, note that PU has been already removed as part SA installation.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+
+// Test that the ROM based package's Private directory centents are preserved during ROM+SA
+// Install the SA and check that the ROM based package's private contents are preserved.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA_PRIVATE
+// Test that the ROM based package's Private directory centents are not deleted during uninstallation of SA from ROM+SA.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA_PRIVATE
+
+// Test that the non-ROM based SA with RU flag also installed successfully.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027NON_ROM_SA_WITH_RU
+// Test that the un-installation of the non-ROM based SA with RU flag be able un-installed successfully.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027NON_ROM_SA_WITH_RU
+
+// Test that the ROM based SA without the RU flag can not upgrade the ROM application (Results in Invalid Upgrade).
+RUN_TEST_STEP_RESULT -10256 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA_NO_RU
+
+// Test that the try for wrong eclipsing is fails. First install ROM+PU then a PU with wrong eclipse data.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027ROM_PU
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027WRONG_PU
+
+//Test that the ROM based SA with RU falg and with a embedded ROM based SA without RU flag combination is fails installing.
+RUN_TEST_STEP_RESULT -10256 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027ROM_SA_WRONG_EMBD_SA_FAILED
+
+//Test that the ROM based SA with RU emeddes a non-ROM based SA is allowed to install and un-install successfully.
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027ROM_SA_EMBD_NORMAL_SA
+//Un install the above package
+RUN_TEST_STEP 40 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA_EMBD_NORMAL_SA
+
+//Test that the normal SA emeddes a ROM based SA with RU flag is allowed to install and un-install successfully.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027SA_EMBD_ROM_SA_RU
+//Un install the above package
+RUN_TEST_STEP 40 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027SA_EMBD_ROM_SA_RU
+
+//Test that the ROM based SA with RU flag emeddes another ROM based SA with RU is allowed to install and un-install successfully.
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027ROM_SA_EMBD_ROM_SA_RU
+//DEF137195 Reinstalling the same package when a normal sis file is present in \system\install\ folder.
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_CR1027ROM_SA_EMBD_ROM_SA_RU
+//Un install the above package
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA_EMBD_ROM_SA_RU
+
+// Test that Installation of ROM+SP+SA is ALLOWED (SP will be kept as it is during installation of SA).
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SP
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+// Test the Un-installation of SA is allowed after ROM+PU+SA, note that PU has been already removed as part SA installation.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA
+// Clean the remining before the next test - Remove the remining SP
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SP
+
+// Test that installation of a SA+RU package with wrong file to eclipse will result in failure.
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_wrongromeclipsesa
+
+// Test that installation of a PU package with wrong file to eclipse will result in failure.
+RUN_TEST_STEP_RESULT -10257 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini i_wrongromeclipsepu
+
+// Test that, an upgrade SA_RU_1(not upgrading all the files in ROM) is allowed over ROM+SA_RU(upgrades all the files  
+// all the files in ROM). and again the SA_RU allowed over ROM+SA_RU_1.
+// This test is to make sure that the eclipsable files in the above scenario are not taken from SIS registry entry
+// but directly from the corresponding stub itself.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA1
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1027ROM_SA
+// Test that Un-Installation of ROM+SA_RU happened on top of ROM+SA_RU_1 is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1027ROM_SA1
+
+// Remove the private file copied earlier
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini delt_config3
+
+END_TESTCASE API-SEC-CR1027SAROMUPGRADE-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CR1122WILDCARDSUPPORTTOROM-0001
+//! @SYMCR 			CR1122 
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-CR1122WILDCARDSUPPORTTOROM-0001
+
+//CR1122 - Wild card support to ROM stub.
+// Test that Installation of SA upgrade over Wild carded ROM stub is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1122WC_ROM_SA
+// Test that Un-Installation of SA upgrade the wild carded ROM stub is ALLOWED.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_CR1122WC_ROM_SA
+
+// Test that Installation of SA with wrong private data over Wild carded ROM stub is NOT-ALLOWED.
+RUN_TEST_STEP_RESULT -21 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini   i_CR1122WC_ROM_SA1
+
+END_TESTCASE API-SEC-CR1122WILDCARDSUPPORTTOROM-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF115255-0001
+//! @SYMTestCaseDesc 		Verify the SWI behavior on installation of a package having it's name same as a stub package but with different UID.
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions  		Install SA pkg with RU flag which has same package name but different uid of ROM stub package.
+//! @SYMTestExpectedResults 	File installs sucessfully.
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-DEF115255-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini def115255
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini def115255
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_def115255
+
+END_TESTCASE API-SEC-DEF115255-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC116616-0001
+//! @SYMTestCaseDesc 		Verify the SWI behavior on installation of a SA package with RU flag which uses a different pacakge name to the stub file.
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions  		Install SA pkg with RU flag which has a different package name to the ROM stub package. Install the same pkg again.
+//! @SYMTestExpectedResults 	SA RU sis file installs successfully on both attempts.
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-INC116616-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini saru_differentpkgname
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini saru_differentpkgname
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_saru_differentpkgname
+
+END_TESTCASE API-SEC-INC116616-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+

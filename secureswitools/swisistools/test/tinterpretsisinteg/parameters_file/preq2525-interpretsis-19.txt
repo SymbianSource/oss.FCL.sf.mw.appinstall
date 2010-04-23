@@ -1,0 +1,3 @@
+devlangsup_19.txt
+devlangsup_fr.txt
+*devlangsup_default.txt

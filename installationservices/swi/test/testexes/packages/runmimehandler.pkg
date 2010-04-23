@@ -1,0 +1,34 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs a mime handler and attempts to launch via the matching mime type from the same package
+
+;Languages 
+&EN
+
+;Header
+#{"runmimehandler"}, (0x8000887C), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Symbian S&DP"
+
+"\epoc32\data\z\mimehandler\mimehandler.rsc"-"$:\resource\apps\mimehandler.rsc"
+"\epoc32\data\z\mimehandler\mimehandler_reg.rsc"-"$:\private\10003a3f\import\apps\mimehandler_reg.rsc"
+"\epoc32\data\z\mimehandler\mimehandler_loc.rsc"-"$:\resource\apps\mimehandler_loc.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\mimehandler.exe"-"$:\sys\bin\mimehandler.exe"
+
+"packages\mimehandler.txt"-"$:\mimehandler.txt", FILEMIME,"x-epoc/x-rai-app", RA, RW
+; we don't expect this to run but it provides extra coverage
+"packages\mimehandler.txt"-"$:\mimehandler2.xxx", FR , RA

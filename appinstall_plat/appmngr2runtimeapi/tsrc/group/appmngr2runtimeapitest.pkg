@@ -1,0 +1,40 @@
+;
+; Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:  Package file for AppMngr2 Runtime API STIF test
+;
+
+
+; Languages
+&EN
+
+; Standard SIS file header
+#{"AppMngr2 Runtime API STIF Test Module"},(0x101FB3E3),1,1,0,TYPE=SA
+
+; Dependencies to S60 3.0 and 5.0 releases
+[0x101F7961],0,0,0,{"Series60ProductID"}
+[0x1028315F],0,0,0,{"Series60ProductID"}
+
+; Unique Vendor name
+:"Nokia"
+
+; Localised Vendor name
+%{"Nokia"}
+
+; Install files
+"\epoc32\release\armv5\urel\appmngr2runtimeapitest.dll"-"c:\sys\bin\appmngr2runtimeapitest.dll"
+"..\conf\ui_appmngr2runtimeapitest.cfg"-"c:\testframework\ui_appmngr2runtimeapitest.cfg"
+"..\init\TestFramework.ini"-"c:\testframework\TestFramework.ini"
+"..\data\mmc\sistest.sisx"-"e:\testing\data\sistest.sisx"
+"..\data\mmc\widgettest.wgz"-"e:\testing\data\widgettest.wgz"
+

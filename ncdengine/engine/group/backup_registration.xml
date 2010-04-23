@@ -1,0 +1,37 @@
+<?xml version="1.0" standalone="yes"?>
+
+<!--
+      NCD Client passive backup & restore registration file
+-->
+
+<backup_registration>
+
+	<!-- Passive backup -->
+	<passive_backup>
+
+            <!-- Purchase history directory -->
+            <include_directory name="ph"/>
+            <!-- NCD UI data. Family UID determines the directory 
+                 All nodes, favorites and subscriptions are backed up. -->             
+            <include_directory name="[20001a4a]">
+                <!-- Download data and download reports -->
+                <exclude name="[20001a4a]\Dl0"/>
+                <!-- previews -->
+                <exclude name="[20001a4a]\pr_"/>
+                <!-- search -->
+                <exclude name="[20001a4a]\s_"/>
+                <!-- Content download temp dir -->
+                <exclude name="[20001a4a]\data"/>
+                <!-- Temp dir for non-content downloads -->
+                <exclude name="[20001a4a]\temp"/>
+                <!-- shutdown counter -->
+                <exclude name="[20001a4a]\ncdshutdown"/>
+                <!-- startup success flag -->
+                <exclude name="[20001a4a]\ncdstartup"/>
+            </include_directory>
+	</passive_backup>
+
+	<!-- Restore -->
+	<restore requires_reboot="no"/>
+
+</backup_registration>

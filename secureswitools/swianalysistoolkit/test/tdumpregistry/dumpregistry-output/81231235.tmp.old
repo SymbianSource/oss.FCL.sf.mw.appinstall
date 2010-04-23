@@ -1,0 +1,63 @@
+Registry Controller Information:
+
+Registry Entry :data\81231235\00000000.reg
+
+Package UID :0x81231235
+Package Name :TestAppInUse Suite
+Vendor :Unique Vendor Name
+Package Index :0
+
+Controller1 Version :1.0.0
+Controller1 Algorithm :SHA1
+
+
+Controller2 Version :1.0.0
+Controller2 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 0
+
+SISProperty Count:0
+
+Number Of File Descriptions :7
+
+SIS File Description:
+
+Target1:c:\resource\apps\HelloWorld.rsc
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target2:c:\resource\apps\HelloWorld.mbm
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target3:c:\private\10003a3f\import\apps\HelloWorld_reg.RSC
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target4:c:\sys\bin\HelloWorld.exe
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x90008ace
+
+Target5:c:\sys\bin\runtestexe.exe
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x89334568
+
+Target6:c:\sys\bin\console_app.exe
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x89334569
+
+Target7:c:\private\89334569\osver1.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

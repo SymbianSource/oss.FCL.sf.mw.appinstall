@@ -1,0 +1,47 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; testexpressions_version4.pkg
+;
+; Test PKG for the following CR1125 Test Cases:
+; SEC-SWI-PKGVER-B005 - Installing a SIS containing an EXISTS condition with a valid argument string
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_version4"}, (0xE000B004), 1, 0, 0,TYPE=SA
+
+%{"Symbian Software Limited"}
+:"Symbian Software Limited"
+
+
+; ---------------------------
+; Case A
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,2")
+	"files\option1.txt"-"c:\tswi\tpkgver\version4_case_a.txt";
+endif
+
+
+; ---------------------------
+; Case B
+; ---------------------------
+
+if EXISTS("\sys\install\pkgversion\?0xE1285B8F,ET,4,3,1")
+	"files\option1.txt"-"c:\tswi\tpkgver\version4_case_b.txt";
+endif
+

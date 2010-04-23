@@ -1,0 +1,1 @@
+Just a dummy augmentation test file. I'm used for component info tests - if you'll change a byte here you'll have to update quite a few tests, so do it only if you feel creative.

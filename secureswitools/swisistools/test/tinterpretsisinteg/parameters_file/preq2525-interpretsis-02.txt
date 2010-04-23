@@ -1,0 +1,3 @@
+devlangsup_en.txt
+devlangsup_fr.txt
+*devlangsup_default.txt

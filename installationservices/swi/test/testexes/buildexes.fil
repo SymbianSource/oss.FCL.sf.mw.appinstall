@@ -1,0 +1,70 @@
+# Build WLDCOMP, a strange WINC/Win32 hybrid
+#
+!IF "$(PLATFORM)" == "WINSCW"
+TOOLNAME=genbackupmeta
+SRCDIR=..\genbackupmeta
+
+!if "$(CFG)" == "REL"
+VC_CFG="$(TOOLNAME) - Win32 Release"
+CFG=UREL
+!else
+VC_CFG="$(TOOLNAME) - Win32 Debug"
+CFG=UDEB
+!endif
+
+!ENDIF
+
+
+FINAL :
+!IF "$(PLATFORM)" == "GCCXML" || "$(PLATFORM)" == "TOOLS"
+	cd
+	echo ----------------
+	echo  Do nothing ...
+	echo ----------------
+!ELSE
+	cd
+	echo ---------------------------
+	echo Building test exes sis files...
+	echo ---------------------------
+
+	perl prepareexes.pl $(PLATFORM) $(CFG)
+
+!IF "$(PLATFORM)" == "WINSCW"
+	copy %EPOCROOT%epoc32\release\winscw\"$(CFG)"\adornedfilenametestingdll_10_0.dll %EPOCROOT%epoc32\release\winscw\"$(CFG)"\z\sys\bin\adornedfilenametestingdll3.dll
+	copy %EPOCROOT%epoc32\release\winscw\"$(CFG)"\adornedfilenametestingdll_10_0.dll %EPOCROOT%epoc32\release\winscw\"$(CFG)"\z\sys\bin\adornedfilenametestingdll4.dll
+
+	cd $(SRCDIR)
+	echo NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CFG=$(VC_CFG)
+	NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CFG=$(VC_CFG)
+	echo ..\tgenbackupmeta\scripts\preparemeta.pl $(PLATFORM) $(CFG)
+	..\tgenbackupmeta\scripts\preparemeta.pl $(PLATFORM) $(CFG)
+!ENDIF
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+MAKEDATA : DO_NOTHING
+
+RELEASABLES :
+	echo $(TOOL)
+
+SAVESPACE : BLD
+
+BLD : MAKEDATA
+
+CLEAN : 
+	perl prepareexes.pl -c $(PLATFORM) $(CFG)
+	cd $(SRCDIR)
+	echo NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CLEAN CFG=$(VC_CFG)
+	NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CLEAN CFG=$(VC_CFG)
+	-@erase $(TOOL)

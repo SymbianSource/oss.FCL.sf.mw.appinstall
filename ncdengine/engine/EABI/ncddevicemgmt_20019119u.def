@@ -1,0 +1,18 @@
+EXPORTS
+	_ZN27NcdDeviceInteractionFactory20CreateDeviceServiceLEv @ 1 NONAME
+	_ZN27NcdDeviceInteractionFactory21CreateDeviceServiceLCEv @ 2 NONAME
+	_ZN27NcdDeviceInteractionFactory26CreateInstallationServiceLEv @ 3 NONAME
+	_ZN27NcdDeviceInteractionFactory27CreateInstallationServiceLCEv @ 4 NONAME
+	_ZTI17CNcdDeviceService @ 5 NONAME ; #<TI>#
+	_ZTI21RCatalogsBufferWriter @ 6 NONAME ; #<TI>#
+	_ZTI22RCatalogsMessageReader @ 7 NONAME ; #<TI>#
+	_ZTI23CNcdInstallationService @ 8 NONAME ; #<TI>#
+	_ZTI27CNcdActiveOperationObserver @ 9 NONAME ; #<TI>#
+	_ZTI31CNcdSilentInstallActiveObserver @ 10 NONAME ; #<TI>#
+	_ZTV17CNcdDeviceService @ 11 NONAME ; #<VT>#
+	_ZTV21RCatalogsBufferWriter @ 12 NONAME ; #<VT>#
+	_ZTV22RCatalogsMessageReader @ 13 NONAME ; #<VT>#
+	_ZTV23CNcdInstallationService @ 14 NONAME ; #<VT>#
+	_ZTV27CNcdActiveOperationObserver @ 15 NONAME ; #<VT>#
+	_ZTV31CNcdSilentInstallActiveObserver @ 16 NONAME ; #<VT>#
+

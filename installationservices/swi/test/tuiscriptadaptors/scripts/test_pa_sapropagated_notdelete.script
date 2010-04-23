@@ -1,0 +1,91 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run PA and SA stub not delete tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+PRINT We need DeletePreinstalledFilesOnUninstall to false for running these tests.
+
+//! @SYMTestCaseID 		API-SEC-PA_NoDeleteFiles-0001
+//! @SYMTestCaseDesc 		Installs a PA package, Remove media card, Uninstall an App, Reinsert the card back, Files should not get deleted
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should not be cleaned up
+//! @SYMTestExpectedResults 	Media card should not be free of installed files
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-PA_NoDeleteFiles-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_preinstalled
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_pa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_pastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_pa_notdelete
+
+END_TESTCASE API-SEC-PA_NoDeleteFiles-0001 
+
+
+//! @SYMTestCaseID 		API-SEC-SAPropogatedNotDeleteFiles-0001
+//! @SYMTestCaseDesc 		Installs a SA package to a Media card, Remove the media card, Delete the Registry , Mount the card back,
+//! 				Install the stub sis file, Remove the Media card, Reinsert the card back, files should not get deleted
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should not be cleaned up
+//! @SYMTestExpectedResults 	Inserts a media card which should not be cleaned up
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SAPropogatedNotDeleteFiles-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sa
+
+RUN_UTILS CopyFile x:\readme.txt c:\readme.txt
+RUN_UTILS CopyFile x:\private\10202dce\8000001a_0.sis x:\8000001a_0.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 8000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sastub
+RUN_UTILS DeleteFile c:\readme.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sastub
+
+// Allow for all processing on the X drive to finish
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 8000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_sa_notdelete
+
+END_TESTCASE API-SEC-SAPropogatedNotDeleteFiles-0001

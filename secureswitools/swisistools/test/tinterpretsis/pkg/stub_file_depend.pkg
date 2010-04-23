@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+;Languages
+&EN
+
+;Header
+#{"sis stub file dependancy 1"}, (0x11113014), 1, 2, 6,TYPE=SA
+
+(0x11113013), 1, 2, 5, {"sis stub file 1"}
+
+%{"sis stub file dependancy 1"}
+:"Unique Vendor Name"
+
+"\epoc32\winscw\c\tswi\tinterpretsis\test.txt"-"c:\rom_depend.txt";

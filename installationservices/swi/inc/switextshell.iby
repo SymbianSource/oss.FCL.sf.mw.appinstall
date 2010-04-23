@@ -1,0 +1,124 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef SWITEXTSHELL
+#define SWITEXTSHELL
+
+define ROMDRIVE \epoc32\data\Z
+
+// SWI configuration - already in textshell ROM
+#include <swiconfig.iby>
+// WARNING
+// This iby file also includes the certman libraries needed for SWI
+#include <certman.iby>
+// DEF139848 fix - Forward Propogation from Symtb9.1 - Illegal dependency from OCSP to HTTP.
+#include <ocsp.iby>
+
+// This iby file also includes the http libraries needed for ocsp testing
+#include <http.iby>
+#include "hash.iby"
+
+#include "ups.iby" // Security utilities 9.5
+#include "streamingcaf.iby"
+#include "filetokens.iby"
+
+//estor.dll is put in ROFS by deafult but we need to put it into CORE as well
+//core version will be used; see DEF113303 for details
+#ifdef __SECURITY_TEST_ROM__
+#ifdef _INTERNAL_MMC
+ROM_IMAGE[0] {
+file = \epoc32\release\armv5\urel\estor.dll \sys\bin\estor.dll
+}
+#else
+#ifdef _NAND2
+ROM_IMAGE[0] {
+file = \epoc32\release\armv5\urel\estor.dll \sys\bin\estor.dll
+}
+#endif
+#endif
+#endif
+
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+// Cert store with no mandatory cert in if flag is not defined.
+data = \epoc32\winscw\c\tswi\certstore\swicertstore.dat resource\swicertstore.dat attrib=r
+#else
+// SWI cert store data file, with Root5CA mandatory
+data=ROMDRIVE\resource\swicertstore.dat		\resource\swicertstore.dat  attrib=r
+#endif
+
+// Core SWI code
+file=ABI_DIR\BUILD_DIR\installserver.exe			sys\bin\installserver.exe
+file=ABI_DIR\BUILD_DIR\plan.dll 				sys\bin\plan.dll
+file=ABI_DIR\BUILD_DIR\sishelper_tshell.dll			sys\bin\sishelper.dll
+file=ABI_DIR\BUILD_DIR\swidataprovider.dll 			sys\bin\swidataprovider.dll 
+file=ABI_DIR\BUILD_DIR\sisxfile.dll 				sys\bin\sisxfile.dll 
+file=ABI_DIR\BUILD_DIR\siscontroller.dll 			sys\bin\siscontroller.dll 
+file=ABI_DIR\BUILD_DIR\sisresult.dll				sys\bin\sisresult.dll
+file=ABI_DIR\BUILD_DIR\uiss.dll					sys\bin\uiss.dll
+file=ABI_DIR\BUILD_DIR\uissclient.dll 				sys\bin\uissclient.dll 
+
+file=ABI_DIR\BUILD_DIR\sisregistryclient.dll			sys\bin\sisregistryclient.dll
+file=ABI_DIR\BUILD_DIR\sisregistryserver.exe			sys\bin\sisregistryserver.exe
+file=ABI_DIR\BUILD_DIR\sislauncherclient.dll			sys\bin\sislauncherclient.dll
+file=ABI_DIR\BUILD_DIR\sislauncherserver_tshell.exe		sys\bin\sislauncherserver.exe
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\apprscparser.dll			sys\bin\apprscparser.dll
+file=ABI_DIR\BUILD_DIR\swtypereginfo.dll		sys\bin\swtypereginfo.dll
+#endif
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\integrityservices.dll			sys\bin\integrityservices.dll
+#endif
+
+file=ABI_DIR\BUILD_DIR\ocspsupport.exe				sys\bin\ocspsupport.exe
+file=ABI_DIR\BUILD_DIR\ocspsupportclient.dll 			sys\bin\ocspsupportclient.dll 
+file=ABI_DIR\BUILD_DIR\devinfosupportcommon.dll			sys\bin\devinfosupportcommon.dll
+file=ABI_DIR\BUILD_DIR\devinfosupport.exe			sys\bin\devinfosupport.exe
+file=ABI_DIR\BUILD_DIR\devinfosupportclient.dll 		sys\bin\devinfosupportclient.dll 
+file=ABI_DIR\BUILD_DIR\securitymanager.dll			sys\bin\securitymanager.dll
+file=ABI_DIR\BUILD_DIR\backuprestore.dll			sys\bin\backuprestore.dll
+file=ABI_DIR\BUILD_DIR\cafdataprovider.dll			sys\bin\cafdataprovider.dll
+file=ABI_DIR\BUILD_DIR\pkgremover.dll				sys\bin\pkgremover.dll
+file=ABI_DIR\BUILD_DIR\swiutils.dll				sys\bin\swiutils.dll
+
+// Core SWI - 9.5
+REM Including swiplugin.iby instead explicitly mentioning the files to avoid duplicate includes 
+#include "swiplugin.iby"
+file=ABI_DIR\BUILD_DIR\swiobserverclient.dll 			sys\bin\swiobserverclient.dll
+file=ABI_DIR\BUILD_DIR\swiobserver.exe 				sys\bin\swiobserver.exe
+
+
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	//Universal Software Install Framework production
+	#include "scr.iby" // Software Component Registry
+	#include "sif.iby" // Software Install Framework
+	#include "sts.iby"  // Software Transaction Services
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+// Common utils libraries
+#include "securitycommonutils.iby"	
+// Common utils libraries test
+#include "installtestframework.iby"		
+
+// Command line installer
+file=ABI_DIR\BUILD_DIR\swiconsole.exe				sys\bin\swiconsole.exe
+data=ROMDRIVE\private\20004f10\swiconsole.rsc			private\20004f10\swiconsole.rsc
+
+#endif

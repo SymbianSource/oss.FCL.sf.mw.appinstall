@@ -1,0 +1,11 @@
+EXPORTS
+	?ShowConfirmationL@CSifUi@@QAEHABVCAppInfo@Swi@@HPBVCApaMaskedBitmap@@ABV?$RPointerArray@VCCertificateInfo@Swi@@@@@Z @ 1 NONAME ; int CSifUi::ShowConfirmationL(class Swi::CAppInfo const &, int, class CApaMaskedBitmap const *, class RPointerArray<class Swi::CCertificateInfo> const &)
+	?Mode@CSifUi@@QAE?AW4TMode@1@XZ @ 2 NONAME ; enum CSifUi::TMode CSifUi::Mode(void)
+	?ShowCompleteL@CSifUi@@QAEXXZ @ 3 NONAME ; void CSifUi::ShowCompleteL(void)
+	?IncreaseProgressBarValueL@CSifUi@@QAEXH@Z @ 4 NONAME ; void CSifUi::IncreaseProgressBarValueL(int)
+	?ShowFailedL@CSifUi@@QAEXH@Z @ 5 NONAME ; void CSifUi::ShowFailedL(int)
+	?SetMode@CSifUi@@QAEXW4TMode@1@@Z @ 6 NONAME ; void CSifUi::SetMode(enum CSifUi::TMode)
+	?ShowProgressL@CSifUi@@QAEXABVCAppInfo@Swi@@HH@Z @ 7 NONAME ; void CSifUi::ShowProgressL(class Swi::CAppInfo const &, int, int)
+	?NewLC@CSifUi@@SAPAV1@XZ @ 8 NONAME ; class CSifUi * CSifUi::NewLC(void)
+	?NewL@CSifUi@@SAPAV1@XZ @ 9 NONAME ; class CSifUi * CSifUi::NewL(void)
+

@@ -1,0 +1,39 @@
+EXPORTS
+	_ZN5SwiUI15RSWInstLauncher13GetLastErrorLEv @ 1 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER14TRequestStatusR5RFileRK6TDesC8 @ 2 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER14TRequestStatusR5RFileRK6TDesC8S7_ @ 3 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER14TRequestStatusRK7TDesC16RK6TDesC8 @ 4 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER14TRequestStatusRK7TDesC16RK6TDesC8S8_ @ 5 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER5RFileRK6TDesC8 @ 6 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallER5RFileRK6TDesC8S5_ @ 7 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallERK7TDesC16RK6TDesC8 @ 8 NONAME
+	_ZN5SwiUI15RSWInstLauncher13SilentInstallERK7TDesC16RK6TDesC8S6_ @ 9 NONAME
+	_ZN5SwiUI15RSWInstLauncher15SilentUninstallER14TRequestStatusRK4TUidRK6TDesC8S8_ @ 10 NONAME
+	_ZN5SwiUI15RSWInstLauncher15SilentUninstallERK4TUidRK6TDesC8S6_ @ 11 NONAME
+	_ZN5SwiUI15RSWInstLauncher18CancelAsyncRequestEi @ 12 NONAME
+	_ZN5SwiUI15RSWInstLauncher5CloseEv @ 13 NONAME
+	_ZN5SwiUI15RSWInstLauncher7ConnectEv @ 14 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER14TRequestStatusR5RFile @ 15 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER14TRequestStatusR5RFileRK6TDesC8 @ 16 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER14TRequestStatusRK7TDesC16 @ 17 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER14TRequestStatusRK7TDesC16RK6TDesC8 @ 18 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER5RFile @ 19 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallER5RFileRK6TDesC8 @ 20 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallERK7TDesC16 @ 21 NONAME
+	_ZN5SwiUI15RSWInstLauncher7InstallERK7TDesC16RK6TDesC8 @ 22 NONAME
+	_ZN5SwiUI15RSWInstLauncher9UninstallER14TRequestStatusRK4TUidRK6TDesC8 @ 23 NONAME
+	_ZN5SwiUI15RSWInstLauncher9UninstallERK4TUidRK6TDesC8 @ 24 NONAME
+	_ZN5SwiUI15RSWInstLauncherC1Ev @ 25 NONAME
+	_ZN5SwiUI15RSWInstLauncherC2Ev @ 26 NONAME
+	_ZTIN5SwiUI15RSWInstLauncherE @ 27 NONAME ; #<TI>#
+	_ZTVN5SwiUI15RSWInstLauncherE @ 28 NONAME ; #<VT>#
+	_ZN5SwiUI15RSWInstLauncher15CustomUninstallENS_10TOperationERK6TDesC8S4_ @ 29 NONAME
+	_ZN5SwiUI15RSWInstLauncher15CustomUninstallER14TRequestStatusNS_10TOperationERK6TDesC8S6_ @ 30 NONAME
+	_ZN5SwiUI21RSWInstSilentLauncher7ConnectEv @ 31 NONAME
+	_ZN5SwiUI21RSWInstSilentLauncherC1Ev @ 32 NONAME
+	_ZN5SwiUI21RSWInstSilentLauncherC2Ev @ 33 NONAME
+	_ZTIN5SwiUI21RSWInstSilentLauncherE @ 34 NONAME ; #<TI>#
+	_ZTVN5SwiUI21RSWInstSilentLauncherE @ 35 NONAME ; #<VT>#
+	_ZN5SwiUI15RSWInstLauncher21SilentCustomUninstallENS_10TOperationERK6TDesC8S4_S4_ @ 36 NONAME
+	_ZN5SwiUI15RSWInstLauncher21SilentCustomUninstallER14TRequestStatusNS_10TOperationERK6TDesC8S6_S6_ @ 37 NONAME
+

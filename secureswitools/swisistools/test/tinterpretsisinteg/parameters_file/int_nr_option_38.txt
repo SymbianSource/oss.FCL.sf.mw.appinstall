@@ -1,0 +1,1 @@
+DRIVE = \epoc32\winscw\e e ext

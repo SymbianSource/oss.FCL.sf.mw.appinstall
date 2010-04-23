@@ -1,0 +1,4 @@
+EXPORTS
+	?Generate@CAppArcFilesGenerator@@QAEXAAVTRequestStatus@@@Z @ 1 NONAME ; void CAppArcFilesGenerator::Generate(class TRequestStatus &)
+	?NewL@CAppArcFilesGenerator@@SAPAV1@AAVRFs@@ABVCMIDletSuiteAttributes@@VTUid@@ABV?$RArray@VTUid@@@@KABVTDesC16@@VTChar@@@Z @ 2 NONAME ; class CAppArcFilesGenerator * CAppArcFilesGenerator::NewL(class RFs &, class CMIDletSuiteAttributes const &, class TUid, class RArray<class TUid> const &, unsigned long, class TDesC16 const &, class TChar)
+

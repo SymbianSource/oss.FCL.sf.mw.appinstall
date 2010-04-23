@@ -1,0 +1,34 @@
+Certificate Chain :
+
+Issued By : /O=Symbian Software Ltd/CN=Mid-R5
+Issued To : /O=Symbian Software Ltd/CN=Good-M5
+Valid From : 17/02/05
+Valid To : 14/02/19
+
+Issued By : /O=Symbian Software Ltd/CN=Root5-RSA
+Issued To : /O=Symbian Software Ltd/CN=Mid-R5
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+Issued By : /O=Symbian Software Ltd/CN=Root5-RSA
+Issued To : /O=Symbian Software Ltd/CN=Root5-RSA
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+Is Validated By : Root5-RSA
+
+Certificate Chain :
+
+Issued By : /O=Symbian Software Ltd/CN=Root5-RSA
+Issued To : /O=Symbian Software Ltd/CN=Mid-R5
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+Is Validated By : Root5-RSA
+
+SIS File is not signed with the following Mandatory Certificate 
+in the CertStore :
+
+Test root for different serial number
+Symbian Test - RSA
+

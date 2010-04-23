@@ -1,0 +1,436 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run all SisRegistry tests
+//
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tuiscriptadaptors
+//
+#
+
+// after startup wait for registry to shutdown so it can restart and reinitialize with the test registry files
+DELAY 5000
+
+RUN_TEST_STEP 100 tSisRegistryTest BackupRegistry
+
+// Time how long it takes to regenerate the cache 
+RUN_TEST_STEP 100 tSisRegistryTest RomStubPerformanceCheck
+
+// wait for the registry to shutdown
+DELAY 5000
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0001
+//! @SYMTestCaseDesc		Create the registry test data by installing the packages
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Prepares the test data by installing the packages usnig SWI
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+// This TestCase consists of a number of other TestCases in the following file and therefore this does not have a START and END statement
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\generateregistrytestdata.script
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0002
+//! @SYMTestCaseDesc		Checks that the list of installed uids matchs the expected list of installed uids
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that the list of installed uids matchs the expected list of installed uids
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0002
+
+RUN_TEST_STEP 100 tSisRegistryTest InstalledUids z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini InstalledUids
+
+END_TESTCASE API-SEC-SISREGISTRY-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0003
+//! @SYMTestCaseDesc		Checks that the list of installed packages matchs the expected list of installed packages
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that the list of installed packages matchs the expected list of installed packages
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0003
+
+RUN_TEST_STEP 100 tSisRegistryTest InstalledPackages z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini InstalledPackages
+
+END_TESTCASE API-SEC-SISREGISTRY-0003
+
+ 
+// now check things are *not* reported as installed.
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\notinstalled.script
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0004
+//! @SYMTestCaseDesc		Checks that the correct filename for a sid 
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Requests a filename for a sid and should be that of expected
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code
+//! @SYMDEF 			DEF052672
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0004
+
+RUN_TEST_STEP 100 tSisRegistryTest SidToFileName z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini SidAndFilenames
+
+END_TESTCASE API-SEC-SISREGISTRY-0004
+
+ 
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0005
+//! @SYMTestCaseDesc		Gets the hash of a file and compares it with the one returned from registry
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Gets the hash of a file and compares it with the one returned from registry
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF 			DEF054596
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0005
+
+RUN_TEST_STEP 100 tSisRegistryTest FileHash z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini HashAndFile
+
+END_TESTCASE API-SEC-SISREGISTRY-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0006
+//! @SYMTestCaseDesc		Checks that the installed controllers match the list of expected controllers
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that each controller in the expected list of controllers is installed
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0006
+
+RUN_TEST_STEP 100 tSisRegistryTest GetControllers z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini GetControllers
+
+END_TESTCASE API-SEC-SISREGISTRY-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0007
+//! @SYMTestCaseDesc		Checks that the installed controllers match the list of expected controllers
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that each controller in the expected list of controllers is installed
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0007
+
+RUN_TEST_STEP 100 tSisRegistryTest IsControllerInstalled z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini IsControllerInstalled
+
+END_TESTCASE API-SEC-SISREGISTRY-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-DEF080947-0001
+//! @SYMTestCaseDesc		DEF080947: New security API to determine whether a SID is installed
+//!				Test new RSisRegistrySession::IsSidPresentL API.
+
+START_TESTCASE API-SEC-SISREGISTRY-DEF080947-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest IsSidPresent z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini IsControllerInstalled
+
+END_TESTCASE API-SEC-SISREGISTRY-DEF080947-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0008
+//! @SYMTestCaseDesc		Checks that specific writable interface operations are policed by Sid 
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Call sequentially AddDrive/RemoveDrive and DeleteEntryL API methods to verify these fail
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0008
+
+RUN_TEST_STEP 100 tSisRegistryTest PoliceSids 
+
+// wait for the registry to shutdown
+DELAY 10000
+
+END_TESTCASE API-SEC-SISREGISTRY-0008
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-DEF123452-0001
+//! @SYMTestCaseDesc		Checks the number of embedding packages of a given package
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Checks the number of embedding packages of a given package
+//! @SYMTestExpectedResults	Actual number of embedding packages meets expected
+//! @SYMDEF			DEF123452
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-DEF123452-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest EmbeddingPackageStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini EmbeddingPackages
+
+// Save a snapshot of the registry we just created
+RUN_TEST_STEP 100 tSisRegistryTest SaveGeneratedRegistry
+
+END_TESTCASE API-SEC-SISREGISTRY-DEF123452-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-P1-0010
+//! @SYMTestCaseDesc		Checks whether the file is tagged as modifiable. 
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Requests file modifiable status and checks that it is the correct one.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF 			DEF054596
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-P1-0010
+
+RUN_TEST_STEP 100 tSisRegistryTest ModifiableFile z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini ModifiableTagAndFile
+
+END_TESTCASE API-SEC-SISREGISTRY-P1-0010
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-P2-0010
+//! @SYMTestCaseDesc		Checks whether the IsFileRegistered API correctly functions (negative and positive)
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Requests file presence status for both existing and non-existing file
+//! @SYMTestExpectedResults	The API returns true for the first case and false for the second one
+//! @SYMPREQ 			PREQ1269
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-P2-0010
+
+RUN_TEST_STEP 100 tSisRegistryTest IsFileRegistered z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini FileRegisteredPositive
+RUN_TEST_STEP 100 tSisRegistryTest IsFileRegistered z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini FileRegisteredNegative
+
+END_TESTCASE API-SEC-SISREGISTRY-P2-0010
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SISREGISTRY-P3-0010
+//! @SYMTestCaseDesc 		Checks whether the GetComponentIdForUidL API correctly functions (negative and positive)
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Requests component id for both existing and missing UID
+//! @SYMTestExpectedResults 	A component id in the first case and KErrNotFound in the second case
+//! @SYMPREQ 			PREQ1269
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-P3-0010
+
+RUN_TEST_STEP 100 tSisRegistryTest GetComponentIdForUid z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini GetComponentIdForUidPositive
+RUN_TEST_STEP !Result=-1 100 tSisRegistryTest GetComponentIdForUid z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini GetComponentIdForUidNegative
+
+END_TESTCASE API-SEC-SISREGISTRY-P3-0010
+
+
+// now check things are *not* reported as installed.
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\notinstalled.script
+
+// now re-run the main registry tests
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\runregistrytests.script
+
+
+//
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0011
+//! @SYMTestCaseDesc		When a sisregistry entry is corrupt (missing .reg file in this case), 
+//	 	     		sisregistry should not panic when we try to regenerate it.
+//! @SYMDEF			PDEF109006
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Delete C32Exe (101f7989) .reg file; Install-Cancel a sis file.
+//! @SYMTestExpectedResults	No panic generated during cache regeneration
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SISREGISTRY-0011
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini NotRegistered
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini NotRegistered
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini u_NotRegistered
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini u_NotRegistered
+
+END_TESTCASE API-SEC-SISREGISTRY-0011
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0012
+//! @SYMTestCaseDesc		Removes the Test Registry, restores the original
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the test registry
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\removeregistrytestdata.script
+
+START_TESTCASE API-SEC-SISREGISTRY-0012
+
+// wait for the registry to shutdown
+DELAY 10000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+RUN_TEST_STEP 100 tSisRegistryTest RestoreRegistry
+
+END_TESTCASE API-SEC-SISREGISTRY-0012
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0013
+//! @SYMTestCaseDesc		Checks the certificate chain count of a given package
+//! @SYMTestActions		Checks the number of certificate chain count of a given package.
+//! @SYMTestExpectedResults	Actual number of certificate chain count meets expected.
+
+START_TESTCASE API-SEC-SISREGISTRY-0013
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini CertificateChainList
+RUN_TEST_STEP 100 tSisRegistryTest CertificateChainListStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini CertificateChainList
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini u_CertificateChainList
+
+END_TESTCASE API-SEC-SISREGISTRY-0013
+
+
+//
+PRINT Run all SisRegistryLogFile tests
+//
+LOAD_SUITE tuiscriptadaptors
+//
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-95817-0002
+//! @SYMTestCaseDesc		Install a sis file, check for logging file, uninstall the file 
+//! @SYMTestExpectedResults	Package should be loggeg in SWIS private directory
+
+START_TESTCASE API-SEC-SWI-95817-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-In
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-In
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-In
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-Un
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-In
+RUN_TEST_STEP 100 tSisRegistryTest LoggingFileInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini SEC-SWI-95817-Simple-Uids
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  SEC-SWI-95817-Simple-Un
+
+END_TESTCASE API-SEC-SWI-95817-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-DEF112195-0001
+//! @SYMTestCaseDesc		Checks that ROM stubs doesn't occur in Removable packages
+//! @SYMTestPriority		High
+//! @SYMTestActions		Checks that ROM stubs doesn't occur in Removable packages
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF 			DEF112195
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SWI-DEF112195-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest InRomNonRemovablePackages
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  Installpkgdrives
+
+END_TESTCASE API-SEC-SWI-DEF112195-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-DEF112215-0001
+//! @SYMTestCaseDesc		Checks that all the drives are listed used for installation
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that all the drives are listed used for installation
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF 			DEF112215
+//! @SYMTestType		UT
+RUN_TEST_STEP 100 tSisRegistryTest InstalledDrives z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini InstalledfilesDrivesuid
+
+// Test the object creation methods of Sis Registry Token
+START_TESTCASE API-SEC-SWI-DEF112215-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest CreateTokenByCopy
+RUN_TEST_STEP 100 tSisRegistryTest CreateTokenFromStream
+
+END_TESTCASE API-SEC-SWI-DEF112215-0001
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini  u_Installpkgdrives
+
+
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0014
+//! @SYMTestCaseDesc		Tests creation of CSisRegistryObject.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0014
+
+// SisRegObjectCreation
+RUN_TEST_STEP 100 tSisRegistryTest CreateSisRegistryObject
+
+END_TESTCASE API-SEC-SISREGISTRY-0014
+
+
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0015
+//! @SYMTestCaseDesc		Tests CSisRegistryDependency methods.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0015
+
+// TestSisRegistryDependencyMethods
+RUN_TEST_STEP 100 tSisRegistryTest SisRegistryDependencyStep z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini TestSisRegDependencyVersion
+
+END_TESTCASE API-SEC-SISREGISTRY-0015
+
+
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0016
+//! @SYMTestCaseDesc		Tests creation of CSisRegistryFileDescription object.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0016
+
+// CreateSisRegistryFileDescriptionObject
+RUN_TEST_STEP 100 tSisRegistryTest SisRegistryFileDescStep
+
+END_TESTCASE API-SEC-SISREGISTRY-0016
+
+
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0017
+//! @SYMTestCaseDesc		Tests creation of CControllerInfo object.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0017
+
+// CreateControllerInfoObject
+RUN_TEST_STEP 100 tSisRegistryTest ControllerInfoStep
+
+END_TESTCASE API-SEC-SISREGISTRY-0017
+
+
+//! @SYMTestCaseID		API-SEC-SISREGISTRY-0018
+//! @SYMTestCaseDesc		Tests creation of CSisRegistryProperty object.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRY-0018
+
+// CreateSisRegistryPropertyObject
+RUN_TEST_STEP 100 tSisRegistryTest SisRegistryPropertyStep
+
+END_TESTCASE API-SEC-SISREGISTRY-0018

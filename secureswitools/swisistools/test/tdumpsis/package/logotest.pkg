@@ -1,0 +1,35 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN, GE
+
+#{"Test Mime-EN","Test Mime-GE"}, (0x802744d5), 1, 2, 3, TYPE=SA
+%{"Vendor","Vendor"}
+:"Vendor"
+
+
+"data\LogoTest\file0"-"!:\tswi\dummynoapp_image.txt", FM," x-epoc/x-dummy-noapp", RI, RW
+
+"data\LogoTest\file1"-"!:\tswi\dummy_text_file1.txt", FM," x-epoc/x-dummy-noapp", RI, RW
+
+"data\LogoTest\file2"-"!:\tswi\dummy_text_file2.txt", FM," x-epoc/x-dummy-noapp", RR, RW
+IF (4096)=(1)
+
+"data\LogoTest\file3"-"!:\tswi\dummy_test2.txt", FM," x-epoc/x-dummy-noapp", RI
+ELSEIF (4096)=(3)
+
+"data\LogoTest\file4"-"!:\tswi\dummy_test2.txt", FM," x-epoc/x-dummy-noapp", RI
+ENDIF

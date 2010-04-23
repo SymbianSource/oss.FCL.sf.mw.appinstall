@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+#{"Test Application SA2"}, (0x81001233), 1, 0, 1, TYPE=SA
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+(0x81001235), *, *, *, {"enbedded.sis"}
+
+"text\file1.txt"-"c:\testapp2\file1.txt"
+
+if not package(0x81001235)
+@"embedded.sis",(0x81001235)
+endif

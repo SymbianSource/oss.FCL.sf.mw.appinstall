@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe
+; Note that the most appropriate executable will be installed.
+
+;Languages
+&EN
+
+;Header
+#{"tswinocapabilityAutoVFP1"}, (0x81113026), 1, 2, 3,TYPE=SA
+
+%{"tswinocapabilityAutoVFP1"}
+:"Unique Vendor Name"
+
+IF FPHARDWARE=0
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswinocapability.exe"-"!:\sys\bin\tswinocapability.exe";
+ELSE
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswinocapabilityVFP.exe"-"!:\sys\bin\tswinocapabilityVFP.exe";
+ENDIF

@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// tswiconsole_unsigned.script
+// script file for testing swiconsole. This script is only for emulator. In hardware unsigned sis can't be installed
+// All these teset are ran with AllowUnsigned = true in swipolicy.ini file
+// 
+//
+
+PRINT Swiconsole Tests for unsigned packages...
+
+LOAD_SUITE tswiconsole
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-I-SWICON-DLG-0019
+//! @SYMTestCaseDesc 		Display Warning - unsigned sis
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions  		Installs a sis file which is not signed. Dialog answered with yes
+//! @SYMTestExpectedResults 	File installs sucessfully
+//! @SYMDevelopedForRelease 	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0019
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST36
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL4
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0019
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-I-SWICON-DLG-0020
+//! @SYMTestCaseDesc 		Display Warning - unsigned sis
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions  		Installs a sis file which is not signed. Dialog answered with no
+//! @SYMTestExpectedResults 	File installation should be terminated.
+//! @SYMDevelopedForRelease 	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0020
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST37
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0020
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-I-SWICON-DLG-0021
+//! @SYMTestCaseDesc 		Display OCSP - unsigned sis
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions  		Installs a sis file which is not signed. Dialog answered with yes
+//! @SYMTestExpectedResults 	File installs sucessfully.
+//! @SYMDevelopedForRelease 	Bravo and future releases
+
+START_TESTCASE API-SEC-SWI-I-SWICON-DLG-0021
+
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini TEST38
+RUN_TEST_STEP 100 tswiconsole TestSwiConsole z:\tswi\tswiconsole\scripts\tswiconsole.ini UNINSTALL4
+
+END_TESTCASE API-SEC-SWI-I-SWICON-DLG-0021
+
+
+

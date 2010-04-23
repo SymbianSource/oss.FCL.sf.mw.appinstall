@@ -1,0 +1,22 @@
+# A single chain where multiple constraints are specified in a single certificate.
+# The validity date of this certificate has been changed so that it is no longer valid and the install should fail.
+[main]
+name=ocsp_03
+template=simple.txt
+inifile=ocsp.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,comb1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnoexist=1
+noexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnoexist=1
+noexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

@@ -1,0 +1,4 @@
+# User grantable capabilities
+
+[cert_capabilities]
+caps=ReadUserData WriteUserData LocalServices

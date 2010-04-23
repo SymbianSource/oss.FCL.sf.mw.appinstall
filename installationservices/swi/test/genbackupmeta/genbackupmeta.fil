@@ -1,0 +1,52 @@
+# Build WLDCOMP, a strange WINC/Win32 hybrid
+#
+!IF "$(PLATFORM)" == "WINSCW"
+TOOLNAME=genbackupmeta
+SRCDIR=..\genbackupmeta
+
+
+!if "$(CFG)" == "REL"
+VC_CFG="$(TOOLNAME) - Win32 Release"
+CFG=UREL
+!else
+VC_CFG="$(TOOLNAME) - Win32 Debug"
+CFG=UDEB
+!endif
+
+maketool :
+	cd $(SRCDIR)
+	echo NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CFG=$(VC_CFG)
+	NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CFG=$(VC_CFG)
+	echo ..\tgenbackupmeta\scripts\preparemeta.pl $(PLATFORM) $(CFG)
+	..\tgenbackupmeta\scripts\preparemeta.pl $(PLATFORM) $(CFG)
+
+!ELSE
+maketool :do_nothing
+
+!ENDIF
+do_nothing:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : do_nothing
+FREEZE : do_nothing
+LIB : do_nothing
+RESOURCE : do_nothing
+CLEANLIB : do_nothing
+FINAL : do_nothing
+
+SAVESPACE : BLD
+
+BLD : maketool
+
+CLEAN : 
+	cd $(SRCDIR)
+	echo NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CLEAN CFG=$(VC_CFG)
+	NMAKE /S /NOLOGO /f $(SRCDIR)\$(TOOLNAME).MAK CLEAN CFG=$(VC_CFG)
+	-@erase $(TOOL)
+
+RELEASABLES : 
+	echo $(TOOL)

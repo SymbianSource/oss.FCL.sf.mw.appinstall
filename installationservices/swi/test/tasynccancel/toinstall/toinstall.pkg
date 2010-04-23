@@ -1,0 +1,120 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Languages
+&EN
+
+;Header
+#{"Application to Install"}, (0x82FFFFFF), 1, 0, 1, TYPE=SA
+
+; Language-specific vendor names
+%{"Relja"}
+
+; Unique, global vendor name
+:"Relja"
+
+;Embedded sis file
+@"toinstall-sub2.sis",(0x822FFFFF)
+@"toinstall-sub3.sis",(0x823FFFFF)
+
+;logo
+="data\logo-relja.jpg", "image/jpeg", ""
+
+;Copy files
+
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+"data\toinstall.txt"-"c:\tswi\tasynccancel\toinstall.txt";
+
+"data\toinstall-exe-big.exe"-"C:\sys\bin\toinstall-exe-big.exe";
+"data\toinstall-exe.exe"-"C:\sys\bin\toinstall-exe.exe";
+
+;Display 2 options to the user
+!({"Option1"},{"Option2"})
+if option1
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-option1.txt"-"c:\tswi\tasynccancel\toinstall-option1.txt";
+    "data\toinstall-exe1.exe"-"C:\sys\bin\toinstall-exe1.exe";
+endif
+if option2
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-option2.txt"-"c:\tswi\tasynccancel\toinstall-option2.txt";
+    "data\toinstall-exe2.exe"-"C:\sys\bin\toinstall-exe2.exe";
+    
+    ;Display another 2 options to the user
+	!({"Option1"},{"Option2"})
+	if option1
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+		"data\toinstall-option21.txt"-"c:\tswi\tasynccancel\toinstall-option21.txt";
+	endif
+	if option2
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+		"data\toinstall-option22.txt"-"c:\tswi\tasynccancel\toinstall-option22.txt";
+	endif
+	
+endif

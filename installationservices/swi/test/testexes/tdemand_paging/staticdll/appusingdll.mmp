@@ -1,0 +1,33 @@
+/*
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* appusingdll.exe for demand paging tests in SWI
+* using relative paths for source and userinclude directories
+*
+*/
+
+
+TARGET        appusingdll.exe
+TARGETTYPE    exe
+UID           0x12345678 0x89334572 
+
+SOURCEPATH    .
+SOURCE        appusingdll.cpp dempage_exe.cpp
+
+USERINCLUDE   .
+USERINCLUDE   ../commonframework
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY       euser.lib  bafl.lib efsrv.lib	largearray.lib
+SMPSAFE

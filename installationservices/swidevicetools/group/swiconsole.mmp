@@ -1,0 +1,56 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+TARGET		swiconsole.exe        
+TARGETTYPE	EXE
+
+UID			0x00000000 0x20004F10
+VENDORID	0x20004F11
+
+CAPABILITY		TrustedUI ProtServ ReadUserData
+
+USERINCLUDE	../../swi/inc
+USERINCLUDE	../source/swiconsole/inc 
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+SOURCEPATH	../source/swiconsole/src
+SOURCE		main.cpp
+SOURCE		cswiconsole.cpp
+SOURCE		cconsoleuihandler.cpp
+SOURCE		ccommandlineparser.cpp
+SOURCE		cpreferences.cpp
+SOURCE		clogger.cpp
+SOURCE		cpackageinfo.cpp
+SOURCE		ciohandler.cpp
+SOURCE		swiutility.cpp
+SOURCE		cpreferencehandler.cpp
+
+START RESOURCE	../data/swiconsole.rss
+HEADER
+TARGETPATH	/private/20004f10
+END
+
+LIBRARY		euser.lib
+LIBRARY		bafl.lib				// Commandline parser
+LIBRARY		sishelper.lib			// SIShelper
+LIBRARY		sisregistryclient.lib	// SISRegistry
+LIBRARY		flogger.lib				// RFileLogger
+LIBRARY		efsrv.lib				// RFs
+LIBRARY		pkixcertbase.lib		// CPKIXValidationResultBase
+SMPSAFE

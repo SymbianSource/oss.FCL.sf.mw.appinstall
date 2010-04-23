@@ -1,0 +1,81 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+// tscr_datalayer_oom.script
+// Software Component Registry Database Layer Out-Of-Memory Tests
+
+PRINT Run Software Component Registry (SCR) - Data Layer OOM Tests
+
+// Load Suite
+LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+
+// Delete the SCR Database file - this step ensures that the SCR DB is down before starting the test
+// As the Secure SQLite layer does not support two connections at the same time, this test step prevents this from happening
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+
+// Load Suite
+LOAD_SUITE tscrdatalayer
+
+// Create the private directory for tdatalayer
+RUN_UTILS MkDir c:\private\1028634C
+// Delete the SCR Database file if it has been left from the previous session
+RUN_UTILS DeleteFile c:\private\1028634C\scr.db
+// Copy the an empty scr db into the test harness private directory, so that the test harness won't require AllFiles.
+// Since tscrdatalayer test harness loads scrdatabase.dll, it cannot have AllFiles capability.
+RUN_UTILS CopyFile z:\tusif\tscr\data\scr-noversiontable.db c:\private\1028634C\scr.db
+RUN_UTILS MakeReadWrite c:\private\1028634C\scr.db
+// Copy the invalid scr db
+RUN_UTILS CopyFile z:\tusif\tscrdatalayer\data\nondb.db c:\private\1028634C\nonscr.db
+RUN_UTILS MakeReadWrite c:\private\1028634C\nonscr.db
+
+//********************** SEC-SCR-DataLayer : SCR DATA LAYER  **********************
+
+//! @SYMTestCaseID 		API-SEC-SCR-DataLayer-OOM-0001
+//! @SYMTestCaseDesc 		Unit tests for SCR Data Layer
+//! @SYMPREQ 			PREQ1269
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Test Actions:
+//!				• SEC-SCR-DataLayer-0001: Open database file
+//!				• SEC-SCR-DataLayer-0002: Insert records
+//!				• SEC-SCR-DataLayer-0003: Verify inserted records
+//!				• SEC-SCR-DataLayer-0004: Update a record
+//!				• SEC-SCR-DataLayer-0005: Verify updated record
+//!				• SEC-SCR-DataLayer-0006: Delete a record
+//!                             • SEC-SCR-DataLayer-0007: Verify the deleted record 	
+//!                             • SEC-SCR-DataLayer-0008: Begin a transaction	
+//!                             • SEC-SCR-DataLayer-0009: Insert a record while a transaction is active
+//!                             • SEC-SCR-DataLayer-0010: Insert a second record while a transaction is active
+//!                             • SEC-SCR-DataLayer-0011: Rollback the transaction.
+//!                             • SEC-SCR-DataLayer-0012: Verify the rollback
+//!                             • SEC-SCR-DataLayer-0013: Execute a bad SQL statement (1) 
+//!                             • SEC-SCR-DataLayer-0014: Execute a bad SQL statement (2)
+//!                             • SEC-SCR-DataLayer-0015: Execute a bad SQL statement (3)
+//!                             • SEC-SCR-DataLayer-0016: Open a non-existing database
+//!                             • SEC-SCR-DataLayer-0017: Open and work on a non-database file
+//!                             • SEC-SCR-DataLayer-0018: Bind a column which doesn't exist
+//!                             • SEC-SCR-DataLayer-0018: Retrieve the value of a column which doesn't exist
+//!                             • SEC-SCR-DataLayer-0020: Retrieve the value of a column whose type doesn't match
+//!
+//! @SYMTestExpectedResults 	• The intended database operations are performed successfully.
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-SCR-DataLayer-OOM-0001
+
+RUN_TEST_STEP 100 tscrdatalayer SCRDataLayer z:\tusif\tscrdatalayer\tscr_datalayer_oom.ini datalayerOOM
+
+END_TESTCASE API-SEC-SCR-DataLayer-OOM-0001
+

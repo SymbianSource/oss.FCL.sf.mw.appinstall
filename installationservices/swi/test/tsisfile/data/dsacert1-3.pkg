@@ -1,0 +1,27 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Sis file which has been digitally signed using dsacert1.cer
+
+&EN
+
+#{"dsacert1-3"}, (0x10009913), 1, 2, 3
+
+%{"Vendor"}
+:"Vendor"
+
+*"files\dsaprivate1.key","files\dsacert1.cer"
+"text\epoc_cpp.txt"-"C:\Documents\InstTest\dsacert1-3.txt"
+"dsacert1-3.pkg"-"", FT, TA

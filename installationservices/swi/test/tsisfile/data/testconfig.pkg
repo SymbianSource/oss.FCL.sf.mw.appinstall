@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Languages
+&EN,FR
+
+;Header
+#{"App config-EN", "App config-FR"}, (0x1000000A), 1, 3, 4, TYPE=SC
+
+%{"Vendor","Vendor"}
+:"Vendor"
+
+
+;Dependencies
+(0x1000000A), 1, 2, 3, {"App-EN", "App-FR"}
+
+;Display text files
+"text\textfilec.txt"-"", FT, TC

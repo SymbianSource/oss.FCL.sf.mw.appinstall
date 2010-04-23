@@ -1,0 +1,3 @@
+EXPORTS
+	?Instance@@YAPAVMEclipsingTest@@XZ @ 1 NONAME ; class MEclipsingTest * Instance(void)
+

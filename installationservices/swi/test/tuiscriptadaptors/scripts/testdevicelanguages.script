@@ -1,0 +1,714 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Device supported language tests
+PRINT Device supported language tests
+
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+START_TESTCASE API-INST-PREQ2344-SWI-0001
+// Package supports EN and FR
+// Language selected EN and FR
+// Asynchronous calls
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncFHStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCAFStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+END_TESTCASE API-INST-PREQ2344-SWI-0001
+
+START_TESTCASE API-INST-PREQ2344-SWI-0001a
+// Package supports EN and FR
+// Language selected EN and FR
+// Synchronous calls
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallCAFStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+END_TESTCASE API-INST-PREQ2344-SWI-0001a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0001b
+// Package supports EN and FR
+// Language selected EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en
+END_TESTCASE API-INST-PREQ2344-SWI-0001b
+
+START_TESTCASE API-INST-PREQ2344-SWI-0001c
+// Package supports EN and FR
+// Language selected FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_fr
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_fr
+END_TESTCASE API-INST-PREQ2344-SWI-0001c
+
+START_TESTCASE API-INST-PREQ2344-SWI-0004
+// Package supports EN and FR
+// Neither EN or FR are selected
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_invalid_lang
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_invalid_lang
+END_TESTCASE API-INST-PREQ2344-SWI-0004
+
+START_TESTCASE API-INST-PREQ2344-SWI-0005
+// Package supports FR and EN. Contains a file for default language option.
+// Neither FR or EN are selected.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_default_lang
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_default_lang
+END_TESTCASE API-INST-PREQ2344-SWI-0005
+
+START_TESTCASE API-INST-PREQ2344-SWI-0005a
+// Package supports FR and EN. Contains a file for default language option.
+// Language selected FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_default_lang_support_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_default_lang
+END_TESTCASE API-INST-PREQ2344-SWI-0005a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0007
+// Base package supports EN and GE. Embedded sis file supports EN and FR.
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_embedded_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_embedded
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_embedded_base
+END_TESTCASE API-INST-PREQ2344-SWI-0007
+
+START_TESTCASE API-INST-PREQ2344-SWI-0007a
+// Base package supports EN and GE. Embedded sis file supports EN and FR.
+// Language selected FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_embedded_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_embedded
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_embedded_base
+END_TESTCASE API-INST-PREQ2344-SWI-0007a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0008
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+// Install the SP upgrade for EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_sp_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_upgrade_sp_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0008
+
+START_TESTCASE API-INST-PREQ2344-SWI-0009
+// Install the  base package again
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+// Install the SP upgrade for GE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_sp_ge
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0009
+
+START_TESTCASE API-INST-PREQ2344-SWI-0010
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+// Install the PU upgrade for EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_pu_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0010
+
+START_TESTCASE API-INST-PREQ2344-SWI-0010a
+// Install the  base package again
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+// Install the PU upgrade for GE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_pu_ge_en
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0010a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0010b
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+// Install the SA upgrade for EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_sa_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0010b
+
+START_TESTCASE API-INST-PREQ2344-SWI-0010c
+// Install the  base package again
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr
+// Install the SA upgrade for GE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_upgrade_sa_ge
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_after_upgrade
+END_TESTCASE API-INST-PREQ2344-SWI-0010c
+
+START_TESTCASE API-INST-PREQ2344-SWI-0011
+// Install an old PKG format sis file using the new API
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_old_pkg
+// Return an invalid language from DiaplayLanguage dialog
+RUN_TEST_STEP !Result=-3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini old_pkg_supresslangdialog
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_old_pkg
+END_TESTCASE API-INST-PREQ2344-SWI-0011
+
+START_TESTCASE API-INST-PREQ2344-SWI-0011a
+// Install again an old PKG format sis file. Select FR as the language.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_old_pkg2
+// Install the device language supported SA upgrade for EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_old_pkg2_upgrade_sa_en
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_old_pkg2
+END_TESTCASE API-INST-PREQ2344-SWI-0011a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0012
+// Package supports EN and FR
+// Installing a device language supported package using the old interface
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_old
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_old
+END_TESTCASE API-INST-PREQ2344-SWI-0012
+
+START_TESTCASE API-INST-PREQ2344-SWI-0012a
+// Package supports FR and EN. Contains a file for default language option.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_old_default
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_old_default
+END_TESTCASE API-INST-PREQ2344-SWI-0012a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0018
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  install_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+// Check to see if SWI responds to the language change event
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+// Wait for the registry to shutdown
+DELAY 10000
+// Change the language after registry shutdown
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+// Check to see if SisRegistry entries are upadetd with after language change
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_french
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+END_TESTCASE API-INST-PREQ2344-SWI-0018
+
+START_TESTCASE API-INST-PREQ2344-SWI-0018a
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  install_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+// Chnage to a language that is not supported by the sis package
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_spanish
+// Package information is in English even when the device is in Spanish
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini package_info_english
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  uninstall_en_fr
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+END_TESTCASE API-INST-PREQ2344-SWI-0018a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0025
+// Package has no languages in the header but the package has supported_language option
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_no_header_en_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_no_header
+END_TESTCASE API-INST-PREQ2344-SWI-0025
+
+START_TESTCASE API-INST-PREQ2344-SWI-0025a
+// Package has no languages in the header but the package has supported_language option
+// Language selected FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_no_header_fr
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_no_header
+END_TESTCASE API-INST-PREQ2344-SWI-0025a
+
+START_TESTCASE API-INST-PREQ2344-SWI-0025b
+// Package has no languages in the header but the package has supported_language option
+// No language is selected
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_no_header_nodevlang
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_no_header
+END_TESTCASE API-INST-PREQ2344-SWI-0025b
+
+START_TESTCASE API-INST-PREQ2344-SWI-0026
+// Package supports EN and FR
+// Language selected EN and FR
+// Package containing user selectable options. Also contains combination of supported langauges as well as options.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_en_fr_options
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_en_fr_options
+END_TESTCASE API-INST-PREQ2344-SWI-0026
+
+START_TESTCASE API-INST-PREQ2525-SWI-0001
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected FR, GE, SP, IT, AM, DU and  ZH 
+// Package containing user selectable options. Also contains combination of supported langauges as well as options.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_bf_sg_ls_sz_sa_bl_hk_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_bf_sg_ls_sz_sa_bl_hk_options
+END_TESTCASE API-INST-PREQ2525-SWI-0001
+
+START_TESTCASE API-INST-PREQ2525-SWI-0002
+// Package supports BF, SG, LS, SZ, SA, BL, HK JA and AS
+// Language selected CE, AM, IE, YH, GE, and  TC 
+// Package containing user selectable options. Also contains combination of supported langauges as well as options.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_sg_hk_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_prc_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini   langauge_to_spanish
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  equ_package_info_swiss_german
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_sa_sg_hk_options
+END_TESTCASE API-INST-PREQ2525-SWI-0002
+
+START_TESTCASE API-INST-PREQ2525-SWI-0003
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected FR, GE, SP, IT, AM, DU, ZH and JA
+// It is to verify different boundary conditions for exact match and equivalent match. Exact match at the end.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_ja_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_ja_options
+END_TESTCASE API-INST-PREQ2525-SWI-0003
+
+START_TESTCASE API-INST-PREQ2525-SWI-0003A
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected JA, GE, SP, IT, AM, DU, ZH and FR
+// Exact match at the beginning.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_ja_optionsA
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_ja_options
+END_TESTCASE API-INST-PREQ2525-SWI-0003A
+
+START_TESTCASE API-INST-PREQ2525-SWI-0003B
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected IT, GE, SP, JA, AM, DU, ZH and FR
+// Exact match at middle.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_ja_optionsB
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_ja_options
+END_TESTCASE API-INST-PREQ2525-SWI-0003B
+
+START_TESTCASE API-INST-PREQ2525-SWI-0003C
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected JA, GE, SP, IT, AM, DU, ZH, FR and AS
+// First and last are exact match.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_ja_optionsC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_ja_optionsC
+END_TESTCASE API-INST-PREQ2525-SWI-0003C
+
+START_TESTCASE API-INST-PREQ2525-SWI-0004
+// Package supports BF, SG, LS, SZ, SA, BL, HK, JA and AS
+// Language selected FR, GE, SP, IT, AM, DU, ZH and JA
+// This test case is to verify if there is no exact or equivalent match then language selection dialog box is shown .
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_no_eqi_match_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_no_eqi_match_options
+END_TESTCASE API-INST-PREQ2525-SWI-0004
+
+START_TESTCASE API-INST-PREQ2525-SWI-0005
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the SP upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sp_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_english_am
+// Uninstall the SP upgrade 
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_sp_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_bf_sg_sr_sa_options
+END_TESTCASE API-INST-PREQ2525-SWI-0005
+
+START_TESTCASE API-INST-PREQ2525-SWI-0005A
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options_b
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options_b
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_en
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options_b
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the SP upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sp_bf_sg_sr_sa_options_b
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_english_en
+// Uninstall the SP upgrade 
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_sp_bf_sg_sr_sa_options_b
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_bf_sg_sr_sa_options_b
+END_TESTCASE API-INST-PREQ2525-SWI-0005A
+
+START_TESTCASE API-INST-PREQ2525-SWI-0006
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_en
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the PU upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_hk_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_sa_pu_pu_bf_sg_sr_sa_options
+END_TESTCASE API-INST-PREQ2525-SWI-0006
+
+START_TESTCASE API-INST-PREQ2525-SWI-0007
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the SP upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sp_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_english_am
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_en
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+// Uninstall the SP upgrade 
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_sp_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_bf_sg_sr_sa_options
+END_TESTCASE API-INST-PREQ2525-SWI-0007
+
+START_TESTCASE API-INST-PREQ2525-SWI-0008
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_en
+// Install the PU upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_hk_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_taiwan_chinese
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_hk_chinese
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_sa_pu_pu_bf_sg_sr_sa_options
+END_TESTCASE API-INST-PREQ2525-SWI-0008
+
+START_TESTCASE API-INST-PREQ2525-SWI-0009
+// Package supports EN and FR
+// Language selected EN and FR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_base_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_sa
+// Install the PU upgrade for BF , SG , EL and AM
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_pu_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Install the SA upgrade for BF , SG , RO and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sa_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_en
+// Install the SP upgrade for BF , SG , EL and EN
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini install_sp_bf_sg_sr_sa_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_sp_package_info_english_am
+// Uninstall the SP upgrade 
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_pu_sa_sp_options
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_belgian_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini  langauge_to_german
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_swiss_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_american_english
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
+// Uninstall  
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_bf_sg_sr_sa_options
+// Always set the language back to English, as tscr test cases assume that device is in english lang
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+END_TESTCASE API-INST-PREQ2525-SWI-0009
+
+START_TESTCASE API-INST-PREQ2525-SWI-0010
+// Negative test to verify -ve language passed will not cause any crash 
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini pass_negative_language_id
+END_TESTCASE API-INST-PREQ2525-SWI-0010
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0001
+//! @SYMTestCaseDesc 		Install SA package  , check for published uid , Install SP , check for published uid
+
+START_TESTCASE API-INST-PAS-SWI-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-Uninstall-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0001
+
+END_TESTCASE API-INST-PAS-SWI-0001
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0002
+//! @SYMTestCaseDesc 		Install SA embedding SP package , check for published uid
+
+//START_TESTCASE API-INST-PAS-SWI-0002
+
+//RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002
+//RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0002-Uninstall
+//END_TESTCASE API-INST-PAS-SWI-0002
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0003
+//! @SYMTestCaseDesc 		Install 8 level of embeded package , check for published uid
+
+START_TESTCASE API-INST-PAS-SWI-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0003
+END_TESTCASE API-INST-PAS-SWI-0003
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0004
+//! @SYMTestCaseDesc 		Install 3 packages A,B and C . B depends on A and C embed A , uninstall C and check for published uid  RemoveOnlyWithLastDependent = true
+
+START_TESTCASE API-INST-PAS-SWI-0004
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-Uninstall-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-Uninstall-B
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0004-A
+END_TESTCASE API-INST-PAS-SWI-0004
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0005
+//! @SYMTestCaseDesc 		Install mutli level dependency , Install A which embeds B and C , Both B and C further embeds xyz.... 
+
+START_TESTCASE API-INST-PAS-SWI-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0005
+END_TESTCASE API-INST-PAS-SWI-0005
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0006
+//! @SYMTestCaseDesc 		Install SA , install another SA which embeds a PU and  SP of first SA
+
+START_TESTCASE API-INST-PAS-SWI-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0006-A
+END_TESTCASE API-INST-PAS-SWI-0006
+
+
+//! @SYMTestCaseID   		API-INST-PAS-SWI-0007
+//! @SYMTestCaseDesc 		Install sis file which embeds 17 sis file in it , Negative test to hit buffer overflow condition in secutils.dll
+
+START_TESTCASE API-INST-PAS-SWI-0007
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+RUN_TEST_STEP !Result=Fail	100 tuiscriptadaptors		GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+RUN_TEST_STEP 100 tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini defineProperty
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007-Uninstall
+RUN_TEST_STEP !Result=Fail	100 tuiscriptadaptors		GetPublishedUidArrayStep	z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini API-INST-PAS-SWI-0007
+END_TESTCASE API-INST-PAS-SWI-0007
+

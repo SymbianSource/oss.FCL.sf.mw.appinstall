@@ -1,0 +1,8 @@
+version3_case_a.txt
+version3_case_b.txt
+*version3_case_c.txt
+version3_case_d.txt
+version3_case_e.txt
+*version3_case_f.txt
+*version3_case_g.txt
+version3_case_h.txt

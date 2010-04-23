@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; DummyDll.pkg
+;
+;Language - standard language definitions
+&EN
+
+;Standard SIS file header
+#{"DummyDLLPkg"},(0xabaecad5),2,1,0, TYPE=PU
+
+;Localised Vendor name
+%{"Vendor Name-EN"}
+
+;Unique Vendor name
+:"SymbianTest1"
+
+;Files to install
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\adornedfilenametestingdll_10_0.dll"                 -"c:\sys\bin\adornedfilenametestingdll.dll"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\adornedfilenametestingdll_10_2.dll"                 -"e:\sys\bin\adornedfilenametestingdll{000A0002}.dll"
+

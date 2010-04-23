@@ -1,0 +1,34 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+#ifndef __TSWICONSOLE_IBY__
+#define __TSWICONSOLE_IBY__
+
+REM SWIConsole Tests
+
+file=ABI_DIR\BUILD_DIR\swiconsole.exe			sys\bin\swiconsole.exe
+file=ABI_DIR\BUILD_DIR\tswiconsole.exe			sys\bin\tswiconsole.exe
+
+data=ZPRIVATE\20004f10\Swiconsole.rsc		 private\20004f10\Swiconsole.rsc
+
+data = \epoc32\winscw\c\tswi\tswiconsole\scripts\tswiconsole.ini \tswi\tswiconsole\scripts\tswiconsole.ini
+data = \epoc32\winscw\c\tswi\tswiconsole\scripts\tswiconsole.script \tswi\tswiconsole\scripts\tswiconsole.script
+data = \epoc32\winscw\c\tswi\tswiconsole\data\eclipse.txt	\tswi\tswiconsole\data\eclipse.txt 
+
+#endif //#ifndef __TSWICONSOLE_IBY__

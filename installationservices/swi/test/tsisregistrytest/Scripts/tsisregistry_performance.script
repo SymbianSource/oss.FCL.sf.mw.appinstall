@@ -1,0 +1,70 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// 
+//
+
+//! @SYMTestCaseID 		API-SEC-TSISREG-PERFORM-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TSISREG-PERFORM-0001
+
+PRINT Run all SIS Registry performance tests.
+LOAD_SUITE tscr // to delete SCR DB file
+LOAD_SUITE tSisRegistryTest // to run SIS registry startup test
+
+// It was peferred to use ready test databases prepared for SCR performance tests rather than creating new ones.
+// Because the size of test databases is around 3MB and another 3MB data causes the rom build image to excess the size limit of H4.
+// Three test databases are used: small (~30 components), medium(~110 components) and large(~210 components)
+
+// Copy small SCR DB
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_backup_db
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_small_db
+
+END_TESTCASE API-SEC-TSISREG-PERFORM-0001
+
+
+// Run SCR performance tests for a small size db
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\tsisregistry_performance_cases.script
+
+//! @SYMTestCaseID 		API-SEC-TSISREG-PERFORM-0002
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TSISREG-PERFORM-0002
+
+// Copy medium SCR DB
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_medium_db
+
+END_TESTCASE API-SEC-TSISREG-PERFORM-0002
+
+// Run SCR performance tests for a medium size db
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\tsisregistry_performance_cases.script
+
+START_TESTCASE API-SEC-TSISREG-PERFORM-0003
+
+// Copy large SCR DB
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_large_db
+
+END_TESTCASE API-SEC-TSISREG-PERFORM-0003
+
+// Run SCR performance tests for a large size db
+RUN_SCRIPT z:\tswi\tsisregistrytest\scripts\tsisregistry_performance_cases.script
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_restore_db
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini backup_file
+

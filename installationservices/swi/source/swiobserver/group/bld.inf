@@ -1,0 +1,44 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+PRJ_PLATFORMS
+default
+
+
+PRJ_EXPORTS
+
+../../../inc/swiobserverplugin.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiobserverplugin.h)
+../../../inc/swiobservedinfo.h		SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiobservedinfo.h)
+../../../inc/swiobserverclient.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiobserverclient.h)
+
+../inc_private/swiobcommon.h		SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiobcommon.h)
+../inc_private/swiobcommon.inl		SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiobcommon.inl)
+
+
+PRJ_MMPFILES
+#ifndef TOOLS
+#ifndef TOOLS2
+
+swiobserver.mmp
+swiobserverclient.mmp
+swiobserverplugin.mmp
+swiobservedinfo.mmp
+
+#endif
+#endif

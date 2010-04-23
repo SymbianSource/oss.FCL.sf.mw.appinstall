@@ -1,0 +1,6 @@
+# config.txt for sim.tsy - see sim.tsy documentation for full format.
+# place in "c:\" on emulator (or device) where sim.tsy picks it up.
+[test0]
+# Match serialnumber to the files in common\generic\security\swi\test\tdevcerts\ext
+# PhoneId=<manufacturer>,<model>,<revision>,<serialnumber>,<error>
+PhoneId= DevCerts, 111, 1.0, 11111111-222222-3-01

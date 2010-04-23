@@ -1,0 +1,184 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SCR new component fields unit tests
+PRINT Check SWI registry against the new component fields in SCR
+LOAD_SUITE aprrtautils
+LOAD_SUITE tRevocation
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-OriginVerified-0001
+//! @SYMTestCaseDesc 		Install simple SIS file with a proper signature and check the 'origin verified' in SCR is set to TRUE by SWIRegistry
+//! @SYMREQ 			REQ10869
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled
+//! @SYMTestExpectedResults 	Origin verified field in SCR should set to TRUE
+//! @SYMDevelopedForRelease 	Diran
+// Signed SIS tests
+START_TESTCASE API-SEC-SWIREG-OriginVerified-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkoriginverified_t
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+END_TESTCASE API-SEC-SWIREG-OriginVerified-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-OriginVerified-0002
+//! @SYMTestCaseDesc 		Install a SIS file where the root certificate is absent from the swicertstore and check the 'origin verified' is set to FALSE by SWIRegistry
+//! @SYMREQ 			REQ10869
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled
+//! @SYMTestExpectedResults 	Origin verified field in SCR should set to FASLE
+//! @SYMDevelopedForRelease 	Diran
+// Signed SIS tests
+START_TESTCASE API-SEC-SWIREG-OriginVerified-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini rootcanotinstore
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkoriginverified_f
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_rootcanotinstore
+
+END_TESTCASE API-SEC-SWIREG-OriginVerified-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-knownrevoked-0001
+//! @SYMTestCaseDesc 		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspGood and 'knownrevoked' in SCR will be set to FALSE by SWIRegistry
+//! @SYMREQ 			REQ10868
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognizes the certificate as good
+//! @SYMTestExpectedResults 	File installs then uninstalls sucessfully, At install, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspNotPerformed. Then PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspGood & KnownRevoked of SCR = FALSE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-knownrevoked-0001
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100 	tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkknownrevoked_f
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1b
+RUN_TEST_STEP_RESULT 0 100 	tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkknownrevoked_f
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+RUN_TEST_STEP_RESULT 0 100	tRevocation ABSENT	z:\tswi\tRevocation\scripts\trevocation.ini Test2.1a
+
+END_TESTCASE API-SEC-SWIREG-knownrevoked-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-knownrevoked-0002
+//! @SYMTestCaseDesc 		Scenario where SisRegistry’s RevocationStatus changes from EOcspNotPerformed to EOcspRevoked and 'knownrevoked' in SCR will be set to TRUE by SWIRegistry
+//! @SYMREQ 			REQ10868
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Installs then checks the sisRegistry properties of a file that has been signed by a good certificate. No installtime check performed. PIR check is with an address that recognize the certificate as revoked
+//! @SYMTestExpectedResults 	File installs then uninstalls sucessfully, At install, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspNotPerformed. Then PIR check runs ok, ValidationStatus = EValidatedToAnchor, RevocationStatus = EOcspRevoked & KnownRevoked of SCR = TRUE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-knownrevoked-0002
+
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100 	tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkknownrevoked_f
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PIRCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2b
+RUN_TEST_STEP_RESULT 0 100 	tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini checkknownrevoked_t
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+RUN_TEST_STEP_RESULT 0 100	tRevocation ABSENT	z:\tswi\tRevocation\scripts\trevocation.ini Test2.2a
+
+END_TESTCASE API-SEC-SWIREG-knownrevoked-0002
+
+
+// Delete the old DRM protected sis file and generate one newly with the help of RTAUtils 
+RUN_UTILS DeleteFile c:\tswi\sis.content
+RUN_TEST_STEP 100 aprrtautils CreateDrmArchive z:\tswi\tuiscriptadaptors\scripts\drm\separate_delivery.ini ContentOnly
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-DRMProtected-0001
+//! @SYMTestCaseDesc 		Install a DRM-protected SIS file and make sure the SWI registry updates the 'DRM Protected' field in SCR properly
+//! @SYMREQ 			REQ10865
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a package are installed/uninstalled
+//! @SYMTestExpectedResults 	'DRM Proetcted' field in SCR should be set to TRUE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-DRMProtected-0001
+
+RUN_UTILS DeleteFile c:\sis.txt
+RUN_UTILS DeleteFile c:\tswi\sis.rights
+RUN_TEST_STEP 100 aprrtautils ClearRightsDb
+RUN_TEST_STEP 100 aprrtautils CreateDrmArchive z:\tswi\tuiscriptadaptors\scripts\drm\separate_delivery.ini ExecuteDateProtected
+RUN_TEST_STEP 100 aprrtautils ImportDrmArchive z:\tswi\tuiscriptadaptors\scripts\drm\import.ini Rights
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdrm.ini Install
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini drmprotected_t
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdrm.ini Uninstall
+RUN_UTILS DeleteFile c:\tswi\processed.rights
+
+END_TESTCASE API-SEC-SWIREG-DRMProtected-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-DRMProtected-0002
+//! @SYMTestCaseDesc 		Install a non DRM-protected SIS file and make sure the SWI registry leaves the default value(FALSE) for 'DRM Protected' field in SCR
+//! @SYMREQ 			REQ10865
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a package are installed/uninstalled
+//! @SYMTestExpectedResults 	'DRM Proetcted' field in SCR should be set to FALSE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-DRMProtected-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini drmprotected_f
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+END_TESTCASE API-SEC-SWIREG-DRMProtected-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-Hidden-0001
+//! @SYMTestCaseDesc 		Install simple SIS file with instalaltion flag 'hidden' enabled and check the 'hidden' field in SCR is set to TRUE by SWIRegistry
+//! @SYMREQ 			REQ10867
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled
+//! @SYMTestExpectedResults 	Hidden field in SCR should set to TRUE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-Hidden-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini i_hiddensa
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini hidden_true
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini u_hiddensa
+
+END_TESTCASE API-SEC-SWIREG-Hidden-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-Hidden-0002
+//! @SYMTestCaseDesc 		Install simple SIS file with instalaltion flag 'hidden' enabled, not signed by a trusted root certificate chain
+//!		     		and check the installation is not allowed.
+//! @SYMREQ 			REQ10867
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install the package
+//! @SYMTestExpectedResults 	Installation should fail
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-Hidden-0002
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini i_hiddensa_untrusted
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini u_hiddensa
+
+END_TESTCASE API-SEC-SWIREG-Hidden-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-Hidden-0003
+//! @SYMTestCaseDesc 		Install simple SIS file with instalaltion flag 'hidden' NOT enabled and check the 'hidden' field in SCR is set to FALSE by SWIRegistry
+//! @SYMREQ 			REQ10867
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled
+//! @SYMTestExpectedResults 	Hidden field in SCR should set to FASLE
+//! @SYMDevelopedForRelease 	Diran
+START_TESTCASE API-SEC-SWIREG-Hidden-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors CheckSCRFieldStep z:\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini hidden_false
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+END_TESTCASE API-SEC-SWIREG-Hidden-0003

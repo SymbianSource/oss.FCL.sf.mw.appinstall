@@ -1,0 +1,232 @@
+EXPORTS
+	_ZN12TNcdProgressC1Ejj @ 1 NONAME
+	_ZN12TNcdProgressC1Ev @ 2 NONAME
+	_ZN12TNcdProgressC2Ejj @ 3 NONAME
+	_ZN12TNcdProgressC2Ev @ 4 NONAME
+	_ZN14CNcdAttributes12InternalizeLER11RReadStream @ 5 NONAME
+	_ZN14CNcdAttributes13SetAttributeLEiRK7TDesC16 @ 6 NONAME
+	_ZN14CNcdAttributes13SetAttributeLEil @ 7 NONAME
+	_ZN14CNcdAttributes4NewLER11RReadStreamii @ 8 NONAME
+	_ZN14CNcdAttributes4NewLERKS_ @ 9 NONAME
+	_ZN14CNcdAttributes4NewLEii @ 10 NONAME
+	_ZN14CNcdAttributesD0Ev @ 11 NONAME
+	_ZN14CNcdAttributesD1Ev @ 12 NONAME
+	_ZN14CNcdAttributesD2Ev @ 13 NONAME
+	_ZN16CNcdKeyValuePair10MatchByKeyERKS_S1_ @ 14 NONAME
+	_ZN16CNcdKeyValuePair12InternalizeLER11RReadStream @ 15 NONAME
+	_ZN16CNcdKeyValuePair4NewLER11RReadStream @ 16 NONAME
+	_ZN16CNcdKeyValuePair4NewLERK16MNcdKeyValuePair @ 17 NONAME
+	_ZN16CNcdKeyValuePair4NewLERK7TDesC16S2_ @ 18 NONAME
+	_ZN16CNcdKeyValuePair5NewLCER11RReadStream @ 19 NONAME
+	_ZN16CNcdKeyValuePair5NewLCERK16MNcdKeyValuePair @ 20 NONAME
+	_ZN16CNcdKeyValuePair5NewLCERK7TDesC16S2_ @ 21 NONAME
+	_ZN16CNcdKeyValuePair7SetKeyLERK7TDesC16 @ 22 NONAME
+	_ZN16CNcdKeyValuePair9SetValueLERK7TDesC16 @ 23 NONAME
+	_ZN16CNcdSearchFilter11AddKeywordLERK7TDesC16 @ 24 NONAME
+	_ZN16CNcdSearchFilter13SetSearchModeEN16MNcdSearchFilter11TSearchModeE @ 25 NONAME
+	_ZN16CNcdSearchFilter18SetContentPurposesEj @ 26 NONAME
+	_ZN16CNcdSearchFilter18SetRecursionDepthLEj @ 27 NONAME
+	_ZN16CNcdSearchFilter4NewLER11RReadStream @ 28 NONAME
+	_ZN16CNcdSearchFilter4NewLERKS_ @ 29 NONAME
+	_ZN16CNcdSearchFilter4NewLEv @ 30 NONAME
+	_ZN16CNcdSearchFilter5NewLCER11RReadStream @ 31 NONAME
+	_ZN16CNcdSearchFilter5NewLCERKS_ @ 32 NONAME
+	_ZN16CNcdSearchFilter5NewLCEv @ 33 NONAME
+	_ZN19CNcdPurchaseDetails10SetHasIconEi @ 34 NONAME
+	_ZN19CNcdPurchaseDetails10SetVersionEP7HBufC16 @ 35 NONAME
+	_ZN19CNcdPurchaseDetails11GetIconDataEv @ 36 NONAME
+	_ZN19CNcdPurchaseDetails11InstallInfoEi @ 37 NONAME
+	_ZN19CNcdPurchaseDetails11SetEntityIdEP7HBufC16 @ 38 NONAME
+	_ZN19CNcdPurchaseDetails11SetItemNameEP7HBufC16 @ 39 NONAME
+	_ZN19CNcdPurchaseDetails11SetItemTypeEN19MNcdPurchaseDetails9TItemTypeE @ 40 NONAME
+	_ZN19CNcdPurchaseDetails11SetVersionLERK7TDesC16 @ 41 NONAME
+	_ZN19CNcdPurchaseDetails12DownloadInfoEi @ 42 NONAME
+	_ZN19CNcdPurchaseDetails12InternalizeLER11RReadStream @ 43 NONAME
+	_ZN19CNcdPurchaseDetails12SetClientUidE4TUid @ 44 NONAME
+	_ZN19CNcdPurchaseDetails12SetEntityIdLERK7TDesC16 @ 45 NONAME
+	_ZN19CNcdPurchaseDetails12SetItemNameLERK7TDesC16 @ 46 NONAME
+	_ZN19CNcdPurchaseDetails12SetNamespaceEP7HBufC16 @ 47 NONAME
+	_ZN19CNcdPurchaseDetails12SetServerUriEP7HBufC16 @ 48 NONAME
+	_ZN19CNcdPurchaseDetails13SetFinalPriceEP7HBufC16 @ 49 NONAME
+	_ZN19CNcdPurchaseDetails13SetNamespaceLERK7TDesC16 @ 50 NONAME
+	_ZN19CNcdPurchaseDetails13SetServerUriLERK7TDesC16 @ 51 NONAME
+	_ZN19CNcdPurchaseDetails14SetDescriptionEP7HBufC16 @ 52 NONAME
+	_ZN19CNcdPurchaseDetails14SetFinalPriceLERK7TDesC16 @ 53 NONAME
+	_ZN19CNcdPurchaseDetails14SetItemPurposeEj @ 54 NONAME
+	_ZN19CNcdPurchaseDetails15AddInstallInfoLEP23MNcdPurchaseInstallInfo @ 55 NONAME
+	_ZN19CNcdPurchaseDetails15SetDescriptionLERK7TDesC16 @ 56 NONAME
+	_ZN19CNcdPurchaseDetails15SetInstallInfoLERK6TArrayIP23MNcdPurchaseInstallInfoE @ 57 NONAME
+	_ZN19CNcdPurchaseDetails15SetOriginNodeIdEP7HBufC16 @ 58 NONAME
+	_ZN19CNcdPurchaseDetails15SetPurchaseTimeE5TTime @ 59 NONAME
+	_ZN19CNcdPurchaseDetails16AddDownloadInfoLEP24MNcdPurchaseDownloadInfo @ 60 NONAME
+	_ZN19CNcdPurchaseDetails16SetDownloadInfoLERK6TArrayIP24MNcdPurchaseDownloadInfoE @ 61 NONAME
+	_ZN19CNcdPurchaseDetails16SetOriginNodeIdLERK7TDesC16 @ 62 NONAME
+	_ZN19CNcdPurchaseDetails17RemoveInstallInfoEi @ 63 NONAME
+	_ZN19CNcdPurchaseDetails18AddDownloadedFileLERK7TDesC16 @ 64 NONAME
+	_ZN19CNcdPurchaseDetails18InsertInstallInfoLEP23MNcdPurchaseInstallInfoi @ 65 NONAME
+	_ZN19CNcdPurchaseDetails18RemoveDownloadInfoEi @ 66 NONAME
+	_ZN19CNcdPurchaseDetails18SetDownloadedFilesEP12CDesC16Array @ 67 NONAME
+	_ZN19CNcdPurchaseDetails19InsertDownloadInfoLEP24MNcdPurchaseDownloadInfoi @ 68 NONAME
+	_ZN19CNcdPurchaseDetails19SetDownloadedFilesLERK12MDesC16Array @ 69 NONAME
+	_ZN19CNcdPurchaseDetails19SetPurchaseOptionIdEP7HBufC16 @ 70 NONAME
+	_ZN19CNcdPurchaseDetails19SetTotalContentSizeEi @ 71 NONAME
+	_ZN19CNcdPurchaseDetails20RemoveDownloadedFileEi @ 72 NONAME
+	_ZN19CNcdPurchaseDetails20SetCatalogSourceNameEP7HBufC16 @ 73 NONAME
+	_ZN19CNcdPurchaseDetails20SetLastOperationTimeERK5TTime @ 74 NONAME
+	_ZN19CNcdPurchaseDetails20SetPaymentMethodNameEP7HBufC16 @ 75 NONAME
+	_ZN19CNcdPurchaseDetails20SetPurchaseOptionIdLERK7TDesC16 @ 76 NONAME
+	_ZN19CNcdPurchaseDetails21InsertDownloadedFileLERK7TDesC16i @ 77 NONAME
+	_ZN19CNcdPurchaseDetails21SetCatalogSourceNameLERK7TDesC16 @ 78 NONAME
+	_ZN19CNcdPurchaseDetails21SetPaymentMethodNameLERK7TDesC16 @ 79 NONAME
+	_ZN19CNcdPurchaseDetails21SetPurchaseOptionNameEP7HBufC16 @ 80 NONAME
+	_ZN19CNcdPurchaseDetails22ReplaceDownloadedFileLEiRK7TDesC16 @ 81 NONAME
+	_ZN19CNcdPurchaseDetails22SetDownloadAccessPointEP7HBufC16 @ 82 NONAME
+	_ZN19CNcdPurchaseDetails22SetPurchaseOptionNameLERK7TDesC16 @ 83 NONAME
+	_ZN19CNcdPurchaseDetails22SetPurchaseOptionPriceEP7HBufC16 @ 84 NONAME
+	_ZN19CNcdPurchaseDetails23SetDownloadAccessPointLERK7TDesC16 @ 85 NONAME
+	_ZN19CNcdPurchaseDetails23SetPurchaseOptionPriceLERK7TDesC16 @ 86 NONAME
+	_ZN19CNcdPurchaseDetails25SetLastOperationErrorCodeEi @ 87 NONAME
+	_ZN19CNcdPurchaseDetails29SetLastUniversalOperationTimeEv @ 88 NONAME
+	_ZN19CNcdPurchaseDetails4NewLERK19MNcdPurchaseDetails @ 89 NONAME
+	_ZN19CNcdPurchaseDetails4NewLEv @ 90 NONAME
+	_ZN19CNcdPurchaseDetails5NewLCERK19MNcdPurchaseDetails @ 91 NONAME
+	_ZN19CNcdPurchaseDetails5NewLCEv @ 92 NONAME
+	_ZN19CNcdPurchaseDetails7SetIconEP6HBufC8 @ 93 NONAME
+	_ZN19CNcdPurchaseDetails8SetIconLERK6TDesC8 @ 94 NONAME
+	_ZN20TNcdConnectionMethod12InternalizeLER11RReadStream @ 95 NONAME
+	_ZN23CNcdPurchaseInstallInfo12InternalizeLER11RReadStream @ 96 NONAME
+	_ZN23CNcdPurchaseInstallInfo12SetFilenameLERK7TDesC16 @ 97 NONAME
+	_ZN23CNcdPurchaseInstallInfo13SetThemeNameLERK7TDesC16 @ 98 NONAME
+	_ZN23CNcdPurchaseInstallInfo14BaseConstructLERK23MNcdPurchaseInstallInfo @ 99 NONAME
+	_ZN23CNcdPurchaseInstallInfo14BaseConstructLEv @ 100 NONAME
+	_ZN23CNcdPurchaseInstallInfo17SetApplicationUidE4TUid @ 101 NONAME
+	_ZN23CNcdPurchaseInstallInfo22SetApplicationVersionLERK7TDesC16 @ 102 NONAME
+	_ZN23CNcdPurchaseInstallInfo4NewLERK23MNcdPurchaseInstallInfo @ 103 NONAME
+	_ZN23CNcdPurchaseInstallInfo4NewLEv @ 104 NONAME
+	_ZN23CNcdPurchaseInstallInfo5NewLCERK23MNcdPurchaseInstallInfo @ 105 NONAME
+	_ZN23CNcdPurchaseInstallInfo5NewLCEv @ 106 NONAME
+	_ZN23CNcdPurchaseInstallInfoC1Ev @ 107 NONAME
+	_ZN23CNcdPurchaseInstallInfoC2Ev @ 108 NONAME
+	_ZN23CNcdPurchaseInstallInfoD0Ev @ 109 NONAME
+	_ZN23CNcdPurchaseInstallInfoD1Ev @ 110 NONAME
+	_ZN23CNcdPurchaseInstallInfoD2Ev @ 111 NONAME
+	_ZN24CNcdPurchaseDownloadInfo10ConstructLERK24MNcdPurchaseDownloadInfo @ 112 NONAME
+	_ZN24CNcdPurchaseDownloadInfo10ConstructLEv @ 113 NONAME
+	_ZN24CNcdPurchaseDownloadInfo12InternalizeLER11RReadStream @ 114 NONAME
+	_ZN24CNcdPurchaseDownloadInfo13SetAttributeLEN24MNcdPurchaseDownloadInfo18TDownloadAttributeERK7TDesC16 @ 115 NONAME
+	_ZN24CNcdPurchaseDownloadInfo13SetAttributeLEN24MNcdPurchaseDownloadInfo18TDownloadAttributeEl @ 116 NONAME
+	_ZN24CNcdPurchaseDownloadInfo13SetLaunchableEi @ 117 NONAME
+	_ZN24CNcdPurchaseDownloadInfo13SetRightsUriLERK7TDesC16 @ 118 NONAME
+	_ZN24CNcdPurchaseDownloadInfo14SetContentSizeEi @ 119 NONAME
+	_ZN24CNcdPurchaseDownloadInfo14SetContentUriLERK7TDesC16 @ 120 NONAME
+	_ZN24CNcdPurchaseDownloadInfo14SetRightsTypeLERK7TDesC16 @ 121 NONAME
+	_ZN24CNcdPurchaseDownloadInfo15SetContentUsageEN24MNcdPurchaseDownloadInfo13TContentUsageE @ 122 NONAME
+	_ZN24CNcdPurchaseDownloadInfo17CreateAttributesLEv @ 123 NONAME
+	_ZN24CNcdPurchaseDownloadInfo17SetActivationKeyLERK7TDesC16 @ 124 NONAME
+	_ZN24CNcdPurchaseDownloadInfo17SetDescriptorUriLERK7TDesC16 @ 125 NONAME
+	_ZN24CNcdPurchaseDownloadInfo18SetDescriptorDataLERK6TDesC8 @ 126 NONAME
+	_ZN24CNcdPurchaseDownloadInfo18SetDescriptorNameLERK7TDesC16 @ 127 NONAME
+	_ZN24CNcdPurchaseDownloadInfo18SetDescriptorTypeLERK7TDesC16 @ 128 NONAME
+	_ZN24CNcdPurchaseDownloadInfo19SetContentMimeTypeLERK7TDesC16 @ 129 NONAME
+	_ZN24CNcdPurchaseDownloadInfo23SetContentValidityDeltaEi @ 130 NONAME
+	_ZN24CNcdPurchaseDownloadInfo26SetInstallNotificationUriLERK7TDesC16 @ 131 NONAME
+	_ZN24CNcdPurchaseDownloadInfo4NewLERK24MNcdPurchaseDownloadInfo @ 132 NONAME
+	_ZN24CNcdPurchaseDownloadInfo4NewLEv @ 133 NONAME
+	_ZN24CNcdPurchaseDownloadInfo5NewLCERK24MNcdPurchaseDownloadInfo @ 134 NONAME
+	_ZN24CNcdPurchaseDownloadInfo5NewLCEv @ 135 NONAME
+	_ZN24CNcdPurchaseDownloadInfoC1Ev @ 136 NONAME
+	_ZN24CNcdPurchaseDownloadInfoC2Ev @ 137 NONAME
+	_ZN24CNcdPurchaseDownloadInfoD0Ev @ 138 NONAME
+	_ZN24CNcdPurchaseDownloadInfoD1Ev @ 139 NONAME
+	_ZN24CNcdPurchaseDownloadInfoD2Ev @ 140 NONAME
+	_ZN25CNcdPurchaseHistoryFilter10SetEventIdEj @ 141 NONAME
+	_ZN25CNcdPurchaseHistoryFilter12InternalizeLER11RReadStream @ 142 NONAME
+	_ZN25CNcdPurchaseHistoryFilter12SetEntityIdLERK7TDesC16 @ 143 NONAME
+	_ZN25CNcdPurchaseHistoryFilter13SetClientUidsE6TArrayI4TUidE @ 144 NONAME
+	_ZN25CNcdPurchaseHistoryFilter13SetNamespaceLERK7TDesC16 @ 145 NONAME
+	_ZN25CNcdPurchaseHistoryFilter4NewLE6TArrayI4TUidERK7TDesC16S5_j @ 146 NONAME
+	_ZN25CNcdPurchaseHistoryFilter4NewLEv @ 147 NONAME
+	_ZN25CNcdPurchaseHistoryFilter5NewLCE6TArrayI4TUidERK7TDesC16S5_j @ 148 NONAME
+	_ZN25CNcdPurchaseHistoryFilter5NewLCEv @ 149 NONAME
+	_ZNK14CNcdAttributes12ExternalizeLER12RWriteStream @ 150 NONAME
+	_ZNK14CNcdAttributes13AttributeTypeEi @ 151 NONAME
+	_ZNK14CNcdAttributes14AttributeInt32Ei @ 152 NONAME
+	_ZNK14CNcdAttributes15RangeLowerLimitEv @ 153 NONAME
+	_ZNK14CNcdAttributes15RangeUpperLimitEv @ 154 NONAME
+	_ZNK14CNcdAttributes17AttributeString16Ei @ 155 NONAME
+	_ZNK16CNcdKeyValuePair12ExternalizeLER12RWriteStream @ 156 NONAME
+	_ZNK16CNcdKeyValuePair18ExternalizeToDesLCEv @ 157 NONAME
+	_ZNK19CNcdPurchaseDetails12ExternalizeLER12RWriteStream @ 158 NONAME
+	_ZNK19CNcdPurchaseDetails16InstallInfoCountEv @ 159 NONAME
+	_ZNK19CNcdPurchaseDetails17DownloadInfoCountEv @ 160 NONAME
+	_ZNK20TNcdConnectionMethod12ExternalizeLER12RWriteStream @ 161 NONAME
+	_ZNK23CNcdPurchaseInstallInfo12ExternalizeLER12RWriteStream @ 162 NONAME
+	_ZNK23CNcdPurchaseInstallInfo14ApplicationUidEv @ 163 NONAME
+	_ZNK23CNcdPurchaseInstallInfo18ApplicationVersionEv @ 164 NONAME
+	_ZNK23CNcdPurchaseInstallInfo8FilenameEv @ 165 NONAME
+	_ZNK23CNcdPurchaseInstallInfo9ThemeNameEv @ 166 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo10ContentUriEv @ 167 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo10RightsTypeEv @ 168 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo11ContentSizeEv @ 169 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo12ContentUsageEv @ 170 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo12ExternalizeLER12RWriteStream @ 171 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo12IsLaunchableEv @ 172 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo13ActivationKeyEv @ 173 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo13DescriptorUriEv @ 174 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo14DescriptorDataEv @ 175 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo14DescriptorNameEv @ 176 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo14DescriptorTypeEv @ 177 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo15AttributeInt32LEN24MNcdPurchaseDownloadInfo18TDownloadAttributeE @ 178 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo15ContentMimeTypeEv @ 179 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo16AttributeStringLEN24MNcdPurchaseDownloadInfo18TDownloadAttributeE @ 180 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo20ContentValidityDeltaEv @ 181 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo22InstallNotificationUriEv @ 182 NONAME
+	_ZNK24CNcdPurchaseDownloadInfo9RightsUriEv @ 183 NONAME
+	_ZNK25CNcdPurchaseHistoryFilter12ExternalizeLER12RWriteStream @ 184 NONAME
+	_ZTI14CNcdAttributes @ 185 NONAME ; #<TI>#
+	_ZTI16CNcdKeyValuePair @ 186 NONAME ; #<TI>#
+	_ZTI16CNcdSearchFilter @ 187 NONAME ; #<TI>#
+	_ZTI19CNcdPurchaseDetails @ 188 NONAME ; #<TI>#
+	_ZTI21RCatalogsBufferWriter @ 189 NONAME ; #<TI>#
+	_ZTI22RCatalogsMessageReader @ 190 NONAME ; #<TI>#
+	_ZTI23CNcdPurchaseInstallInfo @ 191 NONAME ; #<TI>#
+	_ZTI24CNcdPurchaseDownloadInfo @ 192 NONAME ; #<TI>#
+	_ZTI25CNcdPurchaseHistoryFilter @ 193 NONAME ; #<TI>#
+	_ZTV14CNcdAttributes @ 194 NONAME ; #<VT>#
+	_ZTV16CNcdKeyValuePair @ 195 NONAME ; #<VT>#
+	_ZTV16CNcdSearchFilter @ 196 NONAME ; #<VT>#
+	_ZTV19CNcdPurchaseDetails @ 197 NONAME ; #<VT>#
+	_ZTV21RCatalogsBufferWriter @ 198 NONAME ; #<VT>#
+	_ZTV22RCatalogsMessageReader @ 199 NONAME ; #<VT>#
+	_ZTV23CNcdPurchaseInstallInfo @ 200 NONAME ; #<VT>#
+	_ZTV24CNcdPurchaseDownloadInfo @ 201 NONAME ; #<VT>#
+	_ZTV25CNcdPurchaseHistoryFilter @ 202 NONAME ; #<VT>#
+	_ZThn4_N23CNcdPurchaseInstallInfoD0Ev @ 203 NONAME ; #<thunk>#
+	_ZThn4_N23CNcdPurchaseInstallInfoD1Ev @ 204 NONAME ; #<thunk>#
+	_ZThn4_N24CNcdPurchaseDownloadInfoD0Ev @ 205 NONAME ; #<thunk>#
+	_ZThn4_N24CNcdPurchaseDownloadInfoD1Ev @ 206 NONAME ; #<thunk>#
+	_ZThn4_NK23CNcdPurchaseInstallInfo14ApplicationUidEv @ 207 NONAME ; #<thunk>#
+	_ZThn4_NK23CNcdPurchaseInstallInfo18ApplicationVersionEv @ 208 NONAME ; #<thunk>#
+	_ZThn4_NK23CNcdPurchaseInstallInfo8FilenameEv @ 209 NONAME ; #<thunk>#
+	_ZThn4_NK23CNcdPurchaseInstallInfo9ThemeNameEv @ 210 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo10ContentUriEv @ 211 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo10RightsTypeEv @ 212 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo11ContentSizeEv @ 213 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo12ContentUsageEv @ 214 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo12IsLaunchableEv @ 215 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo13ActivationKeyEv @ 216 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo13DescriptorUriEv @ 217 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo14DescriptorDataEv @ 218 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo14DescriptorNameEv @ 219 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo14DescriptorTypeEv @ 220 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo15AttributeInt32LEN24MNcdPurchaseDownloadInfo18TDownloadAttributeE @ 221 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo15ContentMimeTypeEv @ 222 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo16AttributeStringLEN24MNcdPurchaseDownloadInfo18TDownloadAttributeE @ 223 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo20ContentValidityDeltaEv @ 224 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo22InstallNotificationUriEv @ 225 NONAME ; #<thunk>#
+	_ZThn4_NK24CNcdPurchaseDownloadInfo9RightsUriEv @ 226 NONAME ; #<thunk>#
+	_ZN19CNcdPurchaseDetails13SetAttributeLEN19MNcdPurchaseDetails18TPurchaseAttributeERK7TDesC16 @ 227 NONAME
+	_ZN19CNcdPurchaseDetails13SetAttributeLEN19MNcdPurchaseDetails18TPurchaseAttributeEl @ 228 NONAME
+	_ZN19CNcdPurchaseDetails22InternalizeAttributesLER11RReadStream @ 229 NONAME
+	_ZNK19CNcdPurchaseDetails22ExternalizeAttributesLER12RWriteStream @ 230 NONAME
+

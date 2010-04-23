@@ -1,0 +1,68 @@
+/*
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+TARGET          mimehandler.exe
+TARGETTYPE		exe
+TARGETPATH		/sys/bin
+
+CAPABILITY NONE
+
+UID 0x100039CE 0x802EE3EE
+
+epocstacksize	0x8000
+
+USERINCLUDE     .
+
+
+SOURCEPATH	.
+
+
+// Application exe specific resource which is localised to the application
+
+// Application exe registration resource file
+
+// Application localisable resource file
+
+
+APP_LAYER_SYSTEMINCLUDE_SYMBIAN
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+library			euser.lib cone.lib estor.lib ws32.lib
+library		    bafl.lib apparc.lib etext.lib gdi.lib
+library			eikcore.lib eikctl.lib eikdlg.lib eikcoctl.lib viewcli.lib
+library			apgrfx.lib efsrv.lib
+
+SOURCE mimehandler.cpp
+
+START RESOURCE mimehandler.rss
+	TARGETPATH mimehandler
+	HEADER
+	LANG SC
+END
+SOURCEPATH aif
+START RESOURCE mimehandler_reg.rss
+	TARGETPATH mimehandler
+	LANG SC
+END
+START RESOURCE mimehandler_loc.rss
+	TARGETPATH mimehandler
+	LANG SC
+END
+
+SMPSAFE

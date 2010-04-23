@@ -1,0 +1,161 @@
+/*
+* Copyright (c) 2006-2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for project ?myapp
+*
+*/
+
+
+NAME HELL
+
+#include <eikon.rh>
+#include <eikon.rsg>
+#include <avkon.rh>
+#include <avkon.rsg>
+
+#include "catalogslogger.hrh"
+
+
+// ---------------------------------------------------------
+//   
+//    Define the resource file signature 
+//    This resource should be empty.
+//
+// ---------------------------------------------------------
+//
+RESOURCE RSS_SIGNATURE { }
+
+// ---------------------------------------------------------
+//   
+//    Default Document Name
+//
+// ---------------------------------------------------------
+//
+RESOURCE TBUF r_default_document_name { buf=""; }
+
+// ---------------------------------------------------------
+//   
+//    Define default menu and CBA key.
+//
+// ---------------------------------------------------------
+//
+RESOURCE EIK_APP_INFO
+    {
+    menubar = r_catalogslogger_menubar;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+    }
+
+
+// ---------------------------------------------------------
+//   
+//   r_catalogslogger_menubar
+//   Menubar for CatalogsLogger example
+//
+// ---------------------------------------------------------
+//
+RESOURCE MENU_BAR r_catalogslogger_menubar
+    {
+    titles =
+        {
+        MENU_TITLE {menu_pane = r_catalogslogger_menu;}
+        };
+    }
+
+
+// ---------------------------------------------------------
+//   
+//   r_catalogslogger_menu
+//   Menu for "Options"
+//
+// ---------------------------------------------------------
+//
+RESOURCE MENU_PANE r_catalogslogger_menu
+    {
+    items = 
+        {
+        MENU_ITEM {command = ECatalogsLoggerCommandStart;  txt = "Start logging";},
+        MENU_ITEM {command = ECatalogsLoggerCommandStop;  txt = "Stop logging";},
+	    MENU_ITEM {command = ECatalogsLoggerCommandSendFile;  txt = "Send log";},
+	    MENU_ITEM {command = ECatalogsLoggerCommandClearLog;  txt = "Clear log";},
+	    MENU_ITEM {command = ECatalogsLoggerCommandBackground;  txt = "Background";},
+        MENU_ITEM {command = EAknSoftkeyExit;   txt = "Exit";}
+        };
+    }
+    
+RESOURCE AVKON_SETTING_ITEM_LIST r_catalogs_logger_setting_item_list
+    {
+    flags = 0;
+    title = "Settings";
+    items=
+        {
+        AVKON_SETTING_ITEM
+            {
+            identifier = ECatalogsLoggerSettingError;
+            setting_page_resource = r_catalogs_logger_setting_page;
+            associated_resource = r_catalogs_logger_settings;
+            name = "Error";
+            },
+
+        AVKON_SETTING_ITEM
+            {
+            identifier = ECatalogsLoggerSettingInfo;
+            setting_page_resource = r_catalogs_logger_setting_page;
+            associated_resource = r_catalogs_logger_settings;
+            name = "Info";
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ECatalogsLoggerSettingTrace;
+            setting_page_resource = r_catalogs_logger_setting_page;
+            associated_resource = r_catalogs_logger_settings;
+            name = "Trace";
+            },
+        AVKON_SETTING_ITEM
+            {
+            identifier = ECatalogsLoggerSettingWarning;
+            setting_page_resource = r_catalogs_logger_setting_page;
+            associated_resource = r_catalogs_logger_settings;
+            name = "Warning";
+            }
+        };
+    }
+
+RESOURCE AVKON_SETTING_PAGE r_catalogs_logger_setting_page
+    {
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_catalogs_logger_settings_page_editor;
+    softkey_resource = R_AVKON_SOFTKEYS_OPTIONS_CANCEL;
+    }
+
+
+RESOURCE POPUP_SETTING_LIST r_catalogs_logger_settings_page_editor
+    {
+    flags = 0;
+    }
+
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_catalogs_logger_settings
+    {
+    flags = 0;
+    setting_texts_resource = r_catalogs_logger_settings_on_or_off;
+    }
+
+RESOURCE ARRAY r_catalogs_logger_settings_on_or_off
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value = ECatalogsLoggerSettingOn;
+                                text = "On"; },
+        AVKON_ENUMERATED_TEXT { value = ECatalogsLoggerSettingOff;
+                                text = "Off"; }
+        };
+    }

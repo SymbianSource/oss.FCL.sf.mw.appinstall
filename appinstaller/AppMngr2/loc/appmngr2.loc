@@ -1,0 +1,239 @@
+/*
+* Copyright (c) 2003-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Localization strings for project AppMngr2
+*
+*/
+
+
+//  MENU OPTIONS
+
+// d: Command in options list.
+// d: Opens the Details dialog for selected file
+// l: list_single_pane_t1_cp2
+#define qtn_swins_om_comp_details "View details"
+
+// d: Command in options list.
+// d: Starts the installation process
+// l: list_single_pane_t1_cp2
+#define qtn_swins_om_install "Install"
+
+// d: Command in options list.
+// d: Starts the removal process
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_om_uninstall "Uninstall"
+
+// d: Command in options menu
+// d: Opens the installation log.
+// l: list_single_pane_t1_cp2
+#define qtn_swins_om_view_inst_log "View log"
+
+// d: Command in options list.
+// d: Removes installation package
+// l: list_single_pane_t1_cp2
+#define qtn_am_opt_remove "Remove"
+
+
+// CAPTION STRINGS
+
+// d: Application title for listview
+// l: list_single_large_graphic_pane_t1
+#define qtn_apps_appmngr_list "Application Manager"
+
+// d: Application title for grid
+// l: cell_app_pane_t1
+#define qtn_apps_appmngr_grid "AppMngr"
+
+// d: Status pane title for main view
+// l: title_pane_t2/opt9
+//
+#define qtn_am_title "Application Manager"
+
+// d: Status pane title for installed view
+// l: title_pane_t2/opt9
+// r: 3.2
+#define qtn_am_title_installed "Installed"
+
+// d: Status pane title for Installation packages view
+// l: title_pane_t2/opt9
+// r: 3.2
+#define qtn_am_title_not_installed "Installation packages"
+
+
+// MEMORY AMOUNT STRINGS
+
+// d: Memory amount in bytes + abbreviation for byte.
+// d: (for example 1012B) Max. 4 digits.
+// l: list_single_heading_pane_t2
+#define qtn_swins_lsh2_byte "%N B"
+
+// d: Memory amount in kilobytes + abbreviation for kilobyte.
+// d: (for example 23kB) Max. 4 digits.
+// l: list_single_heading_pane_t2
+#define qtn_swins_lsh2_kilobyte "%N kB"
+
+// d: Memory amount in megabytes + abbreviation for megabyte.
+// d: (for example 4MB) Max. 4 digits.
+// l: list_single_heading_pane_t2
+#define qtn_swins_lsh2_megabyte "%N MB"
+
+// d: Memory amount in gigabytes + abbreviation for gigabyte.
+// d: (for example 2GB) Max. 4 digits.
+// l: list_single_heading_pane_t2
+#define qtn_swins_lsh2_gigabyte "%N GB"
+
+
+// SETTINGS
+
+// d: Title of general application manager settings.
+// l: title_pane_t2/opt9
+#define qtn_am_settings_title "Settings"
+
+// d: A setting in application manager's general settings.
+// d: Indicates how to deal with online certificate checking.
+// l: list_setting_pane_t1
+#define qtn_am_setting_ocsp "Online certificate check"
+
+// d: Value for qtn_am_setting_ocsp
+// l: list_set_graphic_pane_t1
+#define qtn_am_set_ocsp_must_pass "Must be passed"
+
+// d: Value for qtn_am_setting_ocsp
+// l: list_set_graphic_pane_t1
+#define qtn_am_set_ocsp_on "On"
+
+// d: Value for qtn_am_setting_ocsp
+// l: list_set_graphic_pane_t1
+#define qtn_am_set_ocsp_off "Off"
+
+// d: A setting in application manager's general settings.
+// d: An URL for online certificate checking.
+// l: list_setting_pane_t1
+#define qtn_am_setting_ocsp_url "Default OCSP URL"
+
+// d: A setting in application manager's general settings.
+// d: Indicates how to deal with software installation.
+// d: This setting is only valid for native Symbian app installation, not for Java
+// l: list_setting_pane_t1
+#define qtn_am_setting_sw_install "Install software"
+
+// d: Value for qtn_am_setting_sw_install
+// d: This value indicates that it is possible to install any native software
+// l: list_set_graphic_pane_t1
+#define qtn_am_set_sw_install_all "On"
+
+// d: Value for qtn_am_setting_sw_install
+// d: This value indicates that it is only possible to install certified software
+// l: list_set_graphic_pane_t1
+#define qtn_am_set_sw_install_signed "Only signed"
+
+
+// INSTALLATION LOG
+
+//d: Installation log - dialog header
+//l: heading_pane_t1
+#define qtn_swins_lsh2_log_header "Installation log"
+
+//d: Status "Installed" in the installation log.
+//d: Status text is shown after date (R_QTN_DATE_USUAL_WITH_ZERO)
+//d: and a separator, which is " - ".
+//d: Example "04/04/2001 - Installed"
+//l: list_double_large_graphic_pane_t2
+#define qtn_swins_logstatus1 "Installed"
+
+//d: Status "Partially installed" in the installation log.
+//d: Status text is shown after date (R_QTN_DATE_USUAL_WITH_ZERO)
+//d: and a separator, which is " - ".
+//d: Example "04/04/2001 - Partial inst."
+//l: list_double_large_graphic_pane_t2
+#define qtn_swins_logstatus2 "Partial inst."
+
+//d: Status "Removed" in the installation log.
+//d: Status text is shown after date (R_QTN_DATE_USUAL_WITH_ZERO)
+//d: and a separator, which is " - ".
+//d: Example "04/04/2001 - Removed"
+//l: list_double_large_graphic_pane_t2
+#define qtn_swins_logstatus3 "Removed"
+
+//d: If the installation log is empty, display
+//d: this text instead
+//l: list_double_large_graphic_pane_t2
+#define qtn_swins_log_empty "No data"
+
+// d: Text in an info note in appmngr.
+// d: Indicates that settings are locked and can not be edited by user
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_note_locked_settings "Cannot edit locked setting items"
+
+
+// MIDDLE SOFTKEY LABELS
+
+// d: Middle softkey label for uninstalled files.
+// l: control_pane_t3/opt7
+// r: 3.2
+#define qtn_msk_uninstall "Uninstall"
+
+// d: Middle softkey label for Installed applications.
+// l: control_pane_t3/opt7
+// r: 3.2
+#define qtn_msk_install "Install"
+
+// d: Middle softkey label for empty view.
+// l: control_pane_t3/opt7
+// r: 3.2
+#define qtn_msk_view_log "View log"
+
+// d: Middle softkey label for Installed view.
+// l: control_pane_t3/opt7
+// r: 5.0
+#define qtn_msk_view_details "View details"
+
+
+// EMPTY LIST LABELS
+
+// d: If the installed view is empty, display
+// d: this text instead
+// l: main_list_empty_pane
+// r: 3.2
+#define qtn_am_empty_installed "No installed applications"
+
+// d: If the not installed view is empty, display
+// d: this text instead
+// l: main_list_empty_pane
+// r: 3.2
+#define qtn_am_empty_not_installed "No applications to install"
+
+
+// OTHER STRINGS
+
+// d: Text displayed while scanning memory. Text is displayed in
+// d: a small non-blocking info popup on the top-right corner. It
+// d: indicates that the displayed application list (or installation
+// d: file list) is updating and more items may appear shortly.
+// d: Those items that are already available in the list can be used.
+// l: popup_preview_text_window/opt1
+// r: 5.1
+#define qtn_am_scanning_memory "Scanning memory"
+
+// d: Indicates untrusted application contained in memory card.
+// d: This string is displayed in second line (instead of size) in
+// d: installation files list. When a new memory card is inserted and
+// d: it contains untrusted appliactions, qtn_swins_preinst_untrusted
+// d: popup note is displayed. This string marks those untrusted apps,
+// d: hence it should match qtn_swins_preinst_untrusted content.
+// l: list_double_large_graphic_pane_t2_cp2
+// r: 5.1
+#define qtn_swins_lsh2_untrusted "Untrusted"
+

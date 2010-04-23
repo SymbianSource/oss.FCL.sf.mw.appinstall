@@ -1,0 +1,39 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file
+
+;Languages
+&EN
+
+;Header
+#{"SWICT-text"}, (0xA000000C), 1, 0, 1, TYPE=SA
+%{"SWICT-text-L"}
+:"SWICT-text-U"
+
+!({"Continue"},{"Abort"},{"Exit"})
+
+IF OPTION1
+"text\file1.txt"-"C:\system\data\text1.txt", FT, TC
+endif
+
+IF OPTION2
+"text\col.txt"-"C:\system\data\text2.txt", FT, TA
+endif
+
+IF OPTION3
+"text\cpu.txt"-"C:\system\data\text3.txt", FT, TE
+endif
+

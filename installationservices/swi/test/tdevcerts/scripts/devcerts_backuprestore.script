@@ -1,0 +1,133 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+PRINT Run Developer Certificates restore test...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-DEVCERTS-RESTORE-A-0001
+//! @SYMTestCaseDesc 		Sets up the environment for the remaining tests
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs test certificates, uninstalls applications
+//! @SYMTestExpectedResults 	Clean environment.
+//! @SYMPREQ 			PREQ918
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-DEVCERTS-RESTORE-A-0001
+
+// Setup Certstore
+RUN_UTILS MkDir c:\tmp\
+RUN_UTILS MkDir c:\tmp\tsis\
+RUN_UTILS MkDir c:\private\101f72a6\
+RUN_UTILS CopyFile c:\private\101f72a6\cacerts.dat c:\tmp\tsis\cacerts.dat
+RUN_UTILS CopyFile c:\private\101f72a6\certclients.dat c:\tmp\tsis\certclients.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\certclients.dat c:\private\101f72a6\certclients.dat
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tdevcerts\scripts\backuprestore.ini	RWY
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	RWY
+
+END_TESTCASE API-SEC-DEVCERTS-RESTORE-A-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-DEVCERTS-RESTORE-P1-0002
+//! @SYMTestCaseDesc 		Checks backup and restore of a complex embedded application, Top level
+//!				SIS file constrained by user_caps,multi_vid,single_sid1, embeded SIS file constrained by 
+//!				system_caps.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Installs, backs up, uninstalls, restores and uninstalls an embedded application
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMPREQ 			PREQ918
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-DEVCERTS-RESTORE-P1-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tdevcerts\scripts\backuprestore.ini	Y
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tdevcerts\scripts\backuprestore.ini	Z
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tdevcerts\scripts\backuprestore.ini	Y
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tdevcerts\scripts\backuprestore.ini	Z
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	W
+
+END_TESTCASE API-SEC-DEVCERTS-RESTORE-P1-0002
+
+
+//! @SYMTestCaseID 		API-SEC-DEVCERTS-RESTORE-P2-0002
+//! @SYMTestPriority 		High
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-DEVCERTS-RESTORE-P2-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tdevcerts\scripts\backuprestore.ini	Y
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tdevcerts\scripts\backuprestore.ini	P
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tdevcerts\scripts\backuprestore.ini	Y
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tdevcerts\scripts\backuprestore.ini	P
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	R
+
+END_TESTCASE API-SEC-DEVCERTS-RESTORE-P2-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-DEVCERTS-RESTORE-B-0003
+//! @SYMTestCaseDesc 		Reinstate the environment
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Uninstalls test certificates, uninstalls applications
+//! @SYMTestExpectedResults 	Clean environment.
+//! @SYMPREQ 			PREQ918 
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-DEVCERTS-RESTORE-B-0003
+
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tdevcerts\scripts\backuprestore.ini	RWY
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tdevcerts\scripts\backuprestore.ini	RWY
+
+// Reinstate certstore
+RUN_UTILS CopyFile c:\tmp\tsis\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile c:\tmp\tsis\certclients.dat c:\private\101f72a6\certclients.dat
+RUN_UTILS DeleteFile c:\tmp\tsis\cacerts.dat
+RUN_UTILS DeleteFile c:\tmp\tsis\certclients.dat
+
+END_TESTCASE API-SEC-DEVCERTS-RESTORE-B-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

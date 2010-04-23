@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Secure Software Install">
+  <purpose>
+    Implements the installation, uninstallation, backup and restore of native applications.
+  </purpose>
+
+   <deliverystep number="" name="PREQ2344 Install only device exact match languages from SIS files" osproject="Diran" revision="233">
+	  <milestone project="GT0379" number="MS3.6"/>
+	  <preq number="2344" title="Install only device exact match languages from SIS files">
+		  Install only device exact match languages from SIS files
+	  </preq>
+  </deliverystep>
+  
+      <defect number="DEF135213" title="WDP:  RBS feature is failing" revision="232">
+    WDP:  RBS feature is failing is fixed	
+  </defect>
+   
+    <defect number="PDEF135366" title="Not possible to uninstall a sis package that is installed to a memory card" revision="231">
+    Continue  uninstallation even media card is corrupted . . 	
+  </defect>
+  
+   <defect number="PDEF135118" title="TRUE - GSM - Out of memory issues" revision="230">
+    TRUE - GSM - Out of memory issues are fixed. 	
+  </defect>
+   <defect number="DEF133189" title="Pre-installed backed up content cannot be restored  " revision="229">
+    instead of opening multiple sessions with SisRegistry we make use of subsessions . 	
+  </defect>
+   
+   <defect number="DEF133306" title="published header file is #including an inaccessible header file " revision="228">
+    published header file is #including an inaccessible header file issue is fixed . 	
+  </defect>
+   <defect number="DEF132931" title="dbtool should be renamed to scrtool " revision="227">
+    dbtool is renamed to scrtool . 	
+  </defect>
+  <defect number="PDEF133243" title="Swi::RSisRegistrySession::RemovablePackagesL() leaves with -4 (KErrNoMemory) in" revision="226">
+ 	Fixed MEMORY LEAK IN SisRegistry server.
+  </defect> 
+  
+  <defect number="DEF133407" title="SWAP_Wordscan errors in MCL" revision="225">
+ 	Fixed word scan issues.
+  </defect> 
+
+  <defect number="PDEF129066" title="Pre-installed backed up content cannot be restored" revision="224">
+ 	A new feature has been added to SWI that allows a backup of an application to overwrite an application on the device if it already exists.The fix also includes improvements to the DEBUG logging for restore and fixes for some partial upgrade edge cases.This was also properly fixes a much older defect PDEF091134.
+</defect>  
+
+  <defect number="DEF131625" title="tresetdevice fails under CS2 on h4  " revision="223">
+	Added automatic creation of directory :\tswi\tbackuprestore in the test harness.
+  </defect>
+
+  <defect number="DEF128388" title="SWI PC tools do not handle capabilities correctly under Linux" revision="222">
+	Function "CSISCapabilities::ExtractCapabilities" is modified to work for Linux as well. 
+  </defect>
+
+  <defect number="PDEF132421" title="interpretsis fails with unknown error with attached sis file" revision="221">
+	Set the logo attributes before moving on to the next token. 
+  </defect>
+
+  <defect number="DEF132499" title="makesis: display the wrong line-number when file is missing" revision="220">
+	displaying the wrong line-number when file is missing issue is fixed.
+  </defect>
+    <defect number="DEF131414" title="Performance in RSisRegistryEntry::InstalledDrivesL is low " revision="219">
+	Modified SCR interface to allow avoiding drive management when registering a file. 
+  </defect>	
+
+  <defect number="DEF131628" title="tsishelper.htm fails with KErrInUse " revision="218">
+	tsishelper.htm now passes. 
+  </defect>
+
+  <defect number="PDEF129949" title="A previously restored PU upgraded application does not get backed up again" revision="217">
+	Previously restored PU upgraded application is getting backed up.
+  </defect>
+
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="216">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+
+   <deliverystep number="1328" name="CR1125:Security: New SIS Package Run Option to Launch After Installation Completed" osproject="Diran" revision="215">
+	  <milestone project="GT0433" number="MS3.13"/>
+	  <cr number="1544" title="New SIS Package Run Option to Launch After Installation Completed">
+		New SIS Package Run Option to Launch After Installation Completed	  
+	  </cr>
+  </deliverystep>  
+
+  <defect number="DEF130885" title="tsisregistrytest , tsis_rollback and tsts_tintegrityservices failing in onb" revision="214">
+	For tintegrityservices, reduced the log string to avoid the TEF defect.
+	For swiregistry, increased the performance target	
+  </defect>
+  
+  <defect number="DEF130944" title="[WDP] tsisstub_delete.script fail due to TEF time out " revision="213">
+	Fixed time out issues. 	
+  </defect>
+
+  <defect number="DEF130793" title="[Coverity]-SYMBIAN.CLEANUP_STACK -security/swi " revision="212">
+	Coverity Issues are fixed. 	
+  </defect>
+
+  <defect number="PDEF130895" title="CLogFileVersion class should be internal" revision="211">
+	Changed CLogFileVersion class classification to internalComponent. 	
+  </defect>
+
+  <defect number="DEF131249" title="KUidSwiProgress shouldn't be visible in 9.5" revision="210">
+	Added proper #ifdef-s 	
+  </defect>
+
+  <defect number="DEF130723" title="Platsec Error raised by SWI Observer when invoked by SWI Daemon" revision="209">
+	No new security test case was added, as testing RSwiObserver classes would require swicaptests to link swiobserverclient.lib and swibservereddata.lib which don't have several capabilities, and couldn't be loaded.
+Without swicaptests, the cost of adding new test cases would be too high with low benefit of capturing regressions. 
+  </defect>
+
+ <deliverystep number="1430" name="PREQ1269: Indication of executable code" osproject="Diran" revision="208">
+	  <milestone project="GT0433" number="3.15"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  Incudes changes to enable the installer to indicate that the software component has an executable, before the installation takes place.
+	  </preq>
+  </deliverystep>
+
+  <defect number="DEF128991" title="TZ server new dependency with swiobserver (part of swi.iby" revision="207">
+	As Swi.iby is dependent on many other .iby. So move all dll related to swi observer from swi.iby and place in some other .iby (swiobserver.iby). Other team are interested on swi observer only. Instead of including whole swi.iby other people can include swiobserver.iby. 
+  </defect>
+
+  <deliverystep number="1117" name="PREQ1269: Crypto Services: Plugin management and highly desirable features
+ (Phase 2)" osproject="Diran" revision="207">
+	  <milestone project="GT0433" number="3.2"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  1) Post-manufacture plugin management 2) Complex queries in the SCR
+			3) Additional smaller requirements and changes and 4) Improved security in the SCR
+	  </preq>
+  </deliverystep>
+
+  <defect number="PDEF130622" title="Crash in integrityservices component during repeated power on/off test" revision="206">
+	Drive boundary check added to function CJournal::RefreshDrivesArrayL 
+  </defect>
+
+  <defect number="DEF128063" title="swiobservertestoom.exe fails from M04646 with USER::PANIC 84" revision="205">
+	Remove the false panic when the test failed. The summery at the end of the tests should be way to indicate any failures
+  </defect>
+
+  <defect number="PDEF130335" title="RSisRegistrySession::RemovablePackages does not return all removable packages" revision="204">
+	RSisRegistrySession::RemovablePackagesL returns now also SP packages
+  </defect>
+
+  <defect number="DEF128602" title="PREQ1269 - Application Manager is unresponsive" revision="203">
+	Added caching for the CComponentEntry object in the subsession. Improved the performance of RSisRegistryEntry::OpenL. Several other minor improvements. 
+  </defect>
+  
+  <defect number="DEF128615" title="PREQ1269 - SCR database consumes much more disk space than SIS Registry" revision="202">
+	As N- series devices tend to have many in ROM components, most settings in the SCR DB were changed to favour ROM components as the default settings. Additionally, more settings were made optional for all components (index etc.) 
+  </defect>
+ 
+  <defect number="DEF128618" title="PREQ1269 - Processing of ROM stubs is very slow" revision="201">
+	Removing queries while adding files. Improving bitmask management for installed drives. Making more properties optional. Made default options to favour ROM components.
+  </defect>
+
+  <defect number="DEF129328" title="PREQ1269: Read-Write lock fails" revision="200">
+	State variables were moved to the sub-session class instead of CRequestImpl class. This way the state is not shared across sub-sessions. 
+  </defect>
+
+  <defect number="DEF125141" title="RSwiObserverSession::ProcessLogs accesses data caged files on client side" revision="199">
+	SWiobserver now maintains a flag file in tmp to show wheter there any any logfiles to proces
+  </defect>
+
+  <defect number="DEF127712" title="[Coverity]-SYMBIAN.CLEANUP_STACK-security/swi " revision="198">
+	Fixes to various coverity issues in SWI.
+  </defect>
+
+  <defect number="PDEF129367" title="TRUE - Can't install apps from Download! application" revision="197">
+	Nonsecure clock will be used if secure clock is not available.
+  </defect>
+
+  <defect number="DEF125494" title="Non-DP Roms can not build in ONB" revision="196">
+     Included rom dependencies for non-dp textshell rom and mcs
+  </defect>
+
+  <defect number="DEF126991" title="Coverity issues in swi" revision="195">
+     Coverity errors fixed in swi
+  </defect>
+
+  <defect number="DEF127022" title="Sisregistry tests fail after JMI is removed" revision="194">
+     Remove the dependency on MIDP.sis from sisregistry test
+  </defect>
+
+  <deliverystep number="1116" name="PREQ1269: Crypto Services: Core Delivery" osproject="Diran" revision="193">
+    <milestone project="GT0433" number="MS3.1"/>
+    <preq number="1269" title="Universal Software Install Framework">
+      Delivers the main set of features for the Diran Early Phase. Includes the new components (SCR, SIF and STS), migration of the native installer to use       the new components and most reference code. Excludes non-mandatory features and post-production plugin management.
+    </preq>
+  </deliverystep>
+
+  <defect number="INC126755" title="Games are not restored, 'Application closed: !InstallServer' systerm error is di" revision="192">
+ 	* Fixed the restore processor to ensure that the hash of the current controller object used the correct raw controller buffer as input.
+	* Fixed the backupsession to allow partial upgrades to ROM stubs to be backed up.
+	* Fixed the restore controller code that matches the list of backed up files against controller to cope with the system drive symbol ($) and the code used for no user-selected drive (255)
+	* Fixed the restore processor to preserve the IsInRom flag on partial upgrades to be preserved so that this is consistent with the installer code. Otherwise, restored upgrades to ROM stubs can magically become non-removable.
+ </defect>
+
+  <defect number="DEF126972" title="Incorrect orphaned file checking during uninstall" revision="191">
+     Break has been added to exit from the inner loop once an entry was found and removed.
+  </defect>
+
+  <defect number="PDEF126699" title="Unable to upgrade ROM based UI application by installing new version to removabl" revision="190">
+     SidToFileNameL returns correct drive 
+  </defect> 
+
+  <defect number="DEF126976" title="Change the reference in security to use new IWS RExplicitHttpSession" revision="189">
+     Reference in security changed to use new IWS RExplicitHttpSession
+  </defect> 
+
+  <defect number="DEF126807" title="Fix copyright errors" revision="188">
+	Copy Right headers has been added in the files.
+  </defect>
+
+  <defect number="DEF126609" title="Category G ipr in security code needs to be confirmed or changed" revision="187">
+	Category G ipr in security code confirmed only for reccafconfig and other code changed to category T
+  </defect>
+
+  <defect number="PDEF126743" title="Flash sis installation is not successfull in the first attempt" revision="186">
+	The integrity services code now creates backups of executables in sys\bin using CFileMan::Copy instead of renaming 
+	the file. This allows the original file to be safely deleted using RLoader::Delete
+  </defect>
+
+  <defect number="DEF125174" title="Cannot eclipse epoc exe's with a patch" revision="185">
+	Condition has been added to eclipse epoc exe's (executables) with a patch.
+  </defect>
+
+  <defect number="DEF125934" title="[coverity] - CHECKED_RETURN - security/swi/source/sislauncher/" revision="184">
+	CID768 - Tagging this defect as intentional. CID767 - Modified Swi::CSisLauncherSession::RunExecutableL()  to check the error code returned. 
+  </defect>
+
+  <defect number="PDEF126279" title="Large SIS files can cause internal overflows and install failures" revision="183">
+	The lengths of IPC messages in the SIS launcher are now stored in TInt instead of TUint8 variables to prevent overflows.
+  </defect>
+  
+  
+  <defect number="DEF126082" title="Uninstallation of base package does not remove non-removable patches." revision="182">
+	When an SA package is removed the associated SP patches are removed even if the SP is marked as non-removable.
+  </defect>
+
+  <defect number="DEF125123" title="RSisRegistrySession::RecoverL capability checks" revision="181">
+	RSisRegistrySession::RecoverL API now is checked for the SWI daemon UID.
+  </defect>
+
+  <defect number="PDEF125677" title="Unable to install SIS packages when the corresponding root certificate is marked" revision="180">
+	SA SU sis files without RU flag are dealt as normal SA sis files.
+  </defect>
+
+  <defect number="DEF124557" title="[coverity] - sisxrecognizer -BAD_OVERRIDE" revision="179">
+	sisxrecognizer BAD_OVERRIDE coverity issue fixed
+  </defect>
+
+  <defect number="DEF115757" title="Testdependencies.script failing" revision="178">
+	Testdependencies.script is now successfully passing
+  </defect>
+
+  <defect number="DEF124070" title="Incorrect data caging path checking in Restore Controller" revision="177">
+	Data cage path checking corrected in Restore Controller
+  </defect>
+
+  <defect number="DEF124063" title="SWI: PU elcipse" revision="176">
+	Allowed a PU package to eclipse files in an SA package.
+  </defect>
+
+  <defect number="DEF124074" title="[Coverity-Blr][connect_chk][1] : Swi::RSwiObserverSession::Connect() return val" revision="175">
+	Added error checking to server connection call.
+  </defect>
+
+  <defect number="PDEF121960" title="Vulnerability of code signing applications to chosen-prefix collisions for MD5" revision="174">
+	Support of MD2 and MD5 signatures on sis file controllers has been removed.
+  </defect>
+
+  <defect number="DEF123261" title="SWI application in use check does not work if there are more than 32 UIDs" revision="173">
+	Updated checks for application in use to allow more than 32 UIDs.
+  </defect>
+  
+  <defect number="DEF123452" title="Incorrect behaviour exhibited by CSisRegistryCache::EmbeddingPackagesL() API" revision="172">
+	Embedding packages can now be correctly found using sisregistry.
+  </defect>
+
+  <defect number="DEF120465" title="TextSkip flag not implemented in SWI" revision="171">
+	TextSkip option which displays a message then skips the installation of the next file in the package was implemented in SWI
+  </defect>
+
+  <defect number="PDEF118284" title="The installed theme in used is corrupted after try to uninstalling it." revision="170">
+	Extended sis registry cache re-generation to apply to cancellation of a confirmed un-installation as well as installation.
+  </defect>
+  
+  <defect number="PDEF122794" title="Debug message in SisRegistryServer is misleading" revision="169">
+	Change message in second debug statement.
+  </defect>
+
+  <defect number="DEF122450" title="RSisRegistryEntry::DependentPackagesL should not return augmentations" revision="168">
+	update documentation for RSisRegistryEntry::DependentPackagesL and RSisRegistryEntry::DependenciesL
+  </defect>
+
+  <defect number="DEF122219" title="SWI run-on-install flag does not work for pre-installed applications" revision="167">
+	Run-on-install does work for pre-installed applications.
+  </defect>
+
+  <defect number="DEF121297" title="Equal error constants in SWI" revision="166">
+	The error code for KErrSISInfoMissingRemoveDirectories is changed to -10148
+  </defect>
+
+  <defect number="DEF119935" title="InterpretSis generates v4 SisregistryObject contains v5 data" revision="165">
+	IsRemoved field will no longer appear in v4 sisregistryObject. In addition, version number for v4 sisregistryObject is now 4.0 instead of 4.1
+  </defect>        
+
+  <defect number="PDEF120840" title="installed themes cannot be shown on theme settings" revision="164">
+	More than 10 themes can now be displayed in themes list
+  </defect>        
+  
+  <devcr number="SBAR-7C7EN6" title="Add internal media propagation to PREQ1912" revision="163">
+	Add internal media propagation to PREQ1912
+  </devcr>        
+ 
+  <defect number="PDEF120331" title="Installer is very slow because all stub sis-packages are read from rom twice in" revision="162">
+ 	check pUid only to determine if a package is in Rom. Read pUid from a specific position in rom stub sis file instead of parsing all the controller info. If an exe is rom based is checked by querying SidCache instead of scanning all the rom stub sis file
+  </defect>        
+
+  <deliverystep number="949" name="CR1125:Crypto Services:Add Package Versions to SIS File Conditionals" osproject="Sphinx" revision="161">
+	  <milestone project="GT0379" number="MS3.9"/>
+	  <cr number="1125" title="Add Package Versions to SIS File Conditionals">
+		Add Package Versions to SIS File Conditionals	  
+	  </cr>
+  </deliverystep>  
+  
+  <deliverystep number="959" name="CR1313: OCSP Changes for Cingular/AT&T" osproject="Sphinx" revision="160">
+	  <milestone project="GT0379" number="MS3.19"/>
+	  <cr number="1313" title="OCSP Changes for Cingular/AT&T">
+		OCSP Changes for Cingular/AT&T	  
+	  </cr>
+  </deliverystep>  
+  
+  <cr number="1240" title="Allow Certificate Validity Dates to be Ignored when Verifying SIS Controllers" revision="159">
+    Added a new Sis Registry API to check the integrity of installed applications without requiring that the signing certificate chain be valid for the current date and time.
+  </cr> 
+
+  <devcr number="SBAR-7BHJ8U" title="Add access to the list of EmbeddedPackages from the published interface" revision="160">
+	Add access to the list of EmbeddedPackages from the published interface
+  </devcr>        
+  
+  <defect number="DEF116513" title="SWI should limit user-grantable capabilities" revision="159">
+	A validation has been added  such that, AllFiles,  CommDD, MultimediaDD, NetworkControl, DiskAdmin. can not be configured as user grantable from SWI policy INI file. 
+  </defect>        
+  
+  <defect number="PDEF118220" title="SIS recongnizer should also check file extension while recognizing sis files" revision="158">
+	Added a patchable constant: KSisxRecognizerConst to recsisx.dll. With KSisxRecognizerConst set to non-zero, the SIS recogniser would return ECertain for .sis, EPossible for .sisx and ENotRecognized for all other extensions. 
+  </defect>        
+  
+  <defect number="DEF118269" title="Invalid version checking when using the '==' operator (TCheckedVersion)" revision="157">
+	TCheckedVersion "==" operator logic fixed
+  </defect>        
+
+  <defect number="DEF118713" title="Include file name should be case sensitive" revision="156">
+	Change included header file name to lower case.
+  </defect>        
+
+  <defect number="PDEF114642" title="Cannot install adorned filename" revision="155">
+	Swi's adorned filename handling mechanism has been refined.
+  </defect>        
+  
+  <defect number="PDEF117983" title="Installation problems with rom upgrades when using SA packages (with RU flag)" revision="154">
+	PackageExistsInRomL() should search by pkg UID - which is unique - instead of pkg name.
+  </defect>        
+  
+  <defect number="DEF115870" title="Wrong error code when installing an embedded SIS consisting a patch file" revision="153">
+	The error code has been changed to KErrMissingBasePackage (-10255) in  installationprocessor.cpp
+  </defect>      
+  
+  <defect number="DEF113546" title="SWI does not delete files on removable media on propagated app uninstall" revision="152">
+	SWI delete files on removable media on propagated app uninstall
+  </defect>      
+
+  <defect number="DEF115255" title="PackageExistsInRomL() doesn't implemented completed" revision="151">
+	The PackageUid has been passed to the CheckIfMatchingStubFileL for checking the PackageUid  when we install a SA package with RU flag.
+  </defect>    
+  
+  <defect number="DEF114911" title="SWI stops any install/uninstall after a failed uninstall under low RAM" revision="150">
+        Creation of templog.txt is been done through Replace API instead of Create API.
+  </defect>    
+  
+  <defect number="PDEF115573" title="Security checks during propgation are inconsistent with checks during restore" revision="149">
+        Modify installer to allow the installation of propagations where some of the files have been modified as long as the modified files do not exist under /sys or /resource and do not have the VERIFY tag set in the package file.
+  </defect>  
+  
+  <defect number="DEF113544" title="SisRegistryServer panics with KERN-EXEC 3" revision="148">
+        Reduced stack usage in integrityservices and sisregistryserver by using heap storage for local variables.
+  </defect>  
+
+  <defect number="DEF115795" title="SWI completes the installation despite the files not being installed" revision="147">
+        makesis tool will report error for file name which exceeds a pre-defined value (KMaxFileName), instead of cutting it off silently.
+  </defect>  
+
+  <defect number="PDEF115151" title="SA fails to install, PU installs ok" revision="146">
+        In SecurityCheckUtil::ProcessFileL(), check whether the installing app's SID is cached or not.
+  </defect>  
+  
+  <defect number="INC115619" title="SWI certification validation does not use secure time" revision="145">
+      When SWI validates a certificate chain, it now uses secure time rather than local time. 
+  </defect>  
+
+  <defect number="DEF113917" title="swipolicy.ini needs to default to true for fix to DEF096906" revision="144">
+      The default setting of "RemoveOnlyWithLastDependent" in swipolicy.ini has been changed to TRUE. 
+  </defect>  
+
+  <defect number="DEF112425" title="RSisRegistryEntry::FilesL uses too much memory for large SIS files" revision="143">
+      Optimise the memory usage of RSisRegistryEntry::FilesL(). 
+  </defect>  
+
+  <defect number="DEF108783" title="Test Improvment - Allow SWI tests to run in startupmode=1 on the emulator" revision="142">
+      Allow SWI tests to run in startupmode=1 on the emulator. 
+  </defect>  
+
+  <defect number="PDEF113727" title="RCA (preRCA036): .sis installation crash" revision="141">
+      Before we attempt to open the backup.lst in InitFromBackupL(), we re-name it. This will act as a flag to specify whether a read was successful or not. So the next time the SisRegistry is opened, we check the flag, and delete the renamed, corrupted backup.lst file. 
+  </defect>  
+
+  <defect number="PDEF113841" title="Frozen/Blank screen after declining installation from inbox" revision="140">
+      Dont regenerate the cache if the user cancels out of confirmation dialog. A further check is made to ensure the registry has not been changed if the user has entered the confirmation state at least once (for embedded packages). 
+  </defect>  
+  
+  <defect number="INC114896" title="SISHelper capability policing does not match documentation" revision="139">
+      Change the policy table so that sishelper will police the SID of calling client to ensure that only InstallServer can use sishelper.
+  </defect>
+  
+  <defect number="PDEF114705" title="The length of embedded sis's controller in sis registry is wrong" revision="137">
+      The controller hash stored in the sisregistry is generated from the controller data fields only (minus  SISSignatueCertificateChain's and SISDataIndex).
+As a result, once the user allow the first installation of a package to the media card (e.g. signed by Vodafone), user can then pop in another media card which contains the installation of the same package but signed differently (e.g. signed by Orange), and the device should still pick up the installed package; as both hashes are the same.
+CSisRegistryObject version had been increment to 5.2.
+Exported a new sisregistry_5.2.txt to z:/system/install/ to indicate the CSisRegistryObject version.
+This defect fix would impact Interpretsis, i.e. Interpretsis need to generate the v5.2 sisregistry hash.
+  </defect>
+  
+  <defect number="DEF113116" title="It is not possible to abort an installation without causing an error." revision="136">
+      A new text option FA is added , which results in SWI aborting the installation when dialog returns.
+  </defect>
+  
+  <defect number="DEF114152" title="Swi Observer processor leaves with an undefined error number" revision="135">
+      The error code -999 is changed to KErrGeneral in swiobprocessor.cpp.
+  </defect>
+  
+  <defect number="DEF113569" title="Makesis should mandate source file specification for PA packages" revision="134">
+      Makesis mandate source file specification for PA packages.
+  </defect>
+
+  <defect number="DEF113369" title="CDeviceInfoServer::HandleTimeout() fails to cancel fetcher" revision="133">
+      CDeviceInfoServer::HandleTimeout()  pass to cancel fetcher
+  </defect>
+  
+  <defect number="PDEF112968" title="Unecessary use of integrity services whilst processing ROM stubs" revision="132">
+      Disable Integrity Services during the processing of ROM stubs.
+  </defect>
+  
+  <defect number="DEF113251" title="calls to GetDesLength() not checked for error return" revision="131">
+      The call to GetDesLength() API  is checked and error handled appropriately.
+  </defect>
+
+  <defect number="DEF113250" title="calls to GetDesLength() not checked for error return" revision="130">
+      The length of the descriptor is checked and error handled appropriately.
+  </defect>
+    
+  <defect number="DEF111982" title="Uninstallation Failed" revision="129">
+      Scanning of ROM based SIS stub files when uninstalling changed to cope with and skip over malformed stub files.
+  </defect>
+  
+  <defect number="DEF112656" title="!InstallServer crashes with panic USER 23" revision="128">
+      InstallServer won't crash with panic USER 23
+  </defect>
+  
+  <defect number="DEF112215" title="Not possible to determine all drives which are installed to" revision="127">
+      SISRegistry is able to determine all the drives on which files are installed.
+  </defect>
+  
+  <defect number="PDEF112966" title="SWI prevents developers from changing the name of a package" revision="126">
+      SWI allows upgrade with different pkg name for SA.
+  </defect>
+  
+  <defect number="DEF113011" title="In source API documentation update for RSisRegistryEntry::FilesL()" revision="125">
+     Enhance API comments for RSisRegistryEntry::FilesL() regarding wildcard file specifications in packages in ROM stub sis files.
+  </defect>
+  
+    <defect number="PDEF112135" title="Security tools do not support Basque and Galician languages" revision="124">
+     Added support for BASQUE and GALICIAN to makesis, signsis, dumpsis and interpretsis.
+  </defect>
+  
+  <defect number="DEF111731" title="swi fails with -2 when called without driver letter is the sis path name" revision="123">
+     SWI console will now accept a sis file without the drive letter in it's path. Sishelper will attempt to discover which drive the sis file is on.
+  </defect>
+  
+  <defect number="DEF112652" title="!SISHELPER crashes with panic USER 47" revision="122">
+     SISHELPER won't crash with panic 47 for tempered sis files when it changes the uncompression length to any negative value.
+  </defect>
+  
+   <defect number="PDEF112338" title="Inefficient use of RFs::Volume in processing of ROM stubs in SIS registry" revision="121">
+     Improve efficiency of SisRegistry when processing ROM stubs. Directly set the iDrives bitmask to the Z Drive and improve the use of the RFs in CSisRegistryObject::UpdateDrivesL().
+  </defect>
+  
+ <defect number="PDEF112337" title="SIS registry processing of SIDs in ROM stubs is inefficient" revision="120">
+     Improve efficiency of SisRegistry when processing ROM stubs. RFs::Entry should only be called on an executable rather than all files.
+  </defect>
+ 
+ <defect number="DEF112195" title="RSisRegistrySession::RemovablePackagesL returns ROM stub packages" revision="119">
+     RemovablePackagesL API won't returns the ROM stubs.
+  </defect>
+ 
+  <defect number="DEF111309" title="ECOM dependency on swi/swispubsubdefs.h breaks Core OS layering" revision="118">
+    Updated swi/swispubsubdefs.h to redefine its published KUidSoftwareInstallKey property keys and values in terms of the duplicate definitions in sacls.h from System Agent 2.
+  </defect> 
+
+ <defect number="PDEF112392" title="SisRegistryServer Cache get corrupted in zero disk space conditions" revision="117">
+    Called the CleanUp() when InitFromBackupL() leaves to avoid double entries to the SisRegristry cache.
+  </defect>
+  
+ <defect number="DEF111229" title="typo in securitypolicy.ini" revision="116">
+    Correction to a typographical error in SWI's config file and the code that reads it.
+  </defect>
+  
+ <defect number="DEF107091" title="Remove/Ratify TO DO comments from security's test component - tcertstore" revision="115">
+    The deletion of certificate has been modified as part of the fix of to do comments for tcertstore.
+  </defect>
+
+ <defect number="DEF111220" title="embedded sis file in conditional block disappear from sisregistry when reinstall" revision="114">
+    Embedded sis file remains in sisregistry after reinstall.
+  </defect>
+
+ <defect number="DEF110093" title="Problem with CR1027 ROM application update with SA SIS" revision="113">
+    When SA_RU(ROM upgradeable SA) package upgrades on top of another SA_RU, eclipseable files list is populated directly from stub file itself. Instead of populating it from the SIS registry entries, which is in the case of normal upgrades.
+  </defect>
+
+ <defect number="PDEF111296" title="Untrusted embedded sis should be rejected if swipolicy doesn't allow unsigned" revision="112">
+    untrusted embedded sis with protected package UID is rejected if AllowUnsigned flag is false.
+  </defect>
+
+ <defect number="DEF111238" title="Redundant forward declaration in swiobserverplugin.h" revision="111">
+    Redundant forward declaration of class CSwiObserverPluginManager has been removed.
+  </defect>
+
+ <defect number="DEF111099" title="IPR errors in security_ups.mrp" revision="110">
+    Move UPS configuration code to security_config and SWI observer plugni to security_swi.
+  </defect>
+
+  <defect number="PDEF107171" title="Sis installation inconsistency when media card is removed during installation" revision="109">
+    Stop integrityservices committing if the removable drive is present.
+  </defect>
+
+  <defect number="PDEF110560" title="PA packages that contain file names with hardcoded e: drive won't work if memo" revision="108">
+    Now rewrite drive letters from e: to the drive letter where the SIS file resides, for PA and PP packages, and install rather than fail
+  </defect>
+
+  <defect number="PDEF110724" title="CIntegrityTreeNode::DoFindNode() calls User::LeaveIfError" revision="107">
+    A non-leaving function was using LeaveIfError - fixed to use a return code.
+  </defect>
+
+  <defect number="PDEF110850" title="Wrong OCSP behaviour while installing sis package signed by two certificate chai" revision="106">
+    In CSecurityManager::ProcessOcspOutcomes(), fixed the chainWorstOutcome to record the chain result properly.
+  </defect>
+
+  <defect number="PDEF110561" title="TCB can be made a user grantable capability" revision="105">
+    A validation has been added  in CSecurityPolicy::AddUserCapability, such that, TCB can not be configured as user grantable from SWI policy INI file.
+  </defect>
+
+  <deliverystep number="655" name="PREQ1262: Crypto Services: User Prompt Service (Phase 2a)" osproject="Oghma" revision="104">
+	  <milestone project="GT0313" number="3.13.2"/>
+	  <preq number="1262" title="Service for Run-time User Permission Prompts">
+		  SWI is updated to notify registered parties about the results of software install events.
+	  </preq>
+  </deliverystep>
+
+  <defect number="DEF110960" title="[System Build]:Errors and warnings in GT related to security_swi in M04322 v9.4" revision="103">
+    SWI Observer functionality is now conditionally compiled using the SYMBIAN_USER_PROMPT_SERVICE variability macro. This is because SWI Observer is part of PREQ1262 which is only included in  9.5 and later builds
+  </defect>
+
+  <defect number="PDEF102073" title="SWI does not supply logging" revision="102">
+    SWI now logs install and uninstall events internally.  This is enabled by adding MaxNumOfLogEnteries=N to swipolicy.ini where N is the maximum number of entries.  The default is 0.  This log can be accessed via RSisRegistrySession::RetrieveLogFileL()
+  </defect>
+
+  <defect number="PDEF110204" title="CCompressedDataProvider::Read() calls InflateL()" revision="101">
+    Error handling mechanism is imporved in non-leaving function CCompressedDataProvider::Read()
+  </defect>
+
+  <defect number="DEF110588" title="IMPORT_C/EXPORT_C: sisregistrytoken.h:" revision="100">
+    CSisRegistryToken::SetFixedDrives() is now properly exported
+  </defect>
+
+  <defect number="DEF110587" title="IMPORT_C/EXPORT_C: sisregistrypackage.h" revision="099">
+    Class destructor ~CSisRegistryPackage() is now properly exported
+  </defect>
+
+  <defect number="DEF110586" title="IMPORT_C/EXPORT_C: sisfield.h:" revision="098">
+    CField::Length() is now properly exported
+  </defect>
+
+  <defect number="DEF110585" title="IMPORT_C/EXPORT_C: securitypolicy.h:" revision="097">
+    CSecurityPolicy::AllowUnsigned(), CSecurityPolicy::MandateCodesigningExtension() and CSecurityPolicy::MandateCertificatePolicies() now properly exported
+  </defect>
+
+  <defect number="DEF110584" title="IMPORT_C/EXPORT_C: msisuihandlers.h" revision="096">
+    CCertificateInfo::NewL(), CCertificateInfo::NewLC(), CAppInfo::NewL() and CAppInfo::NewLC() now properly exported. Also, CAppInfo::InternalizeL(0 and CAppInfo::ExternalizeL() now properly exported
+  </defect>
+
+  <defect number="DEF110059" title="CR1023 should also check for stubs ending sisx" revision="095">
+    ListL modified to list files ending with .sisx extension also.
+  </defect>
+
+  <defect number="PDEF110436" title="Swi::UninstalledSisPackages::ListL missing pkg file" revision="094">
+    Hashes of the controllers are calculated and compared with the existing list so that ListL won't miss any package.
+  </defect>
+
+  <defect number="DEF107470" title="SWI stub name generation problem" revision="093">
+    Swi stub name generation is modified for propogation.
+  </defect>
+
+  <defect number="DEF105776" title="SWI Daemon fails to install upgrade packages" revision="092">
+    Swi Daemon will allow to upgrade packages.
+  </defect>
+
+  <defect number="PDEF108958" title="Native install monitor will panic if there is an error reading the install key" revision="091">
+    Call SetActive() prior to iSwisProperty.Subscribe(iStatus) to avoid potential system panic.
+  </defect>
+
+  <deliverystep number="496" name="EC073: Security: Crypto Services Header File Refactoring" osproject="Oghma" revision="090">
+	  <milestone project="GT0313" number="3.7"/>
+	  <ec number="73" title="Crypto Services Header File Refactoring (to simplify the SDK creation process)">
+		  Non-exported published functions made internal.
+		  Status added to published files if it was missing.
+		  Some classes made publishedPartner from internal because it was referenced from a publishedPartner interface.
+	  </ec>
+  </deliverystep>
+  
+  <deliverystep number="708" name="Security - Alignment of CBR and System Model components" osproject="Oghma" revision="089">
+    <milestone project="GT0313" number="3.7"/>
+    <preq number="775" title="Alignment of CBR and System Model components">
+      Tools are removed from swi and splitted into three more components namely pctools,devicetools and sistools.
+    </preq>
+  </deliverystep>
+
+  <defect number="PDEF109112" title="SIS preinstallation is much slowlier in 3.1 platform compared to 3.0" revision="088">
+    Folding most of the functionality of CPostrequisitesChecker::IsFileOrphanedL() into the main function CPostrequisitesChecker::WouldOverWriteL().
+  </defect>
+
+  <defect number="DEF108706" title="Missing non-removable flag in THeadOpt enum for CSISFieldRoot" revision="087">
+    Added the missing EOptNonRemovable flag to the THeadOpt enum.
+  </defect>
+
+  <defect number="PDEF110026" title="Un-initialised variable in CInstallationPlanner::ProcessControllerL()" revision="086">
+    Added variable initialization in CInstallationPlanner::ProcessControllerL to remove static code analysis warning.
+  </defect>
+
+  <defect number="DEF107507" title="Security test switermination.htm fails" revision="085">
+    Added code to close all handles when removing a registry entry
+  </defect>
+
+  <defect number="DEF109751" title="Error handling in Sisregristry Server Regenerate Cache should be revised" revision="084">
+    When CIntegrityServices::CommitL() Leaves, we need to propagate the error up to the calling method regardless it is temperamental or permanent failure.
+  </defect>
+
+  <defect number="DEF109347" title="Linux, debug version of Signsis is not getting build." revision="083">
+    Signsis Debug version will build on Linux
+  </defect>
+
+  <defect number="PDEF109006" title="HiQTC BB 4.20 Crash when installing BB and cancelling the setup at status 95%..." revision="082">
+    When a sisregistry entry is not registered, it should not panic when sisregistry server try to regenerate it. In CSisRegistryCache::RegisterInRomControllerL(), change to use RF::Replace() instead; as the .ctl file might exist.
+  </defect>
+
+  <defect number="DEF109529" title="Swi::UninstalledSisPackages::ListL returns -10281" revision="081">
+    Fixed Swi::UninstalledSisPackages::ListL to return KErrNone (with list count of zero) when no packages are found.
+  </defect>
+
+  <defect number="DEF109638" title="PackageExistsInRomL should be part of RSisRegistryWritableSession" revision="080">
+    The method PackageExistsInRomL() has been moved from publishes partner class RSisRegistrySession to the internal component class RSisRegistryWritableSession.
+  </defect>
+
+  <defect number="PDEF109082" title="panicscan.pl failed in swicaptests_epocwind.txt" revision="079">
+    Fixed a memory leak in OCSP Support server - it did not deinitialize the ECOM session on shutdown.
+  </defect>
+
+  <cr number="1023" title="Uninstallation without installation and CSisRegistryPackage parser function" revision="078"/>
+
+  <cr number="1122" title="Wildcard Support in ROM Stub SIS Files" revision="077">
+    Wildcard Support in ROM Stub SIS Files
+  </cr>
+
+  <cr number="1027" title="ROM application update with SA SIS" revision="076">
+    ROM application update with SA SIS
+  </cr>
+
+  <ec number="084" title="Improved SWI Integrity Support (provision of external recovery interface)" revision="075">
+    Improved SWI Integrity Support (provision of external recovery interface)
+  </ec>
+
+  <defect number="DEF108815" title="makesis crashes if a trailing comma is present on an install-file" revision="074">
+    Fixed a defect where makesis crashed if a comma was present at the end of the .pkg file.
+  </defect>
+
+  <defect number="DEF108728" title="makesis errors if the output filename is a single character (plus extension)" revision="073">
+    Fixed a defect where a SIS with filename of the form "?.sis" could not be created
+  </defect>
+
+  <defect number="DEF108020" title="Dependency on embedded packages fails" revision="072">
+    In the prerequisite state, the Dependencies are searched across the whole SIS file instead of the current SIS.
+  </defect>
+
+  <defect number="PDEF107033" title="Makesis -d option doesnt work for language dependent files" revision="071">
+    Makesis will work with -d option for language dependent files in .pkg.
+  </defect>
+
+  <defect number="PDEF108551" title="SisRegistry API's don't document capability requirements" revision="070">
+    Documented required capabilies for RSisRegistrySession.
+  </defect>
+
+  <defect number="DEF107155" title="Incorrect tools configuration in swi/group/bld.inf" revision="069">
+    Tools2 will not build the symbian test code.
+  </defect>
+
+  <defect number="DEF107764" title="check behaviour of CSisRegistryCache::RegisterInRomControllerL" revision="068">
+    Corrected minor issues caused by the fix for PDEF107352
+  </defect>
+
+  <defect number="DEF106256" title="Security test tswi\tinterpretsisinteg\runtest.pl fails" revision="067">
+    Path issues and solved file casing errors as per the note added
+  </defect>
+
+  <defect number="DEF107795" title="Security test swi/test/tinterpretsisinteg/runtest.pl hangs" revision="066">
+    Security test swi/test/tinterpretsisinteg/runtest.pl hangs
+  </defect>
+
+  <defect number="PDEF107352" title="ROM eclipsing not working always (for Mobile Search)" revision="065">
+    Increased the maximum size of stub sis that can be processed in sisregistryserver before it runs out of memory.
+  </defect>
+
+  <defect number="DEF107276" title="Lint errors in security code should be fixed (production and test)" revision="064">
+    Minor changes to remove lint errors
+  </defect>
+
+  <defect number="PDEF107100" title="SWI does not kill the running application for FR,RR,RW sis files" revision="063">
+    RunWaitTimeoutSeconds option within the swipolicy.ini file is now accurate to the second
+  </defect>
+
+  <defect number="DEF105590" title="DumpSIS always appends RW in the recreated pkg file ." revision="062">
+    Removed a conditional statement wherein WaitEnd was ORed to the options which resulted in RW being appended in the recreated pkg file through dumpsis.
+  </defect>
+
+  <defect number="PDEF106629" title="Software install registry crashes with array out of bounds" revision="061">
+    Fixed panic USER 130 (array out of bounds) from sisregistryserver.exe when installing jar file while out of memory on C drive.
+  </defect>
+
+  <defect number="DEF105936" title="One test in testmakesis.pl fails in linux." revision="060">
+    Conversion of target sis file path(destination) provided as arguement, consisting backward slashes to forward slash. Since linux understands forward slashes in the path.
+  </defect>
+
+  <defect number="DEF105152" title="Dumpswicertstoretool with -y option doesn't shows the capability properly." revision="059">
+    A new option (-d) has been added which displayes the capabilities in readable format, the existing -y option has been deprecated.
+  </defect>
+
+  <defect number="DEF104797" title="Capabilities requirements in SisRegistry server need to be reviewed" revision="058">
+    Revised capabilities in SisRegistry, quite a few calls required ReadUserData, while they should not.
+  </defect>
+
+  <cr number="0956" title="Control ordering of uninstall RUNREMOVE action" revision="057">
+    Introduced a new uninstall option flag RBS in SWI , to control ordering of RR action.
+  </cr>
+
+  <defect number="PDEF105612" title="Sisx uninstallation is crashing !InstallServer" revision="056">
+    Fixed panic USER: 130 in integrityservice.dll which crashed InstallServer under some
+    OOM situations.
+  </defect>
+
+  <defect number="PDEF103587" title="Test failure in testsignsis.pl" revision="055">
+    Path of sis file reference changed as the sis file is being deleted from the old path before this test executes.
+  </defect>
+
+  <defect number="DEF103760" title="Combine steps in CSisHelperServer::MainPackageEntryL" revision="054">
+    Changed SisHelper implementation for better usage of SisRegistry interface. Changed capabilities verification in SisRegistry to prevent regressions. Added swicaptest to ROM tests.
+  </defect>
+
+  <defect number="PDEF103585" title="Test failure in testChainValidity.pl" revision="053">
+    selfsigned.sis is replaced by itself signed with the new certificate and the selfsigned.out file updated with the new certificate detials as well.
+  </defect>
+
+  <defect number="DEF104895" title="Makesis SetDirectory implementation should be improved." revision="052">
+    Makesis SetDirectory function implementation is optimized.
+  </defect>
+
+  <minorchange revision="051">
+    Removing obsolete comments
+  </minorchange>
+
+  <defect number="DEF104617" title="Dependency dialog in SWI should be localized according to user settings" revision="050">
+    Localized "missing dependency" dialog
+  </defect>
+
+  <minorchange revision="049">
+    Fixed a debug print in test code.
+  </minorchange>
+
+  <preq number="1182" title="GNU Make-based build system" revision="048">
+    TOOLS2 platform is added with TOOLS , makesis and signsis is ported to build and run with MinGW and Linux platform.
+  </preq>
+
+  <defect number="PDEF103564" title="Investigate TO DO comments in SWI source" revision="047">
+    Removed more obsolete comments from SWI
+  </defect>
+
+  <defect number="PDEF103564" title="Investigate TO DO comments in SWI source" revision="046">
+    Removed obsolete TO DO statements from installationplanner.cpp, .h
+  </defect>
+
+  <minorchange revision="045">
+    Removing obsolete comments
+  </minorchange>
+
+  <defect number="PDEF103564" title="Investigate TO DO comments in SWI source" revision="044">
+    Removed obsolete comments in bld.inf and appgen.pm.
+  </defect>
+
+  <defect number="DEF104229" title="move installserverclient.cpp to uiss" revision="043">
+    Moved installclientserver.cpp from swi\source\swis\server to swi\source\uiss\server
+  </defect>
+
+  <defect number="DEF104102" title="test failures in test-preinstalled, testasynccaps, testeclipseemulater" revision="042">
+    Fixed shutdown timeouts in SisHelper.
+  </defect>
+
+  <defect number="DEF103760" title="Combine steps in CSisHelperServer::MainPackageEntryL" revision="041">
+    Changed internals of CSisHelperServer::MainPackageEntryL to combine a couple of steps into a single function call. No external impact.
+  </defect>
+
+  <ec number="075" title="Triage and address Coverity Errors in Security Subsystem" revision="040">
+    Fixed:
+    1. Two if (iRestoreMachine == NULL) conditions have been modified in the CInstallSession::ServiceL() method in order not to dereference these zero pointers.
+    2. Modified the CSecurityManager::VerifyBlockL() method because the certChain variable was unused.
+    3. Modified the CRestoreMachine::ConstructL() method in order to check that the iFs.MkDirAll(path) call finishes successfully.
+  </ec>
+
+  <defect number="DEF103554" title="add capabilities to dialog message in CInstallMachine" revision="039">
+    An error message is displayed when an installation fails due to capabilities. This error message is updated to include the list of problem capabilities.
+  </defect>
+
+  <defect number="DEF104004" title="Test build failure in builds after the submission pdef102493" revision="038">
+    namespace is included with the enum to avoid test build errors
+  </defect>
+
+  <defect number="DEF103471" title="InstallServer has no version no defined for BC" revision="037">
+    Added a version no for Install Server.
+  </defect>
+
+  <defect number="PDEF102737" title="SWI fails in case of embedded or double dependency" revision="036">
+    Allows base packages and their upgrades to be combined in single a wrapper package and resolves double dependency problems. Multiple embedded partial upgrades are supported but multiple embedded SA/SP upgrades are not allowed.
+  </defect>
+
+  <preq number="1182" title="GNU Make-based build system" revision="035">
+    Changed according to filename policy to support the building of Symbian OS on both Windows and Linux for the test code.
+  </preq>
+
+  <defect number="DEF097032" title="Installserver stack usage needs to be investigated" revision="034">
+    installserver.exe stack usage reduced around 2KB by removing unnecessary stack variables.
+  </defect>
+
+  <defect number="DEF099325" title="Dumpsis not working for Unicode named sis files" revision="033">
+    Dumpsis provides unicode support.
+  </defect>
+
+  <defect number="DEF101340" title="Test Failure in Testmakesis.pl" revision="032">
+    Fixed failure in testMakesis.pl by adding a simple while loop in the windows script file, that waits for the asynchronous execution to get over.
+  </defect>
+
+  <defect number="DEF102212" title="Secourity test failures after submission of DEF090812 FBServ Heap ..." revision="031">
+    Fix for test panics after FBserv defect fix
+  </defect>
+
+  <minorchange revision="030">
+    Naiad Quality plan to improve the test coverage and to reduce the defect level in the production code
+  </minorchange>
+
+  <defect number="PDEF097290" title="Cannot restore signed application" revision="029">
+    Added support to configure phone TSY name in swipolicy.ini. This configuration enables SWI to restore the applications signed by developer certificates with IEME constraint.
+  </defect>
+
+  <defect number="DEF101892" title="Native software installation policy may be subverted" revision="028">
+    Added lock on swipolicy.ini in SWI daemon to prevent potential exclusive locks on the file.
+  </defect>
+
+  <minorchange revision="027">
+    Removed unnecessary test SIS files added for DEF100499
+  </minorchange>
+
+  <defect number="DEF102043" title="Makesis &amp; SWI assumes system drive is c:" revision="026">
+    Removed hardcoded references to C drive and replaced with system drive.
+  </defect>
+
+  <defect number="DEF101378" title="SWI has poor performance during uninstall" revision="025">
+    Optimized processing of directories in Integrity Services for faster uninstallation in packages with many private files.
+  </defect>
+
+  <defect number="DEF100049" title="BT 3SK Dialog.BT.selectDevices wrong CSK command when checkbox is marked" revision="024">
+    Fixed behaviour of embedded updates inside partial upgrades and SPs.
+  </defect>
+
+  <defect number="DEF101575" title="Defect in the SWI::DataProvider CCafSisDataProvider::DataL ()" revision="023">
+    Removed leave from DataL() assessor function in CCafSisDataProvider which could cause non-leaving methods to leave.
+  </defect>
+
+  <defect number="DEF101101" title="documentation defect in swi name space" revision="022">
+    Documentation of software install API are modified as per documentation standard.
+  </defect>
+
+  <defect number="INC100928" title="Controller verify returns wrong result if SIS package is self signed." revision="021">
+    INC100928 (Controller verify returns wrong result if SIS package is self signed.): All the controllers will be verified only with the certificate array passed to RSisRegistryEntry::VerifyControllerSignatureL function.
+  </defect>
+
+  <defect number="DEF101509" title="sisregistryserver crashes if swipolicy.ini file is missing" revision="020">
+    Default values now used if there is no swipolicy.ini file.
+  </defect>
+
+  <defect number="INC099535" title="[BR2021] SWI does not check for subst'd drives" revision="019">
+    [BR2021] Substituted drives will not be displayed during installation.
+  </defect>
+
+  <defect number="DEF101192" title="SWI Launcher UISS/SIS thread handle ownership and shutdown broken." revision="018">
+    Modified synchronous installation to wait for the SisHelper thread exits before completing installation request in case of either success or cancellation.
+  </defect>
+
+  <defect number="DEF100584" title="Two minor issues in dessisdataprovider.cpp" revision="017">
+    Missing default cluase has been added to the switch-case control of CDesDataProvider::Seek() method, to handle the invalid input parameters.
+  </defect>
+
+  <defect number="DEF101318" title="Remove Security InstallApp" revision="016">
+    Remove InstallApp UI from Security test build; as it will be included as a standard app in Techview.
+  </defect>
+
+  <defect number="INC096751" title="Documentation for SWI could be improved." revision="015">
+    Added the documentation comment for calling REComSession::FinalClose() as a part of cleanup at the following places. Description of class Launcher( @publishedPartner,@released ) , Launcher::Install() and MInstallerUiHandler::DisplayInstallL() ( @publishedPartner,@released )
+  </defect>
+
+  <defect number="DEF100600" title="Documentation defect - no documentation for SWI installer error codes" revision="014">
+    Added doxygen documentation for error codes.
+  </defect>
+
+  <defect number="DEF100953" title="CCompressedDataProvider does not behave according to MSisDataProvider doc." revision="013">
+    Modified CCompressedDataProvider::Read to adhere to documentation of MSisDataProvider interface
+  </defect>
+
+  <defect number="DEF100911" title="CDesDataProvider::Read() functions do not behave according to documentation" revision="012">
+    Added checksum verification of SISX header in SISX recognizer.
+  </defect>
+
+  <defect number="DEF100626" title="Documentaion defect in MSisDataProvider interface." revision="011">
+    Added documentation to MSisDataProvider::Read functions.
+  </defect>
+
+  <defect number="INC099777" title="The phone displays &quot;Program closed: !SISHELPER&quot; after removing memory card from" revision="010">
+    Modified asynchronous installation to wait for the SisHelper thread exits before completing installation request in case of either success or cancellation.
+  </defect>
+
+  <defect number="DEF100944" title="SWI update caused regression in SP and ECOM hardware tests" revision="009">
+    Added new checks for memory allocations to make the log.h code more rigid
+  </defect>
+
+  <defect number="DEF099245" title="Defect in the SWI::DataProvider" revision="008">
+    
+    Modified the CDesDataProvider::Seek(TSeek aMode, TInt64&amp; aPos) function in dessisdataprovider.cpp
+    in order to accept aPos=0 for aMode=ESeekEnd. Added additional comment to this function in the
+    dessisdataprovider.h file.
+    
+  </defect>
+
+  <defect number="DEF100330" title="Minor change required in SISHelper. Change EXPORT_C to IMPORT_C" revision="007">
+    Modified EXPORT_C to IMPORT_C in sishelper.h
+  </defect>
+
+  <defect number="DEF100220" title="Incorrect dumpsis device ID format" revision="006">
+    Added the missing commas in sistargetdependency.cpp to rectify the incorrect depenedency field in package file regenerated by dumpsis.
+  </defect>
+
+  <defect number="DEF100173" title="Warnings during rombuild.txt" revision="005">
+    Cleaned some warnings during rom build.
+  </defect>
+
+  <defect number="DEF099088" title="SWI fails to complete SP Upgrade in hardware UDEB build" revision="004">
+    Decreased the amount of stack memory used by the SWI debug log printing functions.
+  </defect>
+
+  <defect number="DEF099689" title="Restore fails when sisregistry folder is not available" revision="003">
+    When some registry files are missing whole install or uninstall process will not be halted.
+  </defect>
+
+  <defect number="DEF097891" title="DP: testappinuse.htm: 4 tests failed out of 77" revision="002">
+    Increases the re-create timeout to 0.08 sec. in CSisHelperServer::StartSisHelper() to fix DP test failures in testappinuse.htm
+  </defect>
+
+  <defect number="INC099288" title="Application Installer panics when sis version number is invalid" revision="001">
+    SIS version check added to makesis
+  </defect>
+</relnotes>

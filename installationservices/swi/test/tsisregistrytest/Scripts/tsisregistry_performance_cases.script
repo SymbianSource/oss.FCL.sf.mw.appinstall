@@ -1,0 +1,275 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// 
+//
+
+PRINT Run SIS Registry Performance Tests
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0001
+//! @SYMTestCaseDesc 		The time taken to add an entry to the SIS Registry.
+//! SYMTestPerformanceTarget   800ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-AddEntry z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini new_entry
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0002
+//! @SYMTestCaseDesc 		The time taken to update an existing entry to the SIS Registry.
+//! SYMTestPerformanceTarget   1000ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0002
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-UpdateEntry z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini update_entry
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0003
+//! @SYMTestCaseDesc 		The time taken to ask if a package exists
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0003
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-IsPackageExistInRom z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini existing_inrom
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0003
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0004
+//! @SYMTestCaseDesc 		The time taken to get installed uids
+//! SYMTestPerformanceTarget   150ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0004
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-InstalledUids z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini installed_uids
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0004
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0005
+//! @SYMTestCaseDesc 		The time taken to get installed packages
+//! SYMTestPerformanceTarget   500ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0005
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-InstalledPackages z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini installed_packages
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0005
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0006
+//! @SYMTestCaseDesc 		The time taken to ask if a uid is installed
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0006
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-IsUidInstalled z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini installed_uid
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0006
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0007
+//! @SYMTestCaseDesc 		The time taken to get the package of a given sid
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0007
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-SidToPackage z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini sid_package
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0007
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0008
+//! @SYMTestCaseDesc 		The time taken to get the file name of a given sid
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0008
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-SidToFileName z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini sid_file
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0008
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0009
+//! @SYMTestCaseDesc 		The time taken to query if a sid exists
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0009
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-IsSidPresentSingle z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini sid_present
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0009
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0010
+//! @SYMTestCaseDesc 		The time taken to obtain a list of Sids from an entry
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0010
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-EntrySids z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini sids
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0010
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0011
+//! @SYMTestCaseDesc 		The time taken to retrieve the file descriptions associated with a given package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0011
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-FileDescriptions z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini file_descriptions
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0011
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0012
+//! @SYMTestCaseDesc 		The time taken to retrieve the file descriptions associated with a given package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0012
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-EntryUidOpenClose z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini open_entry
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0012
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0013
+//! @SYMTestCaseDesc 		The time taken to query if a package is present (RSisRegistryEntry::IsPresentL)
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0013
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-IsPackagePresent z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini package_present
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0013
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0014
+//! @SYMTestCaseDesc 		The time taken to query if the given package augments another package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0014
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-IsAugmentation z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini is_augmentation
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0014
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0015
+//! @SYMTestCaseDesc 		The time taken to retrieve the list of files installed by the given package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0015
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-Files z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini files
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0015
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0016
+//! @SYMTestCaseDesc 		The time taken to retrieve all augmentations to the given package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0016
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-Augmentations z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini augmentations
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0016
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0017
+//! @SYMTestCaseDesc 		The time taken to retrieve the package of the current entry
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0017
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-Package z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini package
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0017
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0018
+//! @SYMTestCaseDesc 		The time taken to retrieve the array of packages dependent on the given package.
+//! SYMTestPerformanceTarget   150ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0018
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-DependentPackages z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini dependent_packages
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0018
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0019
+//! @SYMTestCaseDesc 		The time taken to retrieve the dependency array for the given package
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0019
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-Dependencies z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini dependencies
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0019
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0020
+//! @SYMTestCaseDesc 		The time taken to retrieve the array of packages that were embedded within the given package.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0020
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-EmbeddedPackages z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini embedded_packages
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0020
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0021
+//! @SYMTestCaseDesc 		The time taken to check the embedding packages for a given package.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0021
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-EmbeddingPackageStep z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini embedding_package
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0021
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0022
+//! @SYMTestCaseDesc 		The time taken to delete an existing entry to the SIS Registry.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0022
+
+RUN_TEST_STEP 100 tSisRegistryTest Performance-DeleteSingleEntry z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini delete_entry
+
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0022
+
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0023
+//! @SYMTestCaseDesc 		Simulates operations done by an App. Manager
+//! SYMTestPerformanceTarget   1200ms
+START_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0023
+RUN_TEST_STEP 100 tSisRegistryTest Performance-ApplicationManager z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini application_manager
+END_TESTCASE API-SEC-SISRegistry-PERFORMANCE-0023
+
+//! @SYMTestCaseID 		API-SEC-SISRegistry-PERFORMANCE-0024
+//! @SYMTestCaseDesc 	The time taken to list installed drives for a component
+//! SYMTestPerformanceTarget   50ms
+START_TESTCASE  API-SEC-SISRegistry-PERFORMANCE-0024
+RUN_TEST_STEP 100 tSisRegistryTest Performance-InstalledDrives z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini installed_drives
+END_TESTCASE  API-SEC-SISRegistry-PERFORMANCE-0024

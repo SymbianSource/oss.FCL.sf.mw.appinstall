@@ -1,0 +1,4 @@
+EXPORTS
+	_ZN3Swi4Test18ROcspServerSession5CheckEv @ 1 NONAME
+	_ZN3Swi4Test18ROcspServerSession7ConnectEv @ 2 NONAME
+

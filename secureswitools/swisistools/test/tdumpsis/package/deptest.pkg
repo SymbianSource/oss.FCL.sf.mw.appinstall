@@ -1,0 +1,31 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN, GE
+
+#{"Depend-EN","Depend-GE"}, (0x80000003), 1, 2, 3, TYPE=SA
+%{"Vendor","Vendor"}
+:"Vendor"
+
++(0=1, 1=2, 3=4294967295)
+
+IF (4096)=(1)
+
+"data\DepTest\file0"-"C:\Documents\InstTest\dep-lang.txt"
+ELSEIF (4096)=(3)
+
+"data\DepTest\file1"-"C:\Documents\InstTest\dep-lang.txt"
+ENDIF

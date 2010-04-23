@@ -1,0 +1,4 @@
+# System capabilities
+
+[cert_capabilities]
+caps=ReadDeviceData WriteDeviceData

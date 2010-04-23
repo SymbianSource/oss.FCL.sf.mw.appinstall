@@ -1,0 +1,361 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+// Make sure that left-over files from previous tests do not affect us
+RUN_UTILS MakeReadWrite c:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\file1.txt
+
+CONSECUTIVE
+//! @SYMTestCaseID		API-SEC-SWI-ASYNCCANCEL-I-0001
+//! @SYMTestCaseDesc		Install package with embedded packages
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Install package and embedded packages
+//! @SYMTestExpectedResults	Package and embedded packages installed
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0001
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP !Error=-3 150 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP !Error=-3 150 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNCCANCEL-I-0002
+//! @SYMTestCaseDesc		Display a text file and install/uninstall it
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Display text file and install/uninstall it
+//! @SYMTestExpectedResults	Display text file dialog called, file [un]installed
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0002
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayinstall
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayinstall
+
+// This sub-test used to attempt install/uninstall cancellation testing on testdisplayonly.sis, but
+// that package contains NO files, therefore the test is unrealistic and prone to intermittent failure
+// when the operation completes so quickly we don't have time to cancel it...
+// RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayonly
+// RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayonly
+// RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayonly
+// RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayonly
+
+END_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNCCANCEL-I-0003
+//! @SYMTestCaseDesc		Installs a file with a very large controller
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Installs a file with a very large controller
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0003
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+
+END_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNCCANCEL-I-0004
+//! @SYMTestCaseDesc		Install simple SIS file with 1 signature
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+// Signed SIS tests
+
+START_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0004
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 150 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+RUN_TEST_STEP !Error=-3 200 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 150 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+END_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ASYNCCANCEL-I-0005
+//! @SYMTestCaseDesc		Test upgrades
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Perform various upgrades.
+//! @SYMTestExpectedResults	Files installed/uninstalled.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0005
+
+// Make sure none of the files we overwrite are present
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade2.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade3.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+END_TESTCASE API-SEC-SWI-ASYNCCANCEL-I-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-DEF053088-I-0004
+//! @SYMTestCaseDesc		Cancel installation during progress bar
+//! @SYMREQ			REQ2681.5
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Cancel installation during progress bar
+//! @SYMTestExpectedResults	Cancel installation during progress bar
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-SWI-DEF053088-I-0004
+
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini manyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini manyfiles
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors UninstallAsyncCancelStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_manyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_manyfiles
+
+END_TESTCASE API-SEC-SWI-DEF053088-I-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWI-MultipleDialogCancel-0001
+//! @SYMTestCaseDesc		Cancel install/uninstall for packages from preceding tests after each dialog in turn
+//! @SYMDEF 			DEF086800
+//! @SYMTestPriority		High
+//! @SYMTestActions		Cancel install/uninstall after each dialog in turn for a number of packages
+//! @SYMTestExpectedResults	Each cancel succeeds until the install/uninstall actually completes
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-SWI-MultipleDialogCancel-0001
+
+//
+// Repeating above cancel test cases with cancel immediately after each UI callback in turn.
+//
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP 500 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 300 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayinstall
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayonly
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayonly
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+
+RUN_TEST_STEP 500 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+RUN_TEST_STEP 1500 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+RUN_TEST_STEP 300 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini manyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_manyfiles
+
+END_TESTCASE API-SEC-SWI-MultipleDialogCancel-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-MultipleDialogCancel-0002
+//! @SYMTestCaseDesc		Cancel install/uninstall after each dialog in turn for packages with run-on-install
+//! 				and run-on-uninstall exes.
+//! @SYMDEF 			DEF086800
+//! @SYMTestPriority		High
+//! @SYMTestActions		Cancel install/uninstall after each dialog in turn for packages with FILERUN exes
+//! @SYMTestExpectedResults	Each cancel succeeds until the install/uninstall actually completes, exes run as expected.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-SWI-MultipleDialogCancel-0002
+
+// Test cancellation with exe run asynchronously on install
+RUN_TEST_STEP 200 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRI
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+RUN_TEST_STEP 60 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRI
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Test cancellation with exe run synchronously on install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIRW
+
+// Install (with cancels) package with run-on-removal exe.
+RUN_TEST_STEP 500 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe_removable
+
+// Delete the flagging file that shows the exe has run, just to make sure the test is "honest"
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe_removable
+
+// If the exe was correctly shut down at the end of the runwait timeout during the uninstall, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+END_TESTCASE API-SEC-SWI-MultipleDialogCancel-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-MultipleDialogCancel-0003
+//! @SYMTestCaseDesc		Cancel install/uninstall after each dialog in turn where processes need to be shut down
+//! @SYMDEF 			DEF086800
+//! @SYMTestPriority		High
+//! @SYMTestActions		Cancel install/uninstall after each dialog in turn for packages with processes to shut down or kill.
+//! @SYMTestExpectedResults	Each cancel succeeds until the install/uninstall actually completes, processes end as expected.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-SWI-MultipleDialogCancel-0003
+
+//
+// Cancelling installs/uninstalls with exes/apps in use to shut down
+//
+
+// Install Helloworld application suite with cancels after all dialogs
+RUN_TEST_STEP 750 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Launch the Helloworld GUI app and console exe, with delay after install to make sure the app can start and after execution
+// to make sure it is up and running.
+DELAY 15000
+RUN_PROGRAM -1 helloworld.exe  -s 30000000
+RUN_PROGRAM -1 runtestexe console_app -s 30000000
+DELAY 1500
+
+// Check that the exes are running first
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Re-install Helloworld application suite (standalone upgrade) with cancels after all dialogs, which should kill the exes.
+RUN_TEST_STEP 400 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// If the tasks have been shut down/killed successfully, they shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Re-run exes
+DELAY 15000
+RUN_PROGRAM -1 helloworld.exe
+RUN_PROGRAM -1 runtestexe console_app -s 100000000
+DELAY 1500
+
+// Install package with SH flag, cancelling after all dialogs.
+RUN_TEST_STEP 500 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini shutdown
+
+// Let shutdown complete.
+DELAY 1500
+
+// Test that the gui app is shut down, but the console exe is still running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Re-run GUI app
+RUN_PROGRAM -1 helloworld.exe
+DELAY 1500
+
+// Uninstall package with SH flag, cancelling after all dialogs.
+RUN_TEST_STEP 60 tuiscriptadaptors UninstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini u_shutdown
+DELAY 1500
+
+// Test that the gui app is shut down, but the console exe is still running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Re-run GUI app
+RUN_PROGRAM -1 helloworld.exe
+DELAY 1500
+
+// Uninstall helloworld package with cancels after all dialogs.
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+
+// If the tasks have been shut down/killed successfully, they shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+END_TESTCASE API-SEC-SWI-MultipleDialogCancel-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-MultipleDialogCancel-0004
+//! @SYMTestCaseDesc		Cancel install after each dialog in turn for packages which will already fail for various reasons.
+//! @SYMDEF 			DEF086800
+//! @SYMTestPriority		High
+//! @SYMTestActions		Cancel install after each dialog in turn for packages which will already fail.
+//! @SYMTestExpectedResults	Each cancel succeeds until the install actually fails for expected reason.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-SWI-MultipleDialogCancel-0004
+
+// Cancel test with fatal ocsp response
+RUN_TEST_STEP_RESULT -3 240 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   testocspresultdialog_b
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testocspresultdialog_a
+
+// Cancel test with duplicate SIDs (fail in processing phase.)
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testexe2copies
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testexe2copies
+
+END_TESTCASE API-SEC-SWI-MultipleDialogCancel-0004
+
+
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

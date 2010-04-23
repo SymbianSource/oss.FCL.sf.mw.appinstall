@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file
+
+;Languages
+&EN,FR
+
+;Header
+#{"Simple","Simple-FR"}, (0x80000001), 4, 5, 6
+
+%{"Simple-Vendor","Simple-Vendor-FR"}
+:"Unique Vendor Name"
+
+
+;Ordinary file to selected drive
+"text\file1.txt"-"!:\Documents\InstTest\file1.txt"

@@ -1,0 +1,65 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file
+
+;Languages
+&EN, HI, ML
+
+;Header
+#{"SWICT-complete-EN", "SWICT-complete-HI", "SWICT-complete-ML"}, (0xA0000011), 1, 0, 1, TYPE=SA
+%{"SWICT-complete-L-EN", "SWICT-complete-L-HI", "SWICT-complete-L-ML"}
+:"SWICT-complete-U"
+
+"text\file1.txt"-"!:\system\data\complete1.txt"
+"text\exists.txt"-"C:\system\data\complete2.txt"
+
+IF LANGUAGE=1
+"text\englishfile.txt"-"C:\system\data\completeEN.txt", FT, TA
+ENDIF ; LANGUAGE
+
+IF LANGUAGE=58
+"text\file1.txt"-"C:\system\data\completeHI.txt", FT, TC
+ENDIF ;LANGUAGE
+
+IF LANGUAGE=71
+"text\supplier.txt"-"C:\system\data\completeML.txt", FT, TE
+ENDIF ;LANGUAGE
+
+!({"Intel", "Intel", "Intel"},{"ARM", "ARM", "ARM"},{"Motorola", "Motorola", "Motorola"},{"AMD", "AMD", "AMD"})
+
+IF OPTION1
+"text\option1.txt"-"C:\system\data\option1.txt"
+ENDIF ; OPTION1
+
+IF OPTION2
+"text\option2.txt"-"C:\system\data\option2.txt"
+ENDIF ;OPTION2
+
+IF OPTION3
+"text\cpu.txt"-"C:\system\data\option3.txt"
+ENDIF ;OPTION3
+
+IF OPTION4
+"text\options.txt"-"C:\system\data\option4.txt"
+ENDIF ;OPTION4
+
+IF EXISTS("C:\system\data\completeML.txt")
+    "text\romeo.txt"-"C:\system\data\lang.txt"
+ELSE
+    "text\remote.txt"-"C:\system\data\lang.txt"
+ENDIF
+
+

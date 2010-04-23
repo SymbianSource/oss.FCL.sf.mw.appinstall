@@ -1,0 +1,3 @@
+compress.txt
+nocompress1.txt
+nocompress2.txt

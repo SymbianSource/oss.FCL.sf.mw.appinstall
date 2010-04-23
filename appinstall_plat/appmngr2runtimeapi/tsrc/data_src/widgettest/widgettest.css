@@ -1,0 +1,25 @@
+#mainView {
+  font-size: 14px;
+  color: blue;
+}
+
+h2 {
+  text-align: center;
+  color: black;
+}
+
+.button {
+    font-size: 14px;
+    color: blue;
+    background-color: grey;
+    margin: 20px 0px 0px 150px;
+}
+
+#resultView {
+  text-align: center;
+  color: blue;
+  font-size: 16pt;
+  font-weight: bold;
+  display: none;
+}
+

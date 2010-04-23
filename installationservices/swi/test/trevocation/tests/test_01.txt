@@ -1,0 +1,20 @@
+# device id constraint contains a corrupt device id
+[main]
+name=test_01
+template=simple.txt
+inifile=test.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,c2
+chain2=SymbianTestRootCARSA,c3
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all.exe"-"!:\sys\bin\tswiusergrantable_all.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple_ocsp.xml
+exist0=c:\sys\bin\tswiusergrantable_all.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+noexist0=c:\sys\bin\tswiusergrantable_all.exe

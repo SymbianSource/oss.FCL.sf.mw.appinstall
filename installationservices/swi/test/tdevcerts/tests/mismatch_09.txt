@@ -1,0 +1,22 @@
+# Verify that embedded SIS files don't inherit the capabilities of the parent SIS file.
+
+[main]
+name=mismatch_09
+template=simple.txt
+inifile=mismatch.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,user_caps
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiunprotectedvid.exe"-"!:\sys\bin\tswiunprotectedvid.exe";
+sis1=mismatch_04.sis
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnonexist=2
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+nonexist1=c:\sys\bin\tswiunprotectedvid.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml

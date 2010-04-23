@@ -1,0 +1,48 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+; SA package containing complete resource files for English, International French and German
+;
+
+;Languages
+&EN, IF, GE
+
+#{"swiappregintegration_EN","swiappregintegration_IF","swiappregintegration_GE"},(0x80010002),1,0,1,TYPE=SA
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_IF","Vendor_GE"}
+
+;Unique Vendor name
+:"Vendor"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\swiappregintegration.exe" - "!:\sys\bin\swiappregintegration.exe"
+
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration01_reg.rsc" - "!:\private\10003a3f\import\apps\swiappregintegration01_reg.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration01_loc.rsc" -"!:\resource\apps\swiappregintegration01_loc.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration01_rsc.mbm"
+
+if supported_language=01
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration01_loc.r01" -"!:\resource\apps\swiappregintegration01_loc.r01"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration01_01.mbm"
+endif
+
+if supported_language=24
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration01_loc.r24" -"!:\resource\apps\swiappregintegration01_loc.r24"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration01_24.mbm"
+endif
+
+if supported_language=03
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration01_loc.r03" -"!:\resource\apps\swiappregintegration01_loc.r03"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration01_03.mbm"
+endif

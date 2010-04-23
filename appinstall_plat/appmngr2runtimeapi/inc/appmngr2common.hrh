@@ -1,0 +1,60 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Common resource ids for AppMngr2 runtime plug-ins
+*
+*/
+
+
+#ifndef APPMNGR2COMMON_HRH
+#define APPMNGR2COMMON_HRH
+
+enum TAppMngr2GenericCommand
+    {
+    EAppMngr2CmdNone,
+    EAppMngr2CmdViewDetails,
+    EAppMngr2CmdUninstall,
+    EAppMngr2CmdInstall,
+    EAppMngr2PlaceForPluginSpecificCmds,
+    EAppMngr2CmdRemove,
+    EAppMngr2CmdLog,
+    EAppMngr2ReservedForOtherGenericCommands
+    };
+
+#define KAppMngr2FirstFreePluginSpecificCmd     30
+
+enum TAppMngr2IconIndex
+    {
+    // Range 0 ... 0x2FFF reserved for runtime plug-in icon indexes
+    
+    // Specific icons flag
+    EAppMngr2UseSpecificIcon = 0x3000,  // use item specific icons
+    
+    // Default icon indexes
+    EAppMngr2NoIndicatorIcon,           // no indicator icon, item in phone memory
+    EAppMngr2IconQgnIndiAmInstMmcAdd,   // item in memory card indicator icon
+    EAppMngr2IconQgnIndiFmgrMsAdd,      // item in mass storage indicator icon
+    EAppMngr2ReservedForOtherDefaultIcons
+    };
+
+
+// AppMngr2 UID value
+#define KAppMngr2AppUidValue                    0x101F8512
+
+// AppMngr2 View ID values
+#define KAppMngr2InstalledViewIdValue           2
+#define KAppMngr2PackagesViewIdValue            5
+
+
+#endif  // APPMNGR2COMMON_HRH
+

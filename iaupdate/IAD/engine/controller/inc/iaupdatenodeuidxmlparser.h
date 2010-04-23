@@ -1,0 +1,128 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   ?Description
+*
+*/
+
+
+
+#ifndef IA_UPDATE_NODE_UID_XML_PARSER_H
+#define IA_UPDATE_NODE_UID_XML_PARSER_H
+
+
+#include <e32cmn.h>
+
+#include "iaupdatexmlsubparser.h"
+
+class CIAUpdateNodeDependency;
+
+
+/**
+ * CIAUpdateNodeUidXmlParser handles the dependency XML elements for
+ * node UID.
+ *
+ * @since S60 v3.2
+ */
+class CIAUpdateNodeUidXmlParser : public CIAUpdateXmlSubParser
+    {
+
+public:
+    
+    /**
+     * Because there may be multiple dependencies, the dependency sub parser that uses
+     * this sub parser may change the dependency. So, that is why reference to
+     * the pointer is used. This way this parser always uses the correct dependency.
+     *    
+     * @param aDependency The node UID information that is
+     * parsed from the XML data is inserted into this object.
+     * @return CIAUpdateNodeUidXmlParser* Created object.
+     *
+     * @since S60 v3.2
+     */
+    static CIAUpdateNodeUidXmlParser* NewL( CIAUpdateNodeDependency*& aDependency );
+
+    /**
+     * @see CIAUpdateNodeUidXmlParser::NewL
+     *
+     * @since S60 v3.2
+     */
+    static CIAUpdateNodeUidXmlParser* NewLC( CIAUpdateNodeDependency*& aDependency );
+
+
+    /**
+     * Destructor
+     *
+     * @since S60 v3.2
+     */
+    virtual ~CIAUpdateNodeUidXmlParser();
+
+
+public: // CIAUpdateXmlSubParser
+
+    /**
+     * @see CIAUpdateXmlSubParser::OnContentL
+     * 
+     * Sets the UID information for the dependency.
+     *
+     * @since S60 v3.2
+     */                                
+    virtual void OnContentL( const TDesC8& aBytes, 
+                             TInt aErrorCode );    
+    
+
+protected:
+    
+    /**
+     * Constructor
+     *
+     * @see CIAUpdateNodeUidXmlParser::NewL
+     *
+     * @since S60 v3.2
+     */
+    CIAUpdateNodeUidXmlParser( CIAUpdateNodeDependency*& aDependency );
+    
+    /**
+     * 2nd. phase constructor.
+     * Adds the node dependency sub parsers to the parent class sub parser list. 
+     *
+     * @since S60 v3.2
+     */
+    virtual void ConstructL();
+
+
+    /**
+     * @return CIAUpdateNodeDependency& The platform dependency information that is
+     * parsed from the XML data is inserted into this object.
+     * @exception Leaves with KErrNotFound if dependency is not found. Else system
+     * wide error code.
+     *
+     * @since S60 v3.2
+     */
+    CIAUpdateNodeDependency& DependencyL();
+    
+
+private:
+    
+    // Prevent these if not implemented
+    CIAUpdateNodeUidXmlParser( const CIAUpdateNodeUidXmlParser& aObject );
+    CIAUpdateNodeUidXmlParser& operator =( const CIAUpdateNodeUidXmlParser& aObject );
+
+
+private: // data
+
+    CIAUpdateNodeDependency*& iDependency;
+
+    };
+
+#endif // IA_UPDATE_NODE_UID_XML_PARSER_H

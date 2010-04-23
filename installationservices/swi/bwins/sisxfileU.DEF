@@ -1,0 +1,14 @@
+EXPORTS
+	?ContentsL@Parser@Sis@Swi@@SAPAVCContents@23@AAVMSisDataProvider@3@@Z @ 1 NONAME ; class Swi::Sis::CContents * Swi::Sis::Parser::ContentsL(class Swi::MSisDataProvider &)
+	?Length@CField@Sis@Swi@@QBE_JXZ @ 2 NONAME ; long long Swi::Sis::CField::Length(void) const
+	?ReadControllerL@CContents@Sis@Swi@@QBEPAVHBufC8@@XZ @ 3 NONAME ; class HBufC8 * Swi::Sis::CContents::ReadControllerL(void) const
+	?ReadDataL@CContents@Sis@Swi@@QAEXAAVRFile@@HH@Z @ 4 NONAME ; void Swi::Sis::CContents::ReadDataL(class RFile &, int, int)
+	?ReadDataL@CContents@Sis@Swi@@QAEXAAVRFile@@HH_J@Z @ 5 NONAME ; void Swi::Sis::CContents::ReadDataL(class RFile &, int, int, long long)
+	??1CBlob@Sis@Swi@@UAE@XZ @ 6 NONAME ; Swi::Sis::CBlob::~CBlob(void)
+	?CreateSisStubL@Parser@Sis@Swi@@SAXAAVRFile@@AAVMSisDataProvider@3@@Z @ 7 NONAME ; void Swi::Sis::Parser::CreateSisStubL(class RFile &, class Swi::MSisDataProvider &)
+	?NewL@CBlob@Sis@Swi@@SAPAV123@AAVMSisDataProvider@3@AA_JW4TReadTypeBehaviour@23@@Z @ 8 NONAME ; class Swi::Sis::CBlob * Swi::Sis::CBlob::NewL(class Swi::MSisDataProvider &, long long &, enum Swi::Sis::TReadTypeBehaviour)
+	?NewLC@CBlob@Sis@Swi@@SAPAV123@AAVMSisDataProvider@3@AA_JW4TReadTypeBehaviour@23@@Z @ 9 NONAME ; class Swi::Sis::CBlob * Swi::Sis::CBlob::NewLC(class Swi::MSisDataProvider &, long long &, enum Swi::Sis::TReadTypeBehaviour)
+	?CheckCrcL@CContents@Sis@Swi@@QAEXXZ @ 10 NONAME ; void Swi::Sis::CContents::CheckCrcL(void)
+	?NewL@CBlob@Sis@Swi@@SAPAV123@AAVTPtrProvider@23@AA_JW4TReadTypeBehaviour@23@@Z @ 11 NONAME ; class Swi::Sis::CBlob * Swi::Sis::CBlob::NewL(class Swi::Sis::TPtrProvider &, long long &, enum Swi::Sis::TReadTypeBehaviour)
+	?NewLC@CBlob@Sis@Swi@@SAPAV123@AAVTPtrProvider@23@AA_JW4TReadTypeBehaviour@23@@Z @ 12 NONAME ; class Swi::Sis::CBlob * Swi::Sis::CBlob::NewLC(class Swi::Sis::TPtrProvider &, long long &, enum Swi::Sis::TReadTypeBehaviour)
+

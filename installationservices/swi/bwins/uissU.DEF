@@ -1,0 +1,9 @@
+EXPORTS
+	?NewL@CUissServer@Swi@@SAPAV12@W4TPriority@CActive@@@Z @ 1 NONAME ; class Swi::CUissServer * Swi::CUissServer::NewL(enum CActive::TPriority)
+	?NewLC@CUissServer@Swi@@SAPAV12@W4TPriority@CActive@@@Z @ 2 NONAME ; class Swi::CUissServer * Swi::CUissServer::NewLC(enum CActive::TPriority)
+	?Cancel@RInstallServerSession@Swi@@QAEHXZ @ 3 NONAME ; int Swi::RInstallServerSession::Cancel(void)
+	?Connect@RInstallServerSession@Swi@@QAEHXZ @ 4 NONAME ; int Swi::RInstallServerSession::Connect(void)
+	?Restore@RInstallServerSession@Swi@@QAEHABVTIpcArgs@@@Z @ 5 NONAME ; int Swi::RInstallServerSession::Restore(class TIpcArgs const &)
+	?RestoreCommit@RInstallServerSession@Swi@@QAEHXZ @ 6 NONAME ; int Swi::RInstallServerSession::RestoreCommit(void)
+	?RestoreFile@RInstallServerSession@Swi@@QAEHABVTIpcArgs@@@Z @ 7 NONAME ; int Swi::RInstallServerSession::RestoreFile(class TIpcArgs const &)
+

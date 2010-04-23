@@ -1,0 +1,74 @@
+/*
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource headers for project ?myapp
+*
+*/
+
+
+#ifndef CATALOGS_BUILD_CONFIG_MMPI
+#define CATALOGS_BUILD_CONFIG_MMPI
+// This file is included in ncd engine .mmp project files.
+// Always submit this file to version control with default settings.
+// Do not include this file in source/header files.
+
+// Minimum capabilities required by engine DLLs and plugins
+#define CATALOGS_MINIMUM_CAPABILITIES CAP_APPLICATION PowerMgmt TrustedUI ProtServ SurroundingsDD NetworkControl
+
+// Enable if you want to build the engine with minimum capabilities
+//#define CATALOGS_BUILD_WITH_MINIMUM_CAPABILITIES
+#ifdef CATALOGS_BUILD_WITH_MINIMUM_CAPABILITIES    
+    #define CATALOGS_DLL_CAPABILITIES CAP_APPLICATION PowerMgmt TrustedUI ProtServ SurroundingsDD NetworkControl
+#else
+    #define CATALOGS_DLL_CAPABILITIES CAP_ECOM_PLUGIN
+#endif
+
+// This is the main switch that defines if NCD Engine logging is enabled.
+// Please note that if this is ON, the debug must also be turned ON in the client
+// side components. Otherwise the required debuglogging initialization calls are not done
+// in client-side process.
+// Off by default.
+//#define CATALOGS_DEBUG_ENABLED
+
+// This file is included in the component .mmp files, so the switches use 
+// MACRO definitions. 
+
+#ifdef CATALOGS_DEBUG_ENABLED
+
+// See the documentation of the flags in catalogsdebug.h
+MACRO CATALOGS_BUILD_CONFIG_DEBUG
+
+MACRO CATALOGS_BUILD_CONFIG_DEBUG_EXT_LOGGER
+//MACRO CATALOGS_BUILD_CONFIG_DEBUG_FILE_LOGGER
+//MACRO CATALOGS_BUILD_CONFIG_DEBUG_RDEBUG
+
+//MACRO CATALOGS_BUILD_CONFIG_HEAP_CHECKER
+MACRO CATALOGS_LOG_TRACE
+MACRO CATALOGS_LOG_DEBUG
+MACRO CATALOGS_DEBUG_ASSERTS
+
+// Enables platform heap check macros in the engine
+MACRO CATALOGS_BUILD_CONFIG_HEAP_MARKS
+
+#endif // CATALOGS_DEBUG_ENABLED
+
+// This enables HookLogger support.
+// Off by default.
+//OPTION CW -frame on
+
+// This enables device identification overrides from catalogs_device_config.h
+// Use this to receive production catalogs from the production server
+// Off by default.
+//MACRO CATALOGS_BUILD_CONFIG_OVERRIDE_DEVICE
+
+#endif

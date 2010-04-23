@@ -1,0 +1,43 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package for testing upgrades and uninstallation
+; of a dll (static) used by the application (AppUsingDLL.exe) that is running
+;
+
+; Languages
+; none -  English only by default
+
+; Installation header
+; Only one component name as we only support English
+
+#{"dep4c"},(0x89334513),1,0,0
+(0x89334505), 1, 0, 0, {"depdat2c"}
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+; for the PREQ1230
+
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\res4c.dat"-"C:\dependency\res4c.dat"
+
+
+
+
+; Required files
+; None
+
+; Component .sis files
+; None

@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test upgrading a component
+
+;Languages
+&EN,FR
+
+;Header - 0x80000134=UID of zoom app
+#{"An upgrade-EN", "An upgrade-FR"}, (0x80000134), 1, 3, 4, TYPE=SU
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+;Dependencies
+(0x80000134), 1, 2, 3, {"TestRun-EN", "TestRun-FR"}
+
+;Display text files
+"text\file1.txt"-"c:\documents\insttest\file.txt"
+"text\textfilec.txt"-"", FT, TC

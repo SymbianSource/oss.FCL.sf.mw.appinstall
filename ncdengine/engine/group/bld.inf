@@ -1,0 +1,52 @@
+/*
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for project ?myapp
+*
+*/
+
+
+PRJ_MMPFILES
+catalogsdebug.mmp
+ncdutils.mmp
+ncddevicemgmt.mmp
+catalogsserver.mmp
+catalogsengine.mmp
+catalogsproxy.mmp
+catalogsundertaker.mmp
+
+
+PRJ_EXPORTS
+
+//**************************************************************************************************
+//
+// Required data exports
+//
+//**************************************************************************************************
+
+// Backup & restore file
+
+// The following path is needed to make the app work ok on emulator.
+backup_registration.xml         /epoc32/release/winscw/udeb/z/private/20019119/backup_registration.xml
+
+// The following path is a general export dir which is needed for ROM builds
+// (and perhaps pkg references).
+backup_registration.xml         /epoc32/data/z/private/20019119/backup_registration.xml
+
+// Config file
+config.xml                      /epoc32/release/winscw/udeb/z/private/20019119/config.xml
+config.xml                      /epoc32/data/z/private/20019119/config.xml
+
+// Variant config file
+config_variant.xml                      /epoc32/release/winscw/udeb/z/private/20019119/config_variant.xml
+config_variant.xml                      /epoc32/data/z/private/20019119/config_variant.xml

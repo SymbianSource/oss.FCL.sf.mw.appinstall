@@ -1,0 +1,61 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Metadata Restore Tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-BACKUPRESTORE-EC063-CERTSIGN-A-0001
+//! @SYMTestCaseDesc 		Install executables signed without a mandatory certificate
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults 	Restore aborted.
+//! @SYMTestType 		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERTSIGN-A-0001
+
+//tswinocaps	signed with SymbianTestRSA- should fail (mandatory signature missing)
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113001_c_metadata c:\tswi\tbackuprestore\metadata81113001
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswinocapability.exe c:\tswi\tbackuprestore\backup81113001.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	nocapsRSA
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	nocapsRSA
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113001.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113001
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERTSIGN-A-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDUID-0002
+//! @SYMTestCaseDesc 		Install an untrusted SIS file with a protected package UID
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults 	Restore aborted.
+//! @SYMTestType 		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDUID-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\11113001_c_metadata c:\tswi\tbackuprestore\metadata11113001
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswinocapability.exe c:\tswi\tbackuprestore\backup11113001.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedPkg
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedPkg
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup11113001.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata11113001
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDUID-0002
+

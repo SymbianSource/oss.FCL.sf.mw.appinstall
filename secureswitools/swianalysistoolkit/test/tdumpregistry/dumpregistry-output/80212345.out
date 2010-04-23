@@ -1,0 +1,21 @@
+Package Information:
+
+Registry File :.\data\80212345\00000000.reg
+
+Package UID :0x80212345
+Package Name :TestSA
+Vendor :Vendor
+Package Index :0
+Drives :4
+No of executables :0
+Package Version :1.2.4
+Languages :English
+Selected Drive :No Drive Selected
+File Major Version :4
+File Minor Version :0
+Package Vendor Localized Name :Vendor
+Package Install Type :Installation
+Is Package in ROM :No
+Package Preinstalled :No
+Package Signed :Yes
+Package Trust :SisPackageCertificateChainNoTrustAnchor

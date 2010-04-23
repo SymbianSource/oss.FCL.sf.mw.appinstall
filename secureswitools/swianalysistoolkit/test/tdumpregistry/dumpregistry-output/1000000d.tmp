@@ -1,0 +1,43 @@
+Registry Controller Information:
+
+Registry Entry :.\data\1000000d\00000000.reg
+
+Package UID :0x1000000d
+Package Name :Test capabilities2
+Vendor :Vendor
+Package Index :0
+
+Controller1 Version :1.2.3
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 1
+
+Dependencies Information : 
+
+Dependent Package UID : 0x80000003
+Dependent Package From Version : 1.2.3
+Dependent Package To Version : -1.-1.-1
+
+Number of Embedded Packages : 0
+
+SISProperty Count:3
+
+SIS Properties :
+
+Key Value Pair: 0 = 1
+
+Key Value Pair: 1 = 2
+
+Key Value Pair: 3 = 65535
+
+Number Of File Descriptions :1
+
+SIS File Description:
+
+Target1:c:\Documents\InstTest\appcap1.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed
