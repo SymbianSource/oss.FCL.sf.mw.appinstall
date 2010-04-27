@@ -174,6 +174,13 @@ void CIAUpdateFWUpdateHandler::RunL()
                 //still allow user to continue
                 if ( ( fotamodelstate != RFotaEngineSession::EDownloadComplete ) && ( fotamodelstate != RFotaEngineSession::EStartingUpdate ) )
                     {
+		                //if download is suspended, try to resume it.
+		                if ( fotamodelstate == RFotaEngineSession::EDownloadProgressingWithResume)
+		                    {
+		                    TInt result = iFotaModel->TryResumeFwUpdDownload();
+						            FLOG_NUM( "[IAUPDATEFW] TryResumeFwUpdDownload result  = %d", result );   
+		                    }
+                    //anyway, DM is in use
                     isDmActive = ETrue;
                     }
                 }
