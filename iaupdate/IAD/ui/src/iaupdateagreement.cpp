@@ -18,18 +18,16 @@
 
 
 //INCLUDES
+#include <hbaction.h>
+#include <hbmessagebox.h>
+#include <hbtextitem.h>
+#include <centralrepository.h>
 
 #include "iaupdateagreement.h"
 #include "iaupdatefirsttimeinfo.h"
-#include "iaupdatedialogutil.h"
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
 
-#include <avkon.rsg>
-#include <iaupdate.rsg>
-#include <aknmessagequerydialog.h>      // CAknMessageQueryDialog
-#include <StringLoader.h>
-#include <AknUtils.h>
 
 // ================= MEMBER FUNCTIONS =======================
 
@@ -104,16 +102,22 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
         User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, 
                                          autoUpdateCheckValue ) );
         CleanupStack::PopAndDestroy( cenrep );
+        autoUpdateCheckValue = EIAUpdateSettingValueDisable; //temp to test dialog
         if ( autoUpdateCheckValue == EIAUpdateSettingValueDisableWhenRoaming ||
              autoUpdateCheckValue ==  EIAUpdateSettingValueEnable  ) 
             {
             accepted = ETrue;
             firstTimeInfo->SetAgreementAcceptedL();
             }
-        else if ( ShowDialogL( R_IAUPDATE_SOFTKEYS_ACCEPT_DECLINE__ACCEPT ) == EAknSoftkeyYes )
+        else  
             {
-     	    accepted = ETrue;
-     	    firstTimeInfo->SetAgreementAcceptedL();
+     	    HbAction *primaryAction = new HbAction("Accept");
+     	    HbAction *secondaryAction = new HbAction("Decline");
+     	    if ( ShowDialogL( primaryAction, secondaryAction ) == primaryAction)
+     	        {
+     	        accepted = ETrue;
+     	        firstTimeInfo->SetAgreementAcceptedL();
+                }
             }
         }
     CleanupStack::PopAndDestroy( firstTimeInfo );
@@ -127,7 +131,9 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
 //
 void CIAUpdateAgreement::ShowAgreementL()
     {
-    ShowDialogL( R_AVKON_SOFTKEYS_OK_EMPTY );	
+    HbAction *primaryAction = new HbAction("OK");
+    ShowDialogL( primaryAction, NULL );	
+    delete primaryAction;
     }
 
 // ---------------------------------------------------------------------------
@@ -148,9 +154,32 @@ TBool CIAUpdateAgreement::AgreementAcceptedL()
 // 
 // ---------------------------------------------------------------------------
 //
-TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
+HbAction* CIAUpdateAgreement::ShowDialogL( HbAction *primaryAction, HbAction *secondaryAction )
     {
-    HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );
+    HbDialog agreementDialog;
+    HbTextItem *headingText = new HbTextItem(&agreementDialog);
+    headingText->setFontSpec(HbFontSpec(HbFontSpec::Title));
+    headingText->setText("Disclaimer");
+    agreementDialog.setHeadingWidget(headingText);
+    
+   
+    HbTextItem *text = new HbTextItem(&agreementDialog);
+    text->setFontSpec(HbFontSpec(HbFontSpec::PrimarySmall));
+    text->setText("This application allows you to download and use applications and services provided by Nokia or third parties. Service Terms and Privacy Policy will apply. Nokia will not assume any liability or responsibility for the availability or third party applications or services. Before using the third party application or service, read the applicable terms of use.\n\nUse of this application involves transmission of data. Contact your network service provider for information about data transmission charges.\n\n(c) 2007-2010 Nokia. All rights reserved.");
+    agreementDialog.setContentWidget(text);
+    
+    agreementDialog.setPrimaryAction(primaryAction);
+    
+    if ( secondaryAction )
+        {
+        agreementDialog.setSecondaryAction(secondaryAction);
+        }
+    agreementDialog.setTimeout(HbPopup::NoTimeout);
+    
+    return agreementDialog.exec(); 
+    }        
+    
+    /*HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );
     HBufC* text_2 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_2 );
     HBufC* text_3 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_3 );
     HBufC* text_4 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_4 );
@@ -164,7 +193,7 @@ TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
     CleanupStack::PushL( numberArray );
     numberArray->AppendL( 2007 ); 
     numberArray->AppendL( 2009 );
-    HBufC* text_copyright = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_COPYRIGHT, *numberArray );
+    //HBufC* text_copyright = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_COPYRIGHT, *numberArray );
     TPtr ptr = text_copyright->Des();
     AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr );
     
@@ -214,7 +243,8 @@ TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
 
 	TInt ret = dlg->RunLD();
 	
-    return ret;
-    }
+    return ret;*/
+    //return KErrNone;
+
     
 // End of File  

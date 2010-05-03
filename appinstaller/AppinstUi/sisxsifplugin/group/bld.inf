@@ -22,7 +22,7 @@ PRJ_PLATFORMS
 DEFAULT
 
 PRJ_EXPORTS
-../loc/sisxsifui.loc    MW_LAYER_LOC_EXPORT_PATH( sisxsifui.loc )
+../rom/sisxsifplugin.iby    CORE_MW_LAYER_IBY_EXPORT_PATH( sisxsifplugin.iby )
 
 PRJ_MMPFILES
 sisxsifplugin.mmp

@@ -50,8 +50,9 @@ void CSilentLauncher::ConstructL()
     iSifResults = Usif::COpaqueNamedParams::NewL();
     
     // Set needed parameters for silent install.
-    iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue ); 
-/*    
+    FLOG( _L("Daemon: CSilentLauncher::ConstructL: InstallSilently") );
+    iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
+
     iSifOptions->AddIntL( Usif::KSifInParam_PerformOCSP, EFalse );   
     // Note if upgrade is allowed, see NeedsInstallingL function.
     iSifOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, EFalse );
@@ -65,7 +66,7 @@ void CSilentLauncher::ConstructL()
     iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
-*/    
+    
 // TODO: is this defined in USIF?    
     //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );
     
@@ -109,7 +110,7 @@ CSilentLauncher* CSilentLauncher::NewL( RFs& aFs )
 // -----------------------------------------------------------------------------
 //    
 CSilentLauncher::~CSilentLauncher()
-    {
+    {   
     delete iSifOptions;
     delete iSifResults;
     
@@ -117,17 +118,21 @@ CSilentLauncher::~CSilentLauncher()
         {
         iSWInstallerFW.Close();
         }
+    
+    delete iDrive;
     }
+
 
 // -----------------------------------------------------------------------------
 // CSilentLauncher::InstallL
-// Perform installation.
-// (other items were commented in a header).
+// Perform installation with file handle.
 // -----------------------------------------------------------------------------
 //
-void CSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aStatus )
+void CSilentLauncher::InstallL( RFile& aFileHandle, 
+                                const TDesC& aFile, 
+                                TRequestStatus& aStatus )
     {
-    FLOG( _L("Daemon: CSilentLauncher::InstallL START") );
+    FLOG( _L("Daemon: CSilentLauncher::InstallL (aFileHandle) START") );
     
     if ( !iConnected )
          {
@@ -141,19 +146,21 @@ void CSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aStatus )
 //    iDrive = NULL;
 //    iDrive = HBufC::NewLC( 8 );
 //    TPtr drivePtr = iDrive->Des();
-//    drivePtr.Append( aFile[0] );
-    
+//     
+//    TInt driveNumber = 0;
+//    TDriveInfo driveInfo;
+//    aFileHandle.Drive( driveNumber, driveInfo );
 // TODO: how is this used? Is this drive letter?      
 //    iSifOptions->AddStringL( Usif::KSifInParam_Drive , *drive );
-//          
+                                 
     FLOG( _L("Daemon: Launch install") );
-    iSWInstallerFW.Install( aFile, 
+    iSWInstallerFW.Install( aFileHandle, 
                            *iSifOptions, 
                            *iSifResults,
                            aStatus,
                            ETrue );
     
-    FLOG( _L("Daemon: CSilentLauncher::InstallL END") );       
+    FLOG( _L("Daemon: CSilentLauncher::InstallL (aFileHandle) END") );       
     }
        
 // -----------------------------------------------------------------------------

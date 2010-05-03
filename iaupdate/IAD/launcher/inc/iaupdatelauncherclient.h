@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,63 +19,30 @@
 
 #ifndef IA_UPDATE_LAUNCHER_CLIENT_H
 #define IA_UPDATE_LAUNCHER_CLIENT_H
+#include <QObject>
 
-#include <AknServerApp.h> 
-#include <e32std.h>
+class XQServiceRequest;
 
-/**
- *  
- */
-class RIAUpdateLauncherClient : public RAknAppServiceBase 
-    {
-
+//class IAUpdateLauncherClient 
+class IAUpdateLauncherClient : public QObject
+{
+     Q_OBJECT
 public:
 
-    /**
-     * Constructor.
-     */
      
-     RIAUpdateLauncherClient();
+     IAUpdateLauncherClient();
+     ~IAUpdateLauncherClient();
 
-    /** 
-     * This function will crete new embedded IAUpdate instance.
-     */
-    TInt Open();
-    
-    /** 
-     * Close client server connection to IAUpdate
-     */
-    void Close();
+     void launch();
 
-
-    /** 
-     * Command asks IAUpdate to show updates list
-     *
-     * @param aStatus The status will be updated when the operation
-     * has been completed.
-     */
-    void ShowUpdates( TBool& aRefreshFromNetworkDenied, 
-                      TRequestStatus& aStatus );
-    
-    /** 
-     * Cancel async ShowUpdates() request
-     */
-     void CancelAsyncRequest();
- 
-public: // RAknAppServiceBase
-
-    /**
-     * @see RAknAppServiceBase::ServiceUid
-     */
-    TUid ServiceUid() const;
+protected slots:
+     void requestCompleted(const QVariant& value);
+     void requestError(int err); 
 
                                
-private: //data
+private: 
 
-     TBool iConnected;
-     
-     TPtr8 iPtr1;
-
+     XQServiceRequest* mServiceRequest;
      };
 
 #endif // IA_UPDATE_LAUNCHER_CLIENT_H

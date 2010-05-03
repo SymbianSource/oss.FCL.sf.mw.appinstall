@@ -21,10 +21,8 @@
 #include <e32base.h>                    // CBase
 #include <swi/msisuihandlers.h>         // MUiHandler
 #include <f32file.h>                    // RFs
-#include <barsc.h>                      // RResourceFile
-#include <sifui.h>                      // CSifUi::TMode
+#include <sifui.h>                      // CSifUi
 
-class CSifUi;
 class CSisxSifUiSelectionCache;
 
 
@@ -97,17 +95,15 @@ namespace Usif
     private:    // new functions
         CSisxSifPluginUiHandler( RFs& aFs );
         void ConstructL();
-        void OpenResourceFileL();
-        HBufC* ReadStringResourceL( TInt aResourceId );
-        void CloseResourceFile();
+        void MemorySelectionL();
 
     private:    // data
         RFs& iFs;
-        RResourceFile iResourceFile;
         CSisxSifUiSelectionCache* iSelectionCache;
         CSifUi* iSifUi;
         CApaMaskedBitmap* iLogo;
         TBool iQuestionIncompatibleDisplayed;
+        RArray<TInt> iSelectableDrives;
         };
 
 }   // namespace Usif

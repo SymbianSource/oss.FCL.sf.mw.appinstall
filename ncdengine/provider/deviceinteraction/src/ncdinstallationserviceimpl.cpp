@@ -561,6 +561,7 @@ TBool CNcdInstallationService::JavaAppExistsL(
     CleanupStack::PopAndDestroy( javaRegistry );
     return exists;
     */
+    return EFalse;
     
     }
 
@@ -1839,7 +1840,7 @@ void CNcdInstallationService::InitializeRomApplicationListL()
     {
     DLTRACEIN((""));
         
-    TApaAppInfo info;
+/*    TApaAppInfo info;
     ConnectApaLsL();    
     User::LeaveIfError( iApaLs.GetAllApps() );
     
@@ -1867,7 +1868,8 @@ void CNcdInstallationService::InitializeRomApplicationListL()
         {       
         appErr = iApaLs.GetNextApp( info );
         if ( appErr == KErrNone )
-            {            
+            {
+            DLTRACE(("After GetNextApp"));
             // App is considered a ROM app if its not found either
             // in SIS registry or midlet registry
             // Note: ROM apps can be in SIS registry also but that doesn't
@@ -1910,7 +1912,7 @@ void CNcdInstallationService::InitializeRomApplicationListL()
     while( appErr == KErrNone && retryCount >= 0 );
         
     iApaLs.Close();
-    CleanupStack::PopAndDestroy( &midletUids );    
+    CleanupStack::PopAndDestroy( &midletUids );*/    
     
     DLTRACEOUT(("ROM apps: %d", iRomUids.Count() ));
     }
@@ -2145,6 +2147,9 @@ TUid CNcdInstallationService::InstalledMidletUidL()
     CleanupStack::PopAndDestroy( registry );
     return midletUid;
     */
+    
+    return KNullUid;
+    
     }
 
 #endif // USE_OLD_JAVA_API

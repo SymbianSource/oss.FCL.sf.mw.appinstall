@@ -33,10 +33,11 @@ symbian {
     TARGET.UID3 = 0x0fe91d97      // random UID
     TARGET.VID = VID_DEFAULT
 
-    INCLUDEPATH += /epoc32/include/platform/mw \
+    INCLUDEPATH += /epoc32/include/mw \ 
+        /epoc32/include/platform/mw \
         /epoc32/include/mw/hb/hbcore \
         /epoc32/include/mw/hb/hbwidgets
-    LIBS += -lHbCore -lHbWidgets -lsif -lswinstcli
+    LIBS += -lHbCore -lHbWidgets -lxqservice -lsif -lscrclient -lswinstcli
 
 	HEADERS += activerunner_symbian.h
 	SOURCES += activerunner_symbian.cpp

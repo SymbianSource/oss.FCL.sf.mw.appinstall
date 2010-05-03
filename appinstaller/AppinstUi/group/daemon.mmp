@@ -21,15 +21,7 @@
 
 MACRO __DATA_CAGING__
 
-//CAPABILITY    TrustedUI ReadUserData AllFiles WriteDeviceData ReadDeviceData
-
-CAPABILITY 		AllFiles ProtServ ReadDeviceData WriteDeviceData TrustedUI ReadUserData  
-
-// TCB, WriteUserData, DRM, PowerMgmt, MultimediaDD, CommDD, DiskAdmin, NetworkControl, SwEvent, NetworkServices, LocalServices
-// Location, SurroundingsDD, UserEnvironment
-
-// AllFiles needed because uninstaller have to search sys\bin folder.
-// WriteDeviceData for PS keys.
+CAPABILITY 		TrustedUI ReadUserData AllFiles WriteDeviceData ReadDeviceData  
  
 TARGET         swidaemon.exe
 TARGETTYPE     exe
@@ -88,6 +80,7 @@ LIBRARY        stsclient.lib
 LIBRARY        swiobserverclient.lib
 LIBRARY        sif.lib               // USIF SW Installer FW
 LIBRARY        scrclient.lib
+LIBRARY        hbwidgets.lib         // For Symbian Device Dialogs
 
 DEBUGLIBRARY   flogger.lib
 

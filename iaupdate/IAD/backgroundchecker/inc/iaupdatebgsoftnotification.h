@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,13 +22,12 @@
 
 // INCLUDES
 #include <e32base.h>
-#include <AknDynamicSoftNotifier.h>
+
+#include <hbdevicenotificationdialogsymbian.h>
 #include "iaupdatebgcheckermode.h"
 
-// FORWARD DECLARATION
-class TAknDynamicSoftNotificationParams;
-class CIAUpdateBGInternalFileHandler;
 
+// FORWARD DECLARATION
 class MIAUpdateBGSoftNotificationCallBack
     {
     public:
@@ -39,104 +38,79 @@ class MIAUpdateBGSoftNotificationCallBack
 
 // CLASS DECLARATION
 /**
- *  Controls the native soft notifications.
- *  This class delegates method calls to AvKon soft notification.
+ *  Controls the background indicator notifications. 
  *
- *  @since 3.2
  */
-class CIAUpdateBGSoftNotification : public CBase, public MAknDynamicSoftNoteObserver
+class CIAUpdateBGSoftNotification : public CBase, 
+                                    public MHbDeviceNotificationDialogObserver
     {
     public:  // Constructors and destructor
 
         /**
          * Static constructor
          */
-        static CIAUpdateBGSoftNotification* NewL( MIAUpdateBGSoftNotificationCallBack* aCallback, CIAUpdateBGInternalFileHandler* aInternalFile );
+        static CIAUpdateBGSoftNotification* NewL( 
+                MIAUpdateBGSoftNotificationCallBack* aCallback ); 
 
         /**
          * Destructor.
          */
         virtual ~CIAUpdateBGSoftNotification();
-
-    public: // From MAknDynamicSoftNotifierObserver
-
-        /**
-         * Dynamic soft notification was accepted by user.
-         *
-         * @param aNoteId Identification of notification.
-         */
-        void NotificationAccepted( TInt aIdentifier );
-
-        /**
-         * Dynamic soft notification was canceled by user.
-         *
-         * @param aNoteId Identification of notification.
-         */
-        void NotificationCanceled( TInt aIdentifier );
-
+        
     public: // New functions
         
-        void StartObservingIfNeededL();
-        
-        
-        /**
-         * Add a custom soft notification. If a custom soft notification with
-         * exactly the same parameters already exists,
-         * its count is increased by aCount.
-         *
-         * @param aNotificationId identifier for this notification
-         * @param aCount addition count
-         */
-        void ShowSoftNotificationL();
-
-        /**
-         * Cancels custom soft notification.
-         *
-         * @param aNotificationId identifier for this notification
-         */
-        void RemoveSoftNotificationL( TInt aNotifierID );
+         /**
+          * Shows notification and  indicator. 
+          *
+          * @param aNrOfUpdates number of updates
+          */
+         void ShowNotificationL();
+         
+         /**
+          * Shows indicator. 
+          *
+          * @param aMode indicator mode (EFirstTimeMode / ENormalMode)
+          */
+         void ShowIndicatorL();
+         
+         /**
+          * Removes indicator. 
+          *
+          * @param aNrOfUpdates number of updates
+          */
+         void RemoveIndicatorL();
 
         /**
          * Set a text for a soft notification.
          *
-         * @param aSingularText singular text for soft notification
-         * @param aPluralText plural text for soft notification
+         * @param aTitle title for soft notification
+         * @param aText  text for soft notification
          */
-        void SetTextL( const TDesC& aText, const TDesC& aGroupText );
+        void SetTextL( const TDesC& aTitle, const TDesC& aText ); 
 
         /**
-         * Set labels for soft notification's softkeys.
-         *
-         * @param aSoftkey1Label Label for the softkey 1
-         * @param aSoftkey2Label Label for the softkey 2
-         */
-        void SetSoftkeyLabelsL( const TDesC& aSoftkey1Label,
-            const TDesC& aSoftkey2Label );
-
+        * Set an image path for a soft notification.
+        *
+        * @param aImage image path for soft notification
+        */
+        void SetImagePathL( const TDesC& aImage );
+        
         /**
-         * Set an image for a soft notification.
-         *
-         * @param aImage image for soft notification
-         */
-        void SetImageL( const TDesC8& aImage );
+        * Set number of updates a soft notification.
+        *
+        * @param aNrOfUpdates 0 - first time, >< 0 normal case
+        */
+        void SetNrOfUpdates( const TInt& aNrOfUpdates);
 
-        /**
-         * Returns the notification id.
-         *
-         * @return notification id
-         */
-        TInt Id();
 
     private:  // Constructors
         /**
          * C++ constructor.
          *
-         * @param aAppId View activation application id.
-         * @param aNotificationId Notification id.
-         * @param aEventSource Event source used for posting events from
-         *        native to Java side.
+         * @param aCallback notification callback
          */
-        CIAUpdateBGSoftNotification( MIAUpdateBGSoftNotificationCallBack* aCallback, CIAUpdateBGInternalFileHandler* aInternalFile );
+        CIAUpdateBGSoftNotification( 
+                MIAUpdateBGSoftNotificationCallBack* aCallback); 
 
         /**
          * 2nd phase constructor.
@@ -148,31 +122,71 @@ class CIAUpdateBGSoftNotification : public CBase, public MAknDynamicSoftNoteObse
         /**
          * Set assigned member data to custom notification parameters
          *
-         * @param aParam custom soft notification params to fill
          */
-        void FillNotificationParams( TAknDynamicSoftNotificationParams& aParam );
-
+        void FillNotificationParams();
+        
+        /**
+         * Notification dialog activationobserver
+         *
+         * @param aDialog notification dialog
+         */
+        virtual void NotificationDialogActivated(
+                const CHbDeviceNotificationDialogSymbian* aDialog );
+        /**
+         * Notification dialog activationobserver
+         *
+         * @param aDialog notification dialog
+         * @param aCompletionCode completion code
+         */
+        virtual void NotificationDialogClosed( 
+                const CHbDeviceNotificationDialogSymbian* aDialog, 
+                TInt aCompletionCode );
+        
+        /**
+         * Enable/disable indicator
+         *
+         * @param aEnabled ETrue-enabled, EFalse-disabled
+         */        
+        void SetIndicatorEnabled(TBool aEnabled);
+        
+        /**
+         * Get indicator enablation state
+         *
+         * @return aEnabled ETrue-enabled, EFalse-disabled
+         */ 
+        TBool IsIndicatorEnabled();
+        
+        /**
+         * Set number of updates
+         *
+         * @param aNrOfUpdates number of updates 
+         */ 
+        // void SetNrOfUpdates( const int aNrOfUpdates );
+        
+        /**
+         * Get number of updates
+         *
+         * @return  number of updates 
+         */ 
+        int GetNrOfUpdates();
+        
     private:  // Data
-        /// Own. AvKon custom soft notifier
-        CAknDynamicSoftNotifier* iNotifier;
-        /// View activation application id
-        TUid iAppId;
-        /// Notification Id
-        TInt iNotificationId;
-        /// Own. Softkey 1 label
-        HBufC* iSoftkey1;
-        /// Own. Softkey 2 label
-        HBufC* iSoftkey2;
-        /// Own. Note label when single dialog is shown
-        HBufC* iLabel;
-        /// Own. Note label when notifications are groupped
-        HBufC* iGroupLabel;
-        /// Own. Image data byte array
+        // Note title
+        HBufC* iTitle; 
+        // Note text
+        HBufC* iText; 
+        /// Image data byte array
         HBufC8* iImageData;
-        
+        // Notification callback
         MIAUpdateBGSoftNotificationCallBack* iCallback;
-        
-        CIAUpdateBGInternalFileHandler* iInternalFile; //not owned
+        // Image path
+        HBufC* iImagePath;
+        // Number of updates
+        int iNrOfUpdates;
+        // Indictor activation state
+        TBool iActivateIndicator;
+        //Notification dialog
+        CHbDeviceNotificationDialogSymbian* iNotificationDialog;
 
     };
 

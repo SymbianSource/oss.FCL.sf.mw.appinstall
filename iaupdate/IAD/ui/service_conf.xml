@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<service>
+  <name>com.nokia.services.swupdate</name>
+  <filepath>No path</filepath>
+  <description>SWUpdate service</description>
+  <interface>
+     <name>swupdate_interface</name>
+     <version>1.0</version>
+     <description>Interface which may do something</description>
+   </interface>
+</service>

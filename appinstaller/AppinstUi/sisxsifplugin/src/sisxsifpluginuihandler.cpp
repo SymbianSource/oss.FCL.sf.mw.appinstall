@@ -19,19 +19,15 @@
 #include "sisxsifplugin.pan"            // Panic codes
 #include "sisxsifcleanuputils.h"        // CleanupResetAndDestroyPushL
 #include "sisxsifuiselectioncache.h"    // CSisxUISelectionCache
-#include "sisxsifuilangname.h"          // CLangName
-#include <data_caging_path_literals.hrh> // KDC_RESOURCE_FILES_DIR
-#include <sisxsifuidata.rsg>            // Resource IDs
 #include <sifui.h>                      // CSifUi
 #include <bautils.h>                    // BaflUtils
+#include <driveinfo.h>                  // DriveInfo
 #include <featmgr.h>                    // FeatureManager
 //#include <csxhelp/am.hlp.hrh>           // Help IDs
 #include <hb/hbcore/hbsymbiandevicedialog.h> // CHbDeviceDialog
 #include <hb/hbcore/hbsymbianvariant.h> // CHbSymbianVariantMap
 
 using namespace Usif;
-
-_LIT( KSisxUIResourceFileName, "sisxsifuidata.rsc" );
 
 // TODO: replace with proper tracing support
 #ifdef _DEBUG
@@ -45,14 +41,6 @@ _LIT( KSisxUIResourceFileName, "sisxsifuidata.rsc" );
 #endif
 
 
-// ======== LOCAL FUNCTIONS =========
-
-TBool HasLangId( const TLanguage* aId, const CLangName& aLang )
-    {
-    return( *aId == aLang.Id() );
-    }
-
-
 // ======== MEMBER FUNCTIONS ========
 
 // ---------------------------------------------------------------------------
@@ -60,26 +48,26 @@ TBool HasLangId( const TLanguage* aId, const CLangName& aLang )
 // ---------------------------------------------------------------------------
 //
 CSisxSifPluginUiHandler* CSisxSifPluginUiHandler::NewL( RFs& aFs )
-	{
+    {
     FLOG( _L("CSisxSifPluginUiHandler::NewL") );
-	CSisxSifPluginUiHandler *self = new( ELeave ) CSisxSifPluginUiHandler( aFs );
-	CleanupStack::PushL( self );
-	self->ConstructL();
-	CleanupStack::Pop( self );
-	return self;
-	}
+    CSisxSifPluginUiHandler *self = new( ELeave ) CSisxSifPluginUiHandler( aFs );
+    CleanupStack::PushL( self );
+    self->ConstructL();
+    CleanupStack::Pop( self );
+    return self;
+    }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandler::~CSisxSifPluginUiHandler()
 // ---------------------------------------------------------------------------
 //
 CSisxSifPluginUiHandler::~CSisxSifPluginUiHandler()
-	{
+    {
     FLOG( _L("CSisxSifPluginUiHandler::~CSisxSifPluginUiHandler") );
     delete iSelectionCache;
     delete iSifUi;
-    CloseResourceFile();
-	}
+    iSelectableDrives.Close();
+    }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandler::DisplayTextL()
@@ -164,11 +152,12 @@ TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
 
-    iSifUi->SetMode( CSifUi::EInstalling );
-
     // TODO: show preparing note -- unless it can be displayed already earlier.
     // Preparing note should not have any buttons yet, but it might display some
     // application details already.
+
+    // TODO: SISX SIF plugin needs to set memory selection when needed
+    MemorySelectionL();
 
     return ETrue;
     }
@@ -297,7 +286,7 @@ void CSisxSifPluginUiHandler::HandleCancellableInstallEventL( const Swi::CAppInf
 TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAppInfo,
         Swi::TSignatureValidationResult aSigValidationResult,
         RPointerArray<CPKIXValidationResultBase>& /*aPkixResults*/,
-        RPointerArray<Swi::CCertificateInfo>& aCertificates,
+        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/,
         TBool aInstallAnyway )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplaySecurityWarningL") );
@@ -309,7 +298,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
     switch( aSigValidationResult )
         {
         case Swi::EValidationSucceeded:
-            result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo, aCertificates );
+            result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo );
             break;
 
         case Swi::ESignatureSelfSigned:
@@ -322,7 +311,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
         case Swi::EMandatorySignatureMissing:
             if( aInstallAnyway )
                 {
-                result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo, aCertificates );
+                result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo );
                 }
             break;
 
@@ -374,13 +363,11 @@ TBool CSisxSifPluginUiHandler::DisplayMissingDependencyL( const Swi::CAppInfo& /
 // CSisxSifPluginUiHandler::DisplayUninstallL()
 // ---------------------------------------------------------------------------
 //
-TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
+TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& aAppInfo )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayUninstallL") );
 
-    iSifUi->SetMode( CSifUi::EUninstalling );
-
-    return ETrue;
+    return iSifUi->ShowConfirmationL( aAppInfo );
     }
 
 // ---------------------------------------------------------------------------
@@ -403,7 +390,8 @@ void CSisxSifPluginUiHandler::DisplayFailedL( TInt aErrorCode )
     {
     if( iSifUi )
         {
-        iSifUi->ShowFailedL( aErrorCode );
+        _LIT( KErrorMessage, "Error" );
+        iSifUi->ShowFailedL( aErrorCode, KErrorMessage );
         }
     }
 
@@ -421,46 +409,35 @@ CSisxSifPluginUiHandler::CSisxSifPluginUiHandler( RFs& aFs ) : iFs( aFs )
 //
 void CSisxSifPluginUiHandler::ConstructL()
     {
-    OpenResourceFileL();
     iSifUi = CSifUi::NewL();
     iSelectionCache = CSisxSifUiSelectionCache::NewL();
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::OpenResourceFileL()
+// CSisxSifPluginUiHandler::MemorySelectionL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandler::OpenResourceFileL()
+void CSisxSifPluginUiHandler::MemorySelectionL()
     {
-    TFileName fileName;
-    fileName.Copy( KDC_RESOURCE_FILES_DIR );
-    fileName.Append( KSisxUIResourceFileName );
-    BaflUtils::NearestLanguageFile( iFs, fileName );
-    iResourceFile.OpenL( iFs, fileName );
-    iResourceFile.ConfirmSignatureL();
-    }
+    TDriveList driveList;
+    TInt driveCount = 0;
+    TInt err = DriveInfo::GetUserVisibleDrives( iFs, driveList, driveCount );
+    User::LeaveIfError( err );
 
-// ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::ReadStringResourceL()
-// ---------------------------------------------------------------------------
-//
-HBufC* CSisxSifPluginUiHandler::ReadStringResourceL( TInt aResourceId )
-    {
-    HBufC8* buffer = iResourceFile.AllocReadLC( aResourceId );
-    TResourceReader reader;
-    reader.SetBuffer( buffer );
-    const TPtrC ptr( reader.ReadTPtrC() );
-    HBufC* string = ptr.AllocL();
-    CleanupStack::PopAndDestroy( buffer );
-    return string;
-    }
-
-// ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::CloseResourceFile()
-// ---------------------------------------------------------------------------
-//
-void CSisxSifPluginUiHandler::CloseResourceFile()
-    {
-    iResourceFile.Close();
+    iSelectableDrives.Reset();
+    TInt driveListLength = driveList.Length();
+    for( TInt driveNumber = 0; driveNumber < driveListLength; driveNumber++ )
+        {
+        if( driveList[ driveNumber ] )
+            {
+            TUint driveStatus = 0;
+            err = DriveInfo::GetDriveStatus( iFs, driveNumber, driveStatus );
+            if( !err && !( driveStatus & DriveInfo::EDriveRemote ) )
+                {
+                iSelectableDrives.Append( driveNumber );
+                }
+            }
+        }
+    iSifUi->SetMemorySelectionL( iSelectableDrives );
     }
 

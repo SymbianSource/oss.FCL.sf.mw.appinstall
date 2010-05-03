@@ -176,7 +176,7 @@ class CSisInstaller : public CActive, public MShutdownObserver
         /**
         * Indicates if this package is valid.
         */
-        TBool IsValidPackageL( const TDesC& aPackageName );      
+        TBool IsValidPackageL();      
         	          
 	
     private:
@@ -212,6 +212,9 @@ class CSisInstaller : public CActive, public MShutdownObserver
         CProgramStatus* iProgramStatus;   
         // For plugin support
         TBool iUpdateCache;
+        // File handle for USIF.
+        RFile iSisFileHandle;
+        TBool iFileOpen;
     };		
 }
 

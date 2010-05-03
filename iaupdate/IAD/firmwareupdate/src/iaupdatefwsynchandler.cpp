@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,14 +19,10 @@
 
 
 // INCLUDES
-#include <aknnotewrappers.h>
-#include <AknWaitDialog.h>
 #include <StringLoader.h>
 #include <e32property.h>
 #include <data_caging_path_literals.hrh>  // for resource and bitmap directories
 #include <SyncMLErr.h>      // sync error codes
-#include <iaupdate.rsg>
-#include <AknsUtils.h>
 #include <DevManInternalCRKeys.h>
 #include <centralrepository.h>
 #include <rconnmon.h>
@@ -82,11 +78,11 @@ CIAUpdateFWSyncHandler* CIAUpdateFWSyncHandler::NewL( RSyncMLSession* aSyncSessi
 //
 CIAUpdateFWSyncHandler::~CIAUpdateFWSyncHandler()
     {
-    if ( iWaitDialog )
+    /*if ( iWaitDialog )
         {
         TRAP_IGNORE( iWaitDialog->ProcessFinishedL() );
         iWaitDialog = NULL;
-        }
+        }*/
     
 	delete iState;
 	delete iActiveCaller;
@@ -334,12 +330,12 @@ void CIAUpdateFWSyncHandler::SynchronizeCompletedL( TInt aError )
 	iSyncRunning = EFalse;
 	iSyncError = aError;
 
-    if ( iWaitDialog )
+    /*if ( iWaitDialog )
         {
         
         iWaitDialog->ProcessFinishedL();
         iWaitDialog = NULL;
-        }
+        }*/
 
 	iUseFotaProgressNote = EFalse;
     iSyncJob.Close();
@@ -716,10 +712,10 @@ void CIAUpdateFWSyncHandler::HandleSyncErrorL()
 //
 void CIAUpdateFWSyncHandler::ShowProgressDialogL( )
 	{
-        iWaitDialog = new ( ELeave ) CAknWaitDialog(
-            ( REINTERPRET_CAST( CEikDialog**, &iWaitDialog ) ) );
-        iWaitDialog->ExecuteLD( R_FOTA_CHECK_WAIT_NOTE );
-        iWaitDialog->SetCallback( this );
+        //iWaitDialog = new ( ELeave ) CAknWaitDialog(
+        //    ( REINTERPRET_CAST( CEikDialog**, &iWaitDialog ) ) );
+        //iWaitDialog->ExecuteLD( R_FOTA_CHECK_WAIT_NOTE );
+        //iWaitDialog->SetCallback( this );
 	}
 
 // -----------------------------------------------------------------------------
@@ -728,11 +724,11 @@ void CIAUpdateFWSyncHandler::ShowProgressDialogL( )
 //
 void CIAUpdateFWSyncHandler::HideProgressDialogL()
     {
-    if ( iWaitDialog )
+    /*if ( iWaitDialog )
         {
         iWaitDialog->ProcessFinishedL();
         iWaitDialog = NULL;
-        }
+        }*/
     }
 
 // -----------------------------------------------------------------------------

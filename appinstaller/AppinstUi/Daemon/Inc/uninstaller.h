@@ -163,7 +163,7 @@ class CSisPkgUninstaller : public CActive
         // Uninstaller dialog.        
         CDialogWrapper* iDialogs;
         // Descriptor for mime type.
-        HBufC8* iMime;                 
+        HBufC* iMime;                 
     };      
 
 } //namespace Swi

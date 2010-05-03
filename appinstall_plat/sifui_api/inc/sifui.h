@@ -16,43 +16,34 @@
 */
 
 
+/********************************************************
+ *                                                      *
+ *   WARNING - WORK-IN-PROGRESS - THIS API MAY CHANGE   *
+ *                                                      *
+ ********************************************************/
+
 #ifndef C_SIFUI_H
 #define C_SIFUI_H
 
-#include <e32base.h>                            // CActive
-#include <hb/hbcore/hbsymbiandevicedialog.h>    // MHbDeviceDialogObserver
+#include <e32base.h>                            // CBase
 
-
-
-/******************************************************************
- *                                                                *
- *   WARNING - WORK-IN-PROGRESS - THIS API CHANGES ALL THE TIME   *
- *                                                                *
- ******************************************************************/
-
-
-
-class MSifUiCertificateDetailsProvider;
-class MSifUiDrmDetailsProvider;
-class CHbDeviceDialog;
-class CHbSymbianVariantMap;
-class CActiveSchedulerWait;
+class CSifUiPrivate;
 class CApaMaskedBitmap;
-
 namespace Swi {
     class CAppInfo;
     class CCertificateInfo;
 }
 
+
 /**
  * CSifUi provides UI dialogs for SW installation. UI dialogs are
- * global and they can be used in a non-UI code (like in SIF plugins).
+ * global and they can be used in a non-UI code (like SIF plugins).
  * SW install device dialog plugin implements the UI dialogs.
  *
- * @lib SifUi.lib
+ * @lib sifui.lib
  * @since 10.1
  */
-class CSifUi : public CActive, public MHbDeviceDialogObserver
+class CSifUi : public CBase
     {
     public:     // constructor and destructor
         /**
@@ -74,50 +65,51 @@ class CSifUi : public CActive, public MHbDeviceDialogObserver
 
     public:     // new functions
         /**
-         * Defines installation or uninstallation mode.
-         */
-        enum TMode {
-            EUnspecified = 0,
-            EInstalling = 1,
-            EUninstalling = 2
-        };
-
-        /**
-         * Defines installing or uninstalling mode. Selected mode defines
-         * the dialog titles and buttons.
-         * @param aMode - installing or uninstalling mode
-         */
-        IMPORT_C void SetMode( TMode aMode );
-
-        /**
-         * Returns the currently selected mode.
-         * @return TMode - installing or uninstalling mode
-         */
-        IMPORT_C TMode Mode();
-
-        /**
-         * Displays main installation/uninstallation confirmation query and waits
-         * for user response. Returns ETrue if user accepted the query. Confirmation
-         * dialog is left on the screen. Subsequent ShowProgressL() call replaces it's
-         * content with main progress note, and ShowFailedL() or ShowCompleteL() calls
-         * replace it's content with the error or complete dialogs.
+         * Displays main installation confirmation query and waits for user response.
+         * Returns ETrue if user accepted the query. The next ShowProgressL() call
+         * changes the dialog to installation progress note. And finally, ShowFailedL()
+         * or ShowCompleteL() changes the dialog to the final error or complete note.
+         * If the installation confirmation query should contain memory selection option,
+         * then set the selectable drives with SetMemorySelectionL() first. User selected
+         * drive can be retrieved with SelectedDrive().
          * @param aAppInfo - application information (name, version, and vendor)
-         * @param aAppSize - application size in bytes (not displayed if zero)
+         * @param aAppSize - application size in bytes, not displayed if zero
          * @param aAppIcon - application icon, default icon is displayed if NULL
-         * @param aCertificates - certificate details
          * @return TBools - ETrue if user accepted the query, EFalse otherwise
          */
         IMPORT_C TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-                TInt aAppSize, const CApaMaskedBitmap* aAppIcon,
+                TInt aAppSize = 0, const CApaMaskedBitmap* aAppIcon = NULL );
+
+        /**
+         * Defines memory selection alternatives for the main installation
+         * confirmation query displayed with ShowConfirmationL() function.
+         * @param aDriveNumbers - options for memory selection
+         */
+        IMPORT_C void SetMemorySelectionL( const RArray<TInt>& aDriveNumbers );
+
+        /**
+         * Gets the selected drive where new component should be installed.
+         * Use RFs::DriveToChar() to convert the drive number to drive letter.
+         * @param aDriveNumber - selected drive number
+         * @return TInt - KErrNone if successful, otherwise Symbian error code
+         */
+        IMPORT_C TInt SelectedDrive( TInt& aDriveNumber );
+
+        /**
+         * Defines certificate details for the main installation confirmation
+         * query displayed with ShowConfirmationL() function.
+         * @param aCertificates - certificate details
+         */
+        IMPORT_C void SetCertificateInfoL(
                 const RPointerArray<Swi::CCertificateInfo>& aCertificates );
 
         /**
-         * Displays main installation/uninstallation progress note. If progress note
-         * or main confirmation query is already displayed, then updates the dialog
-         * content. Use IncreaseProgressBarValueL() to increase the progress bar value.
-         * Dialog remains still on the screen after progress bar shows full 100% value.
-         * Use ShowFailedL() or ShowCompleteL() to replace the dialog content with the
-         * final error or complete note.
+         * Displays main installation progress note. If the progress note or main
+         * confirmation query is already displayed, then updates the dialog content.
+         * Use IncreaseProgressBarValueL() to increase the progress bar value.
+         * Dialog remains on the screen after progress bar shows full 100% value.
+         * Use ShowFailedL() or ShowCompleteL() to replace the dialog content
+         * with the final error or complete note.
          * @param aAppInfo - application information (name, version, and vendor)
          * @param aAppSize - application size in bytes (not displayed if zero)
          * @param aProgressBarFinalValue - final value of the progress bar
@@ -135,49 +127,39 @@ class CSifUi : public CActive, public MHbDeviceDialogObserver
         IMPORT_C void IncreaseProgressBarValueL( TInt aIncrement );
 
         /**
-         * Displays main installation/uninstallation complete note. Installation complete
-         * note contains button to launch application libaray.
+         * Displays main installation complete note. Installation complete note contains
+         * button to launch the application libaray to show the recently installed apps.
          */
         IMPORT_C void ShowCompleteL();
 
         /**
-         * Displays main installation/uninstallation error note. Installation error note
-         * contains button to see detailed error message.
+         * Displays main installation error note. Installation error note contains button
+         * to see detailed error message when available.
          * @param aErrorCode - error code
+         * @param aErrorMessage - localized error message to be displayed
+         * @param aErrorDetails - localized error message details (if any)
          */
+        IMPORT_C void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
+            const TDesC& aErrorDetails = KNullDesC );
+
+
+
+        /** DEPRECATED -- DO NOT USE -- WILL BE REMOVED */
+        enum TMode {
+            EUnspecified = 0,
+            EInstalling = 1,
+            EUninstalling = 2
+        };
+        IMPORT_C void SetMode( TMode aMode );
+        IMPORT_C TMode Mode();
         IMPORT_C void ShowFailedL( TInt aErrorCode );
-
-    protected:  // from CActive
-        void DoCancel();
-        void RunL();
-
-    private:    // from MHbDeviceDialogObserver
-        void DataReceived( CHbSymbianVariantMap& aData );
-        void DeviceDialogClosed( TInt aCompletionCode );
 
     private:    // new functions
         CSifUi();
         void ConstructL();
-        void ClearParamsL();
-        void ChangeNoteTypeL( TInt aType );
-        void AddParamL( const TDesC& aKey, TInt aValue );
-        void AddParamL( const TDesC& aKey, const TDesC& aValue );
-        void AddParamsAppInfoAndSizeL( const Swi::CAppInfo& aAppInfo, TInt aAppSize );
-        void AddParamsIconL( const CApaMaskedBitmap* aIcon );
-        void AddParamsCertificatesL( const RPointerArray<Swi::CCertificateInfo>& aCertificates );
-        void DisplayDeviceDialogL();
-        TInt WaitForResponse();
-        void ResponseReceived( TInt aCompletionCode );
 
     private:    // data
-        TMode iMode;
-        CHbDeviceDialog* iDeviceDialog;
-        CHbSymbianVariantMap* iVariantMap;
-        CActiveSchedulerWait* iWait;
-        TBool iIsDisplayingDialog;
-        TInt iCompletionCode;
-        TInt iReturnValue;
-        CApaMaskedBitmap* iBitmap;
+        CSifUiPrivate* iPrivate;
     };
 
 

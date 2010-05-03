@@ -402,11 +402,23 @@ TBool CIAUpdateFWFotaModel::IsDMSupportAvailableL()
 // Fetches the state of last or current Fota operation
 // -----------------------------------------------------------------------------
 //
- RFotaEngineSession::TState CIAUpdateFWFotaModel::GetCurrentFwUpdState()
-	{
+RFotaEngineSession::TState CIAUpdateFWFotaModel::GetCurrentFwUpdState()
+	  {
     FLOG( "[IAUPDATEFW] CIAUpdateFWFotaModel::GetCurrentFwUpdState()" );	
-	const TInt x = -1;
-	return iFotaEngine.GetState(x);
-	}
+	  // Workaround because fotaserver has closed all sessions if DM UI was closed.
+	  // So, we cannot rely on existing session but a new one needs to be opened.
+	  iFotaEngine.Close();
+	  iFotaEngine.OpenL();
+	  const TInt x = -1;
+	  return iFotaEngine.GetState(x);
+	  }
 
+
+TInt CIAUpdateFWFotaModel::TryResumeFwUpdDownload()
+    {	
+    FLOG( "[IAUPDATEFW] CIAUpdateFWFotaModel::TryResumeFwUpdDownload()" );	    
+    TInt retval = iFotaEngine.TryResumeDownload();
+    return retval;
+    }
+	
 //  End of File  

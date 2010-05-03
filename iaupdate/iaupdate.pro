@@ -16,6 +16,8 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += IAD\bgcindicatorplugin\bgcindicatorplugin.pro
-
+SUBDIRS += IAD/bgcindicatorplugin/bgcindicatorplugin.pro
+SUBDIRS += IAD/api/iaupdateapi.pro
+SUBDIRS += IAD/ui/iaupdate.pro
+SUBDIRS += IAD/launcher/iaupdatelauncher.pro
 

@@ -45,4 +45,8 @@ BLD_INF_RULES.prj_exports += \
   "$${LITERAL_HASH}include <platform_paths.hrh>" \
   "rom/bgcindicatorplugin.iby             CORE_APP_LAYER_IBY_EXPORT_PATH(bgcindicatorplugin.iby)" 
   
- LIBS += -lxqservice
+LIBS += -lxqservice
+LIBS += -lws32
+LIBS += -lapparc
+LIBS += -lapgrfx
+

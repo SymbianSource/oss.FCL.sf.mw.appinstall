@@ -19,6 +19,7 @@
 #define ACTIVERUNNER_H
 
 #include <QObject>
+#include <usif/usifcommon.h>
 
 class ActiveRunnerPrivate;
 
@@ -37,6 +38,8 @@ signals:
 
 public:     // new functions
     void install(const QString &fileName, bool silent);
+    void remove(const Usif::TComponentId& aComponentId, bool silent);
+    void remove(const TUid& aUid, const TDesC8& aMime, bool silent);
 
 protected:
     void handleCompletion();

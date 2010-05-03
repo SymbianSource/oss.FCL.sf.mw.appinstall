@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -18,26 +18,74 @@
 
 
 // INCLUDE FILES
-#include <AknDynamicSoftNotifier.h>
-#include <AknDynamicSoftNotificationParams.h>
+#include <hbindicatorsymbian.h>
+#include <hbsymbianvariant.h>
 
 #include "iaupdatebgsoftnotification.h"
 #include "iaupdatebginternalfilehandler.h"
 #include "iaupdatebgconst.h"
 #include "iaupdatebglogger.h"
 
+// Indicator type
+_LIT(KIndicatorTypeBgc, "com.nokia.iaupdate.indicatorplugin/1.0");
 
 // ============================ MEMBER FUNCTIONS ===============================
+void CIAUpdateBGSoftNotification::NotificationDialogActivated(
+        const CHbDeviceNotificationDialogSymbian* /* aDialog */)
+    {
+    
+    FLOG("[bgchecker] softnotification callback function ACCEPTED");
+    
+    // indicator shall not be shown 
+    SetIndicatorEnabled( EFalse );
+    
+    // Remove (possibly) existing indicator
+    RemoveIndicatorL();
+    
+    iCallback->SoftNotificationCallBack( ETrue );
+    
+    // remove dialog
+    //delete iNotificationDialog;
+    //iNotificationDialog = 0;
+    
+    return;
+    }
+
+void CIAUpdateBGSoftNotification::NotificationDialogClosed
+         ( const CHbDeviceNotificationDialogSymbian* /* aDialog */, 
+           TInt /* aCompletionCode*/ )
+    {
+    
+    
+    FLOG("[bgchecker] softnotification callback function Closed");
+
+    // Set indicator, if needed
+    if (IsIndicatorEnabled())
+        {
+        ShowIndicatorL();
+        }
+    
+    
+    iCallback->SoftNotificationCallBack( EFalse );
+    
+    // remove dialog
+    //delete iNotificationDialog;
+    //iNotificationDialog = 0;
+    
+    return;
+    }
+
+
 // -----------------------------------------------------------------------------
 // CIAUpdateBGSoftNotification::NewLC
 // Static constructor
 // -----------------------------------------------------------------------------
 //
-CIAUpdateBGSoftNotification* CIAUpdateBGSoftNotification::NewL( MIAUpdateBGSoftNotificationCallBack* aCallback, 
-                                                                CIAUpdateBGInternalFileHandler* aInternalFile )
+CIAUpdateBGSoftNotification* CIAUpdateBGSoftNotification::NewL( 
+        MIAUpdateBGSoftNotificationCallBack* aCallback ) 
     {   
     CIAUpdateBGSoftNotification* self =
-        new ( ELeave ) CIAUpdateBGSoftNotification( aCallback, aInternalFile );
+        new ( ELeave ) CIAUpdateBGSoftNotification( aCallback );
     CleanupStack::PushL( self );
     
     self->ConstructL();
@@ -52,83 +100,99 @@ CIAUpdateBGSoftNotification* CIAUpdateBGSoftNotification::NewL( MIAUpdateBGSoftN
 //
 CIAUpdateBGSoftNotification::~CIAUpdateBGSoftNotification()
     {
-    delete iSoftkey1;
-    delete iSoftkey2;
 
-    delete iLabel;
-    delete iGroupLabel;
+    delete iTitle;
+    delete iText;
 
-    delete iImageData;
-
-    delete iNotifier;
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::NotificationAccepted
-// Dynamic soft notification was accepted by user.
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGSoftNotification::NotificationAccepted( TInt /*aIdentifier*/ )
-    {
-    FLOG("[bgchecker] softnotification callback function ACCEPTED");
-    //remove the soft notifiation id
-    iInternalFile->SetSoftNotificationID( 0 );
-    TRAP_IGNORE( iInternalFile->WriteControllerDataL() );
+    delete iImagePath;
     
-    iCallback->SoftNotificationCallBack( ETrue );
-    }
+    delete iNotificationDialog;
 
-// -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::NotificationCanceled
-// Dynamic soft notification was canceled by user.
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGSoftNotification::NotificationCanceled( TInt /*aIdentifier*/ )
-    {
-    FLOG("[bgchecker] softnotification callback function Canceled");
-    //remove the soft notifiation id
-    iInternalFile->SetSoftNotificationID( 0 );
-    TRAP_IGNORE( iInternalFile->WriteControllerDataL() );
-          
-    iCallback->SoftNotificationCallBack( EFalse );
     }
-    
+   
 // -----------------------------------------------------------------------------
 // CIAUpdateBGSoftNotification::ShowSoftNotificationL
-// Displays a soft notification
+// Displays notification
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::ShowSoftNotificationL()
+void CIAUpdateBGSoftNotification::ShowNotificationL()
     {
-    TAknDynamicSoftNotificationParams param( KSoftNotificationPriority );
-    FillNotificationParams( param );
+    _LIT( KIcon, "C:\\qgn_note_swupdate_notification.svg" );
+    _LIT( KFirstTimeText, "Check for updates ?" );
+    _LIT( KNormalText, "Check for updates ?" );
+    _LIT( KTextRow2, "Tap to view" );
     
-    TInt oldId = iNotificationId;
-    iNotificationId =
-        iNotifier->SetDynamicNotificationCountL( param, iNotificationId, 1 );
-
-    if( oldId != iNotificationId )
-        {           
-        FLOG("[bgchecker] softnotification save notification Id");
-        iInternalFile->SetSoftNotificationID( iNotificationId );
-        TRAP_IGNORE( iInternalFile->WriteControllerDataL() );
-        
-        iNotifier->StopObserving( oldId );
-        iNotifier->StartObservingL( iNotificationId, this );
+    FLOG("[bgchecker] ShowNotificationL");
+    
+    // crete dialog, id does not exist already
+    if (!iNotificationDialog)
+        {
+        iNotificationDialog = CHbDeviceNotificationDialogSymbian::NewL( this );
         }
+    
+    //CleanupStack::PushL( notificationDialog ); // --> memberiin - delete closessa/activaatiossa/destructorissa
+                                                           //    + leave kiinni + tuhoaminen
+    // save number of updates
+    //SetNrOfUpdates ( aNrOfUpdates );
+    
+    // enable indicator showing
+    SetIndicatorEnabled( ETrue );
+
+    // fill texts, icon & behaviour parameters
+    FillNotificationParams();
+    
+    iNotificationDialog->ShowL();
+    
+    return;
+    
     }
 
 // -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::RemoveSoftNotificationL
-// Cancels and removes the soft notification
+// CIAUpdateBGSoftNotification::ShowIndicatorL
+// Displays indicator
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::RemoveSoftNotificationL( TInt aNotifierId )
+void CIAUpdateBGSoftNotification::ShowIndicatorL()
     {
-    if ( aNotifierId != 0 )
-        {
-        iNotifier->CancelDynamicNotificationL( aNotifierId );
-        }
+    
+    FLOG("[bgchecker] ShowIndicatorL");
+    
+    CHbIndicatorSymbian *ind = CHbIndicatorSymbian::NewL();
+    CleanupStack::PushL( ind );
+            
+    TInt value = GetNrOfUpdates();
+            
+    // Set indicator
+    CHbSymbianVariant* varValue = CHbSymbianVariant::NewL( &value,
+        CHbSymbianVariant::EInt );
+    CleanupStack::PushL( varValue );
+    // Temporary removal 
+    // ind->Activate( KIndicatorTypeBgc, varValue );
+    CleanupStack::PopAndDestroy( varValue );
+    CleanupStack::PopAndDestroy( ind );
+    
+    return;
+    
+    }
+
+// -----------------------------------------------------------------------------
+// CIAUpdateBGSoftNotification::Remove indicator
+// Removes indicator
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateBGSoftNotification::RemoveIndicatorL()
+    {
+    
+    FLOG("[bgchecker] RemoveIndicatorL");
+    
+    CHbIndicatorSymbian *ind = CHbIndicatorSymbian::NewL();
+    CleanupStack::PushL( ind );
+    // Temporary removal 
+    // ind->Deactivate( KIndicatorTypeBgc ); 
+    CleanupStack::PopAndDestroy(ind);
+    
+    return;
+    
     }
 
 // -----------------------------------------------------------------------------
@@ -136,58 +200,42 @@ void CIAUpdateBGSoftNotification::RemoveSoftNotificationL( TInt aNotifierId )
 // Sets a text for a soft notification
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::SetTextL( const TDesC& aText, const TDesC& aGroupText )
+void CIAUpdateBGSoftNotification::SetTextL( 
+        const TDesC& aTitle, const TDesC& aText )
     {
-    HBufC* txt = aText.AllocL();
-    delete iLabel;
-    iLabel = txt;
+    HBufC* txt = aTitle.AllocL();
+    delete iTitle;
+    iTitle = txt;
 
-    txt = aGroupText.AllocL();
-    delete iGroupLabel;
-    iGroupLabel = txt;
+    txt = aText.AllocL();
+    delete iText;
+    iText = txt;
     }
 
 // -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::SetSoftkeyLabelsL
-// Sets new labels for softkeys
+// CIAUpdateBGSoftNotification::SetImagePathL
+// Sets an image path for a soft notification
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::SetSoftkeyLabelsL(
-    const TDesC& aSoftkey1Label,
-    const TDesC& aSoftkey2Label )
+void CIAUpdateBGSoftNotification::SetImagePathL( const TDesC& aImage )
     {
-    HBufC* txt = aSoftkey1Label.AllocL();
-    delete iSoftkey1;
-    iSoftkey1 = txt;
-
-    txt = aSoftkey2Label.AllocL();
-    delete iSoftkey2;
-    iSoftkey2 = txt;
+    HBufC* txt = aImage.AllocL();
+    delete iImagePath;
+    iImagePath = txt;
+    return;
     }
 
 // -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::SetImageL
-// Sets an image for a soft notification
+// CIAUpdateBGSoftNotification::SetNrOfUpdates
+// Sets an image path for a soft notification
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::SetImageL(
-    const TDesC8& aImage )
+void CIAUpdateBGSoftNotification::SetNrOfUpdates( const TInt& aNrOfUpdates)
     {
-    HBufC8* image = aImage.AllocL();
-    delete iImageData;
-    iImageData = image;
+    // save number of updates
+    iNrOfUpdates = aNrOfUpdates;
+    return;
     }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::Id
-// Notification Id
-// -----------------------------------------------------------------------------
-//
-TInt CIAUpdateBGSoftNotification::Id()
-    {
-    return iNotificationId;
-    }
-
 // -----------------------------------------------------------------------------
 // CIAUpdateBGSoftNotification::ConstructL
 // Symbian 2nd phase constructor can leave.
@@ -196,11 +244,6 @@ TInt CIAUpdateBGSoftNotification::Id()
 void CIAUpdateBGSoftNotification::ConstructL()
     {
     FLOG("[bgchecker] softnotification ConstructL");
-    iNotifier = CAknDynamicSoftNotifier::NewL();
-    
-    iInternalFile->ReadControllerDataL();
-    iNotificationId = iInternalFile->SoftNotificationID();
-      
     }
 
 // -----------------------------------------------------------------------------
@@ -209,54 +252,81 @@ void CIAUpdateBGSoftNotification::ConstructL()
 // might leave.
 // -----------------------------------------------------------------------------
 //
-CIAUpdateBGSoftNotification::CIAUpdateBGSoftNotification( MIAUpdateBGSoftNotificationCallBack* aCallback, 
-                                                          CIAUpdateBGInternalFileHandler* aInternalFile ) 
-    : iCallback ( aCallback ), iInternalFile ( aInternalFile )
+CIAUpdateBGSoftNotification::CIAUpdateBGSoftNotification( 
+        MIAUpdateBGSoftNotificationCallBack* aCallback )
+    : iCallback ( aCallback )
     {
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::StartObservingIfNeededL
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGSoftNotification::StartObservingIfNeededL()
-    {
-    if ( iNotificationId )
-        {
-        FLOG("[bgchecker] softnotification There is a buffered softnotification");
-        //a buffering soft notification
-        iNotifier->StartObservingL( iNotificationId, this );
-        }
     }
 
 // -----------------------------------------------------------------------------
 // CIAUpdateBGSoftNotification::FillNotificationParams
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateBGSoftNotification::FillNotificationParams(
-    TAknDynamicSoftNotificationParams& aParam )
+
+void CIAUpdateBGSoftNotification::FillNotificationParams()
     {
-    if( iSoftkey1 && iSoftkey2 )
+    
+    // set title, text and icon
+    if ( iTitle )
         {
-        aParam.SetSoftkeys( *iSoftkey1, *iSoftkey2 );
-        }
-
-    if( iLabel )
-        {
-        aParam.SetNoteLabels( *iLabel, *iLabel );
-        }
-
-    if( iGroupLabel )
-        {
-        //aParam.SetGroupLabels( *iGroupLabel, *iGroupLabel );
-        }
-
-    if( iImageData )
-        {
-        aParam.SetImageData( *iImageData );
+        iNotificationDialog->SetTitleL(iTitle->Des());
         }
     
-    aParam.EnableObserver();
+    if ( iText )
+        {
+        iNotificationDialog->SetTextL(iText->Des());
+        }
+    
+    if ( iImagePath )
+        {
+        iNotificationDialog->SetIconNameL(iImagePath->Des());
+        }
+    
+    // set wrapping, timeout and touch 
+    iNotificationDialog->SetTitleTextWrappingL(
+            CHbDeviceNotificationDialogSymbian::TextWordWrap);
+    iNotificationDialog->SetTimeoutL(4000); //default 3000
+    iNotificationDialog->EnableTouchActivationL(ETrue); // default FALSE
+  
+    }  
+// ----------------------------------------------------------
+// CIAUpdateBGSoftNotification::EnableIndicator(TBool aEnabled)
+// ----------------------------------------------------------
+void CIAUpdateBGSoftNotification::SetIndicatorEnabled( TBool aEnabled )
+    {
+    
+    iActivateIndicator = aEnabled;
+    
+    }
+
+// ----------------------------------------------------------
+// CIAUpdateBGSoftNotification::IndicatorEnabled()
+// ----------------------------------------------------------
+TBool CIAUpdateBGSoftNotification::IsIndicatorEnabled()
+    {
+    
+    return iActivateIndicator;
+    
+    }
+// ----------------------------------------------------------
+// CIAUpdateBGSoftNotification::SetNrOfUpdates( TIAUpdateBGMode aNrOfUpdates )
+// ----------------------------------------------------------
+/*
+void CIAUpdateBGSoftNotification::SetNrOfUpdates( const int aNrOfUpdates )
+    {
+    
+    iNrOfUpdates = aNrOfUpdates;
+    
+    }*/
+
+// ----------------------------------------------------------
+// CIAUpdateBGSoftNotification::GetNrOfUpdates()
+// ----------------------------------------------------------
+int CIAUpdateBGSoftNotification::GetNrOfUpdates()
+    {
+    
+    return iNrOfUpdates;
+    
     }
 
 //  End of File

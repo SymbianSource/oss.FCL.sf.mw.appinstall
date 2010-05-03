@@ -35,6 +35,7 @@ namespace Swi
 namespace Usif
 {
     class CSisxSifPluginUiHandler;
+    class CSisxSifPluginUiHandlerSilent;
 
     /**
      *  SISX SIF plugin active implementation
@@ -75,18 +76,19 @@ namespace Usif
     private:    // new functions
         CSisxSifPluginActiveImpl();
         void ConstructL();
-        void CompleteRequest( TRequestStatus& aStatus, TInt aResult );
-        void CommonRequestPreamble( const TSecurityContext& aSecurityContext,
-                const COpaqueNamedParams& aInputParams, COpaqueNamedParams& aOutputParams,
-                TRequestStatus& aStatus );
+        Swi::MUiHandler& UiHandlerL( TBool aUseSilentMode = EFalse );
+        void CommonRequestPreamble( const COpaqueNamedParams& aInputParams,
+                COpaqueNamedParams& aOutputParams, TRequestStatus& aStatus );
+        void CompleteClientRequest( TInt aResult );
         void DoInstallL( const TDesC& aFileName );
-        void DoUninstallL( TComponentId aComponentId, TRequestStatus& aStatus );
+        void DoUninstallL( TComponentId aComponentId );
         void DoActivateL( TComponentId aComponentId );
         void DoDeactivateL( TComponentId aComponentId );
         TInt ConvertToSifErrorCode( TInt aSwiErrorCode );
         TComponentId GetLastInstalledComponentIdL();
-        TBool NeedUserCapabilityL();
+        TBool RequiresUserCapabilityL();
         void ProcessSilentInstallL();
+        void ProcessSilentUninstallL();
         void SetSilentInstallFileL( const TDesC& aFileName );
         void SetSilentInstallFile( RFile& aFileHandle );
         static TInt GrantCapabilitiesHelpCallback( TAny* aPtr );
@@ -95,15 +97,27 @@ namespace Usif
         RFs iFs;
         Swi::CAsyncLauncher* iAsyncLauncher;
         CSisxSifPluginUiHandler* iUiHandler;
+        CSisxSifPluginUiHandlerSilent* iUiHandlerSilent;
         Swi::CInstallPrefs* iInstallPrefs;
         TRequestStatus* iClientStatus;
         const COpaqueNamedParams* iInputParams;
         COpaqueNamedParams* iOutputParams;
         CComponentInfo* iComponentInfo;
         HBufC* iFileName;
-        RFile* iFileHandle;         // not owned
-        TBool iSilentInstall;       // ETrue when silent install has been requested
-        TBool iInstallRequest;      // ETrue when install requestes has been made
+        RFile* iFileHandle;             // not owned
+        TBool iUseSilentMode;
+        TBool iIsPackageCheckedForSilentInstall;
+
+        enum TOperationType
+            {
+            ENone,
+            EGetComponentInfo,
+            EInstall,
+            EUninstall,
+            EActivate,
+            EDeactivate
+            };
+        TOperationType iOperation;
         };
 
 }   // namespace Usif

@@ -18,10 +18,9 @@
 #ifndef SIFUIINSTALLINDICATORPLUGIN_IBY
 #define SIFUIINSTALLINDICATORPLUGIN_IBY
 
-REM DLL
 file=ABI_DIR\UREL\sifuiinstallindicatorplugin.dll SHARED_LIB_DIR\sifuiinstallindicatorplugin.dll UNPAGED
 data=\epoc32\data\z\resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin \resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin
-data=\epoc32\winscw\c\resource\qt\crml\sifuiinstallindicatorplugin.qcrml \resource\qt\crml\sifuiinstallindicatorplugin.qcrml \resource\qt\crml\sifuiinstallindicatorplugin.qcrml
+data=\epoc32\data\z\resource\qt\crml\sifuiinstallindicatorplugin.qcrml \resource\qt\crml\sifuiinstallindicatorplugin.qcrml
 
 #endif  // SIFUIINSTALLINDICATORPLUGIN_IBY
 

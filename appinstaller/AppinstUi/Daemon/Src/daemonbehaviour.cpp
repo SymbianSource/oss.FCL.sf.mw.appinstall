@@ -173,8 +173,10 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
             if ( count )            
                 {                             
                 for(index = 0; index < count; index++ )
-                    {                                        
+                    {                   
                     ProcessPreinstalledFilesL(iDriveArray[index]);
+                    
+                    FLOG_1( _L("Daemon: StartInstallingL for drive: %d"), index);
                     iSisInstaller->StartInstallingL();                
                     }
                 }                
@@ -190,12 +192,7 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
 //          
 void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
     {
-//    _LIT( KDaemonPrivatePath,":\\private\\10202dce\\" );
-    
-    // NOTE this is only for testing since we can not use
-    // Daemon's private folder. Sifserver do not have allfiles
-    // capability currently.
-    _LIT( KDaemonPrivatePath,":\\installs\\swidaemon\\" );
+     _LIT( KDaemonPrivatePath,":\\private\\10202dce\\" );
     
 #ifndef RD_MULTIPLE_DRIVE
     iSisInstaller->Cancel();
@@ -218,7 +215,7 @@ void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
 //        
 void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory)
     {
-    FLOG( _L("Daemon: ProcessPreInstalledFilesL") );
+    FLOG_1( _L("Daemon: ProcessPreInstalledFilesL: Drive index: %d"), aDrive );
     TPath preInstalledPath;
     TChar drive;
     RFs::DriveToChar(aDrive, drive);
@@ -227,8 +224,8 @@ void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDire
     
     FLOG_1( _L("Daemon: ProcessPreInstalledFilesL Getting dir %S"), &preInstalledPath );
     CDir* dir = NULL;
-    TInt err = iFs.GetDir(preInstalledPath, KEntryAttNormal, ESortNone, dir); 
-    if (err != KErrNone && err != KErrPathNotFound)
+    TInt err = iFs.GetDir( preInstalledPath, KEntryAttNormal, ESortNone, dir ); 
+    if ( err != KErrNone && err != KErrPathNotFound )
         {
         FLOG_1( _L("Daemon: ProcessPreInstalledFilesL GetDir with error %d"), err );
         User::Leave(err);

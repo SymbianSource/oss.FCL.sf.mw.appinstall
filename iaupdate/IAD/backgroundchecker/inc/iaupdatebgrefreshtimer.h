@@ -34,7 +34,7 @@
 // FORWARD DECLARATIONS
 class CIAUpdate;
 class CIAUpdateParameters;
-class CAknSoftNotifier;
+// class CAknSoftNotifier;
 class CInternalFileHandler;
 class CIdleObserver;
 
@@ -150,11 +150,13 @@ class CIAUpdateBGTimer : public CTimer,
 
         TInt SetRetryTimesL( TInt aRetry );
           
-        HBufC* ReadResourceLC( TInt aResourceId );
+        // HBufC* ReadResourceLC( TInt aResourceId );
         
         void StartIaupdateL() const;
         
-        void LaunchSoftNotificationL( const TInt& aResourceId, const TInt& SK1, const TInt& SK2 );
+        // void LaunchSoftNotificationL( const TInt& aResourceId, const TInt& SK1, const TInt& SK2 );
+        
+        void LaunchNotificationL( const int aNrOfUpdates );
         
         TBool IsAutoUpdateDisabledL();
         
@@ -197,7 +199,7 @@ class CIAUpdateBGTimer : public CTimer,
         CIAUpdateBGInternalFileHandler* iInternalFile;
         TIAUpdateBGMode iMode;
         CIAUpdateBGSoftNotification* iSoftNotification;
-        RResourceFile iResourceFile;
+        // RResourceFile iResourceFile;
         RFs iFs;
     };        
 

@@ -91,12 +91,18 @@ CSisInstaller::~CSisInstaller()
     iFilesToInstall.ResetAndDestroy();
     iFilesToInstall.Close();
     delete iInstallLauncher;
-    delete iDialogs;  
-    iFs.Close();
-    iApaSession.Close();    
+    delete iDialogs;      
     delete iPreviouslyInstalledAppsCache;
     delete iInstallationFailedAppsCache;  
-    delete iShutdownWatcher;  
+    delete iShutdownWatcher;
+    
+    if ( iFileOpen )
+        {
+        iSisFileHandle.Close();   
+        }    
+    
+    iFs.Close();
+    iApaSession.Close();        
     }
 	
 // -----------------------------------------------------------------------
@@ -117,7 +123,8 @@ void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     // For uninstaller
     // SisInstaller do not own this so do not delete.     
     iProgramStatus = &aMainStatus;  
-    iUpdateCache = ETrue;       
+    iUpdateCache = ETrue;    
+    iFileOpen = EFalse;    
     }
 		
 // -----------------------------------------------------------------------
@@ -169,19 +176,21 @@ void CSisInstaller::StartInstallingL()
         
     if ( !iInstallLauncher )
         {
-        iInstallLauncher = CSilentLauncher::NewL( iFs );
+        iInstallLauncher = CSilentLauncher::NewL( iFs );   
+        
+        // Update cache so we do not try to start install for
+        // components which are installed. This is done always
+        // when new install session is started (e.g. after mmc insert).
+        FLOG( _L("Daemon: StartInstallingL: Update installed cache") );
+        TRAP_IGNORE( iPreviouslyInstalledAppsCache->UpdateAllL() );
+        TRAP_IGNORE( iPreviouslyInstalledAppsCache->FlushToDiskL() );         
         }   
 
     if ( iState == EDSisInstallerStateIdle )
-        {
+        {                
         // Reset the error
         iInstallErr = KErrNone; 
-        // Update cache so we do not try to start install for
-        // components which are installed.
-        FLOG( _L("Daemon: StartInstallingL: Update installed cache") );
-        TRAP_IGNORE( iPreviouslyInstalledAppsCache->UpdateAllL() );
-        TRAP_IGNORE( iPreviouslyInstalledAppsCache->FlushToDiskL() );    
-        
+          
         CompleteSelf();
         }
     }
@@ -258,7 +267,8 @@ void CSisInstaller::DoCancel()
 //
 void CSisInstaller::RunL()
     {
-    FLOG_2( _L("Daemon: Installer RunL status:%d, state:%d"), iStatus.Int(), iState );                
+    FLOG_1( _L("Daemon: Installer RunL status:%d"), iStatus.Int() );  
+    FLOG_1( _L("Daemon: Installer RunL state:%d"), iState );                
     
     // For uninstaller
     // Check that uninstaller is not running.
@@ -284,9 +294,10 @@ void CSisInstaller::RunL()
             // Reached when installation is completed
             case EDSisInstallerStateInstalling:
                 FLOG( _L("Daemon: RunL: EDSisInstallerStateInstalling") );
-                FLOG_1( _L("Daemon: Installation completed with %d"), iStatus.Int() );                    
-                // Installation is completed, check result
+                FLOG_1( _L("Daemon: Installation completed with %d"), 
+                        iStatus.Int() );                  
                 
+                // Installation is completed, check result                
                 if ( iStatus.Int() == SwiUI::KSWInstErrBusy )
                     {
                     FLOG( _L("Daemon: RunL: iStatus: KSWInstErrBusy") );
@@ -298,11 +309,25 @@ void CSisInstaller::RunL()
                     SetActive();                        
                     break;                        
                     }                
-                else if ( (iStatus.Int() == SwiUI::KSWInstErrSecurityFailure && iInstallErr == KErrNone) ||
-                          (iStatus.Int() != KErrNone && iStatus.Int() != SwiUI::KSWInstErrSecurityFailure) )
+                else if ( (iStatus.Int() == SwiUI::KSWInstErrSecurityFailure && 
+                           iInstallErr == KErrNone) ||
+                          (iStatus.Int() != KErrNone && 
+                           iStatus.Int() != SwiUI::KSWInstErrSecurityFailure) )
                     {
-                    FLOG( _L("Daemon: RunL: iStatus: KSWInstErrSecurityFailure or error") );
+                    FLOG( _L("Daemon: RunL: iStatus: error of sec. failure") );
                     iInstallErr = iStatus.Int();                        
+                    }
+                
+                // Close current sisx except if installer engine is busy.
+                // If installer is busy we will try again later.
+                if ( iStatus.Int() != SwiUI::KSWInstErrBusy )
+                    {
+                    if ( iFileOpen )
+                         {
+                         FLOG_1( _L("Daemon: RunL: Close File: %S"), &iSisFile );
+                         iSisFileHandle.Close();
+                         iFileOpen = EFalse;
+                         }    
                     }
                     
                 // Catch all installation error from SwiUI and update cache.              
@@ -312,10 +337,11 @@ void CSisInstaller::RunL()
                     if ( iCurrentPackageId != TUid::Uid( NULL ) )
                         {
                         FLOG( _L("Daemon: RunL: Add UID to cache.") );                    
-                        iInstallationFailedAppsCache->AddPackageUID( iCurrentPackageId ); 
+                        iInstallationFailedAppsCache->AddPackageUID( 
+                                iCurrentPackageId ); 
                         // Clear current UID                    
                         iCurrentPackageId = TUid::Null();                     
-                        }
+                        }                                                         
                     }  
                  else
                     {
@@ -323,7 +349,8 @@ void CSisInstaller::RunL()
                     if ( iCurrentPackageId != TUid::Uid( NULL ) )
                         {                
                         FLOG( _L("Daemon: RunL: Add UID to cache.") );
-                        iPreviouslyInstalledAppsCache->UpdateAddL( iCurrentPackageId );                        
+                        iPreviouslyInstalledAppsCache->UpdateAddL( 
+                                iCurrentPackageId );                        
                         // Clear current UID                    
                         iCurrentPackageId = TUid::Null(); 
                         }
@@ -349,7 +376,17 @@ void CSisInstaller::RunL()
                 // Install a file
             case EDSisInstallerStateIdle:
                 {  
-                FLOG( _L("Daemon: RunL: EDSisInstallerStateIdle") );    
+                FLOG( _L("Daemon: RunL: EDSisInstallerStateIdle") );  
+                
+                // Make sure that current file is closed before we
+                // open new file handle.
+                if ( iFileOpen )
+                    {
+                    FLOG( _L("Daemon: RunL: StateIdle: CLOSE CURRENT FILE") );
+                    FLOG_1( _L("Daemon: RunL: Close File: %S"), &iSisFile );
+                    iSisFileHandle.Close();
+                    iFileOpen = EFalse;
+                    }    
                 
                 // Let's update installed apps cache so we do not give
                 // installed pacakges several time to plug-in. 
@@ -363,14 +400,33 @@ void CSisInstaller::RunL()
                     }
                 
                 if ( iFileIndex < iFilesToInstall.Count() )
-                    {             
+                    { 
+                    // Get next sisx package from array.                 
                     iSisFile.Copy( *iFilesToInstall[iFileIndex] );
-                    ++iFileIndex;
-                               
-                    // No need to install if the package has been installed 
-                    // some time in the past
-                    if ( IsValidPackageL( iSisFile ) && NeedsInstallingL( iSisFile ) )
-                        { 
+                    ++iFileIndex;    
+                    
+                    FLOG_1( _L("Daemon: RunL: Open File: %S"), &iSisFile );
+                    TInt err = KErrNone;
+                    // Let's open the file in here bacause IsValidPackageL
+                    // needs to open the file anyway.
+                    err = iSisFileHandle.Open( 
+                                       iFs, 
+                                       iSisFile, 
+                                       EFileRead | EFileShareReadersOnly );                    
+                    
+                    if ( err )
+                        {
+                        FLOG_1( _L("Daemon: File open ERROR = %d"), err );
+                        iFileOpen = EFalse;                        
+                        } 
+                    else
+                        {
+                        iFileOpen = ETrue;                    
+                        }
+                    
+                    if ( iFileOpen && IsValidPackageL() && 
+                            NeedsInstallingL( iSisFile ) )
+                        {                                           
                         // If there is plugin for SWI Daemon then let's us it.
                         // Daemon will give all files to plug-in which will 
                         // handle installation. There is not feedback so SWI 
@@ -379,8 +435,10 @@ void CSisInstaller::RunL()
                             {
                             // Notify plug-in if not yet done.                                                                 
                             iDaemonBehaviour->NotifyPlugin();
-                            FLOG_1( _L("Daemon: Use plugin to install: %S"), &iSisFile );                             
-                            TRAP_IGNORE( iDaemonBehaviour->RequestPluginInstall( iSisFile ) );                                                                                  
+                            FLOG_1( _L("Daemon: Use plugin to install: %S"), 
+                                    &iSisFile );                             
+                            TRAP_IGNORE( iDaemonBehaviour->RequestPluginInstall( 
+                                    iSisFile ) );                                                                                  
                             
                             // Let's continue to give all packages to plug-in. 
                             // Note that we do not have iStatus as this is not async. call 
@@ -394,22 +452,25 @@ void CSisInstaller::RunL()
                             }                            
                         else
                             {                                                
-                            FLOG_1( _L("Daemon: Kick off the install for %S"), &iSisFile );
-                            iInstallLauncher->InstallL( iSisFile, iStatus );
+                            FLOG_1( _L("Daemon: Start install for %S"), &iSisFile );
+                                                                                                                                                                                                                                                   
+                            iInstallLauncher->InstallL( iSisFileHandle, 
+                                                        iSisFile, 
+                                                        iStatus );
+                            
                             iDialogs->ShowWaitingNoteL(); 
                             iState = EDSisInstallerStateInstalling;                       
                             iInstallerState = iState;                                                   
-                            SetActive();
+                            SetActive();                               
                             }
                         }               
                     else
                         {                  
-                        FLOG_1( _L("Daemon: No need to install %S"), &iSisFile );                                
+                        FLOG_1( _L("Daemon: NOT INSTALLING: %S"), &iSisFile );                                                 
                         iState = EDSisInstallerStateIdle;                
                         iInstallerState = iState;                   
                         // Clear current pkg UID                    
-                        iCurrentPackageId = TUid::Null();                                   
-                        
+                        iCurrentPackageId = TUid::Null();                                                           
                         CompleteSelf();                    
                         }                        
                     }
@@ -424,13 +485,56 @@ void CSisInstaller::RunL()
                 break;
                 
             case EDSisInstallerStateInstallerBusy:
+                {
                 // Try to install the file again
-                FLOG( _L("Daemon: RunL: EDSisInstallerStateInstallerBusy") );  
-                FLOG_1( _L("Daemon: Kick off the install for %S"), &iSisFile );
-                iInstallLauncher->InstallL( iSisFile, iStatus );
-                iState = EDSisInstallerStateInstalling;                   
-                iInstallerState = iState;                                   
-                SetActive(); 
+                FLOG( _L("Daemon: RunL: EDSisInstallerStateInstallerBusy") ); 
+                                
+                // If file is not open, try to open it.
+                if ( !iFileOpen )
+                    {
+                    FLOG( _L("Daemon: RunL: Error file not open !") ); 
+                    FLOG_1( _L("Daemon: Open File: %S"), &iSisFile );
+                
+                    TInt err = iSisFileHandle.Open( 
+                                    iFs, 
+                                    iSisFile, 
+                                    EFileRead | EFileShareReadersOnly
+                                    /*EFileShareReadersOrWriters|EFileRead*/ ); 
+                                                           
+                    if ( err )
+                         {
+                         FLOG_1( _L("Daemon: File open ERROR = %d"), err );
+                         iFileOpen = EFalse;
+                         }
+                    else
+                        {
+                        FLOG( _L("Daemon: RunL: File open") );                     
+                        iFileOpen = ETrue;                    
+                        }
+                    }
+                
+                if ( iFileOpen )
+                    {
+                    FLOG_1( _L("Daemon: Try install again for: %S"), &iSisFile );
+                    iInstallLauncher->InstallL( iSisFileHandle,
+                                                iSisFile, 
+                                                iStatus );                
+                
+                    iState = EDSisInstallerStateInstalling;                   
+                    iInstallerState = iState;                                   
+                    SetActive(); 
+                    }
+                else
+                    {
+                    // If we cannot open the sis file let's continue
+                    // and install rest of the packages.
+                    // We can try to install this next time in boot 
+                    // or when media is mounted.
+                    iState = EDSisInstallerStateIdle;                                                 
+                    iInstallerState = iState;  
+                    CompleteSelf(); 
+                    } 
+                }
                 break;                       
                 
                 // Active object in unknown state
@@ -476,7 +580,8 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
     {
     FLOG_1( _L("Daemon: InstallationCompleted with result = %d"), aResult );  
     iState = EDSisInstallerStateIdle;    
-    iInstallErr = KErrNone;    
+    iInstallErr = KErrNone;     
+    FLOG( _L("Daemon: InstallationCompleted: Delete iInstallLauncher") );
     delete iInstallLauncher;
     iInstallLauncher = NULL;
     // We need to update cache again in RunL if plug-in is loaded.
@@ -488,9 +593,18 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
         {                
         iInstallerState = EDSisInstallerStateCompleted; 
         }
+    
+    // Make sure that current file is closed before exit.
+    // File may be open if this is called from RunError/DoCancel etc.
+    if ( iFileOpen )
+        {
+        FLOG( _L("Daemon: InstallationCompleted: File open - Close it !!!") );
+        iSisFileHandle.Close();
+        iFileOpen = EFalse;
+        }    
                             
     TRAP_IGNORE( iDialogs->CancelWaitingNoteL() );
-    
+        
     if ( aResult != KErrNone && 
          iSisFile.Length() > 0 && 
          IsMediaPresent( TChar( iSisFile[0] ) ) )
@@ -504,13 +618,6 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
             TRAP_IGNORE( iDialogs->ShowErrorResultL() );
             }    
         }
-
-//TODO: remove this update. This is done in start installing !!!!     
-    //FLOG( _L("Daemon: InstallationCompleted: Update installed cache") );
-    // Update cache so we do not start to install those packages 
-    // which are installed by the user manyally. 
-    // NOTE! plugin will install stuff after this call.
-    //TRAP_IGNORE(iPreviouslyInstalledAppsCache->UpdateAllL());
     
     TRAP_IGNORE(iPreviouslyInstalledAppsCache->FlushToDiskL(););    
     TRAP_IGNORE(iInstallationFailedAppsCache->FlushToDiskL());   
@@ -650,22 +757,26 @@ TBool CSisInstaller::IsMediaPresent( TChar aDrive )
 // CSisInstaller::IsValidPackageL
 // -----------------------------------------------------------------------
 //
-TBool CSisInstaller::IsValidPackageL( const TDesC& aPackageName )
+TBool CSisInstaller::IsValidPackageL()
     {
-    TBool result( EFalse );
-  
-    RFile file;
+    TBool result( EFalse ); 
+    
+    if ( !iFileOpen )
+        {
+        FLOG( _L("Daemon: IsValidPackageL: ERROR FILE NOT OPEN") );
+        return result;
+        }
+    
     TUid appUid;
     TDataType dataType;
-    User::LeaveIfError( file.Open( iFs, aPackageName, EFileRead ) );        
-    iApaSession.AppForDocument( file, appUid, dataType );
-    file.Close();
+        
+    iApaSession.AppForDocument( iSisFileHandle, appUid, dataType );
     
     if ( dataType.Des8() == SwiUI::KSisxMimeType )
         {
         result = ETrue;
-        }
-
+        }           
+           
     FLOG_1( _L("Daemon: IsValidPackageL = %d"), result );  
     return result;    
     }

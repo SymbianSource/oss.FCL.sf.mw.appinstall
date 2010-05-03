@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -56,11 +56,8 @@ LIBRARY         apmime.lib
 LIBRARY         apparc.lib
 LIBRARY         sisregistryclient.lib
 LIBRARY         swinstcli.lib
-LIBRARY         aknnotify.lib
-LIBRARY         bafl.lib 
 LIBRARY         estor.lib
 LIBRARY         commonengine.lib
-LIBRARY         avkon.lib
 LIBRARY         ws32.lib 
 LIBRARY         ecom.lib
 
@@ -69,20 +66,9 @@ LIBRARY         iaupdaterfiles.lib
 
 DEBUGLIBRARY    flogger.lib
 
-START RESOURCE  ../src/iaupdater.rss
-HEADER
-TARGETPATH      APP_RESOURCE_DIR
-#ifdef __S60_32__
-LANG            SC
-#else
-LANGUAGE_IDS
-#endif
-END
-
 // This is required to allow iaupdate to start the updater
 // by finding the updater EXE file name by using the UID value.
 START RESOURCE  ../src/iaupdater_reg.rss
-DEPENDS iaupdater.rsg
 TARGETPATH	    /private/10003a3f/apps
 END //RESOURCE
 
