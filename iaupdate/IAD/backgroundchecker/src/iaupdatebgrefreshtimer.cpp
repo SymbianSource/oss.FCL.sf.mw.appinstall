@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -25,9 +25,6 @@
 #include <apgwgnam.h>
 #include <apgcli.h>
 #include <apacmdln.h>
-#include <avkon.hrh>
-#include <StringLoader.h> 
-#include <iaupdate.rsg>
 #include <data_caging_path_literals.hrh>
 #include <bautils.h>
 #include <apgtask.h>
@@ -45,9 +42,10 @@
 
 //MACROS
 _LIT8( KRefreshFromNetworkDenied, "1" );
-_LIT(KIAUpdateResourceFile, "iaupdate.rsc");
+// _LIT(KIAUpdateResourceFile, "iaupdate.rsc");
 _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
 _LIT(KImageFile, "qgn_note_swupdate_notification.svg");
+_LIT8( KFirstTimeCase, "0" );
 
 //CONSTANTS
 const TUint KIADUpdateLauncherUid( 0x2001FE2F );
@@ -84,23 +82,25 @@ void CIAUpdateBGTimer::ConstructL()
     
     iInternalFile = CIAUpdateBGInternalFileHandler::NewL();
     
-    iSoftNotification = CIAUpdateBGSoftNotification::NewL( this, iInternalFile );
-    iSoftNotification->StartObservingIfNeededL();
+    iSoftNotification = CIAUpdateBGSoftNotification::NewL( this ); //, iInternalFile );
+    // HLa: iSoftNotification->StartObservingIfNeededL();
     
     // Get resource file path
+    /* HLa
     TFileName fileName;
     fileName.Copy(TParsePtrC(RProcess().FileName()).Drive());
     fileName.Append(KDC_APP_RESOURCE_DIR);
     fileName.Append(KIAUpdateResourceFile);
-
+    */
+    
     User::LeaveIfError(iFs.Connect());
 
     // Get language of resource file        
-    BaflUtils::NearestLanguageFile( iFs, fileName );
+    //BaflUtils::NearestLanguageFile( iFs, fileName );
 
     // Open resource file
-    iResourceFile.OpenL( iFs, fileName );
-    iResourceFile.ConfirmSignatureL();    
+    //iResourceFile.OpenL( iFs, fileName );
+    //iResourceFile.ConfirmSignatureL();    
     }
     
     
@@ -125,7 +125,7 @@ CIAUpdateBGTimer::~CIAUpdateBGTimer()
     delete iInternalFile;
     delete iSoftNotification;
     
-    iResourceFile.Close();
+    // iResourceFile.Close();
     iFs.Close();
     }
 
@@ -139,10 +139,26 @@ void CIAUpdateBGTimer::StartProcessL()
         
     iMode = ModeL();
     
+    //HLa
+    TBool test1 = IsAgreementAcceptedL();
+    TBool test2 = ReminderOnL();
+    
+    int test = 0;
     switch ( iMode )
         {
         case EFirstTimeMode:
-        case EFirstTimeRemindMode:    
+         
+        // while not released keep in sleep mode
+        //int test = 1;
+        if ( test == 0 )
+            {
+            ListenAutoUpdateSettingsL();
+            iMode = ESleepMode;
+            SetModeL( iMode );
+            return;
+            }
+        
+        //case EFirstTimeRemindMode:    
             {
             if ( IsFirstTimeDialogDisabledL() )
                 {
@@ -217,15 +233,15 @@ void CIAUpdateBGTimer::StartProcessL()
                                                   
             break;
             }
-
+/*
         case EFirstTimeMode2:
             {
             FLOG("[bgchecker] StartProcessL EFirstTimeMode2");
             RunL();
             break;
             }
-
-        case EFirstTimeMode3:
+*/
+        case EFirstTimeMode2:
             {
             FLOG("[bgchecker] StartProcessL EFirstTimeMode 3");
             //if user accepted the disclaimer already and reboot the phone, 
@@ -250,6 +266,22 @@ void CIAUpdateBGTimer::StartProcessL()
                 }
                     
             iNotifyHandler->StartListeningL();  
+            
+
+            if ( !IsAgreementAcceptedL() )
+                {
+                FLOG("[bgchecker] EFirstTimeMode4 ShowIndicator");
+                // Set number of updates; zero for first case
+                iSoftNotification->SetNrOfUpdates( 0 );
+                
+                // do not show indicator when testing
+                int test = 0;
+                if ( test == 1)
+                  iSoftNotification->ShowIndicatorL();
+                
+                }
+            
+            
             break;
             }
 
@@ -334,6 +366,7 @@ void CIAUpdateBGTimer::StartUpdatesCheckingL()
             //start reminder timer also if user choose later before reboot
             //check the value from private folder
              
+            
               if ( ReminderOnL() )
                   {
                   TTime currenttime;
@@ -360,6 +393,7 @@ void CIAUpdateBGTimer::StartUpdatesCheckingL()
                       iReminderTimer->StartReminderTimerL( timetogo );
                       }
                   }
+                  
             }
     }
 
@@ -588,12 +622,14 @@ void CIAUpdateBGTimer::DoUpdatesCheckingL( const TBool& aUpdateFromServer )
     //turn off the reminder, user will decide whether to turn if on or off
     //The user's decision will be checked in soft notification callback function
     
+    
     if ( ReminderOnL())
         {
         FLOG( "Do CheckUpdates 3");
         iReminderTimer->CancelReminderTimerL();
         SetReminderL( EFalse );
         }
+    
     
     if( !iUpdate )
         {
@@ -644,6 +680,15 @@ void CIAUpdateBGTimer::DoCheckUpdatesCompleteL( TInt aErrorCode, TInt aAvailable
     {
     FLOG_NUM( "CheckUpdatesComplete aErrorCode = %d", aErrorCode );
     FLOG_NUM( "CheckUpdatesComplete aAvailableUpdates = %d", aAvailableUpdates );
+    
+    //HLa
+    int test = 0;
+    if ( test == 0 )
+        {
+        aErrorCode = 0;
+        aAvailableUpdates = 0;
+        }
+    
     if ( !IAUpdateEnabledL() )
         {
         Shutdown();
@@ -688,8 +733,9 @@ void CIAUpdateBGTimer::DoCheckUpdatesCompleteL( TInt aErrorCode, TInt aAvailable
             {             
             FLOG( "CheckUpdatesComplete 4");
     
-            LaunchSoftNotificationL(R_IAUPDATE_UPDATE_AVAILABLE,
-                        R_TEXT_SOFTKEY_SHOW, R_TEXT_SOFTKEY_LATER );
+            LaunchNotificationL( aAvailableUpdates );
+            //LaunchSoftNotificationL(R_IAUPDATE_UPDATE_AVAILABLE,
+            //            R_TEXT_SOFTKEY_SHOW, R_TEXT_SOFTKEY_LATER );
             }
 
             FLOG( "CheckUpdatesComplete 5");
@@ -893,6 +939,147 @@ void CIAUpdateBGTimer::RunL()
             break;
             
         case EFirstTimeMode:
+        //case EFirstTimeRemindMode:
+            {
+            FLOG("[bgchecker] runl EFirstTimeMode");
+            
+            if ( iRuns == 0 )
+                {
+                FLOG("[bgchecker] runl run = 0");
+                HandlerFirstTimeL();
+                }
+            else
+                {
+                FLOG("[bgchecker] runl still wait");
+                TTimeIntervalMinutes timetowait = TimeIntervalFromNextShowOfNewFeatureDialogL();
+                                   
+                if ( timetowait.Int() <= 0 )
+                    {
+                    StartL( StartNow );
+                    }
+                 else
+                    {
+                    StartL( timetowait );
+                    } 
+                }
+            }
+            break;
+        /*
+        case EFirstTimeMode2:
+            {
+            FLOG("[bgchecker] runl EFirstTimeMode2");
+            LaunchNotificationL( 1 );
+            //LaunchSoftNotificationL(R_IAUPDATE_REMIND_LATER, R_TEXT_SOFTKEY_YES, R_TEXT_SOFTKEY_NO );
+            }
+            break;
+        */
+        case EFirstTimeMode2:
+            {
+            FLOG("[bgchecker] runl EFirstTimeMode3");                 
+            //disclaimer is not accepted  
+           
+            if ( !IsAgreementAcceptedL()  )
+                {
+                FLOG("[bgchecker] runl EFirstTimeMode reject disclaimer");
+                //user accepte the new feature dialog but user reject sthe disclaimer
+                //in sleep mode now
+                iMode = ESleepMode;
+                SetModeL( iMode );
+                //subscribe to cenrep key for automatic checking for wake up from sleep mode
+                ListenAutoUpdateSettingsL(); 
+                }
+            else
+                {
+                FLOG("[bgchecker] runl EFirstTimeMode go to normal mode");
+                //Set to Normal mode
+                //check autochecksetting in Runl later
+                iMode = ENormalMode;
+                SetModeL( iMode );
+                StartL( StartNow );
+                }
+            }
+            break;
+            
+        default:
+            break;
+        };
+       
+    }
+
+/*
+// ----------------------------------------------------------
+// CIAUpdateBGTimer::RunL()
+// ----------------------------------------------------------
+void CIAUpdateBGTimer::RunL()
+    {
+    FLOG("[bgchecker]RunL() ");
+    if ( !IAUpdateEnabledL() )
+        {
+        Shutdown();
+        return;
+        }
+    User::LeaveIfError( iStatus.Int() );
+    //Check the mode again, in case the mode is changed while waiting.
+    iMode = ModeL();
+    
+    switch ( iMode )
+        {
+        case ENormalMode:
+        case ERetryMode:
+            {     
+            FLOG("[bgchecker]RunL() ENormalMode");                                    
+            //roaming case is checked in IAUpdate server side
+            if ( IsAutoUpdateDisabledL() )
+                {
+                ListenAutoUpdateSettingsL();
+                
+                iMode = ESleepMode;
+                SetModeL( iMode );
+                
+                //the program is waked up when automatic checking is changed by user.
+                //cenrep call back will be used.
+                return;
+                }                        
+            
+            FLOG("[bgchecker]RunL() ENormalMode 1");
+            
+            if(iRuns == 0)
+                {
+                FLOG("[bgchecker]RunL() ENormalMode 2");
+                // if user did the refresh from server while waiting, restart the timer.
+                // the last refresh time is read from the private file of IAUpdate server.
+                TTimeIntervalMinutes timetowait =
+                        TimeIntervalFromNextRefreshL();
+
+                if (timetowait.Int() <= 0 )
+                    {
+                    DoUpdatesCheckingL( ETrue );
+                    }
+                else
+                    {
+                    StartL( timetowait );
+                    }
+                FLOG("[bgchecker]RunL() ENormalMode 3");
+                }
+            else
+                {
+                FLOG("[bgchecker]RunL() ENormalMode 4");
+                TTimeIntervalMinutes timetowait = TimeIntervalFromNextRefreshL();
+                   
+                   if ( timetowait.Int() <= 0 )
+                       {
+                       StartL( StartNow );
+                       }
+                   else
+                       {
+                       StartL( timetowait );
+                       }
+                   FLOG("[bgchecker]RunL() ENormalMode 5");
+                 }        
+            }
+            break;
+            
+        case EFirstTimeMode:
         case EFirstTimeRemindMode:
             {
             FLOG("[bgchecker] runl EFirstTimeMode");
@@ -922,7 +1109,8 @@ void CIAUpdateBGTimer::RunL()
         case EFirstTimeMode2:
             {
             FLOG("[bgchecker] runl EFirstTimeMode2");
-            LaunchSoftNotificationL(R_IAUPDATE_REMIND_LATER, R_TEXT_SOFTKEY_YES, R_TEXT_SOFTKEY_NO );
+            LaunchNotificationL( 1 );
+            //LaunchSoftNotificationL(R_IAUPDATE_REMIND_LATER, R_TEXT_SOFTKEY_YES, R_TEXT_SOFTKEY_NO );
             }
             break;
 
@@ -957,8 +1145,7 @@ void CIAUpdateBGTimer::RunL()
             break;
         };
        
-    }
-
+    }*/
 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::HandlerFirstTimeL()
@@ -984,8 +1171,9 @@ void CIAUpdateBGTimer::HandlerFirstTimeL()
         {
         //this is first time mode
         FLOG("[bgchecker]HandlerFirstTimeL 3 ");
-        LaunchSoftNotificationL( R_IAUPDATE_FEATURES_AVAILABLE,
-                    R_TEXT_SOFTKEY_OK, R_TEXT_SOFTKEY_CANCEL );
+        LaunchNotificationL( 0 );
+        // LaunchSoftNotificationL( R_IAUPDATE_FEATURES_AVAILABLE,
+        //            R_TEXT_SOFTKEY_OK, R_TEXT_SOFTKEY_CANCEL );
         }
     }
 
@@ -1252,11 +1440,12 @@ TTimeIntervalMinutes CIAUpdateBGTimer::TimeIntervalFromNextShowOfNewFeatureDialo
         FLOG(" current mode is FirstTimeMode ");
         interval = FirstTimeDialogDelayInMinutesL();
         }
+    /*
     else if ( ModeL() == EFirstTimeRemindMode )
         {
         FLOG(" current mode is FirstTimeRemindMode");
         interval = FirstTimeDialogReminderIntervalInMinutesL();
-        }
+        }*/
     else
         {
         //nothing
@@ -1274,6 +1463,137 @@ TTimeIntervalMinutes CIAUpdateBGTimer::TimeIntervalFromNextShowOfNewFeatureDialo
     }
 
 
+// ----------------------------------------------------------
+// CIAUpdateBGTimer::DoSoftNotificationCallBackL()
+// ----------------------------------------------------------
+void CIAUpdateBGTimer::DoSoftNotificationCallBackL( TBool aIsAccepted )
+    {
+    FLOG("[bgchecker] SoftNotificationCallBack");
+    if ( !IAUpdateEnabledL() )
+        {
+        Shutdown();
+        return;
+        }
+    iMode = ModeL(); 
+    
+      switch ( iMode )
+          {
+          case EFirstTimeMode:
+          // case EFirstTimeRemindMode:     
+                 {
+                 
+                 FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode");
+                 if ( !aIsAccepted )
+                     {
+                     FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode, not accepted");
+                     //in sleep mode now
+                     iMode = ESleepMode;
+                     SetModeL( iMode );
+                     
+                     //subscribe to cenrep key for automatic checking for wake up from sleep mode
+                     ListenAutoUpdateSettingsL();
+                     
+                     /*
+                     FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode not accepted");
+                     iMode = EFirstTimeMode2;
+                     SetModeL( iMode );
+                     StartL( StartNow );
+                     */
+                     }
+                 else
+                     {
+                     FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMod accepeted");
+                     StartIaupdateL();
+                     //iaupdate is launched
+                     //check the disclaimer acceptance and automatic checking setting in 10mins
+
+                     StartL( KDelayForUserToAcceptDisclaimer );
+                     iMode = EFirstTimeMode2;     
+                     SetModeL( iMode );
+
+                     
+                     //Still in first time mode, 
+                     //check user's setting and disclamier after 10mins.
+                     }
+                 break;
+                 }
+                 
+                 
+          /*       
+          case EFirstTimeMode2:  // reminder 
+              {
+              FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode2 ");
+              if ( aIsAccepted ) // reminder accepted ?
+                  {
+                  FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode2, accepted");
+                  //user wants to be reminder so remind in 4 weeks
+                  //set to first time remind mode
+                  iMode = EFirstTimeRemindMode;
+                  SetModeL( iMode );
+                  TTimeIntervalMinutes fourweeks( FirstTimeDialogReminderIntervalInMinutesL() );            
+                  TTime currenttime;
+                  currenttime.UniversalTime();
+                        
+                  //save the next show new feature dialog time
+                  //in case use switch off the device and restarted.      
+                  User::LeaveIfError( SetLastTimeShowNewFeatureDialogL( currenttime ) );
+                        
+                  StartL( fourweeks );
+                  return;
+                  }
+              else
+                  {
+                  FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode2, not accepted");
+                  //in sleep mode now
+                  iMode = ESleepMode;
+                  SetModeL( iMode );
+                  
+                  //subscribe to cenrep key for automatic checking for wake up from sleep mode
+                  ListenAutoUpdateSettingsL(); 
+                  }
+              break;
+              }
+          */    
+          case ENormalMode:
+              {
+              FLOG("[bgchecker] SoftNotificationCallBack ENormalMode");
+              if ( !aIsAccepted )
+                  {
+                  FLOG("[bgchecker] SoftNotificationCallBack ENormalMode not accpeted");
+                  //user wants to be reminded later
+                  TTimeIntervalMinutes oneweek( UpdateAvailableReminderIntervalInMinutesL() );   
+                  TTime currenttime;
+                  currenttime.UniversalTime();
+                  TTime nextRemindTime = currenttime + oneweek;
+
+                  SetReminderL( ETrue );
+                  SetNextRemindTimeL( nextRemindTime );
+                  
+                  iReminderTimer->StartReminderTimerL( oneweek );
+                  
+                  //the reminder call back function will be called when reminder timer expires.
+                  }
+              else
+                  {
+                  //accepted, launch iad
+                  StartIaupdateL();
+                  }
+              break;
+              }
+
+          case ESleepMode:
+              {
+              FLOG("[bgchecker] SoftNotificationCallBack ESleepMode");
+              //donothing
+              break;
+              }
+
+          default:
+              break;
+          }
+    }
+
+/*
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::DoSoftNotificationCallBackL()
 // ----------------------------------------------------------
@@ -1321,10 +1641,10 @@ void CIAUpdateBGTimer::DoSoftNotificationCallBackL( TBool aIsAccepted )
                  
                  
                  
-          case EFirstTimeMode2:
+          case EFirstTimeMode2:  // reminder 
               {
               FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode2 ");
-              if ( aIsAccepted )
+              if ( aIsAccepted ) // reminder accepted ?
                   {
                   FLOG("[bgchecker] SoftNotificationCallBack EFirstTimeMode2, accepted");
                   //user wants to be reminder so remind in 4 weeks
@@ -1392,7 +1712,7 @@ void CIAUpdateBGTimer::DoSoftNotificationCallBackL( TBool aIsAccepted )
           default:
               break;
           }
-    }
+    } */
 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::SoftNotificationCallBack()
@@ -1410,6 +1730,7 @@ TIAUpdateBGMode CIAUpdateBGTimer::CurrentMode()
     {
     return iMode;
     }
+
 
 
 // ----------------------------------------------------------
@@ -1461,10 +1782,76 @@ void CIAUpdateBGTimer::ReminderTimerCallBack()
     {
     TRAP_IGNORE( DoReminderTimerCallBackL() );
     }
-
+   
+// ----------------------------------------------------------
+// CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
+// ----------------------------------------------------------
+void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
+    {
+    
+    _LIT( KIcon, "C:\\qgn_note_swupdate_notification.svg" );
+    _LIT( KFirstTimeText, "Check for updates ?" );
+    _LIT( KNormalText, "Updates available" );
+    _LIT( KSecondText, "Tap to view" );
+    
+    FLOG("[bgchecker] LaunchNotificationL ");
+        
+    iMode = ModeL();
+    
+    //text for 1st line
+     if ( iMode == ENormalMode )
+         {
+         
+         }
+    
+    //TBuf<256> iconPath;
+    TBuf<128> titleText;
+    TBuf<128> secondText;
+    
+    //title text (normal/first time)
+    if ( iMode == ENormalMode )
+        {
+        titleText.Append(KNormalText);
+        }
+    else
+        {
+        titleText.Append(KFirstTimeText);
+        }
+    
+    //text for 2nd line
+    secondText.Append(KSecondText);
+            
+    // icon
+    if ( iMode == ENormalMode )
+        {
+        TFileName path;
+        TInt err = GetPrivatePathL( path ); 
+        
+        if ( err == KErrNone )
+            {
+            iSoftNotification->SetImagePathL( path );
+            //HBufC8* image = LoadFileLC( path );   
+            //iSoftNotification->SetImageL( *image );
+            //CleanupStack::PopAndDestroy( image );
+            }
+        }
+  
+    // Set texts
+    iSoftNotification->SetTextL( titleText, secondText );
+    
+    // Set number of updates
+    iSoftNotification->SetNrOfUpdates( aNrOfUpdates );
+   
+    iSoftNotification->ShowNotificationL();
+    FLOG("[bgchecker] LaunchSoftNotificationL 1");
+    // CleanupStack::PopAndDestroy( 3 ); //text, sk1, sk2
+    
+    return;
+    }
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::LaunchSoftNotificationL()
 // ----------------------------------------------------------
+/*
 void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const TInt& SK1, const TInt& SK2 )
     {     
     iInternalFile->ReadControllerDataL(); 
@@ -1492,19 +1879,19 @@ void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const T
             {
             HBufC8* image = LoadFileLC( path );   
             iSoftNotification->SetImageL( *image );
+            //iSoftNotification->SetImagePathL( *image );
             CleanupStack::PopAndDestroy( image );
             }
         }
   
     
     iSoftNotification->SetTextL( *text, *text );
-    iSoftNotification->SetSoftkeyLabelsL( *sk1, *sk2 );
    
     iSoftNotification->ShowSoftNotificationL();
     FLOG("[bgchecker] LaunchSoftNotificationL 1");
     CleanupStack::PopAndDestroy( 3 ); //text, sk1, sk2
     }
-
+*/
 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::GetPrivatePathL()
@@ -1646,6 +2033,7 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::ReadResourceLC()
 // ----------------------------------------------------------
+ /* HLa
 HBufC* CIAUpdateBGTimer::ReadResourceLC( TInt aResourceId )
     {
     TResourceReader reader;
@@ -1655,7 +2043,7 @@ HBufC* CIAUpdateBGTimer::ReadResourceLC( TInt aResourceId )
     CleanupStack::PopAndDestroy( buff );
     CleanupStack::PushL( text );
     return text;
-    }
+    } */
 
 
 // ----------------------------------------------------------
@@ -1797,7 +2185,7 @@ void CIAUpdateBGTimer::Shutdown()
     
     if ( iSoftNotification )
         {
-        TRAP_IGNORE( iSoftNotification->RemoveSoftNotificationL( iSoftNotification->Id() ) );    
+        // TRAP_IGNORE( iSoftNotification->RemoveSoftNotificationL( iSoftNotification->Id() ) );    
         delete iSoftNotification;
         iSoftNotification = NULL;
         }

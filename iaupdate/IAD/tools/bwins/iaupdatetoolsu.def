@@ -1,8 +1,0 @@
-EXPORTS
-	?ExternalizeParametersL@IAUpdateTools@@YAXAAPAVHBufC8@@ABVCIAUpdateParameters@@@Z @ 1 NONAME ; void IAUpdateTools::ExternalizeParametersL(class HBufC8 * &, class CIAUpdateParameters const &)
-	?InternalizeParametersL@IAUpdateTools@@YAXAAVCIAUpdateParameters@@ABVTDesC8@@@Z @ 2 NONAME ; void IAUpdateTools::InternalizeParametersL(class CIAUpdateParameters &, class TDesC8 const &)
-	?ExternalizeDes8L@IAUpdateTools@@YAXABVTDesC8@@AAVRWriteStream@@@Z @ 3 NONAME ; void IAUpdateTools::ExternalizeDes8L(class TDesC8 const &, class RWriteStream &)
-	?ExternalizeDesL@IAUpdateTools@@YAXABVTDesC16@@AAVRWriteStream@@@Z @ 4 NONAME ; void IAUpdateTools::ExternalizeDesL(class TDesC16 const &, class RWriteStream &)
-	?InternalizeDes8L@IAUpdateTools@@YAHAAPAVHBufC8@@AAVRReadStream@@@Z @ 5 NONAME ; int IAUpdateTools::InternalizeDes8L(class HBufC8 * &, class RReadStream &)
-	?InternalizeDesL@IAUpdateTools@@YAHAAPAVHBufC16@@AAVRReadStream@@@Z @ 6 NONAME ; int IAUpdateTools::InternalizeDesL(class HBufC16 * &, class RReadStream &)
-

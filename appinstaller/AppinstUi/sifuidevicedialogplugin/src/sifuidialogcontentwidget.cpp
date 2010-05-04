@@ -23,17 +23,27 @@
 #include <hbcombobox.h>
 #include <hbprogressbar.h>
 #include <QPixmap>
-#include <QDir>
-#include <QFileInfoList>
+#include <qsysteminfo.h>                    // QSystemStorageInfo
+QTM_USE_NAMESPACE
 #if defined(Q_OS_SYMBIAN)
+#include <driveinfo.h>                      // DriveInfo
 #include <fbs.h>                            // CFbsBitmap
 #endif  // Q_OS_SYMBIAN
 
-// See definitions in sifuidevicedialogplugin.qrc
-const char KSifUiDialogIconAppDefault[] = ":/default_app_icon.svg";
+const char KSifUiDefaultApplicationIcon[] = "qtg_large_application.svg";
+
+const int KSifUiKilo = 1024;
+const int KSifUiMega = 1024*1024;
 
 const int KAppNameIndex = 0;
 const int KAppSizeIndex = 1;
+
+enum TSifUiDriveName {
+    EUnknown,
+    EPhoneMemory,
+    EMassStorage,
+    EMemoryCard
+};
 
 
 // ======== LOCAL FUNCTIONS ========
@@ -55,6 +65,31 @@ CFbsBitmap *fbsBitmap(int handle)
     }
 #endif // Q_OS_SYMBIAN
     return bitmap;
+}
+
+// ----------------------------------------------------------------------------
+// driveName()
+// ----------------------------------------------------------------------------
+//
+TSifUiDriveName driveName(const QChar& volume)
+{
+#if defined(Q_OS_SYMBIAN)
+    int err = 0;
+    TChar drive;
+    err = DriveInfo::GetDefaultDrive(DriveInfo::EDefaultPhoneMemory, drive);
+    if (!err && volume.toAscii() == drive) {
+        return EPhoneMemory;
+    }
+    err = DriveInfo::GetDefaultDrive(DriveInfo::EDefaultMassStorage, drive);
+    if (!err && volume.toAscii() == drive) {
+        return EMassStorage;
+    }
+    err = DriveInfo::GetDefaultDrive(DriveInfo::EDefaultRemovableMassStorage, drive);
+    if (!err && volume.toAscii() == drive) {
+        return EMemoryCard;
+    }
+#endif  // Q_OS_SYMBIAN
+    return EUnknown;
 }
 
 
@@ -123,8 +158,8 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
 
     Q_ASSERT(mMemorySelection == 0);
     mMemorySelection = new HbComboBox;
-    connect(mMemorySelection, SIGNAL(currentIndexChanged(const QString &)),
-            this, SIGNAL(memorySelectionChanged(const QString &)));
+    connect(mMemorySelection, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(handleMemorySelectionChange(int)));
     mStackedWidget->addWidget(mMemorySelection);
 
     Q_ASSERT(mProgressBar == 0);
@@ -137,9 +172,11 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
     mStackedWidget->addWidget(mErrorText);
 
     mMainLayout->addItem(mStackedWidget);
-    updateMemorySelection(parameters);
-    updateProgressBar(parameters);
-    updateErrorText(parameters);
+    if (!updateErrorText(parameters) &&
+        !updateProgressBar(parameters) &&
+        !updateMemorySelection(parameters)) {
+        mStackedWidget->hide();
+    }
 
     setLayout(mMainLayout);
     }
@@ -177,9 +214,17 @@ void SifUiDialogContentWidget::updateFromParameters(const QVariantMap &parameter
     }
 
     // Stacked widgets: memory selection, progress bar and error text
-    updateMemorySelection(parameters);
-    updateProgressBar(parameters);
-    updateErrorText(parameters);
+    if (updateErrorText(parameters) ||
+        updateProgressBar(parameters) ||
+        updateMemorySelection(parameters)) {
+        if (!mStackedWidget->isVisible()) {
+            mStackedWidget->show();
+        }
+    } else {
+        if (mStackedWidget->isVisible()) {
+            mStackedWidget->hide();
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -252,6 +297,18 @@ void SifUiDialogContentWidget::progressInfo(int &finalValue, int &currentValue) 
 }
 
 // ----------------------------------------------------------------------------
+// SifUiDialogContentWidget::handleMemorySelectionChange()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialogContentWidget::handleMemorySelectionChange(int selectedIndex)
+{
+    QChar selectedDrive = mDriveLetterList[selectedIndex][0];
+    // TODO: save selected drive to cenrep
+
+    emit memorySelectionChanged( selectedDrive );
+}
+
+// ----------------------------------------------------------------------------
 // SifUiDialogContentWidget::applicationName()
 // ----------------------------------------------------------------------------
 //
@@ -286,21 +343,21 @@ QString SifUiDialogContentWidget::applicationSize(const QVariantMap &parameters)
     if (parameters.contains(KSifUiApplicationSize)) {
         uint size = parameters.value(KSifUiApplicationSize).toUInt();
         if (size > 0) {
-            if (size > KMega) {
+            if (size > KSifUiMega) {
                 //: Application size in SW install confirmation query, %1 is in megabytes
                 // TODO: enable when translations ready
-                //appSize = hbTrId("txt_sisxui_install_appsize_mb").arg(size/KMega);
-                appSize = tr("Size: %1 MB").arg(size/KMega);
-            } else if(size > KKilo) {
+                //appSize = hbTrId("txt_sisxui_install_appsize_mb").arg(size/KSifUiMega);
+                appSize = tr("%1 MB").arg(size/KSifUiMega);
+            } else if(size > KSifUiKilo) {
                 //: Application size in SW install confirmation query, %1 is in kilobytes
                 // TODO: enable when translations ready
-                //appSize = hbTrId("txt_sisxui_install_appsize_kb").arg(size/KKilo);
-                appSize = tr("Size: %1 kB").arg(size/KKilo);
+                //appSize = hbTrId("txt_sisxui_install_appsize_kb").arg(size/KSifUiKilo);
+                appSize = tr("%1 kB").arg(size/KSifUiKilo);
             } else {
                 //: Application size in SW install confirmation query, %1 is in bytes
                 // TODO: enable when translations ready
                 //appSize = hbTrId("txt_sisxui_install_appsize_b").arg(size);
-                appSize = tr("Size: %1 B").arg(size);
+                appSize = tr("%1 B").arg(size);
             }
         }
     }
@@ -372,7 +429,7 @@ void SifUiDialogContentWidget::updateAppIcon(const QVariantMap &parameters)
         mAppIcon->setIcon(HbIcon(pixmap));
     } else {
         if (mAppIcon->icon().isNull()) {
-            mAppIcon->setIcon(HbIcon(KSifUiDialogIconAppDefault));
+            mAppIcon->setIcon(HbIcon(KSifUiDefaultApplicationIcon));
         }
     }
 }
@@ -403,28 +460,73 @@ void SifUiDialogContentWidget::updateAppSize(const QVariantMap &parameters)
 // SifUiDialogContentWidget::updateMemorySelection()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &parameters)
+bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &parameters)
 {
     if (parameters.contains(KSifUiMemorySelection)) {
+        QString drives = parameters.value(KSifUiMemorySelection).toString();
+        mDriveLetterList = drives.split(",");
 
-        // TODO: get user visible drives, icons for them, and free sizes
-        // it might be better to get this list from Symbian-side via SifUi API
         QStringList driveList;
-        QFileInfoList driveInfoList = QDir::drives();
-        foreach(const QFileInfo &driveInfo, driveInfoList) {
-            const QChar driveName = driveInfo.absolutePath()[0];
-            switch (driveName.toAscii()) {
-                case 'C':
-                    driveList << "C: Phone memory";
+        QSystemStorageInfo info;
+        QStringList volumeList = info.logicalDrives();
+        foreach (QString volume, volumeList) {
+            if (mDriveLetterList.contains(volume)) {
+                qlonglong size = info.availableDiskSpace(volume);
+                switch (driveName(volume[0])) {
+                case EPhoneMemory:
+                    if (size > KSifUiMega) {
+                        //: Drive name for internal phone memory with megabytes of free space.
+                        //: %1 is replaced with drive letter (usually 'C')
+                        //: %2 is replaced with available free space (in megabytes, MB)
+                        //TODO: use hbTrId("txt_sisxui_device_memory_mb") when available
+                        driveList.append(tr("%1: Device (%L2 MB free)"
+                            ).arg(volume).arg(size/KSifUiMega));
+                    } else {
+                        //: Drive name for internal phone memory with kilobytes of free space.
+                        //: %1 is replaced with drive letter (usually 'C')
+                        //: %2 is replaced with available free space (in kilobytes, kB)
+                        //TODO: use hbTrId("txt_sisxui_device_memory_kb") when available
+                        driveList.append(tr("%1: Device (%L2 kB free)"
+                            ).arg(volume).arg(size/KSifUiKilo));
+                    }
                     break;
-                case 'E':
-                    driveList << "E: Mass memory";
+                case EMassStorage:
+                    if (size > KSifUiMega) {
+                        //: Drive name for mass storage with megabytes of free space.
+                        //: %1 is replaced with drive letter (usually 'E')
+                        //: %2 is replaced with available free space (in megabytes, MB)
+                        // TODO: use hbTrId("txt_sisxui_mass_storage_mb") when available
+                        driveList.append(tr("%1: Mass.mem (%L2 MB free)"
+                            ).arg(volume).arg(size/KSifUiMega));
+                    } else {
+                        //: Drive name for mass storage with kilobytes of free space.
+                        //: %1 is replaced with drive letter (usually 'E')
+                        //: %2 is replaced with available free space (in kilobytes, kB)
+                        // TODO: use hbTrId("txt_sisxui_mass_storage_kb") when available
+                        driveList.append(tr("%1: Mass.mem (%L2 kB free)"
+                            ).arg(volume).arg(size/KSifUiKilo));
+                    }
                     break;
-                case 'F':
-                    driveList << "F: Memory card";
+                case EMemoryCard:
+                    if (size > KSifUiMega) {
+                        //: Drive name for memory card with megabytes of free space.
+                        //: %1 is replaced with drive letter (usually 'F')
+                        //: %2 is replaced with available free space (in megabytes, MB)
+                        // TODO: use hbTrId("txt_sisxui_memory_card_mb") when available
+                        driveList.append(tr("%1: Mem.card (%L2 MB free)"
+                            ).arg(volume).arg(size/KSifUiMega));
+                    } else {
+                        //: Drive name for memory card with kilobytes of free space.
+                        //: %1 is replaced with drive letter (usually 'F')
+                        //: %2 is replaced with available free space (in kilobytes, kB)
+                        // TODO: use hbTrId("txt_sisxui_memory_card_kb") when available
+                        driveList.append(tr("%1: Mem.card (%L2 kB free)"
+                            ).arg(volume).arg(size/KSifUiKilo));
+                    }
                     break;
                 default:
                     break;
+                }
             }
         }
 
@@ -432,14 +534,17 @@ void SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
         mStackedWidget->setCurrentWidget(mMemorySelection);
 
         // TODO: set selected item, read the default from cenrep
+
+        return true;
     }
+    return false;
 }
 
 // ----------------------------------------------------------------------------
 // SifUiDialogContentWidget::updateProgressBar()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialogContentWidget::updateProgressBar(const QVariantMap &parameters)
+bool SifUiDialogContentWidget::updateProgressBar(const QVariantMap &parameters)
 {
     bool progressBarChanged = false;
     if (parameters.contains(KSifUiProgressNoteFinalValue)) {
@@ -455,20 +560,23 @@ void SifUiDialogContentWidget::updateProgressBar(const QVariantMap &parameters)
     if (progressBarChanged) {
         mStackedWidget->setCurrentWidget(mProgressBar);
     }
+    return progressBarChanged;
 }
 
 // ----------------------------------------------------------------------------
 // SifUiDialogContentWidget::updateErrorText()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialogContentWidget::updateErrorText(const QVariantMap &parameters)
+bool SifUiDialogContentWidget::updateErrorText(const QVariantMap &parameters)
 {
     if (parameters.contains(KSifUiErrorCode)) {
         // TODO: proper error texts
         QString errorText = tr("Error %1").arg(parameters.value(KSifUiErrorCode).toInt());
         mErrorText->setPlainText(errorText);
         mStackedWidget->setCurrentWidget(mErrorText);
+        return true;
     }
+    return false;
 }
 
 

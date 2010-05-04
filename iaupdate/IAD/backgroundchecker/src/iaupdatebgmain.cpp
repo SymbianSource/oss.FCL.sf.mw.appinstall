@@ -26,7 +26,6 @@
 // LOCAL FUNCTION PROTOTYPES
 LOCAL_C TInt ThreadStartL();
 LOCAL_C TBool IAUpdateEnabledL();
-LOCAL_C void RemoveExistingSoftNotificationL();
 
 //Const
 _LIT( KBackgroundChecker, "iaupdatebgchecker" );
@@ -70,7 +69,6 @@ LOCAL_C TInt ThreadStartL()
     if ( !IAUpdateEnabledL() )
         {
         FLOG("[bgchecker] ThreadStartL() IAUpdate not enabled");
-        RemoveExistingSoftNotificationL();
         return KErrNone;  
         }
     TFullName name;
@@ -110,7 +108,7 @@ LOCAL_C TInt ThreadStartL()
     }
 
 // ---------------------------------------------------------------------------
-// IAUpdateEnabledL()
+// IAUpdateEnabledL() 
 // ---------------------------------------------------------------------------
 //
 LOCAL_C TBool IAUpdateEnabledL() 
@@ -136,25 +134,6 @@ LOCAL_C TBool IAUpdateEnabledL()
     featureControl.Close(); 
     FLOG_NUM("[bgchecker] IAUpdateEnabledL() enabled: %d", enabled );
     return enabled;        
-    }
-
-// ---------------------------------------------------------------------------
-// RemoveExistingSoftNotificationL()
-// ---------------------------------------------------------------------------
-//
-LOCAL_C void RemoveExistingSoftNotificationL() 
-    {
-    FLOG("[bgchecker] RemoveExistingSoftNotificationL() begin");
-    
-    CIAUpdateBGInternalFileHandler* internalFile = CIAUpdateBGInternalFileHandler::NewLC();
-    CIAUpdateBGSoftNotification* softNotification = CIAUpdateBGSoftNotification::NewL( NULL, internalFile );
-    CleanupStack::PushL( softNotification );
-    softNotification->RemoveSoftNotificationL( softNotification->Id() );
-    CleanupStack::PopAndDestroy( softNotification );
-    CleanupStack::PopAndDestroy( internalFile );
-    
-    FLOG("[bgchecker] RemoveExistingSoftNotificationL() end");
-    return;        
     }
 
 //EOF  

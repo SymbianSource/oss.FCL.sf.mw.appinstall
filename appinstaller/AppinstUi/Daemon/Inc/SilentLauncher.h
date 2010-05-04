@@ -56,7 +56,17 @@ class CSilentLauncher : public CBase
         * @param aFile - Name of the file to install
         * @param aStatus - Request status
         */
-        void InstallL( const TDesC& aFile, TRequestStatus& aStatus );
+       // void InstallL( const TDesC& aFile, TRequestStatus& aStatus );
+ 
+        /**
+        * Perform installation with file handle.
+        * @since 10.1
+        * @param aFileHandle - Handle of the file to be installed 
+        * @param aStatus - Request status
+        */
+        void InstallL( RFile& aFileHandle, 
+                       const TDesC& aFile, 
+                       TRequestStatus& aStatus );
 
         /**
         * Cancel the current installation.
@@ -88,7 +98,9 @@ class CSilentLauncher : public CBase
         // File server
         RFs& iFs;
         // Defines if we have connected to SWI server.
-        TBool iConnected;                    
+        TBool iConnected;   
+        
+        HBufC* iDrive;
     };
 }
 

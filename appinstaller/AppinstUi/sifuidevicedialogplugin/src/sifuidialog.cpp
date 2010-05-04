@@ -68,26 +68,12 @@ SifUiDialog::~SifUiDialog()
 SifUiDeviceDialogType SifUiDialog::dialogType(const QVariantMap &parameters)
 {
     SifUiDeviceDialogType type = SifUiUnspecifiedDialog;
-    if (parameters.contains(KeySifUiDialogType)) {
-        type = static_cast<SifUiDeviceDialogType>(parameters.value(KeySifUiDialogType).toInt());
+    if (parameters.contains(KSifUiDialogType)) {
+        type = static_cast<SifUiDeviceDialogType>(parameters.value(KSifUiDialogType).toInt());
         Q_ASSERT(type == SifUiConfirmationQuery || type == SifUiProgressNote ||
             type == SifUiCompleteNote || type == SifUiErrorNote);
     }
     return type;
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialog::dialogMode()
-// ----------------------------------------------------------------------------
-//
-SifUiDeviceDialogMode SifUiDialog::dialogMode(const QVariantMap &parameters)
-{
-    SifUiDeviceDialogMode mode = SifUiUnspecified;
-    if (parameters.contains(KSifUiDialogMode)) {
-        mode = static_cast<SifUiDeviceDialogMode>(parameters.value(KSifUiDialogMode).toInt());
-        Q_ASSERT(mode == SifUiInstalling || mode == SifUiUninstalling);
-    }
-    return mode;
 }
 
 // ----------------------------------------------------------------------------
@@ -219,14 +205,11 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
     Q_ASSERT(mContent == 0);
     mContent = new SifUiDialogContentWidget(this);
     mContent->constructFromParameters(parameters);
-    connect(mContent, SIGNAL(memorySelectionChanged(const QString &)),
-            this, SLOT(handleMemorySelectionChanged(const QString &)));
+    connect(mContent, SIGNAL(memorySelectionChanged(const QChar &)),
+            this, SLOT(handleMemorySelectionChanged(const QChar &)));
     setContentWidget(mContent);
 
     // Buttons
-    // build error in wk10: 
-    // Error: #20: identifier "mConfirmInstallAction" is undefined
-    //Q_ASSERT(mConfirmInstallAction == 0);
     updateButtons();
 
     return true;
@@ -375,10 +358,10 @@ void SifUiDialog::handleCancelled()
 // SifUiDialog::handleMemorySelectionChanged()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::handleMemorySelectionChanged(const QString &text)
+void SifUiDialog::handleMemorySelectionChanged(const QChar &driveLetter)
 {
-    QVariant memorySelection(text);
-    mResultMap.insert(KSifUiSelectedMemoryIndex, memorySelection);
+    QVariant memorySelection(driveLetter);
+    mResultMap.insert(KSifUiSelectedMemory, memorySelection);
 }
 
 // ----------------------------------------------------------------------------
@@ -387,8 +370,8 @@ void SifUiDialog::handleMemorySelectionChanged(const QString &text)
 //
 void SifUiDialog::handleDisplayCertificateDetails()
 {
-    // TODO: display certificate details dialog
-    HbMessageBox::warning(tr("Not implemented yet"));
+    // TODO: display certificate details, or the following note:
+    HbMessageBox::warning(tr("Application is not certified. It's origin and authenticity cannot be proved."));
 }
 
 // ----------------------------------------------------------------------------

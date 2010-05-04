@@ -18,10 +18,7 @@
 #ifndef __TESTINSTALLER_IBY__
 #define __TESTINSTALLER_IBY__
 
-#include <data_caging_paths_for_iby.hrh>
-
-S60_APP_EXE( testinstaller )
-S60_APP_AIF_RSC( testinstaller )
-S60_APP_RESOURCE( testinstaller )
+file=ABI_DIR/BUILD_DIR/testinstaller.exe SHARED_LIB_DIR/testinstaller.exe
+HB_UPGRADABLE_APP_REG_RSC( testinstaller )
 
 #endif  // __TESTINSTALLER_IBY__

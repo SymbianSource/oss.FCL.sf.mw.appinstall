@@ -25,7 +25,7 @@ INCLUDEPATH += $$MW_LAYER_SYSTEMINCLUDE
 INCLUDEPATH += ../sifuiinstallindicatorplugin/inc
 DEPENDPATH += .
 
-LIBS += -lQtPublishSubscribe
+LIBS += -lQtPublishSubscribe -lQtSystemInfo
 
 HEADERS += inc/sifuidevicedialogplugin.h \
     inc/sifuidialogdefinitions.h \
@@ -38,8 +38,6 @@ SOURCES += src/sifuidevicedialogplugin.cpp \
     src/sifuidialogtitlewidget.cpp \
     src/sifuidialogcontentwidget.cpp
 
-RESOURCES += sifuidevicedialogplugin.qrc
-
 symbian: {
     TARGET.EPOCALLOWDLLDATA = 1
     TARGET.CAPABILITY = CAP_GENERAL_DLL
@@ -49,7 +47,7 @@ symbian: {
     pluginstub.path = /resource/plugins/devicedialogs
     DEPLOYMENT += pluginstub
 
-	LIBS += -lfbscli
+	LIBS += -lfbscli -lPlatformEnv
 }
 
 BLD_INF_RULES.prj_exports += \

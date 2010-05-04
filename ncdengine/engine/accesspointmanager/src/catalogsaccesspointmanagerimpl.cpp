@@ -537,7 +537,7 @@ void CCatalogsAccessPointManager::MapAccessPointL(
 TInt CCatalogsAccessPointManager::AccessPointIdL(
     const TDesC& aNameSpace,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& aClientUid,
+    const TUid& /* aClientUid */,
     TUint32& aAccessPointId ) 
     {
     DLTRACEIN((_L("Namespace: %S, Action: %d, clientUid: %d"), &aNameSpace, aAction, aClientUid.iUid));
@@ -565,7 +565,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
     const TDesC& aNameSpace,
     const TDesC& aCatalogId,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& aClientUid,
+    const TUid& /* aClientUid */,
     TUint32& aAccessPointId) 
     {
     DLTRACEIN((_L("Namespace: %S, CatalogId: %S, Action: %d, clientUid: %d"), &aNameSpace, &aCatalogId, aAction, aClientUid.iUid));
@@ -592,7 +592,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
 TInt CCatalogsAccessPointManager::AccessPointIdL(
     const CNcdNodeIdentifier& aNodeIdentifier,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& aClientUid,
+    const TUid& /* aClientUid */,
     TUint32& aAccessPointId) 
     {
     DLTRACEIN((_L("Namespace: %S, NodeId: %S, Action: %d, clientUid: %d"),
@@ -716,7 +716,7 @@ CCatalogsAccessPoint* CCatalogsAccessPointManager::FindAccessPointL(
     }
             
     
-TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* aAccessPoint )
+TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* /* aAccessPoint */ )
     {
     DLTRACEIN((""));
     
@@ -778,7 +778,7 @@ TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* a
     return EFalse;
     }
 
-TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSettings& aSettings, TUint32& aId )
+TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSettings& /* aSettings */, TUint32& /* aId */)
     {
     DLTRACEIN(_L("Checking comms DB for matching access point"));
     
@@ -833,7 +833,7 @@ TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSe
     return EFalse;
     }
 
-void CCatalogsAccessPointManager::CreateApToCommsDBL( const CCatalogsAccessPoint& aSettings, TUint32& aId )
+void CCatalogsAccessPointManager::CreateApToCommsDBL( const CCatalogsAccessPoint& /* aSettings */, TUint32& /* aId */ )
     {
     DLTRACEIN(_L("Creating AP to comms DB"));
     
@@ -1000,7 +1000,7 @@ void CCatalogsAccessPointManager::RemoveAccessPointsL()
     iClientAccessPointData = NULL;
     }
 
-void CCatalogsAccessPointManager::RemoveApFromCommsDatabaseL( const TUint32& aId )
+void CCatalogsAccessPointManager::RemoveApFromCommsDatabaseL( const TUint32& /* aId */ )
     {
     
 #ifdef _0
@@ -1213,7 +1213,7 @@ TBool CCatalogsAccessPointManager::MatchingSettingsL(
 #endif   
     
 void CCatalogsAccessPointManager::SetApDetailL(
-    CCatalogsAccessPoint& aAp, const TDesC& aKey, const TDesC& aValue ) 
+    CCatalogsAccessPoint& /* aAp */, const TDesC& /* aKey */, const TDesC& /* aValue */ ) 
     {
     
 #ifdef _0

@@ -88,8 +88,7 @@ inline void CleanupResetAndDestroyPushL(T& aRef)
 //  
 CPreviouslyInstalledAppsCache *CPreviouslyInstalledAppsCache::NewL()
 	{
-	CPreviouslyInstalledAppsCache *self = 
-	        new(ELeave)CPreviouslyInstalledAppsCache;
+	CPreviouslyInstalledAppsCache *self = new(ELeave)CPreviouslyInstalledAppsCache;
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	CleanupStack::Pop(self);
@@ -113,8 +112,7 @@ void CPreviouslyInstalledAppsCache::UpdateAllL()
 	{
     FLOG( _L("Daemon: CPreviouslyInstalledAppsCache::UpdateAllL ") );
     
-    // nb. Default constructor gives handle to current thread.
-	RThread ourThread; 
+	RThread ourThread; // nb. Default constructor gives handle to current thread.
 	
 	if( !ourThread.HasCapability(ECapabilityReadUserData, 0) )
 		{
@@ -203,27 +201,25 @@ CPreviouslyInstalledAppsCache::CPreviouslyInstalledAppsCache()
 //  
 void CPreviouslyInstalledAppsCache::ConstructL()
 	{
-    User::LeaveIfError(iFs.Connect());
-    TInt drive = 0;
+	User::LeaveIfError(iFs.Connect());
+	TInt drive = 0;
     iFs.CharToDrive( 
             TParsePtrC( PathInfo::PhoneMemoryRootPath() ).Drive()[0], 
             drive );
     
     iFs.CreatePrivatePath( drive );
-    
-    // Read cache file
-    TRAP_IGNORE( InitFromCacheFileL() );
-    
+
+	// Read cache file
+	TRAP_IGNORE(InitFromCacheFileL());
+		
     TRAPD( err, UpdateAllL() );
-    
-    if( err == KErrNone )
+    if(err == KErrNone)
         {
-        // If we managed to scan the registry, and update the cache, 
-        // flush to disk.
+        // If we managed to scan the registry, and update the cache, flush to disk.
         TRAP_IGNORE(FlushToDiskL());
         }	
-    
-    }
+
+	}
 
 // -----------------------------------------------------------------------
 // CPreviouslyInstalledAppsCache::InitFromCacheFileL
@@ -231,34 +227,34 @@ void CPreviouslyInstalledAppsCache::ConstructL()
 //  
 void CPreviouslyInstalledAppsCache::InitFromCacheFileL()
 	{
-    // Read in existing cache file.
-    RFile cacheFile;
-    TInt err = cacheFile.Open( iFs, 
+	// Read in existing cache file.
+	RFile cacheFile;
+	TInt err = cacheFile.Open( iFs, 
                                KPreInstalledApps, 
                                EFileStream|EFileRead);
-    if ( err != KErrNone )
-        {
-        return; // No existing cache file to read.
-        }
-    CleanupClosePushL( cacheFile );
-    
-    // Now read the cache
-    RFileReadStream cacheReadStream( cacheFile );
-    cacheReadStream.PushL();
-    
-    iPrevPkgUids.Reset();
-    TInt32 count( cacheReadStream.ReadInt32L() );
-    
-    for ( TInt i = 0; i < count; i++ )
-        {
-        TUid packageId;
-        packageId.iUid = cacheReadStream.ReadInt32L();
-        (void)iPrevPkgUids.InsertInSignedKeyOrder( packageId );
-        }	
-    
-    CleanupStack::PopAndDestroy(&cacheReadStream);
-    CleanupStack::PopAndDestroy(&cacheFile);
-	}
+	if ( err != KErrNone )
+		{
+			return; // No existing cache file to read.
+		}
+	CleanupClosePushL( cacheFile );
+	
+	// Now read the cache
+	RFileReadStream cacheReadStream( cacheFile );
+	cacheReadStream.PushL();
+
+	iPrevPkgUids.Reset();
+	TInt32 count( cacheReadStream.ReadInt32L() );
+
+	for ( TInt i = 0; i < count; i++ )
+		{
+		TUid packageId;
+		packageId.iUid = cacheReadStream.ReadInt32L();
+		(void)iPrevPkgUids.InsertInSignedKeyOrder( packageId );
+		}	
+	
+	CleanupStack::PopAndDestroy(&cacheReadStream);
+	CleanupStack::PopAndDestroy(&cacheFile);
+}
 
 // -----------------------------------------------------------------------
 // CPreviouslyInstalledAppsCache::FlushToDiskL
@@ -267,36 +263,32 @@ void CPreviouslyInstalledAppsCache::InitFromCacheFileL()
 void CPreviouslyInstalledAppsCache::FlushToDiskL()
 	{
 	// Write to disk
-    RFile cacheFile;
-    TInt err = cacheFile.Open( iFs, 
-    KPreInstalledApps, 
-    EFileStream|EFileWrite );
-    if ( err != KErrNone )
-        {
-        User::LeaveIfError( cacheFile.Create( iFs, 
-                                              KPreInstalledApps, 
-                                              EFileStream|EFileWrite) );
-        }
-    CleanupClosePushL( cacheFile );
-    
-    // Truncate file.
-    User::LeaveIfError( cacheFile.SetSize(0) );
-    
-    // Now write the cache
-    RFileWriteStream cacheWriteStream( cacheFile );
-    cacheWriteStream.PushL();
-    
-    TInt32 count( iPrevPkgUids.Count() );
-    cacheWriteStream.WriteInt32L(count);
-    
-    for ( TInt i = 0; i < count; i++ )
-        {
-        cacheWriteStream.WriteInt32L( iPrevPkgUids[i].iUid );
-        }	
-    
-    cacheWriteStream.CommitL();
-    CleanupStack::PopAndDestroy( &cacheWriteStream );
-    CleanupStack::PopAndDestroy( &cacheFile );
+	RFile cacheFile;
+	TInt err = cacheFile.Open(iFs, KPreInstalledApps, EFileStream|EFileWrite);
+	if(err != KErrNone)
+		{
+			User::LeaveIfError(cacheFile.Create(iFs, KPreInstalledApps, EFileStream|EFileWrite));
+		}
+	CleanupClosePushL(cacheFile);
+
+	// Truncate file.
+	User::LeaveIfError(cacheFile.SetSize(0));
+	
+	// Now write the cache
+	RFileWriteStream cacheWriteStream(cacheFile);
+	cacheWriteStream.PushL();
+
+	TInt32 count(iPrevPkgUids.Count());
+	cacheWriteStream.WriteInt32L(count);
+
+	for (TInt i = 0; i < count; i++)
+		{
+		cacheWriteStream.WriteInt32L(iPrevPkgUids[i].iUid);
+		}	
+	
+	cacheWriteStream.CommitL();
+	CleanupStack::PopAndDestroy(&cacheWriteStream);
+	CleanupStack::PopAndDestroy(&cacheFile);
 	}
 
 // End of file

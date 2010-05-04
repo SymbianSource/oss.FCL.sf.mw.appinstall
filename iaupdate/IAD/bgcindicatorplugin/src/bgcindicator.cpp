@@ -76,7 +76,7 @@ switch(role)
     case TextRole: 
         {
         QString text("");
-        if ( mNrOfUpdates == 1 )
+        if ( mNrOfUpdates > 0 )
             text.append(QString("Updates available"));
         else
             text.append(QString("Check for updates?"));

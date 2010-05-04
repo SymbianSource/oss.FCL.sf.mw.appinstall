@@ -22,7 +22,6 @@
 
 // INCLUDES
 #include <e32base.h>
-#include <AknProgressDialog.h>
 #include <SyncMLObservers.h>
 #include <cmmanagerext.h>
 
@@ -47,9 +46,7 @@ class CIAUpdateFWFotaModel;
 NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase, 
 						public MIAUpdateFWActiveCallerObserver,
 						public MSyncMLEventObserver,
-						public MSyncMLProgressObserver,
-						public MProgressDialogCallback
-						
+						public MSyncMLProgressObserver
 	{
     public:
         /**

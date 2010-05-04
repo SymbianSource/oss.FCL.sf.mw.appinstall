@@ -18,21 +18,15 @@
 
 
 // INCLUDE FILES
-// TODO needs to be removed in 10.1
-//#include <AknGlobalNote.h> 
-//#include <avkon.rsg>
-// TODO maybe removed 10.1
-//#include <bautils.h>  // file operations like FileMan
-//#include <data_caging_path_literals.hrh> // resource paths
-// TODO probably not needed in QT.
-//#include <swidaemon.rsg>
-
+#include <hb/hbwidgets/hbdeviceprogressdialogsymbian.h>
+#include <hb/hbwidgets/hbdevicenotificationdialogsymbian.h>
 #include "DialogWrapper.h"
 #include "SWInstDebug.h"
 
-//_LIT( KDaemonResourceFile, "swidaemon.rsc" );
-
 using namespace Swi;
+
+//TODO: remove when HB dialogs do not crash in HW/WINS
+#define _SWIDAEMON_DISABLE_NOTES_
 
 // ============================ MEMBER FUNCTIONS ===============================
 
@@ -54,22 +48,14 @@ CDialogWrapper::CDialogWrapper( RFs& aFs )
 //
 void CDialogWrapper::ConstructL()
     {
-//TODO: All resoureces nees to be rewriten for device dialogs (QT)    
-    // Get resource file path
-    //TFileName fileName;
-    //fileName.Copy( TParsePtrC( RProcess().FileName() ).Drive() );
-    //fileName.Append( KDC_RESOURCE_FILES_DIR );
-    //fileName.Append( KDaemonResourceFile );
-    
-    // Get language of resource file        
-    //BaflUtils::NearestLanguageFile( iFs, fileName );
-
-    // Open resource file
-    //iResourceFile.OpenL( iFs, fileName );
-    //iResourceFile.ConfirmSignatureL();
-  
+    iIsProgressDialog = EFalse;
+    iHbProgressDialog = NULL;
+    iIsUninstallerProgressDialog = EFalse;
+    iHbProgressDialogForUninstaller = NULL;
+                  
     // By default Daemon will show all notes.
     iDisableAllNotes = EFalse;
+    
     // Create watcher AO for PS Key.
     iWatcher = CDialogWatcher::NewL( this );   
     // Get current PS Key 
@@ -104,8 +90,8 @@ CDialogWrapper* CDialogWrapper::NewL( RFs& aFs )
 //    
 CDialogWrapper::~CDialogWrapper()
     {
-    //iResourceFile.Close();
-    
+    delete iHbProgressDialog;
+    delete iHbProgressDialogForUninstaller;                          
     if ( iWatcher )
         {
         iWatcher->StopWatcher();
@@ -121,17 +107,39 @@ CDialogWrapper::~CDialogWrapper()
 // 
 void CDialogWrapper::ShowUntrustedResultL()
     {
-    //TODO: All resoureces nees to be rewriten for device dialogs (QT)    
+    FLOG( _L("Daemon: CDialogWrapper::ShowUntrustedResultL") );
+
+#ifdef _SWIDAEMON_DISABLE_NOTES_
+    FLOG( _L("Daemon: CDialogWrapper: iDisableAllNotes = ETrue") );
+    iDisableAllNotes = ETrue;
+#endif      
+      
     // Let watcher to know that waiting note is canceled.
-    //iWatcher->CancelNoteRequest();
+    iWatcher->CancelNoteRequest();            
+        
+    // Inform watcher that we have request to show note. 
+    iWatcher->CancelNoteRequest();   
     
-    //if ( iDisableAllNotes == EFalse )
-    //    {    
-    //    HBufC* string = ReadResourceLC( R_DAEMON_UNTRUSTED_FOUND );    
-    //    CAknGlobalNote* note = CAknGlobalNote::NewLC();
-    //    note->ShowNoteL( EAknGlobalInformationNote, *string );   
-    //    CleanupStack::PopAndDestroy( 2, string ); 
-    //    }
+    if ( iDisableAllNotes == EFalse )
+        {    
+        CHbDeviceNotificationDialogSymbian* notificationDialog = 
+                CHbDeviceNotificationDialogSymbian::NewL( NULL );
+        
+        CleanupStack::PushL( notificationDialog );
+        
+//TODO get string from log file.  
+        _LIT( KTempIconText,"note_info");
+        _LIT( KTempTextTitle,"SW Silent Installer" );
+        _LIT( KTempTextForErrorMessage,"Untrusted software was found." ); 
+                     
+        //notificationDialog->SetTimeout( KHbLongNotificationDialogTimeout );        
+        
+        notificationDialog->NotificationL( KTempIconText, 
+                                           KTempTextTitle , 
+                                           KTempTextForErrorMessage );
+                    
+        CleanupStack::PopAndDestroy( notificationDialog );        
+        }   
     }
 
 // -----------------------------------------------------------------------------
@@ -142,18 +150,35 @@ void CDialogWrapper::ShowUntrustedResultL()
 // 
 void CDialogWrapper::ShowErrorResultL()
     { 
-    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
-    // Let watcher to know that waiting note is canceled.
+    FLOG( _L("Daemon: CDialogWrapper::ShowErrorResultL") );
+    
+#ifdef _SWIDAEMON_DISABLE_NOTES_
+    FLOG( _L("Daemon: CDialogWrapper: iDisableAllNotes = ETrue") );
+    iDisableAllNotes = ETrue;
+#endif  
+    
+    // Inform watcher that we have request to show note. 
     iWatcher->CancelNoteRequest();   
     
     if ( iDisableAllNotes == EFalse )
-        {
-        /*
-        HBufC* string = ReadResourceLC( R_DAEMON_INSTALLATION_ERROR );    
-        CAknGlobalNote* note = CAknGlobalNote::NewLC();
-        note->ShowNoteL( EAknGlobalInformationNote, *string );   
-        CleanupStack::PopAndDestroy( 2, string );
-        */  
+        {    
+        CHbDeviceNotificationDialogSymbian* notificationDialog = 
+                CHbDeviceNotificationDialogSymbian::NewL( NULL );
+        
+        CleanupStack::PushL( notificationDialog );
+        
+//TODO get string from log file.  
+        _LIT( KTempIconText,"note_info");
+        _LIT( KTempTextTitle,"SW Silent Installer" );
+        _LIT( KTempTextForErrorMessage,"Installation was not completed." ); 
+                   
+        //notificationDialog->SetTimeout( KHbLongNotificationDialogTimeout );        
+        
+        notificationDialog->NotificationL( KTempIconText, 
+                                           KTempTextTitle , 
+                                           KTempTextForErrorMessage );
+               
+        CleanupStack::PopAndDestroy( notificationDialog ); 
         }
     }
 
@@ -165,19 +190,28 @@ void CDialogWrapper::ShowErrorResultL()
 // 
 void CDialogWrapper::ShowWaitingNoteL()
 	{
-    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
+    FLOG( _L("Daemon: CDialogWrapper::ShowWaitingNoteL") );
+    
+#ifdef _SWIDAEMON_DISABLE_NOTES_
+    FLOG( _L("Daemon: CDialogWrapper: iDisableAllNotes = ETrue") );
+    iDisableAllNotes = ETrue;
+#endif
+    
     if ( iDisableAllNotes == EFalse )
-        {
-        /*
-        if ( iNoteId == 0 )
-            {            
-            HBufC* string = ReadResourceLC( R_DAEMON_INSTALLING );   
-            CAknGlobalNote* note = CAknGlobalNote::NewLC();
-            note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
-            iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
-            CleanupStack::PopAndDestroy( 2, string );           
+        {          
+        if ( !iIsProgressDialog )
+            {    
+            iHbProgressDialog = CHbDeviceProgressDialogSymbian::NewL( 
+                                   CHbDeviceProgressDialogSymbian::EWaitDialog, 
+                                   NULL );
+            iIsProgressDialog = ETrue;
+            
+//TODO get string from log file.            
+            _LIT( KTempTextForProgressDialog,"Installing" );
+            
+            iHbProgressDialog->SetTextL( KTempTextForProgressDialog );            
+            iHbProgressDialog->ShowL();
             }
-        */    
         }
     else if ( iDisableAllNotes )
         {
@@ -194,17 +228,17 @@ void CDialogWrapper::ShowWaitingNoteL()
 // -----------------------------------------------------------------------------
 // 
 void CDialogWrapper::CancelWaitingNoteL()
-	{
-    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
-    /*
-	if ( iNoteId )
+	{ 
+    FLOG( _L("Daemon: CDialogWrapper::CancelWaitingNoteL") );
+    
+	if ( iIsProgressDialog )
 		{
-		CAknGlobalNote* note = CAknGlobalNote::NewLC();
-		note->CancelNoteL( iNoteId );
-		iNoteId = 0;
-		CleanupStack::PopAndDestroy();
+		iHbProgressDialog->Cancel();
+		delete iHbProgressDialog;
+		iHbProgressDialog = NULL;
+		iIsProgressDialog = EFalse;
 		}
-	*/	
+		
     // Let watcher to know that waiting note is canceled.
 	iWatcher->CancelNoteRequest();
  	}
@@ -215,18 +249,9 @@ void CDialogWrapper::CancelWaitingNoteL()
 // (other items were commented in a header).
 // -----------------------------------------------------------------------------
 // 
-HBufC* CDialogWrapper::ReadResourceLC( TInt aResourceId )
+HBufC* CDialogWrapper::ReadResourceLC( TInt /*aResourceId*/ )
     {
-    //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
-    /*
-    TResourceReader reader;
-    HBufC8* buff = iResourceFile.AllocReadLC( aResourceId );    
-    reader.SetBuffer( buff );
-    HBufC* text = reader.ReadHBufCL();
-    CleanupStack::PopAndDestroy( buff );
-    CleanupStack::PushL( text );
-    return text;
-    */
+    //TODO: All resoureces nees to be rewriten for device dialogs (QT)    
     return NULL;
     }
 
@@ -247,19 +272,28 @@ void CDialogWrapper::SetUIFlag( TInt aUIFlag )
 // 
 void CDialogWrapper::ShowWaitingNoteForUninstallerL()
     {
+    FLOG( _L("Daemon: CDialogWrapper::ShowWaitingNoteForUninstallerL") );
+    
+#ifdef _SWIDAEMON_DISABLE_NOTES_
+    FLOG( _L("Daemon: CDialogWrapper: iDisableAllNotes = ETrue") );
+    iDisableAllNotes = ETrue;
+#endif
+    
     //TODO: All resoureces nees to be rewriten for device dialogs (QT)   
     if ( iDisableAllNotes == EFalse )
         {
-        /*
-        if ( iNoteId == 0 )
-            {
-            HBufC* string = ReadResourceLC( R_UNINSTALLER_INSTALL );   
-            CAknGlobalNote* note = CAknGlobalNote::NewLC();
-            note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
-            iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
-            CleanupStack::PopAndDestroy( 2, string );
+        if ( !iIsUninstallerProgressDialog )
+            {    
+            iHbProgressDialogForUninstaller = 
+                    CHbDeviceProgressDialogSymbian::NewL( 
+                                   CHbDeviceProgressDialogSymbian::EWaitDialog, 
+                                   NULL );
+            iIsUninstallerProgressDialog = ETrue;
+    //TODO get string from log file.            
+            _LIT( KTempTextForProgressDialog,"Uninstalling" );            
+            iHbProgressDialogForUninstaller->SetTextL( KTempTextForProgressDialog );            
+            iHbProgressDialogForUninstaller->ShowL();
             }
-        */    
         }
     else if ( iDisableAllNotes )
         {

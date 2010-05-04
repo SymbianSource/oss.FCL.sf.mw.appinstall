@@ -42,7 +42,7 @@ signals:
 
 private:
     Q_DISABLE_COPY(SifUiDialogTitleWidget)
-    QString defaultTitle(SifUiDeviceDialogType type, SifUiDeviceDialogMode mode);
+    QString defaultTitle(SifUiDeviceDialogType type);
     void createCertButton();
     void removeCertButton();
 

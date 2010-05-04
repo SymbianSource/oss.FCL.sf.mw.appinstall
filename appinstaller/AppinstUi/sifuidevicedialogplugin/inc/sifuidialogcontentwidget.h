@@ -47,7 +47,10 @@ public:
     void progressInfo(int &finalValue, int &currentValue) const;
 
 signals:
-    void memorySelectionChanged(const QString &text);
+    void memorySelectionChanged(const QChar &driveLetter);
+
+private slots:
+	void handleMemorySelectionChange(int selectedIndex);
 
 private:
     Q_DISABLE_COPY(SifUiDialogContentWidget)
@@ -58,9 +61,9 @@ private:
     void addDetail(const QString &detailText);
     void updateAppIcon(const QVariantMap &parameters);
     void updateAppSize(const QVariantMap &parameters);
-    void updateMemorySelection(const QVariantMap &parameters);
-    void updateProgressBar(const QVariantMap &parameters);
-    void updateErrorText(const QVariantMap &parameters);
+    bool updateMemorySelection(const QVariantMap &parameters);
+    bool updateProgressBar(const QVariantMap &parameters);
+    bool updateErrorText(const QVariantMap &parameters);
 
 private:    // data
     HbLabel *mAppIcon;
@@ -70,6 +73,7 @@ private:    // data
     QGraphicsLinearLayout *mAppDetailsLayout;
     HbStackedWidget *mStackedWidget;
     HbComboBox *mMemorySelection;
+    QStringList mDriveLetterList;
     HbProgressBar *mProgressBar;
     HbLabel *mErrorText;
     CFbsBitmap *mBitmap;

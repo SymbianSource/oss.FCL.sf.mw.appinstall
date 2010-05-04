@@ -1,8 +1,0 @@
-EXPORTS
-	_ZN13IAUpdateTools22ExternalizeParametersLERP6HBufC8RK19CIAUpdateParameters @ 1 NONAME
-	_ZN13IAUpdateTools22InternalizeParametersLER19CIAUpdateParametersRK6TDesC8 @ 2 NONAME
-	_ZN13IAUpdateTools15ExternalizeDesLERK7TDesC16R12RWriteStream @ 3 NONAME
-	_ZN13IAUpdateTools15InternalizeDesLERP7HBufC16R11RReadStream @ 4 NONAME
-	_ZN13IAUpdateTools16ExternalizeDes8LERK6TDesC8R12RWriteStream @ 5 NONAME
-	_ZN13IAUpdateTools16InternalizeDes8LERP6HBufC8R11RReadStream @ 6 NONAME
-

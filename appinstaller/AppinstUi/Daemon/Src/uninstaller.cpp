@@ -34,6 +34,7 @@
 using namespace Swi;
 
 const static TInt KWaitTime = 3000000; // 2 secs
+const TInt KMimeTextLength = 64;
 
 // -----------------------------------------------------------------------
 // Two phased construction
@@ -114,9 +115,13 @@ void CSisPkgUninstaller::ConstructL(
     iFs.ShareProtected();
     iUidArrayIndex = 0;
     iSilentUninstaller = NULL;
-    iState = EUninstallerStateIdle;      
-    // Alloc descriptor for mime type sis/sisx
-    iMime = SwiUI::KSisxMimeType().AllocL();      
+    iState = EUninstallerStateIdle;   
+    
+    // Alloc descriptor for mime type sis/sisx    
+    iMime = HBufC::NewL( KMimeTextLength );
+    TPtr iMimePtr = iMime->Des();
+    iMimePtr.Copy( SwiUI::KSisxMimeType );
+         
     // Note this will create new instance for dialog class and
     // also new dialog watcher AO for uninstaller.
     // Since uninstaller is used rarely this is not big issue.

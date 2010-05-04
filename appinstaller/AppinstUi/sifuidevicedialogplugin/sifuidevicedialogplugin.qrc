@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/" >
-        <file alias="default_app_icon.svg" >resources/qgn_menu_am_sis.svg</file>
-        <file alias="cert_indi_icon.svg" >resources/qgn_indi_midp_trusted.svg</file>
-    </qresource>
-</RCC>

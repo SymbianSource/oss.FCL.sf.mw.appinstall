@@ -46,7 +46,6 @@ public:     // constructor and destructor
 
 public:     // new functions
     static SifUiDeviceDialogType dialogType(const QVariantMap &parameters);
-    static SifUiDeviceDialogMode dialogMode(const QVariantMap &parameters);
 
 public:     // from HbDeviceDialogInterface
     bool setDeviceDialogParameters(const QVariantMap &parameters);
@@ -77,7 +76,7 @@ private:    // new functions
 private slots:
     void handleAccepted();
     void handleCancelled();
-    void handleMemorySelectionChanged(const QString &text);
+    void handleMemorySelectionChanged(const QChar &driveLetter);
     void handleDisplayCertificateDetails();
     void handleHidePressed();
     void handleIndicatorActivityChanged();

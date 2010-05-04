@@ -23,6 +23,7 @@ DEFAULT
 
 PRJ_EXPORTS
 ../inc/sifui.h          MW_LAYER_PLATFORM_EXPORT_PATH( sifui.h )
+../rom/sifui.iby        CORE_MW_LAYER_IBY_EXPORT_PATH( sifui.iby )
 
 PRJ_MMPFILES
 sifui.mmp
