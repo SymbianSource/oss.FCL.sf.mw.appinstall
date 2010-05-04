@@ -36,6 +36,8 @@ public:     // constructor and destructor
 public:     // new functions
     TInt Initialize( bool aUseSif );
     TInt Install( const QString& aFileName, bool aSilent );
+    TInt Remove( const Usif::TComponentId& aComponentId, bool aSilent );
+    TInt Remove( const TUid& aUid, const TDesC8& aMime, bool aSilent );
 
 protected:  // from CActive
     void DoCancel();
@@ -44,6 +46,8 @@ protected:  // from CActive
 
 private:    // new functions
     void DoInstallL( const QString& aFileName, bool aSilent );
+    void DoRemoveL( const Usif::TComponentId& aComponentId, bool aSilent );
+    void DoRemoveL( const TUid& aUid, const TDesC8& aMime, bool aSilent );
 
 private:    // data
     ActiveRunner *q_ptr;

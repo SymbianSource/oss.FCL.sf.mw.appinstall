@@ -220,7 +220,7 @@ void CCatalogsAccessPointSettings::BoolParameter(
     }
 #endif
 
-void CCatalogsAccessPointSettings::ExternalizeL(RWriteStream& aStream) 
+void CCatalogsAccessPointSettings::ExternalizeL(RWriteStream& /* aStream */) 
     {
     DLTRACEIN((""));
     
@@ -274,7 +274,7 @@ void CCatalogsAccessPointSettings::ExternalizeL(RWriteStream& aStream)
     DLTRACEOUT((""));        
     }
     
-void CCatalogsAccessPointSettings::InternalizeL(RReadStream& aStream) 
+void CCatalogsAccessPointSettings::InternalizeL(RReadStream& /* aStream */) 
     {
     
 #ifdef _0

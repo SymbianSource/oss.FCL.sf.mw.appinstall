@@ -43,7 +43,16 @@ void MainL()
     FLOG( _L("Daemon: Rename thread to SWI Daemon") );
     // Rename thread as SWI Daemon.
     User::RenameThread( KSWIDaemonInstaller );  
-  
+
+#ifdef __WINS__   
+//TODO: this is tomprary hack since we can not show UI
+// dialogs if QT is not up in wins.
+FLOG( _L("Daemon: Let's wait QT UI to boot up in WINS env.") );   
+FLOG( _L("Daemon: Start SWI Daemon after 300 sec.") );   
+User::After( 150000000 );
+User::After( 15000000 );
+#endif  // WINS
+
     // For uninstaller
     // Set status to installing just to be sure that uninstaller 
     // do not run before installing in complete.

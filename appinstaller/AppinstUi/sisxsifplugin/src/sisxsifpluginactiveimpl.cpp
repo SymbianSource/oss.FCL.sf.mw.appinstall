@@ -17,6 +17,7 @@
 
 #include "sisxsifpluginactiveimpl.h"    // CSisxSifPluginActiveImpl
 #include "sisxsifpluginuihandler.h"     // CSisxSifPluginUiHandler
+#include "sisxsifpluginuihandlersilent.h" // CSisxSifPluginUiHandlerSilent
 #include "sisxsifcleanuputils.h"        // CleanupResetAndDestroyPushL
 #include "sisxsifplugin.pan"            // Panic codes
 #include <usif/sif/sifcommon.h>         // Usif::CComponentInfo
@@ -73,6 +74,7 @@ CSisxSifPluginActiveImpl::~CSisxSifPluginActiveImpl()
 	Cancel();
     delete iAsyncLauncher;
     delete iUiHandler;
+    delete iUiHandlerSilent;
     delete iInstallPrefs;
     delete iComponentInfo;
     delete iFileName;
@@ -85,6 +87,8 @@ CSisxSifPluginActiveImpl::~CSisxSifPluginActiveImpl()
 //
 void CSisxSifPluginActiveImpl::DoCancel()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::DoCancel") );
+
     if( iClientStatus )
         {
         if( iAsyncLauncher )
@@ -94,8 +98,7 @@ void CSisxSifPluginActiveImpl::DoCancel()
             iAsyncLauncher = NULL;
             }
 
-        User::RequestComplete( iClientStatus, KErrCancel );
-        iClientStatus = NULL;
+        CompleteClientRequest( KErrCancel );
         }
     }
 
@@ -106,12 +109,13 @@ void CSisxSifPluginActiveImpl::DoCancel()
 void CSisxSifPluginActiveImpl::RunL()
     {
     TInt result = iStatus.Int();
-    FLOG_1( _L("CSisxSifPluginActiveImpl::RunL(), result %d"), result );
+    FLOG_2( _L("CSisxSifPluginActiveImpl::RunL(), op %d, result %d"), iOperation, result );
 
-    if( iSilentInstall )
+    if( result == KErrNone && iOperation == EInstall &&
+            iUseSilentMode && !iIsPackageCheckedForSilentInstall )
         {
-        FLOG( _L("CSisxSifPluginActiveImpl::RunL, silent install") );
-        ProcessSilentInstallL();
+        ProcessSilentInstallL();    // makes the real silent install request
+        iIsPackageCheckedForSilentInstall = ETrue;
         }
     else
         {
@@ -119,7 +123,7 @@ void CSisxSifPluginActiveImpl::RunL()
             {
             iOutputParams->AddIntL( KSifOutParam_ExtendedErrCode, result );
 
-            if( iInstallRequest && result == KErrNone )
+            if( iOperation == EInstall && result == KErrNone )
                 {
                 TComponentId resultComponentId = 0;
                 TRAPD( getLastIdErr, resultComponentId = GetLastInstalledComponentIdL() );
@@ -131,7 +135,7 @@ void CSisxSifPluginActiveImpl::RunL()
             }
 
         TInt errorCode = ConvertToSifErrorCode( result );
-        if( !iSilentInstall )
+        if( !iUseSilentMode )
             {
             if( errorCode == KErrNone )
                 {
@@ -174,15 +178,16 @@ void CSisxSifPluginActiveImpl::GetComponentInfo(
         CComponentInfo& aComponentInfo,
         TRequestStatus& aStatus )
 	{
+    iOperation = EGetComponentInfo;
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
 
-    TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileName,
+    TRAPD( err, iAsyncLauncher->GetComponentInfoL( UiHandlerL(), aFileName,
             *iInstallPrefs, aComponentInfo, iStatus ) );
     FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo, err = %d"), err );
     if( err != KErrNone )
         {
-        CompleteRequest( aStatus, err );
+        CompleteClientRequest( err );
         return;
         }
 
@@ -199,18 +204,19 @@ void CSisxSifPluginActiveImpl::GetComponentInfo(
         CComponentInfo& aComponentInfo,
         TRequestStatus& aStatus )
 	{
+    iOperation = EGetComponentInfo;
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
 
-    TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileHandle,
+    TRAPD( err, iAsyncLauncher->GetComponentInfoL( UiHandlerL(), aFileHandle,
             *iInstallPrefs, aComponentInfo, iStatus ) );
     FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo, err = %d"), err );
+
     if( err != KErrNone )
         {
-        CompleteRequest( aStatus, err );
+        CompleteClientRequest( err );
         return;
         }
-
     SetActive();
 	}
 
@@ -225,20 +231,26 @@ void CSisxSifPluginActiveImpl::Install(
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
 	{
-    CommonRequestPreamble( aSecurityContext, aInputParams, aOutputParams, aStatus );
+    iOperation = EInstall;
+    CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
 
-    FLOG_2( _L("CSisxSifPluginActiveImpl::Install: %S, iSilentInstall=%d"),
-            &aFileName, iSilentInstall );
-
-    TRAPD( err, DoInstallL( aFileName ) );
-    FLOG_2( _L("CSisxSifPluginActiveImpl::Install, iInstallRequest=%d, err=%d"),
-            iInstallRequest, err );
-    if( err != KErrNone )
+    if( iUseSilentMode && !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
         {
-        CompleteRequest( aStatus, err );
+        FLOG( _L("CSisxSifPluginActiveImpl: missing ECapabilityTrustedUI ERROR") );
+        CompleteClientRequest( KErrPermissionDenied );
         return;
         }
 
+    FLOG_2( _L("CSisxSifPluginActiveImpl::Install: %S, iUseSilentMode=%d"),
+            &aFileName, iUseSilentMode );
+    TRAPD( err, DoInstallL( aFileName ) );
+    FLOG_1( _L("CSisxSifPluginActiveImpl::Install, err=%d"), err );
+
+    if( err != KErrNone )
+        {
+        CompleteClientRequest( err );
+        return;
+        }
     SetActive();
 	}
 
@@ -253,36 +265,42 @@ void CSisxSifPluginActiveImpl::Install(
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
 	{
-    CommonRequestPreamble( aSecurityContext, aInputParams, aOutputParams, aStatus );
+    iOperation = EInstall;
+    CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
 
-    FLOG_1( _L("CSisxSifPluginActiveImpl::Install, iSilentInstall=%d"), iSilentInstall );
+    if( iUseSilentMode && !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
+        {
+        FLOG( _L("CSisxSifPluginActiveImpl: missing ECapabilityTrustedUI ERROR") );
+        CompleteClientRequest( KErrPermissionDenied );
+        return;
+        }
 
-    TInt err;
-    if( iSilentInstall )
+    FLOG_1( _L("CSisxSifPluginActiveImpl::Install, iUseSilentMode=%d"), iUseSilentMode );
+    TInt err = KErrNone;
+    if( iUseSilentMode )
         {
         // Silent install does a few addtional checks on the package to see if is
         // signed and had the required capabilities. So we need to the get the
         // package component information without installing it. Real silent install
         // operation is started in RunL() after this GetComponentInfoL() completes.
         SetSilentInstallFile( aFileHandle );
-        TRAP( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileHandle, *iInstallPrefs,
-                *iComponentInfo, iStatus ) );
+        TRAP( err, iAsyncLauncher->GetComponentInfoL( UiHandlerL( iUseSilentMode ),
+                aFileHandle, *iInstallPrefs, *iComponentInfo, iStatus ) );
+        FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfoL, err=%d"), err );
         }
     else
         {
         // Proceed with the normal installation.
-        TRAP( err, iAsyncLauncher->InstallL( *iUiHandler, aFileHandle, *iInstallPrefs, iStatus ) );
-        iInstallRequest = ETrue;
+        TRAP( err, iAsyncLauncher->InstallL( UiHandlerL(), aFileHandle,
+                *iInstallPrefs, iStatus ) );
+        FLOG_1( _L("CSisxSifPluginActiveImpl::Install, err=%d"), err );
         }
 
-    FLOG_2( _L("CSisxSifPluginActiveImpl::Install, iInstallRequest=%d, err=%d"),
-            iInstallRequest, err );
     if( err != KErrNone )
         {
-        CompleteRequest( aStatus, err );
+        CompleteClientRequest( err );
         return;
         }
-
     SetActive();
 	}
 
@@ -297,16 +315,27 @@ void CSisxSifPluginActiveImpl::Uninstall(
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
 	{
-    CommonRequestPreamble( aSecurityContext, aInputParams, aOutputParams, aStatus );
+    iOperation = EUninstall;
+    CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
 
-    TRAPD( err, DoUninstallL( aComponentId, aStatus ) );
-    FLOG_1( _L("CSisxSifPluginActiveImpl::Uninstall, err=%d"), err );
-    if( err != KErrNone )
+    // Uninstall is always silent. TrustedUI capability is always required.
+    if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
         {
-        CompleteRequest( aStatus, err );
+        FLOG( _L( "CSisxSifPluginActiveImpl: missing ECapabilityTrustedUI ERROR") );
+        CompleteClientRequest( KErrPermissionDenied );
         return;
         }
+    iUseSilentMode = ETrue;     // no complete/error notes launched in RunL
 
+    FLOG( _L("CSisxSifPluginActiveImpl::Uninstall") );
+    TRAPD( err, DoUninstallL( aComponentId ) );
+    FLOG_1( _L("CSisxSifPluginActiveImpl::Uninstall, err=%d"), err );
+
+    if( err != KErrNone )
+        {
+        CompleteClientRequest( err );
+        return;
+        }
     SetActive();
 	}
 
@@ -319,6 +348,7 @@ void CSisxSifPluginActiveImpl::Activate(
         const TSecurityContext& /*aSecurityContext*/,
         TRequestStatus& aStatus )
 	{
+    iOperation = EActivate;
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
 
@@ -326,12 +356,13 @@ void CSisxSifPluginActiveImpl::Activate(
     FLOG_2( _L("CSisxSifPluginActiveImpl::Activate, component %d, err=%d"), aComponentId, err );
     if( err != KErrNone )
         {
-        CompleteRequest( aStatus, err );
+        CompleteClientRequest( err );
         return;
         }
 
     iStatus = KRequestPending;
-    CompleteRequest( iStatus, KErrNone );
+    TRequestStatus* status = &iStatus;
+    User::RequestComplete( status, KErrNone );
     SetActive();
 	}
 
@@ -344,20 +375,21 @@ void CSisxSifPluginActiveImpl::Deactivate(
         const TSecurityContext& /*aSecurityContext*/,
         TRequestStatus& aStatus )
 	{
+    iOperation = EDeactivate;
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
 
-    Swi::RSisRegistryWritableSession sisRegSession;
     TRAPD( err, DoDeactivateL( aComponentId ) );
     FLOG_2( _L("CSisxSifPluginActiveImpl::Deactivate, component %d, err=%d"), aComponentId, err );
     if( err != KErrNone )
         {
-        CompleteRequest( aStatus, err );
+        CompleteClientRequest( err );
         return;
         }
 
     iStatus = KRequestPending;
-    CompleteRequest( iStatus, KErrNone );
+    TRequestStatus* status = &iStatus;
+    User::RequestComplete( status, KErrNone );
     SetActive();
 	}
 
@@ -378,20 +410,47 @@ void CSisxSifPluginActiveImpl::ConstructL()
     {
     User::LeaveIfError( iFs.Connect() );
 
-    iUiHandler = CSisxSifPluginUiHandler::NewL( iFs );
     iAsyncLauncher = Swi::CAsyncLauncher::NewL();
     iInstallPrefs = Swi::CInstallPrefs::NewL();
     iComponentInfo = CComponentInfo::NewL();
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::Complete()
+// CSisxSifPluginActiveImpl::UiHandlerL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::CompleteRequest( TRequestStatus& aStatus, TInt aResult )
+Swi::MUiHandler& CSisxSifPluginActiveImpl::UiHandlerL( TBool aUseSilentMode )
     {
-    TRequestStatus* statusPtr = &aStatus;
-    User::RequestComplete( statusPtr, aResult );
+    Swi::MUiHandler* handler = NULL;
+
+    if( aUseSilentMode )
+        {
+        if( iUiHandler )
+            {
+            delete iUiHandler;
+            iUiHandler = NULL;
+            }
+        if( !iUiHandlerSilent )
+            {
+            iUiHandlerSilent = CSisxSifPluginUiHandlerSilent::NewL( iFs );
+            }
+        handler = iUiHandlerSilent;
+        }
+    else
+        {
+        if( iUiHandlerSilent )
+            {
+            delete iUiHandlerSilent;
+            iUiHandlerSilent = NULL;
+            }
+        if( !iUiHandler )
+            {
+            iUiHandler = CSisxSifPluginUiHandler::NewL( iFs );
+            }
+        handler = iUiHandler;
+        }
+
+    return *handler;
     }
 
 // ---------------------------------------------------------------------------
@@ -399,7 +458,6 @@ void CSisxSifPluginActiveImpl::CompleteRequest( TRequestStatus& aStatus, TInt aR
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginActiveImpl::CommonRequestPreamble(
-        const TSecurityContext& aSecurityContext,
         const COpaqueNamedParams& aInputParams,
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
@@ -407,24 +465,28 @@ void CSisxSifPluginActiveImpl::CommonRequestPreamble(
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
 
+    TInt silentInstall = 0;
+    TRAPD( err, aInputParams.GetIntByNameL( KSifInParam_InstallSilently, silentInstall ) );
+    iUseSilentMode = ( err == KErrNone && silentInstall != 0 );
+    iIsPackageCheckedForSilentInstall = EFalse;
+
     iInputParams = &aInputParams;
     iOutputParams = &aOutputParams;
 
-    // Check InstallSilently opaque input argument
-    TInt silentInstall = 0;
-    TRAP_IGNORE( aInputParams.GetIntByNameL( KSifInParam_InstallSilently, silentInstall ) );
-    if( silentInstall )
-        {
-        iSilentInstall = ETrue;
-        if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
-            {
-            FLOG( _L("CSisxSifPluginActiveImpl: missing ECapabilityTrustedUI ERROR") );
-            CompleteRequest( aStatus, KErrPermissionDenied );
-            iClientStatus = NULL;
-            }
-        }
-
     // TODO: KSifInParam_InstallInactive
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::CompleteClientRequest()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::CompleteClientRequest( TInt aResult )
+    {
+    if( iClientStatus )
+        {
+        User::RequestComplete( iClientStatus, aResult );
+        iClientStatus = NULL;
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -433,21 +495,21 @@ void CSisxSifPluginActiveImpl::CommonRequestPreamble(
 //
 void CSisxSifPluginActiveImpl::DoInstallL( const TDesC& aFileName )
     {
-    if( iSilentInstall )
+    if( iUseSilentMode )
         {
         // Silent install does a few addtional checks on the package to see if is
         // signed and had the required capabilities. So we need to the get the
         // package component information without installing it. Real silent install
         // operation is started in RunL() after this GetComponentInfoL() completes.
         SetSilentInstallFileL( aFileName );
-        iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileName, *iInstallPrefs,
-                *iComponentInfo, iStatus );
+        iIsPackageCheckedForSilentInstall = EFalse;
+        iAsyncLauncher->GetComponentInfoL( UiHandlerL( iUseSilentMode ), aFileName,
+                *iInstallPrefs, *iComponentInfo, iStatus );
         }
     else
         {
         // Proceed with the normal installation.
-        iAsyncLauncher->InstallL( *iUiHandler, aFileName, *iInstallPrefs, iStatus );
-        iInstallRequest = ETrue;
+        iAsyncLauncher->InstallL( UiHandlerL(), aFileName, *iInstallPrefs, iStatus );
         }
     }
 
@@ -455,7 +517,7 @@ void CSisxSifPluginActiveImpl::DoInstallL( const TDesC& aFileName )
 // CSisxSifPluginActiveImpl::DoUninstallL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId, TRequestStatus& /*aStatus*/ )
+void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId )
     {
     RSoftwareComponentRegistry scrSession;
     User::LeaveIfError( scrSession.Connect() );
@@ -475,7 +537,7 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId, TRequest
     TUid objectId = TUid::Uid( intPropertyEntry->IntValue() );
     CleanupStack::PopAndDestroy( 2, &scrSession );      // propertyEntry, scrSession
 
-    iAsyncLauncher->UninstallL( *iUiHandler, objectId, iStatus );
+    iAsyncLauncher->UninstallL( UiHandlerL( iUseSilentMode ), objectId, iStatus );
     }
 
 // ---------------------------------------------------------------------------
@@ -508,6 +570,9 @@ void CSisxSifPluginActiveImpl::DoDeactivateL( TComponentId aComponentId )
 //
 TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
     {
+    FLOG_1( _L("CSisxSifPluginActiveImpl::ConvertToSifErrorCode(), aSwiErrorCode=%d"),
+            aSwiErrorCode );
+
     // TODO: need to show also SWI error code in UI somehow when necessary
 
     if( aSwiErrorCode > KSystemWideErrorsBoundary )
@@ -609,7 +674,7 @@ TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
 //
 TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     {
-    ASSERT( iInstallRequest );
+    ASSERT( iOperation == EInstall );
 
     // Find the id of the last installed component and return it
     TInt uid;
@@ -627,10 +692,10 @@ TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::NeedUserCapabilityL()
+// CSisxSifPluginActiveImpl::RequiresUserCapabilityL()
 // ---------------------------------------------------------------------------
 //
-TBool CSisxSifPluginActiveImpl::NeedUserCapabilityL()
+TBool CSisxSifPluginActiveImpl::RequiresUserCapabilityL()
     {
     // Silent install is not allowed when the package requires additional capabilities
     // than what it is signed for (Package may request for some capability that is not
@@ -653,38 +718,32 @@ TBool CSisxSifPluginActiveImpl::NeedUserCapabilityL()
 //
 void CSisxSifPluginActiveImpl::ProcessSilentInstallL()
     {
-    // We need to do this only once per installation request
-    iSilentInstall = EFalse;
-    iInstallRequest = ETrue;
-
-    // TODO: should self-signed packages that do not contain executables be allowed?
-    //TBool hasExecutable = iComponentInfo->RootNodeL().HasExecutable();
-
-    TBool isNotAuthenticated = ( iComponentInfo->RootNodeL().Authenticity() == ENotAuthenticated );
-    TBool reqUserCap = NeedUserCapabilityL();
-    if( isNotAuthenticated || reqUserCap )
+    TBool isAuthenticated = ( iComponentInfo->RootNodeL().Authenticity() == EAuthenticated );
+    TBool requiresUserCapability = RequiresUserCapabilityL();
+    if( !isAuthenticated || requiresUserCapability )
         {
-        if( isNotAuthenticated )
+        if( !isAuthenticated )
             {
             FLOG( _L("Silent Install is not allowed on unsigned or self-signed packages") );
             }
-        if( reqUserCap )
+        if( requiresUserCapability )
             {
             FLOG( _L("Silent Install is not allowed when user capabilities are required") );
             }
-        User::RequestComplete( iClientStatus, KErrPermissionDenied );
-        iClientStatus = NULL;
+        CompleteClientRequest( KErrPermissionDenied );
         }
     else
         {
         TInt err = KErrNone;
         if( iFileHandle )
             {
-            TRAP( err, iAsyncLauncher->InstallL( *iUiHandler, *iFileHandle, *iInstallPrefs, iStatus ) );
+            TRAP( err, iAsyncLauncher->InstallL( UiHandlerL( iUseSilentMode ), *iFileHandle,
+                    *iInstallPrefs, iStatus ) );
             }
         else if( iFileName )
             {
-            TRAP( err, iAsyncLauncher->InstallL( *iUiHandler, *iFileName, *iInstallPrefs, iStatus ) );
+            TRAP( err, iAsyncLauncher->InstallL( UiHandlerL( iUseSilentMode ), *iFileName,
+                    *iInstallPrefs, iStatus ) );
             }
         else
             {
@@ -697,8 +756,7 @@ void CSisxSifPluginActiveImpl::ProcessSilentInstallL()
             }
         else
             {
-            User::RequestComplete( iClientStatus, err );
-            iClientStatus = NULL;
+            CompleteClientRequest( err );
             }
         }
     }

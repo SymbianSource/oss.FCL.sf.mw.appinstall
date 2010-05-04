@@ -19,23 +19,19 @@
 
 
 // INCLUDES
-#include <avkon.hrh>
-#include <StringLoader.h> 
 #include <centralrepository.h>
-#include <AknUtils.h>
 #include <SWInstDefs.h>
-#include <avkon.rsg>
 #include <featurecontrol.h>
 #include <cmmanager.h>
-#include <iaupdate.rsg>
+#include <qapplication.h>
+#include <hbmessagebox.h>
+#include <hbaction.h>
+#include <hbprogressdialog.h>
 #include <iaupdateparameters.h>
 
 #include "iaupdateuicontroller.h"
 #include "iaupdateuicontrollerobserver.h"
-#include "iaupdateappui.h"
 #include "iaupdate.hrh"
-#include "iaupdatewaitdialog.h"
-#include "iaupdateprogressdialog.h"
 #include "iaupdatenode.h"
 #include "iaupdatefwnode.h"
 #include "iaupdatebasenode.h"
@@ -45,7 +41,6 @@
 #include "iaupdateprivatecrkeys.h"
 #include "iaupdatecontrollerfile.h"
 #include "iaupdateuiconfigdata.h"
-#include "iaupdatedialogutil.h"
 #include "iaupdateutils.h"
 #include "iaupdateagreement.h"
 #include "iaupdateautomaticcheck.h"
@@ -57,13 +52,13 @@
 #include "iaupdateridentifier.h"
 #include "iaupdateruids.h"
 #include "iaupdaterdefs.h"
-#include "iaupdatetools.h"
 #include "iaupdateparametersfilemanager.h"
 #include "iaupdateerrorcodes.h"
 #include "iaupdatefileconsts.h"
 #include "iaupdatefirsttimeinfo.h"
 #include "iaupdaterefreshhandler.h"
 #include "iaupdatenodeid.h"
+#include "iaupdatewaitdialog.h"
 #include "iaupdatedebug.h"
 
 
@@ -252,6 +247,7 @@ CIAUpdateUiController::~CIAUpdateUiController()
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::~CIAUpdateUiController() begin");
 
     CancelOperation();
+    delete mWaitDialog;
     delete iController;
     iNodes.Reset();
     iFwNodes.Reset();
@@ -271,8 +267,8 @@ CIAUpdateUiController::~CIAUpdateUiController()
     // ProcessFinishedL() should normally be used for dialogs but
     // here just use non-leaving delete. In normal cases, dialogs should
     // already be released in the end of the update flow before coming here.
-    delete iWaitDialog;
-    delete iProgressDialog;
+    //delete iWaitDialog;
+    //delete iProgressDialog;
         
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::~CIAUpdateUiController() end");
     }        
@@ -356,9 +352,7 @@ void CIAUpdateUiController::CheckUpdatesL()
        	    }
        	else
        	    {
-       	    CIAUpdateAppUi* appUi = 
-       	            static_cast< CIAUpdateAppUi* >( iEikEnv->EikAppUi() );
-            appUi->Exit();
+       	    qApp->quit();
        	    return;	
        	    }
         }
@@ -421,10 +415,12 @@ void CIAUpdateUiController::StartUpdateL()
                 
     if ( !IAUpdateUtils::SpaceAvailableInInternalDrivesL( iSelectedNodesArray ) )
         {
-  	    HBufC* noteText = NULL;
-        noteText = StringLoader::LoadLC( R_IAUPDATE_INSUFFICIENT_MEMORY );
-        IAUpdateDialogUtil::ShowInformationQueryL( *noteText ); 
-        CleanupStack::PopAndDestroy( noteText );
+            HbMessageBox messageBox(HbMessageBox::MessageTypeInformation); 
+            messageBox.setText(QString("Insufficient memory. Free some memory and try again."));
+            HbAction action("OK");
+            messageBox.setPrimaryAction(&action);
+            messageBox.setTimeout(HbPopup::NoTimeout);
+            messageBox.exec();
         }
     else
         {
@@ -516,10 +512,10 @@ void CIAUpdateUiController::ContinueUpdateL( TBool aSelfUpdateFinished )
                     selectedNode->DownloadL( *this );
                     iState = EDownloading;
                     iClosingAllowedByClient = ETrue;
-                    ShowUpdatingDialogL( R_IAUPDATE_DOWNLOADING_NOTE,
+                    /*ShowUpdatingDialogL( R_IAUPDATE_DOWNLOADING_NOTE,
                                          selectedNode->Base().Name(),
                                          iNodeIndex + 1,
-                                         iSelectedNodesArray.Count() ); 
+                                         iSelectedNodesArray.Count() );*/ 
                     nextUpdate = EFalse;
                     }
                 else
@@ -530,13 +526,13 @@ void CIAUpdateUiController::ContinueUpdateL( TBool aSelfUpdateFinished )
                     selectedNode->InstallL( *this );
                     iState = EInstalling;
                     iClosingAllowedByClient = EFalse;
-                    CIAUpdateAppUi* appUi = 
+                    /*CIAUpdateAppUi* appUi = 
                         static_cast< CIAUpdateAppUi* >( iEikEnv->EikAppUi() );
                     appUi->StartWGListChangeMonitoring();
                     ShowUpdatingDialogL( R_IAUPDATE_INSTALLING_NOTE,
                                          selectedNode->Base().Name(),
                                          iNodeIndex + 1,
-                                         iSelectedNodesArray.Count() ); 
+                                         iSelectedNodesArray.Count() ); */
                     nextUpdate = EFalse;                     
                     }      
                 }
@@ -570,13 +566,13 @@ void CIAUpdateUiController::StartInstallL( MIAUpdateNode& aNode )
             
     aNode.InstallL( *this );
     iState = EInstalling;
-    CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
+    /*CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
     appUi->StartWGListChangeMonitoring();
     iClosingAllowedByClient = EFalse;
     ShowUpdatingDialogL( R_IAUPDATE_INSTALLING_NOTE,
                          aNode.Base().Name(),
                          iNodeIndex + 1,
-                         iSelectedNodesArray.Count()  );
+                         iSelectedNodesArray.Count()  ); */
     
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::StartInstallL() end");
     }
@@ -612,17 +608,13 @@ void CIAUpdateUiController::StartRefreshL()
                 if ( allowNetworkRefresh )
                     {
                     iEikEnv->RootWin().SetOrdinalPosition( 0, ECoeWinPriorityNormal );
-                    HBufC* noteText = StringLoader::LoadLC( R_IAUPDATE_REFRESHING_UPDATE_LIST );
-                    ShowWaitDialogL( *noteText, ETrue );
-                    CleanupStack::PopAndDestroy( noteText );
+                    ShowWaitDialogL( "Refreshing updates list", ETrue );
                     }
                 }
             }
         else
             {
-            HBufC* noteText = StringLoader::LoadLC( R_IAUPDATE_REFRESHING_UPDATE_LIST );
-            ShowWaitDialogL( *noteText, EFalse );
-            CleanupStack::PopAndDestroy( noteText );
+            ShowWaitDialogL( "Refreshing updates list", ETrue );
             }
         }
     
@@ -1301,8 +1293,8 @@ void CIAUpdateUiController::SelfUpdaterComplete( TInt aErrorCode )
 
     if ( aErrorCode == IAUpdaterDefs::KIAUpdaterShutdownRequest )
         {
-        CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
-    	appUi->Exit();
+        //CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
+    	//appUi->Exit();
         }
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::SelfUpdaterComplete() end");
@@ -1354,15 +1346,15 @@ void CIAUpdateUiController::ClientRole( const TDesC& aClientRole )
 // -----------------------------------------------------------------------------
 //
 void CIAUpdateUiController::DownloadProgress( MIAUpdateNode& /*aNode*/, 
-                                              TUint aProgress,
-                                              TUint aMaxProgress )
+                                              TUint /*aProgress*/,
+                                              TUint /*aMaxProgress*/ )
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::DownloadProgress() begin");  
 
     if ( iProgressDialog )
         {
-    	TRAP_IGNORE ( iProgressDialog->SetProgressDialogFinalValueL( aMaxProgress ) );
-        TRAP_IGNORE ( iProgressDialog->UpdateProgressDialogValueL( aProgress ) );
+    	//TRAP_IGNORE ( iProgressDialog->SetProgressDialogFinalValueL( aMaxProgress ) );
+        //TRAP_IGNORE ( iProgressDialog->UpdateProgressDialogValueL( aProgress ) );
         }
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::DownloadProgress() end");  
@@ -1418,8 +1410,8 @@ void CIAUpdateUiController::InstallComplete( MIAUpdateNode& aNode,
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::InstallComplete() begin");
 
     iState = EIdle;
-    CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
-    appUi->StopWGListChangeMonitoring();
+    //CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
+    //appUi->StopWGListChangeMonitoring();
     if ( aError == SwiUI::KSWInstErrFileInUse )
         {
     	iFileInUseError = ETrue;
@@ -1533,29 +1525,23 @@ void CIAUpdateUiController::RoamingHandlerPrepared()
 
 
 // -----------------------------------------------------------------------------
-// CIAUpdateUiController::HandleDialogExitL
-// Called when wait/progress dialog is about to be cancelled.
+// CIAUpdateUiController::HandleWaitDialogCancel
+// Called when wait dialog is cancelled.
 // (other items were commented in a header).
 // -----------------------------------------------------------------------------
 //
-TBool CIAUpdateUiController::HandleDialogExitL( TInt aButtonId )
+void CIAUpdateUiController::HandleWaitDialogCancel()
     {
-    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::HandleDialogExitL() begin");
-    IAUPDATE_TRACE_1("[IAUPDATE] button id: %d", aButtonId );
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::HandleWaitDialogCancel() begin");
     
-    TInt ret( ETrue );
-    if ( aButtonId == EAknSoftkeyCancel )
-        {  
-        TRAPD ( err, HandleUserCancelL() );
-        if ( err != KErrNone )
-            {
-        	iObserver.HandleLeaveErrorL( err );
-            }
-        }   
+    TRAPD ( err, HandleUserCancelL() );
+    if ( err != KErrNone )
+        {
+      	iObserver.HandleLeaveErrorL( err );
+        }
 
-    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::HandleDialogExitL() end");
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::HandleWaitDialogCancel() end");
 
-    return ret;    
     }
 
 // -----------------------------------------------------------------------------
@@ -1573,8 +1559,8 @@ void CIAUpdateUiController::HandleUiRefreshL()
 	    }
 	else if ( iState == EIdle )
 	    {
-	    CIAUpdateAppUi* appUi = static_cast< CIAUpdateAppUi* >( iEikEnv->EikAppUi() );
-        if ( appUi->UiRefreshAllowed() )
+	    //CIAUpdateAppUi* appUi = static_cast< CIAUpdateAppUi* >( iEikEnv->EikAppUi() );
+        //if ( appUi->UiRefreshAllowed() )
 		    {
 	    	iState = EUiRefreshing;
 	        // store node identification (Id and namespace) of currently selected nodes
@@ -2095,7 +2081,7 @@ TInt CIAUpdateUiController::CheckUpdatesDeferredCallbackL( TAny* aPtr )
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateUiController::ShowUpdatingDialogL( TInt aTextResourceId,
+void CIAUpdateUiController::ShowUpdatingDialogL( TInt /*aTextResourceId*/,
                                                  const TDesC& aName,
                                                  TInt aNumber,
                                                  TInt aTotalCount )   
@@ -2115,18 +2101,18 @@ void CIAUpdateUiController::ShowUpdatingDialogL( TInt aTextResourceId,
     numberArray->AppendL( aNumber ); 
     numberArray->AppendL( aTotalCount );
     HBufC* noteText = NULL;
-    noteText = StringLoader::LoadLC( aTextResourceId, 
-                                     *stringArray, 
-                                     *numberArray );
+    //noteText = StringLoader::LoadLC( aTextResourceId, 
+    //                                 *stringArray, 
+    //                                 *numberArray );
     TPtr ptr = noteText->Des();
-    AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr ); 
+    //AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr ); 
     if ( iState == EDownloading )
         {
     	ShowProgressDialogL( *noteText, ETrue );
         }
     else
         {
-        ShowWaitDialogL( *noteText, ETrue );	
+        //ShowWaitDialogL( *noteText, ETrue );	
         }
     
     CleanupStack::PopAndDestroy( noteText ); 
@@ -2142,39 +2128,48 @@ void CIAUpdateUiController::ShowUpdatingDialogL( TInt aTextResourceId,
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateUiController::ShowWaitDialogL( const TDesC& aDisplayString, 
-                                             TBool aVisibilityDelayOff ) 
+void CIAUpdateUiController::ShowWaitDialogL( const QString& aDisplayString, 
+                                             TBool /*aVisibilityDelayOff*/ ) 
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::ShowWaitDialogL() begin");
-
-    if ( iWaitDialog )
+    if ( !mWaitDialog )
+        {
+        mWaitDialog = new IAUpdateWaitDialog();
+        mWaitDialog->SetCallback( this );
+        mWaitDialog->showDialog( aDisplayString );
+        }
+    
+    
+    
+    
+    /*if ( iWaitDialog )
         {
         IAUPDATE_TRACE("[IAUPDATE] Wait dialog already existed. Remove it first");
         // in some rare cases previous dialog still exists
         // it's now just deleted (not recommended way) to avoid forwarding problem(s). 
-        delete iWaitDialog;
+        //delete iWaitDialog;
         iWaitDialog = NULL;
-        }
-    iWaitDialog = 
+        }*/
+ /*   iWaitDialog = 
         new( ELeave ) CIAUpdateWaitDialog( 
             reinterpret_cast< CEikDialog** >( &iWaitDialog ),
             aVisibilityDelayOff );
                 
     iWaitDialog->SetTextL( aDisplayString );
     iWaitDialog->SetCallback( this );        
-    iWaitDialog->ExecuteLD( R_IAUPDATE_WAIT_DIALOG );
+    iWaitDialog->ExecuteLD( R_IAUPDATE_WAIT_DIALOG ); */
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::ShowWaitDialogL() end");
     }
 
 
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 // CIAUpdateUiController::ShowProgressDialogL
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateUiController::ShowProgressDialogL( const TDesC& aDisplayString, 
-                                                 TBool aVisibilityDelayOff ) 
+void CIAUpdateUiController::ShowProgressDialogL( const TDesC& /*aDisplayString*/, 
+                                                 TBool /*aVisibilityDelayOff*/ ) 
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::ShowProgressDialogL() begin");
 
@@ -2183,17 +2178,17 @@ void CIAUpdateUiController::ShowProgressDialogL( const TDesC& aDisplayString,
         IAUPDATE_TRACE("[IAUPDATE] Progress dialog already existed. Remove it first");
         // in some rare cases previous dialog still exists
         // it's now just deleted (not recommended way) to avoid forwarding problem(s). 
-        delete iProgressDialog;
+        //delete iProgressDialog;
         iProgressDialog = NULL;
         }
-    iProgressDialog = 
+/*    iProgressDialog = 
         new( ELeave ) CIAUpdateProgressDialog( 
             reinterpret_cast< CEikDialog** >( &iProgressDialog ),
             aVisibilityDelayOff );
                 
     iProgressDialog->SetTextL( aDisplayString );
     iProgressDialog->SetCallback( this );        
-    iProgressDialog->ExecuteLD( R_IAUPDATE_PROGRESS_DIALOG );
+    iProgressDialog->ExecuteLD( R_IAUPDATE_PROGRESS_DIALOG ); */
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::ShowProgressDialogL() end");
     }
@@ -2223,15 +2218,18 @@ void CIAUpdateUiController::RemoveUpdatingDialogsL()
 void CIAUpdateUiController::RemoveWaitDialogL()
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::RemoveWaitDialogL() begin");
-
-    if ( !iCancelling )  //that's needed because AVKON  in 3.2.3 wk12, returning
+    if ( mWaitDialog )
+        {
+        mWaitDialog->close();  
+        }
+    /*if ( !iCancelling )  //that's needed because AVKON  in 3.2.3 wk12, returning
                          //EFalse in TryToExitL() causes a crash   
         {
     	if ( iWaitDialog )
             {
     	    iWaitDialog->ProcessFinishedL();
             }
-        }
+        }*/
     
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::RemoveWaitDialogL() end");
     }
@@ -2251,7 +2249,7 @@ void CIAUpdateUiController::RemoveProgressDialogL()
         {
     	if ( iProgressDialog )
             {
-    	    iProgressDialog->ProcessFinishedL();
+    	    //iProgressDialog->ProcessFinishedL();
             }
         }
     

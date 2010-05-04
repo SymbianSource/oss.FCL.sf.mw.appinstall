@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -15,12 +15,9 @@
 *
 */
 
-
-#include <iaupdate.rsg>
-#include <StringLoader.h> 
-#include <aknmessagequerydialog.h>
-#include <aknnotewrappers.h>
+#include <e32base.h>
 #include <DevManInternalCRKeys.h>
+#include <centralrepository.h>
 #include <e32property.h>
 
 #include "iaupdatefwupdatehandler.h"
@@ -139,7 +136,7 @@ void CIAUpdateFWUpdateHandler::RunL()
         {
         case ENSU:
             {          
-            HBufC* text1 = StringLoader::LoadLC( R_IAUPDATE_INFO_NSU_1 );  
+            /*HBufC* text1 = StringLoader::LoadLC( R_IAUPDATE_INFO_NSU_1 );  
             HBufC* text2 = StringLoader::LoadLC( R_IAUPDATE_INFO_NSU_2 );
             
             HBufC* text = HBufC::NewLC( text1->Length() +
@@ -155,7 +152,7 @@ void CIAUpdateFWUpdateHandler::RunL()
             CleanupStack::PopAndDestroy( heading ); //text, heading
             CleanupStack::PopAndDestroy( text );
             CleanupStack::PopAndDestroy( text2 );
-            CleanupStack::PopAndDestroy( text1 );
+            CleanupStack::PopAndDestroy( text1 );*/
           
             break;
             }
@@ -174,6 +171,13 @@ void CIAUpdateFWUpdateHandler::RunL()
                 //still allow user to continue
                 if ( ( fotamodelstate != RFotaEngineSession::EDownloadComplete ) && ( fotamodelstate != RFotaEngineSession::EStartingUpdate ) )
                     {
+		                //if download is suspended, try to resume it.
+		                if ( fotamodelstate == RFotaEngineSession::EDownloadProgressingWithResume)
+		                    {
+		                    TInt result = iFotaModel->TryResumeFwUpdDownload();
+						            FLOG_NUM( "[IAUPDATEFW] TryResumeFwUpdDownload result  = %d", result );   
+		                    }
+                    //anyway, DM is in use
                     isDmActive = ETrue;
                     }
                 }
@@ -223,16 +227,16 @@ void CIAUpdateFWUpdateHandler::DoCancel()
 //  CIAUpdateFWUpdateHandler::ShowDialogL()
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateFWUpdateHandler::ShowDialogL(TDesC& aText, TDesC& aHeading )
+void CIAUpdateFWUpdateHandler::ShowDialogL(TDesC& /*aText*/, TDesC& /*aHeading*/ )
     {  
-    CAknMessageQueryDialog* dlg = CAknMessageQueryDialog::NewL( aText );
+    //CAknMessageQueryDialog* dlg = CAknMessageQueryDialog::NewL( aText );
 
-    dlg->PrepareLC( R_IAUPDATE_MESSAGE_QUERY );
+    //dlg->PrepareLC( R_IAUPDATE_MESSAGE_QUERY );
 
-    CAknPopupHeadingPane* headingPane = dlg->Heading();
-    headingPane->SetTextL( aHeading );
+    //CAknPopupHeadingPane* headingPane = dlg->Heading();
+    //headingPane->SetTextL( aHeading );
 	    
-    TInt ret = dlg->RunLD();
+    //TInt ret = dlg->RunLD();
     }
         
 
@@ -278,12 +282,12 @@ void CIAUpdateFWUpdateHandler::StartSyncL(
     if (error != KErrNone)
         {
 
-        CAknInformationNote* queryDialog = new (ELeave) CAknInformationNote;
+        //CAknInformationNote* queryDialog = new (ELeave) CAknInformationNote;
         
-        HBufC* error = HBufC::NewL(20);
-                  TPtr ptrerror = error->Des();
-                  ptrerror.Copy(_L("sync problem")); 
-        queryDialog->ExecuteLD( *error  );
+        //HBufC* error = HBufC::NewL(20);
+        //          TPtr ptrerror = error->Des();
+        //          ptrerror.Copy(_L("sync problem")); 
+        //queryDialog->ExecuteLD( *error  );
         }
     }
 

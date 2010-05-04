@@ -29,12 +29,15 @@ VENDORID        VID_DEFAULT
 
 SOURCEPATH      ../src
 SOURCE          sifui.cpp
+SOURCE          sifuiprivate.cpp
 
 USERINCLUDE     ../inc
 MW_LAYER_SYSTEMINCLUDE
 
-LIBRARY         euser.lib		// User
-LIBRARY         HbCore.lib		// CHbDeviceDialog
-LIBRARY         apgrfx.lib		// CApaMaskedBitmap
-LIBRARY         fbscli.lib		// CFbsBitmap
+LIBRARY         euser.lib       // User
+LIBRARY         HbCore.lib      // CHbDeviceDialog
+LIBRARY         apgrfx.lib      // CApaMaskedBitmap
+LIBRARY         fbscli.lib      // CFbsBitmap
+LIBRARY         bafl.lib        // CDesC16ArrayFlat
+LIBRARY         efsrv.lib       // RFs
 

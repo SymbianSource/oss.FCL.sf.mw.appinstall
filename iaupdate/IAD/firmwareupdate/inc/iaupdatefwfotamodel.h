@@ -181,6 +181,12 @@ class CIAUpdateFWFotaModel : public CBase
           * @return ETrue if DM support is available
           */
          TBool IsDMSupportAvailableL();
+         
+         /**
+         * Tries to resume suspended firmware update package download.
+         * @return Error code.
+         */
+         TInt TryResumeFwUpdDownload();
 
         
     public: // Functions from base classes

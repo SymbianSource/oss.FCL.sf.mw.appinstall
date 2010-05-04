@@ -20,7 +20,7 @@
 
 #include <data_caging_paths_for_iby.hrh>
 
-data=DATAZ_/APP_RESOURCE_DIR/sifuidevicedialogplugin.rsc APP_RESOURCE_DIR/sifuidevicedialogplugin.rsc 
-data=DATAZ_/QT_TRANSLATIONS_DIR/sifuidevicedialogplugin.qm QT_TRANSLATIONS_DIR/sifuidevicedialogplugin.qm
+// TODO: enable when translations ready
+//data=DATAZ_/QT_TRANSLATIONS_DIR/sifuidevicedialogplugin.qm QT_TRANSLATIONS_DIR/sifuidevicedialogplugin.qm
 
 #endif  // SIFUIDEVICEDIALOGPLUGIN_RESOURCES_IBY

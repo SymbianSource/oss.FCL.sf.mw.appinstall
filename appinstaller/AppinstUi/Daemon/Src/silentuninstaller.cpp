@@ -41,16 +41,13 @@ CSilentUninstaller::CSilentUninstaller( RFs& aFs )
 //
 void CSilentUninstaller::ConstructL()
     {
-    iConnected = EFalse; 
-    
+    iConnected = EFalse;     
     iSifOptions = Usif::COpaqueNamedParams::NewL();
-    iSifResults = Usif::COpaqueNamedParams::NewL();
-    
-    // Set parameters for silent uninstall.
-    // iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );    
-    // iSifOptions->AddIntL( Usif::KSifInParam_AllowAppBreakDependency, EFalse );   
-// TODO: Should "silent install" be defined also for uninstall
-    //iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );     
+    iSifResults = Usif::COpaqueNamedParams::NewL();    
+    // Set parameters for silent uninstall.    
+    iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );       
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );    
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppBreakDependency, EFalse );     
     }
 
 
@@ -94,24 +91,21 @@ CSilentUninstaller::~CSilentUninstaller()
 void CSilentUninstaller::UninstallL( 
     TUid& aUid, 
     TRequestStatus& aReqStatus, 
-    TDesC8& aMIME )
+    TDesC& aMIME )
     {
     FLOG_1( _L("Daemon: UninstallL: UID = 0x%x"), aUid.iUid );
     
     if ( !iConnected )
         {               
         FLOG( _L("[CSilentUninstaller] Connect to sif installer server") );    
-        User::LeaveIfError( iSWInstallerFW.Connect() );                     
-    
+        User::LeaveIfError( iSWInstallerFW.Connect() );                         
         FLOG( _L("[CSilentUninstaller] Connect to SisRegistery") );      
-        User::LeaveIfError( iRegistrySession.Connect() );           
-        
+        User::LeaveIfError( iRegistrySession.Connect() );                   
         iConnected = ETrue;   
         }
-    
-// TODO: How is mime type set ?    
+      
     // Set MIME type.
-    //iSifOptions->AddStringL( Usif::KSifInParam_MimeType, aMIME );  
+    iSifOptions->AddStringL( Usif::KSifInParam_MimeType, aMIME );  
            
     // Usif need the component ID, so we need to map the package UID to 
     // component ID. To do this simple we need SisRegistry.           

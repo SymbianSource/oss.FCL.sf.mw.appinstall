@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -24,16 +24,12 @@
 #ifdef FF_IAUPDATE
 
 S60_APP_EXE(iaupdate)
-S60_APP_BITMAP(iaupdate)
-S60_APP_AIF_ICONS(iaupdate)
-S60_UPGRADABLE_APP_REG_RSC(iaupdate)
+data=ZPRIVATE\10003a3f\import\apps\iaupdate_reg.rsc           PRIVATE\10003a3f\import\apps\iaupdate_reg.rsc
 S60_APP_EXE(iaupdater)
 S60_UPGRADABLE_APP_REG_RSC(iaupdater)
 S60_APP_EXE(iaupdatelauncher)
-S60_UPGRADABLE_APP_REG_RSC(iaupdatelauncher)
+data=ZPRIVATE\10003a3f\import\apps\iaupdatelauncher_reg.rsc   PRIVATE\10003a3f\import\apps\iaupdatelauncher_reg.rsc
 
-
-file=ABI_DIR\BUILD_DIR\iaupdatetools.dll         SHARED_LIB_DIR\iaupdatetools.dll
 file=ABI_DIR\BUILD_DIR\iaupdateapi.dll           SHARED_LIB_DIR\iaupdateapi.dll
 file=ABI_DIR\BUILD_DIR\iaupdateengine.dll        SHARED_LIB_DIR\iaupdateengine.dll
 file=ABI_DIR\BUILD_DIR\iaupdaterfiles.dll        SHARED_LIB_DIR\iaupdaterfiles.dll

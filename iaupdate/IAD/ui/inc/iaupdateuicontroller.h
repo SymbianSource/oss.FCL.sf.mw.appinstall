@@ -47,7 +47,11 @@ class CIAUpdateRefreshHandler;
 class MIAUpdateUiControllerObserver;
 class MIAUpdateHistory;
 class MIAUpdateFwNode;
+class IAUpdateWaitDialog;
+
+class QString;
 class CIAUpdateNodeId;
+class CEikonEnv;
 
 
 // CLASS DECLARATION
@@ -320,11 +324,9 @@ private:  // MIAUpdateRoamingHandlerObserver
 private: // From MIAUpdateWaitDialogObserver    
     
     /**
-     * This is called when the dialog is about to be closed.
-     * @param aButtonId - Id of the button, which was used to cancel the dialog.
-     * @return ETrue, if it's ok to close the dialog, EFalse otherwise.
+     * This is called when the dialog is  closed.
      */
-    TBool HandleDialogExitL( TInt aButtonId );   
+     void HandleWaitDialogCancel();   
     
 
 private: // From MIAUpdateRefreshObserver   
@@ -426,7 +428,7 @@ private: // new functions
      * @param aDisplayString       A string to be displayed
      * @param aVisibilityDelayOff  ETrue if visibility delay is off
      */                  
-    void ShowWaitDialogL( const TDesC& aDisplayString, 
+    void ShowWaitDialogL( const QString& aDisplayString, 
                           TBool aVisibilityDelayOff ); 
     
     /**
@@ -555,7 +557,7 @@ private: // data
     
     RPointerArray<MIAUpdateNode> iServicePackNodes;
  
-    CIAUpdateWaitDialog* iWaitDialog;
+    IAUpdateWaitDialog *mWaitDialog;
     
     CIAUpdateProgressDialog* iProgressDialog;
     

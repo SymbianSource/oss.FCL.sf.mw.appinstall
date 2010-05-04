@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -21,15 +21,13 @@
 //INCLUDES
 
 #include "iaupdateautomaticcheck.h"
-#include "iaupdatedialogutil.h"
 #include "iaupdatefirsttimeinfo.h"
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
-#include "iaupdateapplication.h"
 
-#include <avkon.rsg>
+
+
 #include <avkon.hrh>
-#include <iaupdate.rsg>
 #include <centralrepository.h> 
 
 
@@ -104,9 +102,10 @@ TBool CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
 	        }
 	    else
 	        {
-	        TInt ret = IAUpdateDialogUtil::ShowConfirmationQueryL( 
+	        /*TInt ret = IAUpdateDialogUtil::ShowConfirmationQueryL( 
 	                                          R_IAUPDATE_TURN_ON_AUTOUPD_CHECKS, 
-	                                          R_AVKON_SOFTKEYS_YES_NO );    
+	                                          R_AVKON_SOFTKEYS_YES_NO );*/ 
+	        TInt ret = EAknSoftkeyYes;
 	        firstTimeInfo->SetAutomaticUpdatesAskedL();
 	        if ( ret == EAknSoftkeyYes )
                 {

@@ -581,7 +581,7 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
     
     do    
         {
-        TRAP( err, iDmgr.ConnectL( sessionId, *this, ETrue ) );
+        // TRAP( err, iDmgr.ConnectL( sessionId, *this, ETrue ) );
         if ( err != KErrNone ) 
             {
             DLERROR(("DL manager connection failed with err: %d, retry attempts left", 
@@ -607,9 +607,9 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
     iNetworkManager = &CCatalogsHttpSessionManager::NetworkManagerL();
     iNetworkManager->AddObserverL( *this );    
     
-    iDmgr.SetIntAttribute( EDlMgrExitAction, EExitPause );
+//    iDmgr.SetIntAttribute( EDlMgrExitAction, EExitPause );
     // Restore downloads from previous sessions
-    RestoreDownloadsL();
+//    RestoreDownloadsL();
     DLTRACEOUT((""));
     }
     

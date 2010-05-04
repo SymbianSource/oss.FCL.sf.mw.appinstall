@@ -27,8 +27,6 @@ TOOLS
 
 PRJ_EXPORTS
 
-../group/makekeys.ipr	/epoc32/engdoc/tools/makekeys.ipr
-
 PRJ_MMPFILES
 #ifdef TOOLS
 #ifndef TOOLS2

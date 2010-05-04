@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -17,14 +17,8 @@
 
 
 #include    <e32std.h>
-#include    <AknSoftNotifier.h>
-#include    <AknNotifyStd.h>
-#include    <AknSoftNotificationParameters.h>
-#include    <avkon.rsg>
-#include    <iaupdate.rsg>
 #include    <centralrepository.h>
 #include    "iaupdatebgremindertimer.h"
-#include    "iaupdate.hrh"
 #include    "iaupdateprivatecrkeys.h"
 #include    "iaupdatebgconst.h"
 

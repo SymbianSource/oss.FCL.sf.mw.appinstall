@@ -36,11 +36,10 @@ enum TSifUiDeviceDialogType
 
 // Variant map keys for dialog type and title (common to all dialog types)
 _LIT( KSifUiDialogType, "type" );                   // enum TSifUiDeviceDialogType
-_LIT( KSifUiDialogMode, "mode" );                   // enum TSifUiDeviceDialogMode
 
 // Variant map keys for device dialog return values
 _LIT( KSifUiQueryAccepted, "accept" );              // boolean
-_LIT( KSifUiSelectedMemoryIndex, "memi" );          // integer
+_LIT( KSifUiSelectedMemory, "drv" );                // drive letter
 
 // Variant map keys for "confirmation query" dialog parameters
 _LIT( KSifUiApplicationName, "app" );               // descriptor
@@ -49,7 +48,7 @@ _LIT( KSifUiApplicationIconMaskHandle, "mask" );    // integer, bitmap handle
 _LIT( KSifUiApplicationVersion, "ver" );            // descriptor
 _LIT( KSifUiApplicationSize, "size" );              // integer
 _LIT( KSifUiApplicationDetails, "details" );        // descriptor array
-_LIT( KSifUiMemorySelection, "mem" );               // boolean
+_LIT( KSifUiMemorySelection, "mem" );               // descriptor (comma separated drive letters)
 _LIT( KSifUiCertificates, "cert" );                 // boolean ???
 
 // Variant map keys for "progress note" dialog parameters
@@ -59,6 +58,8 @@ _LIT( KSifUiProgressNoteValue, "val" );             // integer
 
 // Variant map keys for "error" dialog parameters
 _LIT( KSifUiErrorCode, "err" );                     // integer
+_LIT( KSifUiErrorMessage, "msg" );                  // string
+_LIT( KSifUiErrorDetails, "det" );                  // string
 
 #endif  // SIFUIDEFS_H
 

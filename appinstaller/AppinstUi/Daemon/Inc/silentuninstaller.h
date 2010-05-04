@@ -62,7 +62,7 @@ class CSilentUninstaller : public CBase
         void UninstallL(         
                 TUid& aUid, 
                 TRequestStatus& aReqStatus, 
-                TDesC8& aMIME  );
+                TDesC& aMIME  );
 
         /**
          * Cancel the current installation.        

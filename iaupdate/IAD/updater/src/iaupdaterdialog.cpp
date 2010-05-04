@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -16,14 +16,6 @@
 */
 
 
-
-#include <AknGlobalNote.h>
-#include <avkon.rsg>
-#include <bautils.h>
-#include <data_caging_path_literals.hrh> 
-#include <iaupdater.rsg>
-#include <StringLoader.h>
-#include <AknUtils.h>   //For AknTextUtils
 
 #include "iaupdaterdialog.h"
 #include "iaupdaterdefs.h"
@@ -92,7 +84,7 @@ void CIAUpdaterDialog::ConstructL()
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ConstructL begin");
     
     // Get resource file path
-    TFileName fileName;
+    /*TFileName fileName;
     fileName.Copy( TParsePtrC( RProcess().FileName() ).Drive() );
     fileName.Append( KDC_APP_RESOURCE_DIR );
     fileName.Append( IAUpdaterDefs::KIAUpdaterResourceFile );
@@ -102,7 +94,7 @@ void CIAUpdaterDialog::ConstructL()
 
     // Open resource file
     iResourceFile.OpenL( iFs, fileName );
-    iResourceFile.ConfirmSignatureL();    
+    iResourceFile.ConfirmSignatureL(); */   
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ConstructL end");
     }
@@ -116,8 +108,8 @@ void CIAUpdaterDialog::ConstructL()
 CIAUpdaterDialog::~CIAUpdaterDialog()
     {
     Cancel();
-    delete iNote;
-    iResourceFile.Close();    
+    //delete iNote;
+    //iResourceFile.Close();    
     }
 
 
@@ -126,7 +118,7 @@ CIAUpdaterDialog::~CIAUpdaterDialog()
 // Show global waiting note during installing.
 // -----------------------------------------------------------------------------
 // 
-void CIAUpdaterDialog::ShowWaitingNoteL( const TDesC& aName, TInt aIndex, TInt aTotalCount )
+void CIAUpdaterDialog::ShowWaitingNoteL( const TDesC& /*aName*/, TInt /*aIndex*/, TInt /*aTotalCount*/ )
 	{	
 	IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ShowWaitingNoteL begin");
 	if ( iNoteId == 0 )
@@ -134,45 +126,45 @@ void CIAUpdaterDialog::ShowWaitingNoteL( const TDesC& aName, TInt aIndex, TInt a
 	    IAUPDATE_TRACE("[IAUpdater] Creating global waiting note.");
 	
         // Get localiced string from resc. file. 
-        HBufC* string = ReadResourceLC( R_IAUPDATER_INSTALLING ); 
+        //HBufC* string = ReadResourceLC( R_IAUPDATER_INSTALLING ); 
                                           
-        HBufC* temp1 = HBufC::NewLC( string->Length() + aName.Length() );          
-        TPtr temp1Ptr = temp1->Des();
+        //HBufC* temp1 = HBufC::NewLC( string->Length() + aName.Length() );          
+        //TPtr temp1Ptr = temp1->Des();
         
         // Add pkg's name to string (U0).
-        StringLoader::Format( temp1Ptr, *string, 0, aName );
+        //StringLoader::Format( temp1Ptr, *string, 0, aName );
                                         
         // Increase buffer length for the number.        
-        HBufC* temp2 = 
-            HBufC::NewLC( temp1->Length() + IAUpdaterDefs::KIAUpdaterParamLen );        
-        TPtr temp2Ptr = temp2->Des();
+        //HBufC* temp2 = 
+        //    HBufC::NewLC( temp1->Length() + IAUpdaterDefs::KIAUpdaterParamLen );        
+        //TPtr temp2Ptr = temp2->Des();
          
         // Add index number to string (N1) 
-        StringLoader::Format( temp2Ptr, *temp1, 1, aIndex );
+        //StringLoader::Format( temp2Ptr, *temp1, 1, aIndex );
                         
         // Increase buffer length for the number.  
-        HBufC* finalString = 
-            HBufC::NewLC( temp2->Length() + IAUpdaterDefs::KIAUpdaterParamLen );        
-        TPtr finalPtr = finalString->Des();
+        //HBufC* finalString = 
+        //    HBufC::NewLC( temp2->Length() + IAUpdaterDefs::KIAUpdaterParamLen );        
+        //TPtr finalPtr = finalString->Des();
         
         // Add max count number to string (N2) 
-        StringLoader::Format( finalPtr, *temp2, 2, aTotalCount );
+        //StringLoader::Format( finalPtr, *temp2, 2, aTotalCount );
         
-        AknTextUtils::DisplayTextLanguageSpecificNumberConversion( finalPtr );         
-        if ( !iNote )
-            {
-        	iNote = CAknGlobalNote::NewL();   
-    	    iNote->SetSoftkeys( R_AVKON_SOFTKEYS_CANCEL );
-            }
+        //AknTextUtils::DisplayTextLanguageSpecificNumberConversion( finalPtr );         
+        //if ( !iNote )
+        //    {
+        //	iNote = CAknGlobalNote::NewL();   
+    	//    iNote->SetSoftkeys( R_AVKON_SOFTKEYS_CANCEL );
+        //    }
      	
-	    IAUPDATE_TRACE("[IAUpdater] Showing global waiting note.");
-    	iNoteId = iNote->ShowNoteL( iStatus, EAknGlobalWaitNote, *finalString );
+	//    IAUPDATE_TRACE("[IAUpdater] Showing global waiting note.");
+    	//iNoteId = iNote->ShowNoteL( iStatus, EAknGlobalWaitNote, *finalString );
     	SetActive();    	    	
      
-    	CleanupStack::PopAndDestroy( finalString );
-    	CleanupStack::PopAndDestroy( temp2 );
-    	CleanupStack::PopAndDestroy( temp1 );
-    	CleanupStack::PopAndDestroy( string );
+    	//CleanupStack::PopAndDestroy( finalString );
+    	//CleanupStack::PopAndDestroy( temp2 );
+    	//CleanupStack::PopAndDestroy( temp1 );
+    	//CleanupStack::PopAndDestroy( string );
 		}
 	IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ShowWaitingNoteL end");
 	}
@@ -187,33 +179,18 @@ void CIAUpdaterDialog::CancelWaitingNoteL()
 	{
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::CancelWaitingNoteL begin");
 	
-	if ( iNoteId != 0 )
+	/*if ( iNoteId != 0 )
 		{
         IAUPDATE_TRACE("[IAUpdater] Cancel waiting note.");
 	    iNote->CancelNoteL( iNoteId );
 	    iNoteId = 0;
-		}
+		}*/
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::CancelWaitingNoteL end");
 	}
 
 	
-// -----------------------------------------------------------------------------	
-// CIAUpdaterDialog::LoadResourceLC
-// Read resource string.
-// -----------------------------------------------------------------------------
-// 
-HBufC* CIAUpdaterDialog::ReadResourceLC( TInt aResourceId )
-    {
-    TResourceReader reader;
-    HBufC8* buff = iResourceFile.AllocReadLC( aResourceId );    
-    reader.SetBuffer( buff );
-    HBufC* text = reader.ReadHBufCL();
-    CleanupStack::PopAndDestroy( buff );
-    CleanupStack::PushL( text );
 
-    return text;
-    }
     
     
 // ---------------------------------------------------------------------------
@@ -235,14 +212,14 @@ void CIAUpdaterDialog::RunL()
     {
     IAUPDATE_TRACE_1("[IAUpdater] CIAUpdaterDialog::RunL() iStatus : %d", iStatus.Int() );
     iNoteId = 0;
-    if ( iStatus.Int() == EAknSoftkeyCancel )
+    /*if ( iStatus.Int() == EAknSoftkeyCancel )
         {
     	iObserver->UserCancel();
         }
     else
         {
         iObserver->UserExit();	
-        }
+        }*/
     }
 
 // ======== GLOBAL FUNCTIONS ========

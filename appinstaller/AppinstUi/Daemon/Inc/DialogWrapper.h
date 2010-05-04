@@ -22,9 +22,13 @@
 //  INCLUDES
 #include <e32base.h>
 #include <f32file.h>
+
 // TODO probably removed in 10.1
 // #include <barsc.h>
 #include "dialogwatcher.h"
+
+class CHbDeviceProgressDialogSymbian;
+class CHbDeviceNotificationDialogSymbian;
 
 namespace Swi
 {
@@ -107,12 +111,16 @@ class CDialogWrapper : public CBase
         HBufC* ReadResourceLC( TInt aResourceId );        
 
     private: //  Data
-
-        //RResourceFile iResourceFile;        
+          
         RFs& iFs;        
         TInt iNoteId;  
         TInt iDisableAllNotes;
         CDialogWatcher* iWatcher;
+        
+        TBool iIsProgressDialog;
+        CHbDeviceProgressDialogSymbian* iHbProgressDialog;
+        TBool iIsUninstallerProgressDialog;                    
+        CHbDeviceProgressDialogSymbian* iHbProgressDialogForUninstaller;                
     };
 }
 

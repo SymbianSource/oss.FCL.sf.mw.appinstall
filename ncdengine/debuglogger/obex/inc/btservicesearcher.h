@@ -207,9 +207,11 @@ private:
     /*! @var iIsDeviceSelectorConnected is the device selector connected ? */
     TBool iIsDeviceSelectorConnected;
 
+#ifdef _0
     /*! @var iDeviceSelector a handle to the bluetooth device selector notifier */
     RNotifier iDeviceSelector;
-
+#endif
+    
     /*! @var iResponse the response of the device selection */
     TBTDeviceResponseParamsPckg iResponse;
 

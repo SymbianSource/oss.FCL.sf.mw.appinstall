@@ -39,6 +39,20 @@ void ActiveRunner::install(const QString &fileName, bool silent)
     }
 }
 
+void ActiveRunner::remove(const Usif::TComponentId& aComponentId, bool silent)
+{
+    if (d_ptr) {
+        d_ptr->Remove(aComponentId, silent);
+    }
+}
+
+void ActiveRunner::remove(const TUid& aUid, const TDesC8& aMime, bool silent)
+{
+    if (d_ptr) {
+        d_ptr->Remove(aUid, aMime, silent);
+    }
+}
+
 void ActiveRunner::handleCompletion()
 {
     emit opCompleted();

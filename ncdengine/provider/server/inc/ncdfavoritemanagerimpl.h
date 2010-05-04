@@ -107,9 +107,92 @@ public: // from CCatalogsCommunicable
     virtual void CounterPartLost(
         const MCatalogsSession& aSession );
     
+private:
+
+    /**
+     * CNcdClientFavorites object encapsulates the favorite identifiers of one
+     * client.
+     */
+    class CNcdClientFavorites : public CBase,
+                                public MNcdStorageDataItem
+        {
+    public:
+        static CNcdClientFavorites* NewLC( const TUid& aClientUid );
+        ~CNcdClientFavorites();
+        
+        TUid ClientUid() const;
+        void AddFavoriteL( CNcdNodeIdentifier* aNodeIdentifier );
+        void RemoveFavorite( const CNcdNodeIdentifier& aNodeIdentifier );
+        void RemoveFavorites();
+        void SetDisclaimerL(
+            const CNcdNodeIdentifier& aNodeIdentifier,
+            const CNcdNodeDisclaimer& aDisclaimer );
+        void RemoveDisclaimer( const CNcdNodeIdentifier& aNodeIdentifier );
+        CNcdNodeDisclaimer* Disclaimer(
+            const CNcdNodeIdentifier& aNodeIdentifier ) const;
+            
+        TBool HasFavorite( const CNcdNodeIdentifier& aNodeIdentifier ) const;
+        
+        const RPointerArray<CNcdNodeIdentifier>& Identifiers() const;
+        void ExternalizeIdentifiersL( RWriteStream& aStream ) const;
+                
+    public: // from MNcdStorageDataItem
+
+        /* 
+        * @see MNcdStorageDataItem::ExternalizeL
+        */
+        virtual void ExternalizeL( RWriteStream& aStream );
+
+        /* 
+        * @see MNcdStorageDataItem::InternalizeL
+        */
+        virtual void InternalizeL( RReadStream& aStream );
+        
+    protected:
+        CNcdClientFavorites( const TUid& aClientUid );
+        void CloseDisclaimers();
+        
+    private: 
+        
+        // Node identifiers.
+        RPointerArray<CNcdNodeIdentifier> iIdentifiers;
+        // Node disclaimers. A disclaimer at index 'i' is disclaimer of the node at
+        // the same index.
+        RPointerArray<CNcdNodeDisclaimer> iDisclaimers;
+        
+        // Client uid.
+        TUid iClientUid;
+        };
+        
+        
+    class CNcdTemporaryFavorites : public CBase 
+        {
+    public: // public functions
+        CNcdTemporaryFavorites( MCatalogsSession& aSession );
+        ~CNcdTemporaryFavorites();
+        
+        
+    public: // member variables
+        MCatalogsSession& iSession;
+        RPointerArray<CNcdNodeIdentifier> iFavoriteIdentifiers;
+        };
+        
+    CNcdGeneralManager& iGeneralManager;
+    
+    // Node manager.        
+    CNcdNodeManager& iNodeManager;
+    
+    // Favorite nodes of all the clients.
+    RPointerArray<CNcdClientFavorites> iFavorites;
+    
+    // Temp favorite mappings.
+    RPointerArray<CNcdTemporaryFavorites> iTempFavorites;
+    
+    // Storage manager.
+    MNcdStorageManager& iStorageManager;       
+    
 protected:
 
-    class CNcdClientFavorites;
     class CNcdTemporaryFavorites;
     
     CNcdFavoriteManager( CNcdGeneralManager& aGeneralManager );
@@ -234,89 +317,6 @@ protected:
     void DbSaveFavoritesL( CNcdClientFavorites& aFavorites );    
     
     
-private:
-
-    /**
-     * CNcdClientFavorites object encapsulates the favorite identifiers of one
-     * client.
-     */
-    class CNcdClientFavorites : public CBase,
-                                public MNcdStorageDataItem
-        {
-    public:
-        static CNcdClientFavorites* NewLC( const TUid& aClientUid );
-        ~CNcdClientFavorites();
-        
-        TUid ClientUid() const;
-        void AddFavoriteL( CNcdNodeIdentifier* aNodeIdentifier );
-        void RemoveFavorite( const CNcdNodeIdentifier& aNodeIdentifier );
-        void RemoveFavorites();
-        void SetDisclaimerL(
-            const CNcdNodeIdentifier& aNodeIdentifier,
-            const CNcdNodeDisclaimer& aDisclaimer );
-        void RemoveDisclaimer( const CNcdNodeIdentifier& aNodeIdentifier );
-        CNcdNodeDisclaimer* Disclaimer(
-            const CNcdNodeIdentifier& aNodeIdentifier ) const;
-            
-        TBool HasFavorite( const CNcdNodeIdentifier& aNodeIdentifier ) const;
-        
-        const RPointerArray<CNcdNodeIdentifier>& Identifiers() const;
-        void ExternalizeIdentifiersL( RWriteStream& aStream ) const;
-                
-    public: // from MNcdStorageDataItem
-
-        /* 
-        * @see MNcdStorageDataItem::ExternalizeL
-        */
-        virtual void ExternalizeL( RWriteStream& aStream );
-
-        /* 
-        * @see MNcdStorageDataItem::InternalizeL
-        */
-        virtual void InternalizeL( RReadStream& aStream );
-        
-    protected:
-        CNcdClientFavorites( const TUid& aClientUid );
-        void CloseDisclaimers();
-        
-    private: 
-        
-        // Node identifiers.
-        RPointerArray<CNcdNodeIdentifier> iIdentifiers;
-        // Node disclaimers. A disclaimer at index 'i' is disclaimer of the node at
-        // the same index.
-        RPointerArray<CNcdNodeDisclaimer> iDisclaimers;
-        
-        // Client uid.
-        TUid iClientUid;
-        };
-        
-        
-    class CNcdTemporaryFavorites : public CBase 
-        {
-    public: // public functions
-        CNcdTemporaryFavorites( MCatalogsSession& aSession );
-        ~CNcdTemporaryFavorites();
-        
-        
-    public: // member variables
-        MCatalogsSession& iSession;
-        RPointerArray<CNcdNodeIdentifier> iFavoriteIdentifiers;
-        };
-        
-    CNcdGeneralManager& iGeneralManager;
-    
-    // Node manager.        
-    CNcdNodeManager& iNodeManager;
-    
-    // Favorite nodes of all the clients.
-    RPointerArray<CNcdClientFavorites> iFavorites;
-    
-    // Temp favorite mappings.
-    RPointerArray<CNcdTemporaryFavorites> iTempFavorites;
-    
-    // Storage manager.
-    MNcdStorageManager& iStorageManager;       
 };
 
 #endif

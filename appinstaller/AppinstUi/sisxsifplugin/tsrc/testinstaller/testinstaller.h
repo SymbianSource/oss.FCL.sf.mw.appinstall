@@ -20,6 +20,7 @@
 
 #include <hbapplication.h>
 #include <QStringList>
+#include <usif/usifcommon.h>
 
 class HbMainWindow;
 class HbView;
@@ -37,27 +38,49 @@ public:     // constructor and destructor
     ~TestInstaller();
 
 private slots:
-    void selectedFileChanged(int index);
     void silentCheckChanged(int state);
+    void installableDirChanged(int index);
+    void installableFileChanged(int index);
     void installUsingNewApi();
     void installUsingOldApi();
+    void installByOpeningFile();
+    void removeUsingNewApi();
+    void removeUsingOldApi();
     void handleComplete();
     void handleError(int error);
     void closeApp();
+    void fileOpenOk(const QVariant &result);
+    void fileOpenFailed(int errorCode, const QString &errorMsg);
 
 private:    // functions
+    void getInstallDirs(QStringList& dirList);
     void changeDir(const QString& dirPath);
-    void createRunner(bool useSif);
-    void installSelected();
+    void getRemovableApps();
+    void doGetRemovableAppsL();
+    bool isFileSelected();
+    bool createRunner(bool useSif);
     void doInstall(const QString &fileName);
+    void doOpenFile(const QString &fileName);
+    void removeSelectedUsingNewApi();
+    void removeSelectedUsingOldApi();
 
 private:    // data
     HbMainWindow *mMainWindow;
     HbView       *mMainView;
-    QStringList  mFileNames;
-    HbComboBox   *mSelectableFiles;
     bool         mUseSilentInstall;
-    QString      mDirPath;
+    HbComboBox   *mInstallDirectories;
+    HbComboBox   *mInstallableFiles;
+    HbComboBox   *mRemovableApps;
+    QList<Usif::TComponentId> mRemovableComponentIds;
+    QList<TUid>  mRemovableUids;
+    enum TSoftwareType {
+        Unknown,
+        Native,
+        Java
+    };
+    QList<TSoftwareType>  mRemovableSoftwareTypes;
+    QString      mCurrentDirPath;
+    QString      mCurrentFile;
     ActiveRunner *mRunner;
 };
 

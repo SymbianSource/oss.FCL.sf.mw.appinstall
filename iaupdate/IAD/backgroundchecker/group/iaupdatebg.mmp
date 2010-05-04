@@ -32,6 +32,10 @@ USERINCLUDE         ../inc
 USERINCLUDE         ../../ui/inc
 USERINCLUDE         ../../firmwareupdate/inc
 
+SYSTEMINCLUDE     /epoc32/include/mw/hb
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbcore 
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbwidgets
+
 MW_LAYER_SYSTEMINCLUDE
 
 SOURCEPATH          ../src
@@ -61,6 +65,11 @@ LIBRARY             AknDynamicSoftNote.lib
 LIBRARY             commonengine.lib
 LIBRARY             sysversioninfo.lib
 LIBRARY             FeatMgr.lib
+
+// HLa
+LIBRARY     hbcore.lib
+LIBRARY     hbwidgets.lib
+
 DEBUGLIBRARY 	    flogger.lib
 
 SMPSAFE
