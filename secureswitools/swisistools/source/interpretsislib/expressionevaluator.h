@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -50,7 +50,7 @@ public:
 	 * Check whether a file exists, corresponds to EXISTS() function in package
 	 * format.
 	 */
-	bool FindFile(const std::wstring& aFileName);
+	bool FindFile(const std::wstring& aFileName, bool aLogInfo = true);
 
 	/**
 	 * Queries an application property, which is a key,value pair associated 
@@ -64,7 +64,7 @@ public:
 	 */
 	bool Package(TUint32 aKey);
 
-	int Variable( int aVariableId );
+	int Variable( int aVariableId, bool aLogInfo = true );
 
 	const std::wstring GetPackageName();
 
@@ -258,8 +258,8 @@ public:
 	void SetFile(const SisFile& aSisFile);
 	void SetRegistry(const SisRegistry& aSisRegistry);
 	
-	ExpressionResult Evaluate(const CSISExpression& aExpression);
-	ExpressionResult Evaluate(const CSISExpression* aExpression);
+	ExpressionResult Evaluate(const CSISExpression& aExpression, bool aLogInfo = true);
+	ExpressionResult Evaluate(const CSISExpression* aExpression, bool aLogInfo = true);
 
 private:
 	void Require(const void *aPointer) const;

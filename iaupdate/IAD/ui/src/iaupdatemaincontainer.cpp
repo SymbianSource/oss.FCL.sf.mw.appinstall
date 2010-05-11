@@ -343,9 +343,15 @@ void CIAUpdateMainContainer::RefreshL( const RPointerArray<MIAUpdateAnyNode>& aN
                     }
                 }
 
-            if ( !size || isNSU )
+            if ( isNSU )
                 {
-                //for firmware when size info is not provided by server
+                //for NSU firmware 
+                importanceDescription = StringLoader::LoadLC(
+                                       R_IAUPDATE_UPDATE_WITH_PC );
+                }
+            else if ( size == 0 )
+                {
+                //for FOTA firmware when size info is not provided by server
                 importanceDescription = StringLoader::LoadLC(
                                                        R_IAUPDATE_DES_CRITICAL_UPDATE_NO_SIZE );
                 }

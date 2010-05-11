@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -230,6 +230,7 @@ EXPORT_C void SoftwareTypeRegInfoUtils::SerializeArrayL(const RPointerArray<CSof
 
 EXPORT_C void SoftwareTypeRegInfoUtils::UnserializeArrayL(RReadStream& aStream, RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray)
 	{
+	CleanupResetAndDestroyPushL(aSwTypeRegInfoArray);
 	const TInt numElems = aStream.ReadInt32L();
 	for (TInt i=0; i<numElems; ++i)
 		{
@@ -238,6 +239,7 @@ EXPORT_C void SoftwareTypeRegInfoUtils::UnserializeArrayL(RReadStream& aStream, 
 		aSwTypeRegInfoArray.AppendL(info);
 		CleanupStack::Pop(info);
 		}
+	CleanupStack::Pop(&aSwTypeRegInfoArray);
 	}
 
 EXPORT_C void SoftwareTypeRegInfoUtils::SerializeUniqueSwTypeNamesL(const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, RBuf& aSerializedNames)
@@ -263,6 +265,7 @@ EXPORT_C void SoftwareTypeRegInfoUtils::SerializeUniqueSwTypeNamesL(const RPoint
 
 EXPORT_C void SoftwareTypeRegInfoUtils::UnserializeUniqueSwTypeNamesL(const TDesC& aSerializedNames, RArray<TPtrC>& aUniqueSwTypeNames)
 	{
+	CleanupClosePushL(aUniqueSwTypeNames);
 	TPtrC buf(aSerializedNames);
 	for (;;)
 		{
@@ -281,6 +284,7 @@ EXPORT_C void SoftwareTypeRegInfoUtils::UnserializeUniqueSwTypeNamesL(const TDes
 			break;
 			}
 		}
+	CleanupStack::Pop(&aUniqueSwTypeNames);
 	}
 
 EXPORT_C void SoftwareTypeRegInfoUtils::ExtractMimeTypesL(const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, RPointerArray<HBufC8>& aMimeTypes)

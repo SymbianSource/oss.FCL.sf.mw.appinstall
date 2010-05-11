@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -36,6 +36,7 @@
 
 // CONSTANTS
 const TSecureId KSIDBackgroundChecker = 0x200211f4;
+const TSecureId KSIDCwrtWidget = 0x200267C0;
 const TSecureId KSIDLauncher = KIAUpdateLauncherUid;
 // ============================ MEMBER FUNCTIONS ===============================
 
@@ -323,7 +324,7 @@ void CIAUpdateSession::HandleRequestL( const RMessage2& aMessage )
         CleanupStack::Pop( params );
         CleanupStack::PopAndDestroy( data );
         
-        if ( aMessage.SecureId() != KSIDBackgroundChecker )      
+        if ( ( aMessage.SecureId() != KSIDBackgroundChecker ) && ( aMessage.SecureId() != KSIDCwrtWidget ) )      
             {
             // other processes than backroundchecker are not allowed to cause refresh from network 
             params->SetRefresh( EFalse );
@@ -331,7 +332,7 @@ void CIAUpdateSession::HandleRequestL( const RMessage2& aMessage )
         switch( functionId )
             {
             case IAUpdateClientDefines::EIAUpdateServerCheckUpdates:
-                appUi->CheckUpdatesRequestL( *this, params );
+                appUi->CheckUpdatesRequestL( *this, params, params->Refresh() && aMessage.SecureId() == KSIDCwrtWidget );
                 break;
 
             case IAUpdateClientDefines::EIAUpdateServerShowUpdates:

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -119,6 +119,22 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
     CleanupStack::PopAndDestroy( firstTimeInfo );
     return accepted;
     }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateAgreement::SetAgreementAcceptedL
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateAgreement::SetAgreementAcceptedL()
+    {
+    CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
+    firstTimeInfo->SetAgreementAcceptedL();
+    CleanupStack::PopAndDestroy( firstTimeInfo );
+    }
+
+
+
+
 
 // ---------------------------------------------------------------------------
 // CIAUpdateAgreement::ShowAgreementL

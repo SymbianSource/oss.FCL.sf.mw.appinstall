@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -95,14 +95,14 @@ void ExpressionEvaluator::Require(const void *aPointer) const
     }
 
 
-ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression* aExpression)
+ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression* aExpression, bool aLogInfo )
     {
 	Require(aExpression);
-	return Evaluate(*aExpression);
+	return Evaluate(*aExpression, aLogInfo);
     }
 
 
-ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression)
+ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression, bool aLogInfo)
     {
 	if (++iExpressionDepth > KMaxExpressionDepth)
 	    {
@@ -122,8 +122,8 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 	case CSISExpression::EBinOpGreaterThanOrEqual:
 	case CSISExpression::EBinOpLessThanOrEqual:
         {
-		const ExpressionResult resultLeft = Evaluate( aExpression.LHS() );
-		const ExpressionResult resultRight = Evaluate( aExpression.RHS() );
+		const ExpressionResult resultLeft = Evaluate( aExpression.LHS(), aLogInfo );
+		const ExpressionResult resultRight = Evaluate( aExpression.RHS(), aLogInfo  );
         //
 	    switch (aExpression.Operator())
 	        {
@@ -152,41 +152,41 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
     
     case CSISExpression::ELogOpAnd:
 		{
-		ExpressionResult tmp1 = Evaluate(aExpression.LHS());
-		ExpressionResult tmp2 = Evaluate(aExpression.RHS());
+		ExpressionResult tmp1 = Evaluate(aExpression.LHS(), aLogInfo );
+		ExpressionResult tmp2 = Evaluate(aExpression.RHS(), aLogInfo );
 		iTempResult = ExpressionResult(tmp1.BoolValue() && tmp2.BoolValue());
 		break;
 		}
 
 	case CSISExpression::ELogOpOr:
 		{
-		ExpressionResult tmp1 = Evaluate(aExpression.LHS());
+		ExpressionResult tmp1 = Evaluate(aExpression.LHS(), aLogInfo );
 		if (tmp1.BoolValue())
     		{
 			iTempResult = ExpressionResult(true);
 	    	}
 		else
 		    {
-			iTempResult = ExpressionResult(Evaluate(aExpression.RHS())).BoolValue();
+			iTempResult = ExpressionResult(Evaluate(aExpression.RHS(), aLogInfo)).BoolValue();
 		    }
 		break;
 		}
 
 	case CSISExpression::EUnaryOpNot:
-		iTempResult=!Evaluate(aExpression.RHS());
+		iTempResult=!Evaluate(aExpression.RHS(), aLogInfo );
 		break;
 
 	case CSISExpression::EFuncAppProperties:
         {
-        const TUint32 resultLeft = Evaluate( aExpression.LHS() ).IntegerValue();
-        const TUint32 resultRight = Evaluate( aExpression.RHS() ).IntegerValue();
+        const TUint32 resultLeft = Evaluate( aExpression.LHS(), aLogInfo  ).IntegerValue();
+        const TUint32 resultRight = Evaluate( aExpression.RHS(), aLogInfo  ).IntegerValue();
         //
 		iTempResult = iExpEnv.ApplicationProperty( resultLeft, resultRight );
 		break;
         }
 
 	case CSISExpression::EFuncDevProperties:
-		iTempResult = ExpressionResult(iExpEnv.Package(Evaluate(aExpression.RHS()).IntegerValue()));
+		iTempResult = ExpressionResult(iExpEnv.Package(Evaluate(aExpression.RHS(), aLogInfo ).IntegerValue()));
 		break;
 
 	case CSISExpression::EFuncExists:
@@ -218,7 +218,7 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 			}
 		else
 			{
-			iTempResult = ExpressionResult(iExpEnv.FindFile(pS.GetString()));
+			iTempResult = ExpressionResult(iExpEnv.FindFile(pS.GetString(), aLogInfo));
 			}
 		}
 		break;
@@ -238,7 +238,7 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 	case CSISExpression::EPrimTypeVariable:
 		{
         const int variableId = aExpression.IntValue();
-        const int variableValue = iExpEnv.Variable( variableId );
+        const int variableValue = iExpEnv.Variable( variableId, aLogInfo);
         //
 		iTempResult = ExpressionResult( variableValue );
 		break;
@@ -292,7 +292,7 @@ const std::wstring ExpressionEnvironment::GetPackageName()
     }
 
 
-bool ExpressionEnvironment::FindFile( const std::wstring& aFileName )
+bool ExpressionEnvironment::FindFile( const std::wstring& aFileName, bool aLogInfo )
     {
     bool fileExists = false;
 
@@ -308,7 +308,10 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName )
     if ( fileName.length() >= 1 && fileName[ 0 ] == L'\\' )
         {
         // Bad file name?
-  		LWARN(L"\tAssuming file path \'" << aFileName << L"\' refers to Z:" );
+		if( aLogInfo )
+			{
+			LWARN(L"\tAssuming file path \'" << aFileName << L"\' refers to Z:" );
+			}  		
         fileName = L"Z:" + fileName;
         }
 
@@ -355,11 +358,14 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName )
 		throw InvalidSis( "", error, INVALID_SIS );
         }
     //
-    std::ostringstream stream;
-    stream << "\tIF EXISTS(\'" << narrowFileName << "\') => " << fileExists;
-    std::string msg = stream.str();
-    std::wstring finalMessage = Utf8ToUcs2( msg );
-    LINFO( finalMessage );
+	if(aLogInfo)
+		{
+		std::ostringstream stream;
+		stream << "\tIF EXISTS(\'" << narrowFileName << "\') => " << fileExists;
+		std::string msg = stream.str();
+		std::wstring finalMessage = Utf8ToUcs2( msg );
+		LINFO( finalMessage );
+		}
     //
     return fileExists;
     }
@@ -396,7 +402,7 @@ TUint32 ExpressionEnvironment::ApplicationProperty(TUint32 aPackageUid, TUint32 
     }
 
 
-int ExpressionEnvironment::Variable( int aVariableId )
+int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
     {
     int result = 0;
 
@@ -417,23 +423,32 @@ int ExpressionEnvironment::Variable( int aVariableId )
 			if (!iSisFile.IsSupportedLanguage((TUint32)result))
 				{
 				int firstLanguage = iSisFile.GetLanguage(); // get the first language
-				std::ostringstream stream;
-				stream << "Input language " << result << " is not supported by SIS file. Using first language " <<firstLanguage;
-				std::string msg = stream.str();
-				std::wstring finalMessage = Utf8ToUcs2( msg );
-				LWARN( finalMessage );	
+				if(aLogInfo)
+					{
+					std::ostringstream stream;
+					stream << "Input language " << result << " is not supported by SIS file. Using first language " <<firstLanguage;
+					std::string msg = stream.str();
+					std::wstring finalMessage = Utf8ToUcs2( msg );
+					LWARN( finalMessage );	
+					}
 				result = firstLanguage;
 				}
 			}
-        std::ostringstream stream;
-        stream << "\tIF " << attributeName << " ... where [" << attributeName << " = " << result << "]";
-        std::string msg = stream.str();
-        std::wstring finalMessage = Utf8ToUcs2( msg );
-        LINFO( finalMessage );
+        if(aLogInfo)
+			{
+			std::ostringstream stream;
+			stream << "\tIF " << attributeName << " ... where [" << attributeName << " = " << result << "]";
+			std::string msg = stream.str();
+			std::wstring finalMessage = Utf8ToUcs2( msg );
+			LINFO( finalMessage );
+			}
         }
 	else if ( aVariableId == KVariableLanguage )
     	{
-		LWARN(L"Disregarding language selection. Using ELangEnglish");
+		if(aLogInfo)
+			{
+			LWARN(L"Disregarding language selection. Using ELangEnglish");
+			}
 		result = 1;
     	}
     else

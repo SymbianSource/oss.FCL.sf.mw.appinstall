@@ -2973,4 +2973,40 @@ CAppSidChecker* CAppSidChecker::CheckerForAppType(TUid aAppTypeUid)
 	return reinterpret_cast<CAppSidChecker*>(ptr);
 	}
 #endif
+
+/////
+//Step to Set RemoveWithLastDependent property
+/////
+
+CSwisSetRemoveWithLastDependent::CSwisSetRemoveWithLastDependent()
+    {
+    }
+
+CSwisSetRemoveWithLastDependent::~CSwisSetRemoveWithLastDependent()
+    {
+    }
+
+TVerdict CSwisSetRemoveWithLastDependent::doTestStepL()
+    {
+    RSisRegistrySession registrySession;
+    User::LeaveIfError(registrySession.Connect());
+    CleanupClosePushL(registrySession);
+    
+    TInt packageUid = 0;
+    GetHexFromConfig(ConfigSection(),_L("packageUid"),packageUid);    
+    TUid expectedPkgUid = TUid::Uid(packageUid);
+    RSisRegistryEntry regEntry;
+    CleanupClosePushL(regEntry);
+    User::LeaveIfError(regEntry.Open(registrySession, expectedPkgUid));
+    TRAPD(err, regEntry.SetRemoveWithLastDependentL(expectedPkgUid));
+    if(KErrNone == err)
+        SetTestStepResult(EPass);
+    else
+        SetTestStepResult(EFail);
+
+    CleanupStack::PopAndDestroy(2, &registrySession);
+    return TestStepResult();
+    
+    }
+
 // End of file

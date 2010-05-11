@@ -234,7 +234,9 @@ CTestStep* CSwisTestServer::CreateTestStep(const TDesC& aStepName)
 	else if (aStepName == KSwisGetPackageDetails)	// Get Package Details
 		testStep = new CSwisUninstallPkgsStep(CSwisUninstallPkgsStep::EPkgDetails);
 	else if (aStepName == KSwisGetPublishedUidArrayStep)  // Get Published Package Uid's Array
-	        testStep = new CSwisCheckPublishUidStep();
+	    testStep = new CSwisCheckPublishUidStep();
+	else if (aStepName == KSwisRemoveWithLastDependent)  // Set RemoveWithLastDependent
+		testStep = new CSwisSetRemoveWithLastDependent();
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	else if (aStepName == KCheckSCRFieldStep)	// Check the SCR components' 'Origin Verified', 'Known Revoked', 'DRM Ptotected' field values.
 		testStep = new CCheckScrFieldStep();

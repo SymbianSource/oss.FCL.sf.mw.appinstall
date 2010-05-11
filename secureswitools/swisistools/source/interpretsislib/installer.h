@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -114,6 +114,12 @@ private:
 	bool IsEclipsable(std::wstring& aRomFile, bool aSUFlag);
 	void FilterNonBlockingFilesOfFilename(const SisFile& aFile, const std::wstring& target);
 	void WarnEclipseOverWrite(const SisFile& aFile);
+
+	void ProcessConditionalBlockWarnings(const CSISInstallBlock& aInstallBlock, 
+												  ExpressionEvaluator& aEvaluator,
+												  const SisFile& aFile
+												  ); 
+	void ProcessInstallBlockWarnings(const CSISInstallBlock& aInstallBlock, const SisFile& aFile);
 
 	// Adorned methods
 	void AdornedProcessingOfFile(const std::wstring& aTarget, std::wstring& aUnadornedName, 

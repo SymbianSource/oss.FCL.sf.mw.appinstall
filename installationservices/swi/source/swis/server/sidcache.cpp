@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -170,7 +170,7 @@ namespace Swi
 		{								
 		// Count() will increase if a subdirectory is encountered so don't 'optimise'
 		// the loop invariant !				
-
+		CleanupResetAndDestroyPushL(aSearchDirs);
 		for (TInt i = 0; i < aSearchDirs.Count(); ++i) 
 			{
 			CDir* entries(0);
@@ -197,6 +197,7 @@ namespace Swi
 				}
 			CleanupStack::PopAndDestroy(subDirs);
 			}
+		CleanupStack::Pop(&aSearchDirs);
 		}
 		
 	void CSidCache::ScanFileSystemL(RFs& aFs)

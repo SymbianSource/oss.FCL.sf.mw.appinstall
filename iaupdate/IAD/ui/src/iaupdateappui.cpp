@@ -65,6 +65,7 @@
 #include "iaupdategloballockhandler.h"
 #include "iaupdatenodefilter.h"
 #include "iaupdateuitimer.h"
+#include "iaupdateagreement.h"
 #include "iaupdatedebug.h"
 
 
@@ -164,7 +165,8 @@ void CIAUpdateAppUi::StartedByLauncherL( MIAUpdateRequestObserver& aObserver,
 // -----------------------------------------------------------------------------
 //
 void CIAUpdateAppUi::CheckUpdatesRequestL( MIAUpdateRequestObserver& aObserver,
-                                           CIAUpdateParameters* aFilterParams )
+                                           CIAUpdateParameters* aFilterParams,
+                                           TBool aForcedRefresh )
                                            
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::CheckUpdatesRequestL() begin");
@@ -184,7 +186,8 @@ void CIAUpdateAppUi::CheckUpdatesRequestL( MIAUpdateRequestObserver& aObserver,
     iRequestObserver = &aObserver;
     iRequestType = IAUpdateUiDefines::ECheckUpdates; 
     iController->SetRequestType( iRequestType );
-    
+    IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateAppUi::CheckUpdatesRequestL() Forced refresh: %d", aForcedRefresh );
+    iController->SetForcedRefresh( aForcedRefresh ); 
     iController->CheckUpdatesDeferredL( aFilterParams, EFalse );
     
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::CheckUpdatesRequestL() end");
@@ -593,8 +596,11 @@ void CIAUpdateAppUi::StartupCompleteL()
                     {
                     if ( iController->Filter()->FilterParams()->Refresh() )
                         {
-                        //from bgchecker, make it silent
-                        totalSilent = ETrue;
+                        if ( !iController->ForcedRefresh() )
+                            {
+                            //from bgchecker, make it silent
+                            totalSilent = ETrue;
+                            }
                         }
                     }
                 }
@@ -683,7 +689,16 @@ void CIAUpdateAppUi::RefreshCompleteL( TBool aWithViewActivation, TInt aError )
             {
         	ActivateLocalViewL( TUid::Uid( EIAUpdateMainViewId ) );
             }
- 
+        CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
+        TBool agreementAccepted = agreement->AgreementAcceptedL();
+        if ( iController->ForcedRefresh() )    
+            {
+            if ( !agreementAccepted )
+                {
+                agreement->SetAgreementAcceptedL();
+                }
+            }
+        CleanupStack::PopAndDestroy( agreement );
         // By calling CIdle possible waiting dialog can be closed before
         // automatic check where a new dialog may be launched
         delete iIdleAutCheck;
@@ -974,13 +989,6 @@ void CIAUpdateAppUi::SetDefaultConnectionMethodL(TBool aTotalSilent )
                //the bgchecker will try again later after 1 month. 
                //The LEAVE will be catched up later and complete the request from background checker.
                User::LeaveIfError( KErrNotFound );
-               
-               //the following code will pop up dialog to ask from user, just for proto
-              /* connectionMethodId = 0;               
-               TIAUpdateConnectionMethod connectionMethod( 
-                   connectionMethodId, TIAUpdateConnectionMethod::EConnectionMethodTypeDefault );
-
-               iController->SetDefaultConnectionMethodL( connectionMethod );*/
                }
            
 

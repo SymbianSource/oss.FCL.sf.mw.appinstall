@@ -297,26 +297,39 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
         DRM::CDrmUtility* utility = DRM::CDrmUtility::NewLC();
                                      
         for ( TInt fileIndex = 0; fileIndex < files.Count(); fileIndex++ )
-            {        
+            {  
+#ifdef _DEBUG        
+            HBufC* tempName = files[ fileIndex ]; 
+            FLOG( "CAppMngr2SisxAppInfo::ConstructL, File name: %S", tempName );
+#endif        
             RFile fileHandle;
             TInt error = fileHandle.Open( iFs, *files[ fileIndex ], EFileRead );
             FLOG( "CAppMngr2SisxAppInfo::ConstructL, File open error %d", 
                     error );
-            
+                       
             if ( error == KErrNone )
                 {                
-                CleanupClosePushL( fileHandle );
+                CleanupClosePushL( fileHandle );                
+                TInt err = KErrNone;
+                // We need to tarp this function since it may leave with some
+                // files which do not have enough data. If ConstrucL leaves
+                // package is not shown in UI.
+                TRAP( err, iIsDRMProtected = utility->IsProtectedL( fileHandle ) );
+           
+                if ( err )
+                    {
+                    // If we have leave let's handle this as not DRM procteded.
+                    iIsDRMProtected = EFalse;
+                    FLOG( "CAppMngr2SisxAppInfo, IsProtectedL error: %d", err );
+                    }
                 
-                iIsDRMProtected = utility->IsProtectedL( fileHandle );
-            
                 CleanupStack::PopAndDestroy( &fileHandle ); 
                 
                 if ( iIsDRMProtected )
-                    {                       
-                    HBufC* fileName = files[ fileIndex ];                            
-                    FLOG( "CAppMngr2SisxAppInfo::ConstructL, iProtectedFile %S", 
-                            fileName );
-                    
+                    { 
+                    FLOG( "CAppMngr2SisxAppInfo: File is DRM protected" );
+                
+                    HBufC* fileName = files[ fileIndex ];                                                
                     iProtectedFile = fileName;  // takes ownership
                     files.Remove( fileIndex );                    
                     
@@ -327,7 +340,7 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
                     CDRMHelperRightsConstraints* printconst = NULL;            
                     TBool sendingallowed = EFalse;
                                     
-                    FLOG( "CAppMngr2SisxAppInfo::ConstructL: GetRightsDetailsL" );
+                    FLOG( "CAppMngr2SisxAppInfo: GetRightsDetailsL" );
                     error = KErrNone;
                     TRAP( error, helper->GetRightsDetailsL( *fileName, 
                                                 ContentAccess::EView, 

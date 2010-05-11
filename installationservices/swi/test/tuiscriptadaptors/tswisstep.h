@@ -370,6 +370,7 @@ _LIT(KSwisListUninstallPkgsStep, "ListUninstallPkgsStep");
 _LIT(KSwisRemoveUninstallPkgsStep, "RemoveUninstallPkgsStep");
 _LIT(KSwisGetPackageDetails, "GetPackageDetails");
 _LIT(KSwisGetPublishedUidArrayStep, "GetPublishedUidArrayStep");
+_LIT(KSwisRemoveWithLastDependent, "RemoveWithLastDependent");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KCheckSCRFieldStep, "CheckSCRFieldStep");
 _LIT(KCheckSCRCompPropertyStep, "CheckSCRCompPropertyStep");
@@ -512,5 +513,13 @@ private:
 TUid iExpectedUidList[KTestMaxUidCount];    //An array whose first element holds the number of uids in the subsequent indices of the array, followed by the the list of uids that are being published.
 TBool iJustDefineProperty;
 	};
+
+class CSwisSetRemoveWithLastDependent : public CSwisTestStep
+    {
+public:    
+    CSwisSetRemoveWithLastDependent();
+    ~CSwisSetRemoveWithLastDependent();
+    virtual TVerdict doTestStepL();
+    };
 
 #endif // __TSWISSTEP_H__

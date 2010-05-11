@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -42,6 +42,7 @@ EXPORT_C void RSisRegistryHelper::Close()
 
 EXPORT_C void RSisRegistryHelper::GetEquivalentLanguagesL(TLanguage aLangId,RArray<TLanguage>& aEquivLangs)
 	{
+	CleanupClosePushL(aEquivLangs);
 	// calculate the likely size of the data transfer buffer
 	const TInt KMaxBufSize=
 		sizeof(TInt)+                 // number of entries
@@ -69,4 +70,5 @@ EXPORT_C void RSisRegistryHelper::GetEquivalentLanguagesL(TLanguage aLangId,RArr
 		}
 	// cleanup
 	CleanupStack::PopAndDestroy(2, buf); // buf
+	CleanupStack::Pop(&aEquivLangs);
 	}

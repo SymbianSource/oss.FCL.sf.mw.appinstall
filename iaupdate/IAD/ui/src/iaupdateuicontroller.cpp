@@ -323,20 +323,22 @@ void CIAUpdateUiController::CheckUpdatesL()
         }
      
     TBool agreementAccepted( EFalse ); 
-    CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
-    agreementAccepted = agreement->AgreementAcceptedL();
-    if ( ( !agreementAccepted )&& ( iRequestType != IAUpdateUiDefines::ECheckUpdates ) )
+    if ( !ForcedRefresh() )
         {
-        // agreement (disclaimer) dialog is not prompted when CheckUpdates is called
-        //
-        // Refresh from network is allowed when first time case 
-        iRefreshFromNetworkDenied = EFalse;
-    	agreementAccepted = agreement->AcceptAgreementL();	
+        CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
+        agreementAccepted = agreement->AgreementAcceptedL();
+        if ( ( !agreementAccepted )&& ( iRequestType != IAUpdateUiDefines::ECheckUpdates ) )
+            {
+            // agreement (disclaimer) dialog is not prompted when CheckUpdates is called
+            //
+            // Refresh from network is allowed when first time case 
+            iRefreshFromNetworkDenied = EFalse;
+            agreementAccepted = agreement->AcceptAgreementL();  
+            }
+        CleanupStack::PopAndDestroy( agreement );
         }
-        	
-    CleanupStack::PopAndDestroy( agreement );
-             
-    if ( !agreementAccepted )
+  	             
+    if ( !agreementAccepted && !ForcedRefresh() )
         {
         if ( iRequestType == IAUpdateUiDefines::ECheckUpdates )
             {
@@ -2290,25 +2292,32 @@ TBool CIAUpdateUiController::AllowNetworkRefreshL()
     	        {
     	    	if ( params->Refresh() )
     	    	    {
-      	      		// Check from the central repocitory what are the automatic checking and 
-                    // roaming settings.     
-                    TInt autoUpdateCheckValue( 0 );
-                    CRepository* cenrep( 
+    	    	    if ( ForcedRefresh() )
+    	    	        {
+    	    	        allowRefresh = ETrue;
+    	    	        }
+    	    	    else
+    	    	        {
+      	      		    // Check from the central repocitory what are the automatic checking and 
+                        // roaming settings.     
+                        TInt autoUpdateCheckValue( 0 );
+                        CRepository* cenrep( 
                              CRepository::NewLC( KCRUidIAUpdateSettings ) );
-                    // Notice, that KIAUpdateSettingAutoUpdateCheck can give following values
-                    // 0 = No automatic update check
-                    // 1 = Automatic update check enabled when not roaming
-                    // 2 = Automatic update enabled
+                        // Notice, that KIAUpdateSettingAutoUpdateCheck can give following values
+                        // 0 = No automatic update check
+                        // 1 = Automatic update check enabled when not roaming
+                        // 2 = Automatic update enabled
 
-                    User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, 
-                                                     autoUpdateCheckValue ) );
-                    CleanupStack::PopAndDestroy( cenrep );
-                    if ( ( autoUpdateCheckValue == EIAUpdateSettingValueEnable ) || 
-    	               ( autoUpdateCheckValue == EIAUpdateSettingValueDisableWhenRoaming &&
-    	                 !iRoamingHandler->IsRoaming() ) )
-                        {
-                    	allowRefresh = ETrue;
-                        }
+                        User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, 
+                                                         autoUpdateCheckValue ) );
+                        CleanupStack::PopAndDestroy( cenrep );
+                        if ( ( autoUpdateCheckValue == EIAUpdateSettingValueEnable ) || 
+    	                    ( autoUpdateCheckValue == EIAUpdateSettingValueDisableWhenRoaming &&
+    	                      !iRoamingHandler->IsRoaming() ) )
+                            {
+                    	    allowRefresh = ETrue;
+                            }
+    	    	        }
      	    	    }
     	        }
     	    }
@@ -2626,6 +2635,26 @@ CIAUpdateParameters* CIAUpdateUiController::ParamsReadAndRemoveFileL()
     return params;
     }
 
+// ---------------------------------------------------------------------------
+// CIAUpdateUiController::ForcedRefresh
+// 
+// ---------------------------------------------------------------------------
+//
+TBool CIAUpdateUiController::ForcedRefresh() const
+    {
+    return iForcedRefresh;
+    }
+
+
+// ---------------------------------------------------------------------------
+// CIAUpdateUiController::SetForcedRefresh
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateUiController::SetForcedRefresh( TBool aForcedRefresh )
+    {
+    iForcedRefresh = aForcedRefresh;
+    }
 
 // ---------------------------------------------------------------------------
 // CIAUpdateUiController::ParamsWriteFileL

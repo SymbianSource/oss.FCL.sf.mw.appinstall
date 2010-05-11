@@ -157,6 +157,11 @@ RESOURCE TBUF r_iaupdate_des_normal_update_mb
     {
     buf = qtn_swupdate_normal_update_mb;
     }
+
+RESOURCE TBUF r_iaupdate_update_with_pc
+    {
+    buf = qtn_swupdate_update_with_pc;
+    }
     
 RESOURCE TBUF r_iaupdate_text_no_updates    
     {    

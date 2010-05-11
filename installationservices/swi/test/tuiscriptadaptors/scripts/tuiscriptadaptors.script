@@ -1326,6 +1326,20 @@ RUN_TEST_STEP_RESULT 0  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptada
 
 END_TESTCASE API-SEC-SWIREG-Hidden-0004
 
+//! @SYMTestCaseID SEC-cyclicDependency-def145326
+//! @SYMTestCaseDesc User installs a package(A) with dependency on package (B), then installs package B with dependency on A, then unistalls pkg B
+//! @SYMDEF  INC
+//! @SYMTestPriority High
+//! @SYMTestActions  Install SA pkg and then Install another SA package, Uninstall second SA
+//! @SYMTestExpectedResults The SIS gets installed and uninstalled successfully
+
+
+START_TESTCASE cyclicDependency
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_A
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_B
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveWithLastDependent z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_Uid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_U_B
+END_TESTCASE cyclicDependency
 
 // Ensure that SWIS shuts down after the above tests to make sure heap checks run
 RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

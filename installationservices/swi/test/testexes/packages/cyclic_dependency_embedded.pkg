@@ -1,0 +1,15 @@
+; This test file tests cyclic dependencies.
+
+;Languages
+&EN
+
+;Header
+#{"cyclic_dependency_embedded"}, (0x811111E0), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+(0x811118FD), 1, 2, 3, {"cyclic_dependency_base"}
+
+
+

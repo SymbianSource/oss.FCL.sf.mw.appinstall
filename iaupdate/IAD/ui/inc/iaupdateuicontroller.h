@@ -230,7 +230,10 @@ public: //new functions
     * Ownership is not transferred.
     */
     CIAUpdateParameters* ParamsReadAndRemoveFileL();
-        
+    
+    TBool ForcedRefresh() const;
+      
+    void SetForcedRefresh( TBool aForcedRefresh );
     /**
      * Is client role "testing"
      *
@@ -596,6 +599,8 @@ private: // data
     TBool iRefreshFromNetworkDenied; 
     
     TBool iOffConfigurated;
+    
+    TBool iForcedRefresh;
         
     TBool iTestRole;
 

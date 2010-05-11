@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -35,7 +35,7 @@
 #include "hashcontainer.h"
 #include "dessisdataprovider.h"
 #include "siscontroller.h"
-
+#include "cleanuputils.h"
 
 using namespace Swi;
 
@@ -380,6 +380,7 @@ HBufC8* RSisRegistrySession::SendReceiveBufferLC(TInt aMessage, TPtrC8 aInputBuf
 	
 EXPORT_C void RSisRegistrySession::RetrieveLogFileL(RPointerArray<CLogEntry>& aLogEntry)
  	{
+    CleanupResetAndDestroyPushL(aLogEntry); 	
  	HBufC8* buffer = SendReceiveBufferLC(EloggingFile);
   
  	RDesReadStream stream(*buffer);
@@ -408,6 +409,7 @@ EXPORT_C void RSisRegistrySession::RetrieveLogFileL(RPointerArray<CLogEntry>& aL
  		}
  	 	
  	CleanupStack::PopAndDestroy(2,buffer);	//buffer,stream
+ 	CleanupStack::Pop(&aLogEntry);
  	}
  
 HBufC8* RSisRegistrySession::SendReceiveBufferLC(TInt aMessage, TPtrC8 aInputBuffer, TInt aThirdArgument) 
