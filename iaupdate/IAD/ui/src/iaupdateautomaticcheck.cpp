@@ -25,10 +25,10 @@
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
 
-
-
-#include <avkon.hrh>
+//#include <avkon.hrh>
 #include <centralrepository.h> 
+#include <hbmessagebox.h>
+#include <hbaction.h>
 
 
 // ---------------------------------------------------------------------------
@@ -102,15 +102,20 @@ TBool CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
 	        }
 	    else
 	        {
-	        /*TInt ret = IAUpdateDialogUtil::ShowConfirmationQueryL( 
-	                                          R_IAUPDATE_TURN_ON_AUTOUPD_CHECKS, 
-	                                          R_AVKON_SOFTKEYS_YES_NO );*/ 
-	        TInt ret = EAknSoftkeyYes;
+	        HbMessageBox messageBox(HbMessageBox::MessageTypeQuestion); 
+	        messageBox.setText(QString("Turn on setting for Automatic update checks?"));
+	        HbAction yesAction("Yes");
+	        HbAction noAction("No");
+	        messageBox.setPrimaryAction(&yesAction);
+	        messageBox.setSecondaryAction(&noAction);
+	        messageBox.setTimeout(HbPopup::NoTimeout);
+	        messageBox.show();
+	        //HbAction *selectedAction = messageBox.exec();
 	        firstTimeInfo->SetAutomaticUpdatesAskedL();
-	        if ( ret == EAknSoftkeyYes )
-                {
-	            EnableAutoUpdateCheckL( ETrue );
-	            }
+	        //if ( selectedAction == messageBox.primaryAction() )
+	        //    {
+                //EnableAutoUpdateCheckL( ETrue ); // TEMP
+            //    }
 	        }
 	    }
 	CleanupStack::PopAndDestroy( firstTimeInfo ); 

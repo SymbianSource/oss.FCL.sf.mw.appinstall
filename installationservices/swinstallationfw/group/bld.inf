@@ -35,6 +35,7 @@ PRJ_EXPORTS
 ../inc/siftransportclient.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransportclient.h)
 ../inc/siftransportserverstartup.h							SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransportserverstartup.h)
 ../inc/siftransporttask.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransporttask.h)
+../inc/sifnotification.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifnotification.h)
 
 // ROMKIT includes
 ../inc/sif.iby												/epoc32/rom/include/sif.iby
@@ -44,6 +45,8 @@ PRJ_TESTEXPORTS
 // TEF test scripts
 ../test/tusif/scripts/tsifintegration.ini				z:/tusif/tsifintegration/tsifintegration.ini
 ../test/tusif/scripts/tsifintegration.script				z:/tusif/tsifintegration/tsifintegration.script
+../test/tusif/scripts/tnotifier.ini					z:/tusif/tsif/tnotifier.ini
+../test/tusif/scripts/tnotifier.script					z:/tusif/tsif/tnotifier.script
 
 ../test/scripts/tsif.ini									z:/tusif/tsif/tsif.ini
 ../test/scripts/tsif.script									z:/tusif/tsif/tsif.script
@@ -64,7 +67,7 @@ PRJ_TESTEXPORTS
 
 ../test/tusif/scripts/data/test.siftestpkg			z:/tusif/tswtype/data/test.siftestpkg
 ../test/tusif/scripts/data/swtypereginfo.xml			z:/tusif/tswtype/data/swtypereginfo.xml
-../test/tusif/scripts/data/corrupt_reg.rsc			z:/tusif/tsif/data/corrupt_reg.rsc
+../test/tusif/scripts/data/Corrupt_reg.rsc			z:/tusif/tsif/data/corrupt_reg.rsc
 
 // ROMKIT includes
 ../inc/tsif.iby							/epoc32/rom/include/tsif.iby
@@ -80,6 +83,7 @@ PRJ_MMPFILES
 ../group/sifutils.mmp
 ../group/sifserver.mmp
 ../group/siflauncher.mmp
+../group/sifnotification.mmp
 
 #endif // TOOLS2
 #endif // TOOLS

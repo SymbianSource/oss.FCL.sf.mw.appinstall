@@ -25,10 +25,12 @@
 #include <cmdestinationext.h>
 #include <rconnmon.h>
 #include <apgwgnam.h>
+#include <starterclient.h>
 
 #include "iaupdateengine.h"
 #include "iaupdateserviceprovider.h"
 #include "iaupdateuicontroller.h"
+#include "iaupdatefwupdatehandler.h"
 #include "iaupdategloballockhandler.h"
 #include "iaupdatenodefilter.h"
 #include "iaupdateresult.h"
@@ -36,24 +38,32 @@
 #include "iaupdateuiconfigdata.h"
 #include "iaupdatequeryhistory.h"
 #include "iaupdateparameters.h"
+#include "iaupdateagreement.h"
+#include "iaupdateautomaticcheck.h"
+#include "iaupdateresultsdialog.h"
 #include "iaupdatedebug.h"
 
+
 IAUpdateEngine::IAUpdateEngine(QObject *parent)
-    : QObject(parent),
+     : QObject(parent),
       iController(NULL),
+      iFwUpdateHandler(NULL),
       iGlobalLockHandler(NULL),
       iIdle(NULL),
+      iIdleAutCheck(NULL),
       iUpdateNow(EFalse),
       iRequestIssued(EFalse),
       iStartedFromApplication(EFalse),
+      iUiRefreshAllowed(ETrue),
       iUpdatequeryUid(0)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::IAUpdateEngine() begin");
     iEikEnv = CEikonEnv::Static();
+    mServiceProvider = NULL;
     mServiceProvider = new IAUpdateServiceProvider( *this );
     connect(mServiceProvider, SIGNAL(clientDisconnected()), this, SLOT(handleAllClientsClosed()));
     TRAP_IGNORE( iController = CIAUpdateUiController::NewL( *this ));
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::IAUpdateEngine() end")
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::IAUpdateEngine() end");
 }
 
 
@@ -61,9 +71,30 @@ IAUpdateEngine::~IAUpdateEngine()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::~IAUpdateEngine() begin");
     InformRequestObserver( KErrCancel );
-    delete iGlobalLockHandler;
-    delete iController;
-    delete mServiceProvider;    
+    if (iIdle)
+        {
+        delete iIdle;
+        }
+    if (iIdleAutCheck)
+        {
+        delete iIdleAutCheck;
+        }
+    if (iGlobalLockHandler)
+        {
+        delete iGlobalLockHandler;
+        }
+    if ( iController )
+        {
+        delete iController;
+        }
+    if ( iFwUpdateHandler )
+        {
+        delete iFwUpdateHandler;
+        }
+    if ( mServiceProvider )
+        {
+        delete mServiceProvider;
+        }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::~IAUpdateEngine() end");
 }
 
@@ -89,7 +120,9 @@ void IAUpdateEngine::StartedByLauncherL( TBool aRefreshFromNetworkDenied )
 // 
 // -----------------------------------------------------------------------------
 //
-void IAUpdateEngine::CheckUpdatesRequestL( int wgid, CIAUpdateParameters* aFilterParams )
+void IAUpdateEngine::CheckUpdatesRequestL( int wgid, 
+                                           CIAUpdateParameters* aFilterParams,
+                                           TBool aForcedRefresh )
                                            
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::CheckUpdatesRequestL() begin");
@@ -110,6 +143,7 @@ void IAUpdateEngine::CheckUpdatesRequestL( int wgid, CIAUpdateParameters* aFilte
            
     iRequestType = IAUpdateUiDefines::ECheckUpdates; 
     iController->SetRequestType( iRequestType );
+    iController->SetForcedRefresh( aForcedRefresh );
     
     iController->CheckUpdatesDeferredL( aFilterParams, EFalse ); 
     
@@ -208,6 +242,52 @@ void IAUpdateEngine::ShowUpdateQueryRequestL( int wgid, TUint aUid )
     }
 
 // -----------------------------------------------------------------------------
+// IAUpdateEngine::StartUpdate
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateEngine::StartUpdate( TBool aFirmwareUpdate )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::StartUpdate() begin");
+    if ( aFirmwareUpdate )
+        {
+        if ( !iFwUpdateHandler )
+            {
+            TRAP_IGNORE( CIAUpdateFWUpdateHandler::NewL() );
+            }
+        if ( iFwUpdateHandler )
+            {
+            iFwUpdateHandler->FirmWareUpdatewithFOTA();
+            }
+        }
+    else
+        {
+        // by pushing object to cleanup stack it's destructor is called if leave happens
+        // so global lock issued by this instance can be released in destructor of CIAUpdateGlobalLockHandler
+        CIAUpdateGlobalLockHandler* globalLockHandler = CIAUpdateGlobalLockHandler::NewLC();
+        if ( !globalLockHandler->InUseByAnotherInstanceL() )
+            {
+            globalLockHandler->SetToInUseForAnotherInstancesL( ETrue );
+            // No need to be totally silent since the updating is started
+            // by user.
+            SetDefaultConnectionMethodL( EFalse );
+            iController->StartUpdateL();
+            CleanupStack::Pop( globalLockHandler ); 
+            delete iGlobalLockHandler;
+            iGlobalLockHandler = globalLockHandler;
+            //now possible deletion of iGlobalLockHandler in leave situation is handled
+            //in HandleLeaveErrorL() and HandleLeaveErrorWithoutLeave methods. 
+            }
+        else
+            {
+            CleanupStack::PopAndDestroy( globalLockHandler );   
+            }
+        }
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::StartUpdate() end");
+    }
+
+
+// -----------------------------------------------------------------------------
 // IAUpdateEngine::SetVisibleL
 // 
 // -----------------------------------------------------------------------------
@@ -273,21 +353,11 @@ TInt IAUpdateEngine::ClientInBackgroundL() const
     }
 
 
-
 // -----------------------------------------------------------------------------
-// IAUpdateEngine::refresh
+// IAUpdateEngine::handleAllClientsClosed()
 // 
 // -----------------------------------------------------------------------------
-//  
-/*void IAUpdateEngine::refresh(int error) 
-    {
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::refresh() begin");
-    IAUPDATE_TRACE_1("[IAUPDATE] Error code: %d", error );
-    //iMainView->RefreshL( iController->Nodes(), iController->FwNodes(), aError );                    
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::refresh() end");
-    }*/
-
-
+//
 void IAUpdateEngine::handleAllClientsClosed()
 {
     qApp->quit(); 
@@ -343,8 +413,11 @@ void IAUpdateEngine::StartupCompleteL()
                     {
                     if ( iController->Filter()->FilterParams()->Refresh() )
                         {
-                        //from bgchecker, make it silent
-                        totalSilent = ETrue;
+                        if ( !iController->ForcedRefresh() )
+                            {
+                            //from bgchecker, make it silent
+                            totalSilent = ETrue;
+                            }
                         }
                     }
                 }
@@ -362,7 +435,7 @@ void IAUpdateEngine::StartupCompleteL()
     
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::StartupCompleteL() end");    
     }
-    
+
  
 // -----------------------------------------------------------------------------
 // IAUpdateEngine::HandleLeaveErrorL
@@ -433,18 +506,30 @@ void IAUpdateEngine::RefreshCompleteL( TBool /*aWithViewActivation*/, TInt aErro
           //  {
           //  ActivateLocalViewL( TUid::Uid( EIAUpdateMainViewId ) );
           //  }
- 
+        CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
+        TBool agreementAccepted = agreement->AgreementAcceptedL();
+        if ( iController->ForcedRefresh() )    
+            {
+            if ( !agreementAccepted )
+                {
+                agreement->SetAgreementAcceptedL();
+                }
+            }
+        CleanupStack::PopAndDestroy( agreement );
         // By calling CIdle possible waiting dialog can be closed before
         // automatic check where a new dialog may be launched
-        //delete iIdleAutCheck;
-        //iIdleAutCheck = NULL;
-        //iIdleAutCheck = CIdle::NewL( CActive::EPriorityIdle ); 
-        //iIdleAutCheck->Start( TCallBack( AutomaticCheckCallbackL, this ) );*/
+        delete iIdleAutCheck;
+        iIdleAutCheck = NULL;
+        iIdleAutCheck = CIdle::NewL( CActive::EPriorityIdle ); 
+        iIdleAutCheck->Start( TCallBack( AutomaticCheckCallbackL, this ) );
         } 
  
   
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::RefreshCompleteL() end");        
     }
+
+
+
 
 // -----------------------------------------------------------------------------
 // IAUpdateEngine::UpdateCompleteL
@@ -463,12 +548,90 @@ void IAUpdateEngine::UpdateCompleteL( TInt aError )
         InformRequestObserver( aError );
         }
     
-    //RefreshL( KErrNone ); 
-      
-    //ShowStatusDialogDeferredL();
+    emit refresh( iController->Nodes(), iController->FwNodes(), KErrNone );
+         
+    ShowResultsDialogDeferredL();
                 
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::UpdateCompleteL end");
     }
+
+
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngine::ShowResultsDialogL
+// 
+// -----------------------------------------------------------------------------
+//   
+void IAUpdateEngine::ShowResultsDialogL()
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogL() begin");
+                
+    iUiRefreshAllowed = ETrue;
+    IAUpdateResultsDialog resultsDialog;
+    resultsDialog.showResults(iController->ResultsInfo());
+    
+    //TODO: How to recognise when application is closing 
+    if ( iController->ResultsInfo().iRebootAfterInstall )
+        {
+        HbMessageBox messageBox(HbMessageBox::MessageTypeQuestion); 
+        messageBox.setText(QString("Phone restart needed. Restart now?"));
+        HbAction okAction("Ok");
+        HbAction cancelAction("Cancel");
+        messageBox.setPrimaryAction(&okAction);
+        messageBox.setSecondaryAction(&cancelAction);
+        messageBox.setTimeout(HbPopup::NoTimeout);
+        messageBox.show();
+        /*HbAction *selectedAction = messageBox.exec();
+        if (selectedAction == messageBox.primaryAction())
+            {
+            RStarterSession startersession;
+            if( startersession.Connect() == KErrNone )
+                {
+                startersession.Reset( RStarterSession::EUnknownReset );
+                startersession.Close();
+                return;
+                }
+            }*/
+        }
+    if ( iStartedFromApplication && 
+        iController->ResultsInfo().iCountCancelled == 0 &&
+        iController->ResultsInfo().iCountFailed == 0 )
+        {
+        qApp->quit();
+        }
+    
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateEngine::ShowResultsDialogL() nodes count: %d", iController->Nodes().Count() );
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateEngine::ShowResultsDialogL() fw nodes: %d", iController->FwNodes().Count() );
+    //exit from result view if there are no update left
+    if ( iController->Nodes().Count() == 0 && iController->FwNodes().Count() == 0 )
+        {
+        qApp->quit();
+        }
+    
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogL() end");
+    }
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngin::ShowResultsDialogDeferredL
+// 
+// -----------------------------------------------------------------------------
+//       
+void IAUpdateEngine::ShowResultsDialogDeferredL()
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogDeferredL() begin");
+    delete iIdle;
+    iIdle = NULL;
+    iIdle = CIdle::NewL( CActive::EPriorityIdle ); 
+    iIdle->Start( TCallBack( ShowResultsDialogCallbackL, this ) ); 
+    iUiRefreshAllowed = EFalse;
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogDeferredL() end");
+    }
+ 
+
+
+
+
+
 
 
 
@@ -910,9 +1073,10 @@ void IAUpdateEngine::ShowUpdateQueryL()
         messageBox.setSecondaryAction(&laterAction);
         messageBox.setTimeout(HbPopup::NoTimeout);
         messageBox.show();
-        HbAction *selectedAction = messageBox.exec();
+        iUpdateNow = ETrue;
+        //HbAction *selectedAction = messageBox.exec();
         
-        if (selectedAction == messageBox.primaryAction())
+        /*if (selectedAction == messageBox.primaryAction())
             {
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowUpdateQueryL() Now");
             iUpdateNow = ETrue;
@@ -921,7 +1085,7 @@ void IAUpdateEngine::ShowUpdateQueryL()
             {
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowUpdateQueryL() Later");
             updateQueryHistory->SetTimeL( iUpdatequeryUid );
-            }
+            }*/
         }
     CleanupStack::PopAndDestroy( updateQueryHistory );
     InformRequestObserver( KErrNone );  
@@ -951,6 +1115,22 @@ void IAUpdateEngine::HideApplicationInFSWL( TBool aHide ) const
     }
 
 // ---------------------------------------------------------------------------
+// IAUpdateEngine::ShowResultsDialogCallbackL
+// ---------------------------------------------------------------------------
+//
+TInt IAUpdateEngine::ShowResultsDialogCallbackL( TAny* aPtr )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogCallbackL() begin");
+    IAUpdateEngine* engine = static_cast<IAUpdateEngine*>( aPtr );
+    //TRAPD( err, engine->ShowResultsDialogL() );
+    TRAP_IGNORE( engine->ShowResultsDialogL() );
+    //appUI->HandleLeaveErrorL( err );
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowResultsDialogCallbackL() end");
+    return KErrNone;
+    }
+
+
+// ---------------------------------------------------------------------------
 // IAUpdateEngine::UpdateQueryCallbackL
 // ---------------------------------------------------------------------------
 //
@@ -968,7 +1148,38 @@ TInt IAUpdateEngine::UpdateQueryCallbackL( TAny* aPtr )
     return KErrNone;
     }    
 
-
+// ---------------------------------------------------------------------------
+// IAUpdateEngine::AutomaticCheckCallbackL
+// ---------------------------------------------------------------------------
+//    
+    
+TInt IAUpdateEngine::AutomaticCheckCallbackL( TAny* aPtr )    
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::AutomaticCheckCallbackL() begin");
+    IAUpdateEngine* engine= static_cast<IAUpdateEngine*>( aPtr ); 
+    
+    TInt err = KErrNone;
+    CIAUpdateAutomaticCheck* automaticCheck = NULL;
+    TRAP( err, automaticCheck = CIAUpdateAutomaticCheck::NewL() ); 
+    if ( err != KErrNone )
+        {
+        engine->HandleLeaveErrorL( err );
+        }
+    else
+        {
+        CleanupStack::PushL( automaticCheck );
+        TRAP( err, automaticCheck->AcceptAutomaticCheckL() );
+        if ( err != KErrNone )
+            {
+            engine->HandleLeaveErrorL( err );
+            }   
+        } 
+    
+    CleanupStack::PopAndDestroy( automaticCheck );
+    
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::AutomaticCheckCallbackL() end");
+    return KErrNone;
+    }
 
 
 

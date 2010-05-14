@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -169,6 +169,20 @@ public:
      */
     virtual TInt Depth() const = 0;
 
+    /**
+     * Informs UI that downloading is ongoing
+     **/
+    virtual TBool Downloading() const = 0;
+
+    /**
+    * Informs UI that installing is ongoing
+    **/
+    virtual TBool Installing() const = 0;
+    
+    virtual void SetDownloading( TBool aDownloading ) = 0;
+
+    virtual void SetInstalling( TBool aInstalling ) = 0;
+    
 
 protected:
 

@@ -154,7 +154,27 @@ namespace Usif
 			{// destroy the filter if created locally
 			CleanupStack::PopAndDestroy((C*)localCopyOfObject);
 			}
-		}// Emd of ExternalizeFilterL
+		}// End of ExternalizeObjectL
+	
+    template <class C>
+    inline void ExternalizeRefObjectL(const C& aObject, RBuf8& aBuf)
+        {
+        // Get the required buffer size for the externalized C object
+        TInt bufSize = GetObjectBufferSizeL(aObject);
+            
+        // Clean the buffer and re-create it with the required buffer size 
+        aBuf.Close();
+        aBuf.CreateL(bufSize);
+            
+        // Externalize the filter object into the buffer
+        RDesWriteStream wstream(aBuf);
+        wstream.PushL();
+        wstream << aObject;
+        wstream.CommitL();
+        wstream.Pop();
+        wstream.Release();
+            
+        }// End of ExternalizeObjectL	
 	}
 
 #endif /* SCRCLIENT_INL */

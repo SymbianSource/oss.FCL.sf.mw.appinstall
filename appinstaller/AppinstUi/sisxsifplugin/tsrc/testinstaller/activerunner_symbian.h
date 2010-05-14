@@ -20,7 +20,6 @@
 
 #include <e32base.h>            // CActive
 #include <usif/sif/sif.h>       // Usif::RSoftwareInstall
-#include <usif/sif/sif.h>       // Usif::RSoftwareInstall
 #include <SWInstApi.h>          // RSWInstLauncher
 
 class ActiveRunner;

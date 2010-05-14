@@ -174,7 +174,7 @@ class CIAUpdateBGTimer : public CTimer,
         
         void StartUpdatesCheckingL();    
         
-        HBufC8* LoadFileLC(const TDesC& aFile);
+        // HBufC8* LoadFileLC(const TDesC& aFile);
         
         TInt GetPrivatePathL( TFileName& aPath );
         

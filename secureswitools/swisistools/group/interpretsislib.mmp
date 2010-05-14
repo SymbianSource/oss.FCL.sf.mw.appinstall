@@ -80,6 +80,7 @@ SOURCE			util.cpp
 SOURCEPATH		../source/rscparser
 SOURCE			barsc2.cpp
 SOURCE			barscimpl.cpp
+SOURCE			dictionarycompression.cpp
 SOURCE			commontypes.cpp
 SOURCE			barsread2.cpp
 SOURCE			barsreadimpl.cpp

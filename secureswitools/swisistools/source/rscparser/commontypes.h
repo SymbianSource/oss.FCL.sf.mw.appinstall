@@ -1,4 +1,4 @@
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of "Eclipse Public License v1.0"
@@ -26,6 +26,57 @@
 #include <vector>
 using namespace std;
 using namespace rscparser;
+
+/** 
+Returns the smaller of two values.
+ 
+@param aLeft  The first value to be compared.
+@param aRight The second value to be compared.
+
+@return The smaller value.
+*/
+template <class T>
+inline T Min(T aLeft,T aRight)
+    {return(aLeft<aRight ? aLeft : aRight);}
+
+/**
+Returns the smaller of two objects, where the right hand object is a treated
+as a TInt for the  purpose of comparison.
+
+@param aLeft  The first value to be compared.
+@param aRight The second value to be compared.
+
+@return The smaller value.
+*/
+template <class T>
+inline T Min(T aLeft,TUint aRight)
+    {return(aLeft<(TInt)aRight ? aLeft : (T)aRight);}
+
+/** 
+Returns the larger of two values.
+
+@param aLeft  The first value to be compared.
+@param aRight The second value to be compared.
+
+@return The larger value.
+*/
+template <class T>
+inline T Max(T aLeft,T aRight)
+    {return(aLeft<aRight ? aRight : aLeft);}
+
+/**
+Returns the larger of two objects, where the right hand object is a treated
+as a TInt for the  purpose of comparison.
+
+@param aLeft  The first value to be compared.
+@param aRight The second value to be compared.
+
+@return The larger value.
+ */
+template <class T>
+inline T Max(T aLeft,TUint aRight)
+    {return(aLeft<(TInt)aRight ? (TInt)aRight : aLeft);}
+
 /**
 Class to allocate heap memory and store a pointer to it 
 for unicode data.
@@ -75,6 +126,15 @@ public:
 	*/
 	TUint32 GetLength() const;
 
+	/**
+	To fetch the Max length
+	*/
+	TUint32 GetMaxLength() const;
+
+ 	TUint8 operator[](TInt anIndex) const;
+
+	void Append(TUint8* aBuffer, TInt aLen);
+
 private:
 	TUint8* iPtr;
 	TUint32 iLength;
@@ -110,6 +170,11 @@ public:
 	TUint16* GetPtr() const;
 
 	/**
+	Set the pointer
+	*/
+	void SetPtr(TUint16* aPtr);
+
+	/**
 	Update the length of the current pointer
 	with the length provided
 	@param aLength Length to be updated
@@ -120,6 +185,8 @@ public:
 	To fetch the current length
 	*/
 	TUint32 GetLength() const;
+
+ 	TUint16 operator[](TInt anIndex) const;
 
 private:
 	TUint16* iPtr;

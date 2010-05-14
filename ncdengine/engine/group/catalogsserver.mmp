@@ -443,7 +443,6 @@ LIBRARY         inetprotutil.lib
 LIBRARY         gsmu.lib    // SMS
 LIBRARY         smcm.lib    // SMS
 LIBRARY         msgs.lib    // SMS
-LIBRARY         apengine.lib
 
 #ifndef __SERIES60_31__
 LIBRARY         cmmanager.lib // CMManager and other SNAP/APN classes

@@ -137,7 +137,21 @@ public: // MIAUpdateNode
      * @see MIAUpdateNode::Depth
      */
     virtual TInt Depth() const;
+    
+    /**
+     * Informs UI that downloading is ongoing
+     **/
+    virtual TBool Downloading() const;
 
+    /**
+     * Informs UI that installing is ongoing
+     **/
+    virtual TBool Installing() const;
+    
+    virtual void SetDownloading( TBool aDownloading );
+
+    virtual void SetInstalling( TBool aInstalling );
+        
     /**
      * @see MIAUpdateNode:::NodeType
      */
@@ -323,6 +337,8 @@ private: // data
     TDependencyCheckStatus              iDependencyCheckStatus;
     TInt                                iLeafDistance;
     TInt                                iDepth;
+    TBool                               iDownloading;
+    TBool                               iInstalling;
 
     // These arrays do not own the nodes.
     RPointerArray< CIAUpdateNode >      iDependants;

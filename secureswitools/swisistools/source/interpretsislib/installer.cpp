@@ -305,23 +305,19 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 
 		UpdateRegistry(file, installable, aInstallSISFile, aInstallSISFile.iSUFlag);
 	}
+	catch  (InterpretSisError& e)
+	{
+		RestoreAll(file, installable, iBackupFlag);
+
+		LERROR(L"\t" << Utf8ToUcs2(e.what()));
+		int result =  e.GetErrorCode();
+		return result;
+	
+	}
 	catch  (...)
 	{//Update Registry Failed. UnInstall the files.
-		InstallableFiles::const_iterator filedesIter; 
-		std::wstring itargetLocalFile;
 
-		for(filedesIter = installable.begin() ; filedesIter != installable.end(); ++filedesIter)
-		{
-		    itargetLocalFile = (*filedesIter)->GetLocalTarget();
-			
-			if (FileExists(itargetLocalFile))
-			{
-				RemoveFile(itargetLocalFile);
-				RemoveHashForFile(itargetLocalFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
-			}
-		}
-		Restore(file, installable, iBackupFlag);
-		FreeInstallableFiles(installable);
+		RestoreAll(file, installable, iBackupFlag);
 		return RSC_PARSING_ERROR;
 	}
 
@@ -594,6 +590,26 @@ void Installer::Restore(const SisFile& aFile, InstallableFiles& aInstallable, TB
 		}
 	}
 }
+
+void Installer::RestoreAll(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag)
+{
+	InstallableFiles::const_iterator filedesIter; 
+	std::wstring itargetLocalFile;
+
+	for(filedesIter = aInstallable.begin() ; filedesIter != aInstallable.end(); ++filedesIter)
+	{
+		itargetLocalFile = (*filedesIter)->GetLocalTarget();
+		
+		if (FileExists(itargetLocalFile))
+		{
+			RemoveFile(itargetLocalFile);
+			RemoveHashForFile(itargetLocalFile, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
+		}
+	}
+	Restore(aFile, aInstallable, aBackupFlag);
+	FreeInstallableFiles(aInstallable);
+}
+
 #endif
 
 struct CheckDependencyMet

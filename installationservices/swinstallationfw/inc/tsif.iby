@@ -24,9 +24,6 @@ REM Software Install Framework
 define ZDRIVE \epoc32\data\Z
 define DATADRIVE \tusif\tsif\data
 
-//This is to be removed if SIFLauncher is added as part of production code
-#include "siflauncherconfig.iby"
-
 ECOM_PLUGIN(refnativeplugin.dll,10285BC3.rsc)
 ECOM_PLUGIN(testnonnativeplugin.dll,10285BD1.rsc)
 
@@ -36,6 +33,8 @@ data=ZDRIVE\tusif\tsif\tsif.ini									\tusif\tsif\tsif.ini
 data=ZDRIVE\tusif\tsif\tsif.script								\tusif\tsif\tsif.script
 data=ZDRIVE\tusif\tsif\tsif_appuidgen.ini							\tusif\tsif\tsif_appuidgen.ini
 data=ZDRIVE\tusif\tsif\tsif_appuidgen.script							\tusif\tsif\tsif_appuidgen.script
+data=ZDRIVE\tusif\tsif\tnotifier.ini							\tusif\tsif\tnotifier.ini
+data=ZDRIVE\tusif\tsif\tnotifier.script							\tusif\tsif\tnotifier.script
 data=ZDRIVE\tusif\tsifintegration\tsifintegration.ini			\tusif\tsifintegration\tsifintegration.ini
 data=ZDRIVE\tusif\tsifintegration\tsifintegration.script		\tusif\tsifintegration\tsifintegration.script
 data=ZDRIVE\tusif\tsifintegration\data\compound.sifrefbinpkg	\tusif\tsifintegration\data\compound.sifrefbinpkg
@@ -84,6 +83,12 @@ data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultifiles_largeandsmallextn
 data=ZDRIVE\tusif\tswtype\data\sifswtypebase.sis				\tusif\tswtype\data\sifswtypebase.sis
 data=ZDRIVE\tusif\tswtype\data\sifswtypeupgrade.sis				\tusif\tswtype\data\sifswtypeupgrade.sis
 
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case05.sis		DATADRIVE\swiappregintegration_case05.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case05_SU.sis		DATADRIVE\swiappregintegration_case05_SU.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case06_base.sis	DATADRIVE\swiappregintegration_case06_base.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case06_sa.sis		DATADRIVE\swiappregintegration_case06_sa.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case08_sa1.sis		DATADRIVE\swiappregintegration_case08_sa1.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case08_sa2.sis		DATADRIVE\swiappregintegration_case08_sa2.sis
 
 REM security tests
 file=ABI_DIR\BUILD_DIR\usifsecuritytests.dll					\sys\bin\usifsecuritytests.dll

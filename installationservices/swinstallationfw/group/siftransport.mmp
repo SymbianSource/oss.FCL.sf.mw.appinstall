@@ -35,8 +35,10 @@ SOURCE siftransportserver.cpp siftransportsession.cpp siftransportrequest.cpp si
 
 USERINCLUDE ../inc
 USERINCLUDE ../common/inc
+USERINCLUDE ../inc_private
+USERINCLUDE ../../swcomponentregistry/inc_private
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 
-LIBRARY euser.lib efsrv.lib estor.lib scsclient.lib scsserver.lib ipcstream.lib
+LIBRARY euser.lib efsrv.lib estor.lib scsclient.lib scsserver.lib ipcstream.lib sifnotification.lib
 SMPSAFE

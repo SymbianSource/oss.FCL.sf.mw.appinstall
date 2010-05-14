@@ -233,7 +233,7 @@ void CDialogWrapper::CancelWaitingNoteL()
     
 	if ( iIsProgressDialog )
 		{
-		iHbProgressDialog->Cancel();
+		iHbProgressDialog->Close();
 		delete iHbProgressDialog;
 		iHbProgressDialog = NULL;
 		iIsProgressDialog = EFalse;

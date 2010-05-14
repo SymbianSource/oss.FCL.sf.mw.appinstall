@@ -20,3 +20,11 @@ set PLATFORM=%1
 set CFG=%2
 
 del /f /q %EPOCROOT%epoc32\release\%PLATFORM%\%CFG%\siflauncher.exe
+
+del /f /q %EPOCROOT%epoc32\release\%PLATFORM%\%CFG%\z\resource\apps\siflauncher.mbm
+del /f /q %EPOCROOT%epoc32\release\%PLATFORM%\%CFG%\z\resource\apps\siflauncher_loc.rsc
+del /f /q %EPOCROOT%epoc32\release\%PLATFORM%\%CFG%\z\private\10003a3f\apps\siflauncher_reg.rsc
+
+del /f /q %EPOCROOT%epoc32\data\z\resource\apps\siflauncher.mbm
+del /f /q %EPOCROOT%epoc32\data\z\resource\apps\siflauncher_loc.rsc
+del /f /q %EPOCROOT%epoc32\data\z\private\10003a3f\apps\siflauncher_reg.rsc

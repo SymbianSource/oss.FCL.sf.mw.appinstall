@@ -62,7 +62,7 @@ private:
 	void RegisterSifLauncherMimeTypesL(const RMessage2& aMessage);
 	void UnregisterSifLauncherMimeTypesL(const RMessage2& aMessage);
 	void RegisterSifLauncherMimeTypesImplL(const RMessage2& aMessage, TBool aRegister);
-	void NotifyApparcForApps(const RMessage2& aMessage);
+	void NotifyApparcForAppsL(const RMessage2& aMessage);
 #endif
 #endif
 	void DoRunExecutableL(const RMessage2& aMessage);

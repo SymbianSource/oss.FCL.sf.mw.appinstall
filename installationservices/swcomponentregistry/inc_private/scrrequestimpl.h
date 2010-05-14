@@ -356,7 +356,8 @@ namespace Usif
 		TBool GetIntforConditionL(const TDesC& aSelectColumn, const TDesC& aTableInfo, const TDesC& aConditionColumn,TInt aConditionValue,TInt& aRetrievedValue) const;
 		TInt  GetServiceIdForDataTypeL(const TDesC& aType) const;
 		TBool GetAppUidForServiceIdL(const TInt ServiceId, TUid& aAppUid) const;
-		TBool GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid appUid,TLanguage& aFinalAppLocale) const;
+		TBool GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid aAppUid,TLanguage& aFinalAppLocale) const;
+		void GetNearestAppLanguageForOpaqueDataL(TLanguage aRequiredLocale,TUid aAppUid,TUid aServiceUid,TLanguage& aFinalAppLocale) const;
 
 		// DB Version management
 		void InitializeDbVersionL();

@@ -208,6 +208,7 @@ void CInstallationProcessor::DoCancel()
 		iFileExtractor->Cancel();
 		}
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  	
 	if (iAppRegExtractor != NULL)
         {
 		if (iAppRegExtractor->IsActive())
@@ -215,6 +216,7 @@ void CInstallationProcessor::DoCancel()
 			iAppRegExtractor->Cancel();
 			}
 		}
+#endif
 	}
 
 void CInstallationProcessor::DisplayFileL(const CSisRegistryFileDescription& aFileDescription, Sis::TSISFileOperationOptions aFileOperationOption)
@@ -773,8 +775,7 @@ TBool CInstallationProcessor::DoStateProcessFilesL()
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
 		
 		// Find out all the regisration resource files associated with this package UID and add to the list of 
-		// files to be processed later for parsing
-		// Continue processing the next file if a registration resource file is not found(in case of SA over SA)
+		// files to be processed later for parsing		
 		TRAPD(err, AddAppArcRegResourceFilesL());
 		if ( err != KErrNotFound && err != KErrNone)
 		    User::Leave(err);
@@ -914,9 +915,10 @@ TBool CInstallationProcessor::DoParseApplicationRegistrationFilesL()
     
     if (iCurrent < iApparcRegFilesForParsing.Count())
         { 
-        TDesC& fileDescription = (iApparcRegFilesForParsing[iCurrent++]->GetAppRegFile());                          
+        TDesC& fileDescription = (iApparcRegFilesForParsing[iCurrent++]->GetAppRegFile());   
+        // Continue processing the next file if a registration resource file is not found(in case of SA over SA)
         TRAPD(err,ParseRegistrationResourceFileL(fileDescription));        
-        if(KErrNotFound == err)
+        if(KErrNotFound == err || KErrPathNotFound == err)
             {               
             delete iApparcRegFilesForParsing[--iCurrent];
             iApparcRegFilesForParsing.Remove(iCurrent); 
@@ -997,7 +999,8 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	RArray<TAppUpdateInfo> affectedApps;    
 	CleanupClosePushL(affectedApps);
 	const CApplication& application = ApplicationL();
-	if(iApparcRegFilesForParsing.Count() != 0)
+	//if there are reg files in the package or if its an upgrade (in case of SA (with app) over SA(with no app))
+	if(iApparcRegFilesForParsing.Count() != 0 || application.IsUpgrade())
 	    {
 	    //Create the list of Application Uids which are affected by the Installation    	    	    
 	    Usif::TComponentId componentId = 0;
@@ -1023,36 +1026,41 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
             if(application.ControllerL().Info().InstallType() == Sis::EInstInstallation )
                 {        
                 //Get the compid for base package
-                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForUidL(packageUid);
-                if(!componentId)
-                    {
-                    DEBUG_PRINTF(_L("ComponentID not found for the base package"));
-                    User::Leave(KErrNotFound);
-                    }
+                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForUidL(packageUid);               
                       
                 TInt index = componentIds.Find(componentId);
-                if(index != KErrNotFound)
-                    {
-                    //Exclude the Base SA compId from the list 
-                    componentIds.Remove(index);
-                    }
+
+                //Exclude the Base SA compId from the list 
+                componentIds.Remove(index);
                 //Get the apps for Base SA compId and mark them as to be deleted
                 existingAppUids.Reset();
-                iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids);                 
-                for(TInt i = 0 ; i < existingAppUids.Count(); i++)
+                TRAPD(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids);)  
+                //If Base Package does not contain any app then GetAppUidsForComponentL will return KErrNotFound, ignore the error else leave
+                if (KErrNone != err && KErrNotFound != err)
+                    {
+                    User::Leave(err);
+                    }
+                
+                for(TInt i = 0 ; i < existingAppUids.Count(); ++i)
                     {
                     existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);    
-                    affectedApps.Append(existingAppInfo);
+                    affectedApps.AppendL(existingAppInfo);
                     }                
                 //Get the apps for Remaining CompIds and mark them as to be upgraded               
-                for(TInt i = 0 ; i < componentIds.Count(); i++)
+                for(TInt i = 0 ; i < componentIds.Count(); ++i)
                     {
                     existingAppUids.Reset();                    
-                    iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids); 
-                    for(TInt i = 0 ; i < existingAppUids.Count(); i++)
+                    //If there are no apps within the existing components (SP's) then it will return KErrNotFound
+                    TRAPD(err, iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids);) 
+                    if (KErrNone != err && KErrNotFound != err)
                         {
-                        existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppInstalled);    
-                        affectedApps.Append(existingAppInfo);
+                        User::Leave(err);
+                        }
+                    
+                    for(TInt k = 0 ; k < existingAppUids.Count(); ++k)
+                        {
+                        existingAppInfo = TAppUpdateInfo(existingAppUids[k], EAppInstalled);    
+                        affectedApps.AppendL(existingAppInfo);
                         }
                     }                                
                 }
@@ -1060,36 +1068,23 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
             //SP over SP
             if(application.ControllerL().Info().InstallType() == Sis::EInstAugmentation)
                 {
-                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForPackageL(application.PackageL().Name(), application.PackageL().Vendor());
-                //if SP upgrades the SP
-                if(componentId)
-                    {
-                    //Get the apps for Base SP compId and mark them as to be deleted
-                    existingAppUids.Reset();
-                    iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids); 
-                    for(TInt i = 0 ; i < existingAppUids.Count(); i++)
-                       {
-                       existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);    
-                       affectedApps.Append(existingAppInfo);
-                       }  
-                    }            
+                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForPackageL(application.PackageL().Name(), application.PackageL().Vendor());     
+                //Get the apps for Base SP compId and mark them as to be deleted
+                existingAppUids.Reset();
+                //If there are no apps within the existing component (SP) then it will return KErrNotFound
+                TRAPD(err, iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids);) 
+                if (KErrNone != err && KErrNotFound != err)
+					{
+                    User::Leave(err);
+					}
+                
+                for(TInt i = 0 ; i < existingAppUids.Count(); ++i)
+                   {
+                   existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);    
+                   affectedApps.Append(existingAppInfo);
+                   }                                  
                 }        
-            }	    
-        
-        else if(application.IsPartialUpgrade() || application.IsAugmentation() || application.IsPreInstalledPatch())
-            {       
-            //Get the apps for Remaining CompIds and mark them as to be upgraded               
-            for(TInt i = 0 ; i < componentIds.Count(); i++)
-                {
-                existingAppUids.Reset();                    
-                iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids); 
-                for(TInt i = 0 ; i < existingAppUids.Count(); i++)
-                    {
-                    existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppInstalled);    
-                    affectedApps.Append(existingAppInfo);
-                    }
-                }        
-            }
+            }	                   
         CleanupStack::PopAndDestroy(2, &componentIds);
 	    }		
 #endif
@@ -1235,9 +1230,10 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	// RSisRegistryWritableSession::UpdateEntryL()
 	InstallSoftwareTypeHelper::RegisterMimeTypesL(iSoftwareTypeRegInfoArray);
 	
-	if(iApparcRegFilesForParsing.Count() != 0)
+	//if there are reg files in the package or if its an upgrade (in case of SA (with app) over SA(with no app))
+	if(iApparcRegFilesForParsing.Count() != 0 || application.IsUpgrade())
 	    {
-	    //Create the list of Application Uids which are affected by the Installation                            
+	    //Create the list of Application Uids which are affected by the Restore                           
         RArray<Usif::TComponentId> componentIds;
         CleanupClosePushL(componentIds);
         RArray<TUid> newAppUids;    
@@ -1255,9 +1251,11 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
             newAppUids.Reset();                    
             TRAPD(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], newAppUids))
             if (KErrNone != err && KErrNotFound != err)
+                {
                 User::Leave(err);
+                }
             
-            for(TInt i = 0 ; i < newAppUids.Count(); i++)
+            for(TInt i = 0 ; i < newAppUids.Count(); ++i)
                 {
                 existingAppInfo = TAppUpdateInfo(newAppUids[i], EAppUninstalled);
                 TInt index = 0;
@@ -1267,7 +1265,7 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
                     affectedApps.Remove(index);
                     }
                 existingAppInfo = TAppUpdateInfo(newAppUids[i],EAppInstalled);
-                affectedApps.Append(existingAppInfo);            
+                affectedApps.AppendL(existingAppInfo);            
                 }        
             }
         

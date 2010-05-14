@@ -38,6 +38,7 @@ data=ZDRIVE\tusif\tscrdatalayer\tscr_datalayer.script	\tusif\tscrdatalayer\tscr_
 data=ZDRIVE\tusif\tscr\tscr_performance.ini				\tusif\tscr\tscr_performance.ini
 data=ZDRIVE\tusif\tscr\tscr_performance.script			\tusif\tscr\tscr_performance.script
 data=ZDRIVE\tusif\tscr\tscr_performance_cases.script	\tusif\tscr\tscr_performance_cases.script
+data=ZDRIVE\tusif\tscr\tscr_app_performance_cases.script \tusif\tscr\tscr_app_performance_cases.script
 
 data=ZDRIVE\tusif\tscr\tscr_appreginfo.ini		\tusif\tscr\tscr_appreginfo.ini	
 data=ZDRIVE\tusif\tscr\tscr_appreginfo.script		\tusif\tscr\tscr_appreginfo.script

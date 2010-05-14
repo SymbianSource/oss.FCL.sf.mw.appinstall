@@ -23,6 +23,7 @@
 #include "iaupdatedebug.h"
 
 const TSecureId KSIDBackgroundChecker = 0x200211f4;
+const TSecureId KSIDCwrtWidget = 0x200267C0;
 
 
 IAUpdateServiceProvider::IAUpdateServiceProvider(IAUpdateEngine& engine)
@@ -76,12 +77,12 @@ void IAUpdateServiceProvider::checkUpdates(QString stringWgId,
                   stringType,
                   stringRefresh);
   
-        if ( requestInfo().clientSecureId() != KSIDBackgroundChecker )      
+        if ((requestInfo().clientSecureId() != KSIDBackgroundChecker) && (requestInfo().clientSecureId() != KSIDCwrtWidget))      
         {
             // other processes than backroundchecker are not allowed to cause refresh from network 
             params->SetRefresh( EFalse );
         }
-    mEngine->CheckUpdatesRequestL(stringWgId.toInt(),params);
+    mEngine->CheckUpdatesRequestL(stringWgId.toInt(),params, params->Refresh() && requestInfo().clientSecureId() == KSIDCwrtWidget);
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateServiceProvider::checkUpdates() end");
     }
     

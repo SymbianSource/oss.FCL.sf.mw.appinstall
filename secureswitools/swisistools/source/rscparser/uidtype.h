@@ -30,31 +30,16 @@
 namespace rscparser
 {
 /**
-@internalComponent
-@released
-
 Defines a Null UID value.
-
-@see TUid
 */
 const TInt KNullUidValue=0;
 
 /**
-@publishedAll
-@released
-
 Defines the number of TUids that form a TUidType.
-
-@see TUid
-@see TUidType
 */
 const TInt KMaxCheckedUid=3;
 
-
 /**
-@publishedAll
-@released
-
 A globally unique 32-bit number.
 */
 class TUid
@@ -75,9 +60,6 @@ public:
 
 
 /**
-@publishedAll
-@released
-
 Defines a null UID
 */
 #define NullUid TUid::Null()
@@ -102,9 +84,6 @@ inline TUid TUid::Uid(TInt aUid)
 	{TUid uid={aUid};return uid;}
 	
 /**
-@publishedAll
-@released
-
 Encapsulates a set of three unique identifiers (UIDs) which, in combination, 
 identify a system object such as a GUI application or a DLL. The three
 component UIDs are referred to as UID1, UID2 and UID3.
@@ -123,5 +102,22 @@ public:
 private:
 	TUid iUid[KMaxCheckedUid];
 	};
+
+/**
+Packages a Uid type together with a checksum.
+*/
+class TCheckedUid
+     {
+ public:
+     TCheckedUid();
+     TCheckedUid(const TUidType& aUidType);
+	 TCheckedUid(const TUint8* aDes, TInt aLen);
+     void Set(const TUidType& aUidType);
+	 void Set(const TUint8* aDes, TInt aLen);
+     const TUidType&  UidType() const;
+private:
+    TUidType iType;
+	TUint32 iCheck;
+    };
 }
 #endif

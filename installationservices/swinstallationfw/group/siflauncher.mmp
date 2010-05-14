@@ -20,7 +20,8 @@ TARGET				siflauncher.exe
 TARGETTYPE			exe
 TARGETPATH			/sys/bin
 
-CAPABILITY			TrustedUI
+// We need WriteDeviceData so that the installer data types can have priority EDataTypePrioritySystem
+CAPABILITY			TrustedUI WriteDeviceData
 
 VENDORID			0x70000001
 
@@ -35,6 +36,23 @@ SOURCEPATH			../source
 SOURCE				siflauncher.cpp
 
 SOURCEPATH			../../swiconfig/usif/siflauncher
+
+START RESOURCE		siflauncher_reg.rss
+TARGETPATH			/private/10003a3f/apps
+END
+
+start resource		siflauncher_loc.rss
+targetpath			/resource/apps
+lang				sc
+end
+
+// Bitmaps
+START BITMAP		siflauncher.mbm
+SOURCEPATH			../../swiconfig/usif/siflauncher
+TARGETPATH			/resource/apps
+HEADER
+SOURCE				c8,1 INST24.bmp INST24M.BMP INST32.BMP INST32M.BMP INST48.BMP INST48M.BMP
+END
 
 LIBRARY				euser.lib efsrv.lib
 LIBRARY				apgrfx.lib apparc.lib apmime.lib

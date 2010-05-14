@@ -514,13 +514,6 @@ void CSisRegistryCache::InitFromBackupL()
 	
 void CSisRegistryCache::InitStartUpL()
 	{
-    TRAPD(res, UpdateRecentFWVersionL(););
-    if (res != KErrNone)
-        {
-        // log that
-        DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
-        }
-	
 	// else reinit lists- initial settings, esp at the first reboot
 	BuildUidListL();
 	iUseIntegServices = EFalse; // temporarily "turn off" integrity services. It is not needed to process ROM stubs
@@ -532,6 +525,13 @@ void CSisRegistryCache::InitStartUpL()
 			
 	// only when all is processed one can check the package state		
 	UpdatePackagePresentStateL();
+	
+    TRAPD(res, UpdateRecentFWVersionL(););
+    if (res != KErrNone)
+        {
+        // log that
+        DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
+        }
 	}
 
 void CSisRegistryCache::StoreBackupL()

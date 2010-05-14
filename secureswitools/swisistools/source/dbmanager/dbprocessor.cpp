@@ -376,6 +376,13 @@ void CStatement::BindBinary(TInt aParameterIndex, const std::string &aParameterS
 	CheckSqlErrCode(err);
 	}
 
+void CStatement::BindBinary(TInt aParameterIndex, const std::wstring &aParameterStr)
+	{
+	TInt err = iLibraryHandler.sqlite3_bind_blob(iStmtHandle, aParameterIndex, aParameterStr.c_str(), aParameterStr.size()*2, SQLITE_TRANSIENT);
+	// The fifth argument has the value SQLITE_TRANSIENT, it means that SQLite makes its own private copy of the data immediately
+	CheckSqlErrCode(err);
+	}
+
 void CStatement::Reset()
 	{
 	TInt err = iLibraryHandler.sqlite3_reset(iStmtHandle);

@@ -196,6 +196,7 @@ void CScrRequestImpl::CommitTransactionL()
 
 HBufC* CScrRequestImpl::GenerateGlobalIdL(const TDesC& aUniqueSwTypeName, const TDesC& aGlobalId) const
 	{ 
+	DEBUG_PRINTF(_L8("Generating Global ID."));
 	HBufC *globalIdBuf = HBufC::NewL(aUniqueSwTypeName.Length() + aGlobalId.Length() + 1); // 1 is extra memory to put NULL char
 	TPtr globalIdDes(globalIdBuf->Des());
 	
@@ -348,6 +349,8 @@ void CScrRequestImpl::AddComponentL(const RMessage2& aMessage)
 	
 	TPckg<TComponentId> componentIdDes(newComponentId);
 	aMessage.WriteL(3, componentIdDes);
+	
+	DEBUG_PRINTF(_L8("New component added successfully."));
 	}
 
 HBufC* CScrRequestImpl::ReadAndGetGlobalIdLC(const RMessage2& aMessage, TInt aSlot) const
@@ -453,6 +456,8 @@ void CScrRequestImpl::AddComponentDependencyL(const RMessage2& aMessage)
 	ExecuteStatementL(insertStmtStr, numberOfValues, EValueInteger, globalIdsHash, EValueInteger, depGlobalIdHash, EValueInteger, suppGlobalIdHash, EValueString, depGlobalId, EValueString, suppGlobalId, EValueString, firstVersionParam, EValueString, secondVersionParam);
 	
 	CleanupStack::PopAndDestroy(5, verCompId); // verCompId, suppGlobalId, depGlobalId, insertStmtStr, insertStmtEndStr
+	
+	DEBUG_PRINTF(_L8("New component dependency added successfully."));
 	}
 
 CStatement* CScrRequestImpl::CreateGeneralPropertyStatementWithLocaleL(const TDesC& aStmtStr, TInt aIdColumnValue, TLanguage aLocale, const TDesC& aPropName, TBool aDoLocaleResolving) const
@@ -947,6 +952,8 @@ void CScrRequestImpl::SetFileIntPropertyL(const RMessage2& aMessage)
 
 void CScrRequestImpl::SetComponentLocalizableL(TComponentId aComponentId, TLanguage aLocale, const TDesC& aColumnName, const TDesC& aName, const TDesC& aVendor)
 	{
+	DEBUG_PRINTF(_L8("Setting component Localizable."));
+	
 	_LIT(KFindComponentLocalizable, "SELECT CompLocalId FROM ComponentLocalizables WHERE ComponentId=? AND Locale=?;");
 	TInt numberOfValues = 2;
 	CStatement *stmt = CreateStatementObjectWithLocaleL(KFindComponentLocalizable, aLocale, numberOfValues, EValueInteger, aComponentId, EValueLanguage);	
@@ -1420,6 +1427,7 @@ CStatement* CScrRequestImpl::ExecuteLocalizableStatementL(const TDesC& aLocaliza
 
 void CScrRequestImpl::AddComponentEntryLocalizablesL(TComponentId aComponentId, CComponentEntry& aEntry, TLanguage aLocale) const
 	{
+	DEBUG_PRINTF(_L8("Adding Component Entry Localizables."));
 	_LIT(KSelectLocalizableNames, "SELECT Name,Vendor FROM ComponentLocalizables WHERE ComponentId=? AND Locale=?;");
 	_LIT(KSelectAnyNames, "SELECT Name,Vendor FROM ComponentLocalizables WHERE ComponentId=?;");
 	
@@ -1447,6 +1455,7 @@ void CScrRequestImpl::AddComponentEntryLocalizablesL(TComponentId aComponentId, 
 
 void CScrRequestImpl::AddSoftwareTypeNameToComponentEntryL(CStatement& aStmt, CComponentEntry& aEntry, TLanguage aLocale) const
 	{
+	DEBUG_PRINTF(_L8("Adding SoftwareType Name To Component Entry."));
 	TInt softwareTypeId = aStmt.IntColumnL(1);
 	_LIT(KSelectLocalizableSwTypeName, "SELECT Name FROM SoftwareTypeNames WHERE SoftwareTypeId=? AND Locale=?;");
 	CStatement *stmtLoc = ExecuteLocalizableStatementL(KSelectLocalizableSwTypeName, KSelectLocalizableSwTypeName, softwareTypeId, aLocale);
@@ -1546,6 +1555,8 @@ TBool CompareProperties(const CPropertyEntry& aRhs, const CPropertyEntry& aLhs)
 
 void CScrRequestImpl::AddGeneralPropertiesArrayWithLocaleL(const TDesC& aStmtStr, TLanguage aLocale, TComponentId aIdColumnValue, RPointerArray<CPropertyEntry>& aProperties) const
 	{
+	DEBUG_PRINTF(_L8("Adding General Properties Array With Locale."));
+	
 	TInt numberOfValues = 2;
 	CStatement *stmt = CreateStatementObjectWithLocaleL(aStmtStr, aLocale, numberOfValues, EValueInteger, aIdColumnValue, EValueLanguage);
 	if(!stmt)
@@ -1573,6 +1584,8 @@ void CScrRequestImpl::AddGeneralPropertiesArrayWithLocaleL(const TDesC& aStmtStr
 
 void CScrRequestImpl::GetGeneralPropertiesArrayL(const TDesC& aTableName, const TDesC& aIdColumnName , TComponentId aIdColumnValue, TLanguage aLocale, RPointerArray<CPropertyEntry>& aProperties) const
 	{
+	DEBUG_PRINTF(_L8("Returning General Properties Array."));
+	
 	_LIT(KSelectGeneralLocalizableProperties, "SELECT Name,IntValue,StrValue,Locale,IsStr8Bit FROM %S WHERE %S=? AND Locale=?;");
 	TInt formattedLen = aTableName.Length() + aIdColumnName.Length();
 	HBufC *statementStr = FormatStatementLC(KSelectGeneralLocalizableProperties, formattedLen, &aTableName, &aIdColumnName );
@@ -1625,6 +1638,8 @@ void CScrRequestImpl::GetFilePropertiesDataL(const RMessage2& aMessage) const
 
 CPropertyEntry* CScrRequestImpl::GetPropertyEntryL(CStatement& aStmt, const TDesC& aPropName, TInt aStartingIndex) const
 	{
+	DEBUG_PRINTF(_L8("Returning the file properties entry."));
+	
 	CPropertyEntry *entry(0);
 		
 	if(!aStmt.IsFieldNullL(aStartingIndex))
@@ -1701,6 +1716,7 @@ void CScrRequestImpl::GetSingleFilePropertyDataL(const RMessage2& aMessage) cons
 
 void CScrRequestImpl::GetComponentFilesCountL(const RMessage2& aMessage) const
 	{
+	DEBUG_PRINTF(_L8("Returning the Component Files Count."));
 	TComponentId componentId = GetComponentIdFromMsgL(aMessage);
 
 	DEBUG_PRINTF2(_L8("Returning the files count for component %d."), componentId);
@@ -1724,6 +1740,7 @@ void CScrRequestImpl::GetComponentFilesCountL(const RMessage2& aMessage) const
 
 void CScrRequestImpl::GetFileComponentsL(const TDesC& aFileName, RArray<TComponentId>& aComponents) const
 	{
+	DEBUG_PRINTF(_L8("Returning the File Components."));
 	_LIT(KSelectFileComponents, "SELECT ComponentId FROM ComponentsFiles WHERE LocationHash=?;");
 	CStatement *stmt = iDbHandle->PrepareStatementLC(KSelectFileComponents);
 	TUint32 hash = HashCaseInsensitiveL(aFileName);
@@ -1749,6 +1766,7 @@ void CScrRequestImpl::GetFileComponentsSizeL(const RMessage2& aMessage) const
 
 void CScrRequestImpl::GetFileComponentsDataL(const RMessage2& aMessage) const
 	{
+	DEBUG_PRINTF(_L8("Returning the File Components Data."));
 	WriteArrayDataL(aMessage, 0, iFileComponents);
 	}
 	
@@ -1853,6 +1871,7 @@ CGlobalComponentId* CScrRequestImpl::ParseGlobalComponendIdLC(const TDesC& aGlob
 
 void CScrRequestImpl::GetGeneralDependencyListL(const TDesC& aSelectColumn, const TDesC& aConditionColumn, const TDesC& aConditionValue, RPointerArray<CVersionedComponentId> &aVerCompIdList) const
 	{
+	DEBUG_PRINTF(_L8("Returning General Dependency List."));
 	_LIT(KSelectDependencies, "SELECT %S,VersionFrom,VersionTo FROM ComponentDependencies WHERE %S=?;");
 	TInt formattedLen = aSelectColumn.Length() + aConditionColumn.Length();
 	HBufC *stmtStr = FormatStatementLC(KSelectDependencies(), formattedLen, &aSelectColumn, &aConditionColumn);
@@ -1915,6 +1934,7 @@ void CScrRequestImpl::GetDependantComponentsSizeL(const RMessage2& aMessage) con
 
 void CScrRequestImpl::GetDependantComponentsDataL(const RMessage2& aMessage) const
 	{
+	DEBUG_PRINTF(_L8("Returning Dependant Components Data."));
 	WriteArrayDataL(aMessage, 0, iVerCompIdList);
 	}
 		
@@ -1931,6 +1951,7 @@ void CScrRequestImpl::GetIsMediaPresentL(const RMessage2& aMessage) const
 
 TBool CScrRequestImpl::CheckForMediaPresenceL(TComponentId aComponentId) const
 	{
+	DEBUG_PRINTF(_L8("Check For Media Presence."));
 	TInt componentDrivesBitmask = GetInstalledDrivesBitmaskL(aComponentId);	
 	
 	TDriveList presentDriveSet;
@@ -1982,6 +2003,7 @@ void CScrRequestImpl::GetPluginUidWithMimeTypeL(const RMessage2& aMessage) const
 
 TBool CScrRequestImpl::GetSifPluginUidIInternalL(TInt aSoftwareTypeId, TInt& aValue) const
 	{
+	DEBUG_PRINTF(_L8("Returning Sif Plugin UidI Internal."));
 	TBool found = EFalse;	
 		
 	_LIT(KSelectSifPluginUid, "SELECT SifPluginUid FROM SoftwareTypes WHERE SoftwareTypeId=?;");
@@ -2042,6 +2064,7 @@ TBool CScrRequestImpl::IsInstallerOrExecutionEnvSidL(TSecureId& aSid) const
 
 void CScrRequestImpl::GetPluginUidWithComponentIdL(const RMessage2& aMessage) const
 	{
+	DEBUG_PRINTF(_L8("Returning Plugin Uid With ComponentId."));
 	TComponentId componentId = GetComponentIdFromMsgL(aMessage);
 	DEBUG_PRINTF2(_L8("Returning the plugin of component(%d)."), componentId);
 	
@@ -2210,6 +2233,7 @@ void CScrRequestImpl::GetAppForDataTypeL(const RMessage2& aMessage) const
 
 TInt CScrRequestImpl::GetServiceIdForDataTypeL(const TDesC& aType) const
     {
+	DEBUG_PRINTF(_L8("Returning ServiceId For DataType."));
     TInt serviceId = 0;
     _LIT(KSelectAppForDataTypeAndService, "SELECT ServiceId FROM DataType WHERE Type=? ORDER BY Priority DESC;");    
     CStatement* stmt = iDbHandle->PrepareStatementLC(KSelectAppForDataTypeAndService);
@@ -2229,6 +2253,7 @@ TInt CScrRequestImpl::GetServiceIdForDataTypeL(const TDesC& aType) const
     
 TBool CScrRequestImpl::GetAppUidForServiceIdL(const TInt ServiceId, TUid& aAppUid) const
     {
+	DEBUG_PRINTF(_L8("Returning App Uid for ServiceId."));
     _LIT(KSelectColumn, "AppUid");
     _LIT(KTable, "ServiceInfo");
     _LIT(KConditionColumn, "ServiceId");
@@ -2243,8 +2268,82 @@ TBool CScrRequestImpl::GetAppUidForServiceIdL(const TInt ServiceId, TUid& aAppUi
         }
     }
 
-TBool CScrRequestImpl::GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid appUid, TLanguage& aFinalAppLocale) const
+void CScrRequestImpl::GetNearestAppLanguageForOpaqueDataL(TLanguage aRequiredLocale, TUid aAppUid, TUid aServiceUid, TLanguage& aFinalAppLocale) const
     {
+	DEBUG_PRINTF(_L8("Returning Nearest App Language For OpaqueData."));
+    // Set the default language
+    aFinalAppLocale = TLanguage(0);
+    
+    if (aRequiredLocale == KUnspecifiedLocale)
+        {
+        aRequiredLocale = User::Language();
+        }
+        
+    // Get the list of locales supported by the application
+    RArray<TInt> appLocales;
+    CleanupClosePushL(appLocales);
+    GetLocalesForAppIdL(appLocales, aAppUid);
+    
+    // Return the default language if the app doesn't have localized info
+    if (!appLocales.Count())
+        {
+        CleanupStack::PopAndDestroy(&appLocales);
+        return;            
+        }
+  
+    // Check if current language is supported by application
+    if (KErrNotFound != appLocales.Find((TInt)aRequiredLocale))
+        {
+        aFinalAppLocale = aRequiredLocale;
+        }
+    else // Get the nearest languages corresponding to the required language
+        {    
+        TLanguagePath equivalentLanguages;
+        BaflUtils::GetEquivalentLanguageList(aRequiredLocale, equivalentLanguages);
+            
+        // Identify the application locale corresponding to the nearest required locale
+        TInt index = 0;
+        while (1)
+            {
+            if (equivalentLanguages[index] == ELangNone)
+                {
+                break;
+                }
+            
+            if (appLocales.FindInOrder((TInt)equivalentLanguages[index]) != KErrNotFound)
+                {
+                aFinalAppLocale = equivalentLanguages[index];
+                break;
+                }           
+    
+            index++;
+            }
+        }
+    
+    // Check the opaque data exists in the selected language
+    if (aFinalAppLocale != TLanguage(0))
+        {
+        _LIT(KOpaqueData, "SELECT StrValue FROM AppProperties where Name = ? AND ServiceUid = ?  AND AppUid = ? AND Locale = ?");
+        CStatement *stmt = iDbHandle->PrepareStatementLC(KOpaqueData);        
+        stmt->BindStrL(1, _L("OpaqueData"));
+        stmt->BindIntL(2, aServiceUid.iUid);
+        stmt->BindIntL(3, aAppUid.iUid);
+        stmt->BindIntL(4, (TInt)aFinalAppLocale);
+        
+        if (!stmt->ProcessNextRowL())
+            {
+            // No opaque data for given locale, hence set to the default locale
+            aFinalAppLocale = TLanguage(0);
+            }
+        CleanupStack::PopAndDestroy(stmt);
+        }
+       
+    CleanupStack::PopAndDestroy(&appLocales);
+    }
+
+TBool CScrRequestImpl::GetNearestAppLanguageL(TLanguage aRequiredLocale, TUid aAppUid, TLanguage& aFinalAppLocale) const
+    {
+	DEBUG_PRINTF(_L8("Returning Nearest App Language."));
     TLanguagePath equivalentLanguages;
     TInt index = 0;
     RArray<TInt> appLocales;
@@ -2256,43 +2355,43 @@ TBool CScrRequestImpl::GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid app
         {
         aRequiredLocale = User::Language();
         }
-    
-    
-    //Get the app language list.    
-    GetLocalesForAppIdL(appLocales,appUid);
+        
+    //Get the app language list.
+    CleanupClosePushL(appLocales);
+    GetLocalesForAppIdL(appLocales,aAppUid);
   
     //Check if current language is supported by application
-    if ( KErrNotFound!=appLocales.Find((TInt)aRequiredLocale))
+    if (KErrNotFound != appLocales.Find((TInt)aRequiredLocale))
         {
         aFinalAppLocale = aRequiredLocale;
         isLocalizedInfoPresent = ETrue;
-		appLocales.Close();
+        CleanupStack::PopAndDestroy(&appLocales);
         return isLocalizedInfoPresent;
         }
+    
     //Get the nearest languages corresponding to the required language.
     BaflUtils::GetEquivalentLanguageList(aRequiredLocale, equivalentLanguages);
-    
-    
+        
     //Identify the app language corresponding to the nearest required language.
     if(0 != appLocales.Count()) 
         {
         while(1)
-            {                                      
-            if(equivalentLanguages[index] != ELangNone && appLocales.FindInOrder((TInt)equivalentLanguages[index]) != KErrNotFound)
-                {
-                aFinalAppLocale = equivalentLanguages[index];
-                isLocalizedInfoPresent = ETrue;
-                break;
-                }
-                
+            {
             if(equivalentLanguages[index] == ELangNone)
                 {
                 break;
                 }
+            
+            if(appLocales.FindInOrder((TInt)equivalentLanguages[index]) != KErrNotFound)
+                {
+                aFinalAppLocale = equivalentLanguages[index];
+                isLocalizedInfoPresent = ETrue;
+                break;
+                }           
 
             index++;
-
-            } 
+            }
+        
         // If a matching language is not found in the list of equivalent languages,
         // we check if a default locale (KNonLocalized) is present.
         if(!isLocalizedInfoPresent && appLocales[0] == (TInt)KNonLocalized)
@@ -2300,8 +2399,9 @@ TBool CScrRequestImpl::GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid app
             isLocalizedInfoPresent = ETrue;
             aFinalAppLocale = KNonLocalized;
             }        
-        } 
-    appLocales.Close();
+        }
+    
+    CleanupStack::PopAndDestroy(&appLocales);
     return isLocalizedInfoPresent;
     }
 
@@ -2585,6 +2685,7 @@ void BindIntegerFilterToStatementL(CStatement& aStatement, TUint16 aSetFlag, TUi
 
 CStatement* CScrRequestImpl::OpenComponentViewL(CComponentFilter& aFilter, RArray<TComponentId>& aComponentFilterSuperset, TBool& aFilterSupersetInUse) const
 	{
+	DEBUG_PRINTF(_L8("Opening Component View."));
 	aComponentFilterSuperset.Reset();
 	aFilterSupersetInUse = EFalse;
 
@@ -2683,6 +2784,7 @@ CStatement* CScrRequestImpl::OpenComponentViewL(CComponentFilter& aFilter, RArra
 
 void CScrRequestImpl::AddComponentEntryLocalizablesL(TComponentId aComponentId, CComponentEntry& aEntry, TLanguage aLocale, const CComponentFilter& aFilter) const
 	{
+	DEBUG_PRINTF(_L8("Adding  Component Entry Localizables."));
 	if(aFilter.iSetFlag & (CComponentFilter::EName | CComponentFilter::EVendor))
 		{ // If a name or vendor is specified in the filter, the locale is ignored
 		  // and the provided names are retrieved from the ComponentLocalizables table.
@@ -2705,6 +2807,7 @@ void CScrRequestImpl::AddComponentEntryLocalizablesL(TComponentId aComponentId, 
 
 TBool CScrRequestImpl::IsSoftwareTypeExistingL(TInt aSoftwareTypeId) const
 	{
+	DEBUG_PRINTF(_L8("verify Software Type Exists."));
 	TBool result = EFalse;
 	_LIT(KComponentSoftwareType, "SELECT SoftwareTypeId FROM SoftwareTypes WHERE SoftwareTypeId=?;");	
 		
@@ -3558,6 +3661,7 @@ TBool CScrRequestImpl::DoesAppWithScreenModeExistL(TUid aAppUid, TInt aScreenMod
 
 void CScrRequestImpl::GetAppUidsL(CAppInfoViewSubsessionContext* aSubsessionContext, TBool aScreenModePresent) const
     {
+	DEBUG_PRINTF(_L8("Returning the App Uid."));
     CStatement* stmt;
     _LIT(KAllAppIds,"SELECT AppUid from AppRegistrationInfo"); 
     stmt = iDbHandle->PrepareStatementLC(KAllAppIds);
@@ -3572,7 +3676,7 @@ void CScrRequestImpl::GetAppUidsL(CAppInfoViewSubsessionContext* aSubsessionCont
         	{
             if(DoesAppWithScreenModeExistL(appUidWithLocaleInfo.iAppUid, aSubsessionContext->iScreenMode, appUidWithLocaleInfo.iLocale))
                 {
-                 aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
+                aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
                 }
         	}
         
@@ -3586,6 +3690,7 @@ void CScrRequestImpl::GetAppUidsL(CAppInfoViewSubsessionContext* aSubsessionCont
         
 void CScrRequestImpl::GetEmbeddableAppUidsL(CAppInfoViewSubsessionContext* aSubsessionContext, TBool aScreenModePresent) const
     {
+	DEBUG_PRINTF(_L8("Returning the Embeddable App Uids."));
     CStatement *stmt1;
     _LIT (KGetAppIdWithEmbeddability, "SELECT DISTINCT AppUid from AppRegistrationInfo where Embeddable IN(1,2)"); 
     stmt1 = iDbHandle->PrepareStatementLC(KGetAppIdWithEmbeddability);
@@ -3600,7 +3705,7 @@ void CScrRequestImpl::GetEmbeddableAppUidsL(CAppInfoViewSubsessionContext* aSubs
         	{
             if(DoesAppWithScreenModeExistL(appUidWithLocaleInfo.iAppUid, aSubsessionContext->iScreenMode, appUidWithLocaleInfo.iLocale))
                 {
-                 aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
+                aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
                 }
         	}
         else
@@ -3629,7 +3734,7 @@ void CScrRequestImpl::GetServerAppUidsL(CAppInfoViewSubsessionContext* aSubsessi
         	{
             if(DoesAppWithScreenModeExistL(appUidWithLocaleInfo.iAppUid, aSubsessionContext->iScreenMode, appUidWithLocaleInfo.iLocale))
                 {
-                 aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
+                aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
                 }
         	}
         else
@@ -3660,7 +3765,7 @@ void CScrRequestImpl::GetAppUidsWithEmbeddabilityFilterL(CAppInfoViewSubsessionC
                 	{
                     if(DoesAppWithScreenModeExistL(appUidWithLocaleInfo.iAppUid, aSubsessionContext->iScreenMode, appUidWithLocaleInfo.iLocale))
                         {
-                         aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
+                        aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
                         }
                 	}
                 else
@@ -3694,7 +3799,7 @@ void CScrRequestImpl::GetAppUidsWithCapabilityMaskAndValueL(CAppInfoViewSubsessi
             	{
                 if(DoesAppWithScreenModeExistL(appUidWithLocaleInfo.iAppUid, aSubsessionContext->iScreenMode, appUidWithLocaleInfo.iLocale))
                     {
-                     aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
+                    aSubsessionContext->iApps.AppendL(appUidWithLocaleInfo);
                     }
             	}
             else
@@ -3741,7 +3846,7 @@ CAppInfoFilter* CScrRequestImpl::ReadAppInfoFilterL(const RMessage2& aMessage) c
 
 void CScrRequestImpl::OpenAppInfoViewL(CAppInfoFilter& aFilter, CAppInfoViewSubsessionContext* aSubsessionContext)
     {
-               
+	DEBUG_PRINTF(_L8("Opening App Info View."));			
     switch(aFilter.iSetFlag)
         {
         
@@ -3907,11 +4012,12 @@ void CScrRequestImpl::AddApplicationEntryL(const RMessage2& aMessage)
         }
           
     CleanupStack::PopAndDestroy(regInfo);
-    DEBUG_PRINTF(_L8("Adding the application details into SCR done "));
+    DEBUG_PRINTF(_L8("Added the application details into SCR successfully "));
     }
 
 void CScrRequestImpl::AddFileOwnershipInfoL(TUid aAppUid, const TDesC& aFileName)
     {
+	DEBUG_PRINTF(_L8("Adding the File Ownership Info details into SCR"));
     if(aAppUid == KNullUid || !aFileName.CompareF(KNullDesC()))
     	{
     	DEBUG_PRINTF(_L8("Mandatory values not provided."));
@@ -3925,6 +4031,7 @@ void CScrRequestImpl::AddFileOwnershipInfoL(TUid aAppUid, const TDesC& aFileName
 
 void CScrRequestImpl::AddLocalizableAppInfoL(TUid aAppUid, Usif::CLocalizableAppInfo* aLocalizableAppInfoEntry)
     {
+	DEBUG_PRINTF(_L8("Adding the Localizable App Info details into SCR"));
 	TInt captionAndIconInfoId = 0;
 	if(NULL != aLocalizableAppInfoEntry->iCaptionAndIconInfo)
 	    {
@@ -3943,6 +4050,7 @@ void CScrRequestImpl::AddLocalizableAppInfoL(TUid aAppUid, Usif::CLocalizableApp
 
 void CScrRequestImpl::AddViewDataL(TInt aLocalAppInfoId, Usif::CAppViewData* aViewDataEntry)
     {
+	DEBUG_PRINTF(_L8("Adding the ViewData details into SCR"));
 	if(aLocalAppInfoId == 0 || aViewDataEntry->Uid() == KNullUid )
 		{
 		DEBUG_PRINTF(_L8("Mandatory values not provided."));
@@ -3962,6 +4070,7 @@ void CScrRequestImpl::AddViewDataL(TInt aLocalAppInfoId, Usif::CAppViewData* aVi
 
 TInt CScrRequestImpl::AddCaptionAndIconInfoL(Usif::CCaptionAndIconInfo* aCaptionAndIconEntry)
     {
+	DEBUG_PRINTF(_L8("Adding the Caption And Icon Info details into SCR"));
 	_LIT(KCaptionAndIconInfo,"INSERT INTO CaptionAndIconInfo(Caption, NumberOfIcons, IconFile) VALUES(?,?,?);");
     TInt numberOfValues = 3;
     ExecuteStatementL(KCaptionAndIconInfo(), numberOfValues, EValueString, &(aCaptionAndIconEntry->Caption()), EValueInteger, aCaptionAndIconEntry->NumOfAppIcons(), EValueString, &(aCaptionAndIconEntry->IconFileName()));
@@ -3970,6 +4079,7 @@ TInt CScrRequestImpl::AddCaptionAndIconInfoL(Usif::CCaptionAndIconInfo* aCaption
 
 void CScrRequestImpl::AddServiceInfoL(TUid aAppUid, Usif::CServiceInfo* aAppServiceInfoEntry)
     {
+	DEBUG_PRINTF(_L8("Adding the Service Info details into SCR"));
     if(aAppUid == KNullUid)
     	{
     	DEBUG_PRINTF(_L8("Values for app uid is absent"));
@@ -3996,6 +4106,7 @@ void CScrRequestImpl::AddServiceInfoL(TUid aAppUid, Usif::CServiceInfo* aAppServ
 
 void CScrRequestImpl::AddServiceDataTypeL(TInt aServiceUid, Usif::CDataType* aDataTypeEntry)
 	{
+	DEBUG_PRINTF(_L8("Adding the Service Data Type details into SCR"));
     if(!((aDataTypeEntry->Type()).CompareF(KNullDesC())))
     	{
     	DEBUG_PRINTF(_L8("Values for service uid or type is absent"));
@@ -4008,6 +4119,7 @@ void CScrRequestImpl::AddServiceDataTypeL(TInt aServiceUid, Usif::CDataType* aDa
 
 void CScrRequestImpl::AddPropertyL(TUid aAppUid, Usif::CPropertyEntry* aAppPropertiesEntry)
     {
+	DEBUG_PRINTF(_L8("Adding the Property details into SCR"));
     if(aAppUid == KNullUid || !((aAppPropertiesEntry->PropertyName().CompareF(KNullDesC()))))
     	{
     	DEBUG_PRINTF(_L8("Property name is absent and hence cannot be entered into the DB."));
@@ -4067,9 +4179,10 @@ void CScrRequestImpl::AddPropertyL(TUid aAppUid, Usif::CPropertyEntry* aAppPrope
 		}
     }
 
-
 void CScrRequestImpl::AddOpaqueDataL(TUid aAppUid, Usif::COpaqueData* aOpaqueDataEntry, TUid aServiceUid)
     {
+	DEBUG_PRINTF(_L8("Adding the Opaque Data details into SCR"));
+    const TInt KMaxOpaqueDataLength = 1024;
     /* AppUid cannot be NULL since this function is invoked from AddApplicationEntryL */ 
     __ASSERT_DEBUG(aAppUid != TUid::Null(), User::Leave(KErrArgument));
     
@@ -4081,7 +4194,7 @@ void CScrRequestImpl::AddOpaqueDataL(TUid aAppUid, Usif::COpaqueData* aOpaqueDat
     stmt->BindStrL(2, _L("OpaqueData"));
     stmt->BindIntL(3, (TInt)aOpaqueDataEntry->iLanguage);
     stmt->BindIntL(4, aServiceUid.iUid);
-    stmt->BindBinaryL(5, *(aOpaqueDataEntry->iOpaqueData));
+    stmt->BindBinaryL(5, *(aOpaqueDataEntry->iOpaqueData), KMaxOpaqueDataLength);
     stmt->ExecuteStatementL();
     CleanupStack::PopAndDestroy(stmt);
     }
@@ -4134,6 +4247,7 @@ void CScrRequestImpl::DeleteApplicationEntryInternalL(const TInt aAppUid)
 
 void CScrRequestImpl::DeleteApplicationEntryL(const RMessage2& aMessage)
     {
+	DEBUG_PRINTF(_L8("Deleting Application Entry details from SCR"));
     TInt applicationUid = aMessage.Int0();
     DeleteApplicationEntryInternalL(applicationUid);
     }
@@ -4183,6 +4297,7 @@ void CScrRequestImpl::DeleteFromTableL(const TDesC& aTableName, const TDesC& aAt
 
 CCaptionAndIconInfo* CScrRequestImpl::GetCaptionAndIconInfoL(TInt aCaptionAndIconId) const
     {
+	DEBUG_PRINTF2(_L8("Returning the Caption And Icon Info associated with CaptionAndIconId (%d) from SCR."), aCaptionAndIconId);
     _LIT(KGetLocalizedCaptionAndIconInfo, "Select Caption,NumberOfIcons,Iconfile from CaptionAndIconInfo where CaptionAndIconId = ?");
     CStatement *stmt = iDbHandle->PrepareStatementLC(KGetLocalizedCaptionAndIconInfo);
     stmt->BindIntL(1, aCaptionAndIconId);
@@ -4395,9 +4510,7 @@ void CScrRequestImpl::GetServiceInfoL(CApplicationRegistrationData& aApplication
         DEBUG_PRINTF2(_L("The Service Uid for this App is 0x%x "), serviceInfo->iUid);
         if(serviceInfo->iUid.iUid)
             {
-            TLanguage storedLanguage = aLanguage;
-            GetNearestAppLanguageL(aLanguage, aAppUid, storedLanguage);
-            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, storedLanguage);
+            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, aLanguage);
             }
 
         //populate the data types for a service Id 
@@ -4416,10 +4529,10 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
         {
         Usif::CLocalizableAppInfo* localizedAppInfo = NULL;        
         _LIT(KGetServiceInfo, "Select ShortCaption,GroupName,Locale,CaptionAndIconId from LocalizableAppInfo where AppUid = ? and Locale = ?");
-       CStatement *stmt = iDbHandle->PrepareStatementLC(KGetServiceInfo);
-       stmt->BindIntL(1, aAppUid.iUid);
-       stmt->BindIntL(2, (TInt)storedLanguage);
-       if(stmt->ProcessNextRowL())
+        CStatement *stmt = iDbHandle->PrepareStatementLC(KGetServiceInfo);
+        stmt->BindIntL(1, aAppUid.iUid);
+        stmt->BindIntL(2, (TInt)storedLanguage);
+        if(stmt->ProcessNextRowL())
            {
            localizedAppInfo = Usif::CLocalizableAppInfo::NewLC();
            DeleteObjectZ(localizedAppInfo->iShortCaption);
@@ -4443,7 +4556,7 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
            }
         CleanupStack::PopAndDestroy(stmt);
         }
-    else
+        else
         {
         DEBUG_PRINTF(_L8("No Nearest locale found for AppUid %d in the SCR"));
         }    
@@ -4451,9 +4564,7 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
 
 void CScrRequestImpl::GetAppRegOpaqueDataL(CApplicationRegistrationData& aApplicationRegistration, TUid aAppUid, TLanguage aLanguage) const
     {
-    TLanguage storedLanguage = aLanguage;
-    GetNearestAppLanguageL(aLanguage, aAppUid, storedLanguage);
-    GetOpaqueDataArrayL(aAppUid, TUid::Null(), aApplicationRegistration.iOpaqueDataArray, storedLanguage);
+    GetOpaqueDataArrayL(aAppUid, TUid::Null(), aApplicationRegistration.iOpaqueDataArray, aLanguage);
     }
 
 void CScrRequestImpl::NextApplicationRegistrationInfoSizeL(const RMessage2& aMessage, CApplicationRegistrationData*& aApplicationRegistration, CAppRegistrySubsessionContext*  aSubsessionContext)
@@ -4668,9 +4779,7 @@ void CScrRequestImpl::GetAppServicesL(TUid aAppUid, RPointerArray<
             CServiceInfo* serviceInfo = CServiceInfo::NewLC();
             serviceInfo->iUid = TUid::Uid(stmt->IntColumnL(1));
 
-            TLanguage finalLocale = KUnspecifiedLocale;
-            GetNearestAppLanguageL(aLocale, aAppUid, finalLocale);
-            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, finalLocale);
+            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, aLocale);
             GetDataTypesL(serviceInfo->iDataTypes, stmt->IntColumnL(0));
             aServiceInfoArray.AppendL(serviceInfo);
             CleanupStack::Pop(serviceInfo);
@@ -4697,9 +4806,7 @@ void CScrRequestImpl::GetServiceImplementationsL(TUid aServiceUid,
             
             serviceInfo->iUid = TUid::Uid(stmt->IntColumnL(1));
             TUid appUid = TUid::Uid(stmt->IntColumnL(2));
-            TLanguage finalLocale = KUnspecifiedLocale;
-            GetNearestAppLanguageL(aLocale, appUid, finalLocale);
-            GetOpaqueDataArrayL(appUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, finalLocale);
+            GetOpaqueDataArrayL(appUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, aLocale);
             GetDataTypesL(serviceInfo->iDataTypes, stmt->IntColumnL(0));
             
             aServiceInfoArray.AppendL(serviceInfo);
@@ -4728,9 +4835,7 @@ void CScrRequestImpl::GetServiceImplementationsL(TUid aServiceUid,
             serviceInfo->iUid = TUid::Uid(stmt->IntColumnL(0));
             
             TUid appUid = TUid::Uid(stmt->IntColumnL(3));
-            TLanguage finalLocale = KUnspecifiedLocale;
-            GetNearestAppLanguageL(aLocale, appUid, finalLocale);
-            GetOpaqueDataArrayL(appUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, finalLocale);
+            GetOpaqueDataArrayL(appUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, aLocale);
             TInt priority(stmt->IntColumnL(1));
             TPtrC datatype(stmt->StrColumnL(2));
             CDataType* dataType = CDataType::NewL(priority,datatype);
@@ -4763,9 +4868,7 @@ void CScrRequestImpl::GetAppServiceOpaqueDataL(TUid aAppUid,
             CServiceInfo* serviceInfo = CServiceInfo::NewLC();
             
             serviceInfo->iUid = TUid::Uid(stmt->IntColumnL(1));
-            TLanguage finalLocale = KUnspecifiedLocale;
-            GetNearestAppLanguageL(aLocale, aAppUid, finalLocale);
-            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, finalLocale);
+            GetOpaqueDataArrayL(aAppUid, serviceInfo->iUid, serviceInfo->iOpaqueDataArray, aLocale);
             GetDataTypesL(serviceInfo->iDataTypes, stmt->IntColumnL(0));
 
             aServiceInfoArray.AppendL(serviceInfo);
@@ -4778,19 +4881,22 @@ void CScrRequestImpl::GetAppServiceOpaqueDataL(TUid aAppUid,
 
 void CScrRequestImpl::GetOpaqueDataArrayL(TUid aAppUid, TUid aServiceUid, RPointerArray<COpaqueData>& aOpaqueDataArray, TLanguage aLanguage) const
     {
+    TLanguage finalAppLocale;
+    GetNearestAppLanguageForOpaqueDataL(aLanguage, aAppUid, aServiceUid, finalAppLocale);
+            
     _LIT(KOpaqueData, "SELECT StrValue FROM AppProperties where Name = ? AND ServiceUid = ?  AND AppUid = ? AND Locale = ?");
     CStatement *stmt = iDbHandle->PrepareStatementLC(KOpaqueData);
     
     stmt->BindStrL(1, _L("OpaqueData"));
     stmt->BindIntL(2, aServiceUid.iUid);
     stmt->BindIntL(3, aAppUid.iUid);
-    stmt->BindIntL(4, (TInt)aLanguage);
+    stmt->BindIntL(4, (TInt)finalAppLocale);
     
     aOpaqueDataArray.ResetAndDestroy();
     while (stmt->ProcessNextRowL())
         {
         Usif::COpaqueData* opaqueData = Usif::COpaqueData::NewLC();
-        opaqueData->iLanguage = aLanguage;
+        opaqueData->iLanguage = finalAppLocale;
         DeleteObjectZ(opaqueData->iOpaqueData);
         opaqueData->iOpaqueData = stmt->BinaryColumnL(0).AllocL();
         DEBUG_PRINTF2(_L("Locale for opaque entry for this App is %d "), opaqueData->iLanguage);
@@ -4922,6 +5028,7 @@ void CScrRequestImpl::GetCaptionAndShortCaptionInfoForLocaleL(TUid aAppUid, TLan
 
 void CScrRequestImpl::GetAppPropertiesInfoL(CApplicationRegistrationData& aApplicationRegistration,TUid aAppUid, TLanguage aLanguage)
     {
+	DEBUG_PRINTF2(_L8("returning App Properties Info for AppUid %d in the SCR"), aAppUid);
     TLanguage appSupportedLanguage;
     if(GetNearestAppLanguageL(aLanguage, aAppUid, appSupportedLanguage))
         {
@@ -4978,6 +5085,7 @@ void CScrRequestImpl::GetApplicationLaunchersDataL(const RMessage2& aMessage) co
 
 void CScrRequestImpl::GenerateNonNativeAppUidL(const RMessage2& aMessage)
     {    
+	DEBUG_PRINTF(_L8("Generating Non Native AppUid"));
     //Get access to the repository instance.
     CScrRepository* scrRepository = CScrRepository::GetRepositoryInstanceL();
     

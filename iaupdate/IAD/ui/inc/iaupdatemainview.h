@@ -28,7 +28,7 @@
 
 
 class HbListWidget;
-//class HbListView;
+class IAUpdateEngine;
 
 
 class IAUpdateMainView : public HbView
@@ -36,12 +36,12 @@ class IAUpdateMainView : public HbView
     Q_OBJECT 
     
 public:
-    IAUpdateMainView();
+    IAUpdateMainView(IAUpdateEngine *engine);
     virtual ~IAUpdateMainView();
         
-    void refresh( const RPointerArray<MIAUpdateNode>& nodes,
-                      const RPointerArray<MIAUpdateFwNode>& fwNodes,
-                      int error );
+    void refresh(const RPointerArray<MIAUpdateNode> &nodes,
+                 const RPointerArray<MIAUpdateFwNode> &fwNodes,
+                 int error);
 public slots:
     void handleStartUpdate();
  
@@ -53,10 +53,15 @@ public slots:
     
 private:
     
-
+    void getSelectedNodes(RPointerArray<MIAUpdateAnyNode> &selectedNodes) const;
+    void markListItem(bool mark, int index);
+    bool getMandatoryNodes(RPointerArray<MIAUpdateAnyNode> &mandNodes) const;
+    void showUpdateCannotOmitDialog() const; 
+    bool showDependenciesFoundDialog(QString &text) const;
+    void updateSelectionsToList();
     
 private:
-    //HbListView *mListView;
+    IAUpdateEngine *mEngine;
     HbListWidget *mListView;
     RPointerArray<MIAUpdateAnyNode> mAllNodes;
 

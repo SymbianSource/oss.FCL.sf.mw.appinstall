@@ -72,7 +72,7 @@ namespace Usif
 	_LIT(KTe_CompInfoRootNodePrefix,"root");
 	_LIT(KTe_CompInfoChildNodePrefix,".child");
 	_LIT(KTe_CompInfoNumChildren,"numChildren");
-
+	_LIT(KTe_OperationType,"operation");
 	// For test step panics
 	_LIT(KTe_SifSuitePanic,"Te_SifSuite");
 

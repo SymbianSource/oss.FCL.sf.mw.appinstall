@@ -43,8 +43,6 @@ data=ZPRIVATE\2000F85A\backup_registration.xml   PRIVATE\2000F85A\backup_registr
 data=ZSYSTEM\install\iaupdate_stub.sis           system\install\iaupdate_stub.sis
 data=ZSYSTEM\install\iaupdater_stub.sis          system\install\iaupdater_stub.sis
 
-data= ZPRIVATE\200211f4\qgn_note_swupdate_notification.svg PRIVATE\200211f4\qgn_note_swupdate_notification.svg
-
 #endif //FF_IAUPDATE
 
 #endif //__IAUPDATE_IBY__

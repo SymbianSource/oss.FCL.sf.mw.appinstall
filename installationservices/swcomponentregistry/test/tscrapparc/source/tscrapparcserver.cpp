@@ -83,15 +83,39 @@ GLDEF_C TInt E32Main()
     return err;
     }
 
+TBool CScrApparcTestServer::IsPerformanceTestStep(const TDesC& aStepName, TPtrC& aStrippedName)
+    {
+    _LIT(KPerformanceStepKeyWord, "Performance-");
+    if (KErrNotFound == aStepName.FindF(KPerformanceStepKeyWord()))
+        {
+        aStrippedName.Set(aStepName);
+        return EFalse;
+        }
+    
+    TInt len = KPerformanceStepKeyWord().Length();
+    aStrippedName.Set(aStepName.Mid(len));
+    return ETrue;
+    }
+
 CTestStep* CScrApparcTestServer::CreateTestStep(const TDesC& aStepName)    
     {    
     CTestStep* testStep = NULL;
     
-    if (aStepName == KScrApplicationRegistrationViewSubsessionStep)
-        testStep = new CScrGetApplicationRegistrationViewSubsessionStep();
-           
-    if (aStepName == KScrMultipleSubsessionsForAppRegistryViewStep)
+    TBool performanceStep = EFalse;
+    TPtrC strippedStepName;
+    performanceStep = IsPerformanceTestStep(aStepName, strippedStepName);
+    
+    if (strippedStepName == KScrApplicationRegistrationViewSubsessionStep)
+        testStep = new CScrGetApplicationRegistrationViewSubsessionStep();           
+    else if (strippedStepName == KScrMultipleSubsessionsForAppRegistryViewStep)
         testStep = new CScrMultipleSubsessionsForAppRegistryViewStep();
+    
+    if (performanceStep && (strippedStepName == KScrApplicationRegistrationViewSubsessionStep))
+        {
+        // Currently we support performace testing for only CScrGetApplicationRegistrationViewSubsessionStep
+        CScrGetApplicationRegistrationViewSubsessionStep* scrTestStep = dynamic_cast<CScrGetApplicationRegistrationViewSubsessionStep*>(testStep);
+        scrTestStep->MarkAsPerformanceStep();
+        }
     
     return testStep;
     }

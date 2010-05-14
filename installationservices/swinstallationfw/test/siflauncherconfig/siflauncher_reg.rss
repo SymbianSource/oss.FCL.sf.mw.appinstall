@@ -33,7 +33,7 @@ RESOURCE APP_REGISTRATION_INFO
 	newfile=KAppDoesNotSupportNewFile;
 	datatype_list=
 		{
-		DATATYPE { priority=EDataTypePriorityHigh; type="x-epoc/x-sisx-app"; },
-		DATATYPE { priority=EDataTypePriorityHigh; type="binary/sif-refpkg"; }
+		DATATYPE { priority=EDataTypePrioritySystem; type="x-epoc/x-sisx-app"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="binary/sif-refpkg"; }
 		};
 	}

@@ -42,20 +42,20 @@ class CScrGetApplicationRegistrationViewSubsessionStep : public COomTestStep
 public:
     CScrGetApplicationRegistrationViewSubsessionStep();
     ~CScrGetApplicationRegistrationViewSubsessionStep();
-protected:
     
-    Usif::RSoftwareComponentRegistry iScrSession;
+    void MarkAsPerformanceStep();
+    
+protected:    
     void ImplTestStepPreambleL();
     void ImplTestStepL();
-    void ImplTestStepPostambleL();
-    
+    void ImplTestStepPostambleL();   
     
     // Utility Functions
     void PrintErrorL(const TDesC& aMsg, TInt aErrNum,...);
     
     static void GenerateIndexedAttributeNameL(TDes& aInitialAttributeName, TInt aIndex);
     TBool GetUidFromConfig(const TDesC& aSectName, const TDesC& aKeyName, TUid& aUid);
-    //for reading data from ini file
+    // For reading data from ini file
     Usif::CApplicationRegistrationData* GetAppRegInfoFromConfigLC(HBufC* aConfigSection = NULL);
     void GetAppOwnedFilesL(RPointerArray<HBufC>& aOwnedFileArray, HBufC* aConfigSection = NULL);
     void GetAppServiceInfoL(RPointerArray<Usif::CServiceInfo>& aServiceInfoArray, HBufC* aConfigSection = NULL);
@@ -66,9 +66,8 @@ protected:
     CPropertyEntry* GetPropertyFromConfigLC(TBool aIsSingle, TInt aIndex, TBool aSupportLocalized, HBufC* aConfigsection = NULL);
     void GetAppPropertiesL(RPointerArray<Usif::CPropertyEntry>& aAppPropertyArray, TBool aSupportLocalized, HBufC* aConfigSection = NULL );
     void GetAppUidL(TUid& aAppUid, HBufC* aConfigsection = NULL);
-    
-    
-    //for comparing data 
+        
+    // For comparing data 
     TBool CompareApplicationRegistrationDataL(Usif::CApplicationRegistrationData *aActualData, Usif::CApplicationRegistrationData *aExpectedData);
     TBool CompareFileOwnershipInfo(RPointerArray<HBufC> aActualData, RPointerArray<HBufC> aExpectedData);
     TBool CompareServiceInfoL(RPointerArray<Usif::CServiceInfo> aActualData,  RPointerArray<Usif::CServiceInfo> aExpectedData);
@@ -77,9 +76,19 @@ protected:
     TBool CompareCaptionandIconInfo(const CCaptionAndIconInfo* aActualData, const CCaptionAndIconInfo* aExpectedData);
     TBool CompareViewData(RPointerArray<Usif::CAppViewData> aActualData,  RPointerArray<Usif::CAppViewData> aExpectedData);
     TBool CompareOpaqueDataL(RPointerArray<Usif::COpaqueData> aActualData,  RPointerArray<Usif::COpaqueData> aExpectedData);
-//private:
     
     void GetApplicationRegistrationDataFromConfigL(RPointerArray<Usif::CApplicationRegistrationData>& aEntries);
+    
+    void StartTimer();
+    void StopTimerAndPrintResultL();
+    void PrintPerformanceLog(TTime aTime);
+    
+protected:    
+    Usif::RSoftwareComponentRegistry iScrSession;
+    TBool iIsPerformanceTest;
+    
+private:    
+    TTime iStartTime;
     };
 
 
@@ -91,13 +100,12 @@ class CScrMultipleSubsessionsForAppRegistryViewStep : public CScrGetApplicationR
 public:
     CScrMultipleSubsessionsForAppRegistryViewStep();
     ~CScrMultipleSubsessionsForAppRegistryViewStep();
-protected:
-      
+    
+protected:      
     void ImplTestStepPreambleL();
     void ImplTestStepL();
     void ImplTestStepPostambleL();
     };
-
 
 #endif /* APPREGINFOAPPARCSTEPS_H_ */
 

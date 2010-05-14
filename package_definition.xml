@@ -43,6 +43,21 @@
       <component id="swidevicetools" name="Secure Software Install Device Tools" introduced="8.1" purpose="development">
         <unit bldFile="installationservices/swidevicetools/group" mrp="installationservices/swidevicetools/group/security_switools_device.mrp"/>
       </component>
+      <component id="swcomponentregistry" name="Software Component Registry" introduced="^4" purpose="mandatory">
+        <unit bldFile="installationservices/swcomponentregistry/group" mrp="installationservices/swcomponentregistry/group/security_softwarecomponentregistry.mrp"/>
+      </component>
+      <component id="swinstallationfw" name="Software Installation Framework" introduced="^4" purpose="optional">
+        <unit bldFile="installationservices/swinstallationfw/group" mrp="installationservices/swinstallationfw/group/security_softwareinstallframework.mrp"/>
+      </component>
+      <component id="swtransactionservices" name="Software Transaction Services" introduced="^4" purpose="optional">
+        <unit bldFile="installationservices/swtransactionservices/group" mrp="installationservices/swtransactionservices/group/security_softwaretransactionservices.mrp"/>
+      </component>
+      <component id="refswinstallationplugin" name="Reference Software Installation Plugin" introduced="^4" purpose="development" class="plugin">
+        <unit bldFile="installationservices/refswinstallationplugin/group" mrp="installationservices/refswinstallationplugin/group/security_sifrefplugin.mrp"/>
+      </component>
+      <component id="refsoftwareappmgr" name="Reference Software Application Manager" introduced="^4" purpose="development">
+        <unit bldFile="installationservices/refsoftwareappmgr/group" mrp="installationservices/refsoftwareappmgr/group/security_referenceapplicationmanager.mrp"/>
+      </component>
       <component id="switestfw" name="Software Install Test Framework" deprecated="^3" introduced="7.0" purpose="development" filter="test">
         <unit mrp="installationservices/switestfw/group/install_testframework.mrp" bldFile="installationservices/switestfw/group"/>
       </component>

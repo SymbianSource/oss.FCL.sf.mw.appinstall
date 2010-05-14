@@ -619,13 +619,6 @@ void ParseResourceDir(const CParameterList* aParamList, const CInterpretSIS& aIn
 	std::list<std::wstring>::iterator curr = regDirs.begin();
 	for( curr = regDirs.begin(); curr != regDirs.end(); ++curr )
 	{
-	
-		if(aParamList->RegistryVersionExists())
-		{
-			std::string errMsg= "Database not updated. SIS Registry version file present.\n Remove file RomDrive\\system\\data\\sisregistry_*.txt";
-			throw CResourceFileException(errMsg);
-		}
-
 		try
 		{
 			if (curr->find(AppResourceFileExtension,0) != std::wstring::npos)

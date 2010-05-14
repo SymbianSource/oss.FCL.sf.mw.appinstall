@@ -82,6 +82,7 @@ PRJ_TESTEXPORTS
 ../test/tscr/scripts/tscr_performance.ini			z:/tusif/tscr/tscr_performance.ini
 ../test/tscr/scripts/tscr_performance.script		z:/tusif/tscr/tscr_performance.script
 ../test/tscr/scripts/tscr_performance_cases.script	z:/tusif/tscr/tscr_performance_cases.script
+../test/tscr/scripts/tscr_app_performance_cases.script	z:/tusif/tscr/tscr_app_performance_cases.script
 
 ../test/tscr/scripts/tscr_versioning.script		z:/tusif/tscr/tscr_versioning.script
 ../test/tscr/scripts/tscr_oom.script		z:/tusif/tscr/tscr_oom.script

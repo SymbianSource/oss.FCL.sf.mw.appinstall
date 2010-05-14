@@ -60,8 +60,9 @@ void CSilentLauncher::ConstructL()
     iSifOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, EFalse ); 
     // Defined for the install.
     iSifOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, ETrue );          
-    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue );   
-    iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );     
+    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue ); 
+    // TODO: Is this removed from current USIF ?	  
+    //iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );     
     iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );

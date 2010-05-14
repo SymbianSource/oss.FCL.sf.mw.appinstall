@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -27,6 +27,7 @@
 
 class IAUpdateServiceProvider;
 class CIAUpdateUiController;
+class CIAUpdateFWUpdateHandler;
 class CIAUpdateParameters;
 class CIAUpdateGlobalLockHandler;
 class MIAUpdateNode;
@@ -42,7 +43,7 @@ class IAUpdateEngine : public QObject,
 
 public:
     IAUpdateEngine(QObject *parent = 0);
-    virtual ~IAUpdateEngine();
+    ~IAUpdateEngine();
     
     void StartedByLauncherL( TBool aRefreshFromNetworkDenied );
      
@@ -54,7 +55,9 @@ public:
       * @param aFilterParams These parameters are used when update items
       * are filtered for the UI list.
       */
-     void CheckUpdatesRequestL( int wgid, CIAUpdateParameters* aFilterParams );
+     void CheckUpdatesRequestL( int wgid, 
+                                CIAUpdateParameters* aFilterParams, 
+                                TBool aForcedRefresh );
 
      /**
       * When the show update operation is started through
@@ -76,7 +79,9 @@ public:
       * @param aUid  Uid of the caller of the request
       */
      void ShowUpdateQueryRequestL( int wgid, TUint aUid );
-          
+     
+     
+     void StartUpdate( TBool aFirmwareUpdate );
      /**
       * Set this application visible/unvisible
       * @param aVisible If EFalse application is put background and is hidden in FSW 
@@ -91,7 +96,7 @@ public:
       void SetClientWgId( TInt aWgId );
           
       /**
-      * Is client application in backround
+      * Is client application in background
       *
       * @param True value if client application is in background
       */
@@ -160,6 +165,17 @@ private: // From MIAUpdateUiControllerObserver
 private:  //new methods
 
     /**
+    * Show results dialog of update
+    */ 
+    void ShowResultsDialogL();
+        
+    /**
+    * Starts CIdle. Results dialog is shown in callback function. 
+    */ 
+    void ShowResultsDialogDeferredL();
+    
+    
+    /**
     * Informs an observer that its async request is completed 
     *
     * @param aError  Error code 
@@ -210,6 +226,16 @@ private:  //new methods
      void HideApplicationInFSWL( TBool aHide ) const;
      
      /**
+     * CIdle callback function, that shows status dialog
+     * To be used to guarantee that possible old status dialog is totally 
+     * removed by AVKON before showing new one  
+     *
+     * @param aPtr  Pointer to this instance
+     */ 
+     static TInt ShowResultsDialogCallbackL( TAny* aPtr );
+     
+     
+     /**
      * CIdle callback function, that shows update query dialog
      * To be used because a client to be informed immediately that its 
      * async request is issued. Waiting dialog cannot be shown before responding to a client  
@@ -217,6 +243,13 @@ private:  //new methods
      * @param aPtr  Pointer to this instance
      */
      static TInt UpdateQueryCallbackL( TAny* aPtr );
+     
+     /**
+     * CIdle callback function, that performs automatic update check and query
+     *
+     * @param aPtr  Pointer to this instance
+     */
+     static TInt AutomaticCheckCallbackL( TAny* aPtr );
          
      
     
@@ -226,15 +259,18 @@ public: //temp
     
 private:
     CIAUpdateUiController* iController;
+    CIAUpdateFWUpdateHandler* iFwUpdateHandler;
     CIAUpdateGlobalLockHandler* iGlobalLockHandler;
     CEikonEnv* iEikEnv; //not owned
     CIdle* iIdle;
+    CIdle* iIdleAutCheck;
     
     IAUpdateUiDefines::TIAUpdateUiRequestType iRequestType;
     TBool iUpdateNow;
     RArray<TUint32> iDestIdArray;
     TBool iRequestIssued;
     TBool iStartedFromApplication;
+    TBool iUiRefreshAllowed;
     TUint iUpdatequeryUid;
     TInt iWgId;
   

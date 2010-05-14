@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -25,11 +25,11 @@
 
 
 // ViewManager Constructor
-IAUpdateMainWindow::IAUpdateMainWindow()
+IAUpdateMainWindow::IAUpdateMainWindow(IAUpdateEngine *engine)
 {
     // Add the views to the main window
     //addHistoryView();
-    addMainView();
+    addMainView(engine);
     // show the main window (which will display the last view that was added)
     show();   //temp
 }
@@ -40,9 +40,9 @@ IAUpdateMainWindow::~IAUpdateMainWindow()
 }
 
 // Methods to add views to the main window
-void IAUpdateMainWindow::addMainView()
+void IAUpdateMainWindow::addMainView(IAUpdateEngine *engine)
 {
-    mMainView = new IAUpdateMainView();
+    mMainView = new IAUpdateMainView(engine);
     addView(mMainView);
 }
 

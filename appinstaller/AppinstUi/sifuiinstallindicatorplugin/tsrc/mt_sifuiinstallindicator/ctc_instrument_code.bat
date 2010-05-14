@@ -25,8 +25,8 @@ pushd ..\..
 if exist MON.sym del MON.sym
 if exist MON.dat del MON.dat
 call qmake
-call bldmake bldfiles
-call abld reallyclean winscw udeb
-call ctcwrap -i f -C "EXCLUDE+moc_*.cpp" -C "EXCLUDE+*.UID.CPP" -C "SKIP_FUNCTION_NAME+qt_plugin_query_verification_data" -C "SKIP_FUNCTION_NAME+qt_plugin_instance" abld build winscw udeb
+call make distclean
+call qmake
+call ctcwrap -i f -2comp -C "EXCLUDE+moc_*.cpp" -C "EXCLUDE+*.UID.CPP" -C "SKIP_FUNCTION_NAME+SifUiInstallIndicatorPlugin::error()" -C "SKIP_FUNCTION_NAME+qt_plugin_query_verification_data" -C "SKIP_FUNCTION_NAME+qt_plugin_instance" make debug-winscw
 popd
 

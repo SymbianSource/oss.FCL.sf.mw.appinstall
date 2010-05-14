@@ -28,14 +28,14 @@ class IAUpdateHistoryView;
 class HbDocumentLoader;
 class MIAUpdateNode;
 class MIAUpdateFwNode;
-class IAUpdateServiceProvider;  //temp
+class IAUpdateEngine;  
 
 class IAUpdateMainWindow : public HbMainWindow
     {
     Q_OBJECT
     
 public:
-    IAUpdateMainWindow();
+    IAUpdateMainWindow(IAUpdateEngine *engine);
     virtual ~IAUpdateMainWindow();
 
 public slots:
@@ -46,7 +46,7 @@ public slots:
     void toHistoryView();
 
 private:
-    void addMainView();
+    void addMainView(IAUpdateEngine *engine);
     void addHistoryView();
     
 private:

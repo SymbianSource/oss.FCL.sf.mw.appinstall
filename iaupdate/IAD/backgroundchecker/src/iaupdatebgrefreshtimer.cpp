@@ -25,12 +25,16 @@
 #include <apgwgnam.h>
 #include <apgcli.h>
 #include <apacmdln.h>
-#include <data_caging_path_literals.hrh>
+// #include <avkon.hrh>
+//#include <StringLoader.h> 
+//#include <iaupdate.rsg>
+//#include <data_caging_path_literals.hrh>
 #include <bautils.h>
 #include <apgtask.h>
 #include <sysversioninfo.h>  //sysversioninfo
 #include <featurecontrol.h>
 
+#include <hb/hbcore/hbtextresolversymbian.h>
 #include "iaupdateprivatecrkeys.h"
 #include "iaupdate.hrh"
 
@@ -46,6 +50,8 @@ _LIT8( KRefreshFromNetworkDenied, "1" );
 _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
 _LIT(KImageFile, "qgn_note_swupdate_notification.svg");
 _LIT8( KFirstTimeCase, "0" );
+
+
 
 //CONSTANTS
 const TUint KIADUpdateLauncherUid( 0x2001FE2F );
@@ -1788,23 +1794,88 @@ void CIAUpdateBGTimer::ReminderTimerCallBack()
 // ----------------------------------------------------------
 void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
     {
-    
-    _LIT( KIcon, "C:\\qgn_note_swupdate_notification.svg" );
+   
     _LIT( KFirstTimeText, "Check for updates ?" );
     _LIT( KNormalText, "Updates available" );
     _LIT( KSecondText, "Tap to view" );
+
+    // loc:
+    /*
+    _LIT( KIcon, "z:\\resource\\iaupdate\\qgn_note_swupdate_notification.svg" );
+    _LIT(KLocFile, "Text_Map_Swupdate_");
+    _LIT(KLocFilePath, "z:\\resource\\iaupdate\\");
+    
+    _LIT(KTitleFirstTime, "txt_software_update_list_software_update");
+    _LIT(KTitleOneUpdate, "txt_software_dpophead_update_available");
+    _LIT(KTitleSeveralUpdates, "txt_software_dpophead_updates_available");
+    
+    
+    _LIT(KSecondFirstTime, "txt_software_update_list_software_update");
+    _LIT(KSecondOneUpdate, "txt_software_dpopinfo_val_1_new");
+    _LIT(KSecondSeveralUpdates, "txt_software_dpopinfo_ln_new");
+   */
     
     FLOG("[bgchecker] LaunchNotificationL ");
         
     iMode = ModeL();
     
-    //text for 1st line
-     if ( iMode == ENormalMode )
-         {
-         
-         }
+    // loc: initialize localisation text loader
+    /*
+    TBool res = HbTextResolverSymbian::Init(KLocFile, KLocFilePath);
+    if ( res != KErrNone )
+        {
+        // nothing to do
+        }
+    */
+    
+    
+    // loc: Resolve title text
+    /*
+    HBufC*  titleText;
+    if ( aNrOfUpdates == 0 )
+        {
+        // First time case
+        titleText = HbTextResolverSymbian::LoadL( KTitleFirstTime );
+        }
+    else if ( aNrOfUpdates == 1 )
+        {
+        // one update available
+        titleText = HbTextResolverSymbian::LoadL( KTitleOneUpdate );
+        }
+    else
+        {
+        // several updates available
+        titleText = HbTextResolverSymbian::LoadL( KTitleSeveralUpdates );
+        }
+    
+    // Resolve second text
+    HBufC*  secondText;
+    if ( aNrOfUpdates == 0 )
+        {
+        // First time case
+        secondText = HbTextResolverSymbian::LoadL( KSecondFirstTime );
+        }
+    else if ( aNrOfUpdates == 1 )
+        {
+        // one update available
+        secondText = HbTextResolverSymbian::LoadL( KSecondOneUpdate, aNrOfUpdates );
+        }
+    else
+        {
+        // several updates available
+        // loc: text.append(hbTrId("txt_software_dblist_updates_available"));
+        secondText = HbTextResolverSymbian::LoadL( KSecondSeveralUpdates, aNrOfUpdates );
+        }
+     */
+    
+    // loc: Load title and second line
+    // HBufC* titleText = HbTextResolverSymbian::LoadL(KTextTitle);
+    // CleanupStack::PushL( titleText );
+    // HBufC* secondText3 = HbTextResolverSymbian::LoadL(KTextSecond);
+    // CleanupStack::PushL( titleText );
     
     //TBuf<256> iconPath;
+    
     TBuf<128> titleText;
     TBuf<128> secondText;
     
@@ -1835,9 +1906,17 @@ void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
             //CleanupStack::PopAndDestroy( image );
             }
         }
+    
+    // loc: set image path
+    // iSoftNotification->SetImagePathL( KIcon );
   
     // Set texts
+    // loc: iSoftNotification->SetTextL( titleText->Des(), secondText->Des() );
     iSoftNotification->SetTextL( titleText, secondText );
+    
+    // loc: delete text buffers
+    // CleanupStack::PopAndDestroy( titleText );
+    // CleanupStack::PopAndDestroy( titleText );
     
     // Set number of updates
     iSoftNotification->SetNrOfUpdates( aNrOfUpdates );
@@ -1851,7 +1930,7 @@ void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::LaunchSoftNotificationL()
 // ----------------------------------------------------------
-/*
+/* HLa
 void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const TInt& SK1, const TInt& SK2 )
     {     
     iInternalFile->ReadControllerDataL(); 
@@ -1893,6 +1972,7 @@ void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const T
     }
 */
 
+
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::GetPrivatePathL()
 // ----------------------------------------------------------
@@ -1920,6 +2000,7 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
     return err;
     }
 
+/*
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::LoadFileLC()
 // ----------------------------------------------------------
@@ -1941,7 +2022,7 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
     CleanupDeletePushL(imagebuf);
     return imagebuf;
      } 
-
+*/
  
  // ----------------------------------------------------------
  // CIAUpdateBGTimer::SetPrivateDriveL()
@@ -2030,6 +2111,7 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
      return driveNum;
      }
 
+ 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::ReadResourceLC()
 // ----------------------------------------------------------

@@ -20,30 +20,39 @@
 #include <hbview.h>
 #include <QGraphicsLinearLayout>
 #include <hbtextitem.h>
-#include <hbcheckbox.h>
 #include <hbpushbutton.h>
 #include <hbindicator.h>
+#include <hbmessagebox.h>
+#include <qvaluespacesubscriber.h>
+#include "../../inc/sifuiinstallindicatorparams.h"
 
-const QString KInstallIndicator = "com.nokia.sifui.indi/1.0";
 
 TestInstallIndicator::TestInstallIndicator(int& argc, char* argv[]) : HbApplication(argc, argv),
-    mMainWindow(0), mMainView(0), mIndicator(0)
+    mMainWindow(0), mMainView(0), mIndicator(0), mSubscriber(0)
 {
     mMainWindow = new HbMainWindow();
     mMainView = new HbView();
     mMainView->setTitle(tr("TestInstIndi"));
 
+    mIndicator = new HbIndicator;
+
+    mSubscriber = new QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath));
+    connect(mSubscriber, SIGNAL(contentsChanged()), this, SLOT(handleIndicatorActivity()));
+
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical);
 
     HbTextItem *infoText = new HbTextItem;
-    infoText->setText("Enable/disable SW install progress indicator in status indicator area and/or in universal indicator popup.");
+    infoText->setText("Activate/deactivate SW install indicator in universal indicator popup.");
     infoText->setTextWrapping(Hb::TextWordWrap);
     layout->addItem(infoText);
 
-    HbCheckBox *enableCheckBox = new HbCheckBox;
-    enableCheckBox->setText("Activate install indicator");
-    connect(enableCheckBox, SIGNAL(stateChanged(int)), this, SLOT(activateStateChanged(int)));
-    layout->addItem(enableCheckBox);
+    HbPushButton *activateButton = new HbPushButton("Activate install indicator");
+    connect(activateButton, SIGNAL(clicked()), this, SLOT(activatePressed()));
+    layout->addItem(activateButton);
+
+    HbPushButton *deactivateButton = new HbPushButton("Deactivate install indicator");
+    connect(deactivateButton, SIGNAL(clicked()), this, SLOT(deactivatePressed()));
+    layout->addItem(deactivateButton);
 
     HbPushButton *closeButton = new HbPushButton("Close");
     connect(closeButton, SIGNAL(clicked()), qApp, SLOT(quit()));
@@ -56,22 +65,55 @@ TestInstallIndicator::TestInstallIndicator(int& argc, char* argv[]) : HbApplicat
 
 TestInstallIndicator::~TestInstallIndicator()
 {
+    delete mSubscriber;
     delete mIndicator;
     delete mMainView;
     delete mMainWindow;
 }
 
-void TestInstallIndicator::activateStateChanged(int state)
+bool TestInstallIndicator::isIndicatorActive()
 {
-    if (!mIndicator) {
-        mIndicator = new HbIndicator;
+    bool isActive = false;
+    if (mSubscriber) {
+        QVariant variant = mSubscriber->value();
+        bool valueOk = false;
+        int intValue = variant.toInt(&valueOk);
+        if (valueOk && intValue) {
+            isActive = true;
+        }
     }
+    return isActive;
+}
 
-    Qt::CheckState s = static_cast<Qt::CheckState>(state);
-    if (s == Qt::Checked) {
-        mIndicator->activate(KInstallIndicator);
+void TestInstallIndicator::handleIndicatorActivity()
+{
+    if (isIndicatorActive()) {
+        HbMessageBox::information("Indicator activated");
     } else {
-        mIndicator->deactivate(KInstallIndicator);
+        HbMessageBox::information("Indicator deactivated");
+    }
+}
+
+void TestInstallIndicator::activatePressed()
+{
+    if (mIndicator) {
+        if (isIndicatorActive()) {
+            HbMessageBox::information("Already active");
+        } else {
+            QVariant parameter(QString("Application"));
+            mIndicator->activate(KSifUiInstallIndicatorType, parameter);
+        }
+    }
+}
+
+void TestInstallIndicator::deactivatePressed()
+{
+    if (mIndicator) {
+        if (isIndicatorActive()) {
+            mIndicator->deactivate(KSifUiInstallIndicatorType);
+        } else {
+            HbMessageBox::information("Already deactive");
+        }
     }
 }
 

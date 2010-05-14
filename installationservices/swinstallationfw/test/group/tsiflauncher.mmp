@@ -23,7 +23,8 @@ TARGET				siflauncher.exe
 TARGETTYPE			exe
 TARGETPATH			/sys/bin
 
-CAPABILITY			TrustedUI
+// We need WriteDeviceData so that the installer data types can have priority EDataTypePrioritySystem
+CAPABILITY			TrustedUI WriteDeviceData
 
 VENDORID			0x70000001
 

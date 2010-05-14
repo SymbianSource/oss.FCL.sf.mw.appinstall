@@ -51,7 +51,9 @@ private:    // new functions
 
 private:    // data
     QString mAppName;
+    int mProgress;
     QTM_PREPEND_NAMESPACE(QValueSpacePublisher) *mPublisher;
+    bool mIsActive;
 };
 
 #endif  // SIFUIINSTALLINDICATOR_H

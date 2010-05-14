@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -365,6 +365,45 @@ TInt CIAUpdateNode::Depth() const
     return iDepth;
     }
 
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Downloading()
+// 
+// ---------------------------------------------------------------------------
+//
+TBool CIAUpdateNode::Downloading() const
+    {
+    return iDownloading;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Installing()
+// 
+// ---------------------------------------------------------------------------
+//
+TBool CIAUpdateNode::Installing() const
+    {
+    return iInstalling;
+    }
+ 
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetDownloading()
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetDownloading( TBool aDownloading )
+    {
+    iDownloading = aDownloading;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetInstalling()
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetInstalling( TBool aInstalling )
+    {
+    iInstalling = aInstalling;
+    }
 
 // ---------------------------------------------------------------------------
 // CIAUpdateNode::NodeType

@@ -17,7 +17,6 @@
 
 #include "sifuiprivate.h"                       // CSifUiPrivate
 #include "sifuidefs.h"                          // SIF UI device dialog parameters
-#include <hb/hbcore/hbsymbiandevicedialog.h>    // CHbDeviceDialog
 #include <hb/hbcore/hbsymbianvariant.h>         // CHbSymbianVariantMap
 #include <swi/msisuihandlers.h>                 // Swi::CAppInfo
 #include <apgicnfl.h>                           // CApaMaskedBitmap
@@ -404,7 +403,7 @@ void CSifUiPrivate::DisplayDeviceDialogL()
         {
         if( !iDeviceDialog )
             {
-            iDeviceDialog = CHbDeviceDialog::NewL();
+            iDeviceDialog = CHbDeviceDialogSymbian::NewL();
             }
         iDeviceDialog->Show( KSifUiDeviceDialog, *iVariantMap, this );
         iIsDisplayingDialog = ETrue;

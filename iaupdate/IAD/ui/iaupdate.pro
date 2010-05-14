@@ -66,7 +66,8 @@ SOURCES += iaupdatemain.cpp \
     iaupdateserviceprovider.cpp \
     iaupdatewaitdialog.cpp \
     iaupdatenodeid.cpp \
-    iaupdatetools.cpp
+    iaupdatetools.cpp \
+    iaupdateresultsdialog.cpp
     
 
 HEADERS = iaupdateapplication.h \
@@ -105,7 +106,8 @@ HEADERS = iaupdateapplication.h \
     iaupdateuitimer.h \
     iaupdateserviceprovider.h \
     iaupdatenodeid.h \
-    iaupdatetools.h
+    iaupdatetools.h \
+    iaupdateresultsdialog.h 
 
 
 LIBS += -lbafl
@@ -128,6 +130,7 @@ LIBS += -lcone
 LIBS += -lws32
 LIBS += -lapparc
 LIBS += -lapgrfx
+LIBS += -lstarterclient
 
 
 

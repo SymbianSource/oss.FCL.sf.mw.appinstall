@@ -117,10 +117,13 @@ CIAUpdateBGSoftNotification::~CIAUpdateBGSoftNotification()
 //
 void CIAUpdateBGSoftNotification::ShowNotificationL()
     {
+    
+    /*
     _LIT( KIcon, "C:\\qgn_note_swupdate_notification.svg" );
     _LIT( KFirstTimeText, "Check for updates ?" );
     _LIT( KNormalText, "Check for updates ?" );
     _LIT( KTextRow2, "Tap to view" );
+    */
     
     FLOG("[bgchecker] ShowNotificationL");
     
@@ -283,10 +286,10 @@ void CIAUpdateBGSoftNotification::FillNotificationParams()
         }
     
     // set wrapping, timeout and touch 
-    iNotificationDialog->SetTitleTextWrappingL(
+    iNotificationDialog->SetTitleTextWrapping(
             CHbDeviceNotificationDialogSymbian::TextWordWrap);
-    iNotificationDialog->SetTimeoutL(4000); //default 3000
-    iNotificationDialog->EnableTouchActivationL(ETrue); // default FALSE
+    iNotificationDialog->SetTimeout(4000); //default 3000
+    iNotificationDialog->EnableTouchActivation(ETrue); // default FALSE
   
     }  
 // ----------------------------------------------------------

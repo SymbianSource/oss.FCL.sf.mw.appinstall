@@ -31,7 +31,7 @@ CScrAddApplicationEntryStep::CScrAddApplicationEntryStep(CScrTestServer& aParent
 
 void CScrAddApplicationEntryStep::ImplTestStepPreambleL()
     {
-    CScrTestStep::ImplTestStepPreambleL();
+    User::LeaveIfError(iScrSession.Connect());    
     }
 
 void CScrAddApplicationEntryStep::ImplTestStepL()
@@ -67,8 +67,13 @@ void CScrAddApplicationEntryStep::ImplTestStepL()
 
 	INFO_PRINTF1(_L("Get reg info from config file."));
 	const CApplicationRegistrationData* appRegData = GetAppRegInfoFromConfigLC();
-	TRAPD(err, iScrSession.AddApplicationEntryL(compId, *appRegData));	
 	
+	if (iIsPerformanceTest)
+        StartTimer(); // Start the timer in the case of a performance tests        
+	TRAPD(err, iScrSession.AddApplicationEntryL(compId, *appRegData));
+    if (iIsPerformanceTest)
+        StopTimerAndPrintResultL(); // Stop the timer and analyze the time taken after performance tests
+        
 	if (err != KErrNone)
 	    {
 		if (newComponentAdded)
@@ -84,7 +89,7 @@ void CScrAddApplicationEntryStep::ImplTestStepL()
     
 void CScrAddApplicationEntryStep::ImplTestStepPostambleL()
     {
-    CScrTestStep::ImplTestStepPostambleL();
+   
     }
 
 

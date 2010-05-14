@@ -33,6 +33,15 @@ RESOURCE APP_REGISTRATION_INFO
 	newfile=KAppDoesNotSupportNewFile;
 	datatype_list=
 		{
-		DATATYPE { priority=EDataTypePriorityHigh; type="x-epoc/x-sisx-app"; }
+		DATATYPE { priority=EDataTypePrioritySystem; type="x-epoc/x-sisx-app"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="x-epoc/x-app268436505"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/vnd.symbian.install"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/x-pip"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="text/vnd.sun.j2me.app-descriptor"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/java"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/java-archive"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/x-java-archive"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/widget"; },
+		DATATYPE { priority=EDataTypePrioritySystem; type="application/x-nokia-widget"; }
 		};
 	}

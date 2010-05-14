@@ -53,4 +53,6 @@ LIBRARY         bafl.lib                // TResourceReader
 LIBRARY         efsrv.lib               // RFs
 LIBRARY         PlatformEnv.lib         // TDriveInfo
 LIBRARY         featmgr.lib             // FeatureManager
+LIBRARY         pkixcertbase.lib        // CPKIXValidationResultBase
+LIBRARY         x509.lib                // TValidationStatus
 

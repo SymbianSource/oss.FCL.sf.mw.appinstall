@@ -2090,13 +2090,16 @@ void SisRegistry::AddApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDe
 			RegistrationFileName = iRomPath + localpath;
 		}
 
+		size_t found=RegistrationFileName.rfind(".rsc");
+		if(found==string::npos)
+			continue;
+
 		//Return 0 for Registration file else 1
 		TInt err = FindRegistrationResourceFileL(RegistrationFileName);
 
 		if(err)
 			continue;
 
-		size_t found;
 		std::string folder;
 		found=RegistrationFileName.find("private\\10003a3f\\");
 

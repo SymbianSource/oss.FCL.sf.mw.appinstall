@@ -151,5 +151,57 @@ END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0005
 //RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case04_wronguid2
 //END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0008
 
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0009
+//! @SYMTestCaseDesc	Tests the SA upgrade that is SU signed.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that followed by an SA upgrade that is SU signed and reflects the latest SA installation. Reg data updated in second SA(Group name changed.)
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0009
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_SA
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_reg_SA
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_SA_SU
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_reg_SA_SU
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_SA
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0009
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0010
+//! @SYMTestCaseDesc	Tests the installation of an SIS file which delivers no files followed by a SA upgrade that delivers an app.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installation succeeds
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0010
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0011
+//! @SYMTestCaseDesc	Tests the installation of an SIS file which delivers some files followed by a SA upgrade that delivers no files.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installation succeeds
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0011
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0011
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0012
+//! @SYMTestCaseDesc	Tests the installation of an SIS file embeds an SP, which embeds a PU, which in turn embeds another SP, that embeds another SP. (SA->SP->PU->SP->SP)
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that embeds recursively other SIS files with various upgrade combinations.
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0012
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_base
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_sa
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_sa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case06
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0012
+
 // Ensure that SWIS shuts down after the above tests to make sure heap checks run
 RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -25,9 +25,12 @@
 
 // For silent installation
 #include <SWInstDefs.h>
+#include <swi/sisregistryentry.h>
 
 class TIAUpdateVersion;
 class MIAUpdateNode;
+class CIAUpdateBaseNode;
+class RWidgetRegistryClientSession;
 
 namespace IAUpdateUtils
 {
@@ -120,11 +123,10 @@ IMPORT_C TBool IsInstalledL( const TUid& aPUid, const TDesC& aExecutable );
  * Creates options for silent install.
  * Uses DriveToInstallL to etermine target drive to install.
  * 
- * @param aUid PUID of the application
- * @param aSize Estimated size of installation
+ * @param aNode
  */
-IMPORT_C SwiUI::TInstallOptions SilentInstallOptionsL( const TUid& aUid,
-                                                       TInt aSize );
+SwiUI::TInstallOptions SilentInstallOptionsL( const CIAUpdateBaseNode& aNode );
+                                                     
 
 
 
@@ -134,7 +136,12 @@ IMPORT_C SwiUI::TInstallOptions SilentInstallOptionsL( const TUid& aUid,
  * @param aLocationDrive Drive where a package is currently installed
  * @return ETrue if a package previously installed to an available drive
  **/
-TBool InstalledDriveL( const TUid& aUid, TDriveUnit& aLocationDrive );
+TBool InstalledDriveL( RFs& aFs, const TUid& aUid, TDriveUnit& aLocationDrive );
+
+void InstalledDriveWidgetL( RFs& aFs, 
+                            RWidgetRegistryClientSession& aWidgetRegistry, 
+                            const TUid& aUid, 
+                            TDriveUnit& aLocationDrive );
 
 TBool NextInternalDriveL( RFs& aFs, 
                           TDriveUnit aCurrentDrive, 
@@ -149,6 +156,8 @@ TBool NextInternalDriveL( RFs& aFs,
  **/
 TDriveUnit DriveToInstallL( const TUid& aUid, TInt aSize );
 
+TDriveUnit DriveToInstallWidgetL( const TDesC& aIdentifier );
+
 TDriveUnit BiggestInternalDriveL();
 
 TBool InternalDriveWithSpaceL( TInt aSize, 
@@ -160,6 +169,8 @@ void SaveCurrentFwVersionIfNeededL();
 TBool IsFirmwareChangedL(); 
 
 TInt64 FreeDiskSpace( RFs& aFs, TInt aDriveNumber );
+
+void DrivesWithBinariesL( Swi::RSisRegistryEntry& aEntry, RArray<TInt>& aDrives );
 
 }
 

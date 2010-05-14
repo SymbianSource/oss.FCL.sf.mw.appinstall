@@ -407,16 +407,16 @@ EXPORT_C void CStatement::BindInt64L(TInt aParameterIndex, TInt64 aParameterValu
 	iDb.iDbImpl->CheckSqlErrCodeL(err);
 	}
 
-template <class A> void VerifyDescriptorLengthL(const A& aDesc)
+template <class A> void VerifyDescriptorLengthL(const A& aDesc, TUint aMaxDescriptorLength)
 	{
-	const TInt KMaxInputDescriptorLength = 512;	
-	if (aDesc.Length() > KMaxInputDescriptorLength)
+	if (aDesc.Length() > aMaxDescriptorLength)
 		User::Leave(KErrArgument);	
 	}
 	
 EXPORT_C void CStatement::BindStrL(TInt aParameterIndex, const TDesC &aParameterStr)
 	{
-	VerifyDescriptorLengthL(aParameterStr);	
+    const TInt KMaxInputDescriptorLength = 512; 
+	VerifyDescriptorLengthL(aParameterStr, KMaxInputDescriptorLength);	
 	TInt err = sqlite3_bind_text16(iStmtImpl->Handle(), aParameterIndex, aParameterStr.Ptr(), aParameterStr.Size(), SQLITE_TRANSIENT);
 	// The fifth argument has the value SQLITE_TRANSIENT, it means that SQLite makes its own private copy of the data immediately
 	iDb.iDbImpl->CheckSqlErrCodeL(err);
@@ -424,10 +424,16 @@ EXPORT_C void CStatement::BindStrL(TInt aParameterIndex, const TDesC &aParameter
 
 EXPORT_C void CStatement::BindBinaryL(TInt aParameterIndex, const TDesC8 &aParameterStr)
 	{
-	VerifyDescriptorLengthL(aParameterStr);
-	TInt err = sqlite3_bind_blob(iStmtImpl->Handle(), aParameterIndex, reinterpret_cast<const char *>(aParameterStr.Ptr()), aParameterStr.Size(), SQLITE_TRANSIENT);
-	iDb.iDbImpl->CheckSqlErrCodeL(err);	
-	}
+    const TInt KMaxInputDescriptorLength = 512;
+    BindBinaryL(aParameterIndex, aParameterStr, KMaxInputDescriptorLength);
+    }
+
+EXPORT_C void CStatement::BindBinaryL(TInt aParameterIndex, const TDesC8 &aParameterStr, TUint aCustomLength)
+    {
+    VerifyDescriptorLengthL(aParameterStr, aCustomLength);
+    TInt err = sqlite3_bind_blob(iStmtImpl->Handle(), aParameterIndex, reinterpret_cast<const char *>(aParameterStr.Ptr()), aParameterStr.Size(), SQLITE_TRANSIENT);
+    iDb.iDbImpl->CheckSqlErrCodeL(err); 
+    }
 
 EXPORT_C TPtrC8 CStatement::BinaryColumnL(TInt aColIdx) const
 	{

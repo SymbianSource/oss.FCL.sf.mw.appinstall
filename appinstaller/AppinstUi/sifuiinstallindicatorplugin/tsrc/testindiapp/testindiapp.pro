@@ -19,6 +19,7 @@ TARGET = testindiapp
 CONFIG += hb
 DEPENDPATH += .
 INCLUDEPATH += .
+LIBS += -lQtPublishSubscribe
 
 HEADERS += testindiapp.h
 SOURCES += testindimain.cpp testindiapp.cpp

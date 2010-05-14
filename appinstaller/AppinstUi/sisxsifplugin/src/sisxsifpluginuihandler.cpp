@@ -24,10 +24,10 @@
 #include <driveinfo.h>                  // DriveInfo
 #include <featmgr.h>                    // FeatureManager
 //#include <csxhelp/am.hlp.hrh>           // Help IDs
-#include <hb/hbcore/hbsymbiandevicedialog.h> // CHbDeviceDialog
-#include <hb/hbcore/hbsymbianvariant.h> // CHbSymbianVariantMap
 
 using namespace Usif;
+
+const TInt KFreeSpaceTreshold = 128*1024;   // bytes
 
 // TODO: replace with proper tracing support
 #ifdef _DEBUG
@@ -148,17 +148,14 @@ TBool CSisxSifPluginUiHandler::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo
 //
 TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*/,
         const CApaMaskedBitmap* /*aLogo*/,
-        const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
+        const RPointerArray<Swi::CCertificateInfo>& aCertificates )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
 
-    // TODO: show preparing note -- unless it can be displayed already earlier.
-    // Preparing note should not have any buttons yet, but it might display some
-    // application details already.
-
-    // TODO: SISX SIF plugin needs to set memory selection when needed
-    MemorySelectionL();
-
+    if( iSifUi )
+        {
+        iSifUi->SetCertificateInfoL( aCertificates );
+        }
     return ETrue;
     }
 
@@ -191,11 +188,34 @@ TInt CSisxSifPluginUiHandler::DisplayLanguageL( const Swi::CAppInfo& /*aAppInfo*
 // ---------------------------------------------------------------------------
 //
 TInt CSisxSifPluginUiHandler::DisplayDriveL( const Swi::CAppInfo& /*aAppInfo*/,
-        TInt64 /*aSize*/, const RArray<TChar>& /*aDriveLetters*/,
+        TInt64 /*aSize*/, const RArray<TChar>& aDriveLetters,
         const RArray<TInt64>& /*aDriveSpaces*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayDriveL") );
 
+    TInt err = KErrNone;
+    TInt driveNumber = EDriveC;
+    if( iSifUi )
+        {
+        err = iSifUi->SelectedDrive( driveNumber );
+        if( err )
+            {
+            FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDriveL; SelectedDrive err=%d"), err );
+            }
+        }
+
+    TChar driveLetter = 'C';
+    err = RFs::DriveToChar( driveNumber, driveLetter );
+    if( err )
+        {
+        FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDriveL; DriveToChar err=%d"), err );
+        }
+
+    TInt index = aDriveLetters.Find( driveLetter );
+    if( index >= 0 && index < aDriveLetters.Count() )
+        {
+        return index;
+        }
     return 0;
     }
 
@@ -232,13 +252,10 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
     {
     FLOG_2( _L("CSisxSifPluginUiHandler::HandleInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
 
-    // TODO: application size?
-    TInt appSize = 0;
-
     switch( aEvent )
         {
         case Swi::EEventSetProgressBarFinalValue:
-            iSifUi->ShowProgressL( aAppInfo, appSize, aValue );
+            iSifUi->ShowProgressL( aAppInfo, iMaxInstalledSize, aValue );
             break;
 
         case Swi::EEventUpdateProgressBar:
@@ -285,20 +302,23 @@ void CSisxSifPluginUiHandler::HandleCancellableInstallEventL( const Swi::CAppInf
 //
 TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAppInfo,
         Swi::TSignatureValidationResult aSigValidationResult,
-        RPointerArray<CPKIXValidationResultBase>& /*aPkixResults*/,
-        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/,
+        RPointerArray<CPKIXValidationResultBase>& aPkixResults,
+        RPointerArray<Swi::CCertificateInfo>& aCertificates,
         TBool aInstallAnyway )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplaySecurityWarningL") );
     TBool result = EFalse;
 
-    // TODO: add application size
-    TInt appSize = 0;
+    if( iDriveSelectionRequired )
+        {
+        AddMemorySelectionL();
+        }
+    AddCertificatesL( aCertificates, aPkixResults );
 
     switch( aSigValidationResult )
         {
         case Swi::EValidationSucceeded:
-            result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo );
+            result = iSifUi->ShowConfirmationL( aAppInfo, iMaxInstalledSize, iLogo );
             break;
 
         case Swi::ESignatureSelfSigned:
@@ -311,7 +331,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
         case Swi::EMandatorySignatureMissing:
             if( aInstallAnyway )
                 {
-                result = iSifUi->ShowConfirmationL( aAppInfo, appSize, iLogo );
+                result = iSifUi->ShowConfirmationL( aAppInfo, iMaxInstalledSize, iLogo );
                 }
             break;
 
@@ -371,6 +391,15 @@ TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& aAppInfo 
     }
 
 // ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::DisplayPreparingInstallL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::DisplayPreparingInstallL( const TDesC& /*aFileName*/ )
+    {
+    // TODO: should this be displayed?
+    }
+
+// ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandler::DisplayCompleteL()
 // ---------------------------------------------------------------------------
 //
@@ -383,7 +412,7 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::DisplayFailedL
+// CSisxSifPluginUiHandler::DisplayFailedL()
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandler::DisplayFailedL( TInt aErrorCode )
@@ -393,6 +422,24 @@ void CSisxSifPluginUiHandler::DisplayFailedL( TInt aErrorCode )
         _LIT( KErrorMessage, "Error" );
         iSifUi->ShowFailedL( aErrorCode, KErrorMessage );
         }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::SetDriveSelectionRequired()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::SetDriveSelectionRequired( TBool aIsRequired )
+    {
+    iDriveSelectionRequired = aIsRequired;
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::SetMaxInstalledSize()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::SetMaxInstalledSize( TInt aSize )
+    {
+    iMaxInstalledSize = aSize;
     }
 
 // ---------------------------------------------------------------------------
@@ -414,11 +461,13 @@ void CSisxSifPluginUiHandler::ConstructL()
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::MemorySelectionL()
+// CSisxSifPluginUiHandler::AddMemorySelectionL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandler::MemorySelectionL()
+void CSisxSifPluginUiHandler::AddMemorySelectionL()
     {
+    TInt64 adjustedSize = iMaxInstalledSize + KFreeSpaceTreshold;
+
     TDriveList driveList;
     TInt driveCount = 0;
     TInt err = DriveInfo::GetUserVisibleDrives( iFs, driveList, driveCount );
@@ -434,10 +483,41 @@ void CSisxSifPluginUiHandler::MemorySelectionL()
             err = DriveInfo::GetDriveStatus( iFs, driveNumber, driveStatus );
             if( !err && !( driveStatus & DriveInfo::EDriveRemote ) )
                 {
-                iSelectableDrives.Append( driveNumber );
+                TVolumeInfo volumeInfo;
+                err = iFs.Volume( volumeInfo, driveNumber );
+                if( !err && volumeInfo.iFree > adjustedSize )
+                    {
+                    iSelectableDrives.Append( driveNumber );
+                    }
                 }
             }
         }
     iSifUi->SetMemorySelectionL( iSelectableDrives );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::AddCertificatesL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::AddCertificatesL(
+        RPointerArray<Swi::CCertificateInfo>& aCertificates,
+        RPointerArray<CPKIXValidationResultBase>& aPkixResults )
+    {
+    ASSERT( aCertificates.Count() == aPkixResults.Count() );
+
+    RPointerArray<Swi::CCertificateInfo> certificates;
+    CleanupClosePushL( certificates );  // does not own array items
+
+    for( TInt index = 0; index < aCertificates.Count(); ++index )
+        {
+        TValidationStatus status = aPkixResults[ index ]->Error();
+        if( status.iReason == EValidatedOK )
+            {
+            Swi::CCertificateInfo* cert = aCertificates[ index ];
+            certificates.AppendL( cert );   // not owned
+            }
+        }
+    iSifUi->SetCertificateInfoL( certificates );
+    CleanupStack::PopAndDestroy( &certificates );
     }
 

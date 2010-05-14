@@ -37,6 +37,9 @@ public:
     static CScrApparcTestServer* NewL();
     virtual CTestStep* CreateTestStep(const TDesC& aStepName);
     ~CScrApparcTestServer();
+
+private:
+    TBool IsPerformanceTestStep(const TDesC& aStepName, TPtrC& aStrippedName);
     };
     
 #endif /* TSCRAPPARCSERVER_H_ */

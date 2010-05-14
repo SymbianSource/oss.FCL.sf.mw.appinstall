@@ -33,7 +33,7 @@ public:
     virtual ~IAUpdateApplication();
     
 private:
-    QSharedPointer<IAUpdateEngine> mEngine;         // owned
+    IAUpdateEngine *mEngine;         // owned
     QSharedPointer<IAUpdateMainWindow> mMainWindow; // owned
     };
 

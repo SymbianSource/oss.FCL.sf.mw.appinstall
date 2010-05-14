@@ -28,6 +28,8 @@
 #include <hbmessagebox.h>
 #include <qvaluespacesubscriber.h>
 
+QTM_USE_NAMESPACE
+
 const QString KTranslationsPath = "resource/qt/translations/";
 const QString KTranslationsFile = "sifuidevicedialogplugin";
 const QString KSwiErrorsFile = "c:\\temp\\swierrors.txt";
@@ -329,7 +331,7 @@ void SifUiDialog::sendResult(bool accepted)
 void SifUiDialog::monitorIndicatorActivity()
 {
     if (!mSubscriber) {
-        mSubscriber = new QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber(KSifUiIndicatorPath));
+        mSubscriber = new QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath);
         connect(mSubscriber, SIGNAL(contentsChanged()),
             this, SLOT(handleIndicatorActivityChanged()));
     }
@@ -382,31 +384,11 @@ void SifUiDialog::handleHidePressed()
 {
     if (!mIndicator) {
         mIndicator = new HbIndicator(this);
-
-        QVariantMap variantMap;
-        QVariant applicationNameVariant(mContent->applicationName());
-        variantMap.insert(KSifUiIndicatorApplicationName, applicationNameVariant);
-
+        QVariant applicationName(mContent->applicationName());
         if (!mContent->isDefaultIconUsed()) {
-            int iconHandle = 0;
-            int maskHandle = 0;
-            mContent->iconHandles(iconHandle, maskHandle);
-            QVariant iconHandleVariant(iconHandle);
-            variantMap.insert(KSifUiIndicatorAppIconHandle, iconHandleVariant);
-            QVariant maskHandleVariant(maskHandle);
-            variantMap.insert(KSifUiIndicatorAppIconMaskHandle, maskHandleVariant);
+            // TODO: send icon to indicator
         }
-
-        int finalValue = 0;
-        int progressValue = 0;
-        mContent->progressInfo(finalValue, progressValue);
-        QVariant finalValueVariant(finalValue);
-        variantMap.insert(KSifUiIndicatorProgressFinal, finalValueVariant);
-        QVariant progressValueVariant(progressValue);
-        variantMap.insert(KSifUiIndicatorProgressValue, progressValueVariant);
-
-        QVariant parameter(variantMap);
-        if (mIndicator->activate(KSifUiIndicatorPlugin, parameter)) {
+        if (mIndicator->activate(KSifUiInstallIndicatorType, applicationName)) {
             hide();
             monitorIndicatorActivity();
         }
@@ -419,7 +401,7 @@ void SifUiDialog::handleHidePressed()
 //
 void SifUiDialog::handleIndicatorActivityChanged()
 {
-    QVariant variant = mSubscriber->value(KSifUiIndicatorActive);
+    QVariant variant = mSubscriber->value();
     if (variant.isValid() && (variant.type() == QVariant::Int)) {
         bool valueOk = false;
         int intValue = variant.toInt(&valueOk);

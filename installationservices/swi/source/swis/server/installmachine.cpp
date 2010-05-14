@@ -1,4 +1,4 @@
-/*
+	/*
 * Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
@@ -60,6 +60,7 @@
 #include "swi/sisversion.h"
 #include "swi/nativecomponentinfo.h"
 #include <usif/usifcommon.h>
+#include <usif/scr/appregentries.h>
 #include "scrdbconstants.h"
 #endif
 
@@ -69,6 +70,23 @@ using namespace Swi::Sis;
 _LIT(KExpressSignedOID, "1.2.826.0.1.1796587.1.1.2.1"); 
 _LIT(KCertifiedSignedOID, "1.2.826.0.1.1796587.1.1.2.2"); 
 _LIT(KCertifiedSignedWithVerisignOID, "1.2.826.0.1.1796587.1.1.2.3"); 
+
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+void DeRegisterForceRegisteredAppsL()
+	{
+	// Deregister the force registered applications from AppArc
+	DEBUG_PRINTF(_L8("Deregistering the force registered applications with AppArc"));
+	RSisLauncherSession launcher;
+	CleanupClosePushL(launcher);
+	User::LeaveIfError(launcher.Connect());
+	RPointerArray<Usif::CApplicationRegistrationData> emptyAppRegDataArray;
+	launcher.NotifyNewAppsL(emptyAppRegDataArray);
+	CleanupStack::PopAndDestroy(&launcher);
+	}
+
+#endif
 
 //
 // TInstallState
@@ -525,8 +543,13 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 
 	        TRAPD(err, (allowSelfSigned = secSettingsSession.SettingValueL(KUidInstallationRepository , KAllowSelfSignedInstallKey)));
 
-	        if( err == KErrNone || err == KErrSettingNotFound || err == KErrNotFound)
+	        if( err == KErrNone || err == KErrSettingNotFound || err == KErrNotFound || err == KErrCorrupt)
 				{
+                 if (err == KErrCorrupt)
+	                {
+                         DEBUG_PRINTF(_L8("Install Machine - CenRep file 2002cff6.txt is corrupt. Using Default Value to Install."));
+	                }
+				                  
 	             if (!allowSelfSigned || !SecurityAlertL(ETrue))
 					{
 	                 User::Leave(KErrCancel);
@@ -1213,6 +1236,11 @@ CInstallMachine::TState* CInstallMachine::TIntegritySupportState::ErrorL(
 void CInstallMachine::TIntegritySupportState::Cancel()
 	{
 	DEBUG_PRINTF(_L8("Install Machine - Cancelling Integrity Support State"));
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	DeRegisterForceRegisteredAppsL();
+#endif
+
 	if (iInstallMachine.iProcessor)
 		{
 		iInstallMachine.iProcessor->Cancel();
@@ -1400,7 +1428,11 @@ void CInstallMachine::PostJournalFinalizationL(TInt aError)
 			}
 		}
 	
-	iInstallMachine.CompleteSelf();
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	DeRegisterForceRegisteredAppsL();
+#endif
+
+    iInstallMachine.CompleteSelf();
 	iInstallMachine.SetActive();
 	}
     
@@ -1420,6 +1452,9 @@ CInstallMachine::TState* CInstallMachine::TFinalState::ErrorL(
 
 void CInstallMachine::TFinalState::Cancel()
 	{
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	DeRegisterForceRegisteredAppsL();
+#endif
 	}
 
 //

@@ -89,13 +89,18 @@ namespace Usif
         TBool DisplayUninstallL( const Swi::CAppInfo& aAppInfo );
 
     public:     // new functions
+        void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
         void DisplayFailedL( TInt aErrorCode );
+        void SetDriveSelectionRequired( TBool aIsRequired );
+        void SetMaxInstalledSize( TInt aSize );
 
     private:    // new functions
         CSisxSifPluginUiHandler( RFs& aFs );
         void ConstructL();
-        void MemorySelectionL();
+        void AddMemorySelectionL();
+        void AddCertificatesL( RPointerArray<Swi::CCertificateInfo>& aCertificates,
+                RPointerArray<CPKIXValidationResultBase>& aPkixResults );
 
     private:    // data
         RFs& iFs;
@@ -103,6 +108,8 @@ namespace Usif
         CSifUi* iSifUi;
         CApaMaskedBitmap* iLogo;
         TBool iQuestionIncompatibleDisplayed;
+        TInt iMaxInstalledSize;
+        TBool iDriveSelectionRequired;
         RArray<TInt> iSelectableDrives;
         };
 

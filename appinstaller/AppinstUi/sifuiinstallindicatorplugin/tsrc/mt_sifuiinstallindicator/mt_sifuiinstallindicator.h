@@ -19,19 +19,17 @@
 #ifndef MT_SIFUIINSTALLINDICATOR_H
 #define MT_SIFUIINSTALLINDICATOR_H
 
-
 #include <QtTest/QtTest>
 
 class TestSifUiInstallIndicator: public QObject
 {
     Q_OBJECT
 
-private slots:
+private slots:  // test functions
     void activateWithoutParams();
     void activateWithAppName();
     void activateWithInvalidParam();
 };
-
 
 #endif  // MT_SIFUIINSTALLINDICATOR_H
 

@@ -123,3 +123,46 @@ Compares this UID type for equality with the specified UID type.
            iUid[1]==aUidType.iUid[1] &&
            iUid[2]==aUidType.iUid[2]);
     }
+
+TCheckedUid::TCheckedUid()
+//
+// Constructor
+//
+	{
+
+	memset(this,0,sizeof(TCheckedUid));
+	}
+
+TCheckedUid::TCheckedUid(const TUidType& aUidType)
+//
+// Constructor
+//
+	{
+
+	Set(aUidType);
+	}
+
+void TCheckedUid::Set(const TUidType& aUidType)
+//
+// Set from a aUidType
+//
+	{
+	iType=aUidType;
+	}
+
+const TUidType&  TCheckedUid::UidType() const
+{
+	return (iType);
+}
+
+void TCheckedUid::Set(const TUint8* aDes, TInt aLen)
+    {
+   	assert(aLen == sizeof(TCheckedUid));
+    memcpy(this,aDes,aLen);
+    }
+
+TCheckedUid::TCheckedUid(const TUint8* aDes, TInt aLen)
+    {
+    memset(this,0,sizeof(TCheckedUid));
+    Set(aDes, aLen);
+    }

@@ -19,7 +19,7 @@
 TARGET				sifserver.exe        
 TARGETTYPE			exe
 
-CAPABILITY			ProtServ TrustedUI ReadUserData
+CAPABILITY			ProtServ TrustedUI ReadUserData WriteDeviceData
 
 VENDORID			0x70000001
 
@@ -29,6 +29,7 @@ MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 USERINCLUDE			../inc
 USERINCLUDE			../common/inc
+USERINCLUDE			../inc_private
 
 SOURCEPATH			../source
 SOURCE				sifserverstartup.cpp sifservertask.cpp

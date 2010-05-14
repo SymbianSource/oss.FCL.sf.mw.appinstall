@@ -26,4 +26,5 @@ EXPORTS
 	_ZTVN4Usif24CStatementImplementationE @ 25 NONAME
 	_ZN4Usif9CDatabase4NewLER5RFileS2_ @ 26 NONAME
 	_ZN4Usif9CDatabase5NewLCER5RFileS2_ @ 27 NONAME
+	_ZN4Usif10CStatement11BindBinaryLEiRK6TDesC8j @ 28 NONAME
 

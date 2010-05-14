@@ -27,6 +27,7 @@
 #include "siftransportcommon.h"
 #include "usiflog.h"
 #include "sifutils.h"
+#include "e32property.h" 
 
 using namespace Usif;
 
@@ -34,7 +35,7 @@ CSifServerTask* CSifServerTask::NewL(TransportTaskFactory::TTaskType aTaskType, 
 	{
 	CSifServerTask* self = new (ELeave) CSifServerTask(aTaskType, aParams);
 	CleanupStack::PushL(self);
-
+   
 	// Query AppArc about the (MIME) type of the package to be processed and instantiate an appropriate SIF plug-in
 	self->SelectAndLoadPluginL();
 
@@ -50,7 +51,7 @@ CSifServerTask::CSifServerTask(TransportTaskFactory::TTaskType aTaskType, TTrans
 CSifServerTask::~CSifServerTask()
 	{
 	DEBUG_PRINTF2(_L8("CSifServerTask::~CSifServerTask() for aFunction = %d\n"),iTaskType);
-
+	                
 	// Clean up the plugin
 	delete iPlugin;
 	iPlugin = NULL;

@@ -636,7 +636,7 @@ namespace Usif
 		"AllowOverwrite" - TSifPolicy
 		Can files be overwritten 
 
-		"DisplayPackageInfo" - TSifPolicy
+		"PackageInfo" - TSifPolicy
 		Whether to skip infos 
 
 		"AllowDownload" - TSifPolicy
@@ -662,6 +662,9 @@ namespace Usif
 
   		"Charset" -  TDesC
 		Represents charset to be used during HTTP download 
+
+		"AllowIncompatible" -  TSifPolicy
+		Check if installation of incompatible packages is allowed 
 
 		"ComponentId" - Array of TUInt
 		If returned in the custom results, provides the id's of the newly added components
@@ -699,7 +702,7 @@ namespace Usif
 	_LIT(KSifInParam_AllowAppShutdown, "AllowAppShutdown");
 	_LIT(KSifInParam_AllowAppBreakDependency, "AllowAppBreakDependency");
 	_LIT(KSifInParam_AllowOverwrite, "AllowOverwrite");
-	_LIT(KSifInParam_DisplayPackageInfo, "DisplayPackageInfo");
+	_LIT(KSifInParam_PackageInfo, "PackageInfo");
 	_LIT(KSifInParam_AllowDownload, "AllowDownload");
 	_LIT(KSifInParam_UserName, "UserName");
 	_LIT(KSifInParam_Password, "Password");
@@ -708,6 +711,7 @@ namespace Usif
 	_LIT(KSifInParam_SNAP, "SNAP");
 	_LIT(KSifInParam_MimeType, "MimeType");
 	_LIT(KSifInParam_Charset, "Charset");
+	_LIT(KSifInParam_AllowIncompatible, "AllowIncompatible");
 
 	_LIT(KSifOutParam_ComponentId, "ComponentId");
 	_LIT(KSifOutParam_ErrCategory, "ErrCategory");

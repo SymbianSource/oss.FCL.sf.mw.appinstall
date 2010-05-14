@@ -80,18 +80,20 @@ namespace Usif
         void CommonRequestPreamble( const COpaqueNamedParams& aInputParams,
                 COpaqueNamedParams& aOutputParams, TRequestStatus& aStatus );
         void CompleteClientRequest( TInt aResult );
-        void DoInstallL( const TDesC& aFileName );
         void DoUninstallL( TComponentId aComponentId );
         void DoActivateL( TComponentId aComponentId );
         void DoDeactivateL( TComponentId aComponentId );
+        void DoHandleErrorL( TInt aError );
         TInt ConvertToSifErrorCode( TInt aSwiErrorCode );
+        void SetInstallFileL( const TDesC& aFileName );
+        void SetInstallFile( RFile& aFileHandle );
         TComponentId GetLastInstalledComponentIdL();
-        TBool RequiresUserCapabilityL();
-        void ProcessSilentInstallL();
-        void ProcessSilentUninstallL();
-        void SetSilentInstallFileL( const TDesC& aFileName );
-        void SetSilentInstallFile( RFile& aFileHandle );
-        static TInt GrantCapabilitiesHelpCallback( TAny* aPtr );
+        TBool RequiresUserCapabilityL( const CComponentInfo::CNode& aRootNode );
+        void StartInstallingL();
+        void StartSilentInstallingL();
+        void StartSilentUninstallingL();
+        void FinalizeInstallationL();
+        void UpdateStartupListL();
 
     private:    // data
         RFs iFs;
@@ -106,8 +108,6 @@ namespace Usif
         HBufC* iFileName;
         RFile* iFileHandle;             // not owned
         TBool iUseSilentMode;
-        TBool iIsPackageCheckedForSilentInstall;
-
         enum TOperationType
             {
             ENone,
@@ -116,8 +116,14 @@ namespace Usif
             EUninstall,
             EActivate,
             EDeactivate
-            };
-        TOperationType iOperation;
+            } iOperation;
+        enum TPhase
+            {
+            ENotActive,
+            EPreprocessing,
+            ERunningOperation,
+            EPostprocessing
+            } iPhase;
         };
 
 }   // namespace Usif

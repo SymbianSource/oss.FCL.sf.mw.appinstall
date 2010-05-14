@@ -22,6 +22,50 @@
 #include <barsread.h> 
 using namespace Usif;
 
+void CScrGetApplicationRegistrationViewSubsessionStep::PrintPerformanceLog(TTime aTime)
+    {
+    TDateTime timer = aTime.DateTime();
+    INFO_PRINTF6(_L("%S,%d:%d:%d:%d"), &KPerformanceTestInfo(), timer.Hour(), timer.Minute(), timer.Second(), timer.MicroSecond());
+    }
+
+void CScrGetApplicationRegistrationViewSubsessionStep::StartTimer()
+    {
+    iStartTime.HomeTime();
+    PrintPerformanceLog(iStartTime);
+    }
+
+void CScrGetApplicationRegistrationViewSubsessionStep::StopTimerAndPrintResultL()
+    {
+    TTime endTime;
+    endTime.HomeTime();
+    PrintPerformanceLog(endTime);
+    
+    TTimeIntervalMicroSeconds duration = endTime.MicroSecondsFrom(iStartTime);
+    TInt actualDuration = I64INT(duration.Int64())/1000; // in millisecond
+        
+    TInt maxDuration = 0;
+    if(!GetIntFromConfig(ConfigSection(), KMaxDurationName, maxDuration))
+        {
+        ERR_PRINTF2(_L("%S could not be found in configuration."), &KMaxDurationName());
+        User::Leave(KErrNotFound);
+        }
+    else
+        {
+        INFO_PRINTF3(_L("%S,%d"), &KMaxTestCaseDuration(), maxDuration);
+        INFO_PRINTF3(_L("%S,%d"), &KActualTestCaseDuration(), actualDuration);
+        }
+    
+    if(actualDuration <= maxDuration)
+        {
+        INFO_PRINTF2(_L("This test meets performance requirement (Duration=%d)."), actualDuration);
+        }
+    else
+        {
+        ERR_PRINTF2(_L("This test does not meet performance requirement (Duration=%d)."), actualDuration);
+        SetTestStepResult(EFail);
+        }
+    }
+
 void CScrGetApplicationRegistrationViewSubsessionStep::GenerateIndexedAttributeNameL(TDes& aInitialAttributeName, TInt aIndex)
     {
     const TInt MAX_INT_STR_LEN = 8;
@@ -102,7 +146,6 @@ void CScrGetApplicationRegistrationViewSubsessionStep::GetAppUidL(TUid& aAppUid,
     delete configsection;
     }
     
-
 void CScrGetApplicationRegistrationViewSubsessionStep::GetAppServiceInfoL(
         RPointerArray<CServiceInfo>& aServiceInfoArray, HBufC* aConfigSection)
     {
@@ -902,6 +945,11 @@ CScrGetApplicationRegistrationViewSubsessionStep::~CScrGetApplicationRegistratio
     iScrSession.Close();
     }
 
+void CScrGetApplicationRegistrationViewSubsessionStep:: MarkAsPerformanceStep()
+    {
+    iIsPerformanceTest = ETrue;
+    }
+
 void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepPreambleL()
     {
     User::LeaveIfError(iScrSession.Connect());
@@ -1014,8 +1062,14 @@ void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepL()
     while(1)
     {    
     actualAppRegData.ResetAndDestroy();
+    
+    if(iIsPerformanceTest)
+        StartTimer();
     TRAP(err,subSession.GetNextApplicationRegistrationInfoL(noOfEntries, actualAppRegData))
-    if(KErrNone != err)
+    if(iIsPerformanceTest)
+        StopTimerAndPrintResultL();
+    
+    if( (KErrNone != err) || (iIsPerformanceTest && (EFail == TestStepResult())) )
         {
         CleanupStack::Pop(1); //poping actualAppRegData 
         actualAppRegData.ResetAndDestroy();

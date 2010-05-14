@@ -271,6 +271,7 @@ void TestInstaller::doGetRemovableAppsL()
     CleanupClosePushL(registry);
 
     RArray<TComponentId> componentIdList;
+    CleanupClosePushL( componentIdList );
     registry.GetComponentIdsL(componentIdList);
     for (int i = 0; i < componentIdList.Count(); ++i) {
         TComponentId compId = componentIdList[i];
@@ -303,7 +304,7 @@ void TestInstaller::doGetRemovableAppsL()
         CleanupStack::PopAndDestroy(compEntry);
     }
 
-    CleanupStack::PopAndDestroy(&registry);
+    CleanupStack::PopAndDestroy(2, &registry);  // componentIdList, registry
 }
 
 bool TestInstaller::isFileSelected()

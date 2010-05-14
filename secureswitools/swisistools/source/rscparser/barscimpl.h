@@ -1,4 +1,4 @@
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of "Eclipse Public License v1.0"
@@ -26,6 +26,9 @@
 #include <string>
 #include "commontypes.h"
 
+//Forward declarations
+struct SDictionaryCompressionData;
+class RDictionaryCompressionBitStream;
 /** 
 Accesses a resource file and reads the resource data into a buffer.
 It is the implementation class for CResourceFile class.
@@ -76,8 +79,11 @@ public:
 	@param aPos Offset from where to begin reading
 	@param aData Buffer to store read values
 	@param aLength Length of the bytes to be read.
+	@return Length of the bytes to be read.
 	*/
-	void ReadL(TInt aPos,TUint8* aData,const TInt& aLength) ;
+	TInt ReadL(TInt aPos,TUint8* aData,const TInt& aLength);
+
+	TUidType UidType() const;
 
 
 private:
@@ -114,8 +120,9 @@ private:
 	@param aPos Offset from where to begin reading
 	@param aData Buffer to store read values
 	@param aLength Length of the bytes to be read.
+	@return Length of the bytes to be read.
 	*/
-	void ReadL(const TUint32& aFlags, TInt aPos, TUint8* aData, const TInt& aLength);
+	TInt ReadL(const TUint32& aFlags, TInt aPos, TUint8* aData, const TInt& aLength);
 
 	/** @internalComponent
 	@return The first resource record.
@@ -155,6 +162,38 @@ private:
 	@return Pointer to decompressed data 
 	*/
 	Ptr8* DecompressUnicodeL(const Ptr8* aInputResourceData) const;
+
+
+	/**
+	The method will decompress the dictionary compressed data, allocate enough
+	memory from the heap for the decompressed data, copy the data there and return a pointer
+	to the decompressed data.
+	The method doesn't own the allocated heap memory for the decompressed data. It's a caller
+	responsibility to deallocate the allocated memory.
+	@pre OpenL() is called.
+	@leave KErrCorrupt The file is corrupted.
+	@leave KErrNoMemory There is not enough memory for the decompressed data.
+	Some other error codes are possible too.
+	*/
+	Ptr8* DictionaryDecompressedResourceDataL(
+								TInt aResourceIndex,
+								TUint aFlags,
+								const SDictionaryCompressionData& aDictionaryCompressionData,
+								const Ptr16* aIndex) const;
+
+
+	/** 
+	The method will decomress the dictionary compressed data (aDictionaryCompressionData argument) and append
+	the decompressed data to the end of std::vector<RDictionaryCompressionBitStream> 
+	(aStackOfDictionaryCompressionBitStreams argument).
+	*/
+	void AppendDictionaryCompressionBitStreamL(
+								std::vector<RDictionaryCompressionBitStream>& aStackOfDictionaryCompressionBitStreams,
+								TUint aFlags,
+								const SDictionaryCompressionData& aDictionaryCompressionData,
+								TInt aStartOfBitData,
+								TInt aStartOfIndex,
+								TInt aIndexEntry) const;
 	
 	/**
 	Get the two bytes(in Little Endian format) from the specified buffer
@@ -163,19 +202,49 @@ private:
            buffer.
 	@return 2-bytes read from the buffer.
 	*/
-	TInt LittleEndianTwoByteInteger(TUint8* aBuffer,const TInt& aIndexOfFirstByte) const;
-	Ptr8* GetDecompressedResourceDataL(
-									const TInt& aResourceIndex,			
-									const TUint32& aFlags);
+	
+	TInt LittleEndianTwoByteInteger(const TUint8* aBuffer,const TInt& aIndexOfFirstByte,TInt aLength) const;
+
 
 private:
 	std::ifstream* iResourceContents;	
 	TInt iSizeOfLargestResourceWhenCompletelyUncompressed;
-	// An array of (unsigned) 16-bit file-positions
-	TUint16* iIndex; 
+	//basically an array of (unsigned) 16-bit file-positions - 
+	//this is only used for non-dictionary-compressed resource files
+	Ptr16* iIndex; 
+
+	//the position of this member in the class is exposed because RResourceFile::Offset() is 
+	//an inline function accessing "iOffset". RResourceFileImpl is an implementation class for
+	//RResourceFile class. The "iOffset" offset from the beginning of the class must be exactly
+	//12 bytes.
 	TInt iOffset; 
 	TExtra* iExtra;
 	TUint32 iFlagsAndNumberOfResources;
+	};
+
+
+struct SDictionaryCompressionData
+	{
+ 	inline SDictionaryCompressionData() :
+		iStartOfDictionaryData(0),
+		iStartOfDictionaryIndex(0),
+		iNumberOfDictionaryEntries(0),
+		iStartOfResourceData(0),
+		iStartOfResourceIndex(0),
+		iNumberOfBitsUsedForDictionaryTokens(0), 
+		iCachedDictionaryIndex(0),
+		iCachedResourceBuffer(0)// = NULL;
+		{
+		}
+	TInt iStartOfDictionaryData;
+	TInt iStartOfDictionaryIndex;
+	TInt iNumberOfDictionaryEntries;
+	TInt iStartOfResourceData;
+	TInt iStartOfResourceIndex;
+	TInt iNumberOfBitsUsedForDictionaryTokens;
+	TUint16* iCachedDictionaryIndex;
+	TUint8* iCachedResourceBuffer;
+	
 	};
 
 
@@ -194,7 +263,7 @@ public:
 	@param aRscIdx Resource Index
 	@return Status of whether the resource is actually present or not.
 	*/
-	TInt32 ContainsCompressedUnicode(const TInt& aRscIdx) const;
+	TInt32 ContainsCompressedUnicode(TInt& aRscIdx, TBool aFirstRscIsGen) const;
 
 private:
 	// Prevent default copy constructor
@@ -204,13 +273,15 @@ private:
 
 public:
 	// RSC file UID
-	sTUid iUid;
+	TUidType iUidType;
 	// An array of bits, one for each resource in the resource file
-	TUint8* iBitArrayOfResourcesContainingCompressedUnicode; 
+	Ptr8* iBitArrayOfResourcesContainingCompressedUnicode;
+	SDictionaryCompressionData iDictionaryCompressionData;
 	// Offset of RSC chunk
 	TInt iFileOffset;	
 	// RSC file size 
 	TUint32 iFileSize;		
 	};
+
 
 #endif//__BARSCIMPL_H__

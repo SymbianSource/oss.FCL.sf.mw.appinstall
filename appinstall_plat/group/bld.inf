@@ -25,6 +25,5 @@
 #include "../sw_installer_ui_plugin_api/group/bld.inf"
 #include "../sw_installer_cr_keys/group/bld.inf"
 #include "../sw_installer_ps_keys/group/bld.inf"
-#include "../appmngr2runtimeapi/group/bld.inf"
 #include "../sifui_api/group/bld.inf"
 

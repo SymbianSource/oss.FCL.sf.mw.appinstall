@@ -45,7 +45,7 @@ SifUiInstallIndicatorPlugin::~SifUiInstallIndicatorPlugin()
 QStringList SifUiInstallIndicatorPlugin::indicatorTypes() const
 {
     QStringList types;
-    types << KSifUiIndicatorPlugin;
+    types << KSifUiInstallIndicatorType;
     return types;
 }
 

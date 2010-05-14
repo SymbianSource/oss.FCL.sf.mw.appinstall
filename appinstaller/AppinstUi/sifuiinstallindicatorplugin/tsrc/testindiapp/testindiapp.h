@@ -19,10 +19,15 @@
 #define TESTINDICAPPLICATION_H
 
 #include <hbapplication.h>
+#include <qmobilityglobal.h>            // QTM namespace macros
 
 class HbMainWindow;
 class HbView;
 class HbIndicator;
+
+QTM_BEGIN_NAMESPACE
+class QValueSpaceSubscriber;
+QTM_END_NAMESPACE
 
 
 class TestInstallIndicator : public HbApplication
@@ -32,14 +37,18 @@ class TestInstallIndicator : public HbApplication
 public:     // constructor and destructor
     TestInstallIndicator(int& argc, char* argv[]);
     ~TestInstallIndicator();
+    bool isIndicatorActive();
 
 private slots:  // new functions
-    void activateStateChanged(int state);
+    void handleIndicatorActivity();
+    void activatePressed();
+    void deactivatePressed();
 
 private:    // data
     HbMainWindow *mMainWindow;
     HbView       *mMainView;
     HbIndicator  *mIndicator;
+    QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber) *mSubscriber;
 };
 
 #endif  // TESTINDICAPPLICATION_H

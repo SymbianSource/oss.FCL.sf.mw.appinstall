@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -20,6 +20,8 @@
 #include "siftransportserver.h"
 #include "siftransportcommon.h"
 #include <e32property.h>
+#include "sifnotification_internal.h"
+#include "scrclient.inl"
 
 using namespace Usif;
 
@@ -53,8 +55,26 @@ void CSifTransportServer::ConstructL(const TDesC& aServerName, TInt aShutdownPer
 	starts the server.
  */
 	{
-	CScsServer::ConstructL(aShutdownPeriodUs);
+	// Define a key (KSifOperationKey) which would be used to notify the client of any new operations.
+    TInt ret = RProperty::Define(KUidSystemCategory, KSifOperationKey, RProperty::EByteArray, KSecurityPolicyWDD, KSecurityPolicyNone,(sizeof(TInt) * KMaxNumberOfOperations));
+    if (ret != KErrAlreadyExists && ret != KErrNone)
+        {
+        User::Leave(ret);
+        }
 
+    if(ret == KErrNone)
+        {
+        // Create a empty CSifOperationKey object and publish it.
+        CSifOperationKey* nullKey = CSifOperationKey::NewL();
+        CleanupStack::PushL(nullKey);
+        RBuf8 nullKeyBuffer;
+        nullKeyBuffer.CleanupClosePushL();
+        ExternalizeRefObjectL(*nullKey, nullKeyBuffer);
+        User::LeaveIfError(RProperty::Set(KUidSystemCategory, KSifOperationKey, nullKeyBuffer));
+		CleanupStack::PopAndDestroy(2, nullKey);
+        }
+    
+    CScsServer::ConstructL(aShutdownPeriodUs);
 	StartL(aServerName);
 	}
 
@@ -64,6 +84,7 @@ CSifTransportServer::~CSifTransportServer()
 	Cleanup the server, in particular close the RFs session.
  */
 	{
+	RProperty::Delete(Usif::KSifOperationKey);
 	}
 
 CScsSession* CSifTransportServer::DoNewSessionL(const RMessage2& /*aMessage*/)

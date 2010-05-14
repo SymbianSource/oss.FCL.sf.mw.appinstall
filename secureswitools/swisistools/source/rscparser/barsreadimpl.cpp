@@ -251,7 +251,7 @@ PtrC16* TResourceReaderImpl::ReadTPtrC16L()
 			// to ensure the alignment of Unicode strings within each resource.
 				if(*currentPtr!=0xab)
 				{
-					std::string errMsg= "Failed : Trying to access invalid registrationFile";
+					std::string errMsg= "Failed : Improper alignment of Unicode strings (0xab) within each resource.";
 					throw CResourceFileException(errMsg);
 				}
 			++currentPtr;

@@ -19,7 +19,7 @@
 #define C_SIFUIPRIVATE_H
 
 #include <e32base.h>                            // CActive
-#include <hb/hbcore/hbsymbiandevicedialog.h>    // MHbDeviceDialogObserver
+#include <hb/hbcore/hbdevicedialogsymbian.h>    // MHbDeviceDialogObserver
 #include <bamdesca.h>                           // MDesCArray
 
 class CHbDeviceDialog;
@@ -79,7 +79,7 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         void ResponseReceived( TInt aCompletionCode );
 
     private:    // data
-        CHbDeviceDialog* iDeviceDialog;
+        CHbDeviceDialogSymbian* iDeviceDialog;
         CHbSymbianVariantMap* iVariantMap;
         CActiveSchedulerWait* iWait;
         TBool iIsDisplayingDialog;

@@ -20,7 +20,10 @@
 #include <apacmdln.h>
 #include <xqservicerequest.h>
 
-// #include "debugtraces.h"
+#include <hb/hbcore/hbtranslator.h>
+
+#include <hbicon.h>
+
 #include "bgcindicator.h" 
 
 //----------------------------------------------------------------------
@@ -32,8 +35,8 @@
 // ----------------------------------------------------------------------------
 BgcIndicator::BgcIndicator(const QString &indicatorType) :
 HbIndicatorInterface(indicatorType,
-        HbIndicatorInterface::GroupPriorityHigh,
-        InteractionActivated),
+        HbIndicatorInterface::NotificationCategory,
+        InteractionActivated), 
         mNrOfUpdates(0)
     {
     }
@@ -56,7 +59,11 @@ bool BgcIndicator::handleInteraction(InteractionType type)
     
     if (type == InteractionActivated) 
         {
-        StartIaupdateL();
+        TRAPD( err, StartIaupdateL() );
+        if ( err != KErrNone )
+            {
+            // nothing to do 
+            }
         handled = true;   
         
         emit deactivate(); 
@@ -70,27 +77,63 @@ bool BgcIndicator::handleInteraction(InteractionType type)
 // ----------------------------------------------------------------------------
 QVariant BgcIndicator::indicatorData(int role) const
 {
-    
+    // use iaupdate's translate file
+    // loc: HbTranslator trans("z:\\resource\\iaupdate\\","Text_Map_Swupdate_");
+        
 switch(role)
     {
-    case TextRole: 
+    case PrimaryTextRole: 
         {
         QString text("");
-        if ( mNrOfUpdates > 0 )
-            text.append(QString("Updates available"));
-        else
+        if ( mNrOfUpdates == 0 )
+            {
+            // First time case
+            // loc: text.append(hbTrId("txt_software_update_list_software_update"));
             text.append(QString("Check for updates?"));
+            }
+        else if ( mNrOfUpdates == 1 )
+            {
+            // one update available
+            // loc: text.append(hbTrId("txt_software_dblist_update_available"));
+            text.append(QString("Update available"));
+            }
+        else
+            {
+            // several updates available
+            // loc: text.append(hbTrId("txt_software_dblist_updates_available"));
+            text.append(QString("Updates available"));
+            }
         return text;        
         }
     case SecondaryTextRole:
         {
-        QString text("Tap to view");
+        QString text("");
+        if ( mNrOfUpdates == 0 )
+            {
+            // First time case
+            // loc: QString text(hbTrId("txt_software_update_list_software_update"));
+            text.append(QString("Tap to view"));
+            }
+        else if ( mNrOfUpdates == 1 )
+            {
+            // one update available
+            // loc: QString text(hbTrId("txt_software_dblist_val_1_new"));
+            text.append(QString("%1 new").arg(mNrOfUpdates));
+            }
+        else
+            {
+            // several updates available
+            // loc: QString text(hbTrId("txt_software_dblist_val_ln_new"));
+            text.append(QString("%1 new").arg(mNrOfUpdates));
+            }
         return text; 
         }
-    case IconNameRole:
+    case DecorationNameRole:
+    case MonoDecorationNameRole:
         {
         // QString iconName("z:/resource/messaging/message.svg");
-        QString iconName("c:/qgn_note_swupdate_notification.svg");
+        // HbIcon iconName1 ("c:/qgn_note_swupdate_notification.svg");
+        QString iconName("z:/resource/iaupdate/qgn_note_swupdate_notification.svg");
         return iconName;
         }
     default: 
@@ -110,6 +153,7 @@ bool BgcIndicator::handleClientRequest( RequestType type,
         case RequestActivate:
             {
             mNrOfUpdates = parameter.toInt();
+            emit dataChanged();
             handled =  true;
             }
             break;
@@ -126,7 +170,7 @@ bool BgcIndicator::handleClientRequest( RequestType type,
     }
 
 // ----------------------------------------------------------
-// CIAUpdateBGTimer::StartIaupdateL()
+// BgcIndicator::StartIaupdateL()
 // ----------------------------------------------------------
 void BgcIndicator::StartIaupdateL() const
     {
@@ -135,16 +179,13 @@ void BgcIndicator::StartIaupdateL() const
     _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
     _LIT8( KRefreshFromNetworkDenied, "1" );
     
-    //FLOG("[bgchecker] StartIaupdateL() begin");
     RWsSession ws;   
     User::LeaveIfError( ws.Connect() == KErrNone );
     TApaTaskList tasklist(ws);   
     TApaTask task = tasklist.FindApp( TUid::Uid( KIADUpdateLauncherUid ) );
     if ( task.Exists() )
         {
-        //FLOG("[bgchecker] StartIaupdateL() IAD launcher process found");
         task.BringToForeground();
-        //FLOG("[bgchecker] StartIaupdateL() after task.BringToForeground()");
         ws.Close();
         }
     else 
@@ -165,6 +206,5 @@ void BgcIndicator::StartIaupdateL() const
         process.Resume();
         CleanupStack::PopAndDestroy( &process );    
         }
-    //FLOG("[bgchecker] StartIaupdateL() end");
     }
 

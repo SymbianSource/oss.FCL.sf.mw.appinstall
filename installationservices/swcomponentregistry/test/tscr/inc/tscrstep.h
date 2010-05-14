@@ -117,25 +117,24 @@ protected:
 	// Read Application info filter from config file
 	void ReadAppInfoFilterFromConfigL(Usif::CAppInfoFilter** aFilter);
 	Usif::TAppRegInfo* CScrTestStep::GetAppInfoFromConfigL(TBool aIsSingle , TInt aIndex=0 );
+	
 	void StartTimer();
-	
-	
-protected:
-	CScrTestServer& iParent;
-	Usif::RSoftwareComponentRegistry iScrSession;
-
-private:
-	TInt ReadSharedComponentIdL(TInt aOffset);
 	void StopTimerAndPrintResultL();
 	void PrintPerformanceLog(TTime aTime);
 
+private:
+	TInt ReadSharedComponentIdL(TInt aOffset);	
+
 protected:
+	CScrTestServer& iParent;
+	Usif::RSoftwareComponentRegistry iScrSession;
+	TBool iIsPerformanceTest;
+	
 	// For plugin management test cases, the time is measured externally because they are performed via another accessor server (scr accessor).
 	// The actual test time is measured on the scr accessor server side and returned to the test code.
 	TInt iTimeMeasuredExternally;
-	
-private:
-	TBool iIsPerformanceTest;
+		
+private:	
 	TTime iStartTime;
 	};
 

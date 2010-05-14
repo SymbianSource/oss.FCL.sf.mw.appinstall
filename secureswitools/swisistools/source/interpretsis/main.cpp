@@ -67,26 +67,30 @@ int main(int argc, const char* argv[])
 		CInterpretSIS interpretSis(paramList);
 		
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-		if ( paramPtr->IsFlagSet(CParameterList::EFlagsResourceFilePathSet)) 
+		//Parsing Preprovisioned Resource file in not done if RegistryVersionExists
+		if(!paramPtr->RegistryVersionExists())
 		{
-			ParseResourceDir(paramPtr, interpretSis);
-
-			if (NULL != logFile)
+			if ( paramPtr->IsFlagSet(CParameterList::EFlagsResourceFilePathSet)) 
 			{
-				bool val = logFile->is_open();
-				logFile->close();
-				delete logFile;
+				ParseResourceDir(paramPtr, interpretSis);
+
+				if (NULL != logFile)
+				{
+					bool val = logFile->is_open();
+					logFile->close();
+					delete logFile;
+				}
+				return result;
 			}
-			return result;
-		}
-		else
-		{
-			ParseResourceDir(paramPtr, interpretSis);
+			else
+			{
+				ParseResourceDir(paramPtr, interpretSis);
+			}
 		}
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
 	
 		result = interpretSis.Install();
-		
+
 		// Uninstall the sis files
 		interpretSis.Uninstall();
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	

@@ -887,9 +887,7 @@ void CDbLayer::AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPrePr
 
 		if(appPropertyIter->iIsStr8Bit)
 			{
-			std::string str = Util::wstring2string(appPropertyIter->iStrValue);
-			std::string decodedString = Util::Base64Decode(str);
-			stmtAppProperty->BindBinary(6, str);
+			stmtAppProperty->BindBinary(6, appPropertyIter->iStrValue);
 			}
 		else
 			{

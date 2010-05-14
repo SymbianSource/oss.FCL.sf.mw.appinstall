@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -20,6 +20,7 @@
 #include "log.h"
 #include "plan.h"
 #include "swispubsubdefs.h"
+#include <usif/scr/appregentries.h>
 
 namespace Swi
 {
@@ -347,6 +348,18 @@ TInt CSwisStateMachine::RunError(TInt aError)
 		// re-generate the sisregistry cache .. very time consuming!
 		ResetRegistryCache();
 		}
+#endif
+
+	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	// Deregister the force registered applications from AppArc
+	DEBUG_PRINTF(_L8("Deregistering the force registered applications with AppArc"));
+	RSisLauncherSession launcher;
+	CleanupClosePushL(launcher);
+	User::LeaveIfError(launcher.Connect());
+	RPointerArray<Usif::CApplicationRegistrationData> emptyAppRegDataArray;
+	launcher.NotifyNewAppsL(emptyAppRegDataArray);
+	CleanupStack::PopAndDestroy(&launcher);
 #endif
 
 	iMessage.Complete(aError);

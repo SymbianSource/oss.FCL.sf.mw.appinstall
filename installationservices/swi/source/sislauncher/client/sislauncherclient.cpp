@@ -93,7 +93,6 @@ EXPORT_C TInt RSisLauncherSession::Connect()
             }
         }    
     }
-
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisLauncherSession::Close()
     {	
@@ -106,7 +105,6 @@ EXPORT_C void RSisLauncherSession::Close()
     RSessionBase::Close();
     }
 #endif
-
 EXPORT_C void RSisLauncherSession::RunExecutableL(const TDesC& aFileName, TBool aWait)
     {
     TPckgC<TBool> wait(aWait);
@@ -410,7 +408,7 @@ EXPORT_C Usif::CApplicationRegistrationData*  RSisLauncherSession::AsyncParseRes
     Usif::CApplicationRegistrationData* applicationData= Usif::CApplicationRegistrationData::NewLC();
     // Got the buffer, internalise the arrays
     RDesReadStream readStream(*appRegData);
-    CleanupClosePushL(readStream);
+    CleanupClosePushL(readStream);    
     applicationData->InternalizeL(readStream);
     CleanupStack::PopAndDestroy(&readStream); 
     CleanupStack::Pop(applicationData);

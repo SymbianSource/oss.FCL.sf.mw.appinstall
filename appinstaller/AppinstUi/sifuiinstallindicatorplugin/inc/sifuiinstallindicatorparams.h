@@ -19,18 +19,12 @@
 #define SIFUIINSTALLINDICATORPARAMS_H
 
 // Install indicator plugin type string
-const QString KSifUiIndicatorPlugin = "com.nokia.sifui.indi/1.0";
-
-// Variant map keys for install indicator
-const QString KSifUiIndicatorApplicationName = "app";       // string
-const QString KSifUiIndicatorAppIconHandle = "icon";        // integer, bitmap handle
-const QString KSifUiIndicatorAppIconMaskHandle = "mask";    // integer, bitmap handle
-const QString KSifUiIndicatorProgressValue = "pval";        // integer
-const QString KSifUiIndicatorProgressFinal = "pfin";        // integer
+const QString KSifUiInstallIndicatorType = "com.nokia.sifui.indi/1.0";
 
 // Path and value name for QValueSpacePublisher/QValueSpaceSubscriber.
-const QString KSifUiIndicatorPath = "/sifui";
-const QString KSifUiIndicatorActive = "indicator_active";
+const QString KSifUiInstallIndicatorPath = "/SifUiInstallIndicator";
+const QString KSifUiInstallIndicatorStatus = "Status";
+const QString KSifUiInstallIndicatorStatusPath = "/SifUiInstallIndicator/Status";
 
 #endif // SIFUIINSTALLINDICATORPARAMS_H
 

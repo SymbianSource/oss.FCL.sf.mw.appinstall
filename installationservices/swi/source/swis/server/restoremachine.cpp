@@ -881,13 +881,33 @@ void CRestoreMachine::CCommitWatcher::SwitchStateL()
 		ASSERT(controllerBinaries.Count() == iPlans.Count());
 		DEBUG_PRINTF3(_L8("Restoring plan %d out of %d"), iPlanIndex, iPlans.Count());
 		const TDesC8& controllerBinary = *controllerBinaries[iPlanIndex];
+		
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		/*During restore the controllers are processed sequentialy one by one, ecah controller has one CPlan object (which internally has
+		CApplication object), we maintain the set of affected apps for each controller within its CPlan object(done while doning processing)
+		and we use the same set of affected apps for the subsequent controllers. For example In case of SP over SA ,while processing the SA controller we will not have
+		any affected apps as it is the first controller but for the second SP controller we will tahke the affected apps from the previously 
+		processed controller ie SA.
+		*/
+		RArray<TAppUpdateInfo> appInfo;
+		CleanupClosePushL(appInfo);		
+		if(iPlanIndex > 0)
+		    {
+		    iPlans[iPlanIndex-1]->GetAffectedApps(appInfo);
+		    }
+#endif
+		
 		iProcessor = CRestoreProcessor::NewL(*(iPlans[iPlanIndex]), controllerBinary, iSecurityManager,
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-			iStsSession, iRegistrySession,
+			iStsSession, iRegistrySession, appInfo,
 #else
 			iIntegrityServices,
 #endif
 			iRestoreController.Verifiers(), baseSids, iMachine.Observer()); 
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
+		CleanupStack::Pop(&appInfo);
+#endif
 		iProcessor->ProcessPlanL(iStatus);
 		CleanupStack::PopAndDestroy(&baseSids);
 		
@@ -1078,6 +1098,41 @@ void CRestoreMachine::CCommitWatcher::CompleteL()
 		// failure - therefore we commit STS first and then the registry 
 		iStsSession.CommitL();
 		iRegistrySession.CommitTransactionL();
+   
+		CPlan* lastPlan = iPlans[iPlans.Count()-1];
+		if (lastPlan)
+            {
+            RSisLauncherSession launcher;  
+            CleanupClosePushL(launcher);
+            if (launcher.Connect() != KErrNone)
+                {
+                iMachine.Observer().CommitL();
+                User::LeaveIfError(RProperty::Set(pubsubCategory, KUidSoftwareInstallKey, ESwisNone));
+                iClientMessage.Complete(iStatus.Int());
+                DEBUG_PRINTF(_L8("Install Machine - Failed to connect to SisLauncher"));
+                CleanupStack::Pop(&launcher);
+                launcher.Close();
+                return;
+                }             
+             //Notify apparc for the the change in the Applications
+             RArray<TAppUpdateInfo> affectedApps;
+             CleanupClosePushL(affectedApps);
+             lastPlan->GetAffectedApps(affectedApps);
+#ifdef _DEBUG             
+             for(TInt i = 0; i < affectedApps.Count(); i++)
+                  {
+                  DEBUG_PRINTF2(_L("Affected AppUid during restore is 0x%x"), affectedApps[i].iAppUid);
+                  DEBUG_PRINTF2(_L("Action to be performed is %d"), affectedApps[i].iAction);
+                  }  
+#endif             
+             if (affectedApps.Count() > 0)
+                  {
+                  launcher.NotifyNewAppsL(affectedApps);
+                  }          
+             CleanupStack::PopAndDestroy(2, &launcher);             
+             }        
+       
+		
 #else
 		iIntegrityServices.CommitL();
 #endif

@@ -1,0 +1,47 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* 
+* Description:
+* tswiappregintegration_case05.mmp for swi application reg integration testing
+*
+*/
+
+TARGET			swiappregintegration_case05.exe
+TARGETTYPE		exe
+
+UID			0x10000007 0x90000009
+VENDORID		0x0
+
+SOURCEPATH		.
+SOURCE			swiappregintegration.cpp
+
+SYSTEMINCLUDE	/epoc32/include
+
+START RESOURCE	case05/swiappregintegration_case05_loc.rss
+HEADER
+TARGETPATH		tswi/tuiscriptadaptors/data/swiappregintegration_case05
+LANG  SC 01 02 03 04	
+END
+
+// Application exe registration resource file
+START RESOURCE 	case05/swiappregintegration_case05_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data/swiappregintegration_case05
+END
+
+// Application exe registration resource file upgraded
+START RESOURCE 	case05/swiappregintegration_case05_su_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data/swiappregintegration_case05
+END
+
+LIBRARY			euser.lib
+SMPSAFE

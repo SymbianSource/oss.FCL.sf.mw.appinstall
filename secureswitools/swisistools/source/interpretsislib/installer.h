@@ -72,6 +72,7 @@ private:
 	void Backup(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
 	void RemoveBackup(const SisFile& aFile, InstallableFiles& aInstallable);
 	void Restore(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
+	void RestoreAll(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
 #endif
 	bool DependenciesOk(const SisFile& aFile);			// Check to see if the sis file
 														// meets it's dependencies

@@ -19,6 +19,7 @@ TARGET =
 CONFIG += qtestlib hb
 DEPENDPATH += .
 INCLUDEPATH += . ../../inc
+LIBS += -lQtPublishSubscribe
 
 HEADERS += mt_sifuiinstallindicator.h
 SOURCES += mt_sifuiinstallindicator.cpp

@@ -54,7 +54,7 @@ public:
      * @see HbIndicatorPluginInterface
      */
     bool accessAllowed(const QString &indicatorType,
-                               const HbSecurityInfo *securityInfo) const;   
+            const QVariantMap &securityInfo) const;
     /**
      * @see HbIndicatorPluginInterface
      */

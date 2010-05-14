@@ -58,7 +58,7 @@ QStringList BgcIndicatorPlugin::indicatorTypes() const
 // @see bgcindicatorplugin.h
 // ----------------------------------------------------------------------------
 bool BgcIndicatorPlugin::accessAllowed(const QString &indicatorType,
-    const HbSecurityInfo *securityInfo) const
+        const QVariantMap &securityInfo) const
 {
     Q_UNUSED(indicatorType)
     Q_UNUSED(securityInfo)

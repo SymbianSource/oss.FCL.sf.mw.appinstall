@@ -18,7 +18,10 @@
 #include "mt_sifuiinstallindicator.h"
 #include "sifuiinstallindicatorparams.h"
 #include <hbindicator.h>
+#include <qvaluespacesubscriber.h>
 #include <QTest>
+
+QTM_USE_NAMESPACE
 
 
 // ---------------------------------------------------------------------------
@@ -27,13 +30,22 @@
 //
 void TestSifUiInstallIndicator::activateWithoutParams()
 {
+    QValueSpaceSubscriber *subscriber = 0;
+    subscriber = new QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath);
+    QSignalSpy indicatorStatusSpy(subscriber, SIGNAL(contentsChanged()));
+
     HbIndicator *indicator = new HbIndicator();
     QVERIFY(indicator != 0);
     QVERIFY(indicator->error() == 0);
-    QVERIFY(indicator->activate(KSifUiIndicatorPlugin));
+
+    QVERIFY(indicator->activate(KSifUiInstallIndicatorType));
     QTest::qWait(3000);
-    QVERIFY(indicator->deactivate(KSifUiIndicatorPlugin));
+    QCOMPARE(indicatorStatusSpy.count(), 1);
+    QVERIFY(indicator->deactivate(KSifUiInstallIndicatorType));
     delete indicator;
+
+    QCOMPARE(indicatorStatusSpy.count(), 2);
+    delete subscriber;
 }
 
 // ---------------------------------------------------------------------------
@@ -46,13 +58,19 @@ void TestSifUiInstallIndicator::activateWithAppName()
     QVERIFY(indicator != 0);
     QVERIFY(indicator->error() == 0);
 
-    QVariantMap map;
-    map.insert(KSifUiIndicatorApplicationName, QString("Application name"));
-    QVariant params(map);
-    QVERIFY(indicator->activate(KSifUiIndicatorPlugin, params));
+    QValueSpaceSubscriber *subscriber = 0;
+    subscriber = new QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath);
+    QSignalSpy indicatorStatusSpy(subscriber, SIGNAL(contentsChanged()));
+
+    QVariant params(QString("Test application"));
+    QVERIFY(indicator->activate(KSifUiInstallIndicatorType, params));
     QTest::qWait(3000);
-    QVERIFY(indicator->deactivate(KSifUiIndicatorPlugin));
+    QCOMPARE(indicatorStatusSpy.count(), 1);
+    QVERIFY(indicator->deactivate(KSifUiInstallIndicatorType));
     delete indicator;
+
+    QCOMPARE(indicatorStatusSpy.count(), 2);
+    delete subscriber;
 }
 
 // ---------------------------------------------------------------------------
@@ -61,15 +79,23 @@ void TestSifUiInstallIndicator::activateWithAppName()
 //
 void TestSifUiInstallIndicator::activateWithInvalidParam()
 {
+    QValueSpaceSubscriber *subscriber = 0;
+    subscriber = new QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath);
+    QSignalSpy indicatorStatusSpy(subscriber, SIGNAL(contentsChanged()));
+
     HbIndicator *indicator = new HbIndicator();
     QVERIFY(indicator != 0);
     QVERIFY(indicator->error() == 0);
 
     QVariant params(QByteArray("test"));
-    QVERIFY(indicator->activate(KSifUiIndicatorPlugin, params));
+    QVERIFY(indicator->activate(KSifUiInstallIndicatorType, params));
     QTest::qWait(3000);
-    QVERIFY(indicator->deactivate(KSifUiIndicatorPlugin));
+    QCOMPARE(indicatorStatusSpy.count(), 1);
+    QVERIFY(indicator->deactivate(KSifUiInstallIndicatorType));
     delete indicator;
+
+    QCOMPARE(indicatorStatusSpy.count(), 2);
+    delete subscriber;
 }
 
 // ---------------------------------------------------------------------------

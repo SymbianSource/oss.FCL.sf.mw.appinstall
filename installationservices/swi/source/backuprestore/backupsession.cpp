@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -184,7 +184,7 @@ namespace Swi
 		
 		for (TInt i = 0; i < augmentationCount; ++i)
 			{			
-			RSisRegistryEntry augmentation;
+			RSisRegistryWritableEntry augmentation;
 			augmentation.OpenL(iSession, *packages[i]);
 			CleanupClosePushL(augmentation);
 			
@@ -212,7 +212,7 @@ namespace Swi
 			// were backed up.
 			augmentationDrives.AppendL(augmentation.SelectedDriveL());
 			// Get the matching supported languages
-			entry.GetMatchingSupportedLanguagesL(matchingSupportedLanguagesArray);
+			augmentation.GetMatchingSupportedLanguagesL(matchingSupportedLanguagesArray);
 
 			// Appending ELangNone at the end as marker for the end of the language IDs
 			// as we also append the language ID's from other Augmentations

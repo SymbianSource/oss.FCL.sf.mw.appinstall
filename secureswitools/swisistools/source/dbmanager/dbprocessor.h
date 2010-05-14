@@ -188,6 +188,8 @@ class CStatement
 		
 		void BindBinary(int aParameterIndex, const std::string &aParameterStr);
 
+		void BindBinary(int aParameterIndex, const std::wstring &aParameterStr);
+
 		/**
 			Resets this SQL statement object to its initial state and makes it ready to be executed again.
 			Any SQL statement parameters that had values bound to them, retain their values.

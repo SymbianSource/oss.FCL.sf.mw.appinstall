@@ -476,9 +476,11 @@ TBool CAppInfoReader::ReadL()
 				std::string Locale;
 				int iLocale = 0;
 		
-				found=fName.find_last_of(".");
-				if(found)
-				   	Locale = fName.substr(found+2);
+				found=fName.rfind(".r");
+				if(found!=string::npos)
+					Locale = fName.substr(found+2);
+				else
+					continue;
 
 				iLocale = atoi(Locale.c_str()); 
 			    if(!iLocale)

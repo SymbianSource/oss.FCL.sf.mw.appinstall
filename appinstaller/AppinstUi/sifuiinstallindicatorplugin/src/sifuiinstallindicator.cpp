@@ -20,15 +20,19 @@
 #include <QVariant>
 #include <qvaluespacepublisher.h>
 
+const char KSifUiDefaultApplicationIcon[] = "qtg_large_application.svg";
+const QString KSifUiPathSeparator = "/";
+
 
 // ---------------------------------------------------------------------------
 // SifUiInstallIndicator::SifUiInstallIndicator()
 // ---------------------------------------------------------------------------
 //
 SifUiInstallIndicator::SifUiInstallIndicator(const QString &indicatorType) :
-    HbIndicatorInterface(indicatorType, HbIndicatorInterface::GroupPriorityHigh,
-            InteractionActivated), mAppName(), mPublisher(0)
+    HbIndicatorInterface(indicatorType, HbIndicatorInterface::ProgressCategory,
+            InteractionActivated), mAppName(), mPublisher(0), mIsActive(false)
 {
+    mPublisher = new QTM_PREPEND_NAMESPACE(QValueSpacePublisher(KSifUiInstallIndicatorPath));
 }
 
 // ---------------------------------------------------------------------------
@@ -37,6 +41,9 @@ SifUiInstallIndicator::SifUiInstallIndicator(const QString &indicatorType) :
 //
 SifUiInstallIndicator::~SifUiInstallIndicator()
 {
+    if (mPublisher && mIsActive) {
+        publishActivityStatus(false);
+    }
     delete mPublisher;
 }
 
@@ -50,6 +57,7 @@ bool SifUiInstallIndicator::handleInteraction(InteractionType type)
 
     if (type == InteractionActivated) {
         emit deactivate();
+        publishActivityStatus(false);
         handled = true;
     }
 
@@ -65,19 +73,21 @@ QVariant SifUiInstallIndicator::indicatorData(int role) const
     QVariant data;
 
     switch(role) {
-        case IconNameRole:
         case DecorationNameRole:
-            // TODO: use proper icon when available
-            data = QString("note_info.svg");
+            data = QString(KSifUiDefaultApplicationIcon);
             break;
         case PrimaryTextRole:
             //: Primary text for application installation progress displayed in
             //: universal indicator menu. Secondary text is the application name.
             // TODO: use localised UI string when available
-            data = tr("Installing...");
+            data = tr("Installing");
+            // TODO: text must indicate installation phase, need to support also
+            // tr("Downloading") and tr("Doing OCSP checks")
             break;
         case SecondaryTextRole:
-            data = mAppName;
+            if (!mAppName.isEmpty()) {
+                data = tr("%1 (%L2 %)").arg(mAppName).arg(mProgress);
+            }
         default:
             break;
     }
@@ -115,9 +125,12 @@ bool SifUiInstallIndicator::handleClientRequest(RequestType type, const QVariant
 //
 void SifUiInstallIndicator::processParameters(const QVariant &parameter)
 {
-    if (parameter.isValid() && (parameter.type() == QVariant::Map)) {
-        QVariantMap map = parameter.toMap();
-        mAppName = map.value(KSifUiIndicatorApplicationName).toString();
+    if (parameter.isValid() && (parameter.type() == QVariant::String)) {
+        mAppName = parameter.toString();
+        mProgress = 0;
+
+        // TODO: get icon if standard icon needs to be replaced
+        // TODO: start listening USIF installation progress
     }
 }
 
@@ -127,9 +140,13 @@ void SifUiInstallIndicator::processParameters(const QVariant &parameter)
 //
 void SifUiInstallIndicator::publishActivityStatus(bool status)
 {
-    if (!mPublisher) {
-        mPublisher = new QTM_PREPEND_NAMESPACE(QValueSpacePublisher(KSifUiIndicatorPath));
+    if (status != mIsActive) {
+        if (mPublisher) {
+            int intStatus = status;
+            mPublisher->setValue(KSifUiInstallIndicatorStatus, QVariant(intStatus));
+            mPublisher->sync();
+        }
+        mIsActive = status;
     }
-    mPublisher->setValue(KSifUiIndicatorActive, QVariant(status));
 }
 

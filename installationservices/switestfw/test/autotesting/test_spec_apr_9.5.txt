@@ -361,6 +361,7 @@ TESTEXECUTE, \logs\testexecute\usifsecuritytests.htm,,z:\tusif\securitytests\usi
 TESTEXECUTE, \logs\testexecute\tsifintegration.htm,,z:\tusif\tsifintegration\tsifintegration.script, 500, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\tsif.htm,,z:\tusif\tsif\tsif.script, 300, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\tsifoom.htm,,z:\tusif\tsif\tsifoom.script, 300, UDEB,,
+TESTEXECUTE, \logs\testexecute\tnotifier.htm,,z:\tusif\tsif\tnotifier.script, 1000, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\tscr.htm,,z:\tusif\tscr\tscr.script, 100000, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\tscr_oom.htm,,z:\tusif\tscr\tscr_oom.script, 100000, UDEB,,
 TESTEXECUTE, \logs\testexecute\tsts_bootuptimerecovery.htm,,z:\tusif\tsts\tsts_bootuptimerecovery.script, 300, UDEB#UREL, \epoc32\data\z\tusif\tsts\batchfiles\tsts_bootuptimerecovery.bat,

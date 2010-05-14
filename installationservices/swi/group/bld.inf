@@ -65,7 +65,9 @@ PRJ_EXPORTS
 // swi.iby split into two part swi.iby and swiplugin.iby, swiplugin can be used by other team for implementing swi observer plug-in independently
 ../inc/swiplugin.iby /epoc32/rom/include/swiplugin.iby
 ../inc/switextshell.iby /epoc32/rom/include/switextshell.iby
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 ../inc/sisregistry_5.3.txt z:/system/data/sisregistry_5.3.txt
+#endif
 
 // export certstoretobin
 ../source/certstoretobin/Swicertstoretobin.pl	/epoc32/tools/swicertstoretobin.pl
@@ -941,40 +943,40 @@ PRJ_TESTEXPORTS
 ../test/trevocation/scripts/trevocationocsp_emulator.script	/epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator.script
 ../test/trevocation/scripts/trevocationocsp_emulator_pre.bat /epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator_pre.bat
 ../test/trevocation/scripts/trevocationocsp_emulator_post.bat /epoc32/winscw/c/tswi/trevocation/scripts/trevocationocsp_emulator_post.bat
-../test/trevocation/sisinteg/winscw/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_01.sis
-../test/trevocation/sisinteg/winscw/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_02.sis
-../test/trevocation/sisinteg/winscw/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_03.sis
-../test/trevocation/sisinteg/winscw/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_04.sis
-../test/trevocation/sisinteg/winscw/ocsp_05.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_05.sis
-../test/trevocation/sisinteg/winscw/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedval.sis
-../test/trevocation/sisinteg/winscw/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignval.sis
-../test/trevocation/sisinteg/winscw/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedval.sis
-../test/trevocation/sisinteg/winscw/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedval.sis
-../test/trevocation/sisinteg/winscw/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedval.sis
-../test/trevocation/sisinteg/winscw/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedrev.sis
-../test/trevocation/sisinteg/winscw/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignrev.sis
-../test/trevocation/sisinteg/winscw/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedrev.sis
-../test/trevocation/sisinteg/winscw/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedrev.sis
-../test/trevocation/sisinteg/winscw/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedrev.sis
-../test/trevocation/sisinteg/winscw/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation.sis
-../test/trevocation/sisinteg/winscw/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation-sub1.sis
-../test/trevocation/sisinteg/armv5/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_01.sis
-../test/trevocation/sisinteg/armv5/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_02.sis
-../test/trevocation/sisinteg/armv5/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_03.sis
-../test/trevocation/sisinteg/armv5/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_04.sis
-../test/trevocation/sisinteg/armv5/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedval.sis
-../test/trevocation/sisinteg/armv5/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignval.sis
-../test/trevocation/sisinteg/armv5/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedval.sis
-../test/trevocation/sisinteg/armv5/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedval.sis
-../test/trevocation/sisinteg/armv5/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedval.sis
-../test/trevocation/sisinteg/armv5/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedrev.sis
-../test/trevocation/sisinteg/armv5/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignrev.sis
-../test/trevocation/sisinteg/armv5/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedrev.sis
-../test/trevocation/sisinteg/armv5/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedrev.sis
-../test/trevocation/sisinteg/armv5/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedrev.sis
+../test/trevocation/sisInteg/winscw/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_01.sis
+../test/trevocation/sisInteg/winscw/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_02.sis
+../test/trevocation/sisInteg/winscw/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_03.sis
+../test/trevocation/sisInteg/winscw/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_04.sis
+../test/trevocation/sisInteg/winscw/ocsp_05.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsp_05.sis
+../test/trevocation/sisInteg/winscw/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedval.sis
+../test/trevocation/sisInteg/winscw/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignval.sis
+../test/trevocation/sisInteg/winscw/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedval.sis
+../test/trevocation/sisInteg/winscw/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedval.sis
+../test/trevocation/sisInteg/winscw/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedval.sis
+../test/trevocation/sisInteg/winscw/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedrev.sis
+../test/trevocation/sisInteg/winscw/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/certifiedsignedverisignrev.sis
+../test/trevocation/sisInteg/winscw/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/expresssignedrev.sis
+../test/trevocation/sisInteg/winscw/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/allsignedrev.sis
+../test/trevocation/sisInteg/winscw/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/selfsignedrev.sis
+../test/trevocation/sisInteg/winscw/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation.sis
+../test/trevocation/sisInteg/winscw/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/ocsprevocation-sub1.sis
+../test/trevocation/sisInteg/armv5/ocsp_01.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_01.sis
+../test/trevocation/sisInteg/armv5/ocsp_02.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_02.sis
+../test/trevocation/sisInteg/armv5/ocsp_03.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_03.sis
+../test/trevocation/sisInteg/armv5/ocsp_04.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsp_04.sis
+../test/trevocation/sisInteg/armv5/certifiedsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedval.sis
+../test/trevocation/sisInteg/armv5/certifiedsignedverisignval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignval.sis
+../test/trevocation/sisInteg/armv5/expresssignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedval.sis
+../test/trevocation/sisInteg/armv5/allsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedval.sis
+../test/trevocation/sisInteg/armv5/selfsignedval.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedval.sis
+../test/trevocation/sisInteg/armv5/certifiedsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedrev.sis
+../test/trevocation/sisInteg/armv5/certifiedsignedverisignrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/certifiedsignedverisignrev.sis
+../test/trevocation/sisInteg/armv5/expresssignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/expresssignedrev.sis
+../test/trevocation/sisInteg/armv5/allsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/allsignedrev.sis
+../test/trevocation/sisInteg/armv5/selfsignedrev.sis /epoc32/winscw/c/tswi/trevocation/data/armv5/selfsignedrev.sis
 
-../test/trevocation/sisinteg/armv5/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation.sis
-../test/trevocation/sisinteg/armv5/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation-sub1.sis
+../test/trevocation/sisInteg/armv5/ocsprevocation.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation.sis
+../test/trevocation/sisInteg/armv5/ocsprevocation-sub1.sis	/epoc32/winscw/c/tswi/trevocation/data/armv5/ocsprevocation-sub1.sis
 
 // legacy SIS file
 ../test/tsisfile/data/files/legacy.sis /epoc32/winscw/c/tswi/tsis/data/legacy.sis

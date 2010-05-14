@@ -23,7 +23,7 @@
 IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     HbApplication( argc, argv ),
     mEngine (new IAUpdateEngine),
-    mMainWindow (new IAUpdateMainWindow())
+    mMainWindow (new IAUpdateMainWindow(mEngine))
     {
     
     // Connect view change signals to the view change slots

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -26,6 +26,7 @@
 #include "tsifgenericbrowserinstallstep.h"
 #include "tsifcommonverificationstep.h"
 #include "tsifcommonunitteststep.h"
+#include "tsifnotifierteststep.h"
 
 using namespace Usif;
 
@@ -124,6 +125,10 @@ CTestStep* CSifSuiteServer::CreateTestStep(const TDesC& aStepName)
 		testStep = new CSifMultipleInstallStep();
 	else if(aStepName == KSifCommonUnitTestStep)
 		testStep = new CSifCommonUnitTestStep();
+    else if(aStepName == KSifSubscribeTestStep)
+        testStep = new CSifSubscribeTestStep();
+	else if(aStepName == KSifPublishTestStep)
+        testStep = new CSifPublishTestStep();
 
 	return testStep;
 	}

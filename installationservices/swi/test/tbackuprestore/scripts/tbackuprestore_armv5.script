@@ -19,6 +19,8 @@ PRINT Backup and restore tests...
 LOAD_SUITE tbackuprestore
 LOAD_SUITE tuiscriptadaptors
 LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+LOAD_SUITE tscr
 
 
 //! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0001
@@ -1740,6 +1742,393 @@ RUN_TEST_STEP 	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scr
 END_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0003
 
 RUN_UTILS DeleteFile C:\Documents\abc*.txt
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr_appreginfo.ini db_file
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+//! @SYMTestCaseDesc		Checks restore of a package containg an applicaion
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls a single package containg an applicaion
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		AppRegData_Install
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_IF
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_spanish
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+//! @SYMTestCaseDesc		Upgrades an existing SA pacakge with an SA having new application and new details for FR and GE through Restore
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data then do backup, uninstall, restore. Now install an upgrade
+//				then do backup, uninstall, restore
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base02
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+//! @SYMTestCaseDesc		Tests the installation of an SIS file which delivers no files followed by a SA upgrade that delivers an app.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having no appplication then do backup, uninstall and restore. Now install an upgrade with application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+//! @SYMTestCaseDesc		Tests the installation of an SIS file which delivers some files followed by a SA upgrade that delivers no files.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having with appplication then do backup, uninstall and restore. Now install an upgrade with no application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+//! @SYMTestCaseDesc		Checks restore of a package containg an applicaion
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a NR SIS file without an appplication then do backup, uninstall and restore. Now install an SP upgrade(Non NR) with application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		Install_NonRemovableBase
+
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		Upgrade_SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini uninstall_SP_Over_SA-NR
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SP having new application and new details for GE,backup the  package,
+//			Uninstall the package , restore and verify the data.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SP having new application and new details for GE,backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an PU having new application and new details for FR and GE, backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_pu
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an PU having new application and new details for FR and GE, backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE 	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+RUN_TEST_STEP   100 	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 	100 	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_pu
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE 	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//! @SYMTestCaseDesc	Install an  SA pacakge with app, take backup , upgrade it with an SP having new application and new loc(Ge) for SA,
+//!			restore Base SA and verify the data.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//! @SYMTestCaseDesc	Tests the installation of an SIS file embeds an SP, which embeds a PU, which in turn embeds another SP, that embeds another SP. (SA->SP->PU->SP->SP)
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that embeds recursively other SIS files with various upgrade combinations.
+//! @SYMTestExpectedResults	File installs sucessfully
+
+//START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_base
+//RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_base
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_sa
+//RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_sa
+
+//RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case06
+//END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
 
 // Ensure that SWIS shuts down after the above tests to make sure heap checks run
 RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

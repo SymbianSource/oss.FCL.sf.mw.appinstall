@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,7 +19,7 @@
 
 //INCLUDES
 #include <hbaction.h>
-#include <hbmessagebox.h>
+#include <hbdialog.h>
 #include <hbtextitem.h>
 #include <centralrepository.h>
 
@@ -125,6 +125,22 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
     }
 
 // ---------------------------------------------------------------------------
+// CIAUpdateAgreement::SetAgreementAcceptedL
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateAgreement::SetAgreementAcceptedL()
+    {
+    CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
+    firstTimeInfo->SetAgreementAcceptedL();
+    CleanupStack::PopAndDestroy( firstTimeInfo );
+    }
+
+
+
+
+
+// ---------------------------------------------------------------------------
 // CIAUpdateAgreement::ShowAgreementL
 // 
 // ---------------------------------------------------------------------------
@@ -175,8 +191,9 @@ HbAction* CIAUpdateAgreement::ShowDialogL( HbAction *primaryAction, HbAction *se
         agreementDialog.setSecondaryAction(secondaryAction);
         }
     agreementDialog.setTimeout(HbPopup::NoTimeout);
-    
-    return agreementDialog.exec(); 
+    agreementDialog.show();
+    //return agreementDialog.exec(); 
+    return primaryAction;
     }        
     
     /*HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );

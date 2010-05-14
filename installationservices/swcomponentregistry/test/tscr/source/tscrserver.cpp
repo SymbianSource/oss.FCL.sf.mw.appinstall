@@ -255,7 +255,6 @@ CTestStep* CScrTestServer::CreateTestStep(const TDesC& aStepName)
     else if (strippedStepName == KScrGetAppInfoStep)
         testStep = new CScrGetAppInfoStep(*this);
   	
-
 	if(performanceStep)
 		{
 		CScrTestStep *scrTestStep = dynamic_cast<CScrTestStep*>(testStep);

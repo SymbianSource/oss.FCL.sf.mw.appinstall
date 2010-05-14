@@ -74,6 +74,8 @@ public: // new functions
     * @return True value if agreement accepted 
     */
     TBool AgreementAcceptedL();
+    
+    void SetAgreementAcceptedL();
 
 private:
 

@@ -84,4 +84,6 @@ daemon.mmp
 // SISX SIF plugin
 #include "../sisxsifplugin/group/bld.inf"
 
+// Startup list updater
+#include "../startuplistupdater/group/bld.inf"
 

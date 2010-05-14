@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,7 +22,9 @@
 #include "iaupdateversion.h"
 #include "iaupdatenode.h"
 #include "iaupdatebasenode.h"
+#include "iaupdatebasenodeimpl.h"
 #include "iaupdatefwversionfilehandler.h"
+#include "iaupdateprotocolconsts.h"
 #include "iaupdatedebug.h"
 
 #include <swi/sisregistrysession.h>
@@ -40,9 +42,10 @@
 #include <WidgetRegistryClient.h>
 
 //Constants
-const TInt KSpaceMarginal( 100 * 1024 );
-const TInt KSizeMultiplier( 1 );
 const TText KVersionSeparator( '.' );
+
+_LIT( KExe, ".exe" );
+_LIT( KDll, ".dll" );
 
 
 // -----------------------------------------------------------------------------
@@ -355,28 +358,29 @@ EXPORT_C TBool IAUpdateUtils::SpaceAvailableInInternalDrivesL(
     RFs fs;
     User::LeaveIfError( fs.Connect() );
     CleanupClosePushL( fs );  
-    TInt64 freeOnC = FreeDiskSpace( fs, EDriveC );
-    TInt64 freeOnE = FreeDiskSpace( fs, EDriveE );
-
-    if ( freeOnC >= freeOnE )
+    
+    for ( i = 0; i < aNodes.Count(); ++i )
         {
-        for ( i = 0; i < aNodes.Count(); ++i )
+        MIAUpdateNode* node( aNodes[ i ] );
+        MIAUpdateBaseNode& baseNode( node->Base() );
+        if ( baseNode.ContentSizeL() > sizeOfBiggest )
             {
-            MIAUpdateNode* node( aNodes[ i ] );
-            MIAUpdateBaseNode& baseNode( node->Base() );
-            if ( baseNode.ContentSizeL() > sizeOfBiggest )
-                {
-                sizeOfBiggest = baseNode.ContentSizeL();
-                }
+            sizeOfBiggest = baseNode.ContentSizeL();
             }
         }
-  
+    
+    TInt64 freeOnC = FreeDiskSpace( fs, EDriveC );
+    TInt64 freeOnE = FreeDiskSpace( fs, EDriveE );
 	TDriveUnit driveUnit( EDriveC );
+	if ( freeOnE > freeOnC )
+	    {
+	    driveUnit = EDriveE;
+	    }
 	if ( SysUtil::DiskSpaceBelowCriticalLevelL( &fs, sizeOfBiggest, driveUnit ) ) 
 	    { // no space even for package caching
 		enoughSpaceFound = EFalse;
 	    }
-	else
+/*	else
 	    {
         TInt sizeNeededInDrive = sizeOfBiggest + KSpaceMarginal; //size of the biggest package is included in C drive
         for ( i = 0; i < aNodes.Count() && enoughSpaceFound; ++i )
@@ -384,7 +388,7 @@ EXPORT_C TBool IAUpdateUtils::SpaceAvailableInInternalDrivesL(
             TDriveUnit installedDrive;
             MIAUpdateNode* node( aNodes[ i ] );
             MIAUpdateBaseNode& baseNode( node->Base() );
-            if ( !IAUpdateUtils::InstalledDriveL( baseNode.Uid(), installedDrive ) )
+            if ( !IAUpdateUtils::InstalledDriveL( fs, baseNode.Uid(), installedDrive ) )
                 { //let's assume that already installed package does not need extra space
         	    sizeNeededInDrive += ( baseNode.ContentSizeL() * KSizeMultiplier );       
                 if ( SysUtil::DiskSpaceBelowCriticalLevelL( &fs, sizeNeededInDrive, driveUnit ) )
@@ -416,7 +420,7 @@ EXPORT_C TBool IAUpdateUtils::SpaceAvailableInInternalDrivesL(
                     }
         	    }
             }
-        }
+        }*/
     CleanupStack::PopAndDestroy( &fs );
     return enoughSpaceFound;
     }
@@ -463,9 +467,10 @@ EXPORT_C TBool IAUpdateUtils::IsInstalledL(
 // 
 // ---------------------------------------------------------------------------
 //
-EXPORT_C SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL( 
-    const TUid& aUid, TInt aSize )
+SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
+    const CIAUpdateBaseNode& aNode )
     {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() begin");
     SwiUI::TInstallOptions options;
 
     // Upgrades are allowed        
@@ -500,8 +505,20 @@ EXPORT_C SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
     options.iDownload = SwiUI::EPolicyAllowed;
     
     // Where to save.
-    TDriveUnit driveUnit = IAUpdateUtils::DriveToInstallL( aUid, aSize );
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() before DriveToInstallL");
+    TDriveUnit driveUnit;
+    if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+        {
+        driveUnit = IAUpdateUtils::DriveToInstallWidgetL( aNode.Identifier() );
+        }
+    else
+        {
+        driveUnit = IAUpdateUtils::DriveToInstallL( aNode.Uid(), aNode.OwnContentSizeL() );
+        }
+     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() after DriveToInstallL");
+    
     TDriveName driveName = driveUnit.Name();
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() driveName: %S", &driveName );
     options.iDrive = driveName[0];
     
     // Choose the phone language.
@@ -512,7 +529,7 @@ EXPORT_C SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
     
     // Does not affect SISX. This is for Java.
     options.iUpgradeData = SwiUI::EPolicyAllowed;
-
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() end");
     return options;
     }
 
@@ -522,9 +539,10 @@ EXPORT_C SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
 // 
 // -----------------------------------------------------------------------------
 // 
-TBool IAUpdateUtils::InstalledDriveL( 
-    const TUid& aUid, TDriveUnit& aLocationDrive )
+TBool IAUpdateUtils::InstalledDriveL(
+    RFs& aFs, const TUid& aUid, TDriveUnit& aLocationDrive )
     {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveL() begin");
     TBool installed = EFalse;
 	Swi::RSisRegistrySession registrySession;
 	User::LeaveIfError( registrySession.Connect() );
@@ -541,21 +559,73 @@ TBool IAUpdateUtils::InstalledDriveL(
         if ( ( !entry.IsInRomL() ) && ( entry.IsPresentL() ) )
             { //only interested in a drive available for installation just now
             installed = ETrue;
-    	    TUint drivesMask = entry.InstalledDrivesL();
+            }
+        
+        if ( !entry.IsInRomL() )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveL() entry not in ROM"); 
+     	    TUint drivesMask = entry.InstalledDrivesL();
             if( drivesMask )
                 {
+                IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveL() drivesMask exists"); 
                 // Select the highest drive as location drive. That's the case when 
                 // all installation is not in same drive
+                TInt driveCount = 0;
                 TInt drive = EDriveA;
                 while( drivesMask >>= 1 )
                     {
+                    driveCount++; 
                     drive++;
                     }
-                aLocationDrive = drive;
+                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveL() driveCount: %d", driveCount );
+                if ( driveCount > 1 )
+                    {
+                    // installation is in multiple drives
+                    // the drive where are binaries (EXEs and DLLs) is chosen
+                    RArray<TInt> drivesWithBinaries; 
+                    CleanupClosePushL( drivesWithBinaries );
+                    DrivesWithBinariesL( entry, drivesWithBinaries ); 
+                    if ( drivesWithBinaries.Count() == 0 )
+                        {
+                        //let's assume the highest drive 
+                        aLocationDrive = drive;
+                        }
+                    else if ( drivesWithBinaries.Count() == 1 )
+                        {
+                        // there are binaries only in one drive, this one is chosen
+                        aLocationDrive = drivesWithBinaries[0];
+                        }
+                    else
+                        {
+                        // there are binaries in multiple drives, C drive is chosen
+                        aLocationDrive = EDriveC;
+                        }
+                    CleanupStack::PopAndDestroy( &drivesWithBinaries );
+                    }
+                else
+                    {
+                    aLocationDrive = drive;
+                    }
                 }
             else
                 {
                 // No installed files, select C: as location drive
+                aLocationDrive = EDriveC;
+                }
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveL() location drive: %d", aLocationDrive.operator int() );
+            // if the drive chosen is physically removable and it's not available, then install to C drive
+            TUint driveStatus = 0;
+            User::LeaveIfError( DriveInfo::GetDriveStatus( aFs, aLocationDrive, driveStatus ) );
+            if  ( driveStatus & DriveInfo::EDriveRemovable )
+                {
+                IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveL() removable"); 
+                }
+            if  ( driveStatus & DriveInfo::EDrivePresent )
+                {
+                IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveL() present"); 
+                }
+            if ( ( driveStatus & DriveInfo::EDriveRemovable ) && ( !(driveStatus & DriveInfo::EDrivePresent) ) )
+                {
                 aLocationDrive = EDriveC;
                 }
             }
@@ -567,7 +637,44 @@ TBool IAUpdateUtils::InstalledDriveL(
         }
     
     CleanupStack::PopAndDestroy( &registrySession ); 
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveL() installed: %d", installed );
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveL() target drive: %d", aLocationDrive.operator int() );
 	return installed;
+    }
+
+// -----------------------------------------------------------------------------
+// IAUpdateUtils::InstalledDriveWidgetL
+// 
+// -----------------------------------------------------------------------------
+// 
+void IAUpdateUtils::InstalledDriveWidgetL( RFs& aFs, 
+                                           RWidgetRegistryClientSession& aWidgetRegistry, 
+                                           const TUid& aUid, 
+                                           TDriveUnit& aLocationDrive )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
+    TFileName widgetPath;
+    aWidgetRegistry.GetWidgetPath( aUid, widgetPath );
+    aLocationDrive = widgetPath.Mid( 0, 2 );
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Drive in registry: %S", &aLocationDrive.Name() );
+    if ( aLocationDrive == EDriveZ )
+        {
+        // if the installation is in ROM, then install to C drive
+        aLocationDrive = EDriveC;
+        IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Exists in ROM, install to C:");
+        }
+    else
+        {
+        TUint driveStatus = 0;
+        User::LeaveIfError( DriveInfo::GetDriveStatus( aFs, aLocationDrive, driveStatus ) );
+        // if the installation drive physically removable and it's not available, then install to C drive
+        if ( ( driveStatus & DriveInfo::EDriveRemovable ) && ( !(driveStatus & DriveInfo::EDrivePresent) ) )
+            {
+            aLocationDrive = EDriveC;
+            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Physically removable drive not present, install to C:");
+            }
+        }
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
     }
 
 
@@ -615,9 +722,9 @@ TBool IAUpdateUtils::NextInternalDriveL(
 // 
 // -----------------------------------------------------------------------------
 //   
-TDriveUnit IAUpdateUtils::DriveToInstallL( const TUid& /*aUid*/, TInt /*aSize*/ )
+TDriveUnit IAUpdateUtils::DriveToInstallL( const TUid& aUid, TInt /*aSize*/ )
     {
-    
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallL() begin");
 	/*TDriveUnit preferredDriveUnit;
 	TDriveUnit targetDriveUnit( EDriveC );
 	//preferred drive is same as a drive of previous installation
@@ -635,11 +742,64 @@ TDriveUnit IAUpdateUtils::DriveToInstallL( const TUid& /*aUid*/, TInt /*aSize*/ 
 			targetDriveUnit = preferredDriveUnit;
 		    }
 	    }*/
-	    
-	// installation drive is alvays "C"
+	
+    RFs fs;
+    User::LeaveIfError( fs.Connect() );
+    CleanupClosePushL( fs );  
     TDriveUnit targetDriveUnit( EDriveC );
+    InstalledDriveL( fs, aUid, targetDriveUnit );
+    CleanupStack::PopAndDestroy( &fs );
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallL() end");
     return targetDriveUnit;
     }
+
+// -----------------------------------------------------------------------------
+// IAUpdateUtils::DriveToInstallWidgetL
+// 
+// -----------------------------------------------------------------------------
+//   
+TDriveUnit IAUpdateUtils::DriveToInstallWidgetL( const TDesC& aIdentifier )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() begin");
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() identifier: %S", &aIdentifier );
+    TDriveUnit targetDriveUnit( EDriveC );
+    RWidgetRegistryClientSession widgetRegistry;
+
+    User::LeaveIfError( widgetRegistry.Connect() );
+        
+    CleanupClosePushL( widgetRegistry );
+        
+    RPointerArray<CWidgetInfo> widgetInfoArr;
+    CleanupResetAndDestroyPushL( widgetInfoArr );
+    TInt err = widgetRegistry.InstalledWidgetsL(widgetInfoArr); 
+    
+    TBool foundInRegistry( EFalse );
+    for( TInt i( widgetInfoArr.Count() - 1 ); !foundInRegistry && i >= 0; --i ) 
+        {
+        CWidgetInfo* widgetInfo( widgetInfoArr[i] );  
+            
+        CWidgetPropertyValue* BundleId = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleIdentifier );
+        CleanupStack::PushL( BundleId );
+            
+        if( aIdentifier.Compare( *(BundleId->iValue.s) )== 0 )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() Found in registry");
+            foundInRegistry = ETrue;
+            RFs fs;
+            User::LeaveIfError( fs.Connect() );
+            CleanupClosePushL( fs );
+            InstalledDriveWidgetL( fs, widgetRegistry, widgetInfo->iUid, targetDriveUnit );
+            CleanupStack::PopAndDestroy( &fs );
+            }
+        CleanupStack::PopAndDestroy( BundleId );
+        }
+        
+    CleanupStack::PopAndDestroy( &widgetInfoArr );
+    CleanupStack::PopAndDestroy( &widgetRegistry);
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() end");
+    return targetDriveUnit;
+    }
+
 
 
 // -----------------------------------------------------------------------------
@@ -826,6 +986,50 @@ TInt64 IAUpdateUtils::FreeDiskSpace( RFs& aFs, TInt aDriveNumber )
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::FreeDiskSpace() end");
     return freeSpace;
     }  
-    
 
-
+// ---------------------------------------------------------------------------
+// IAUpdateUtils::DrivesWithBinariesL
+// ---------------------------------------------------------------------------
+//
+void IAUpdateUtils::DrivesWithBinariesL( Swi::RSisRegistryEntry& aEntry, RArray<TInt>& aDrives )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() begin");
+    RPointerArray<HBufC> files; 
+    aEntry.FilesL( files );
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() file count: %d", files.Count() );
+    for( TInt i = 0; i < files.Count(); i++)
+        {
+        TFileName fullName = *files[i]; 
+        IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() fullname: %S", &fullName);
+        TParse parse;
+        parse.Set( fullName, NULL, NULL);    
+        IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() extension: %S", &parse.Ext());
+        if ( parse.Ext().CompareF( KExe() ) == 0  || parse.Ext().CompareF( KDll() ) == 0 )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() EXE or DLL found");
+            TDriveUnit driveUnit( parse.Drive() );
+            TInt driveInt = driveUnit;
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() driveInt: %d", driveInt );
+            TBool driveExistInList = EFalse;
+            for( TInt j = 0; !driveExistInList && j < aDrives.Count(); j++)
+                {
+                if ( driveInt == aDrives[j])
+                    {
+                    driveExistInList = ETrue;
+                    }
+                }
+            if ( !driveExistInList )
+                {
+                TInt ret = aDrives.Append(driveInt);
+                if ( ret != KErrNone )
+                    {
+                    files.ResetAndDestroy(); 
+                    User::Leave( ret );
+                    }
+                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() drive added to list: %d", driveInt );
+                }
+            }
+        }
+    files.ResetAndDestroy(); 
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() end");
+    }

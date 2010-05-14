@@ -206,6 +206,22 @@ namespace Usif
 			@leave Leaves with one of the error codes listed in @see CDatabase::PerformStatementLC 
 		 */
 		IMPORT_C void BindBinaryL(TInt aParameterIndex, const TDesC8 &aParameterStr);		
+
+		/**
+            Sets the parameter given with the index value to the specified 8-bit descriptor.
+            A parameter value can be set:
+            - immediately after this object has been created
+            - after a call to @see CStatement::Reset
+             
+            @param aParameterIndex The index value identifying the parameter; the first parameter 
+                   has an index of 1.
+            @param aParameterStr The 8-bit descriptor whose content is to be assigned to the parameter.
+            @param aCustomLength The maximum characters allowed
+            
+            @leave KErrArgument If the input string's length is more than aCustomLength            
+            @leave Leaves with one of the error codes listed in @see CDatabase::PerformStatementLC 
+         */
+		IMPORT_C void BindBinaryL(TInt aParameterIndex, const TDesC8 &aParameterStr, TUint aCustomLength);
 		
 		/** 
 			Retrieves the value of a string column. The caller must know the string column index.
