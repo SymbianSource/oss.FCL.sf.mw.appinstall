@@ -1,0 +1,12 @@
+; A simple package that installs a number of executables with no other checks
+
+;Languages
+&EN
+
+;Header
+#{"Test Package"}, (##PACKAGE_UID##), 1, 2, 3,TYPE=SA
+
+%{"Test Package"}
+:"Unique Vendor Name"
+
+##FILES##

@@ -1,0 +1,376 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0010
+//! @SYMTestCaseDesc 		Attempt to restore the SIS file which produces large plain data files. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0010
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largedatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largedatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largedatafile
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0010
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0011
+//! @SYMTestCaseDesc 		Restore the SIS file where the sis file contains Unicode character(s) as part of its name. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0011
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfilenameisunicode
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0011
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0012
+//! @SYMTestCaseDesc 		Restore the SIS file where the data file produced by the SIS file contains Unicode character(s) 
+//!                  		as part of its name. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0012
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	datafilenameproducedisunicode
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0012
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0013
+//! @SYMTestCaseDesc 		Restore the SIS file where the plain data files produced by the SIS file contains Unicode character(s) 
+//!                  		as part of its name and the SIS file also contains Unicode character(s) as part of its name. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0013
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	sisfileanddatafilenameareunicode
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0013
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0017
+//! @SYMTestCaseDesc 		Restore the SIS file where the backup.lst file (at c:\sys\install\sisregistry\) had been corrupted. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults Restore should succeed.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0017
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini		A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP			z:\tswi\tbackuprestore\scripts\ini		A
+//DELAY is given so that the backup.lst file will be created in this time
+DELAY 5000
+
+// Backup the "backup.lst" file. Please note that this step won't work on newer SWI Registry where backup.lst is not used. In this case, the whole test case becomes unnecessary
+// MmcCopyFilesStep is not used as it will fail on absent fails, unlike RUN_UTILS
+RUN_UTILS CopyFile c:\sys\install\sisregistry\backup.lst c:\sys\install\sisregistry\temp\backup.lst.bak
+
+RUN_TEST_STEP   100     tuiscriptadaptors MmcCopyFilesStep	z:\tswi\tbackuprestore\scripts\ini		copycorruptlstfile
+
+RUN_TEST_STEP	100		tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100		tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+// Restore the backup.lst file - see comment above on the Backup step on why MmcCopyFilesStep isn't used
+RUN_UTILS CopyFile c:\sys\install\sisregistry\temp\backup.lst.bak c:\sys\install\sisregistry\backup.lst 
+
+//To make the environment clean
+RUN_TEST_STEP	100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini		removeregistryfolder
+RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini		A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini		A	  
+RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini		A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0017
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0018
+//! @SYMTestCaseDesc 		Restore the embedded SIS file where this embedded SIS file contains a SIS file which contains Unicode 
+//!		     		character as part of its file name. Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0018
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+
+RUN_TEST_STEP   100     tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\unicode.ini	unicodeembededSISfilename
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0018
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0022
+//! @SYMTestCaseDesc 		Backup where the expected files are missing and just the .ctl and .reg files are present. (at c:\sys\install\sisregistry\<UID>\)). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, deletes the plain data file produced as a result of SIS file installation and backs up a single application
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0022
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		datafiledeleted
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		datafiledeleted
+
+RUN_UTILS DeleteFile c:\restore\pic1.bmp
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		datafiledeleted
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		datafiledeleted
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		datafiledeleted
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0022
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0023
+//! @SYMTestCaseDesc 		Restore with the zero byte metadata file(at C:\tswi\tbackuprestore\). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls, makes the metadata file zero byte and restores a single application
+//! @SYMTestExpectedResults 	Restore to fail with Error code -25.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0023
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_UTILS CopyFile z:\tswi\tbackuprestore\data\zerobytemetadata81113001 c:\tswi\tbackuprestore\metadata81113001
+
+RUN_TEST_STEP_RESULT	  -25	tbackuprestore	RESTORE	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP		100	tbackuprestore	ABSENT	z:\tswi\tbackuprestore\scripts\ini		A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0023
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0024
+//! @SYMTestCaseDesc 		Trying to take back up and restring the SIS file which has a very large controller. Requirement NQP.
+//!		     		(e.g. testhugecontroller.sis, this has a complicated structure and generates a large .ctl file )
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0024
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0024
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-B-0027
+//! @SYMTestCaseDesc 		Attempt to restore when overwriting the orphan file is not permitted by the policy.Requirement NQP (Test case commented, Defect number DEF101100).
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application
+//! @SYMTestExpectedResults 	Restore shold fail 
+//! @SYMTestType 		CIT
+
+//Test case uncommented as DEF101100 was rejected, as even in this case, restore has to pass as asked by NOKIA.
+START_TESTCASE API-SEC-SWI-NQP-BR-B-0027
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_UTILS CopyFile c:\restore\pic1.bmp	c:\restore\pic1.bmp.bak
+RUN_UTILS CopyFile c:\restore\pic2.bmp	c:\restore\pic2.bmp.bak
+RUN_UTILS CopyFile c:\restore\pic3.gif	c:\restore\pic3.gif.bak
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_UTILS CopyFile c:\restore\pic1.bmp.bak	c:\restore\pic1.bmp
+RUN_UTILS CopyFile c:\restore\pic2.bmp.bak	c:\restore\pic2.bmp
+RUN_UTILS CopyFile c:\restore\pic3.gif.bak		c:\restore\pic3.gif
+
+RUN_UTILS DeleteFile c:\restore\pic1.bmp.bak
+RUN_UTILS DeleteFile c:\restore\pic2.bmp.bak
+RUN_UTILS DeleteFile c:\restore\pic3.gif.bak
+
+//change the policy file z:\system\data\swipolicy.ini for the entry AllowOrphanedOverwrite = false
+//even in this case, restore has to pass as asked by NOKIA.
+RUN_TEST_STEP	100	tbackuprestore	RESTORE	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+END_TESTCASE API-SEC-SWI-NQP-BR-B-0027
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0029
+//! @SYMTestCaseDesc 		Attempt to restore while the hash file (at c:\sys\hash\) has been corrupted (Copied another exe to that file). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls, corrupt the metadata file and restores a single application
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0029
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP   100     tuiscriptadaptors MmcCopyFilesStep	z:\tswi\tbackuprestore\scripts\ini      corrupthash
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0029
+
+//! @file
+//! @SYMTestCaseID API-SEC-SWI-DEF140527_HUGE_CTL_PU-0001
+//! @SYMTestCaseDesc Trying to take back up and restore a package and a PU upgrade with a large controller
+//! @SYMTestPriority Low
+//! @SYMTestActions Installs, backs up, uninstalls and restores a single application and an upgrade.
+//! @SYMTestExpectedResults Success, clean environment
+//! @SYMTestType CIT
+
+START_TESTCASE API-SEC-SWI-DEF140527_HUGE_CTL_PU-0001
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largecontroller_base
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+END_TESTCASE API-SEC-SWI-DEF140527_HUGE_CTL_PU-0001

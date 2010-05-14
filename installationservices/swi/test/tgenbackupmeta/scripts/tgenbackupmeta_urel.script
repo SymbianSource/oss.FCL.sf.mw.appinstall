@@ -1,0 +1,773 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Metadata Restore Tests...
+
+LOAD_SUITE tbackuprestore
+
+////////////////////////////////////////// Meta-data installation ////////////////////////////////////////// 
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-BACKUPRESTORE-EC063-FILETYPES_SA-A-0001
+//! @SYMTestCaseDesc 		Checks restore of applications of SA type
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Restores, checks whether application is present, uninstalls, checks whether application is absent.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_SA-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\a0000a93_sa_metadata c:\tswi\tbackuprestore\metadataa0000a93
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	basic
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	basic
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	c:\tswi\tgenbackupmeta\scripts\ini_urel	basic
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	basic
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadataa0000a93
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_SA-A-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-BACKUPRESTORE-EC063-FILETYPES_PU-A-0001
+//! @SYMTestCaseDesc 		Checks restore of applications of SA and PU type
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Restores, checks whether application is present, uninstalls, checks whether application is absent.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_PU-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\a0000a93_pu_metadata c:\tswi\tbackuprestore\metadataa0000a93
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\file1.txt c:\tswi\tbackuprestore\backupa0000a93.1
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	partialupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	partialupgrade
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	c:\tswi\tgenbackupmeta\scripts\ini_urel	partialupgrade
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	partialupgrade
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadataa0000a93
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupa0000a93.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_PU-A-0001
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-BACKUPRESTORE-EC063-FILETYPES_SP-A-0001
+//! @SYMTestCaseDesc 		Checks restore of applications of SA,PU and SP type
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Restores, checks whether application is present, uninstalls, checks whether application is absent.
+//! @SYMTestExpectedResults 	Success, clean environment.
+//! @SYMTestType 		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_SP-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\a0000a93_sp_metadata c:\tswi\tbackuprestore\metadataa0000a93
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\file1.txt c:\tswi\tbackuprestore\backupa0000a93.1
+RUN_TEST_STEP 	100 tbackuprestore RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	patch
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	patch
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	c:\tswi\tgenbackupmeta\scripts\ini_urel	patch
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	patch
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadataa0000a93
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupa0000a93.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-FILETYPES_SP-A-0001
+
+////////////////////////////////////////// Security Related Test Cases ///////////////////////////////////////////
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-UNSIGNED-A-0001
+//! @SYMTestCaseDesc		Ensure that unsigned sis files cannot be restored
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Restores, checks whether application is present, uninstalls, checks whether application is absent.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNSIGNED-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\8000a002_ff_metadata c:\tswi\tbackuprestore\metadata8000a002
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswinocapability.exe c:\tswi\tbackuprestore\backup8000a002.1
+RUN_TEST_STEP_RESULT -20 100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	unsigned
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	unsigned
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata8000a002
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup8000a002.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNSIGNED-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0001
+//! @SYMTestCaseDesc		If the device id constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_dev1 and bad_single_dev, then SWI should interpret this as "no valid devices".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112228_c_metadata c:\tswi\tbackuprestore\metadatae1112228
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112228.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_01
+RUN_TEST_STEP			100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112228
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112228.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0002
+//! @SYMTestCaseDesc		If the device id constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_dev and empty_devs, then SWI should interpret this as "no valid device".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111222c_c_metadata c:\tswi\tbackuprestore\metadatae111222c
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111222c.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_02
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_02
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111222c
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111222c.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0003
+//! @SYMTestCaseDesc		The device id constraint is present, but the constraints contained in the certificate chain
+//!		     is corrupt_0dev, then SWI should interpret this as "corrupt certificate".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0003
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112230_c_metadata c:\tswi\tbackuprestore\metadatae1112230
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112230.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_03
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_03
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112230
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112230.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0004
+//! @SYMTestCaseDesc		If the device id constraint is present but empty then SWI should interpret this as "no valid devices".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0004
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112242_c_metadata c:\tswi\tbackuprestore\metadatae1112242
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112242.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_04
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_04
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112242
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112242.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0005
+//! @SYMTestCaseDesc		If the device id constraint is present but not matched then installation should be aborted.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0005
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112246_c_metadata c:\tswi\tbackuprestore\metadatae1112246
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112246.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_05
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	devidcons_05
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112246
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112246.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVICEID_CONS-A-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0001
+//! @SYMTestCaseDesc		If the sid constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_sid1 and bad_single_sid, then SWI should interpret this as "no valid sid".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112229_c_metadata c:\tswi\tbackuprestore\metadatae1112229
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112229.1
+RUN_TEST_STEP_RESULT -20 tbackuprestore	RESTORE 	c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_01
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112229
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112229.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0002
+//! @SYMTestCaseDesc		The sid constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0sid, then SWI should interpret this as "corrupt certificate".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112231_c_metadata c:\tswi\tbackuprestore\metadatae1112231
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112231.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_02
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_02
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112231
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112231.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0003
+//! @SYMTestCaseDesc		If the sid constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_sid and empty_sids, then SWI should interpret this as "no valid sid".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0003
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111222d_c_metadata c:\tswi\tbackuprestore\metadatae111222d
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111222d.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_03
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	sidcons_03
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111222d
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111222d.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SID_CONS-A-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0001
+//! @SYMTestCaseDesc		If the vid constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_vid1,bad_single_vid, then SWI should interpret this as "no valid vid".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111222a_c_metadata c:\tswi\tbackuprestore\metadatae111222a
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111222a.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_01
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111222a
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111222a.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0002
+//! @SYMTestCaseDesc		If the vid constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_vid and empty_vids, then SWI should interpret this as "no valid vid".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111222e_c_metadata c:\tswi\tbackuprestore\metadatae111222e
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111222e.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_02
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_02
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111222e
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111222e.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0003
+//! @SYMTestCaseDesc		The vid constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0vid, then SWI should interpret this as "corrupt certificate".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0003
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112232_c_metadata c:\tswi\tbackuprestore\metadatae1112232
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112232.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_03
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_03
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112232
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112232.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0004
+//! @SYMTestCaseDesc		If the vendor id constraint is present but empty then SWI should interpret this as "no non-zero vendor ids".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0004
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112244_c_metadata c:\tswi\tbackuprestore\metadatae1112244
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112244.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_04
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_04
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112244
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112244.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0005
+//! @SYMTestCaseDesc		If a vendor id constraint is specified then executables with non zero vendor ids must match the constraint.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0005
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112248_c_metadata c:\tswi\tbackuprestore\metadatae1112248
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112248.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_05
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	vidcons_05
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112248
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112248.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-VID_CONS-A-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0001
+//! @SYMTestCaseDesc		If the capability constraint is present, but two constraints contained in the certificate chain
+//!		     		are user_caps and empty_caps, then SWI should interpret this as "no valid capability".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111222b_c_metadata c:\tswi\tbackuprestore\metadatae111222b
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111222b.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_01
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111222b
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111222b.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0002
+//! @SYMTestCaseDesc		The capability constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0caps, then SWI should interpret this as "corrupt certificate".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112233_c_metadata c:\tswi\tbackuprestore\metadatae1112233
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112233.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_02
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_02
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112233
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112233.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0003
+//! @SYMTestCaseDesc		The capability constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0caps, then SWI should interpret this as "corrupt certificate".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0003
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112234_c_metadata c:\tswi\tbackuprestore\metadatae1112234
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112234.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_03
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_03
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112234
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112234.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0004
+//! @SYMTestCaseDesc		If the intersection of the capabilities is zero then no capabilities are allowed (including user grantable capabilities)
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0004
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112245_c_metadata c:\tswi\tbackuprestore\metadatae1112245
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112245.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_04
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_04
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112245
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112245.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0005
+//! @SYMTestCaseDesc		If a non-empty capabilities constraint is specified then the requested capabilities must lie within that constraint.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0005
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112249_c_metadata c:\tswi\tbackuprestore\metadatae1112249
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112249.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_05
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capcons_05
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112249
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112249.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAP_CONS-A-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0001
+//! @SYMTestCaseDesc		If the secure id constraint is present but empty then SWI should interpret this as "no restricted secure ids".
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112243_c_metadata c:\tswi\tbackuprestore\metadatae1112243
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112243.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	seccons_01
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	seccons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112243
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112243.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0002
+//! @SYMTestCaseDesc		If a secure id constraint is specified then executables with restricted secure ids must match the constraint.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112247_c_metadata c:\tswi\tbackuprestore\metadatae1112247
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe1112247.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	seccons_02
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	seccons_02
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112247
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112247.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SECUREID_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0001
+//! @SYMTestCaseDesc		Verify that certificates with no constraints do not cancel out certificates with constraints.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111224b_c_metadata c:\tswi\tbackuprestore\metadatae111224b
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisystemcapability_protected.exe c:\tswi\tbackuprestore\backupe111224b.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	certcons_01
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	certcons_01
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111224b.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111224b
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0002
+//! @SYMTestCaseDesc		Protected VID with trusted signature that does not match a devcert constraint.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0002
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e1112223_c_metadata c:\tswi\tbackuprestore\metadatae1112223
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswidllnocapabilityprotectedvid.dll c:\tswi\tbackuprestore\backupe1112223.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	protected_vid_mismatch
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	protected_vid_mismatch
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe1112223.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae1112223
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CERT_CONS-A-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-DEVCERTS_OCSPEXPIRED-A-0001
+//! @SYMTestCaseDesc		A combination of constraints signed with an expired certificate.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVCERTS_OCSPEXPIRED-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\e111224e_c_metadata c:\tswi\tbackuprestore\metadatae111224e
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiusergrantable_all_protected.exe c:\tswi\tbackuprestore\backupe111224e.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	ocsp_expired
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	ocsp_expired
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadatae111224e
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backupe111224e.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-DEVCERTS_OCSPEXPIRED-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SIGNEDCAP-A-0001
+//! @SYMTestCaseDesc		Install signed executables and check/grant their caps
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SIGNEDCAP-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113000_c_metadata c:\tswi\tbackuprestore\metadata81113000
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiallcapabilities.exe c:\tswi\tbackuprestore\backup81113000.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	signedcap
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	signedcap
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113000.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113000
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SIGNEDCAP-A-0001
+
+
+//Swi certstore: (Root5CA is mandatory)
+
+//Root5CA		ReadDeviceData	WriteDeviceData	DRM	AllFiles
+//SymbianTestDSACA	MultimediaDD, NetworkServices	LocalServices	Location
+//SymbianTestRSACA	ReadUserData	WriteUserData
+
+// Exes
+//tswisystemcapability.exe - ReadDeviceData, WriteDeviceData
+//tswiallcapabilities.exe - ReadDeviceData, WriteDeviceData, ReadUserData, WriteUserData
+//tswisignedcap_8.exe - ReadUserData, WriteUserData, LocalServices, MultimediaDD, ReadDeviceData, WriteDeviceData, LocalServices, NetworkServices
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-SystemCap-A-0001
+//! @SYMTestCaseDesc		Install signed executables with various capabilities signed with multiple certs
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-SystemCap-A-0001
+
+// unsigned should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113006_c_metadata c:\tswi\tbackuprestore\metadata81113006
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisystemcapability.exe c:\tswi\tbackuprestore\backup81113006.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113006.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113006
+
+// signed with SymbianTestDSACA should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113006_c_dsa_metadata c:\tswi\tbackuprestore\metadata81113006
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisystemcapability.exe c:\tswi\tbackuprestore\backup81113006.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps_DSA
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps_DSA
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113006.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113006
+
+// tswiallcapabilities signed with SymbiantestRSACA - should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113000_c_rsa_metadata c:\tswi\tbackuprestore\metadata81113000
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiallcapabilities.exe c:\tswi\tbackuprestore\backup81113000.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps_RSA
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	syscaps_RSA
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113000.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113000
+
+// tswisignedcap_8	unsigned - should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113004_c_metadata c:\tswi\tbackuprestore\metadata81113004
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedCap_8.exe c:\tswi\tbackuprestore\backup81113004.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113004.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113004
+
+//tswisignedcap_8	signed with Root5CA - should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113004_c_root5_metadata c:\tswi\tbackuprestore\metadata81113004
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedcap_8.exe c:\tswi\tbackuprestore\backup81113004.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8_Root5
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8_Root5
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113004.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113004
+
+//tswisignedcap_8	signed with Root5CA, SymbianTestRSACAA - should fail
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113004_c_root5_rsa_metadata c:\tswi\tbackuprestore\metadata81113004
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedcap_8.exe c:\tswi\tbackuprestore\backup81113004.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8_Root5_RSA
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	cap8_Root5_RSA
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113004.1
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113004
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-SystemCap-A-0001
+
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-CAPSWICERTSTORE-A-0001
+//! @SYMTestCaseDesc		Check that capabilties are enforced in the writable SWI certstore
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAPSWICERTSTORE-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\80172a37_c_metadata c:\tswi\tbackuprestore\metadata80172a37
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\wsc_exe.exe c:\tswi\tbackuprestore\backup80172a37.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	capsfail
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	capsfail
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata80172a37
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup80172a37.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-CAPSWICERTSTORE-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-MISSINGCERT-A-0001
+//! @SYMTestCaseDesc		Ensure that a SIS file signed with a certificate in the writable SWI certstore and the ROM 
+//!				certstore can be installed. The certificates are not duplicates.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-MISSINGCERT-A-0001
+
+// This should fail becuase one of the required certificates is missing
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\80172a38_c_doublesigned_metadata c:\tswi\tbackuprestore\metadata80172a38
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\wsc_exe.exe c:\tswi\tbackuprestore\backup80172a38.1
+RUN_TEST_STEP_RESULT -10254	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	doublesignedfail
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	doublesignedfail
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata80172a38
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup80172a38.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-MISSINGCERT-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDVID-A-0001
+//! @SYMTestCaseDesc		Install an untrusted SIS file containi_urelng an EXE with a non-zero VID
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDVID-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113020_c_metadata c:\tswi\tbackuprestore\metadata81113020
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiprotectedvid.exe c:\tswi\tbackuprestore\backup81113020.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedVid
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedVid
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113020
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113020.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDVID-A-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDSID-A-0001
+//! @SYMTestCaseDesc		Install an untrusted SIS file containi_urelng an EXE with a protected SID
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Attempts to restore, checks application is absent.
+//! @SYMTestExpectedResults	Restore aborted.
+//! @SYMTestType		ST
+
+// Test case should pass after DEF095174 is fixed. Please uncomment this test after the fix.
+
+START_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDSID-A-0001
+
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\metadata\winscw_urel\81113019_c_metadata c:\tswi\tbackuprestore\metadata81113019
+RUN_UTILS 	CopyFile c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiprotectedsid.exe c:\tswi\tbackuprestore\backup81113019.1
+RUN_TEST_STEP_RESULT -20	100	tbackuprestore	RESTORE		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedSid
+RUN_TEST_STEP				100	tbackuprestore	ABSENT		c:\tswi\tgenbackupmeta\scripts\ini_urel	untrustedSid
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\metadata81113019
+RUN_UTILS 	DeleteFile c:\tswi\tbackuprestore\backup81113019.1
+
+END_TESTCASE API-SEC-BACKUPRESTORE-EC063-UNTRUSTEDSID-A-0001

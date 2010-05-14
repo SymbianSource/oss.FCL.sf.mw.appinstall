@@ -1,0 +1,110 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* sisregistryclient.dll Implementation of software registry client
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY ALL
+
+TARGET		sisregistryclient.dll
+TARGETTYPE	dll
+
+UID			0x1000008d 0x10202DCB
+VENDORID	0x70000001
+
+USERINCLUDE	../inc
+USERINCLUDE	../inc/swi
+USERINCLUDE ../source/plan
+USERINCLUDE ../source/sisregistry/client 
+USERINCLUDE ../source/sisregistry/common
+USERINCLUDE ../source/swis/server
+
+SOURCEPATH	../source/sisregistry
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		sisregistryclient_v2.def
+#else
+DEFFILE		sisregistryclient_v2_legacy.def
+#endif
+
+SOURCE		client/sisrevocationentry.cpp
+#else
+DEFFILE		sisregistryclient.def
+#endif
+
+SOURCE		client/sisregistrysession.cpp
+SOURCE		client/sisregistryentry.cpp
+SOURCE		client/sisregistrywritablesession.cpp
+SOURCE		client/sisregistrywritableentry.cpp
+
+SOURCE		common/hashcontainer.cpp
+SOURCE		common/controllerinfo.cpp
+SOURCE		common/sisregistrypackage.cpp
+SOURCE		common/sisregistrytoken.cpp
+SOURCE		common/sisregistryobject.cpp
+SOURCE		common/sisregistrydependency.cpp
+SOURCE		common/sisregistryproperty.cpp
+SOURCE		common/sisregistryfiledescription.cpp
+SOURCE		common/versionutil.cpp
+SOURCE		common/sisregistrylog.cpp
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+SOURCE		common/sisregistryhelperclient.cpp
+#endif
+
+// We need the security check util functions from
+// SWIS to extract details of SIDs from executables in ROM for SIS stubs
+SOURCEPATH	../source/swis/server
+SOURCE 		securityinfo.cpp
+
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY	    euser.lib 
+LIBRARY     estor.lib 
+LIBRARY     efsrv.lib 
+LIBRARY     siscontroller.lib 
+LIBRARY     plan.lib
+LIBRARY     hash.lib
+LIBRARY	    securitymanager.lib
+LIBRARY	    hal.lib
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+LIBRARY		swtypereginfo.lib
+LIBRARY		scrclient.lib
+library		ipcstream.lib
+#else
+LIBRARY         scsclient.lib
+LIBRARY		integrityservices.lib
+#endif
+
+LIBRARY		sectcbutil.lib
+LIBRARY		swidataprovider.lib
+#ifdef __SWI_LOGGING__
+LIBRARY flogger.lib // To use logging, define __SWI_LOGGING__ in the .hrh file
+#endif 
+
+start wins
+WIN32_LIBRARY		kernel32.lib
+end
+SMPSAFE

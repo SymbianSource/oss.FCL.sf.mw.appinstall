@@ -1,0 +1,21 @@
+# Vendor id constraint containts a single id that matchts tswiusergrantable_all
+[main]
+name=match_03
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_vid1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

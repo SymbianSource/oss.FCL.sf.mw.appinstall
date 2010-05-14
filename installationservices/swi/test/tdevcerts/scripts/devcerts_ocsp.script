@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+// All of the test cases should result in a successful install/uninstall.
+
+// Add delay for ced, to avoid DP rom crash
+DELAY 5000
+
+PRINT Run Developer Certificates match test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-ocsp-0001
+//! @SYMTestCaseDesc 		Check that OCSP checks can be performed on developer certificates.
+//! @SYMREQ 			REQ4052.3.1
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-ocsp-0001
+
+RUN_TEST_STEP_RESULT -3 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\ocsp.ini ocsp_01
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\ocsp.ini u_ocsp_01
+
+END_TESTCASE API-SEC-ocsp-0001
+
+
+//! @SYMTestCaseID 		API-SEC-ocsp-0002
+//! @SYMTestCaseDesc 		Check OCSP checks are performed if multiple chains are present.
+//! @SYMREQ 			REQ4052.3.1
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-ocsp-0002
+
+RUN_TEST_STEP_RESULT -3 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\ocsp.ini ocsp_02
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\ocsp.ini u_ocsp_02
+
+END_TESTCASE API-SEC-ocsp-0002
+
+
+//! @SYMTestCaseID 		API-SEC-ocsp-0003
+//! @SYMTestCaseDesc 		A combination of constraints signed with an expired certificate.
+//! @SYMREQ 			REQ4052 - assumption 4
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is rejected because the certificate has expired
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-ocsp-0003
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\ocsp.ini ocsp_03
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tdevcerts\scripts\ocsp.ini u_ocsp_03
+
+END_TESTCASE API-SEC-ocsp-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

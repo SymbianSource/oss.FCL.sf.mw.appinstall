@@ -1,0 +1,114 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Display handling of user options dialogs
+
+;Languages
+&EN,FR
+
+;Header
+#{"Test options-EN", "Test options-FR"}, (0x10000012), 1, 2, 3
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+!(	{"Add-on 1 (20KB)","Add-on 1 (20KB)"},
+	{"Add-on 2 (75KB)","Add-on 2 (75KB)"},
+	{"Add-on 3 (80KB)","Add-on 3 (80KB)"},
+	{"Add-on 4 (20KB)","Add-on 4 (20KB)"},
+	{"Add-on 5 (20KB)","Add-on 5 (20KB)"},
+	{"Add-on 6 (20KB)","Add-on 6 (20KB)"},
+	{"Add-on 7 (20KB)","Add-on 7 (20KB)"},
+	{"Add-on 8 (20KB)","Add-on 8 (20KB)"},
+	{"Add-on 9 (20KB)","Add-on 9 (20KB)"},
+	{"Add-on 10 (20KB)","Add-on 10 (20KB)"},
+	{"Add-on 11 (20KB)","Add-on 11 (20KB)"},
+	{"Add-on 12 (20KB)","Add-on 12 (20KB)"},
+	{"Add-on 13 (20KB)","Add-on 13 (20KB)"},
+	{"Add-on 14 (20KB)","Add-on 14 (20KB)"},
+	{"Add-on 15 (20KB)","Add-on 15 (20KB)"},
+	{"Add-on 16 (20KB)","Add-on 16 (20KB)"},
+	{"Add-on 17 (20KB)","Add-on 17 (20KB)"},
+	{"Add-on 18 (20KB)","Add-on 18 (20KB)"},
+	{"Add-on 19 (20KB)","Add-on 19 (20KB)"},
+	{"Add-on 20 (20KB)","Add-on 20 (20KB)"},
+	{"Add-on 21 (20KB)","Add-on 21 (20KB)"},
+	{"Add-on 22 (20KB)","Add-on 22 (20KB)"},
+	{"Add-on 23 (20KB)","Add-on 23 (20KB)"},
+	{"Add-on 24 (20KB)","Add-on 24 (20KB)"},
+	{"Add-on 25 (20KB)","Add-on 25 (20KB)"},
+	{"Add-on 26 (20KB)","Add-on 26 (20KB)"},
+	{"Add-on 27 (20KB)","Add-on 27 (20KB)"},
+	{"Add-on 28 (20KB)","Add-on 28 (20KB)"},
+	{"Add-on 29 (20KB)","Add-on 29 (20KB)"},
+	{"Add-on 30 (20KB)","Add-on 30 (20KB)"},
+	{"Add-on 31 (20KB)","Add-on 31 (20KB)"},
+	{"Add-on 32 (20KB)","Add-on 32 (20KB)"},
+	{"Add-on 33 (20KB)","Add-on 33 (20KB)"},
+	{"Add-on 34 (20KB)","Add-on 34 (20KB)"}	)
+
+if option1
+	"text\option1.txt"-"", FT, TC
+	"text\file1.txt"-"!:\Documents\InstTest\option1.txt", FF
+endif
+if option2
+	"text\option2.txt"-"", FT, TC
+	"text\file1.txt"-"!:\Documents\InstTest\option2.txt", FF
+endif
+if	option3 or
+	option4 or
+	option5 or
+	option6 or
+	option7 or
+	option8 or
+	option9 or
+	option10 or
+	option11 or
+	option12 or
+	option13 or
+	option14 or
+	option15 or
+	option16 or
+	option17 or
+	option18 or
+	option19 or
+	option20 or
+	option21 or
+	option22 or
+	option23 or
+	option24 or
+	option25 or
+	option26 or
+	option27 or
+	option28 or
+	option29 or
+	option31 or
+	option32 or
+	option33 or
+	option34
+	"text\options.txt"-"", FT, TC
+	"text\file1.txt"-"!:\Documents\InstTest\options.txt", FF
+endif
+
+!(	{"2nd option1-EN","2nd option1-FR"}	)
+
+if option1
+	"text\option1.txt"-"", FT, TC
+	"text\file1.txt"-"!:\Documents\InstTest\option1.txt", FF
+endif
+if option2
+	"text\option2.txt"-"", FT, TC
+	"text\file1.txt"-"!:\Documents\InstTest\option2.txt", FF
+endif

@@ -1,0 +1,5 @@
+EXPORTS
+	?ExternalizeL@CInstallationResult@Swi@@QBEXAAVRWriteStream@@@Z @ 1 NONAME ; void Swi::CInstallationResult::ExternalizeL(class RWriteStream &) const
+	?InternalizeL@CInstallationResult@Swi@@QAEXAAVRReadStream@@@Z @ 2 NONAME ; void Swi::CInstallationResult::InternalizeL(class RReadStream &)
+	?NewL@CInstallationResult@Swi@@SAPAV12@XZ @ 3 NONAME ; class Swi::CInstallationResult * Swi::CInstallationResult::NewL(void)
+

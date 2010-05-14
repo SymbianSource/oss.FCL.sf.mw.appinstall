@@ -1,0 +1,73 @@
+/*
+* Copyright (c) 2003-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for project AppMngr2
+*
+*/
+
+
+#include <platform_paths.hrh>
+
+#include "../Sisx/group/bld.inf"
+#include "../Widget/group/bld.inf"
+
+
+PRJ_EXPORTS
+// export localised loc file
+../loc/appmngr2.loc                 MW_LAYER_LOC_EXPORT_PATH( appmngr2.loc )
+../loc/appmngrgsplugin.loc          MW_LAYER_LOC_EXPORT_PATH( appmngrgsplugin.loc )
+../loc/appmngrinstalledplugin.loc   MW_LAYER_LOC_EXPORT_PATH( appmngrinstalledplugin.loc )
+../loc/appmngrinstfilesplugin.loc   MW_LAYER_LOC_EXPORT_PATH( appmngrinstfilesplugin.loc )
+
+// export iby files
+../rom/appmngr2.iby                 CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2.iby )
+../rom/appmngr2sisxplugin.iby       CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2sisxplugin.iby )
+../rom/appmngr2widgetplugin.iby     CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2widgetplugin.iby )
+../rom/appmngr2gssettingsplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gssettingsplugin.iby )
+../rom/appmngr2gsinstalledplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gsinstalledplugin.iby )
+../rom/appmngr2gsinstfilesplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gsinstfilesplugin.iby )
+../rom/swinstadapter.iby            CORE_MW_LAYER_IBY_EXPORT_PATH( swinstadapter.iby )
+../rom/appmngr2resources.iby                    LANGUAGE_MW_LAYER_IBY_EXPORT_PATH( appmngr2resources.iby )
+../rom/appmngr2gssettingspluginresources.iby    LANGUAGE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gssettingspluginresources.iby )
+../rom/appmngr2gsinstalledpluginresources.iby   LANGUAGE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gsinstalledpluginresources.iby )
+../rom/appmngr2gsinstfilespluginresources.iby   LANGUAGE_MW_LAYER_IBY_EXPORT_PATH( appmngr2gsinstfilespluginresources.iby )
+
+
+PRJ_PLATFORMS
+DEFAULT
+
+#include "../help/group/bld.inf"        // Help exports
+
+PRJ_EXTENSIONS
+START EXTENSION s60/mifconv
+  OPTION TARGETFILE appmngr2.mif
+  OPTION HEADERFILE appmngr2.mbg
+  OPTION SOURCES \
+	-c8,8 qgn_prop_cp_inst_installs -c8,8 qgn_prop_cp_inst_files \
+	-c8,8 qgn_prop_cp_inst_settings -c8,8 qgn_prop_drm_exp_large \
+	-c8,1 qgn_indi_sett_protected_add -c8,1 qgn_indi_am_inst_mmc_add \
+	-c8,8 qgn_indi_mmc_add -c8,8 qgn_indi_fmgr_ms_add -c8,8 qgn_prop_unknown
+END
+START EXTENSION s60/mifconv
+  OPTION TARGETFILE appmngr2_aif.mif
+  OPTION SOURCES -c8,8 qgn_menu_am
+END
+
+
+PRJ_MMPFILES
+appmngr2.mmp
+appmngr2gssettingsplugin.mmp
+appmngr2gsinstalledplugin.mmp
+appmngr2gsinstfilesplugin.mmp
+swinstadapter.mmp
+

@@ -1,0 +1,158 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWI-cr956 Integration Tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tswiconsole
+
+// give emulator time to start up so APPARC can initialize
+DELAY 5000
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0005
+//! @SYMTestCaseDesc		checks sis file with RBS  
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RI and RBS 
+//! @SYMTestExpectedResults	RI and RBS should be running at same time (for some duration)
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWI-CR956-HW-0005
+
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini simplerbs
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONCURRENT
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_simplerbs
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini bigexeRunning
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+
+END_TESTCASE API-SEC-SWI-CR956-HW-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0006
+//! @SYMTestCaseDesc		checks embedded sis file with RBS  
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RI and RBS which has embedded sis file with RBS,  
+//! @SYMTestExpectedResults	RBS should run asynchronously with RI
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWI-CR956-HW-0006
+
+CONSECUTIVE
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embeddedrbs
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONCURRENT
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_embeddedrbs
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embedexeRunning
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+
+END_TESTCASE API-SEC-SWI-CR956-HW-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0009
+//! @SYMTestCaseDesc		checks sis file with RR,RI and RBS 
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RR, RI and RBS   
+//! @SYMTestExpectedResults	RBS should run asynchronously with RI
+//! @SYMDevelopedForRelease 	Oghma
+
+CONSECUTIVE
+
+START_TESTCASE API-SEC-SWI-CR956-HW-0009
+
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini rirbsrr
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONCURRENT
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_simplerbs
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini bigexeRunning
+//RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embedexeRunning
+
+END_TESTCASE API-SEC-SWI-CR956-HW-0009
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0010
+//! @SYMTestCaseDesc		checks sis file with SH 
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RI and RBS with SH flag,  
+//! @SYMTestExpectedResults	RBS should run asynchronously with RI which has SH flag
+//! @SYMDevelopedForRelease 	Oghma
+
+CONSECUTIVE
+
+START_TESTCASE API-SEC-SWI-CR956-HW-0010
+
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini shrbs
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONCURRENT
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_shrbs
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embedexeRunning
+//Ensure the embedded exe is running, hence kill it
+RUN_PROGRAM KillRunningProcess 90008ACF
+
+END_TESTCASE API-SEC-SWI-CR956-HW-0010
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0007
+//! @SYMTestCaseDesc		checks embedded sis file with RBS  
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RI and RBS which has embedded sis file with RBS
+//!  				Uninstalls the embedded sis file first
+//! @SYMTestExpectedResults	RBS should run asynchronously with RI
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWI-CR956-HW-0007
+
+CONSECUTIVE
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embeddedrbs
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONCURRENT
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_embeddedrbs1
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini embedexeRunning
+RUN_TEST_STEP 100 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini infiniteexeRunning
+CONSECUTIVE 
+RUN_PROGRAM KillRunningProcess 8933456c 2000000
+
+END_TESTCASE API-SEC-SWI-CR956-HW-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR956-HW-0011
+//! @SYMTestCaseDesc		checks sis file with RBS  
+//! @SYMREQ			REQ7504
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls sis file with RI and RBS, for OOM
+//! @SYMTestExpectedResults	No cells should be leaked
+//! @SYMDevelopedForRelease 	Oghma
+
+// Note: These tests are commented as there is memory leak occured during OOM testing for Install Step.
+// A defect has been raised on this.
+
+//START_TESTCASE API-SEC-SWI-CR956-HW-0011
+//RUN_TEST_STEP !OOM 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini simplerbs
+//DELAY 5000
+//RUN_TEST_STEP !OOM 500 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\CR956_test_armv5.ini u_simplerbs
+//END_TESTCASE API-SEC-SWI-CR956-HW-0011

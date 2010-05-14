@@ -1,0 +1,29 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWI-TEST-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-SWI-TEST-0001
+
+CONSECUTIVE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+END_TESTCASE API-SEC-SWI-TEST-0001

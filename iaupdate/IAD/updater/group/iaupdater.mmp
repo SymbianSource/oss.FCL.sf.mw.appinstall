@@ -1,0 +1,77 @@
+/*
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   mmp file for iaupdater.
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh> 
+#include "../inc/iaupdateruids.h"
+
+CAPABILITY      AllFiles ReadDeviceData ReadUserData TrustedUI PowerMgmt
+VENDORID        VID_DEFAULT   
+
+PAGED
+
+TARGETPATH      /sys/bin
+TARGET          iaupdater.exe
+TARGETTYPE      exe
+
+UID             0x100039CE KIAUpdaterUid 
+SECUREID        KIAUpdaterUid
+
+MW_LAYER_SYSTEMINCLUDE
+
+USERINCLUDE     ../inc
+USERINCLUDE     ../updaterfiles/inc
+USERINCLUDE     ../../loc
+// Notice, that iaupdate engine headers are only needed
+// for the debug logging. So, for normal purposes, the
+// updater is independend from the IAD itself.
+USERINCLUDE     ../../engine/inc
+
+SOURCEPATH      ../src
+SOURCE          iaupdater.cpp
+SOURCE          iaupdatermngr.cpp 
+SOURCE          iaupdaterinstaller.cpp
+SOURCE          iaupdaterdialog.cpp
+SOURCE          iaupdatersilentlauncher.cpp
+
+LIBRARY         euser.lib 
+LIBRARY         efsrv.lib
+LIBRARY         apgrfx.lib
+LIBRARY         apmime.lib
+LIBRARY         apparc.lib
+LIBRARY         sisregistryclient.lib
+LIBRARY         swinstcli.lib
+LIBRARY         estor.lib
+LIBRARY         commonengine.lib
+LIBRARY         ws32.lib 
+LIBRARY         ecom.lib
+
+// Updater files dll
+LIBRARY         iaupdaterfiles.lib
+
+DEBUGLIBRARY    flogger.lib
+
+// This is required to allow iaupdate to start the updater
+// by finding the updater EXE file name by using the UID value.
+START RESOURCE  ../src/iaupdater_reg.rss
+TARGETPATH	    /private/10003a3f/apps
+END //RESOURCE
+
+SMPSAFE
+
+//EOF

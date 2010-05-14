@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This package installs two files to the same target on the c: drive, and eclipses
+; the same target file on the e: drive.  This may not be sensible, but this test exists
+; to make sure the same behaviour is still possible after the fix for DEF083512.
+
+&EN
+
+#{"Eclipse Overwrite Self Test Package"}, (0x802730FB), 1, 0, 0
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+"files\option1.txt"-"c:\documents\insttest\overwriteme.txt"
+"files\option2.txt"-"c:\documents\insttest\overwriteme.txt"
+"files\option1.txt"-"e:\documents\insttest\overwriteme.txt"

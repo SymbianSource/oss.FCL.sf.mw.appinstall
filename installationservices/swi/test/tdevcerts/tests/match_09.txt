@@ -1,0 +1,22 @@
+# Check that unprotected SIDs can still be installed even if there is a non empty SID constraint that doesn't match.
+[main]
+name=match_09
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_sid1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiunprotectedsid.exe"-"!:\sys\bin\tswiunprotectedsid.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswiunprotectedsid.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiunprotectedsid.exe
+

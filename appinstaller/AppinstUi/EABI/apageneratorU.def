@@ -1,0 +1,8 @@
+EXPORTS
+	_ZN21CAppArcFilesGenerator4NewLER3RFsRK22CMIDletSuiteAttributes4TUidRK6RArrayIS5_EmRK7TDesC165TChar @ 1 NONAME
+	_ZN21CAppArcFilesGenerator8GenerateER14TRequestStatus @ 2 NONAME
+	_ZTI14CIconConverter @ 3 NONAME ; #<TI>#
+	_ZTI21CAppArcFilesGenerator @ 4 NONAME ; #<TI>#
+	_ZTV14CIconConverter @ 5 NONAME ; #<VT>#
+	_ZTV21CAppArcFilesGenerator @ 6 NONAME ; #<VT>#
+

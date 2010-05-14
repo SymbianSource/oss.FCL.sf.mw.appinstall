@@ -1,0 +1,50 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+//! @SYMTestCaseID		API-SEC-SIMPLETEST-0001
+//! @SYMTestStatus		3. Released
+
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+START_TESTCASE API-SEC-SIMPLETEST-0001
+
+/// Simple file installation from a compressed SIS file
+// Be sure that the registry entries are deleted because they may have been left
+// from previous failed test cases
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini u_simple
+/// Simple file installation from a non-compressed SIS file
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini simplenc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini u_simplenc
+/// Bad language selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini badlangsel
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini u_simple
+
+/// Bad drive selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini baddrivesel
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdrives.ini u_simple
+
+END_TESTCASE API-SEC-SIMPLETEST-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

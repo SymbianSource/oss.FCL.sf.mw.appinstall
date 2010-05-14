@@ -1,0 +1,478 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-OptionsTestC-I-0001
+//! @SYMTestCaseDesc 		Display options in SISX file
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Display options dialog, install/uninstall selected options
+//! @SYMTestExpectedResults 	Display options dialog called, options [un]installed
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-OptionsTestC-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini options1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_options
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini options2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_options
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini options3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_options
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini options123
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_options
+
+END_TESTCASE API-SEC-UISA-OptionsTestC-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-FileNullOption-I-0001
+//! @SYMTestCaseDesc 		Test for a file with NULL option, which will get deleted at uninstall
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Test for a file with NULL option, which will get deleted at uninstall
+//! @SYMTestExpectedResults 	File gets removed at uninstallation time
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-FileNullOption-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini filenull
+RUN_UTILS CopyFile c:\Documents\InstTest\sub-file1.txt c:\Documents\InstTest\sub-created.txt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_filenull
+
+END_TESTCASE API-SEC-UISA-FileNullOption-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC_UISA_FileNullCleanupOption-0001
+//! @SYMTestCaseDesc 		Test for files and directories with NULL option, which will be deleted at uninstall
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Test for files and directories with NULL option, which will be deleted at uninstall
+//! @SYMTestExpectedResults 	All files and directories listed with FN are removed at uninstallation time
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC_UISA_FileNullCleanupOption-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cleanup
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme1\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme1\deleteme3\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme1\deleteme3\deleteme5\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\buz\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\buz\buns\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\buz\buns\boz\
+RUN_UTILS MkDir c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\buz\buns\boz\etc\
+RUN_UTILS MakeReadWrite c:\auto.cfg
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme1\delete.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme1\delete2.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme1\deleteme3\delete.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme1\deleteme3\deleteme5\delete.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme2\delete.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme2\deleteme4\delete.txt
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\deleteme2\deleteme4\foo\bar\baz\buz\buns\boz\etc\deletethis.txt
+RUN_UTILS CopyFile z:\resource\swicertstore.dat c:\Documents\InstTest\deleteme2\deleteme4\readonly.dat
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_cleanup
+
+END_TESTCASE API-SEC_UISA_FileNullCleanupOption-0001
+
+
+//! @SYMTestCaseID 		API-SEC-FileNullCleanupsaOption-0001
+//! @SYMDEF 			DEF066295 
+//! @SYMTestStatus		3. Released
+//Test case for defect DEF066295
+
+START_TESTCASE API-SEC-FileNullCleanupsaOption-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cleanupsa
+RUN_UTILS CopyFile c:\auto.cfg c:\Documents\InstTest\romeo.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cleanupsa1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_cleanupsa
+
+END_TESTCASE API-SEC-FileNullCleanupsaOption-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-FileExistsTest-I-0001
+//! @SYMTestCaseDesc 		Expressions test - check for existing file
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Test for installation depending on an existing file
+//! @SYMTestExpectedResults 	Files installed/uninstalled if the test file exists
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-FileExistsTest-I-0001
+
+// negative test case
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini fileexists
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_fileexists
+
+// positive test case
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\scripts\Simple.xml  c:\tswi\testfileexists
+RUN_UTILS MakeReadWrite c:\tswi\testfileexists
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini fileexists2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_fileexists
+
+// cleanup
+RUN_UTILS DeleteFile c:\tswi\testfileexists
+
+END_TESTCASE API-SEC-UISA-FileExistsTest-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-OperatorsTest-I-0001
+//! @SYMTestCaseDesc 		Expressions test - check conditional operators
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Test for installation depending on conditional operators
+//! @SYMTestExpectedResults 	Files installed/uninstalled depending on which options are selected
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-OperatorsTest-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operators1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operators
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operators2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operators
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operators3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operators
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operators4
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operators
+
+END_TESTCASE API-SEC-UISA-OperatorsTest-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-OperatorsTest-I-0002
+//! @SYMTestCaseDesc 		Expressions test - check conditional operators individually
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Test for installation depending on conditional operators
+//! @SYMTestExpectedResults 	Files installed/uninstalled depending on which options are selected
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-OperatorsTest-I-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operatorsb1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operatorsb
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operatorsb2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operatorsb
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operatorsb3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operatorsb
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini operatorsb4
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_operatorsb
+
+END_TESTCASE API-SEC-UISA-OperatorsTest-I-0002
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-PropertiesTest-I-0001
+//! @SYMTestCaseDesc 		Expressions test - check properties works
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install SISFileA, check files based on properties inside sis file, install sisb, check properties stored in registry, uninstall a, uninstall b, install b, check properties are properly removed from the registry.
+//! @SYMTestExpectedResults 	Files installed/uninstalled depending on which properties are present int he registry
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-PropertiesTest-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini propertiesA
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini propertiesB
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_propertiesB
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_propertiesA
+
+// different files installed due to different properties in the registry
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini propertiesB2
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_propertiesB
+
+END_TESTCASE API-SEC-UISA-PropertiesTest-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ElseTest-I-0001
+//! @SYMTestCaseDesc 		Expressions test - check else conditions work
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Files installed/uninstalled depending on the evaluation of expressions in the sisx file
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-ElseTest-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini else
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_else
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini else1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_else
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini else2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_else
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini else3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_else
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini else123
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_else
+
+END_TESTCASE API-SEC-UISA-ElseTest-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ElseIfTest-I-0001
+//! @SYMTestCaseDesc 		Expressions test - check elseif conditions work
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Files installed/uninstalled depending on the evaluation of expressions in the sisx file
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-ElseIfTest-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini elseif
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_elseif
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini elseif1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_elseif
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini elseif2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_elseif
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini elseif3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_elseif
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini elseif123
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_elseif
+
+END_TESTCASE API-SEC-UISA-ElseIfTest-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-PackageQuery-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-PackageQuery-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini packagequery
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_packagequery
+
+END_TESTCASE API-SEC-PackageQuery-0001
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// CR1125 Add Package Versions to SIS File Conditionals: Integration Tests (SEC-SWI-PKGVER-B-0001 to SEC-SWI-PKGVER-B-0007)
+// --------------------------------------------------------------------------------------------------------------------
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0002
+//! @SYMTestCaseDesc 		Installing a SIS containing a VERSION condition with a Package UID not identified by 
+//!				the SIS Registry
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that NEITHER of the preinstalled test packages have been installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each
+//!				of the cases as shown in the SEC-SWI-PKGVER-B001 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the 
+//!				configuration section that highlights which of the files should have been copied to
+//!				the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked that each condition has
+//!				evaluated to EFalse because the packages are not recognised by the SIS Registry.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0002
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b002
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b002
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0002	
+
+
+// Precondition Installation of Supporting Test Applications for the CR1125 SEC-SWI-PKGVER-B-000* Tests
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini tversionpkg_app1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini tversionpkg_app2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini tversionpkg_app3
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0001
+//! @SYMTestCaseDesc 		Installing a SIS containing a VERSION condition exercising each relational operator
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9098, REQ9097, REQ9096, REQ9095, REQ9094, REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the preinstalled test packages have been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for
+//!				each of the cases as shown in the SEC-SWI-PKGVER-B001 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the
+//!				configuration section that highlights which of the files should have been copied
+//!				to the system drive. 
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked that the correct files
+//!				were installed for each of the conditions, as specified in the SEC-SWI-PKGVER-B001
+//!				test data table.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0001
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b001
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b001
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0003
+//! @SYMTestCaseDesc 		Installing a SIS containing a VERSION condition within compound expressions
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the preinstalled test packages have been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each
+//!				of the cases as shown in the SEC-SWI-PKGVER-B003 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the 
+//!				configuration section that highlights which of the files should have been copied to
+//!				the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked that the correct files
+//!				were installed for each of the conditions, as specified in the SEC-SWI-PKGVER-B003
+//!				test data table.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0003
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b003
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b003
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0003
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0004
+//! @SYMTestCaseDesc 		Installing a SIS containing VERSION conditions evaluating a package version range
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the preinstalled test packages have been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each
+//!				of the cases as shown in the SEC-SWI-PKGVER-B004 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the configuration
+//!				section that highlights which of the files should have been copied to the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked that the correct files were 
+//!				installed for each of the conditions, as specified in the SEC-SWI-PKGVER-B004 test data table.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0004
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b004
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b004
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0004
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0005
+//! @SYMTestCaseDesc 		Installing a SIS containing an EXISTS condition with a valid argument string
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the tversionpkg_app3 has been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each of
+//!				the cases as shown in the SEC-SWI-PKGVER-B005 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the configuration
+//!				section that highlights which of the files should have been copied to the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked that the correct files were
+//!				installed for each of the conditions, as specified in the SEC-SWI-PKGVER-B005 test data table.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0005
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b005
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b005
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0005
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0006
+//! @SYMTestCaseDesc 		Installing a SIS containing an EXISTS condition with invalid data in the argument string
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the preinstalled test packages have been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each of
+//!				the cases as shown in the SEC-SWI-PKGVER-B006 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the configuration
+//!				section that highlights which of the files should have been copied to the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked each of the conditions safely
+//!				evaluated to EFalse, as specified in the SEC-SWI-PKGVER-B006 test data table, rather than
+//!				cause any errors or unexpected behaviour within the install server.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0006
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b006
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b006
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0006
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PKGVER-B-0007
+//! @SYMTestCaseDesc 		Installing a SIS containing an EXISTS condition with arguments missing from the 
+//!				argument string
+//! @SYMCR 			CR1125
+//! @SYMREQ 			REQ9093
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions 		Preconditions:
+//!				1)Make sure that the preinstalled test packages have been successfully installed.
+//!				Test Actions:
+//!				1)Generate and sign a SIS file using a PKG that contains a conditional block for each of
+//!				the cases as shown in the SEC-SWI-PKGVER-B007 test data table.
+//!				2)Install the SIS file using the tuiscriptadaptors InstallStep, specifying the configuration
+//!				section that highlights which of the files should have been copied to the system drive.
+//!				3)Uninstall the test SIS file using the tuiscriptadaptors UninstallStep.
+//! @SYMTestExpectedResults 	The tuiscriptadaptors InstallStep should pass having checked each of the conditions safely
+//!				evaluated to EFalse, as specified in the SEC-SWI-PKGVER-B007 test data table, rather than
+//!				cause any errors or unexpected behaviour within the install server.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PKGVER-B-0007
+
+// Test Actions:
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini version_b007
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_version_b007
+
+END_TESTCASE API-SEC-SWI-PKGVER-B-0007
+
+
+
+// Post Uninstall Supporting Test Applications for the CR1125 SEC-SWI-PKGVER-B00* Tests
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_tversionpkg_app1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_tversionpkg_app2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testexpressions.ini u_tversionpkg_app3
+
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,64 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Test version of the SIF Launcher. It registers the reference
+* software type "binary/sif-refpkg" in addition to the production
+* configuration that registers "x-epoc/x-sisx-app" only.
+*
+*/
+
+
+TARGET				siflauncher.exe
+TARGETTYPE			exe
+TARGETPATH			/sys/bin
+
+// We need WriteDeviceData so that the installer data types can have priority EDataTypePrioritySystem
+CAPABILITY			TrustedUI WriteDeviceData
+
+VENDORID			0x70000001
+
+UID					0x0 0x10285BD0
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+USERINCLUDE			../../inc
+USERINCLUDE			../../common/inc
+
+SOURCEPATH			../../source
+SOURCE				siflauncher.cpp
+
+SOURCEPATH			../siflauncherconfig
+
+START RESOURCE		siflauncher_reg.rss
+TARGETPATH			/private/10003a3f/apps
+END
+
+start resource		siflauncher_loc.rss
+targetpath			/resource/apps
+lang				sc
+end
+
+// Bitmaps
+START BITMAP		siflauncher.mbm
+SOURCEPATH			../../../swiconfig/usif/siflauncher
+TARGETPATH			/resource/apps
+HEADER
+SOURCE				c8,1 INST24.bmp INST24M.BMP INST32.BMP INST32M.BMP INST48.BMP INST48M.BMP
+END
+
+LIBRARY				euser.lib efsrv.lib
+LIBRARY				apgrfx.lib apparc.lib apmime.lib
+LIBRARY				sif.lib
+
+SMPSAFE

@@ -1,0 +1,225 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Uses TUISCRIPTADAPTORS to generates a set of known registry test data used to prevent future data compatibility breaks.
+//
+LOAD_SUITE tuiscriptadaptors
+//
+#
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0001
+//! @SYMTestCaseDesc		Create the registry entry for a simple unsigned SISX package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create the registry entry for a simple unsigned SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0002
+//! @SYMTestCaseDesc		Create the registry entries for a SISX package and the other packages it embeds.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create the registry entries for a SISX package and the other packages it embeds.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0003
+//! @SYMTestCaseDesc		Create the registry entry for a signed SISX package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create the registry entry for a signed SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0004
+//! @SYMTestCaseDesc		Create a registry entry using a SISX package that contains a SID
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create a registry entry using a SISX package that contains a SID
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0005
+//! @SYMTestCaseDesc		Create registry entries for a SISX package and an augmentation to that package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create registry entries for a SISX package and an augmentation to that package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini augmentation_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini augmentation_A
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0006
+//! @SYMTestCaseDesc		Create registry entries for a SISX package, and packages that depend on it.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create registry entries for a SISX package, and packages that depend on it.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend3
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0007
+//! @SYMTestCaseDesc		Create registry entries for a SISX package that has a preinstalled patch.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create registry entries for a SISX package that has a preinstalled patch.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+// Copy files into place on the pre-installed drives
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0007
+
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_patch2_dsa_l1.sis e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_patch2_dsa_l1.sis
+// Install base and preinstalled patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch2
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0008
+//! @SYMTestCaseDesc		Create registry entries for a SISX package that has been upgraded.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create registry entries for a SISX package that has been upgraded.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0008
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0009
+//! @SYMTestCaseDesc		Create registry entries for a signed SIS file with cert chain that validates against a known root.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Create registry entries for a signed SIS file with cert chain that validates against a known root.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\registrytestdata.ini optionsnc
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0009
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0010
+//! @SYMTestCaseDesc		Create the registry entry for a simple SISX package
+//! @SYMTestPriority		High
+//! @SYMTestActions		Create the registry entry for a simple SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			DEF054596
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tsisregistrytest\scripts\registrytestdata.ini def054596
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0010
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0011
+//! @SYMTestCaseDesc		Create the registry entry for 1500 files! SISX package
+//! @SYMTestPriority		High
+//! @SYMTestActions		Create the registry entry for the 1500 files! SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			DEF112425
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0011
+
+RUN_TEST_STEP 5000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini 1500files
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0011
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYCREATETESTDATA-0012
+//! @SYMTestCaseDesc		Create the registry entry for smlsyncagent SISX package
+//! @SYMTestPriority		High
+//! @SYMTestActions		Create the registry entry for the smlsyncagent SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			DEF140011
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0012
+
+RUN_TEST_STEP 5000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini smlsyncagent
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0012

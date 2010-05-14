@@ -1,0 +1,4 @@
+LOAD_SUITE tsishelperserver
+
+RUN_TEST_STEP 100 tsishelperserver Controller z:\tswi\tsishelper\scripts\tsishelper.ini TEST1
+RUN_TEST_STEP 100 tsishelperserver Data z:\tswi\tsishelper\scripts\tsishelper.ini TEST1

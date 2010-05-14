@@ -1,0 +1,12 @@
+EXPORTS
+	??0RSwiObserverSession@Swi@@QAE@XZ @ 1 NONAME ; Swi::RSwiObserverSession::RSwiObserverSession(void)
+	?AddEventL@RSwiObserverSession@Swi@@QAEXABVCObservationData@2@@Z @ 2 NONAME ; void Swi::RSwiObserverSession::AddEventL(class Swi::CObservationData const &)
+	?AddHeaderL@RSwiObserverSession@Swi@@QAEXABVCObservationHeader@2@@Z @ 3 NONAME ; void Swi::RSwiObserverSession::AddHeaderL(class Swi::CObservationHeader const &)
+	?CancelRegistration@RSwiObserverSession@Swi@@QAEXXZ @ 4 NONAME ; void Swi::RSwiObserverSession::CancelRegistration(void)
+	?Close@RSwiObserverSession@Swi@@QAEXXZ @ 5 NONAME ; void Swi::RSwiObserverSession::Close(void)
+	?CommitL@RSwiObserverSession@Swi@@QAEXXZ @ 6 NONAME ; void Swi::RSwiObserverSession::CommitL(void)
+	?Connect@RSwiObserverSession@Swi@@QAEHXZ @ 7 NONAME ; int Swi::RSwiObserverSession::Connect(void)
+	?GetFileHandleL@RSwiObserverSession@Swi@@QAEXAAVTDes16@@@Z @ 8 NONAME ; void Swi::RSwiObserverSession::GetFileHandleL(class TDes16 &)
+	?ProcessLogsL@RSwiObserverSession@Swi@@QAEXAAVRFs@@@Z @ 9 NONAME ; void Swi::RSwiObserverSession::ProcessLogsL(class RFs &)
+	?Register@RSwiObserverSession@Swi@@QAEXAAVTRequestStatus@@@Z @ 10 NONAME ; void Swi::RSwiObserverSession::Register(class TRequestStatus &)
+

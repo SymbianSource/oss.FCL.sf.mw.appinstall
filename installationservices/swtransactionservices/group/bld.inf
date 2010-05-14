@@ -1,0 +1,195 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* @ Software Transaction System
+*
+*/
+
+
+/**
+ @file
+*/
+
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+
+// STS exported headers
+
+../inc/sts.h			SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sts/sts.h)
+../inc/stsdefs.h		SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sts/stsdefs.h)
+
+// ROMKIT includes
+../inc/sts.iby                       /epoc32/rom/include/sts.iby
+
+PRJ_MMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+
+stsserver.mmp			// STS Server
+stsclient.mmp			// STS Client
+
+#endif // TOOLS2
+#endif // TOOLS
+
+PRJ_TESTMMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+
+../test/group/tsts.mmp                                           //STS test framework
+../test/group/tstsrollbackall.mmp                                //STS test framework
+../test/tintegrityservices/group/tstsintegrityservicesclient.mmp    //legacy client-server framework for testing integrity services code
+../test/tintegrityservices/group/tstsintegrityservicesserver.mmp    //legacy client-server framework for testing integrity services code
+
+#endif // TOOLS2
+#endif // TOOLS
+
+PRJ_TESTEXPORTS
+
+// ROMKIT includes
+../inc/tsts.iby                       /epoc32/rom/include/tsts.iby
+
+../test/scripts/tsts.ini					z:/tusif/tsts/tsts.ini
+../test/scripts/tsts.script					z:/tusif/tsts/tsts.script
+../test/scripts/tsts_rollbackall.script				z:/tusif/tsts/tsts_rollbackall.script
+../test/scripts/data/tstsdummy.txt			z:/tusif/tsts/data/tstsdummy.txt
+../test/scripts/tsts_bootuptimerecovery.script			z:/tusif/tsts/tsts_bootuptimerecovery.script
+../test/scripts/batchfiles/tsts_bootuptimerecovery.bat		z:/tusif/tsts/batchfiles/tsts_bootuptimerecovery.bat
+
+
+//tsts rollback-all testexports - testcase1
+../test/scripts/data/rollbackall/testcase1/c_drive/61f7bbf8/0.bak       z:/tusif/tsts/data/rollbackall/testcase1/c_drive/61f7bbf8/0.bak
+../test/scripts/data/rollbackall/testcase1/c_drive/61f7bbf8/1.bak       z:/tusif/tsts/data/rollbackall/testcase1/c_drive/61f7bbf8/1.bak
+../test/scripts/data/rollbackall/testcase1/c_drive/61f7bbf8.drv         z:/tusif/tsts/data/rollbackall/testcase1/c_drive/61f7bbf8.drv
+../test/scripts/data/rollbackall/testcase1/c_drive/61f7bbf8.log         z:/tusif/tsts/data/rollbackall/testcase1/c_drive/61f7bbf8.log
+../test/scripts/data/rollbackall/testcase1/e_drive/61f7bbf8/0.bak       z:/tusif/tsts/data/rollbackall/testcase1/e_drive/61f7bbf8/0.bak
+../test/scripts/data/rollbackall/testcase1/e_drive/61f7bbf8/1.bak       z:/tusif/tsts/data/rollbackall/testcase1/e_drive/61f7bbf8/1.bak
+../test/scripts/data/rollbackall/testcase1/e_drive/61f7bbf8.log         z:/tusif/tsts/data/rollbackall/testcase1/e_drive/61f7bbf8.log
+
+//tsts rollback-all testexports - testcase2
+../test/scripts/data/rollbackall/testcase2/c_drive/b06c42f3/0.bak       z:/tusif/tsts/data/rollbackall/testcase2/c_drive/b06c42f3/0.bak
+../test/scripts/data/rollbackall/testcase2/c_drive/b06c42f3/1.bak       z:/tusif/tsts/data/rollbackall/testcase2/c_drive/b06c42f3/1.bak
+../test/scripts/data/rollbackall/testcase2/c_drive/b06c42f3.drv         z:/tusif/tsts/data/rollbackall/testcase2/c_drive/b06c42f3.drv
+../test/scripts/data/rollbackall/testcase2/c_drive/b06c42f3.log         z:/tusif/tsts/data/rollbackall/testcase2/c_drive/b06c42f3.log
+../test/scripts/data/rollbackall/testcase2/e_drive/b06c42f3/0.bak       z:/tusif/tsts/data/rollbackall/testcase2/e_drive/b06c42f3/0.bak
+../test/scripts/data/rollbackall/testcase2/e_drive/b06c42f3/1.bak       z:/tusif/tsts/data/rollbackall/testcase2/e_drive/b06c42f3/1.bak
+../test/scripts/data/rollbackall/testcase2/e_drive/b06c42f3.log         z:/tusif/tsts/data/rollbackall/testcase2/e_drive/b06c42f3.log
+
+//tsts rollback-all testexports - testcase3
+../test/scripts/data/rollbackall/testcase3/c_drive/bd596810.drv         z:/tusif/tsts/data/rollbackall/testcase3/c_drive/bd596810.drv
+../test/scripts/data/rollbackall/testcase3/c_drive/bd596810.log         z:/tusif/tsts/data/rollbackall/testcase3/c_drive/bd596810.log
+../test/scripts/data/rollbackall/testcase3/e_drive/bd596810.log         z:/tusif/tsts/data/rollbackall/testcase3/e_drive/bd596810.log
+
+//tsts rollback-all testexports - testcase4
+../test/scripts/data/rollbackall/testcase4/c_drive/cb94c9f0.drv         z:/tusif/tsts/data/rollbackall/testcase4/c_drive/cb94c9f0.drv
+../test/scripts/data/rollbackall/testcase4/c_drive/cb94c9f0.log         z:/tusif/tsts/data/rollbackall/testcase4/c_drive/cb94c9f0.log
+../test/scripts/data/rollbackall/testcase4/e_drive/cb94c9f0.log         z:/tusif/tsts/data/rollbackall/testcase4/e_drive/cb94c9f0.log
+
+//tsts rollback-all testexports - testcase5
+../test/scripts/data/rollbackall/testcase5/c_drive/b630b6f0.drv         z:/tusif/tsts/data/rollbackall/testcase5/c_drive/b630b6f0.drv
+../test/scripts/data/rollbackall/testcase5/c_drive/b630b6f0.log         z:/tusif/tsts/data/rollbackall/testcase5/c_drive/b630b6f0.log
+../test/scripts/data/rollbackall/testcase5/e_drive/b630b6f0.log         z:/tusif/tsts/data/rollbackall/testcase5/e_drive/b630b6f0.log
+
+//tsts rollback-all testexports - testcase6
+../test/scripts/data/rollbackall/testcase6/c_drive/be3d42f0.drv         z:/tusif/tsts/data/rollbackall/testcase6/c_drive/be3d42f0.drv
+../test/scripts/data/rollbackall/testcase6/c_drive/be3d42f0.log         z:/tusif/tsts/data/rollbackall/testcase6/c_drive/be3d42f0.log
+../test/scripts/data/rollbackall/testcase6/e_drive/be3d42f0.log         z:/tusif/tsts/data/rollbackall/testcase6/e_drive/be3d42f0.log
+
+//tsts rollback-all testexports - SEC-STS-RollbackAll-0002
+../test/scripts/data/rollbackall/sec-sts-rollbackall-0002/b6da9d45.drv         z:/tusif/tsts/data/rollbackall/sec-sts-rollbackall-0002/b6da9d45.drv
+../test/scripts/data/rollbackall/sec-sts-rollbackall-0002/b6da9d45.log         z:/tusif/tsts/data/rollbackall/sec-sts-rollbackall-0002/b6da9d45.log
+
+//legacy tintegrityservices test export
+../test/tintegrityservices/scripts/tintegrityservices.script 	        z:/tusif/tsts/tintegrityservices/scripts/tsts_tintegrityservices.script
+../test/tintegrityservices/scripts/tintegrityservices.ini 		z:/tusif/tsts/tintegrityservices/scripts/tintegrityservices.ini
+../test/tintegrityservices/scripts/oom.ini 						z:/tusif/tsts/tintegrityservices/scripts/oom.ini
+
+../test/tintegrityservices/scripts/install_v1/EFailAddingNewFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailaddingnewfile.ini
+../test/tintegrityservices/scripts/install_v1/EFailAddingTempFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailaddingtempfile.ini
+../test/tintegrityservices/scripts/install_v1/EFailBackupFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailbackupfilesremoved.ini
+../test/tintegrityservices/scripts/install_v1/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v1/efaildeletingfile.ini
+../test/tintegrityservices/scripts/install_v1/EFailInstallComplete.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailinstallcomplete.ini
+../test/tintegrityservices/scripts/install_v1/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailnone.ini
+../test/tintegrityservices/scripts/install_v1/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/install_v1/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/install_v2/EFailAddingNewFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailaddingnewfile.ini
+../test/tintegrityservices/scripts/install_v2/EFailAddingTempFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailaddingtempfile.ini
+../test/tintegrityservices/scripts/install_v2/EFailBackupFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailbackupfilesremoved.ini
+../test/tintegrityservices/scripts/install_v2/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/install_v2/EFailInstallComplete.ini 		z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailinstallcomplete.ini
+../test/tintegrityservices/scripts/install_v2/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailnone.ini
+../test/tintegrityservices/scripts/install_v2/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/install_v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/rollback_install_v1/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v1/efaildeletingfile.ini
+../test/tintegrityservices/scripts/rollback_install_v1/EFailNewFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v1/efailnewfilesremoved.ini
+../test/tintegrityservices/scripts/rollback_install_v1/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v1/efailnone.ini
+../test/tintegrityservices/scripts/rollback_install_v1/EFailOldFilesRestored.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v1/efailoldfilesrestored.ini
+../test/tintegrityservices/scripts/rollback_install_v1/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v1/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/rollback_install_v2/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/rollback_install_v2/EFailNewFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v2/efailnewfilesremoved.ini
+../test/tintegrityservices/scripts/rollback_install_v2/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v2/efailnone.ini
+../test/tintegrityservices/scripts/rollback_install_v2/EFailOldFilesRestored.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v2/efailoldfilesrestored.ini
+../test/tintegrityservices/scripts/rollback_install_v2/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_install_v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efaildeletingfile.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailNewFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efailnewfilesremoved.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efailnone.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailOldFilesRestored.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efailoldfilesrestored.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailRestoringFile.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efailrestoringfile.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v1/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v1/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailNewFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efailnewfilesremoved.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efailnone.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailOldFilesRestored.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efailoldfilesrestored.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailRestoringFile.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efailrestoringfile.ini
+../test/tintegrityservices/scripts/rollback_uninstall_v2/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_uninstall_v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailDeletingFile.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailNewFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efailnewfilesremoved.ini
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailNone.ini 			z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efailnone.ini
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailOldFilesRestored.ini z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efailoldfilesrestored.ini
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailRestoringFile.ini 	z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efailrestoringfile.ini
+../test/tintegrityservices/scripts/rollback_upgrade_v1-v2/EFailTempFilesRemoved.ini z:/tusif/tsts/tintegrityservices/scripts/rollback_upgrade_v1-v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/uninstall_v1/EFailBackupFilesRemoved.ini z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efailbackupfilesremoved.ini
+../test/tintegrityservices/scripts/uninstall_v1/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efaildeletingfile.ini
+../test/tintegrityservices/scripts/uninstall_v1/EFailInstallComplete.ini 	z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efailinstallcomplete.ini
+../test/tintegrityservices/scripts/uninstall_v1/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efailnone.ini
+../test/tintegrityservices/scripts/uninstall_v1/EFailRemovingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efailremovingfile.ini
+../test/tintegrityservices/scripts/uninstall_v1/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/uninstall_v1/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/uninstall_v2/EFailBackupFilesRemoved.ini z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efailbackupfilesremoved.ini
+../test/tintegrityservices/scripts/uninstall_v2/EFailDeletingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/uninstall_v2/EFailInstallComplete.ini 	z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efailinstallcomplete.ini
+../test/tintegrityservices/scripts/uninstall_v2/EFailNone.ini 				z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efailnone.ini
+../test/tintegrityservices/scripts/uninstall_v2/EFailRemovingFile.ini 		z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efailremovingfile.ini
+../test/tintegrityservices/scripts/uninstall_v2/EFailTempFilesRemoved.ini 	z:/tusif/tsts/tintegrityservices/scripts/uninstall_v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailAddingNewFile.ini 	 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailaddingnewfile.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailAddingTempFile.ini 	 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailaddingtempfile.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailBackupFilesRemoved.ini z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailbackupfilesremoved.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailDeletingFile.ini 		 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efaildeletingfile.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailInstallComplete.ini 	 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailinstallcomplete.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailNone.ini 				 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailnone.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailRemovingFile.ini 		 z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailremovingfile.ini
+../test/tintegrityservices/scripts/upgrade_v1-v2/EFailTempFilesRemoved.ini   z:/tusif/tsts/tintegrityservices/scripts/upgrade_v1-v2/efailtempfilesremoved.ini
+
+../test/tintegrityservices/scripts/data/unittests/testjournal.log z:/tusif/tsts/tintegrityservices/scripts/data/unittests/myjournal.log
+

@@ -1,0 +1,20 @@
+# Verify that certificates with no constraints do not undo constraints already present in other certificates
+
+[main]
+name=mismatch_10
+template=simple.txt
+inifile=mismatch.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,unconstrained,user_caps,unconstrained
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswisystemcapability_protected.exe"-"!:\sys\bin\tswisystemcapability_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml

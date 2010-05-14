@@ -1,0 +1,53 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+* sifgetcompinfotest1.mmp for usif test 
+*
+*/
+ 
+
+TARGET			sifgetcompapparcinfotest.exe
+TARGETTYPE		exe
+CAPABILITY 		All -Tcb
+
+UID			0x10000007 0x80286FE1
+VENDORID		0x0
+
+SOURCEPATH		../source
+SOURCE			sifintegusercapsbasepackage.cpp
+
+SYSTEMINCLUDE	/epoc32/include
+
+START RESOURCE	sifgetcompapparcinfotest_loc.rss
+HEADER
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotest 
+END
+
+// Application exe registration resource file
+resource  	sifgetcompapparcinfotest_reg.rss
+start resource 	sifgetcompapparcinfotest_reg.rss
+targetpath 	tusif/tsif/data/sifgetcompapparcinfotest
+end
+
+
+// Icons for UK language version
+START BITMAP	sifgetcompapparcinfotest_01.mbm
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotest
+SOURCEPATH		../source
+SOURCE			c8,1 icon3M.BMP
+END
+
+LIBRARY			euser.lib
+SMPSAFE
+

@@ -1,0 +1,6 @@
+[TEST1]
+SIS = z:\tswi\tsishelper\data\test1.sis
+ExpectedController = z:\tswi\tsishelper\data\test1.controller
+ExpectedData = z:\tswi\tsishelper\data\test1.data
+DataUnit = 0
+FileNumber = 1

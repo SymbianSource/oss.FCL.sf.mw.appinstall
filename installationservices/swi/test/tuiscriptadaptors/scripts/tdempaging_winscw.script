@@ -1,0 +1,285 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// @file tdempaging.script
+// Creation May 17, 2006
+// dempaging Integration Test Script
+// Integration Test
+// Component  : SWI
+// Tests      : Jayavardhan Malladi
+// The scope of this script is to cover demand paging related SWI tests 
+// The ini file dempaging.ini is loacted at the path c:\tswi\tuiscriptadaptors\scripts
+//
+
+PRINT Run all tests for install (upgrade) and uninstall of running application
+LOAD_SUITE tuiscriptadaptors
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0003
+//! @SYMTestCaseDesc 		2pkg-Test for Uninstall of a dll when it is being used by an exe
+//! @SYMREQ 			REQ5673
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Install an exe and a dll, 
+//				2. start the exe 
+//				3. verify that the exe is running 
+//				4. Uninstall the dll 
+//				5. verify that the exe is running
+//! @SYMTestExpectedResults 	Uninstall is successful     
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+
+RUN_PROGRAM 5 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+// Cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0003
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0004
+//! @SYMTestCaseDesc 		2pkg-Test for Upgrade of a dll multiple times
+//! @SYMREQ 			REQ5671
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Installs an exe and a dll
+//				2. Start the exe then,
+//				3. verify that the exe is running
+//				4. Upgrade and check exe is still running
+//				5. Upgrade and check exe is still running
+//				6. Cleanup
+//! @SYMTestExpectedResults 	Upgrade is successful		    
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+
+RUN_PROGRAM 5 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+// Upgrade DLL a couple of times
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+// Cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0004
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0005
+//! @SYMTestCaseDesc 		2pkg-Test for Uninstall of a dll with initialised writable data when the dll is in use 
+//! @SYMREQ 			REQ5673
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Install an exe and a dll, 
+//				2. Start the exe, verify it is running
+//				4. Uninstall the dll
+//				5. Wakeup the exe so it checks the array
+//				6. Check the passed file
+//				7. Cleanup passed file (1st exe is still running)
+//				8. Start a 2nd copy of the exe
+//				9. Wakeup the 2nd exe so it checks the array
+//				10. Check the new passed file
+//              		11. Cleanup
+//! @SYMTestExpectedResults 	Uninstall is successful
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0005
+
+RUN_UTILS  MkDir c:\preq1110\
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+
+RUN_PROGRAM 1 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+
+RUN_UTILS  MkDir c:\preq1110\wakeup\
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file
+
+RUN_UTILS DeleteDirectory c:\preq1110\
+RUN_UTILS MkDir c:\preq1110\
+RUN_PROGRAM 1 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_UTILS  MkDir c:\preq1110\wakeup\
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file
+
+// Cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0005
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0006
+//! @SYMTestCaseDesc 		2pkg-Test for Uninstall of a dll multiple times
+//! @SYMREQ 			REQ5673
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Install an exe and a dll
+//				2. Start the exe 
+//				3. Verify that exe is running
+//				4. Uninstalls the dll 
+//				5. Verify that exe is running
+//				6. Repeat install/uninstall of the dll for 2nd time also 
+//				7. Verify that the exe is running.
+//! @SYMTestExpectedResults 	Uninstall is successful    
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+
+RUN_PROGRAM 1 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+RUN_UTILS MkDir c:\preq1110\
+RUN_UTILS  MkDir c:\preq1110\wakeup\
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file
+
+// Cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0006
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0007
+//! @SYMTestCaseDesc 		2pkg-Test for testing correctness of initialised data
+//! @SYMREQ 			REQ5673
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Install an exe and a dll, 
+//				2. Start the exe 
+//				3. Wakeup exe to check it detects DLL 1 data
+//				4. Upgrade DLL to v2
+//				5. Start 2nd exe and make it check for DLL 1 data
+//				6. Kill both exes (by uninstall/install of exe pkg)
+//				7. Start 2nd exe and make it check for DLL 2 data
+//				8. Cleanup
+//! @SYMTestExpectedResults 	Uninstall is successful			    
+//! @SYMTestType		CIT	    
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+
+RUN_PROGRAM 1 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+// Wakeup and check v1 DLL data
+RUN_UTILS  MkDir c:\preq1110\
+RUN_UTILS  MkDir c:\preq1110\wakeup\
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file
+// Exe should still be running
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll_running
+
+// Upgrade DLL to v2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini large_array_dll2
+
+// Start 2nd copy of exe and check the data is still that of DLL v1 (not v2)
+RUN_UTILS DeleteDirectory c:\preq1110\
+RUN_UTILS MkDir c:\preq1110\
+RUN_PROGRAM 1 AppUsingDLL.exe
+
+// Wakeup and check data
+RUN_UTILS  MkDir c:\preq1110\wakeup\
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file
+
+// Stop both exes
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini appusingdll
+
+// Check for DLL2 data
+// This part of the test does not work running on the winscw emulator due to emulator limitations.
+//RUN_UTILS DeleteDirectory c:\preq1110\
+//RUN_UTILS MkDir c:\preq1110\
+//RUN_PROGRAM 1 AppUsingDLL.exe
+//RUN_UTILS  MkDir c:\preq1110\wakeup\
+//RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini Check_file2
+
+// Cleanup
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_large_array_dll
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0007
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-DEMPAGING-0009
+//! @SYMTestCaseDesc 		Tests whether a non pageable exe is uninstallable when it is running 
+//! @SYMREQ 			REQ5668
+//! @SYMPREQ  			PREQ1110
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Install a non pageable app,(which has the tag in mmp file)
+//				2. Run the exe 
+//				3. Verify that exe is running  
+//				4. Uninstall the exe 
+//				5. Verify that the exe not running
+//! @SYMTestExpectedResults  	successfull uninstallation of the exe	    
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+START_TESTCASE API-SEC-SWI-DEMPAGING-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini isolated_unpaged
+RUN_PROGRAM  1 isolated_app_unpaged.exe 
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini isolated_unpaged_running
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini u_isolated_unpaged
+RUN_TEST_STEP_RESULT 106 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\tdempaging.ini isolated_unpaged_running
+// Cleanup
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-DEMPAGING-0009
+

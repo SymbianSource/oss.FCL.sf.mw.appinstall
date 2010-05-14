@@ -1,0 +1,30 @@
+/*
+* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Image description file for project AppMngr2
+*
+*/
+
+
+#ifndef APPMNGR2_IBY
+#define APPMNGR2_IBY
+
+#include <data_caging_paths_for_iby.hrh>
+
+S60_APP_EXE( appmngr2 )
+S60_APP_AIF_ICONS( appmngr2 )
+S60_APP_AIF_RSC( appmngr2 )
+SCALABLE_IMAGE( APP_BITMAP_DIR, APP_BITMAP_DIR, appmngr2 )
+
+#endif // APPMNGR2_IBY
+

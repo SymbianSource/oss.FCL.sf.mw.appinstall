@@ -1,0 +1,80 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* DESRIPTION:
+* Security Manager project to install SIS file on Symbian devices
+* securitymanager.dll Security manager implementation
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY All
+
+target		securitymanager.dll
+targettype	dll
+
+UID			0x1000008d 0x10202614
+VENDORID	0x70000001
+
+USERINCLUDE ../inc
+USERINCLUDE ../inc/swi
+USERINCLUDE ../source/securitymanager
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+SOURCEPATH	../source/securitymanager
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+DEFFILE		SecurityManager_v2.DEF
+#else
+DEFFILE		securitymanager.def
+#endif
+
+
+SOURCE securitymanager.cpp
+SOURCE certificateretriever.cpp
+SOURCE secutils.cpp
+SOURCE chainvalidator.cpp
+SOURCE signatureverifier.cpp
+SOURCE securitypolicy.cpp
+SOURCE certchainconstraints.cpp
+
+#ifdef __SWI_LOGGING__
+LIBRARY flogger.lib    // Logging & tracing support -- To use define __SWI_LOGGING__ in the .hrh file
+#endif 
+
+LIBRARY euser.lib
+LIBRARY estor.lib
+LIBRARY hash.lib
+LIBRARY efsrv.lib 
+LIBRARY siscontroller.lib 
+LIBRARY ocsp.lib
+LIBRARY ocspsupportclient.lib
+LIBRARY cryptography.lib 
+LIBRARY x509.lib
+LIBRARY asn1.lib
+LIBRARY crypto.lib // This is certman crypto
+
+LIBRARY pkixcertbase.lib 
+LIBRARY fstokencli.lib 
+LIBRARY ctframework.lib
+LIBRARY swicertstore.lib
+LIBRARY uissclient.lib
+LIBRARY devinfosupportclient.lib
+SMPSAFE

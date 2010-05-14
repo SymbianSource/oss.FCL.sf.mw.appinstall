@@ -1,0 +1,37 @@
+EXPORTS
+	??1CIAUpdate@@UAE@XZ @ 1 NONAME ; CIAUpdate::~CIAUpdate(void)
+	??1CIAUpdateParameters@@UAE@XZ @ 2 NONAME ; CIAUpdateParameters::~CIAUpdateParameters(void)
+	??1CIAUpdateResult@@UAE@XZ @ 3 NONAME ; CIAUpdateResult::~CIAUpdateResult(void)
+	?CancelCount@CIAUpdateResult@@QBEHXZ @ 4 NONAME ; int CIAUpdateResult::CancelCount(void) const
+	?CheckUpdates@CIAUpdate@@QAEXABVCIAUpdateParameters@@@Z @ 5 NONAME ; void CIAUpdate::CheckUpdates(class CIAUpdateParameters const &)
+	?CommandLineArguments@CIAUpdateParameters@@QBEABVTDesC8@@XZ @ 6 NONAME ; class TDesC8 const & CIAUpdateParameters::CommandLineArguments(void) const
+	?CommandLineExecutable@CIAUpdateParameters@@QBEABVTDesC16@@XZ @ 7 NONAME ; class TDesC16 const & CIAUpdateParameters::CommandLineExecutable(void) const
+	?FailCount@CIAUpdateResult@@QBEHXZ @ 8 NONAME ; int CIAUpdateResult::FailCount(void) const
+	?NewL@CIAUpdate@@SAPAV1@AAVMIAUpdateObserver@@@Z @ 9 NONAME ; class CIAUpdate * CIAUpdate::NewL(class MIAUpdateObserver &)
+	?NewL@CIAUpdateParameters@@SAPAV1@XZ @ 10 NONAME ; class CIAUpdateParameters * CIAUpdateParameters::NewL(void)
+	?NewL@CIAUpdateResult@@SAPAV1@XZ @ 11 NONAME ; class CIAUpdateResult * CIAUpdateResult::NewL(void)
+	?NewLC@CIAUpdate@@SAPAV1@AAVMIAUpdateObserver@@@Z @ 12 NONAME ; class CIAUpdate * CIAUpdate::NewLC(class MIAUpdateObserver &)
+	?NewLC@CIAUpdateParameters@@SAPAV1@XZ @ 13 NONAME ; class CIAUpdateParameters * CIAUpdateParameters::NewLC(void)
+	?NewLC@CIAUpdateResult@@SAPAV1@XZ @ 14 NONAME ; class CIAUpdateResult * CIAUpdateResult::NewLC(void)
+	?SearchCriteria@CIAUpdateParameters@@QBEABVTDesC16@@XZ @ 15 NONAME ; class TDesC16 const & CIAUpdateParameters::SearchCriteria(void) const
+	?SetCancelCount@CIAUpdateResult@@QAEXH@Z @ 16 NONAME ; void CIAUpdateResult::SetCancelCount(int)
+	?SetCommandLineArgumentsL@CIAUpdateParameters@@QAEXABVTDesC8@@@Z @ 17 NONAME ; void CIAUpdateParameters::SetCommandLineArgumentsL(class TDesC8 const &)
+	?SetCommandLineExecutableL@CIAUpdateParameters@@QAEXABVTDesC16@@@Z @ 18 NONAME ; void CIAUpdateParameters::SetCommandLineExecutableL(class TDesC16 const &)
+	?SetFailCount@CIAUpdateResult@@QAEXH@Z @ 19 NONAME ; void CIAUpdateResult::SetFailCount(int)
+	?SetSearchCriteriaL@CIAUpdateParameters@@QAEXABVTDesC16@@@Z @ 20 NONAME ; void CIAUpdateParameters::SetSearchCriteriaL(class TDesC16 const &)
+	?SetSuccessCount@CIAUpdateResult@@QAEXH@Z @ 21 NONAME ; void CIAUpdateResult::SetSuccessCount(int)
+	?SetUid@CIAUpdateParameters@@QAEXABVTUid@@@Z @ 22 NONAME ; void CIAUpdateParameters::SetUid(class TUid const &)
+	?ShowUpdates@CIAUpdate@@QAEXABVCIAUpdateParameters@@@Z @ 23 NONAME ; void CIAUpdate::ShowUpdates(class CIAUpdateParameters const &)
+	?SuccessCount@CIAUpdateResult@@QBEHXZ @ 24 NONAME ; int CIAUpdateResult::SuccessCount(void) const
+	?Uid@CIAUpdateParameters@@QBEABVTUid@@XZ @ 25 NONAME ; class TUid const & CIAUpdateParameters::Uid(void) const
+	?Update@CIAUpdate@@QAEXABVCIAUpdateParameters@@@Z @ 26 NONAME ; void CIAUpdate::Update(class CIAUpdateParameters const &)
+	?UpdateQuery@CIAUpdate@@QAEXXZ @ 27 NONAME ; void CIAUpdate::UpdateQuery(void)
+	?SetShowProgress@CIAUpdateParameters@@QAEXH@Z @ 28 NONAME ; void CIAUpdateParameters::SetShowProgress(int)
+	?ShowProgress@CIAUpdateParameters@@QBEHXZ @ 29 NONAME ; int CIAUpdateParameters::ShowProgress(void) const
+	?Importance@CIAUpdateParameters@@QBEIXZ @ 30 NONAME ; unsigned int CIAUpdateParameters::Importance(void) const
+	?Refresh@CIAUpdateParameters@@QBEHXZ @ 31 NONAME ; int CIAUpdateParameters::Refresh(void) const
+	?SetImportance@CIAUpdateParameters@@QAEXI@Z @ 32 NONAME ; void CIAUpdateParameters::SetImportance(unsigned int)
+	?SetRefresh@CIAUpdateParameters@@QAEXH@Z @ 33 NONAME ; void CIAUpdateParameters::SetRefresh(int)
+	?SetType@CIAUpdateParameters@@QAEXI@Z @ 34 NONAME ; void CIAUpdateParameters::SetType(unsigned int)
+	?Type@CIAUpdateParameters@@QBEIXZ @ 35 NONAME ; unsigned int CIAUpdateParameters::Type(void) const
+

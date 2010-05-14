@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file add a file to the private directory for an exe of the base package
+
+;Languages
+&EN
+
+;Header
+#{"testlocations_privatedir_patch"}, (0x81113009), 1, 2, 3,TYPE=SP
+
+%{"testlocations_privatedir_patch"}
+:"Unique Vendor Name"
+
+"main.cpp"-"!:\Private\81000002\file1.txt"
+"main.cpp"-"!:\Private\81000002\file2.txt"
+"main.cpp"-"!:\Private\81000002\file3.txt"
+

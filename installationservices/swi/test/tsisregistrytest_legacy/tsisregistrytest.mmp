@@ -1,0 +1,62 @@
+/*
+* Copyright (c) 1999-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* tsisregistrytest.exe Test harness for sisregistry
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY All -TCB
+
+
+TARGET          tsisregistrytest.exe
+TARGETTYPE  	exe
+
+UID             0xFFFFFFFF
+VENDORID		0x70000001
+
+USERINCLUDE ../../inc
+USERINCLUDE ../../inc/swi
+USERINCLUDE ../../source/sisregistry
+USERINCLUDE ../testutilswi/client
+USERINCLUDE ../../source/sisregistry/server_legacy
+USERINCLUDE ../../source/sisregistry/common
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+SOURCEPATH	.
+
+SOURCE 		tsisregistrytest.cpp
+SOURCE 		tsisregistryteststep.cpp
+SOURCE 		sessionstep.cpp
+SOURCE 		writablesessionstep.cpp
+
+LIBRARY    	euser.lib
+LIBRARY		efsrv.lib
+LIBRARY		testexecuteutils.lib
+LIBRARY		testexecutelogclient.lib
+LIBRARY		sisregistryclient.lib
+LIBRARY     integrityservices.lib
+LIBRARY     testutilclientswi.lib
+LIBRARY		x509.lib
+LIBRARY     estor.lib 
+LIBRARY 	centralrepository.lib
+SMPSAFE

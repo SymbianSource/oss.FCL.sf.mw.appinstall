@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SISX file, without embedded SISX files
+
+;Languages
+&EN
+
+;Header
+#{"053177a_0"}, (0x81115000), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;Ordinary file to selected drive
+"text\appcap1.txt"-"!:\Documents\def053177\appcap1.txt"

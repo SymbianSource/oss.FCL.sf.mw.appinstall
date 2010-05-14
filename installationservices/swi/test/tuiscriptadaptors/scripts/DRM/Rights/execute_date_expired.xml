@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<drmrights>
+	<rights cid="Sis">
+		<intent type ="execute">
+			<expiry>
+				<day>
+				1
+				</day>
+				<month>
+				1
+				</month>
+				<year>
+				2000
+				</year>
+			</expiry>
+		</intent>
+	</rights>
+</drmrights>

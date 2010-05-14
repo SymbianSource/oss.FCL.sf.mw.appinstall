@@ -1,0 +1,399 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run Cleanup Infrastructure tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @file
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0001
+//! @SYMTestCaseDesc		Installs a package to a Media card, removes it, uninstalls, remounts it to test cleanup
+//! @SYMDEF			INC069902 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_base_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_base_x_unmounted
+
+// Remount the card, and make sure the cleanup stuff worked
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_base_x
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0001
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0002
+//! @SYMTestCaseDesc		Installs a package and augmentation to a Media card, removes it, uninstalls, remounts it to test cleanup
+//! @SYMDEF			INC069902 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_base_x
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_aug_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_base_x_unmounted
+
+// Remount the card, and make sure the cleanup stuff worked
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_base_x
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0002
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0003
+//! @SYMTestCaseDesc		Installs a package and augmentation to a Media card, removes it, uninstalls the augmentation, remounts it to test cleanup
+//! @SYMDEF			INC069902 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_base_x
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_aug_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_aug_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_aug_x
+
+// Remount the card, and make sure the cleanup stuff worked
+// ensure augmentation files are missing, but base files are still present
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_aug_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini augmentation_base_x
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_augmentation_base_x
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0003
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0004
+//! @SYMTestCaseDesc		Installs a package to several drives including a card, removes it, uninstalls, remounts it to test cleanup
+//! @SYMDEF			INC069902 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini test2drives_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_test2drives_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_test2drives_x
+
+// Remount the card, and make sure the cleanup stuff worked
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_test2drives_x
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0004
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0005
+//! @SYMTestCaseDesc		Installs a package and partial upgrade to a Media card, removes it, uninstalls, remounts it to test cleanup
+//! @SYMDEF			INC069902 
+//! @SYMTestPriority		High
+//! @SYMTestActions		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults	Media card should be free of installed files
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini partialupgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini partialupgrade_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_partialupgrade
+
+// Remount the card, and make sure the cleanup stuff worked
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_partialupgrade
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0005
+
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0006
+//! @SYMTestCaseDesc		Checks that sis registry does not indicate app is present unless drive it is installed on is present.
+//! @SYMDEF			INC073095
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs app, checks sisregistry indicated presence of app through unmounts and remounts of MMC card, and
+//! 				after uninstall.
+//! @SYMTestExpectedResults	Registry does not indicate app is present unless drive it is installed on is present.
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0006
+
+// Ensure that the drive is mounted for the tests.
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+// Install simple package.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_present
+
+// Check that sisregistry indicates the app is not present when the drive is removed
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_absent
+
+// Check that sisregistry indicates the app is present again when the drive is re-inserted.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_present
+
+// Check again when a file (not a directory) with an 8 digit hex number as a name is present in the sisregistry directory
+// on the MMC when it is removed and reinserted.  This tests the fix for DEF081610 - previously the sisregistryserver would
+// panic when attempting the update.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini fileinsisregistrydir
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini fileinsisregistrydir
+
+// Repeat removal, uninstalling while drive removed, and confirm cleanup and absence from registry when re-inserted.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_uninstalled
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple_uninstalled
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_simple
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0006
+
+
+//! @SYMTestCaseID		API-SEC-DEF073368-B-0001
+//! @SYMTestCaseDesc		Installs a package, and and installs another package with the same content but diffierent case of the file names
+//! @SYMDEF			DEF073368
+//! @SYMTestPriority		High
+//! @SYMTestExpectedResults	both package should installed sucessfully 
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-DEF073368-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini basepkg
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini basepkg2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_basepkg
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini basepkg2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini basepkg
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_basepkg
+
+END_TESTCASE API-SEC-DEF073368-B-0001
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0007
+//! @SYMTestCaseDesc		Tests install/removal/cleanup with a FN directive for drive absent at the time of install/uninstall.
+//! @SYMDEF			INC075324
+//! @SYMTestPriority		High
+//! @SYMTestActions		Unmount media card, install package with FN entry for MMC drive, re-mount drive, create files affected
+//! 				by FN line and one in private directory on removable drive, uninstall package.
+//! @SYMTestExpectedResults	File on MMC card specified by FN line should be removed on uninstall, as well as those in the
+//! 				private directory for the SID being removed.
+//! @SYMDevelopedForRelease	Mike
+ 
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0007
+ 
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc_copyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini filenullmmc_checkfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_filenullmmc
+ 
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0007
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0008
+//! @SYMTestCaseDesc		Installs a package to a Media card, removes it, uninstalls, remounts it to test directories
+//! @SYMDEF			DEF076676 
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card and install sis file in X drive 
+//! @SYMTestExpectedResults	Empety directories should not be present
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0008
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini Install_DEF076676
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_DEF076676_x
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_DEF076676_x
+
+// Remount the card, and make sure the cleanup stuff worked
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_DEF076676
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0008
+
+
+//! @SYMTestCaseID		API-SEC-CLNP-INFRAS-B-0009
+//! @SYMTestCaseDesc		Installs a package to a Media card, uninstalls, removes it to test directories
+//! @SYMDEF			DEF076676 
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Inserts a media card and install sis file in X drive 
+//! @SYMTestExpectedResults	Empety directories should not be present
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-CLNP-INFRAS-B-0009
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini Install_DEF076676
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_DEF076676
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_DEF076676
+
+END_TESTCASE API-SEC-CLNP-INFRAS-B-0009
+ 
+
+//! @SYMTestCaseID 		API-SEC-INC082422-B-0001
+//! @SYMTestCaseDesc		INC082422: Reset loop with certain (filesystem partly corrupted) MiniSD card
+//! @SYMDEF			INC082422
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Mounting an MMC with corrupt files can cause CSisRegistryCache::UpdatePackagePresentState to Leave
+//! @SYMTestExpectedResults	Function must not leave
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-INC082422-B-0001
+
+// Replace registry dir with a file to simulate a corrupt MMC
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini MmcReg
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini MmcReg
+
+// Force re-scan
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+// This will cause the registry to start and scan drives
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini esock
+
+// Recover by deleting X: registry
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini MmcReg
+
+END_TESTCASE API-SEC-INC082422-B-0001
+
+
+//! @SYMTestCaseID   		API-SEC-CleanupInfrastructureSurvivesRollback-B-0001
+//! @SYMTestCaseDesc		Check that existing controller files and uninstall logs aren't removed when an install which removes them
+//! 				fails and rolls back.  Also check that no new files are left in these directories on rollback
+//! @SYMDEF 			DEF083624
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions		Installs an embedded sis file which overwrites orphaned controller files and uninstall logs, with an
+//! 				embedding sis file that fails during processing due to a bad private directory.  One of the orphans is "watched"
+//! 				to ensure that it is modified, and all are compared to the original files after rollback.
+//! @SYMTestExpectedResults	FS reports orphaned file is changed, but orphans all exist and match originals at the end of the test.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-CleanupInfrastructureSurvivesRollback-B-0001
+
+// Create "orphaned" controller files and files in uninstall log directories
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini orphancleanuptestsetup
+
+// Install step which will fail and rollback after removing/replacing files above, checks that they are returned after rollback
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini orphansurvivesrollback
+
+// Install step which will succeed after removing/replacing orphans above.
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini zeros
+
+// Uninstall package.
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_zeros
+
+// Install step which will fail and rollback, make sure orphans in relevant dirs aren't created in the process
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini orphansnotcreated
+
+END_TESTCASE API-SEC-CleanupInfrastructureSurvivesRollback-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF068425-B-0001
+//! @SYMTestCaseDesc		DEF068425: SWI: Package uninstall fails when drive installed to contains corrupt media
+//! @SYMDEF			DEF068425
+//! @SYMTestPriority		Low
+//! @SYMTestActions 		Install sis file Format MMC Boot Table Only, Uninstall the sis file
+//! @SYMTestExpectedResults	sis file uninstalled successfully ignoring the corruption.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF068425-B-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini XFAT
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+END_TESTCASE API-SEC-DEF068425-B-0001
+
+
+//! @SYMTestCaseID   		API-SEC-UninstallLogsForRomUpgrades-B-0001
+//! @SYMTestCaseDesc		Check that uninstall logs are created for SP upgrades to packages in ROM (with file on removable media),
+//! 				but not PUs.
+//! @SYMDEF 			DEF090064
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions		Installs PU, checking for no uninstall logs, removes PU, then installs SP, checking that uninstall logs
+//! 				are created, then uninstalls.
+//! @SYMTestExpectedResults	Uninstall logs created for SP but not for PU of base package in ROM.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-UninstallLogsForRomUpgrades-B-0001
+
+// Make sure that any previous install of the PU is removed before tests start
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini removepuentry
+
+// Install PU, checking that no uninstall logs are created
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini stubwildcardupgrade
+
+// Remove PU (can't be uninstalled)
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini removepuentry
+
+// Install SP, checking that uninstall logs are created
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini stubprivateupgradesp
+
+// Uninstall SP, checking that uninstall logs are cleaned up
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_legacy.ini u_stubprivateupgradesp
+
+END_TESTCASE API-SEC-UninstallLogsForRomUpgrades-B-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

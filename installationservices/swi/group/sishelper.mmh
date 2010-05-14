@@ -1,0 +1,93 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* common header file for both the textshell and general purpose version of this sishelper.
+*
+*/
+
+
+/**
+ @file
+*/
+
+
+macro __SECURE_API__
+macro __DATA_CAGING__
+
+capability ALL -TCB
+
+targettype dll
+
+// UID is KAppinstSISHelper (270496403 - 0x101F7293)
+uid			0x1000008d 0x101F7293
+vendorid	0x70000001
+
+userinclude ../source/sishelper
+userinclude ../inc
+userinclude ../inc/swi
+userinclude ../source/uiss/client
+userinclude ../source/uiss/common
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+sourcepath	../source/sishelper
+
+source sishelper.cpp
+source launcher.cpp
+source asynclauncher.cpp
+source installprefs.cpp
+source uissclienthandler.cpp
+
+source	commands/applicationsinusedialog.cpp
+source	commands/handlecancellableinstallevent.cpp
+source	commands/cannotoverwritefiledialog.cpp
+source	commands/dependencybreakdialog.cpp
+source	commands/deviceincompatibility.cpp
+source	commands/missingdependency.cpp
+source	commands/drivedialog.cpp
+source	commands/errordialog.cpp
+source	commands/grantcapabilitiesdialog.cpp
+source	commands/handleinstallevent.cpp
+source	commands/installdialog.cpp
+source	commands/languagedialog.cpp
+source	commands/ocspresultdialog.cpp
+source	commands/optionsdialog.cpp
+source	commands/questiondialog.cpp
+source	commands/securitywarningdialog.cpp
+source	commands/uninstalldialog.cpp
+source	commands/upgradedialog.cpp
+source	commands/textdialog.cpp
+source	commands/shutdownserver.cpp
+
+library euser.lib
+library efsrv.lib
+library estor.lib
+library flogger.lib
+library uiss.lib
+library uissclient.lib
+library sisxfile.lib
+library pkixcertbase.lib
+library sisregistryclient.lib
+library securitymanager.lib
+library cafdataprovider.lib
+library swidataprovider.lib
+library ecom.lib
+library charconv.lib
+library	bafl.lib
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+library sif.lib
+
+deffile	sishelper.DEF
+#else
+deffile	sishelper_legacy.DEF
+#endif

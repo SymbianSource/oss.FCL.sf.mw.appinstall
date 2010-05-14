@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2007 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+&EN
+
+#{"Wildcard Suported ROM App"},(0x802730B1), 1, 2, 3
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+""-"z:\sys\bin\wildcard_rom_stub_lib?.dll"
+""-"z:\sys\bin\*.exe"
+
+; Misc data files for baseline eclipsing test
+""-"z:\cr1122test\*.txt"
+""-"z:\cr1122etst\wildcard_config?.cnf"

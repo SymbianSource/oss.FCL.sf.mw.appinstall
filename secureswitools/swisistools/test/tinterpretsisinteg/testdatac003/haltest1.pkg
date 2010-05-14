@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;To test the HAL conditionals
+;Languages
+&EN
+
+;Header
+#{"HAL-conditionals-PEN"}, (0x89334286), 1, 0, 0
+
+%{"Vendor"}
+:"Vendor"
+
+
+IF PEN=1 ;pen/digitizeris present.
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\pen.txt"-"C:\pen.txt"
+ELSE
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\nopen.txt"-"c:\nopen.txt", FILETEXT, TEXTEXIT
+ENDIF
+
+

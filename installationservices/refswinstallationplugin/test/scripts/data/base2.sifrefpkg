@@ -1,0 +1,7 @@
+Languages: "EN" "PL"
+ComponentName: "SIF Reference Component 2" "Przykladowy komponent SIF"
+ComponentVersion: 1.00(0)
+ComponentVendor: "Symbian" "Symbian"
+File: c:\RefComponent2\file1.ref
+File: c:\RefComponent2\file2.ref
+File: c:\RefComponent2\file3.ref

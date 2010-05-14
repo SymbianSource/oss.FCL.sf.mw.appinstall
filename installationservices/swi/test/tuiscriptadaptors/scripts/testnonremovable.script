@@ -1,0 +1,172 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests for non-removable sis files
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_nonremovable_base
+
+//! @SYMTestCaseID 		API-SEC-InstallNR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallNR-0001
+
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_non-removable
+
+END_TESTCASE API-SEC-InstallNR-0001
+
+
+//! @SYMTestCaseID 		API-SEC-InstallR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallR-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_removable
+
+END_TESTCASE API-SEC-InstallR-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UninstallNR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-UninstallNR-0001
+
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini uninstall_non-removable
+
+END_TESTCASE API-SEC-UninstallNR-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RemovablePackages-0001
+//! @SYMTestStatus		3. Released
+// Test Removable Packages
+
+START_TESTCASE API-SEC-RemovablePackages-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest RemovablePackages z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini RemovablePackages
+
+END_TESTCASE API-SEC-RemovablePackages-0001
+
+
+// Start the upgrade tests
+
+// SA base (80000001)
+
+//! @SYMTestCaseID 		API-SEC-InstallSANR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallSANR-0001
+
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SANR_1
+
+END_TESTCASE API-SEC-InstallSANR-0001
+
+
+//! @SYMTestCaseID 		API-SEC-InstallSPNR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallSPNR-0001
+
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SPNR_1
+
+END_TESTCASE API-SEC-InstallSPNR-0001
+
+
+//! @SYMTestCaseID 		API-SEC-InstallPUNR-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallPUNR-0001
+
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_PUNR_1
+
+END_TESTCASE API-SEC-InstallPUNR-0001
+
+
+// SA(NR) base (80000002)
+
+//! @SYMTestCaseID 		API-SEC-InstallSA-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallSA-0001
+
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SA_2
+
+END_TESTCASE API-SEC-InstallSA-0001
+
+
+/// This test is temporarily disabled until the correct DB is pre-provisioned by interpretsis with a NR component which is not SU
+/// Current tests uses an SU component which cannot be upgraded by a non-SU package
+//! @SYMTestCaseID 		API-SEC-InstallSANR-0002
+//! @SYMTestStatus		3. Released
+///START_TESTCASE API-SEC-InstallSANR-0002
+///RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SANR_2
+///END_TESTCASE API-SEC-InstallSANR-0002
+
+
+//! @SYMTestCaseID 		API-SEC-InstallSP-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallSP-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SP_2
+RUN_TEST_STEP 100 tSisRegistryTest RemovablePackages z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini INC129325_RemovablePackages_SP
+
+END_TESTCASE InstallSP
+
+
+//! @SYMTestCaseID 		API-SEC-InstallSPNR-0002
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallSPNR-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_SPNR_2
+
+END_TESTCASE API-SEC-InstallSPNR-0002
+
+
+//! @SYMTestCaseID 		API-SEC-InstallPU-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallPU-0001
+
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_PU_2
+
+END_TESTCASE API-SEC-InstallPU-0001
+
+
+/// This test is temporarily disabled until the correct DB is pre-provisioned by interpretsis with a NR component which is not SU
+/// Current tests uses an SU component which cannot be upgraded by a non-SU package
+//! @SYMTestCaseID 		API-SEC-InstallPUNR-0002
+//! @SYMTestStatus		3. Released
+///START_TESTCASE API-SEC-InstallPUNR-0002
+///RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini install_PUNR_2
+///END_TESTCASE API-SEC-InstallPUNR-0002
+
+
+// Remove the removable package
+
+//! @SYMTestCaseID 		API-SEC-UninstallNR-0002
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-UninstallNR-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini uninstall_removable
+
+END_TESTCASE API-SEC-UninstallNR-0002
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tuiscriptadaptors\scripts\testnonremovable.ini forceremove_nonremovable_base

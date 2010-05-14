@@ -1,0 +1,9 @@
+EXPORTS
+	??1Cadornedfilenametestingdll@@UAE@XZ @ 1 NONAME ; Cadornedfilenametestingdll::~Cadornedfilenametestingdll(void)
+	?ExampleFuncAddCharL@Cadornedfilenametestingdll@@QAEXABVTChar@@@Z @ 2 NONAME ; void Cadornedfilenametestingdll::ExampleFuncAddCharL(class TChar const &)
+	?ExampleFuncRemoveLast@Cadornedfilenametestingdll@@QAEXXZ @ 3 NONAME ; void Cadornedfilenametestingdll::ExampleFuncRemoveLast(void)
+	?ExampleFuncString@Cadornedfilenametestingdll@@QBE?BVTPtrC16@@XZ @ 4 NONAME ; class TPtrC16 const Cadornedfilenametestingdll::ExampleFuncString(void) const
+	?NewL@Cadornedfilenametestingdll@@SAPAV1@XZ @ 5 NONAME ; class Cadornedfilenametestingdll * Cadornedfilenametestingdll::NewL(void)
+	?NewLC@Cadornedfilenametestingdll@@SAPAV1@XZ @ 6 NONAME ; class Cadornedfilenametestingdll * Cadornedfilenametestingdll::NewLC(void)
+	?Version@Cadornedfilenametestingdll@@QBE?AVTVersion@@XZ @ 7 NONAME ; class TVersion Cadornedfilenametestingdll::Version(void) const
+

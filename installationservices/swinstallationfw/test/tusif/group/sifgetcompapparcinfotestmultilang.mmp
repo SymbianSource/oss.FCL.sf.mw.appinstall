@@ -1,0 +1,74 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* sifgetcompapparcinfotestmultilang.mmp for usif test 
+*
+*/
+
+TARGET			sifgetcompapparcinfotestmultilang.exe
+TARGETTYPE		exe
+CAPABILITY 		All -Tcb
+
+UID			0x10000007 0x80286FE2
+VENDORID		0x0
+
+SOURCEPATH		../source
+SOURCE			sifintegusercapsbasepackage.cpp
+
+SYSTEMINCLUDE	/epoc32/include
+
+START RESOURCE	sifgetcompapparcinfotestmultilang_loc.rss
+HEADER
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotestmultilang 
+LANG 01 03 04 24
+END
+
+// Application exe registration resource file
+resource  	sifgetcompapparcinfotestmultilang_reg.rss
+start resource 	sifgetcompapparcinfotestmultilang_reg.rss
+targetpath 	tusif/tsif/data/sifgetcompapparcinfotestmultilang
+end
+
+
+// Icons for UK language version
+START BITMAP	sifgetcompapparcinfotestmultilang_01.mbm
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotestmultilang
+SOURCEPATH		../source
+SOURCE			c8,1 icon3M.BMP
+END
+
+// Icons for German language version
+START BITMAP	sifgetcompapparcinfotestmultilang_03.mbm
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotestmultilang
+SOURCEPATH		../source
+SOURCE			c8,1 icon3M.BMP
+END
+
+// Icons for Spanish language version
+START BITMAP	sifgetcompapparcinfotestmultilang_04.mbm
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotestmultilang
+SOURCEPATH		../source
+SOURCE			c8,1 icon3M.BMP 
+END
+
+// Icons for French International language version
+START BITMAP	sifgetcompapparcinfotestmultilang_24.mbm
+TARGETPATH		tusif/tsif/data/sifgetcompapparcinfotestmultilang
+SOURCEPATH		../source
+SOURCE			c8,1 icon3M.BMP
+END
+
+LIBRARY			euser.lib
+SMPSAFE
+

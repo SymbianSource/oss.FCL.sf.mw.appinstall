@@ -1,0 +1,15 @@
+EXPORTS
+	_ZN3Swi11CUissServer4NewLEN7CActive9TPriorityE @ 1 NONAME
+	_ZN3Swi11CUissServer5NewLCEN7CActive9TPriorityE @ 2 NONAME
+	_ZN3Swi21RInstallServerSession11RestoreFileERK8TIpcArgs @ 3 NONAME
+	_ZN3Swi21RInstallServerSession13RestoreCommitEv @ 4 NONAME
+	_ZN3Swi21RInstallServerSession6CancelEv @ 5 NONAME
+	_ZN3Swi21RInstallServerSession7ConnectEv @ 6 NONAME
+	_ZN3Swi21RInstallServerSession7RestoreERK8TIpcArgs @ 7 NONAME
+	_ZTIN3Swi11CUissServerE @ 8 NONAME ; #<TI>#
+	_ZTIN3Swi12CUissSessionE @ 9 NONAME ; #<TI>#
+	_ZTIN3Swi21CServerInstallWatcherE @ 10 NONAME ; #<TI>#
+	_ZTVN3Swi11CUissServerE @ 11 NONAME ; #<VT>#
+	_ZTVN3Swi12CUissSessionE @ 12 NONAME ; #<VT>#
+	_ZTVN3Swi21CServerInstallWatcherE @ 13 NONAME ; #<VT>#
+

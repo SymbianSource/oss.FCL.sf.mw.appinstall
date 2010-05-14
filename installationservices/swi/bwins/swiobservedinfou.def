@@ -1,0 +1,16 @@
+EXPORTS
+	?AddFilterL@CObservationFilter@Swi@@QAEXPBVHBufC16@@@Z @ 1 NONAME ; void Swi::CObservationFilter::AddFilterL(class HBufC16 const *)
+	?ExternalizeL@CObservationData@Swi@@QBEXAAVRWriteStream@@@Z @ 2 NONAME ; void Swi::CObservationData::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@CObservationHeader@Swi@@QBEXAAVRWriteStream@@@Z @ 3 NONAME ; void Swi::CObservationHeader::ExternalizeL(class RWriteStream &) const
+	?FindF@CObservationFilter@Swi@@QBEHPBVHBufC16@@@Z @ 4 NONAME ; int Swi::CObservationFilter::FindF(class HBufC16 const *) const
+	?InternalizeL@CObservationData@Swi@@QAEXAAVRReadStream@@@Z @ 5 NONAME ; void Swi::CObservationData::InternalizeL(class RReadStream &)
+	?InternalizeL@CObservationHeader@Swi@@QAEXAAVRReadStream@@@Z @ 6 NONAME ; void Swi::CObservationHeader::InternalizeL(class RReadStream &)
+	?NewL@CObservationData@Swi@@SAPAV12@ABVTDesC16@@ABVTSecureId@@E@Z @ 7 NONAME ; class Swi::CObservationData * Swi::CObservationData::NewL(class TDesC16 const &, class TSecureId const &, unsigned char)
+	?NewL@CObservationFilter@Swi@@SAPAV12@XZ @ 8 NONAME ; class Swi::CObservationFilter * Swi::CObservationFilter::NewL(void)
+	?NewL@CObservationHeader@Swi@@SAPAV12@ABVTUid@@W4TPackageType@2@W4TOperationType@2@@Z @ 9 NONAME ; class Swi::CObservationHeader * Swi::CObservationHeader::NewL(class TUid const &, enum Swi::TPackageType, enum Swi::TOperationType)
+	?NewLC@CObservationData@Swi@@SAPAV12@ABVTDesC16@@ABVTSecureId@@E@Z @ 10 NONAME ; class Swi::CObservationData * Swi::CObservationData::NewLC(class TDesC16 const &, class TSecureId const &, unsigned char)
+	?NewLC@CObservationData@Swi@@SAPAV12@XZ @ 11 NONAME ; class Swi::CObservationData * Swi::CObservationData::NewLC(void)
+	?NewLC@CObservationFilter@Swi@@SAPAV12@XZ @ 12 NONAME ; class Swi::CObservationFilter * Swi::CObservationFilter::NewLC(void)
+	?NewLC@CObservationHeader@Swi@@SAPAV12@ABVTUid@@W4TPackageType@2@W4TOperationType@2@@Z @ 13 NONAME ; class Swi::CObservationHeader * Swi::CObservationHeader::NewLC(class TUid const &, enum Swi::TPackageType, enum Swi::TOperationType)
+	?NewLC@CObservationHeader@Swi@@SAPAV12@XZ @ 14 NONAME ; class Swi::CObservationHeader * Swi::CObservationHeader::NewLC(void)
+

@@ -1,0 +1,50 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project definition file for AppMngr2 Runtime API STIF tests
+*
+*/
+
+
+#include <platform_paths.hrh>
+
+TARGET          appmngr2runtimeapitest.dll
+TARGETTYPE      dll
+UID             0x1000008D 0x101FB3E3
+
+VENDORID        VID_DEFAULT
+CAPABILITY      ALL -TCB
+
+USERINCLUDE     ../inc
+MW_LAYER_SYSTEMINCLUDE
+
+SOURCEPATH      ../src
+SOURCE          appmngr2runtimeapitest.cpp
+SOURCE          appmngr2runtimeapitestmain.cpp
+SOURCE          appmngr2testcommand.cpp
+
+LIBRARY         euser.lib                       // Base
+LIBRARY         stiftestinterface.lib           // STIF Framework
+LIBRARY         stiftestengine.lib              // STIF Framework
+LIBRARY         appmngr2pluginapi.lib           // AppMngr2 Runtime API
+LIBRARY         ecom.lib                        // ECom
+LIBRARY         avkon.lib                       // CAknIconArray
+LIBRARY         efsrv.lib                       // File Server
+LIBRARY         caf.lib                         // Content Access Framework
+LIBRARY         apmime.lib                      // TDataType
+LIBRARY         cone.lib                        // CCoeEnv
+LIBRARY         bafl.lib                        // BaflUtils
+LIBRARY         ws32.lib                        // RWsSession
+
+SMPSAFE
+

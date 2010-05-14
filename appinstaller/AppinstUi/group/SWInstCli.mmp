@@ -1,0 +1,50 @@
+/*
+* Copyright (c) 2002-2004 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification for SWInstCli.
+*                This project implements client API for SW Installer server UI.
+*
+*/
+
+
+// INCLUDES
+#include <platform_paths.hrh>
+#include "SWInstPrivateUid.h"
+
+TARGET          SWInstCli.dll
+TARGETTYPE      dll
+UID             0x1000008D KSWInstCliUid
+
+CAPABILITY      CAP_CLIENT_DLL DRM
+VENDORID        VID_DEFAULT
+
+SOURCEPATH      ../Client/Src
+SOURCE          SWInstLauncher.cpp
+SOURCE          SWInstSilentLauncher.cpp
+
+USERINCLUDE     . ../Client/Inc
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib
+LIBRARY         avkon.lib
+LIBRARY         eikcore.lib
+LIBRARY         apparc.lib
+LIBRARY         efsrv.lib
+LIBRARY         cone.lib
+LIBRARY         apgrfx.lib
+
+SMPSAFE
+
+// End of file
+
+

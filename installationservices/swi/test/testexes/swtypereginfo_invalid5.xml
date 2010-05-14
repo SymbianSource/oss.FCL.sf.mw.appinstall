@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LayeredExecutionEnvironments SYSTEM "swtype.dtd">
+<LayeredExecutionEnvironments>
+	<softwareType name="testSoftwareType">
+		<localizedName language="15">testSwTypeLoc15</localizedName>
+		<localizedName language="31">testSwTypeLoc31</localizedName>
+		<mimeType>text/sif-testpkg</mimeType>
+		<sifPluginUid>102866EF</sifPluginUid>
+		<installerSecureId>10285BCB</installerSecureId>
+		<executionLayerSecureId>80285DE0</executionLayerSecureId>
+	</softwareType>
+	<softwareType name="native">
+		<localizedName language="15">testSwTypeLoc15</localizedName>
+		<localizedName language="31">testSwTypeLoc31</localizedName>
+		<mimeType>text/sif-testpkg2</mimeType>
+		<sifPluginUid>C02866EF</sifPluginUid>
+		<installerSecureId>C0285BCB</installerSecureId>
+		<executionLayerSecureId>C0285DE0</executionLayerSecureId>
+	</softwareType>
+</LayeredExecutionEnvironments>

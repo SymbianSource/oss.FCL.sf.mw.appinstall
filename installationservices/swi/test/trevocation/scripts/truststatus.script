@@ -1,0 +1,118 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+PRINT Run Post-install revocation check tests 
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0001
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_01
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_01
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_01
+
+END_TESTCASE API-SEC-TrustStatusTest-0001 
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0002
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_02
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_02
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_02
+
+END_TESTCASE API-SEC-TrustStatusTest-0002
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0003
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_03
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_03
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_03
+
+END_TESTCASE API-SEC-TrustStatusTest-0003
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0004
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_04
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_04
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_04
+
+END_TESTCASE API-SEC-TrustStatusTest-0004
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0005
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_05
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_05
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_05
+
+END_TESTCASE API-SEC-TrustStatusTest-0005
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0006
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+//START_TESTCASE API-SEC-TrustStatusTest-0006
+//RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_06
+//END_TESTCASE API-SEC-TrustStatusTest-0006
+
+
+//! @SYMTestCaseID		API-SEC-TrustStatusTest-0007
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Installation is ok.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-TrustStatusTest-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\test.ini test_04
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_04
+RUN_TEST_STEP 100 tuiscriptadaptors PostInstallRevocationCheck z:\tswi\trevocation\scripts\trust.ini test_07rev
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\trevocation\scripts\trust.ini test_07rev
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\test.ini u_test_04
+
+END_TESTCASE API-SEC-TrustStatusTest-0007
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

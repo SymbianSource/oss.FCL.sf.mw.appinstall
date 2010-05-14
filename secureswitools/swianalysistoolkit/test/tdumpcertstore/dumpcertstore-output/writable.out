@@ -1,0 +1,53 @@
+ C:\ Based Writable SwiCertstore :
+
+\epoc32\winscw\c\resource\swicertstore\dat\00000001: Is not a dat file 
+or is a corrupt file
+
+\epoc32\winscw\c\resource\swicertstore\dat\00000000:
+
+[SymbianTestRootCADiffSerial]
+
+file = SymbianTestRootCADiffSerial.der
+capability = TCB
+capability = CommDD
+capability = PowerMgmt
+capability = MultimediaDD
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = TrustedUI
+capability = ProtServ
+capability = DiskAdmin
+capability = NetworkControl
+capability = AllFiles
+capability = SwEvent
+capability = NetworkServices
+capability = LocalServices
+capability = ReadUserData
+capability = WriteUserData
+capability = Location
+capability = SurroundingsDD
+capability = UserEnvironment
+application = SWInstall
+application = SWInstallOCSP
+Mandatory = 1
+SystemUpgrade = 0
+
+
+[Root5CA]
+
+file = Root5CA.der
+application = SWInstall
+Mandatory = 1
+SystemUpgrade = 0
+
+
+[SymbianTestRSACA]
+
+file = SymbianTestRSACA.der
+capability = TCB
+capability = CommDD
+application = SWInstall
+Mandatory = 1
+SystemUpgrade = 0
+

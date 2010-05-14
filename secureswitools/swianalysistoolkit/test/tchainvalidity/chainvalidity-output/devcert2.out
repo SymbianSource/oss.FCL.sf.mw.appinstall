@@ -1,0 +1,57 @@
+Certificate Chain :
+
+Issued By : /O=Symbian Software Ltd/CN=Mid-R5
+Issued To : /O=Symbian/CN=Simple Cert
+Valid From : 24/02/06
+Valid To : 26/03/06
+
+Issued By : /O=Symbian Software Ltd/CN=Root5-RSA
+Issued To : /O=Symbian Software Ltd/CN=Mid-R5
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+Issued By : /O=Symbian Software Ltd/CN=Root5-RSA
+Issued To : /O=Symbian Software Ltd/CN=Root5-RSA
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+Invalid Certificate Chain : Validity Period Check Failed
+
+SIS File is signed with a Developer Certificate with Constraints :
+
+DeviceId Constraints :
+
+11111111-222222-3-44
+
+SID Constraints :
+
+11000006
+
+VID Constraints :
+
+70000001
+
+Capabilities Constraints :
+
+CommDD
+PowerMgmt
+MultimediaDD
+ReadDeviceData
+WriteDeviceData
+DRM
+TrustedUI
+ProtServ
+DiskAdmin
+NetworkControl
+AllFiles
+SwEvent
+NetworkServices
+LocalServices
+ReadUserData
+WriteUserData
+Location
+SurroundingsDD
+UserEnvironment
+
+Is Validated By : Root5-RSA
+

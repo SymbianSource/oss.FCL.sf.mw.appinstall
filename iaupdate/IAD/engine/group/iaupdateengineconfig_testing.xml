@@ -1,0 +1,19 @@
+<!-- IAD Engine Configuration for test environment -->
+
+<iaupdateEngineConfig>
+
+    <!-- URI to the production CDB server -->
+    <masterServer uri="http://arrowcdb.ncd.nokia.com/"/>
+    
+    <!-- Provisioning value can be used in CDB to decide
+         where to direct the client and what content to give.
+         This can be used for example for testing purposes
+         when connection should be directed to different 
+         CGWs -->
+    <provisioning value="arrow"/>
+
+    <!-- Client role defines what content CGW should give
+         to the client. -->
+    <clientRole value="testing"/>
+  
+</iaupdateEngineConfig>

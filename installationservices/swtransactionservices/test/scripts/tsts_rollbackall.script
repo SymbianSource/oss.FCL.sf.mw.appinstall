@@ -1,0 +1,118 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+// tsts_rollbackall.script
+// Software Transaction Services Tests
+
+PRINT Run Software Transaction Services (STS) Tests - RollBackAll interface
+
+//ensure that stsserver is not running (by introducing this delay) if this script is being run right after startup (ONB)
+//as sts erver is invoked by the daemon at boot up time we have to wait long enough for that operation to be finished otherwise overlap
+//of the execution of this script and the start up recovery might cause script failures
+DELAY 5000
+
+// Load Suite
+LOAD_SUITE tststestserver
+LOAD_SUITE tststestserverrollbackall
+
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+
+
+//! @SYMTestCaseID 		API-SEC-STS-API-0028
+//! @SYMTestCaseDesc 		Implementation of SEC-STS-API-0028 test documented in TMS : Test rollback all pending transaction 
+//! @SYMTestPriority 		High
+
+START_TESTCASE API-SEC-STS-API-0028
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase1_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase1_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase1_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase1_create_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase1_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase1_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase1_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase1_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase1_create_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase1_overwrite_file_drive2.txt
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase2_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase2_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase2_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase2_create_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase2_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase2_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase2_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase2_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase2_create_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase2_overwrite_file_drive2.txt
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase3_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase3_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase3_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase3_create_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase3_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase3_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase3_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase3_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase3_create_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase3_overwrite_file_drive2.txt
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase4_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase4_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase4_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase4_create_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase4_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase4_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase4_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase4_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase4_create_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase4_overwrite_file_drive2.txt
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase5_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase5_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase5_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase5_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase5_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase5_overwrite_file_drive2.txt
+
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase6_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase6_create_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\RollbackAllTestCase6_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase6_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase6_create_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\RollbackAllTestCase6_overwrite_file_drive2.txt
+
+RUN_TEST_STEP 100 tststestserver FileOperationsStep                  z:\tusif\tsts\tsts.ini SEC_STS_TestCase028_TCB_dir_setup
+RUN_TEST_STEP 100 tststestserver CheckFilesStep                      z:\tusif\tsts\tsts.ini SEC_STS_TestCase028_pre_rollbackall
+RUN_TEST_STEP 100 tststestserverrollbackall RollbackAllPendingStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase028
+RUN_TEST_STEP 100 tststestserver CheckFilesStep                      z:\tusif\tsts\tsts.ini SEC_STS_TestCase028_post_rollbackall
+RUN_TEST_STEP 100 tststestserver FileOperationsStep                  z:\tusif\tsts\tsts.ini file_system_cleanup
+
+END_TESTCASE API-SEC-STS-API-0028
+
+
+//! @SYMTestCaseID 	API-SEC-STS-RollbackAll-0002
+//! @SYMTestCaseDesc 	Verify that very big journals can be rolled back successfully
+//! @SYMTestPriority 	High
+
+START_TESTCASE API-SEC-STS-RollbackAll-0002
+
+RUN_TEST_STEP 100 tststestserver FileOperationsStep                  z:\tusif\tsts\tsts.ini SEC-STS-RollbackAll-0002_TCB_dir_setup
+RUN_TEST_STEP 100 tststestserverrollbackall RollbackAllPendingStep   z:\tusif\tsts\tsts.ini SEC-STS-RollbackAll-0002
+RUN_TEST_STEP 100 tststestserver CheckFilesStep                      z:\tusif\tsts\tsts.ini SEC-STS-RollbackAll-0002_post_rollbackall
+RUN_TEST_STEP 100 tststestserver FileOperationsStep                  z:\tusif\tsts\tsts.ini file_system_cleanup
+
+END_TESTCASE API-SEC-STS-RollbackAll-0002

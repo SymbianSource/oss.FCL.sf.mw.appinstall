@@ -1,0 +1,63 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run Silent install tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID 		API-SEC-CIT_AWIR-6FSGNJ-0001
+//! @SYMTestCaseDesc 		Check expected callbacks happen
+//! @SYMREQ 			REQ5496, REQ5497, REQ5498
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Format MMC, Install SIS file, copy stub file to C:\, remove registry and install stub again
+//! @SYMTestExpectedResults 	Correct callbacks occur
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+# Install to MMC card first
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\inc098114.ini install_org
+RUN_UTILS CopyFile x:\readme.txt c:\readme.txt
+RUN_UTILS CopyFile x:\private\10202dce\a0000bf3_0.sis x:\a0000bf3_0.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 7000
+
+# 
+RUN_UTILS CopyFile c:\readme.txt x:\readme.txt
+RUN_UTILS DeleteFile c:\readme.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\inc098114.ini install_stub
+
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\inc098114.ini PackageInstalled
+
+END_TESTCASE API-SEC-CIT_AWIR-6FSGNJ-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

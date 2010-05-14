@@ -1,0 +1,44 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// USIF Security tests
+PRINT Run USIF Security tests
+
+LOAD_SUITE aprcaptestframework
+LOAD_SUITE tscr -SharedData
+
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+
+//! @SYMTestCaseID 		API-SEC-USIF-SecurityTests-0001
+//! @SYMTestCaseDesc 		Runs the whole suite of security test cases for USIF interfaces. 
+//! @SYMTestPriority 		High
+//! @SYMTestActions Tests 	IPC calls from different SIDs and capabilities
+//! @SYMTestExpectedResults 	KErrPermissionDenied received on calls which should fail
+//! @SYMDevelopedForRelease 	Diran
+
+
+START_TESTCASE API-SEC-USIF-SecurityTests-0001
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+  
+// Add a dummy component for the APIs tests
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\securitytests\usifsecuritytests.ini add_test_component
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\securitytests\usifsecuritytests.ini add_app_reg_info
+RUN_TEST_STEP 100 aprcaptestframework RunThoroughCapabilityChecks z:\tusif\securitytests\usifsecuritytests.ini usifsecuritytests
+RUN_TEST_STEP 100 aprcaptestframework RunThoroughCapabilityChecks z:\tusif\securitytests\usifsecuritytests.ini usifsecuritytests-tcb
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\securitytests\usifsecuritytests.ini del_app_entry
+END_TESTCASE API-SEC-USIF-SecurityTests-0001

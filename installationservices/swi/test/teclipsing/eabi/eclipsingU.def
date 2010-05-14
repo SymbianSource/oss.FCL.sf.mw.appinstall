@@ -1,0 +1,5 @@
+EXPORTS
+	_Z8Instancev @ 1 NONAME
+	_ZTI14CEclipsingTest @ 2 NONAME ; #<TI>#
+	_ZTV14CEclipsingTest @ 3 NONAME ; #<VT>#
+

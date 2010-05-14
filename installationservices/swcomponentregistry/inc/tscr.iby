@@ -1,0 +1,62 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef TSCR_IBY
+#define TSCR_IBY
+
+#include  "tefeventlogpluginserver.iby"
+
+define ZDRIVE \epoc32\data\Z
+
+REM Software Component Registry Test Suite
+
+file=ABI_DIR\BUILD_DIR\tscr.exe				\sys\bin\tscr.exe
+file=ABI_DIR\BUILD_DIR\tscrdatalayer.exe	\sys\bin\tscrdatalayer.exe
+file=ABI_DIR\BUILD_DIR\tscraccessor.exe		\sys\bin\tscraccessor.exe
+file=ABI_DIR\BUILD_DIR\tscrapparc.exe		\sys\bin\tscrapparc.exe
+
+data=ZDRIVE\tusif\tscr\tscr.ini					\tusif\tscr\tscr.ini	
+data=ZDRIVE\tusif\tscr\tscr.script				\tusif\tscr\tscr.script	
+data=ZDRIVE\tusif\tscr\tscr_api.script			\tusif\tscr\tscr_api.script
+data=ZDRIVE\tusif\tscrdatalayer\tscr_datalayer.script	\tusif\tscrdatalayer\tscr_datalayer.script	
+
+data=ZDRIVE\tusif\tscr\tscr_performance.ini				\tusif\tscr\tscr_performance.ini
+data=ZDRIVE\tusif\tscr\tscr_performance.script			\tusif\tscr\tscr_performance.script
+data=ZDRIVE\tusif\tscr\tscr_performance_cases.script	\tusif\tscr\tscr_performance_cases.script
+data=ZDRIVE\tusif\tscr\tscr_app_performance_cases.script \tusif\tscr\tscr_app_performance_cases.script
+
+data=ZDRIVE\tusif\tscr\tscr_appreginfo.ini		\tusif\tscr\tscr_appreginfo.ini	
+data=ZDRIVE\tusif\tscr\tscr_appreginfo.script		\tusif\tscr\tscr_appreginfo.script
+data=ZDRIVE\tusif\tscr\tscrapparc.script		\tusif\tscr\tscrapparc.script	
+
+data=ZDRIVE\tusif\tscrdatalayer\data\nondb.db			\tusif\tscrdatalayer\data\nondb.db
+data=ZDRIVE\tusif\tscr\data\scr_small.db		\tusif\tscr\data\scr_small.db
+data=ZDRIVE\tusif\tscr\data\scr_medium.db		\tusif\tscr\data\scr_medium.db
+data=ZDRIVE\tusif\tscr\data\scr_large.db		\tusif\tscr\data\scr_large.db
+
+data=ZDRIVE\tusif\tscr\tscr_versioning.script			\tusif\tscr\tscr_versioning.script
+
+data=ZDRIVE\tusif\tscr\data\scr-differentbuildnumber.db			\tusif\tscr\data\scr-differentbuildnumber.db
+data=ZDRIVE\tusif\tscr\data\scr-newermajordbversion.db			\tusif\tscr\data\scr-newermajordbversion.db
+data=ZDRIVE\tusif\tscr\data\scr-oldermajordbversion.db			\tusif\tscr\data\scr-oldermajordbversion.db
+data=ZDRIVE\tusif\tscr\data\scr-olderminordbversion.db			\tusif\tscr\data\scr-olderminordbversion.db
+data=ZDRIVE\tusif\tscr\data\scr-newerminordbversion.db			\tusif\tscr\data\scr-newerminordbversion.db
+data=ZDRIVE\tusif\tscr\data\scr-noentriesinversiontable.db			\tusif\tscr\data\scr-noentriesinversiontable.db
+data=ZDRIVE\tusif\tscr\data\scr-noversiontable.db			\tusif\tscr\data\scr-noversiontable.db
+
+#endif

@@ -1,0 +1,6 @@
+EXPORTS
+	?ReadL@CAppRegInfoReader@@QAEPAVCApplicationRegistrationData@Usif@@ABV?$RArray@W4TLanguage@@@@@Z @ 1 NONAME ; class Usif::CApplicationRegistrationData * CAppRegInfoReader::ReadL(class RArray<enum TLanguage> const &)
+	?NewL@CAppRegInfoReader@@SAPAV1@AAVRFs@@ABVTDesC16@@@Z @ 2 NONAME ; class CAppRegInfoReader * CAppRegInfoReader::NewL(class RFs &, class TDesC16 const &)
+	??1CAppRegInfoReader@@UAE@XZ @ 3 NONAME ; CAppRegInfoReader::~CAppRegInfoReader(void)
+	?NewL@CAppRegInfoReader@@SAPAV1@AAVRFs@@ABVRFile@@@Z @ 4 NONAME ; class CAppRegInfoReader * CAppRegInfoReader::NewL(class RFs &, class RFile const &)
+

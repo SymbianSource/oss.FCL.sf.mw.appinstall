@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe and also specifies files to be removed on multiple drives including one MMC.
+
+;Languages
+&EN
+
+;Header
+#{"filenulls spanning multiple drives"}, (0x81000008), 1, 2, 3,TYPE=SA
+
+%{"createprivatefile"}
+:"Unique Vendor Name"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\createprivatefile.exe"-"!:\sys\bin\createprivatefile.exe",FR,RI,RUNWAITEND
+"osver.txt"-"", FT, TEXTSKIP
+""-"C:\Documents\InstTest\cfiletoremove.txt", FN
+"osver.txt"-"", FT, TEXTSKIP
+""-"E:\Documents\InstTest\efiletoremove.txt", FN
+"osver.txt"-"", FT, TEXTSKIP
+""-"X:\Documents\InstTest\xfiletoremove.txt", FN

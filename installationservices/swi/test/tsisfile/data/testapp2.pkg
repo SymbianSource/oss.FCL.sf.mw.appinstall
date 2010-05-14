@@ -1,0 +1,34 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; An application SIS file
+
+;Languages
+&EN,FR
+
+;Header
+#{"App-EN", "App-FR"}, (0x1000000A), 2, 0, 4, TYPE=SA
+
+%{"Vendor","Vendor"}
+:"Vendor"
+
+;Dependencies
+(0x80000003), 1, 2, 3, {"Depend-EN", "Depend-FR"}
+
+; version 2 of sub.sis
+@"sub2.sis",(0x80000002)
+
+;Display text files
+"text\textfilec.txt"-"", FT, TC

@@ -1,0 +1,36 @@
+/*
+* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for AppMngr2 GS Installation Files plugin
+*
+*/
+
+
+NAME    AMIF
+
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <avkon.loc>
+#include <data_caging_paths_strings.hrh>
+#include <appinfo.rh>
+#include <AiwCommon.rh>
+#include <appmngrinstfilesplugin.loc>
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE TBUF r_cp_folder_not_installed
+    {
+    buf = qtn_cp_folder_not_installed;
+    }
+

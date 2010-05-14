@@ -1,0 +1,301 @@
+EXPORTS
+	_ZN3Swi3Sis10CDataIndex4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 1 NONAME
+	_ZN3Swi3Sis10CDataIndex5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 2 NONAME
+	_ZN3Swi3Sis10CDataIndexD0Ev @ 3 NONAME
+	_ZN3Swi3Sis10CDataIndexD1Ev @ 4 NONAME
+	_ZN3Swi3Sis10CDataIndexD2Ev @ 5 NONAME
+	_ZN3Swi3Sis10CSignature4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 6 NONAME
+	_ZN3Swi3Sis10CSignature5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 7 NONAME
+	_ZN3Swi3Sis10CSignatureD0Ev @ 8 NONAME
+	_ZN3Swi3Sis10CSignatureD1Ev @ 9 NONAME
+	_ZN3Swi3Sis10CSignatureD2Ev @ 10 NONAME
+	_ZN3Swi3Sis11CController4NewLERNS_16MSisDataProviderENS0_18TReadTypeBehaviourE @ 11 NONAME
+	_ZN3Swi3Sis11CController4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 12 NONAME
+	_ZN3Swi3Sis11CController5NewLCERNS_16MSisDataProviderENS0_18TReadTypeBehaviourE @ 13 NONAME
+	_ZN3Swi3Sis11CController5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 14 NONAME
+	_ZN3Swi3Sis11CControllerD0Ev @ 15 NONAME
+	_ZN3Swi3Sis11CControllerD1Ev @ 16 NONAME
+	_ZN3Swi3Sis11CControllerD2Ev @ 17 NONAME
+	_ZN3Swi3Sis11CDependency4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 18 NONAME
+	_ZN3Swi3Sis11CDependency5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 19 NONAME
+	_ZN3Swi3Sis11CDependencyD0Ev @ 20 NONAME
+	_ZN3Swi3Sis11CDependencyD1Ev @ 21 NONAME
+	_ZN3Swi3Sis11CDependencyD2Ev @ 22 NONAME
+	_ZN3Swi3Sis11CExpression4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 23 NONAME
+	_ZN3Swi3Sis11CExpression5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 24 NONAME
+	_ZN3Swi3Sis11CExpressionD0Ev @ 25 NONAME
+	_ZN3Swi3Sis11CExpressionD1Ev @ 26 NONAME
+	_ZN3Swi3Sis11CExpressionD2Ev @ 27 NONAME
+	_ZN3Swi3Sis11CProperties4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 28 NONAME
+	_ZN3Swi3Sis11CProperties5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 29 NONAME
+	_ZN3Swi3Sis11CPropertiesD0Ev @ 30 NONAME
+	_ZN3Swi3Sis11CPropertiesD1Ev @ 31 NONAME
+	_ZN3Swi3Sis11CPropertiesD2Ev @ 32 NONAME
+	_ZN3Swi3Sis13CCapabilities4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 33 NONAME
+	_ZN3Swi3Sis13CCapabilities5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 34 NONAME
+	_ZN3Swi3Sis13CCapabilitiesD0Ev @ 35 NONAME
+	_ZN3Swi3Sis13CCapabilitiesD1Ev @ 36 NONAME
+	_ZN3Swi3Sis13CCapabilitiesD2Ev @ 37 NONAME
+	_ZN3Swi3Sis13CInstallBlock4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 38 NONAME
+	_ZN3Swi3Sis13CInstallBlock5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 39 NONAME
+	_ZN3Swi3Sis13CInstallBlockD0Ev @ 40 NONAME
+	_ZN3Swi3Sis13CInstallBlockD1Ev @ 41 NONAME
+	_ZN3Swi3Sis13CInstallBlockD2Ev @ 42 NONAME
+	_ZN3Swi3Sis13CVersionRange4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 43 NONAME
+	_ZN3Swi3Sis13CVersionRange5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 44 NONAME
+	_ZN3Swi3Sis13CVersionRangeD0Ev @ 45 NONAME
+	_ZN3Swi3Sis13CVersionRangeD1Ev @ 46 NONAME
+	_ZN3Swi3Sis13CVersionRangeD2Ev @ 47 NONAME
+	_ZN3Swi3Sis14CPrerequisites4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 48 NONAME
+	_ZN3Swi3Sis14CPrerequisites5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 49 NONAME
+	_ZN3Swi3Sis14CPrerequisitesD0Ev @ 50 NONAME
+	_ZN3Swi3Sis14CPrerequisitesD1Ev @ 51 NONAME
+	_ZN3Swi3Sis14CPrerequisitesD2Ev @ 52 NONAME
+	_ZN3Swi3Sis16CFileDescription4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 53 NONAME
+	_ZN3Swi3Sis16CFileDescription5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 54 NONAME
+	_ZN3Swi3Sis16CFileDescriptionD0Ev @ 55 NONAME
+	_ZN3Swi3Sis16CFileDescriptionD1Ev @ 56 NONAME
+	_ZN3Swi3Sis16CFileDescriptionD2Ev @ 57 NONAME
+	_ZN3Swi3Sis16CSupportedOption4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 58 NONAME
+	_ZN3Swi3Sis16CSupportedOption5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 59 NONAME
+	_ZN3Swi3Sis16CSupportedOptionD0Ev @ 60 NONAME
+	_ZN3Swi3Sis16CSupportedOptionD1Ev @ 61 NONAME
+	_ZN3Swi3Sis16CSupportedOptionD2Ev @ 62 NONAME
+	_ZN3Swi3Sis17CCertificateChain4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 63 NONAME
+	_ZN3Swi3Sis17CCertificateChain5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 64 NONAME
+	_ZN3Swi3Sis17CCertificateChainD0Ev @ 65 NONAME
+	_ZN3Swi3Sis17CCertificateChainD1Ev @ 66 NONAME
+	_ZN3Swi3Sis17CCertificateChainD2Ev @ 67 NONAME
+	_ZN3Swi3Sis17CSupportedOptions4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 68 NONAME
+	_ZN3Swi3Sis17CSupportedOptions5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 69 NONAME
+	_ZN3Swi3Sis17CSupportedOptionsD0Ev @ 70 NONAME
+	_ZN3Swi3Sis17CSupportedOptionsD1Ev @ 71 NONAME
+	_ZN3Swi3Sis17CSupportedOptionsD2Ev @ 72 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithm4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 73 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithm5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 74 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithmD0Ev @ 75 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithmD1Ev @ 76 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithmD2Ev @ 77 NONAME
+	_ZN3Swi3Sis19CSupportedLanguages4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 78 NONAME
+	_ZN3Swi3Sis19CSupportedLanguages5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 79 NONAME
+	_ZN3Swi3Sis19CSupportedLanguagesD0Ev @ 80 NONAME
+	_ZN3Swi3Sis19CSupportedLanguagesD1Ev @ 81 NONAME
+	_ZN3Swi3Sis19CSupportedLanguagesD2Ev @ 82 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChain4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 83 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChain5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 84 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChainD0Ev @ 85 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChainD1Ev @ 86 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChainD2Ev @ 87 NONAME
+	_ZN3Swi3Sis3CIf4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 88 NONAME
+	_ZN3Swi3Sis3CIf5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 89 NONAME
+	_ZN3Swi3Sis3CIfD0Ev @ 90 NONAME
+	_ZN3Swi3Sis3CIfD1Ev @ 91 NONAME
+	_ZN3Swi3Sis3CIfD2Ev @ 92 NONAME
+	_ZN3Swi3Sis4CUid4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 93 NONAME
+	_ZN3Swi3Sis4CUid5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 94 NONAME
+	_ZN3Swi3Sis4CUidD0Ev @ 95 NONAME
+	_ZN3Swi3Sis4CUidD1Ev @ 96 NONAME
+	_ZN3Swi3Sis4CUidD2Ev @ 97 NONAME
+	_ZN3Swi3Sis5CBlob4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 98 NONAME
+	_ZN3Swi3Sis5CBlob5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 99 NONAME
+	_ZN3Swi3Sis5CBlobD0Ev @ 100 NONAME
+	_ZN3Swi3Sis5CBlobD1Ev @ 101 NONAME
+	_ZN3Swi3Sis5CBlobD2Ev @ 102 NONAME
+	_ZN3Swi3Sis5CDate4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 103 NONAME
+	_ZN3Swi3Sis5CDate5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 104 NONAME
+	_ZN3Swi3Sis5CDateD0Ev @ 105 NONAME
+	_ZN3Swi3Sis5CDateD1Ev @ 106 NONAME
+	_ZN3Swi3Sis5CDateD2Ev @ 107 NONAME
+	_ZN3Swi3Sis5CHash4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 108 NONAME
+	_ZN3Swi3Sis5CHash5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 109 NONAME
+	_ZN3Swi3Sis5CHashD0Ev @ 110 NONAME
+	_ZN3Swi3Sis5CHashD1Ev @ 111 NONAME
+	_ZN3Swi3Sis5CHashD2Ev @ 112 NONAME
+	_ZN3Swi3Sis5CInfo4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 113 NONAME
+	_ZN3Swi3Sis5CInfo5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 114 NONAME
+	_ZN3Swi3Sis5CInfoD0Ev @ 115 NONAME
+	_ZN3Swi3Sis5CInfoD1Ev @ 116 NONAME
+	_ZN3Swi3Sis5CInfoD2Ev @ 117 NONAME
+	_ZN3Swi3Sis5CLogo4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 118 NONAME
+	_ZN3Swi3Sis5CLogo5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 119 NONAME
+	_ZN3Swi3Sis5CLogoD0Ev @ 120 NONAME
+	_ZN3Swi3Sis5CLogoD1Ev @ 121 NONAME
+	_ZN3Swi3Sis5CLogoD2Ev @ 122 NONAME
+	_ZN3Swi3Sis5CTime4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 123 NONAME
+	_ZN3Swi3Sis5CTime5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 124 NONAME
+	_ZN3Swi3Sis5CTimeD0Ev @ 125 NONAME
+	_ZN3Swi3Sis5CTimeD1Ev @ 126 NONAME
+	_ZN3Swi3Sis5CTimeD2Ev @ 127 NONAME
+	_ZN3Swi3Sis7CElseIf4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 128 NONAME
+	_ZN3Swi3Sis7CElseIf5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 129 NONAME
+	_ZN3Swi3Sis7CElseIfD0Ev @ 130 NONAME
+	_ZN3Swi3Sis7CElseIfD1Ev @ 131 NONAME
+	_ZN3Swi3Sis7CElseIfD2Ev @ 132 NONAME
+	_ZN3Swi3Sis7CString4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 133 NONAME
+	_ZN3Swi3Sis7CString5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 134 NONAME
+	_ZN3Swi3Sis7CStringD0Ev @ 135 NONAME
+	_ZN3Swi3Sis7CStringD1Ev @ 136 NONAME
+	_ZN3Swi3Sis7CStringD2Ev @ 137 NONAME
+	_ZN3Swi3Sis8CVersion4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 138 NONAME
+	_ZN3Swi3Sis8CVersion5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 139 NONAME
+	_ZN3Swi3Sis8CVersionD0Ev @ 140 NONAME
+	_ZN3Swi3Sis8CVersionD1Ev @ 141 NONAME
+	_ZN3Swi3Sis8CVersionD2Ev @ 142 NONAME
+	_ZN3Swi3Sis9CDateTime4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 143 NONAME
+	_ZN3Swi3Sis9CDateTime5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 144 NONAME
+	_ZN3Swi3Sis9CDateTimeD0Ev @ 145 NONAME
+	_ZN3Swi3Sis9CDateTimeD1Ev @ 146 NONAME
+	_ZN3Swi3Sis9CDateTimeD2Ev @ 147 NONAME
+	_ZN3Swi3Sis9CLanguage4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 148 NONAME
+	_ZN3Swi3Sis9CLanguage5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 149 NONAME
+	_ZN3Swi3Sis9CLanguageD0Ev @ 150 NONAME
+	_ZN3Swi3Sis9CLanguageD1Ev @ 151 NONAME
+	_ZN3Swi3Sis9CLanguageD2Ev @ 152 NONAME
+	_ZN3Swi3Sis9CProperty4NewLERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 153 NONAME
+	_ZN3Swi3Sis9CProperty5NewLCERNS_16MSisDataProviderERxNS0_18TReadTypeBehaviourE @ 154 NONAME
+	_ZN3Swi3Sis9CPropertyD0Ev @ 155 NONAME
+	_ZN3Swi3Sis9CPropertyD1Ev @ 156 NONAME
+	_ZN3Swi3Sis9CPropertyD2Ev @ 157 NONAME
+	_ZNK3Swi3Sis6CField6LengthEv @ 158 NONAME
+	_ZTIN3Swi3Sis10CDataIndexE @ 159 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis10CSignatureE @ 160 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis11CControllerE @ 161 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis11CDependencyE @ 162 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis11CExpressionE @ 163 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis11CPropertiesE @ 164 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis13CCapabilitiesE @ 165 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis13CInstallBlockE @ 166 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis13CVersionRangeE @ 167 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis14CPrerequisitesE @ 168 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis16CFileDescriptionE @ 169 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis16CSupportedOptionE @ 170 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis17CCertificateChainE @ 171 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis17CSupportedOptionsE @ 172 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis19CSignatureAlgorithmE @ 173 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis19CSupportedLanguagesE @ 174 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis26CSignatureCertificateChainE @ 175 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis3CIfE @ 176 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis4CUidE @ 177 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CBlobE @ 178 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CDateE @ 179 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CHashE @ 180 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CInfoE @ 181 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CLogoE @ 182 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis5CTimeE @ 183 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis6CFieldE @ 184 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis7CElseIfE @ 185 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis7CStringE @ 186 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis8CVersionE @ 187 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis9CDateTimeE @ 188 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis9CLanguageE @ 189 NONAME ; #<TI>#
+	_ZTIN3Swi3Sis9CPropertyE @ 190 NONAME ; #<TI>#
+	_ZTVN3Swi3Sis10CDataIndexE @ 191 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis10CSignatureE @ 192 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis11CControllerE @ 193 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis11CDependencyE @ 194 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis11CExpressionE @ 195 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis11CPropertiesE @ 196 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis13CCapabilitiesE @ 197 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis13CInstallBlockE @ 198 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis13CVersionRangeE @ 199 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis14CPrerequisitesE @ 200 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis16CFileDescriptionE @ 201 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis16CSupportedOptionE @ 202 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis17CCertificateChainE @ 203 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis17CSupportedOptionsE @ 204 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis19CSignatureAlgorithmE @ 205 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis19CSupportedLanguagesE @ 206 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis26CSignatureCertificateChainE @ 207 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis3CIfE @ 208 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis4CUidE @ 209 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CBlobE @ 210 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CDateE @ 211 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CHashE @ 212 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CInfoE @ 213 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CLogoE @ 214 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis5CTimeE @ 215 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis6CFieldE @ 216 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis7CElseIfE @ 217 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis7CStringE @ 218 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis8CVersionE @ 219 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis9CDateTimeE @ 220 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis9CLanguageE @ 221 NONAME ; #<VT>#
+	_ZTVN3Swi3Sis9CPropertyE @ 222 NONAME ; #<VT>#
+	_ZN3Swi15TSisTrustStatus12InternalizeLER11RReadStream @ 223 NONAME
+	_ZN3Swi15TSisTrustStatusC1ENS_17TValidationStatusENS_17TRevocationStatusE5TTimeS3_ @ 224 NONAME
+	_ZN3Swi15TSisTrustStatusC1Ev @ 225 NONAME
+	_ZN3Swi15TSisTrustStatusC2ENS_17TValidationStatusENS_17TRevocationStatusE5TTimeS3_ @ 226 NONAME
+	_ZN3Swi15TSisTrustStatusC2Ev @ 227 NONAME
+	_ZNK3Swi15TSisTrustStatus12ExternalizeLER12RWriteStream @ 228 NONAME
+	_ZNK3Swi15TSisTrustStatus9IsTrustedEv @ 229 NONAME
+	_ZNK3Swi3Sis11CController13AddChainIndexEi @ 230 NONAME
+	_ZNK3Swi3Sis11CController21ClearCertChainIndicesEv @ 231 NONAME
+	_ZN3Swi3Sis11CController23SetCertChainConstraintsEPNS_21CCertChainConstraintsE @ 232 NONAME
+	_ZN3Swi3Sis10CDataIndex4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 233 NONAME
+	_ZN3Swi3Sis10CDataIndex5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 234 NONAME
+	_ZN3Swi3Sis10CSignature4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 235 NONAME
+	_ZN3Swi3Sis10CSignature5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 236 NONAME
+	_ZN3Swi3Sis11CController4NewLERNS0_12TPtrProviderENS0_18TReadTypeBehaviourE @ 237 NONAME
+	_ZN3Swi3Sis11CController4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 238 NONAME
+	_ZN3Swi3Sis11CController5NewLCERNS0_12TPtrProviderENS0_18TReadTypeBehaviourE @ 239 NONAME
+	_ZN3Swi3Sis11CController5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 240 NONAME
+	_ZN3Swi3Sis11CDependency4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 241 NONAME
+	_ZN3Swi3Sis11CDependency5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 242 NONAME
+	_ZN3Swi3Sis11CExpression4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 243 NONAME
+	_ZN3Swi3Sis11CExpression5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 244 NONAME
+	_ZN3Swi3Sis11CProperties4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 245 NONAME
+	_ZN3Swi3Sis11CProperties5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 246 NONAME
+	_ZN3Swi3Sis13CCapabilities4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 247 NONAME
+	_ZN3Swi3Sis13CCapabilities5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 248 NONAME
+	_ZN3Swi3Sis13CInstallBlock4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 249 NONAME
+	_ZN3Swi3Sis13CInstallBlock5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 250 NONAME
+	_ZN3Swi3Sis13CVersionRange4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 251 NONAME
+	_ZN3Swi3Sis13CVersionRange5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 252 NONAME
+	_ZN3Swi3Sis14CPrerequisites4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 253 NONAME
+	_ZN3Swi3Sis14CPrerequisites5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 254 NONAME
+	_ZN3Swi3Sis16CFileDescription4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 255 NONAME
+	_ZN3Swi3Sis16CFileDescription5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 256 NONAME
+	_ZN3Swi3Sis16CSupportedOption4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 257 NONAME
+	_ZN3Swi3Sis16CSupportedOption5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 258 NONAME
+	_ZN3Swi3Sis17CCertificateChain4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 259 NONAME
+	_ZN3Swi3Sis17CCertificateChain5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 260 NONAME
+	_ZN3Swi3Sis17CSupportedOptions4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 261 NONAME
+	_ZN3Swi3Sis17CSupportedOptions5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 262 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithm4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 263 NONAME
+	_ZN3Swi3Sis19CSignatureAlgorithm5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 264 NONAME
+	_ZN3Swi3Sis19CSupportedLanguages4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 265 NONAME
+	_ZN3Swi3Sis19CSupportedLanguages5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 266 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChain4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 267 NONAME
+	_ZN3Swi3Sis26CSignatureCertificateChain5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 268 NONAME
+	_ZN3Swi3Sis3CIf4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 269 NONAME
+	_ZN3Swi3Sis3CIf5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 270 NONAME
+	_ZN3Swi3Sis4CUid4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 271 NONAME
+	_ZN3Swi3Sis4CUid5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 272 NONAME
+	_ZN3Swi3Sis5CBlob4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 273 NONAME
+	_ZN3Swi3Sis5CBlob5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 274 NONAME
+	_ZN3Swi3Sis5CDate4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 275 NONAME
+	_ZN3Swi3Sis5CDate5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 276 NONAME
+	_ZN3Swi3Sis5CHash4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 277 NONAME
+	_ZN3Swi3Sis5CHash5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 278 NONAME
+	_ZN3Swi3Sis5CInfo4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 279 NONAME
+	_ZN3Swi3Sis5CInfo5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 280 NONAME
+	_ZN3Swi3Sis5CLogo4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 281 NONAME
+	_ZN3Swi3Sis5CLogo5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 282 NONAME
+	_ZN3Swi3Sis5CTime4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 283 NONAME
+	_ZN3Swi3Sis5CTime5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 284 NONAME
+	_ZN3Swi3Sis7CElseIf4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 285 NONAME
+	_ZN3Swi3Sis7CElseIf5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 286 NONAME
+	_ZN3Swi3Sis7CString4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 287 NONAME
+	_ZN3Swi3Sis7CString5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 288 NONAME
+	_ZN3Swi3Sis8CVersion4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 289 NONAME
+	_ZN3Swi3Sis8CVersion5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 290 NONAME
+	_ZN3Swi3Sis9CDateTime4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 291 NONAME
+	_ZN3Swi3Sis9CDateTime5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 292 NONAME
+	_ZN3Swi3Sis9CLanguage4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 293 NONAME
+	_ZN3Swi3Sis9CLanguage5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 294 NONAME
+	_ZN3Swi3Sis9CProperty4NewLERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 295 NONAME
+	_ZN3Swi3Sis9CProperty5NewLCERNS0_12TPtrProviderERxNS0_18TReadTypeBehaviourE @ 296 NONAME
+	_ZN3Swi3Sis11CController26SetRemoveWithLastDependentEv @ 297 NONAME
+	_ZNK3Swi3Sis11CController23RemoveWithLastDependentEv @ 298 NONAME
+	_ZN3Swi3Sis11CController24GenerateControllerHashLCERK6TDesC8 @ 299 NONAME
+

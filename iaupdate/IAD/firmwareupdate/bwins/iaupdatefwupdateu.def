@@ -1,0 +1,7 @@
+EXPORTS
+	?FirmWareUpdatewithFOTA@CIAUpdateFWUpdateHandler@@QAEXXZ @ 1 NONAME ; void CIAUpdateFWUpdateHandler::FirmWareUpdatewithFOTA(void)
+	?FirmWareUpdatewithNSU@CIAUpdateFWUpdateHandler@@QAEXXZ @ 2 NONAME ; void CIAUpdateFWUpdateHandler::FirmWareUpdatewithNSU(void)
+	?IsDMSupportAvailableL@CIAUpdateFWUpdateHandler@@QAEHXZ @ 3 NONAME ; int CIAUpdateFWUpdateHandler::IsDMSupportAvailableL(void)
+	?NewL@CIAUpdateFWUpdateHandler@@SAPAV1@XZ @ 4 NONAME ; class CIAUpdateFWUpdateHandler * CIAUpdateFWUpdateHandler::NewL(void)
+	?NewLC@CIAUpdateFWUpdateHandler@@SAPAV1@XZ @ 5 NONAME ; class CIAUpdateFWUpdateHandler * CIAUpdateFWUpdateHandler::NewLC(void)
+

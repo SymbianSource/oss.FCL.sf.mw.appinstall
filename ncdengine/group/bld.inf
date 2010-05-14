@@ -1,0 +1,272 @@
+/*
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for project ncdengine
+*
+*/
+
+
+/**
+ * This is the main bld.inf file to be used in ROM builds.
+ */
+
+#include <platform_paths.hrh> // export paths
+
+// Engine
+#include "../engine/group/bld.inf"
+
+// PC client front end, not supported on any platforms anymore
+//#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+//#include "../pcdadapter/catalogsenginepcclientfrontend/group/bld.inf"
+//#endif
+
+PRJ_TESTMMPFILES
+
+../debuglogger/group/catalogslogger.mmp
+
+PRJ_EXPORTS
+
+//****************************************************************************
+// Stub SIS files for ROM build
+// This allows eclipsing the ROM base installation with normal SIS
+//****************************************************************************
+
+altair-engine-stub.SIS        /epoc32/data/z/system/install/altair-engine-stub.SIS
+//altair-pcd-adapter-stub.SIS   /epoc32/data/z/system/install/altair-pcd-adapter-stub.SIS
+
+//****************************************************************************
+// Exports for the 5.0 platform. NEEDS TO BE CONFIRMED.
+//****************************************************************************
+
+#if !defined(__S60_32__) && !defined(__SERIES60_31__)
+../rom/NcdCatalogsEngine.iby             CORE_MW_LAYER_IBY_EXPORT_PATH(NcdCatalogsEngine.iby)
+../rom/NcdCatalogsEngineVariant.iby      CUSTOMER_MW_LAYER_IBY_EXPORT_PATH(NcdCatalogsEngineVariant.iby)
+#endif
+
+//****************************************************************************
+// Header exports. 
+// Public headers exported to the middleware layer include dir.
+// The list has been generated using ../internal/headerexports.pl.
+//****************************************************************************
+
+#if defined(__SERIES60_31__) || defined(__SERIES60_32__)
+// PCD-adapter plugin API
+//../pcdadapter/catalogspcconnectivityplugin/inc/catalogspcconnectivityplugin.h MW_LAYER_DOMAIN_EXPORT_PATH(catalogspcconnectivityplugin.h)
+
+// Engine API
+../inc/catalogsarray.h                                       MW_LAYER_DOMAIN_EXPORT_PATH(catalogsarray.h)
+../inc/catalogsbase.h                                        MW_LAYER_DOMAIN_EXPORT_PATH(catalogsbase.h)
+../inc/catalogsdebug.h                                       MW_LAYER_DOMAIN_EXPORT_PATH(catalogsdebug.h)
+../inc/catalogsengine.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(catalogsengine.h)
+../inc/catalogsengineobserver.h                              MW_LAYER_DOMAIN_EXPORT_PATH(catalogsengineobserver.h)
+../inc/catalogserrors.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(catalogserrors.h)
+../inc/catalogsinterfaceids.h                                MW_LAYER_DOMAIN_EXPORT_PATH(catalogsinterfaceids.h)
+../inc/catalogspanics.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(catalogspanics.h)
+../inc/catalogsuids.h                                        MW_LAYER_DOMAIN_EXPORT_PATH(catalogsuids.h)
+../inc/catalogsutils.h                                       MW_LAYER_DOMAIN_EXPORT_PATH(catalogsutils.h)
+../inc/ncdbundle.h                                           MW_LAYER_DOMAIN_EXPORT_PATH(ncdbundle.h)
+../inc/ncdcapabilities.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdcapabilities.h)
+../inc/ncdchildloadmode.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdchildloadmode.h)
+../inc/ncdclientlocalizer.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdclientlocalizer.h)
+../inc/ncdconfigurationdata.h                                MW_LAYER_DOMAIN_EXPORT_PATH(ncdconfigurationdata.h)
+../inc/ncdconfigurationkeys.h                                MW_LAYER_DOMAIN_EXPORT_PATH(ncdconfigurationkeys.h)
+../inc/ncdconnectionmethod.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdconnectionmethod.h)
+../inc/ncdcontainertype.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdcontainertype.h)
+../inc/ncdcreateaccesspointoperation.h                       MW_LAYER_DOMAIN_EXPORT_PATH(ncdcreateaccesspointoperation.h)
+../inc/ncdcreateaccesspointoperationobserver.h               MW_LAYER_DOMAIN_EXPORT_PATH(ncdcreateaccesspointoperationobserver.h)
+../inc/ncddebuginformation.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncddebuginformation.h)
+../inc/ncddownloadoperation.h                                MW_LAYER_DOMAIN_EXPORT_PATH(ncddownloadoperation.h)
+../inc/ncddownloadoperationobserver.h                        MW_LAYER_DOMAIN_EXPORT_PATH(ncddownloadoperationobserver.h)
+../inc/ncderrors.h                                           MW_LAYER_DOMAIN_EXPORT_PATH(ncderrors.h)
+../inc/ncdfavoritemanager.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdfavoritemanager.h)
+../inc/ncdfiledownloadoperation.h                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdfiledownloadoperation.h)
+../inc/ncdfiledownloadoperationobserver.h                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdfiledownloadoperationobserver.h)
+../inc/ncdinstalledapplication.h                             MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalledapplication.h)
+../inc/ncdinstalledcontent.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalledcontent.h)
+../inc/ncdinstalledfile.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalledfile.h)
+../inc/ncdinstalledtheme.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalledtheme.h)
+../inc/ncdinstalloperation.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalloperation.h)
+../inc/ncdinstalloperationobserver.h                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdinstalloperationobserver.h)
+../inc/ncdinterfaceids.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdinterfaceids.h)
+../inc/ncditempurpose.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(ncditempurpose.h)
+../inc/ncdkeyvaluepair.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdkeyvaluepair.h)
+../inc/ncdloadnodeoperation.h                                MW_LAYER_DOMAIN_EXPORT_PATH(ncdloadnodeoperation.h)
+../inc/ncdloadnodeoperationobserver.h                        MW_LAYER_DOMAIN_EXPORT_PATH(ncdloadnodeoperationobserver.h)
+../inc/ncdnode.h                                             MW_LAYER_DOMAIN_EXPORT_PATH(ncdnode.h)
+../inc/ncdnodeactivate.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeactivate.h)
+../inc/ncdnodechildoftransparent.h                           MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodechildoftransparent.h)
+../inc/ncdnodecontainer.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodecontainer.h)
+../inc/ncdnodecontentinfo.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodecontentinfo.h)
+../inc/ncdnodedependency.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodedependency.h)
+../inc/ncdnodedependencyinfo.h                               MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodedependencyinfo.h)
+../inc/ncdnodedownload.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodedownload.h)
+../inc/ncdnodefavorite.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodefavorite.h)
+../inc/ncdnodeicon.h                                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeicon.h)
+../inc/ncdnodeinstall.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeinstall.h)
+../inc/ncdnodemetadata.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodemetadata.h)
+../inc/ncdnodepreview.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodepreview.h)
+../inc/ncdnodepurchase.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodepurchase.h)
+../inc/ncdnodescreenshot.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodescreenshot.h)
+../inc/ncdnodesearch.h                                       MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodesearch.h)
+../inc/ncdnodeseen.h                                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeseen.h)
+../inc/ncdnodeseenfolder.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeseenfolder.h)
+../inc/ncdnodeskin.h                                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeskin.h)
+../inc/ncdnodeupgrade.h                                      MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeupgrade.h)
+../inc/ncdnodeuricontent.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeuricontent.h)
+../inc/ncdnodeuserdata.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdnodeuserdata.h)
+../inc/ncdoperation.h                                        MW_LAYER_DOMAIN_EXPORT_PATH(ncdoperation.h)
+../inc/ncdoperationdatatypes.h                               MW_LAYER_DOMAIN_EXPORT_PATH(ncdoperationdatatypes.h)
+../inc/ncdpanics.h                                           MW_LAYER_DOMAIN_EXPORT_PATH(ncdpanics.h)
+../inc/ncdpaymentmethod.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdpaymentmethod.h)
+../inc/ncdprogress.h                                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdprogress.h)
+../inc/ncdprovider.h                                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdprovider.h)
+../inc/ncdproviderobserver.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdproviderobserver.h)
+../inc/ncdproviderpcclientsupport.h                          MW_LAYER_DOMAIN_EXPORT_PATH(ncdproviderpcclientsupport.h)
+../inc/ncdpurchasedetails.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchasedetails.h)
+../inc/ncdpurchasedownloadinfo.h                             MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchasedownloadinfo.h)
+../inc/ncdpurchasehistory.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchasehistory.h)
+../inc/ncdpurchasehistoryfilter.h                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchasehistoryfilter.h)
+../inc/ncdpurchaseinstallinfo.h                              MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchaseinstallinfo.h)
+../inc/ncdpurchaseoperation.h                                MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchaseoperation.h)
+../inc/ncdpurchaseoperationobserver.h                        MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchaseoperationobserver.h)
+../inc/ncdpurchaseoption.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdpurchaseoption.h)
+../inc/ncdquery.h                                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdquery.h)
+../inc/ncdqueryitem.h                                        MW_LAYER_DOMAIN_EXPORT_PATH(ncdqueryitem.h)
+../inc/ncdquerynumericitem.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdquerynumericitem.h)
+../inc/ncdquerypincodeitem.h                                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdquerypincodeitem.h)
+../inc/ncdqueryselectionitem.h                               MW_LAYER_DOMAIN_EXPORT_PATH(ncdqueryselectionitem.h)
+../inc/ncdquerytextitem.h                                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdquerytextitem.h)
+../inc/ncdrightsobjectoperation.h                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdrightsobjectoperation.h)
+../inc/ncdrightsobjectoperationobserver.h                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdrightsobjectoperationobserver.h)
+../inc/ncdschemenodetype.h                                   MW_LAYER_DOMAIN_EXPORT_PATH(ncdschemenodetype.h)
+../inc/ncdsearchfilter.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdsearchfilter.h)
+../inc/ncdsearchoperation.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdsearchoperation.h)
+../inc/ncdsendhttprequestoperation.h                         MW_LAYER_DOMAIN_EXPORT_PATH(ncdsendhttprequestoperation.h)
+../inc/ncdsendhttprequestoperationobserver.h                 MW_LAYER_DOMAIN_EXPORT_PATH(ncdsendhttprequestoperationobserver.h)
+../inc/ncdsubscription.h                                     MW_LAYER_DOMAIN_EXPORT_PATH(ncdsubscription.h)
+../inc/ncdsubscriptionmanager.h                              MW_LAYER_DOMAIN_EXPORT_PATH(ncdsubscriptionmanager.h)
+../inc/ncdsubscriptionoperation.h                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdsubscriptionoperation.h)
+../inc/ncdsubscriptionoperationobserver.h                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdsubscriptionoperationobserver.h)
+../inc/ncdutils.h                                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdutils.h)
+../inc/catalogsarray.inl                                     MW_LAYER_DOMAIN_EXPORT_PATH(catalogsarray.inl)
+../inc/catalogsutils.inl                                     MW_LAYER_DOMAIN_EXPORT_PATH(catalogsutils.inl)
+../inc/ncdserverreportmanager.h                              MW_LAYER_DOMAIN_EXPORT_PATH(ncdserverreportmanager.h)
+../inc/ncdserverreportoperation.h                            MW_LAYER_DOMAIN_EXPORT_PATH(ncdserverreportoperation.h)
+../inc/ncdserverreportoperationobserver.h                    MW_LAYER_DOMAIN_EXPORT_PATH(ncdserverreportoperationobserver.h)
+../inc/ncdprovideroptions.h                                  MW_LAYER_DOMAIN_EXPORT_PATH(ncdprovideroptions.h)
+#else //5.X platforms
+// PCD-adapter plugin API
+//../pcdadapter/catalogspcconnectivityplugin/inc/catalogspcconnectivityplugin.h MW_LAYER_PLATFORM_EXPORT_PATH(catalogspcconnectivityplugin.h)
+
+// Engine API
+../inc/catalogsarray.h                                       MW_LAYER_PLATFORM_EXPORT_PATH(catalogsarray.h)
+../inc/catalogsbase.h                                        MW_LAYER_PLATFORM_EXPORT_PATH(catalogsbase.h)
+../inc/catalogsdebug.h                                       MW_LAYER_PLATFORM_EXPORT_PATH(catalogsdebug.h)
+../inc/catalogsengine.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(catalogsengine.h)
+../inc/catalogsengineobserver.h                              MW_LAYER_PLATFORM_EXPORT_PATH(catalogsengineobserver.h)
+../inc/catalogserrors.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(catalogserrors.h)
+../inc/catalogsinterfaceids.h                                MW_LAYER_PLATFORM_EXPORT_PATH(catalogsinterfaceids.h)
+../inc/catalogspanics.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(catalogspanics.h)
+../inc/catalogsuids.h                                        MW_LAYER_PLATFORM_EXPORT_PATH(catalogsuids.h)
+../inc/catalogsutils.h                                       MW_LAYER_PLATFORM_EXPORT_PATH(catalogsutils.h)
+../inc/ncdbundle.h                                           MW_LAYER_PLATFORM_EXPORT_PATH(ncdbundle.h)
+../inc/ncdcapabilities.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdcapabilities.h)
+../inc/ncdchildloadmode.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdchildloadmode.h)
+../inc/ncdclientlocalizer.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdclientlocalizer.h)
+../inc/ncdconfigurationdata.h                                MW_LAYER_PLATFORM_EXPORT_PATH(ncdconfigurationdata.h)
+../inc/ncdconfigurationkeys.h                                MW_LAYER_PLATFORM_EXPORT_PATH(ncdconfigurationkeys.h)
+../inc/ncdconnectionmethod.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdconnectionmethod.h)
+../inc/ncdcontainertype.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdcontainertype.h)
+../inc/ncdcreateaccesspointoperation.h                       MW_LAYER_PLATFORM_EXPORT_PATH(ncdcreateaccesspointoperation.h)
+../inc/ncdcreateaccesspointoperationobserver.h               MW_LAYER_PLATFORM_EXPORT_PATH(ncdcreateaccesspointoperationobserver.h)
+../inc/ncddebuginformation.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncddebuginformation.h)
+../inc/ncddownloadoperation.h                                MW_LAYER_PLATFORM_EXPORT_PATH(ncddownloadoperation.h)
+../inc/ncddownloadoperationobserver.h                        MW_LAYER_PLATFORM_EXPORT_PATH(ncddownloadoperationobserver.h)
+../inc/ncderrors.h                                           MW_LAYER_PLATFORM_EXPORT_PATH(ncderrors.h)
+../inc/ncdfavoritemanager.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdfavoritemanager.h)
+../inc/ncdfiledownloadoperation.h                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdfiledownloadoperation.h)
+../inc/ncdfiledownloadoperationobserver.h                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdfiledownloadoperationobserver.h)
+../inc/ncdinstalledapplication.h                             MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalledapplication.h)
+../inc/ncdinstalledcontent.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalledcontent.h)
+../inc/ncdinstalledfile.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalledfile.h)
+../inc/ncdinstalledtheme.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalledtheme.h)
+../inc/ncdinstalloperation.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalloperation.h)
+../inc/ncdinstalloperationobserver.h                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdinstalloperationobserver.h)
+../inc/ncdinterfaceids.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdinterfaceids.h)
+../inc/ncditempurpose.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(ncditempurpose.h)
+../inc/ncdkeyvaluepair.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdkeyvaluepair.h)
+../inc/ncdloadnodeoperation.h                                MW_LAYER_PLATFORM_EXPORT_PATH(ncdloadnodeoperation.h)
+../inc/ncdloadnodeoperationobserver.h                        MW_LAYER_PLATFORM_EXPORT_PATH(ncdloadnodeoperationobserver.h)
+../inc/ncdnode.h                                             MW_LAYER_PLATFORM_EXPORT_PATH(ncdnode.h)
+../inc/ncdnodeactivate.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeactivate.h)
+../inc/ncdnodechildoftransparent.h                           MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodechildoftransparent.h)
+../inc/ncdnodecontainer.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodecontainer.h)
+../inc/ncdnodecontentinfo.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodecontentinfo.h)
+../inc/ncdnodedependency.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodedependency.h)
+../inc/ncdnodedependencyinfo.h                               MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodedependencyinfo.h)
+../inc/ncdnodedownload.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodedownload.h)
+../inc/ncdnodefavorite.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodefavorite.h)
+../inc/ncdnodeicon.h                                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeicon.h)
+../inc/ncdnodeinstall.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeinstall.h)
+../inc/ncdnodemetadata.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodemetadata.h)
+../inc/ncdnodepreview.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodepreview.h)
+../inc/ncdnodepurchase.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodepurchase.h)
+../inc/ncdnodescreenshot.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodescreenshot.h)
+../inc/ncdnodesearch.h                                       MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodesearch.h)
+../inc/ncdnodeseen.h                                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeseen.h)
+../inc/ncdnodeseenfolder.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeseenfolder.h)
+../inc/ncdnodeskin.h                                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeskin.h)
+../inc/ncdnodeupgrade.h                                      MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeupgrade.h)
+../inc/ncdnodeuricontent.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeuricontent.h)
+../inc/ncdnodeuserdata.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdnodeuserdata.h)
+../inc/ncdoperation.h                                        MW_LAYER_PLATFORM_EXPORT_PATH(ncdoperation.h)
+../inc/ncdoperationdatatypes.h                               MW_LAYER_PLATFORM_EXPORT_PATH(ncdoperationdatatypes.h)
+../inc/ncdpanics.h                                           MW_LAYER_PLATFORM_EXPORT_PATH(ncdpanics.h)
+../inc/ncdpaymentmethod.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdpaymentmethod.h)
+../inc/ncdprogress.h                                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdprogress.h)
+../inc/ncdprovider.h                                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdprovider.h)
+../inc/ncdproviderobserver.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdproviderobserver.h)
+../inc/ncdproviderpcclientsupport.h                          MW_LAYER_PLATFORM_EXPORT_PATH(ncdproviderpcclientsupport.h)
+../inc/ncdpurchasedetails.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchasedetails.h)
+../inc/ncdpurchasedownloadinfo.h                             MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchasedownloadinfo.h)
+../inc/ncdpurchasehistory.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchasehistory.h)
+../inc/ncdpurchasehistoryfilter.h                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchasehistoryfilter.h)
+../inc/ncdpurchaseinstallinfo.h                              MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchaseinstallinfo.h)
+../inc/ncdpurchaseoperation.h                                MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchaseoperation.h)
+../inc/ncdpurchaseoperationobserver.h                        MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchaseoperationobserver.h)
+../inc/ncdpurchaseoption.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdpurchaseoption.h)
+../inc/ncdquery.h                                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdquery.h)
+../inc/ncdqueryitem.h                                        MW_LAYER_PLATFORM_EXPORT_PATH(ncdqueryitem.h)
+../inc/ncdquerynumericitem.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdquerynumericitem.h)
+../inc/ncdquerypincodeitem.h                                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdquerypincodeitem.h)
+../inc/ncdqueryselectionitem.h                               MW_LAYER_PLATFORM_EXPORT_PATH(ncdqueryselectionitem.h)
+../inc/ncdquerytextitem.h                                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdquerytextitem.h)
+../inc/ncdrightsobjectoperation.h                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdrightsobjectoperation.h)
+../inc/ncdrightsobjectoperationobserver.h                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdrightsobjectoperationobserver.h)
+../inc/ncdschemenodetype.h                                   MW_LAYER_PLATFORM_EXPORT_PATH(ncdschemenodetype.h)
+../inc/ncdsearchfilter.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdsearchfilter.h)
+../inc/ncdsearchoperation.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdsearchoperation.h)
+../inc/ncdsendhttprequestoperation.h                         MW_LAYER_PLATFORM_EXPORT_PATH(ncdsendhttprequestoperation.h)
+../inc/ncdsendhttprequestoperationobserver.h                 MW_LAYER_PLATFORM_EXPORT_PATH(ncdsendhttprequestoperationobserver.h)
+../inc/ncdsubscription.h                                     MW_LAYER_PLATFORM_EXPORT_PATH(ncdsubscription.h)
+../inc/ncdsubscriptionmanager.h                              MW_LAYER_PLATFORM_EXPORT_PATH(ncdsubscriptionmanager.h)
+../inc/ncdsubscriptionoperation.h                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdsubscriptionoperation.h)
+../inc/ncdsubscriptionoperationobserver.h                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdsubscriptionoperationobserver.h)
+../inc/ncdutils.h                                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdutils.h)
+../inc/catalogsarray.inl                                     MW_LAYER_PLATFORM_EXPORT_PATH(catalogsarray.inl)
+../inc/catalogsutils.inl                                     MW_LAYER_PLATFORM_EXPORT_PATH(catalogsutils.inl)
+../inc/ncdserverreportmanager.h                              MW_LAYER_PLATFORM_EXPORT_PATH(ncdserverreportmanager.h)
+../inc/ncdserverreportoperation.h                            MW_LAYER_PLATFORM_EXPORT_PATH(ncdserverreportoperation.h)
+../inc/ncdserverreportoperationobserver.h                    MW_LAYER_PLATFORM_EXPORT_PATH(ncdserverreportoperationobserver.h)
+../inc/ncdprovideroptions.h                                  MW_LAYER_PLATFORM_EXPORT_PATH(ncdprovideroptions.h)
+#endif

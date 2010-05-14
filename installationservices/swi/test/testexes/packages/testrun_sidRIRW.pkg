@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe and is used with testsidcheck_B to check for installation of
+; multiple executables with the same sid.
+
+
+;Languages
+&EN
+
+;Header
+#{"testrun_sidRIRW"}, (0x81113015), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswinocapability.exe"-"!:\sys\bin\testsidcheck_A.exe", FR, RI, RW

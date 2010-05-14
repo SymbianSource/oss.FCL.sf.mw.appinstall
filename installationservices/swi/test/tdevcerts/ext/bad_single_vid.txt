@@ -1,0 +1,3 @@
+# A single vendor id that should never match
+[vid_list]
+vid1=0xC001C0DE

@@ -1,0 +1,68 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// This script tests the installation to a removable media drive and
+// verifies the correct creation of a SIS stub on that drive
+
+// This script requires the SWIPolicy AllowPackagePropagate to be true in order to pass
+
+PRINT Run Removable media SIS deletable stub installation test
+PRINT SWIPolicy AllowPackagePropagate and DeletePreinstalledFilesOnUninstall must be set to true for these tests to pass
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-StubDeleteTest-I-0001
+//! @SYMTestCaseDesc 		Test for swipolicy allowing deletion of files installed from removable media stub.
+//! @SYMDEF			INC080962
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Install and uninstall from stub and check expected deletions
+//! @SYMTestExpectedResults 	Files installed/uninstalled, package files and stub sis deleted if stub sis is writable
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-StubDeleteTest-I-0001
+
+// Simple package installation from a normal sis file
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini packagefordelete
+
+// Copy the stub that was created and the installed exe to another location for later restore.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini save_packagefordelete_files
+
+// Uninstall the package
+RUN_TEST_STEP 15 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_packagefordelete
+
+// Restore the files and set the stub file read-only.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini restore_packagefordelete_files
+RUN_TEST_STEP 10 tuiscriptadaptors SetClearReadOnlyStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini setreadonly_packagefordelete_stub
+// Reinstall from the stub
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini packagefordelete_stub
+
+// Uninstall stub
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_packagefordelete_stub
+
+// Set stub sis writable and reinstall.
+RUN_TEST_STEP 10 tuiscriptadaptors SetClearReadOnlyStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini clearreadonly_packagefordelete_stub
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini packagefordelete_stub
+
+// Uninstall stub and check deletion of files
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_packagefordelete_stub_delete
+
+// Remove the backup copies of the package files and stub.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini delete_packagefordelete_files
+
+END_TESTCASE API-SEC-StubDeleteTest-I-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,24 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+
+#{"Exe File Upgrades SA, RU"},(0x802730A1), 1,3,5, TYPE=SA, RU
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\sntpclient.exe"-"c:\sys\bin\sntpclient_elicpse.exe";

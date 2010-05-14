@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software Install implementation 
+*
+*/
+
+
+/**
+ @file
+*/
+
+PRJ_PLATFORMS
+DEFAULT TOOLS
+TOOLS2
+
+PRJ_MMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+
+swiconsole.mmp
+
+#endif
+#endif
+
+PRJ_TESTMMPFILES
+
+#ifndef TOOLS
+../test/tswiconsole/tswiconsole.mmp
+swicertstoretool.mmp
+#endif
+
+PRJ_TESTEXPORTS
+
+// ROMKIT test includes
+../test/tswiconsole/data/tswiconsole.iby						/epoc32/rom/include/tswiconsole.iby
+
+../test/tswiconsole/scripts/tswiconsole.script 					/epoc32/winscw/c/tswi/tswiconsole/scripts/tswiconsole.script
+../test/tswiconsole/scripts/tswiconsole_allowunsigned.script 	/epoc32/winscw/c/tswi/tswiconsole/scripts/tswiconsole_allowunsigned.script
+../test/tswiconsole/scripts/tswiconsole.ini 					/epoc32/winscw/c/tswi/tswiconsole/scripts/tswiconsole.ini
+../test/tswiconsole/data/Eclipse.txt 							/epoc32/winscw/c/tswi/tswiconsole/data/eclipse.txt
+
+// SWICertstoretool example input file
+../source/swicertstoretool/exampleInputFile.txt					/epoc32/winscw/c/swicertstoretool/exampleinputfile.txt
+
+
+// End of file

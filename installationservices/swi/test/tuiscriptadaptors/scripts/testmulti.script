@@ -1,0 +1,47 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests for duplicated source files
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-MULTI-I-0001
+//! @SYMTestCaseDesc 		Test duplicated source file
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Perform various installs.
+//! @SYMTestExpectedResults 	Files installed/uninstalled.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-UISA-MULTI-I-0001
+
+// Make sure none of the files we overwrite are present
+RUN_UTILS DeleteFile c:\Documents\InstTest\If\test.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\Else\test.txt
+
+RUN_UTILS MkDir c:\Documents\
+RUN_UTILS MkDir c:\Documents\InstTest\
+RUN_UTILS MkDir c:\Documents\InstTest\If\
+RUN_UTILS MkDir c:\Documents\InstTest\Else\
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testmulti.ini installIf
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testmulti.ini installElse
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testmulti.ini uninstallIf
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testmulti.ini uninstallElse
+
+RUN_UTILS DeleteFile c:\Documents\InstTest\If\test.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\Else\test.txt
+
+END_TESTCASE API-SEC-UISA-MULTI-I-0001

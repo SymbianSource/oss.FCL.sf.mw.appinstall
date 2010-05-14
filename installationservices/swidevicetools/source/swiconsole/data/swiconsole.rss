@@ -1,0 +1,4558 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* define sundry structures
+*
+*/
+
+
+
+#include "swiconsole.loc"
+
+STRUCT STRING
+    {
+    LTEXT text;
+    }
+
+// define resources
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_TOOL_HEADER_MSG
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_tool_header_msg
+{
+	text	= s_tool_header_msg;
+}
+
+//------------------------- INSTALL DETAILS ------------------------------------
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_MSG
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_msg
+{
+	text	= s_install_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_APPLICATION_NAME
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_application_name
+{
+	text	= s_install_application_name;
+}
+
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_VERSION_NAME
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_version_name
+{
+	text	= s_install_version_name;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_VENDOR_NAME 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_vendor_name
+{
+	text	= s_install_vendor_name;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_CONTINUE_CONFIRM_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_continue_confirm_msg
+{
+	text	= s_install_continue_confirm_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_Y_TO_CONTINUE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_y_to_continue_msg
+{
+	text	= s_install_y_to_continue_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_N_TO_ABORT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_n_to_abort_msg
+{
+	text	= s_install_n_to_abort_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_D_TO_VIEW_CERT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_d_to_view_cert_msg
+{
+	text	= s_install_d_to_view_cert_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALL_ENTER_CHOICE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_install_enter_choice_msg
+{
+	text	= s_install_enter_choice_msg;
+}
+
+
+//----------------- CERTIFICATE DETAILS ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_DETAILS_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_details_msg
+{
+	text	= s_cert_details_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_SUBJECT_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_subject_name_msg
+{
+	text	= s_cert_subject_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_ISSUER_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_issuer_name_msg
+{
+	text	= s_cert_issuer_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_VALID_FROM_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_valid_from_msg
+{
+	text	= s_cert_valid_from_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_VALID_TO_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_valid_to_msg
+{
+	text	= s_cert_valid_to_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CERT_SERIAL_NUMBER_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cert_serial_number_msg
+{
+	text	= s_cert_serial_number_msg;
+}
+
+//------------------------- USER CAPABILTIES -----------------------------------
+//------------------------------------------------------------------------------
+// Resource Name   : R_GRANT_USER_CAPABILITIES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_grant_user_capabilities_msg
+{
+	text	= s_grant_user_capabilities_msg;
+}
+
+//------------------------- LANGUAGE SELECTION ---------------------------------
+//------------------------------------------------------------------------------
+// Resource Name   : R_DISPLAY_LANGUAGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_display_language_msg
+{
+	text	= s_display_language_msg;
+}
+
+
+//------------------------- LANGUAGE STRINGS -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ENGLISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_english_str
+{
+	text	= s_lang_english_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_FRENCH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_french_str
+{
+	text	= s_lang_french_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_GERMAN_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_german_str
+{
+	text	= s_lang_german_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SPANISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_spanish_str
+{
+	text	= s_lang_spanish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ITALIAN_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_italian_str
+{
+	text	= s_lang_italian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SWEDISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_swedish_str
+{
+	text	= s_lang_swedish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_DANISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_danish_str
+{
+	text	= s_lang_danish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_NORWEGIAN_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_norwegian_str
+{
+	text	= s_lang_norwegian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_FINNISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_finnish_str
+{
+	text	= s_lang_finnish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_AMERICANENGLISH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_americanenglish_str
+{
+	text	= s_lang_americanenglish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SWISSFRENCH_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_swissfrench_str
+{
+	text	= s_lang_swissfrench_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SWISSGERMAN_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_swissgerman_str
+{
+	text	= s_lang_swissgerman_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_PORTUGUESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_portuguese_str
+{
+	text	=  s_lang_portuguese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TURKISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_turkish_str
+{
+	text	=  s_lang_turkish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ICELANDIC_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_icelandic_str
+{
+	text	=  s_lang_icelandic_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_RUSSIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_russian_str
+{
+	text	=  s_lang_russian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_HUNGARIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_hungarian_str
+{
+	text	=  s_lang_hungarian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_DUTCH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_dutch_str
+{
+	text	=  s_lang_dutch_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BELGIANFLEMISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_belgianflemish_str
+{
+	text	=  s_lang_belgianflemish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_AUSTRALIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_australian_str
+{
+	text	=  s_lang_australian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BELGIANFRENCH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_belgianfrench_str
+{
+	text	=  s_lang_belgianfrench_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_AUSTRIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_austrian_str
+{
+	text	=  s_lang_austrian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_NEWZEALAND_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_newzealand_str
+{
+	text	=  s_lang_newzealand_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_INTERNATIONALFRENCH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_internationalfrench_str
+{
+	text	=  s_lang_internationalfrench_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CZECH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_czech_str
+{
+	text	=  s_lang_czech_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SLOVAK_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_slovak_str
+{
+	text	=  s_lang_slovak_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_POLISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_polish_str
+{
+	text	=  s_lang_polish_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SLOVENIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_slovenian_str
+{
+	text	=  s_lang_slovenian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TAIWANCHINESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_taiwanchinese_str
+{
+	text	=  s_lang_taiwanchinese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_HONGKONGCHINESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_hongkongchinese_str
+{
+	text	=  s_lang_hongkongchinese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_PRCCHINESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_prcchinese_str
+{
+	text	=  s_lang_prcchinese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_JAPANESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_japanese_str
+{
+	text	=  s_lang_japanese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_THAI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_thai_str
+{
+	text	=  s_lang_thai_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_AFRIKAANS_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_afrikaans_str
+{
+	text	=  s_lang_afrikaans_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ALBANIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_albanian_str
+{
+	text	=  s_lang_albanian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_AMHARIC_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_amharic_str
+{
+	text	=  s_lang_amharic_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ARABIC_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_arabic_str
+{
+	text	=  s_lang_arabic_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ARMENIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_armenian_str
+{
+	text	=  s_lang_armenian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TAGALOG_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_tagalog_str
+{
+	text	=  s_lang_tagalog_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BELARUSSIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_belarussian_str
+{
+	text	=  s_lang_belarussian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BENGALI_STR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_bengali_str 
+{
+	text	=  s_lang_bengali_str ;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BULGARIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_bulgarian_str
+{
+	text	=  s_lang_bulgarian_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BURMESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_burmese_str
+{
+	text	=  s_lang_burmese_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CATALAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_catalan_str
+{
+	text	=  s_lang_catalan_str;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CROATIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_croatian_str
+{
+	text	=  s_lang_croatian_str;
+}
+
+          
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CANADIANENGLISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_canadianenglish_str
+{
+	text	=  s_lang_canadianenglish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_INTERNATIONALENGLISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_internationalenglish_str
+{
+	text	=  s_lang_internationalenglish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SOUTHAFRICANENGLISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_southafricanenglish_str
+{
+	text	=  s_lang_southafricanenglish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ESTONIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_estonian_str
+{
+	text	=  s_lang_estonian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_FARSI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_farsi_str
+{
+	text	=  s_lang_farsi_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CANADIANFRENCH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_canadianfrench_str
+{
+	text	=  s_lang_canadianfrench_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SCOTSGAELIC_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_scotsgaelic_str
+{
+	text	=  s_lang_scotsgaelic_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_GEORGIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_georgian_str
+{
+	text	=  s_lang_georgian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_GREEK_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_greek_str
+{
+	text	=  s_lang_greek_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CYPRUSGREEK_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_cyprusgreek_str
+{
+	text	=  s_lang_cyprusgreek_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_GUJARATI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_gujarati_str
+{
+	text	=  s_lang_gujarati_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_HEBREW_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_hebrew_str
+{
+	text	=  s_lang_hebrew_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_HINDI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_hindi_str
+{
+	text	=  s_lang_hindi_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_INDONESIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_indonesian_str
+{
+	text	=  s_lang_indonesian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_IRISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_irish_str
+{
+	text	=  s_lang_irish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SWISSITALIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_swissitalian_str
+{
+	text	=  s_lang_swissitalian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_KANNADA_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_kannada_str
+{
+	text	=  s_lang_kannada_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_KAZAKH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_kazakh_str
+{
+	text	=  s_lang_kazakh_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_KHMER_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_khmer_str
+{
+	text	=  s_lang_khmer_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_KOREAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_korean_str
+{
+	text	=  s_lang_korean_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_LAOTHIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_laothian_str
+{
+	text	=  s_lang_laothian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_LATVIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_latvian_str
+{
+	text	=  s_lang_latvian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_LITHUANIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_lithuanian_str
+{
+	text	=  s_lang_lithuanian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MACEDONIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_macedonian_str
+{
+	text	=  s_lang_macedonian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MALAY_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_malay_str
+{
+	text	=  s_lang_malay_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MALAYALAM_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_malayalam_str
+{
+	text	=  s_lang_malayalam_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MARATHI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_marathi_str
+{
+	text	=  s_lang_marathi_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MOLDOVIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_moldovian_str
+{
+	text	=  s_lang_moldovian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_MONGOLIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_mongolian_str
+{
+	text	=  s_lang_mongolian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_NORWEGIANNYNORSK_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_norwegiannynorsk_str
+{
+	text	=  s_lang_norwegiannynorsk_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_BRAZILIANPORTUGUESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_brazilianportuguese_str
+{
+	text	=  s_lang_brazilianportuguese_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_PUNJABI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_punjabi_str
+{
+	text	=  s_lang_punjabi_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ROMANIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_romanian_str
+{
+	text	=  s_lang_romanian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SERBIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_serbian_str
+{
+	text	=  s_lang_serbian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SINHALESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_sinhalese_str
+{
+	text	=  s_lang_sinhalese_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SOMALI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_somali_str
+{
+	text	=  s_lang_somali_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_INTERNATIONALSPANISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_internationalspanish_str
+{
+	text	=  s_lang_internationalspanish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_LATINAMERICANSPANISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_latinamericanspanish_str
+{
+	text	=  s_lang_latinamericanspanish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_SWAHILI_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_swahili_str
+{
+	text	=  s_lang_swahili_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_FINLANDSWEDISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_finlandswedish_str
+{
+	text	=  s_lang_finlandswedish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_RESERVED_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_reserved_str
+{
+	text	=  s_lang_reserved_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TAMIL_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_tamil_str
+{
+	text	=  s_lang_tamil_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TELUGU_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_telugu_str
+{
+	text	=  s_lang_telugu_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TIBETAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_tibetan_str
+{
+	text	=  s_lang_tibetan_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TIGRINYA_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_tigrinya_str
+{
+	text	=  s_lang_tigrinya_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_CYPRUSTURKISH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_cyprusturkish_str
+{
+	text	=  s_lang_cyprusturkish_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_TURKMEN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_turkmen_str
+{
+	text	=  s_lang_turkmen_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_UKRAINIAN_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_ukrainian_str
+{
+	text	=  s_lang_ukrainian_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_URDU_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_urdu_str
+{
+	text	=  s_lang_urdu_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_VIETNAMESE_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_vietnamese_str
+{
+	text	=  s_lang_vietnamese_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_WELSH_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_welsh_str
+{
+	text	=  s_lang_welsh_str;    
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LANG_ZULU_STR
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_lang_zulu_str
+{
+	text	=  s_lang_zulu_str;    
+}
+
+
+//-------------------------- DRIVE SELECTION -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DRIVE_SELECTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_drive_selection_msg
+{
+	text	= s_drive_selection_msg;
+}
+
+//-------------------------- PACKAGE UPGRADE -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UPGRADE_CONFIRMATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_upgrade_confirmation_msg
+{
+	text	= s_upgrade_confirmation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UPGRADE_EXISTING_PKG_DETAILS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_upgrade_existing_pkg_details
+{
+	text	= s_upgrade_existing_pkg_details;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UPGRADE_NEW_PKG_DETAILS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_upgrade_new_pkg_details
+{
+	text	= s_upgrade_new_pkg_details;
+}
+
+
+//----------------------------- OPTION LIST ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPTION_SELECT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_option_select_msg
+{
+	text	= s_option_select_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPTION_ENTER_WITH_SPACES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_option_enter_with_spaces_msg
+{
+	text	= s_option_enter_with_spaces_msg;
+}
+
+
+
+//-------------------------- PROGRESS INFORMATION ------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PROGRESS_INFO 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_progress_info
+{
+	text	= s_progress_info;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PROGRESS_PROMPT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_progress_prompt_msg
+{
+	text	= s_progress_prompt_msg;
+}
+
+
+//-------------------------- INSTALL EVENT MESSAGES ----------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_INSTALL_ABORTED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_install_aborted_msg
+{
+	text	= s_event_install_aborted_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : s_event_install_completed_msg 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING R_EVENT_INSTALL_COMPLETED_MSG
+{
+	text	= s_event_install_completed_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_UNINSTALL_COMPLETED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_uninstall_completed_msg
+{
+	text	= s_event_uninstall_completed_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_UNINSTALL_ABORTED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_uninstall_aborted_msg
+{
+	text	= s_event_uninstall_aborted_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_COMPLETED_NO_MESSAGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_completed_no_message_msg
+{
+	text	= s_event_completed_no_message_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_LEAVE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_leave_msg
+{
+	text	= s_event_leave_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_OCSP_CHECK_END_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_ocsp_check_end_msg
+{
+	text	= s_event_ocsp_check_end_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_DEVCERT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_devcert_msg
+{
+	text	= s_event_devcert_msg;
+}
+
+
+//------------------------- CANCELLABLE EVENT MESSAGES -------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_REMOVING_FILES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_removing_files_msg
+{
+	text	= s_event_removing_files_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_SHUTTING_DOWN_APPS_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_shutting_down_apps_msg
+{
+	text	= s_event_shutting_down_apps_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_COPYING_FILES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_copying_files_msg
+{
+	text	= s_event_copying_files_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_OCSP_CHECK_START_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_ocsp_check_start_msg
+{
+	text	= s_event_ocsp_check_start_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_CONFIRM_CANCEL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_confirm_cancel_msg
+{
+	text	= s_event_confirm_cancel_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_Y_TO_CANCEL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_y_to_cancel_msg
+{
+	text	= s_event_y_to_cancel_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_EVENT_N_TO_CONTINUE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_event_n_to_continue_msg
+{
+	text	= s_event_n_to_continue_msg;
+}
+
+
+//------------------------- SIGNATURE VALIDATION ERROR -------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_VALIDATION_SUCCEEDED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_validation_succeeded_msg
+{
+	text	= s_sig_validation_succeeded_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_SELF_SIGNED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_self_signed_msg
+{
+	text	= s_sig_self_signed_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_NO_CERTIFICATE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_no_certificate_msg
+{
+	text	= s_sig_no_certificate_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_CERTIFICATE_VALIDATION_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_certificate_validation_err_msg
+{
+	text	= s_sig_certificate_validation_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_NOT_PRESENT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_not_present_msg
+{
+	text	= s_sig_not_present_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_COULD_NOT_BE_VALIDATED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_could_not_be_validated_msg
+{
+	text	= s_sig_could_not_be_validated_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_NO_CODE_SIGNING_EXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_no_code_signing_ext_msg
+{
+	text	= s_sig_no_code_signing_ext_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_NO_SUPPORTED_POLICY_EXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_no_supported_policy_ext_msg
+{
+	text	= s_sig_no_supported_policy_ext_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIG_MISSING_MANDATORY_SIGNATURE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sig_missing_mandatory_signature_msg
+{
+	text	= s_sig_missing_mandatory_signature_msg;
+}
+
+//------------------------- VALIDATION ERRORS -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_RESULT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_result_msg
+{
+	text	= s_validation_result_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_OK_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_ok_msg
+{
+	text	= s_validation_ok_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CHAIN_HAS_NO_ROOT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_chain_has_no_root_msg
+{
+	text	= s_validation_chain_has_no_root_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_INVALID_SIGNATURE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_invalid_signature_msg
+{
+	text	= s_validation_invalid_signature_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_DATE_OUT_OF_RANGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_date_out_of_range_msg
+{
+	text	= s_validation_date_out_of_range_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NAME_EXCLUDED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_name_excluded_msg
+{
+	text	= s_validation_name_excluded_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NAME_NOT_PERMITTED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_name_not_permitted_msg
+{
+	text	= s_validation_name_not_permitted_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NOT_CA_CERT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_not_ca_cert_msg
+{
+	text	= s_validation_not_ca_cert_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CERT_REVOKED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_cert_revoked_msg
+{
+	text	= s_validation_cert_revoked_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_UNRECOGNIZED_EXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_unrecognized_ext_msg
+{
+	text	= s_validation_unrecognized_ext_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NO_CONSTRAINT_IN_CA_CERT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_no_constraint_in_ca_cert_msg
+{
+	text	= s_validation_no_constraint_in_ca_cert_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NO_ACCEPTABLE_POLICY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_no_acceptable_policy_msg
+{
+	text	= s_validation_no_acceptable_policy_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_PATH_TOO_LONG_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_path_too_long_msg
+{
+	text	= s_validation_path_too_long_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NEG_PATH_LEN_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_neg_path_len_msg
+{
+	text	= s_validation_neg_path_len_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_NAMES_DONT_CHAIN_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_names_dont_chain_msg
+{
+	text	= s_validation_names_dont_chain_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_POLICY_NOT_FOUND_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_policy_not_found_msg
+{
+	text	= s_validation_policy_not_found_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_BAD_KEY_USAGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_bad_key_usage_msg
+{
+	text	= s_validation_bad_key_usage_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_ROOT_NOT_SELFSIGNED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_root_not_selfsigned_msg
+{
+	text	= s_validation_root_not_selfsigned_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_EXT_KEY_USAGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_ext_key_usage_msg
+{
+	text	= s_validation_critical_ext_key_usage_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CERT_POLICIES_WITH_QUALIFER_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_cert_policies_with_qualifer_msg
+{
+	text	= s_validation_cert_policies_with_qualifer_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_POLICY_MAPPING_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_policy_mapping_msg
+{
+	text	= s_validation_critical_policy_mapping_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_DEVICE_ID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_device_id_msg
+{
+	text	= s_validation_critical_device_id_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_SID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_sid_msg
+{
+	text	= s_validation_critical_sid_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_VID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_vid_msg
+{
+	text	= s_validation_critical_vid_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_VALIDATION_CRITICAL_CAPABILITIES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_validation_critical_capabilities_msg
+{
+	text	= s_validation_critical_capabilities_msg;
+}
+
+
+//------------------------- VALIDATION ERRORS -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_RESULT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_result_msg
+{
+	text	= s_ocsp_result_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_RESULT_GOOD_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_result_good_msg
+{
+	text	= s_ocsp_result_good_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_RESULT_UNKNOWN_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_result_unknown_msg
+{
+	text	= s_ocsp_result_unknown_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_RESULT_REVOKED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_result_revoked_msg
+{
+	text	= s_ocsp_result_revoked_msg;
+}
+
+//--------------------------- OCSP ERRORS -------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_INVALID_SERVER_URL 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_invalid_server_url
+{
+	text	= s_ocsp_dlg_invalid_server_url;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_UNABLE_TO_OBTAIN_STATUS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_unable_to_obtain_status
+{
+	text	= s_ocsp_dlg_unable_to_obtain_status;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_VALIDATION_FAILURE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_validation_failure
+{
+	text	= s_ocsp_dlg_validation_failure;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_INVALID_RESPONSE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_invalid_response
+{
+	text	= s_ocsp_dlg_invalid_response;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_INVALID_STATUS_INFORMATION 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_invalid_status_information
+{
+	text	= s_ocsp_dlg_invalid_status_information;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_UNKNOWN_STATUS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_unknown_status
+{
+	text	= s_ocsp_dlg_unknown_status;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_UNKNOWN_SELFSIGNED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_unknown_selfsigned
+{
+	text	= s_ocsp_dlg_unknown_selfsigned;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_DLG_REVOKED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_dlg_revoked
+{
+	text	= s_ocsp_dlg_revoked;
+}
+
+
+//--------------------------- OCSP ERRORS -------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_ERROR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_error_msg
+{
+	text	= s_ocsp_error_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_TRANSPORT_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_transport_err_msg
+{
+	text	= s_ocsp_transport_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_CLIENT_INTERNAL_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_client_internal_err_msg
+{
+	text	= s_ocsp_client_internal_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_NO_SERVER_SPECFIED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_no_server_specfied_msg
+{
+	text	= s_ocsp_no_server_specfied_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_INVALID_URI_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_invalid_uri_msg
+{
+	text	= s_ocsp_invalid_uri_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_MALFORMED_RESPONSE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_malformed_response_msg
+{
+	text	= s_ocsp_malformed_response_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_UNKNOWN_RESPONSE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_unknown_response_msg
+{
+	text	= s_ocsp_unknown_response_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_UNKNOWN_CRITICAL_EXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_unknown_critical_ext_msg
+{
+	text	= s_ocsp_unknown_critical_ext_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_MALFORMED_REQUEST_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_malformed_request_msg
+{
+	text	= s_ocsp_malformed_request_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_SERVER_INTERNAL_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_server_internal_err_msg
+{
+	text	= s_ocsp_server_internal_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_SERVER_BUSY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_server_busy_msg
+{
+	text	= s_ocsp_server_busy_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_SIGNATURE_REQUIRED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_signature_required_msg
+{
+	text	= s_ocsp_signature_required_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_CLIENT_UNAUTHORISED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_client_unauthorised_msg
+{
+	text	= s_ocsp_client_unauthorised_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_MISSING_CERTIFICATES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_missing_certificates_msg
+{
+	text	= s_ocsp_missing_certificates_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_RESPONSE_SIG_VALIDATION_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_response_sig_validation_err_msg
+{
+	text	= s_ocsp_response_sig_validation_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_UPDATE_TOO_LATE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_update_too_late_msg
+{
+	text	= s_ocsp_update_too_late_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_UPDATE_TOO_EARLY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_update_too_early_msg
+{
+	text	= s_ocsp_update_too_early_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_NEXT_UPDATE_TOO_EARLY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_next_update_too_early_msg
+{
+	text	= s_ocsp_next_update_too_early_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_INVALID_CERT_AT_VALIDATION_TIME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_invalid_cert_at_validation_time_msg
+{
+	text	= s_ocsp_invalid_cert_at_validation_time_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_NONCE_MISMATCH_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_nonce_mismatch_msg
+{
+	text	= s_ocsp_nonce_mismatch_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_MISSING_NONCE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_missing_nonce_msg
+{
+	text	= s_ocsp_missing_nonce_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OCSP_VALID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_ocsp_valid_msg
+{
+	text	= s_ocsp_valid_msg;
+}
+
+//------------------------- CANNOT OVERWRITE FILE ------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CANNOT_OVERWRITE_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cannot_overwrite_file_msg
+{
+	text	= s_cannot_overwrite_file_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_FILE_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_file_name_msg
+{
+	text	= s_file_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_FILE_BELONGS_TO_OTHER_APP_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_file_belongs_to_other_app_msg
+{
+	text	= s_file_belongs_to_other_app_msg;
+}
+
+//--------------------------- MISSING DEPENDENCY -------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_MISSING_DEPENDENCY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_missing_dependency_msg
+{
+	text	= s_missing_dependency_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_REQUIRED_FOR_INSTALLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_required_for_installation_msg
+{
+	text	= s_app_required_for_installation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DEPENDENCY_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dependency_name_msg
+{
+	text	= s_dependency_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_WANTED_VERSION_RANGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_wanted_version_range_msg
+{
+	text	= s_wanted_version_range_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALLED_VERSION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_installed_version_msg
+{
+	text	= s_installed_version_msg;
+}
+
+
+//------------------------- UNINSTALL STRINGS ----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UNINSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_uninstall_msg
+{
+	text	= s_uninstall_msg;
+}
+
+//--------------------------- DISPLAY TEXT  ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_TEXT_CONFIRM_FILE_SKIP_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_text_confirm_file_skip_msg
+{
+	text	= s_text_confirm_file_skip_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_TEXT_PRESS_Y_TO_SKIP_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_text_press_y_to_skip_file_msg
+{
+	text	= s_text_press_y_to_skip_file_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_TEXT_PRESS_N_TO_INSTALL_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_text_press_n_to_install_file_msg
+{
+	text	= s_text_press_n_to_install_file_msg;
+}
+
+//--------------------------- ERROR STRINGS ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_msg
+{
+	text	= s_err_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_ALREADY_IN_ROM_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_already_in_rom_msg
+{
+	text	= s_err_already_in_rom_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_MISSING_DEP_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_missing_dep_msg
+{
+	text	= s_err_missing_dep_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_REQUIRE_VER_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_require_ver_msg
+{
+	text	= s_err_require_ver_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_REQUIRE_VER_OR_GR8_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_require_ver_or_gr8_msg
+{
+	text	= s_err_require_ver_or_gr8_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_FILE_CORRUPT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_file_corrupt_msg
+{
+	text	= s_err_file_corrupt_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_DISK_NOT_PRESENT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_disk_not_present_msg
+{
+	text	= s_err_disk_not_present_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CANNOT_READ_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_cannot_read_msg
+{
+	text	= s_err_cannot_read_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CANNOT_DELETE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_cannot_delete_msg
+{
+	text	= s_err_cannot_delete_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_FILENAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_filename_msg
+{
+	text	= s_err_invalid_filename_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_FILE_NOT_FOUND_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_file_not_found_msg
+{
+	text	= s_err_file_not_found_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INSUFFICIENT_DISK_SPACE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_insufficient_disk_space_msg
+{
+	text	= s_err_insufficient_disk_space_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CANT_GRANT_CAPBILITY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_cant_grant_capbility_msg
+{
+	text	= s_err_cant_grant_capbility_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_UNKNOWN_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_unknown_file_msg
+{
+	text	= s_err_unknown_file_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_MISSING_BASE_PKG_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_missing_base_pkg_msg
+{
+	text	= s_err_missing_base_pkg_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CONSTRAINTS_EXCEEDED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_constraints_exceeded_msg
+{
+	text	= s_err_constraints_exceeded_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SID_VIOLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_sid_violation_msg
+{
+	text	= s_err_sid_violation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_VID_VIOLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_vid_violation_msg
+{
+	text	= s_err_vid_violation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NO_MEMORY_IN_DRIVE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_no_memory_in_drive_msg
+{
+	text	= s_err_no_memory_in_drive_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_PKG_UID_VIOLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_pkg_uid_violation_msg
+{
+	text	= s_err_pkg_uid_violation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_EXE_VIOLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_exe_violation_msg
+{
+	text	= s_err_exe_violation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SID_MISMATACH_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_sid_mismatach_msg
+{
+	text	= s_err_sid_mismatach_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_BLOCKING_ECLIPSING_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_blocking_eclipsing_file_msg
+{
+	text	= s_err_blocking_eclipsing_file_msg;
+}
+
+
+
+//--------------------------- SECURITY ERROR -----------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CORRUPTED_SIS_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_corrupted_sis_file_msg
+{
+	text	= s_corrupted_sis_file_msg;
+}
+
+
+
+//------------------------ GENERAL ERROR MESSAGES ------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_INPUT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_input_msg
+{
+	text	= s_err_invalid_input_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INST_CANNOT_CONTINUE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_inst_cannot_continue_msg
+{
+	text	= s_err_inst_cannot_continue_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_MANDATORY_OPTION_MISSING_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_mandatory_option_missing_msg
+{
+	text	= s_err_mandatory_option_missing_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_OPTION_VALUE_MISSING_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_option_value_missing_msg
+{
+	text	= s_err_option_value_missing_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_PACKAGE_UID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_package_uid_msg
+{
+	text	= s_err_invalid_package_uid_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_DRIVE_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_drive_name_msg
+{
+	text	= s_err_invalid_drive_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_ARGUMENT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_argument_msg
+{
+	text	= s_err_invalid_argument_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_SWITCH_CASE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_switch_case_msg
+{
+	text	= s_err_invalid_switch_case_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_GENERAL_ERROR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_general_error_msg
+{
+	text	= s_err_general_error_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INTERNAL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_internal_msg
+{
+	text	= s_err_internal_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_UNINSTALL_INPUT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_uninstall_input_msg
+{
+	text	= s_err_uninstall_input_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INSTALL_INPUT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_install_input_msg
+{
+	text	= s_err_install_input_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_UNKNOWN_ERROR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_unknown_error
+{
+	text	= s_err_unknown_error;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NOT_FOUND 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_not_found
+{
+	text	= s_err_not_found;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_GENERAL 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_general
+{
+	text	= s_err_general;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CANCEL 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_cancel
+{
+	text	= s_err_cancel;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NO_MEMORY 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_no_memory
+{
+	text	= s_err_no_memory;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NOT_SUPPORTED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_not_supported
+{
+	text	= s_err_not_supported;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_OVERFLOW 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_overflow
+{
+	text	= s_err_overflow;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_ALREADY_EXISTS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_already_exists
+{
+	text	= s_err_already_exists;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_PATH_NOT_FOUND 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_path_not_found
+{
+	text	= s_err_path_not_found;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_IN_USE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_in_use
+{
+	text	= s_err_in_use;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SERVER_CLOSED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_server_closed
+{
+	text	= s_err_server_closed;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SERVER_BUSY 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_server_busy
+{
+	text	= s_err_server_busy;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_COMPLETION_ERR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_completion_err
+{
+	text	= s_err_completion_err;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CORRUPT 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_corrupt
+{
+	text	= s_err_corrupt;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_ACCESS_DENIED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_access_denied
+{
+	text	= s_err_access_denied;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_UNEXPECTED_EOF 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_unexpected_eof
+{
+	text	= s_err_unexpected_eof;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_DISK_FULL 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_disk_full
+{
+	text	= s_err_disk_full;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NO_PERMISSION 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_no_permission
+{
+	text	= s_err_no_permission;
+}
+
+
+//------------------------ SECURITY ERRORS ------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_CORRUPT_PACKAGE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_corrupt_package
+{
+	text	= s_err_corrupt_package;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_COMPR_ALGO_UNSUPPORTED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_compr_algo_unsupported
+{
+	text	= s_err_compr_algo_unsupported;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_ILLEGAL_TARGET 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_illegal_target
+{
+	text	= s_err_illegal_target;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_WOULD_OVERWRITE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_would_overwrite
+{
+	text	= s_err_would_overwrite;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_NO_DISK_SPACE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_no_disk_space
+{
+	text	= s_err_no_disk_space;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_UNEXPECTED_ERR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_unexpected_err
+{
+	text	= s_err_unexpected_err;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_POLICY_CORRUPT 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_policy_corrupt
+{
+	text	= s_err_policy_corrupt;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SIGN_ALGO_UNSUPPORTED 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_sign_algo_unsupported
+{
+	text	= s_err_sign_algo_unsupported;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_FILE_CORRUPT 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_file_corrupt
+{
+	text	= s_err_file_corrupt;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_SECURITY_ERR 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_security_err
+{
+	text	= s_err_security_err;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_MISSING_BASE_PKG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_missing_base_pkg
+{
+	text	= s_err_missing_base_pkg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_UPGRADE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_upgrade
+{
+	text	= s_err_invalid_upgrade;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_ECLIPSING 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_eclipsing
+{
+	text	= s_err_invalid_eclipsing;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_WRONG_HEADER 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_wrong_header
+{
+	text	= s_err_wrong_header;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_EXE 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_exe
+{
+	text	= s_err_invalid_exe;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERR_INVALID_INST 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_err_invalid_inst
+{
+	text	= s_err_invalid_inst;
+
+}
+
+//------------------------ UNINSTALL DEPENDENCY STRINGS ------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DEPENDENCY_BREAK_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dependency_break_msg
+{
+	text	= s_dependency_break_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DEPENDED_COMPONENT_LIST_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_depended_component_list_msg
+{
+	text	= s_depended_component_list_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DEP_CONFIRM_UNINSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dep_confirm_uninstall_msg
+{
+	text	= s_dep_confirm_uninstall_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UNINSTALL_Y_TO_CONTINUE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_uninstall_y_to_continue_msg
+{
+	text	= s_uninstall_y_to_continue_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UNINSTALL_N_TO_ABORT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_uninstall_n_to_abort_msg
+{
+	text	= s_uninstall_n_to_abort_msg;
+}
+
+
+
+//------------------------- APPLICATION IN USE ---------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_IN_USE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_in_use_msg
+{
+	text	= s_app_in_use_msg;
+}
+
+
+
+//--------------------------- QUESTION STRINGS ---------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_QUE_INCOMPATIBLE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_que_incompatible_msg
+{
+	text	= s_que_incompatible_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_QUE_OVERWRITE_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_que_overwrite_file_msg
+{
+	text	= s_que_overwrite_file_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_QUE_PRESS_Y_FOR_YES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_que_press_y_for_yes_msg
+{
+	text	= s_que_press_y_for_yes_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_QUE_PRESS_N_FOR_NO_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_que_press_n_for_no_msg
+{
+	text	= s_que_press_n_for_no_msg;
+}
+
+
+
+//------------------------- LOGGING INFORMATION --------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_MODE_NORMAL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_mode_normal_msg
+{
+	text	= s_mode_normal_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_MODE_OPTIMAL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_mode_optimal_msg
+{
+	text	= s_mode_optimal_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_MODE_UNATTENDED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_mode_unattended_msg
+{
+	text	= s_mode_unattended_msg;
+}
+
+
+//------------------------- LOGGING INFORMATION --------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPERATION_HELP_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_operation_help_msg
+{
+	text	= s_operation_help_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPERATION_UNSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_operation_unstall_msg
+{
+	text	= s_operation_unstall_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPERATION_UNINSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_operation_uninstall_msg
+{
+	text	= s_operation_uninstall_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPERATION_LIST_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_operation_list_msg
+{
+	text	= s_operation_list_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_OPERATION_VERSION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_operation_version_msg
+{
+	text	= s_operation_version_msg;
+}
+
+
+
+
+//------------------------- LOGGING INFORMATION --------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_LINE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_line_msg
+{
+	text	= s_log_line_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_CMD_LINE_ARG_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_cmd_line_arg_msg
+{
+	text	= s_log_cmd_line_arg_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_OPERATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_operation_msg
+{
+	text	= s_log_operation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_OPERATION_MODE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_operation_mode_msg
+{
+	text	= s_log_operation_mode_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_DISPLAY_TEXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_display_text_msg
+{
+	text	= s_log_display_text_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_TEXT_TYPE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_text_type_msg
+{
+	text	= s_log_text_type_msg;
+}
+
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_TEXT_CONTINUE_TYPE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_text_continue_type_msg
+{
+	text	= s_log_text_continue_type_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_TEXT_SKIPONE_TYPE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_text_skipone_type_msg
+{
+	text	= s_log_text_skipone_type_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_TEXT_ABORTIFNO_TYPE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_text_abortifno_type_msg
+{
+	text	= s_log_text_abortifno_type_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_TEXT_EXITIFNO_TYPE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_text_exitifno_type_msg
+{
+	text	= s_log_text_exitifno_type_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_PRESELECTED_RESPONSE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_preselected_response_msg
+{
+	text	= s_log_preselected_response_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_USER_RESPONSE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_user_response_msg
+{
+	text	= s_log_user_response_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_RESPONSE_NOT_PRESELECTED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_response_not_preselected_msg
+{
+	text	= s_log_response_not_preselected_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_ABORTING_OPERATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_aborting_operation_msg
+{
+	text	= s_log_aborting_operation_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_INVALID_INPUT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_invalid_input_msg
+{
+	text	= s_log_invalid_input_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_LOG_INSUFFICIENT_SPACE_IN_DRIVE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_log_insufficient_space_in_drive_msg
+{
+	text	= s_log_insufficient_space_in_drive_msg;
+}
+
+
+
+//------------------------- DIALOG HEADINGS ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_INSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_install_msg
+{
+	text	= s_dialog_install_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_TEXT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_text_msg
+{
+	text	= s_dialog_text_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_ERROR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_error_msg
+{
+	text	= s_dialog_error_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_DEPENDECY_BREAK_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_dependecy_break_msg
+{
+	text	= s_dialog_dependecy_break_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_APP_IN_USE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_app_in_use_msg
+{
+	text	= s_dialog_app_in_use_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_QUESTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_question_msg
+{
+	text	= s_dialog_question_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_GRANT_CAPABILITIES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_grant_capabilities_msg
+{
+	text	= s_dialog_grant_capabilities_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_LANGUAGE_SELECTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_language_selection_msg
+{
+	text	= s_dialog_language_selection_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_DRIVE_SELECTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_drive_selection_msg
+{
+	text	= s_dialog_drive_selection_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_PACKAGE_UPGRADE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_package_upgrade_msg
+{
+	text	= s_dialog_package_upgrade_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_OPTION_LIST_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_option_list_msg
+{
+	text	= s_dialog_option_list_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_INSTALL_EVENT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_install_event_msg
+{
+	text	= s_dialog_install_event_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_CANCELLABLE_EVENT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_cancellable_event_msg
+{
+	text	= s_dialog_cancellable_event_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_SECURITY_WARNING_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_security_warning_msg
+{
+	text	= s_dialog_security_warning_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_OCSP_RESULT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_ocsp_result_msg
+{
+	text	= s_dialog_ocsp_result_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_CANNOT_OVERWRITE_FILE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_cannot_overwrite_file_msg
+{
+	text	= s_dialog_cannot_overwrite_file_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_MISSING_DEPENDECY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_missing_dependecy_msg
+{
+	text	= s_dialog_missing_dependecy_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_UNINSTALL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_uninstall_msg
+{
+	text	= s_dialog_uninstall_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_DIALOG_PACKAGE_INFO_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_dialog_package_info_msg
+{
+	text	= s_dialog_package_info_msg;
+}
+
+
+
+
+//------------------------- PACKAGE INFORMATION ---------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PKG_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_pkg_name_msg
+{
+	text	= s_pkg_name_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PKG_VENDOR_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_pkg_vendor_name_msg
+{
+	text	= s_pkg_vendor_name_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PKG_UID_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_pkg_uid_msg
+{
+	text	= s_pkg_uid_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PKG_AUGUMENTATIONS_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_pkg_augumentations_msg
+{
+	text	= s_pkg_augumentations_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_NAME_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_name_msg
+{
+	text	= s_app_name_msg;
+}
+
+
+
+//------------------------- GENERAL STRINGS ------------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PRESS_ANY_KEY_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_press_any_key_msg
+{
+	text	= s_press_any_key_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PRESS_ESC_TO_CANCEL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_press_esc_to_cancel_msg
+{
+	text	= s_press_esc_to_cancel_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PRESS_D_FOR_DETAILS_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_press_d_for_details_msg
+{
+	text	= s_press_d_for_details_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_FROM_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_from_msg
+{
+	text	= s_from_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_TO_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_to_msg
+{
+	text	= s_to_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_YES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_yes_msg
+{
+	text	= s_yes_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_NO_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_no_msg
+{
+	text	= s_no_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_CANCEL_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_cancel_msg
+{
+	text	= s_cancel_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_NONE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_none_msg
+{
+	text	= s_none_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_REASON_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_reason_msg
+{
+	text	= s_reason_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_NO_DISK_SPACE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_no_disk_space_msg
+{
+	text	= s_no_disk_space_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INSTALLATION_CANCELLED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_installation_cancelled_msg
+{
+	text	= s_installation_cancelled_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_UNINSTALLATION_CANCELLED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_uninstallation_cancelled_msg
+{
+	text	= s_uninstallation_cancelled_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERROR_IN_INSTALLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_error_in_installation_msg
+{
+	text	= s_error_in_installation_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERROR_IN_UNINSTALLATION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_error_in_uninstallation_msg
+{
+	text	= s_error_in_uninstallation_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERROR_NUMBER_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_error_number_msg
+{
+	text	= s_error_number_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_ERROR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_error_msg
+{
+	text	= s_error_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_INVALID_ARGUMENTS 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_invalid_arguments
+{
+	text	= s_invalid_arguments;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_PKG_NOT_INSTALLED_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_pkg_not_installed_msg
+{
+	text	= s_pkg_not_installed_msg;
+}
+
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_SIS_NOT_FOUND_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_sis_not_found_msg
+{
+	text	= s_sis_not_found_msg;
+}
+
+
+
+//------------------------- HELP & COPYRIGHT MSG --------------------------------
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_HEADER_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_header_msg
+{
+	text	= s_app_header_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_VERSION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_version_msg
+{
+	text	= s_app_version_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_COPYRIGHT_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_copyright_msg
+{
+	text	= s_app_copyright_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_USAGE1_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_usage1_msg
+{
+	text	= s_app_usage1_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_HELP_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_help_option_msg
+{
+	text	= s_app_help_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_APP_VERSION_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_app_version_option_msg
+{
+	text	= s_app_version_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_MAIN_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_main_option_msg
+{
+	text	= s_help_main_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_I_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_i_option_msg
+{
+	text	= s_help_i_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_U_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_u_option_msg
+{
+	text	= s_help_u_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_D_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_d_option_msg
+{
+	text	= s_help_d_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_VER_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ver_option_msg
+{
+	text	= s_help_ver_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_UID_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_uid_option_msg
+{
+	text	= s_help_uid_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_PKG_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_pkg_option_msg
+{
+	text	= s_help_pkg_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_VENDOR_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_vendor_option_msg
+{
+	text	= s_help_vendor_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_OPERATION_MODE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_operation_mode_msg
+{
+	text	= s_help_operation_mode_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_NORMAL_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_normal_option_msg
+{
+	text	= s_help_normal_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_OPTIMAL_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_optimal_option_msg
+{
+	text	= s_help_optimal_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_UNATTENDED_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_unattended_option_msg
+{
+	text	= s_help_unattended_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_APPLICATION_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_application_option_msg
+{
+	text	= s_help_application_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_L_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_l_option_msg
+{
+	text	= s_help_l_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_LF_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_lf_option_msg
+{
+	text	= s_help_lf_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_V_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_v_option_msg
+{
+	text	= s_help_v_option_msg;
+}
+
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_QUERY_RESONSES_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_query_resonses_msg
+{
+	text	= s_help_query_resonses_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EP_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ep_option_msg
+{
+	text	= s_help_ep_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EP_SHOW_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ep_show_option_msg
+{
+	text	= s_help_ep_show_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EP_HIDE_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ep_hide_option_msg
+{
+	text	= s_help_ep_hide_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EP_PROMPT_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ep_prompt_option_msg
+{
+	text	= s_help_ep_prompt_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EDEVCERT_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_edevcert_option_msg
+{
+	text	= s_help_edevcert_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_CER_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_cer_option_msg
+{
+	text	= s_help_cer_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_CES_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ces_option_msg
+{
+	text	= s_help_ces_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_CEC_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_cec_option_msg
+{
+	text	= s_help_cec_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_CEO_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ceo_option_msg
+{
+	text	= s_help_ceo_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_IEPF_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_iepf_option_msg
+{
+	text	= s_help_iepf_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_IEPU_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_iepu_option_msg
+{
+	text	= s_help_iepu_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_IEOE_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ieoe_option_msg
+{
+	text	= s_help_ieoe_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_IECNM_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_iecnm_option_msg
+{
+	text	= s_help_iecnm_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_IEDEV_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_iedev_option_msg
+{
+	text	= s_help_iedev_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DI_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_di_option_msg
+{
+	text	= s_help_di_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DC_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dc_option_msg
+{
+	text	= s_help_dc_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DL_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dl_option_msg
+{
+	text	= s_help_dl_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DD_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dd_option_msg
+{
+	text	= s_help_dd_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DG_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dg_option_msg
+{
+	text	= s_help_dg_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DO_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_do_option_msg
+{
+	text	= s_help_do_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DW_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dw_option_msg
+{
+	text	= s_help_dw_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DOCSP_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_docsp_option_msg
+{
+	text	= s_help_docsp_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DDEPEND_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ddepend_option_msg
+{
+	text	= s_help_ddepend_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DT_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dt_option_msg
+{
+	text	= s_help_dt_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DQI_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dqi_option_msg
+{
+	text	= s_help_dqi_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DQO_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_dqo_option_msg
+{
+	text	= s_help_dqo_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DU_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_du_option_msg
+{
+	text	= s_help_du_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DDB_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_ddb_option_msg
+{
+	text	= s_help_ddb_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_DA_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_da_option_msg
+{
+	text	= s_help_da_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EMBEDDED_OPTION_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_embedded_option_msg
+{
+	text	= s_help_embedded_option_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EMB_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_emb_msg
+{
+	text	= s_help_emb_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EMB_PACKAGE_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_emb_package_msg
+{
+	text	= s_help_emb_package_msg;
+}
+
+//------------------------------------------------------------------------------
+// Resource Name   : R_HELP_EMB_VENDOR_MSG 
+// Resource Type   : TBUF
+// Description     : 
+//------------------------------------------------------------------------------
+RESOURCE STRING r_help_emb_vendor_msg
+{
+	text	= s_help_emb_vendor_msg;
+}
+
+
+
+
+//***************************************************************************
+

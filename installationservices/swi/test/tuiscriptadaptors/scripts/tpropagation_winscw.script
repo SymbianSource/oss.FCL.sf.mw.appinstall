@@ -1,0 +1,224 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Propagation tests running...
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-Propagation-0001
+//! @SYMTestCaseDesc 		Tests that a propagation will install correctly with a modified version of one of the files listed in the stub file.
+//! @SYMDEF			DEF1112252
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Copy stub file and data files to MMC, modify installed file, unmount MMC, mount MMC, simulate propagated install.
+//! @SYMTestExpectedResults 	File is not under /sys or /resource and does not have VERIFY set so the propagation should install correctly.
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-Propagation-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini test1_modification_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_stub_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_winscw
+
+END_TESTCASE API-SEC-Propagation-0001
+
+
+//! @SYMTestCaseID 		API-SEC-Propagation-0002
+//! @SYMTestCaseDesc 		Tests that a propagation will fail when a VERIFY tagged file has been modified.
+//! @SYMDEF			DEF1112252
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Copy stub file and data files to MMC, modify installed file, unmount MMC, mount MMC, simulate propagated install.
+//! @SYMTestExpectedResults 	Failure with EUiCorruptFile as the VERIFY tag is set in the SIS file for the modified file.
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-Propagation-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini test2_modification_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+
+RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_stub_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_winscw
+
+END_TESTCASE API-SEC-Propagation-0002
+
+
+//! @SYMTestCaseID 		API-SEC-Propagation-0003
+//! @SYMTestCaseDesc 		Tests that a propagation will fail when a fail under /resource has been modified.
+//! @SYMDEF 			DEF1112252
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Copy stub file and data files to MMC, modify installed file, unmount MMC, mount MMC, simulate propagated install.
+//! @SYMTestExpectedResults 	Failure with EUiCorruptFile as the modified file is under /resource.
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-Propagation-0003
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini test3_modification_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+
+RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_stub_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_winscw
+
+END_TESTCASE API-SEC-Propagation-0003
+
+
+
+////////////    NEW TESTS ADDED FOR MEDIA PROPAGATION signed by SU certificates   ///////////// 
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PREQ1912-MP-0001
+//! @SYMTestCaseDesc 		Propagation of SA RU  signed  system upgrade package in media card
+//! @SYMPREQ 			PREQ1912
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions		Test Actions: 
+//!				1) Install a SA RU package for system upgrade in media card.
+//!                     	2) Simulate system drive wipe-out.
+//!                     	3) Use sis stub in media card created by previous installation in a media propagation.
+//!                     	4) Uninstall previously installed SA RU package.
+//! @SYMTestExpectedResults	Installation of SIS package occurs correctly. 
+//!                             Media card propagation occurs correctly. 
+//!                             Uninstalling previously installed package behaves normally.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PREQ1912-MP-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_sasu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_sasu_stub_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_sasu_winscw
+
+END_TESTCASE API-SEC-SWI-PREQ1912-MP-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-PREQ1912-MP-0002
+//! @SYMTestCaseDesc 		Propagation of SP RU  signed  system upgrade package in media card
+//! @SYMPREQ 			PREQ1912
+//! @SYMTestPriority 		Critical
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions		Test Actions: 
+//!				1) Install a SA RU package for system upgrade in media card.
+//!                     	2) Install a SP RU package for system upgrade in media card which updates previous installation.
+//!                     	3) Simulate system drive wipe-out.
+//!				4) Use the 2 sis stub in media card created by previous installations in a media propagation.
+//!				5) Uninstall previously installed SP RU package.
+//!				6) Uninstall previously installed SA RU package.
+//! @SYMTestExpectedResults	Installation of SIS packages occur correctly. 
+//!                             Media card propagation occur correctly. 
+//!                             Uninstalling previously installed package behave normally.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-PREQ1912-MP-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_spsu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_spsu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_spsu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_sasu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_spsu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_spsu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_sasu_stub_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_spsu_stub_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_spsu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_sasu_winscw
+
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_sasu_winscw
+RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_spsu_winscw
+
+END_TESTCASE API-SEC-SWI-PREQ1912-MP-0002
+
+
+

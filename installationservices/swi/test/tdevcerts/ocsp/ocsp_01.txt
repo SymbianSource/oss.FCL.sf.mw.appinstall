@@ -1,0 +1,23 @@
+# A single chain constrainted to user capabilities. This will be installed with OCSP checking enabled
+# and the certificate should not be found by the OCSP server.
+[main]
+name=ocsp_01
+template=simple.txt
+inifile=ocsp.ini
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple_ocsp.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+ocsp_uri=http://cam-ocsptest01.intra:19010/
+ocsp_flag=1
+FatalOcspResponseExpected=true
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnoexist=1
+noexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+

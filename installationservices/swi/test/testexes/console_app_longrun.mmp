@@ -1,0 +1,37 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+// console_app.mmp
+//
+
+// using relative paths for sourcepath and user includes
+
+TARGET        console_app_longrun_forpackage.exe
+TARGETTYPE    exe
+UID           0x12345678 0x89334569
+VENDORID 0x0
+
+MACRO _CONSOLE_APP_LONG_RUNNING_DEFAULT_
+
+SOURCEPATH    .
+SOURCE        testappinuse/console_app.cpp
+
+USERINCLUDE   .
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY       euser.lib bafl.lib efsrv.lib
+SMPSAFE
+

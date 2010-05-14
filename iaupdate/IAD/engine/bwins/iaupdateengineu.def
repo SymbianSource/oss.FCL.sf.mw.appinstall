@@ -1,0 +1,90 @@
+EXPORTS
+	?SetFilePathL@CIAUpdatePendingNodesFile@@QAEXABVTDesC16@@@Z @ 1 NONAME ; void CIAUpdatePendingNodesFile::SetFilePathL(class TDesC16 const &)
+	?OnProcessingInstructionL@CIAUpdateXmlSubParser@@UAEXABVTDesC8@@0H@Z @ 2 NONAME ; void CIAUpdateXmlSubParser::OnProcessingInstructionL(class TDesC8 const &, class TDesC8 const &, int)
+	?SetCurrentData@CIAUpdateControllerFile@@QAEXXZ @ 3 NONAME ; void CIAUpdateControllerFile::SetCurrentData(void)
+	?ElementTagInfoEquals@CIAUpdateXmlSubParser@@IBEHABVRTagInfo@Xml@@@Z @ 4 NONAME ; int CIAUpdateXmlSubParser::ElementTagInfoEquals(class Xml::RTagInfo const &) const
+	??PTIAUpdateVersion@@QBEHABV0@@Z @ 5 NONAME ; int TIAUpdateVersion::operator>=(class TIAUpdateVersion const &) const
+	??OTIAUpdateVersion@@QBEHABV0@@Z @ 6 NONAME ; int TIAUpdateVersion::operator>(class TIAUpdateVersion const &) const
+	?NewL@CIAUpdateXmlParser@@SAPAV1@PAVCIAUpdateXmlSubParser@@@Z @ 7 NONAME ; class CIAUpdateXmlParser * CIAUpdateXmlParser::NewL(class CIAUpdateXmlSubParser *)
+	??NTIAUpdateVersion@@QBEHABV0@@Z @ 8 NONAME ; int TIAUpdateVersion::operator<=(class TIAUpdateVersion const &) const
+	?IsElementEnded@CIAUpdateXmlSubParser@@IBEHXZ @ 9 NONAME ; int CIAUpdateXmlSubParser::IsElementEnded(void) const
+	??MTIAUpdateVersion@@QBEHABV0@@Z @ 10 NONAME ; int TIAUpdateVersion::operator<(class TIAUpdateVersion const &) const
+	?ParseFileL@CIAUpdateXmlParser@@QAEXABVTDesC16@@@Z @ 11 NONAME ; void CIAUpdateXmlParser::ParseFileL(class TDesC16 const &)
+	?ParsePrivateFileL@CIAUpdateXmlParser@@QAEXABVTDesC16@@@Z @ 12 NONAME ; void CIAUpdateXmlParser::ParsePrivateFileL(class TDesC16 const &)
+	?OnEndPrefixMappingL@CIAUpdateXmlSubParser@@UAEXABVRString@@H@Z @ 13 NONAME ; void CIAUpdateXmlSubParser::OnEndPrefixMappingL(class RString const &, int)
+	?SubParsers@CIAUpdateXmlSubParser@@IAEAAV?$RPointerArray@VCIAUpdateXmlSubParser@@@@XZ @ 14 NONAME ; class RPointerArray<class CIAUpdateXmlSubParser> & CIAUpdateXmlSubParser::SubParsers(void)
+	?OnSkippedEntityL@CIAUpdateXmlSubParser@@UAEXABVRString@@H@Z @ 15 NONAME ; void CIAUpdateXmlSubParser::OnSkippedEntityL(class RString const &, int)
+	?FilePath@CIAUpdatePendingNodesFile@@QBEABVTDesC16@@XZ @ 16 NONAME ; class TDesC16 const & CIAUpdatePendingNodesFile::FilePath(void) const
+	?SetCurrentLanguage@CIAUpdateControllerFile@@QAEXXZ @ 17 NONAME ; void CIAUpdateControllerFile::SetCurrentLanguage(void)
+	??1CIAUpdatePendingNodesFile@@UAE@XZ @ 18 NONAME ; CIAUpdatePendingNodesFile::~CIAUpdatePendingNodesFile(void)
+	?ConstructL@CIAUpdateXmlParser@@MAEXXZ @ 19 NONAME ; void CIAUpdateXmlParser::ConstructL(void)
+	??1CIAUpdateXmlSubParser@@UAE@XZ @ 20 NONAME ; CIAUpdateXmlSubParser::~CIAUpdateXmlSubParser(void)
+	??4TIAUpdateVersion@@QAEABV0@ABVTVersion@@@Z @ 21 NONAME ; class TIAUpdateVersion const & TIAUpdateVersion::operator=(class TVersion const &)
+	?WriteControllerDataL@CIAUpdateControllerFile@@QAEXXZ @ 22 NONAME ; void CIAUpdateControllerFile::WriteControllerDataL(void)
+	?SetToRoof@TIAUpdateVersion@@QAEXXZ @ 23 NONAME ; void TIAUpdateVersion::SetToRoof(void)
+	?OnStartElementL@CIAUpdateXmlSubParser@@UAEXABVRTagInfo@Xml@@ABV?$RArray@VRAttribute@Xml@@@@H@Z @ 24 NONAME ; void CIAUpdateXmlSubParser::OnStartElementL(class Xml::RTagInfo const &, class RArray<class Xml::RAttribute> const &, int)
+	??0TIAUpdateVersion@@QAE@XZ @ 25 NONAME ; TIAUpdateVersion::TIAUpdateVersion(void)
+	?GetExtendedInterface@CIAUpdateXmlSubParser@@UAEPAXJ@Z @ 26 NONAME ; void * CIAUpdateXmlSubParser::GetExtendedInterface(long)
+	?OnError@CIAUpdateXmlSubParser@@UAEXH@Z @ 27 NONAME ; void CIAUpdateXmlSubParser::OnError(int)
+	?SetCurrentRefreshTime@CIAUpdateControllerFile@@QAEXXZ @ 28 NONAME ; void CIAUpdateControllerFile::SetCurrentRefreshTime(void)
+	?RemoveFile@CIAUpdatePendingNodesFile@@QAEHXZ @ 29 NONAME ; int CIAUpdatePendingNodesFile::RemoveFile(void)
+	?ParseL@CIAUpdateXmlParser@@QAEXABVTDesC16@@@Z @ 30 NONAME ; void CIAUpdateXmlParser::ParseL(class TDesC16 const &)
+	?CreateControllerL@IAUpdateFactory@@YAPAVMIAUpdateController@@ABVTUid@@AAVMIAUpdateControllerObserver@@@Z @ 31 NONAME ; class MIAUpdateController * IAUpdateFactory::CreateControllerL(class TUid const &, class MIAUpdateControllerObserver &)
+	?OnStartPrefixMappingL@CIAUpdateXmlSubParser@@UAEXABVRString@@0H@Z @ 32 NONAME ; void CIAUpdateXmlSubParser::OnStartPrefixMappingL(class RString const &, class RString const &, int)
+	?NewLC@CIAUpdateXmlParser@@SAPAV1@PAVCIAUpdateXmlSubParser@@@Z @ 33 NONAME ; class CIAUpdateXmlParser * CIAUpdateXmlParser::NewLC(class CIAUpdateXmlSubParser *)
+	?OnStartDocumentL@CIAUpdateXmlSubParser@@UAEXABVRDocumentParameters@Xml@@H@Z @ 34 NONAME ; void CIAUpdateXmlSubParser::OnStartDocumentL(class Xml::RDocumentParameters const &, int)
+	?SetToFloor@TIAUpdateVersion@@QAEXXZ @ 35 NONAME ; void TIAUpdateVersion::SetToFloor(void)
+	?AcceptData@CIAUpdateXmlSubParser@@IBEHXZ @ 36 NONAME ; int CIAUpdateXmlSubParser::AcceptData(void) const
+	?OnIgnorableWhiteSpaceL@CIAUpdateXmlSubParser@@UAEXABVTDesC8@@H@Z @ 37 NONAME ; void CIAUpdateXmlSubParser::OnIgnorableWhiteSpaceL(class TDesC8 const &, int)
+	??9TIAUpdateVersion@@QBEHABV0@@Z @ 38 NONAME ; int TIAUpdateVersion::operator!=(class TIAUpdateVersion const &) const
+	??8TIAUpdateVersion@@QBEHABV0@@Z @ 39 NONAME ; int TIAUpdateVersion::operator==(class TIAUpdateVersion const &) const
+	?NewL@CIAUpdateControllerFile@@SAPAV1@ABVTDesC16@@@Z @ 40 NONAME ; class CIAUpdateControllerFile * CIAUpdateControllerFile::NewL(class TDesC16 const &)
+	?IsInstalledL@IAUpdateUtils@@YAHABVTUid@@ABVTDesC16@@@Z @ 41 NONAME ; int IAUpdateUtils::IsInstalledL(class TUid const &, class TDesC16 const &)
+	?AppPackageUidL@IAUpdateUtils@@YA?AVTUid@@ABV2@AAVTIAUpdateVersion@@@Z @ 42 NONAME ; class TUid IAUpdateUtils::AppPackageUidL(class TUid const &, class TIAUpdateVersion &)
+	?WriteDataL@CIAUpdatePendingNodesFile@@QAEXXZ @ 43 NONAME ; void CIAUpdatePendingNodesFile::WriteDataL(void)
+	?ConstructL@CIAUpdateXmlSubParser@@MAEXABVTDesC8@@@Z @ 44 NONAME ; void CIAUpdateXmlSubParser::ConstructL(class TDesC8 const &)
+	?DeleteFiles@CIAUpdateRestartInfo@@QAEXXZ @ 45 NONAME ; void CIAUpdateRestartInfo::DeleteFiles(void)
+	?SpaceAvailableInInternalDrivesL@IAUpdateUtils@@YAHAAV?$RPointerArray@VMIAUpdateNode@@@@@Z @ 46 NONAME ; int IAUpdateUtils::SpaceAvailableInInternalDrivesL(class RPointerArray<class MIAUpdateNode> &)
+	?IsAppInstalledL@IAUpdateUtils@@YAHABVTUid@@@Z @ 47 NONAME ; int IAUpdateUtils::IsAppInstalledL(class TUid const &)
+	?ReadControllerDataL@CIAUpdateControllerFile@@QAEHXZ @ 48 NONAME ; int CIAUpdateControllerFile::ReadControllerDataL(void)
+	??0TIAUpdateVersion@@QAE@ABVTVersion@@@Z @ 49 NONAME ; TIAUpdateVersion::TIAUpdateVersion(class TVersion const &)
+	?OnEndElementL@CIAUpdateXmlSubParser@@UAEXABVRTagInfo@Xml@@H@Z @ 50 NONAME ; void CIAUpdateXmlSubParser::OnEndElementL(class Xml::RTagInfo const &, int)
+	?AppPackageUidL@IAUpdateUtils@@YA?AVTUid@@ABV2@@Z @ 51 NONAME ; class TUid IAUpdateUtils::AppPackageUidL(class TUid const &)
+	?StartMonitoringL@CIAUpdateNetworkRegistration@@QAEXXZ @ 52 NONAME ; void CIAUpdateNetworkRegistration::StartMonitoringL(void)
+	?UnknownElementCounter@CIAUpdateXmlSubParser@@IBEHXZ @ 53 NONAME ; int CIAUpdateXmlSubParser::UnknownElementCounter(void) const
+	?SetLanguage@CIAUpdateControllerFile@@QAEXW4TLanguage@@@Z @ 54 NONAME ; void CIAUpdateControllerFile::SetLanguage(enum TLanguage)
+	?DesHexToIntL@IAUpdateUtils@@YAHABVTDesC16@@@Z @ 55 NONAME ; int IAUpdateUtils::DesHexToIntL(class TDesC16 const &)
+	??1CIAUpdateXmlParser@@UAE@XZ @ 56 NONAME ; CIAUpdateXmlParser::~CIAUpdateXmlParser(void)
+	?SetRefreshTime@CIAUpdateControllerFile@@QAEX_J@Z @ 57 NONAME ; void CIAUpdateControllerFile::SetRefreshTime(long long)
+	??0CIAUpdateXmlSubParser@@IAE@XZ @ 58 NONAME ; CIAUpdateXmlSubParser::CIAUpdateXmlSubParser(void)
+	?ReadDataL@CIAUpdatePendingNodesFile@@QAEHXZ @ 59 NONAME ; int CIAUpdatePendingNodesFile::ReadDataL(void)
+	?NewLC@CIAUpdateRestartInfo@@SAPAV1@XZ @ 60 NONAME ; class CIAUpdateRestartInfo * CIAUpdateRestartInfo::NewLC(void)
+	??1CIAUpdateRestartInfo@@UAE@XZ @ 61 NONAME ; CIAUpdateRestartInfo::~CIAUpdateRestartInfo(void)
+	?NewLC@CIAUpdateControllerFile@@SAPAV1@ABVTDesC16@@@Z @ 62 NONAME ; class CIAUpdateControllerFile * CIAUpdateControllerFile::NewLC(class TDesC16 const &)
+	?InternalizeL@TIAUpdateVersion@@QAEXABVTDesC16@@@Z @ 63 NONAME ; void TIAUpdateVersion::InternalizeL(class TDesC16 const &)
+	?SetRefreshTime@CIAUpdateControllerFile@@QAEXABVTTime@@@Z @ 64 NONAME ; void CIAUpdateControllerFile::SetRefreshTime(class TTime const &)
+	?RefreshTime@CIAUpdateControllerFile@@QBEABVTTime@@XZ @ 65 NONAME ; class TTime const & CIAUpdateControllerFile::RefreshTime(void) const
+	?Language@CIAUpdateControllerFile@@QBE?AW4TLanguage@@XZ @ 66 NONAME ; enum TLanguage CIAUpdateControllerFile::Language(void) const
+	?NewLC@CIAUpdatePendingNodesFile@@SAPAV1@XZ @ 67 NONAME ; class CIAUpdatePendingNodesFile * CIAUpdatePendingNodesFile::NewLC(void)
+	?Index@CIAUpdatePendingNodesFile@@QBEHXZ @ 68 NONAME ; int CIAUpdatePendingNodesFile::Index(void) const
+	?IsWidgetInstalledL@IAUpdateUtils@@YAHABVTDesC16@@AAVTIAUpdateVersion@@@Z @ 69 NONAME ; int IAUpdateUtils::IsWidgetInstalledL(class TDesC16 const &, class TIAUpdateVersion &)
+	?PendingNodesFile@CIAUpdateRestartInfo@@QAEAAVCIAUpdatePendingNodesFile@@XZ @ 70 NONAME ; class CIAUpdatePendingNodesFile & CIAUpdateRestartInfo::PendingNodesFile(void)
+	?CurrentSubParser@CIAUpdateXmlSubParser@@IBEPAV1@XZ @ 71 NONAME ; class CIAUpdateXmlSubParser * CIAUpdateXmlSubParser::CurrentSubParser(void) const
+	?SetIndex@CIAUpdatePendingNodesFile@@QAEXH@Z @ 72 NONAME ; void CIAUpdatePendingNodesFile::SetIndex(int)
+	?PendingNodes@CIAUpdatePendingNodesFile@@QAEAAV?$RPointerArray@VCIAUpdaterIdentifier@@@@XZ @ 73 NONAME ; class RPointerArray<class CIAUpdaterIdentifier> & CIAUpdatePendingNodesFile::PendingNodes(void)
+	?SubParser@CIAUpdateXmlParser@@IAEAAVCIAUpdateXmlSubParser@@XZ @ 74 NONAME ; class CIAUpdateXmlSubParser & CIAUpdateXmlParser::SubParser(void)
+	?IsElementStarted@CIAUpdateXmlSubParser@@IBEHXZ @ 75 NONAME ; int CIAUpdateXmlSubParser::IsElementStarted(void) const
+	?IsAppInstalledL@IAUpdateUtils@@YAHABVTUid@@AAVTIAUpdateVersion@@@Z @ 76 NONAME ; int IAUpdateUtils::IsAppInstalledL(class TUid const &, class TIAUpdateVersion &)
+	?LocalName@CIAUpdateXmlSubParser@@IBEABVTDesC8@@XZ @ 77 NONAME ; class TDesC8 const & CIAUpdateXmlSubParser::LocalName(void) const
+	?DesToVersionL@IAUpdateUtils@@YAXABVTDesC16@@AAC1AAF@Z @ 78 NONAME ; void IAUpdateUtils::DesToVersionL(class TDesC16 const &, signed char &, signed char &, short &)
+	?OnContentL@CIAUpdateXmlSubParser@@UAEXABVTDesC8@@H@Z @ 79 NONAME ; void CIAUpdateXmlSubParser::OnContentL(class TDesC8 const &, int)
+	?ParseL@CIAUpdateXmlParser@@QAEXABVTDesC8@@@Z @ 80 NONAME ; void CIAUpdateXmlParser::ParseL(class TDesC8 const &)
+	?Reset@CIAUpdatePendingNodesFile@@QAEXXZ @ 81 NONAME ; void CIAUpdatePendingNodesFile::Reset(void)
+	??1CIAUpdateControllerFile@@UAE@XZ @ 82 NONAME ; CIAUpdateControllerFile::~CIAUpdateControllerFile(void)
+	?NewL@CIAUpdateRestartInfo@@SAPAV1@XZ @ 83 NONAME ; class CIAUpdateRestartInfo * CIAUpdateRestartInfo::NewL(void)
+	?OnEndDocumentL@CIAUpdateXmlSubParser@@UAEXH@Z @ 84 NONAME ; void CIAUpdateXmlSubParser::OnEndDocumentL(int)
+	?ResultsFile@CIAUpdateRestartInfo@@QAEAAVCIAUpdaterResultsFile@@XZ @ 85 NONAME ; class CIAUpdaterResultsFile & CIAUpdateRestartInfo::ResultsFile(void)
+	??0CIAUpdateXmlParser@@IAE@PAVCIAUpdateXmlSubParser@@@Z @ 86 NONAME ; CIAUpdateXmlParser::CIAUpdateXmlParser(class CIAUpdateXmlSubParser *)
+	?NewL@CIAUpdateNetworkRegistration@@SAPAV1@AAVMIAUpdateNetworkRegistrationObserver@@@Z @ 87 NONAME ; class CIAUpdateNetworkRegistration * CIAUpdateNetworkRegistration::NewL(class MIAUpdateNetworkRegistrationObserver &)
+	?NewL@CIAUpdatePendingNodesFile@@SAPAV1@XZ @ 88 NONAME ; class CIAUpdatePendingNodesFile * CIAUpdatePendingNodesFile::NewL(void)
+

@@ -1,0 +1,49 @@
+EXPORTS
+	_ZN15CIAUpdateResult12SetFailCountEi @ 1 NONAME
+	_ZN15CIAUpdateResult14SetCancelCountEi @ 2 NONAME
+	_ZN15CIAUpdateResult15SetSuccessCountEi @ 3 NONAME
+	_ZN15CIAUpdateResult4NewLEv @ 4 NONAME
+	_ZN15CIAUpdateResult5NewLCEv @ 5 NONAME
+	_ZN15CIAUpdateResultD0Ev @ 6 NONAME
+	_ZN15CIAUpdateResultD1Ev @ 7 NONAME
+	_ZN15CIAUpdateResultD2Ev @ 8 NONAME
+	_ZN19CIAUpdateParameters18SetSearchCriteriaLERK7TDesC16 @ 9 NONAME
+	_ZN19CIAUpdateParameters24SetCommandLineArgumentsLERK6TDesC8 @ 10 NONAME
+	_ZN19CIAUpdateParameters25SetCommandLineExecutableLERK7TDesC16 @ 11 NONAME
+	_ZN19CIAUpdateParameters4NewLEv @ 12 NONAME
+	_ZN19CIAUpdateParameters5NewLCEv @ 13 NONAME
+	_ZN19CIAUpdateParameters6SetUidERK4TUid @ 14 NONAME
+	_ZN19CIAUpdateParametersD0Ev @ 15 NONAME
+	_ZN19CIAUpdateParametersD1Ev @ 16 NONAME
+	_ZN19CIAUpdateParametersD2Ev @ 17 NONAME
+	_ZN9CIAUpdate11ShowUpdatesERK19CIAUpdateParameters @ 18 NONAME
+	_ZN9CIAUpdate11UpdateQueryEv @ 19 NONAME
+	_ZN9CIAUpdate12CheckUpdatesERK19CIAUpdateParameters @ 20 NONAME
+	_ZN9CIAUpdate4NewLER17MIAUpdateObserver @ 21 NONAME
+	_ZN9CIAUpdate5NewLCER17MIAUpdateObserver @ 22 NONAME
+	_ZN9CIAUpdate6UpdateERK19CIAUpdateParameters @ 23 NONAME
+	_ZN9CIAUpdateD0Ev @ 24 NONAME
+	_ZN9CIAUpdateD1Ev @ 25 NONAME
+	_ZN9CIAUpdateD2Ev @ 26 NONAME
+	_ZNK15CIAUpdateResult11CancelCountEv @ 27 NONAME
+	_ZNK15CIAUpdateResult12SuccessCountEv @ 28 NONAME
+	_ZNK15CIAUpdateResult9FailCountEv @ 29 NONAME
+	_ZNK19CIAUpdateParameters14SearchCriteriaEv @ 30 NONAME
+	_ZNK19CIAUpdateParameters20CommandLineArgumentsEv @ 31 NONAME
+	_ZNK19CIAUpdateParameters21CommandLineExecutableEv @ 32 NONAME
+	_ZNK19CIAUpdateParameters3UidEv @ 33 NONAME
+	_ZTI15CIAUpdateResult @ 34 NONAME ; #<TI>#
+	_ZTI19CIAUpdateParameters @ 35 NONAME ; #<TI>#
+	_ZTI9CIAUpdate @ 36 NONAME ; #<TI>#
+	_ZTV15CIAUpdateResult @ 37 NONAME ; #<VT>#
+	_ZTV19CIAUpdateParameters @ 38 NONAME ; #<VT>#
+	_ZTV9CIAUpdate @ 39 NONAME ; #<VT>#
+	_ZN19CIAUpdateParameters15SetShowProgressEi @ 40 NONAME
+	_ZNK19CIAUpdateParameters12ShowProgressEv @ 41 NONAME
+	_ZN19CIAUpdateParameters10SetRefreshEi @ 42 NONAME
+	_ZN19CIAUpdateParameters13SetImportanceEj @ 43 NONAME
+	_ZN19CIAUpdateParameters7SetTypeEj @ 44 NONAME
+	_ZNK19CIAUpdateParameters10ImportanceEv @ 45 NONAME
+	_ZNK19CIAUpdateParameters4TypeEv @ 46 NONAME
+	_ZNK19CIAUpdateParameters7RefreshEv @ 47 NONAME
+

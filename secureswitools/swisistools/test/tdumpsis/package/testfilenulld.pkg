@@ -1,0 +1,26 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+
+#{"File Null Restore"}, (0xa0000205), 2, 5, 4, TYPE=SA
+%{"Symbian"}
+:"Symbian"
+
+
+"data\TestFileNullD\file0"-"c:\restore\pic1.bmp", FF
+
+"data\TestFileNullD\file1"-"c:\restore\filenull.txt"

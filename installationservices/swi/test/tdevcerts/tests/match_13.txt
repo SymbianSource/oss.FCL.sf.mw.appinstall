@@ -1,0 +1,24 @@
+# Verify that unconstrained certificates do not restrict the constraints more than already specified. 
+[main]
+name=match_13
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=root5CA,unconstrained,system_caps,unconstrained
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswisystemcapability_protected.exe"-"!:\sys\bin\tswisystemcapability_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswisystemcapability_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswisystemcapability_protected.exe
+
+
+

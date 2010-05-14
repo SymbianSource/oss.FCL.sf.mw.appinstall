@@ -1,0 +1,34 @@
+Registry Controller Information:
+
+Registry Entry :.\data\811111f8\00000000.reg
+
+Package UID :0x811111f8
+Package Name :testexpressions_operators
+Vendor :Unique Vendor Name
+Package Index :0
+
+Controller1 Version :1.2.3
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 0
+
+SISProperty Count:0
+
+Number Of File Descriptions :2
+
+SIS File Description:
+
+Target1:c:\Documents\InstTest\option_1o2o3.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target2:c:\Documents\InstTest\option_test2.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

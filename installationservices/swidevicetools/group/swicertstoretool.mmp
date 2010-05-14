@@ -1,0 +1,39 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+/**
+@file
+
+@SYMPurpose certtool.exe Tool to build SWI cert store data file
+*/
+
+TARGET		swicertstoretool.exe
+TARGETTYPE	exe
+UID 0x10000079 0x10204317
+VENDORID 0x70000001
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+SOURCEPATH	../source/swicertstoretool
+
+SOURCE 		swicertstoretool.cpp 
+SOURCE		CSWICertStoreToolCert.cpp
+SOURCE		CSWICertStoreTool.cpp
+
+LIBRARY		euser.lib efsrv.lib estor.lib x509.lib
+LIBRARY		testconfigfileparser.lib charconv.lib
+SMPSAFE

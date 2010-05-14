@@ -1,0 +1,34 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+; Base package containing complete resource files for English and French
+;
+
+;Languages
+&EN, FR
+
+#{"swiappregintegration_case5A_EN","swiappregintegration_case5A_FR"},(0x80010009),1,1,1
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_FR"}
+
+;Unique Vendor name
+:"Vendor"
+
+"\epoc32\<BUILDMIDPATH>\swiappregintegration_case05.exe" - "!:\sys\bin\swiappregintegration_case05.exe"
+
+"\epoc32\<ZDRIVEMIDPATH>\z\tswi\tuiscriptadaptors\data\swiappregintegration_case05\swiappregintegration_case05_reg.rsc" - "!:\private\10003a3f\import\apps\swiappregintegration_case05_reg.rsc"
+"\epoc32\<ZDRIVEMIDPATH>\z\tswi\tuiscriptadaptors\data\swiappregintegration_case05\swiappregintegration_case05_loc.rsc" - "!:\resource\apps\swiappregintegration_case05_loc.rsc"
+"\epoc32\<ZDRIVEMIDPATH>\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration.mbm"
+

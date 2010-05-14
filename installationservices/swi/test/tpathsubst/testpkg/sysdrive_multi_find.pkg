@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"PathSub multi find case with system drive"},(0x8150355d),1,0,0
+
+%{"Symbian"}
+
+:"Symbian"
+
+"textfile.txt"-"c:\FIND_C_ONLY\tf_drv_c.txt",FF
+"textfile.txt"-"$:\FIND_$_ONLY\tf_drv_sysdrive.txt",FF
+
+
+
+

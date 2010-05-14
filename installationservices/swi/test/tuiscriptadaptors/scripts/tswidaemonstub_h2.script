@@ -1,0 +1,101 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+/! @file
+// SWIS unit (integration) tests
+PRINT Run SWI Daemon Stub tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+
+//! @SYMTestCaseID 		API-SEC-SWIDaemonStub-I-B-0001
+//! @SYMTestCaseDesc 		Install SA and SP on the media card
+//! @SYMDEF			DEF107470
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Install SA,Install SP , Unmount, DeleteRegistry, Mount
+//! @SYMTestExpectedResults  	SA and SP should be propogated to another device
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SWIDaemonStub-I-B-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+# Install to MMC card first
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini Install_SA_h2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini Install_SP_h2
+
+RUN_UTILS CopyFile e:\private\10202dce\81111207_0.sis  e:\81111207_0.sis
+RUN_UTILS CopyFile e:\Documents\InstTest\abase1.txt e:\abase1.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\abase4.txt e:\abase4.txt
+
+DELAY 1000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini Checkstub_h2
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// 1 sec delay for DP ROM performance
+DELAY 1000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Wait for the PlatSec* ERROR message, otherwise, testutilserver will get a E32User 46 error.
+DELAY 7000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini test1_all
+
+// Really install base package(SA) 
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini Checkstub1_h2
+RUN_UTILS MKDIR e:\tswi
+RUN_UTILS MKDIR e:\tswi\preinstalled
+RUN_UTILS CopyFile e:\private\10202dce\81111207_1.sis  e:\tswi\preinstalled\81111207_1.sis
+RUN_UTILS CopyFile e:\abase1.txt e:\Documents\InstTest\abase1.txt
+RUN_UTILS CopyFile e:\abase4.txt  e:\Documents\InstTest\abase4.txt
+
+DELAY 7000
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini install_stub_h2
+RUN_UTILS CopyFile e:\tswi\preinstalled\81111207_1.sis  e:\private\10202dce\81111207_1.sis
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcResetTagsStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// 1 sec delay for DP ROM performance
+DELAY 1000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Wait for the PlatSec* ERROR message, otherwise, testutilserver will get a E32User 46 error.
+DELAY 7000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini test2_all
+
+RUN_UTILS DeleteFile e:\private\10202dce\81111207_1.sis
+RUN_UTILS DeleteFile e:\Documents\InstTest\abase1.txt
+RUN_UTILS DeleteFile e:\Documents\InstTest\abase4.txt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini u_install_SA_h2
+
+END_TESTCASE API-SEC-SWIDaemonStub-I-B-0001
+
+
+
+

@@ -1,0 +1,857 @@
+/*
+* Portions Copyright (c) 1999 - 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+EPOC Technical Paper  
+
+Managing C++ APIs
+Martin Tasker, Head of Technical Communications
+Revision 1.0(011), 30th June 1999
+
+Summary
+This paper summarizes Symbian’s central insights into OO system design gained while developing EPOC.
+
+Its two main aims are to show how C++ language constructs are used to implement object oriented designs and deliver object oriented APIs; and to show how DLLs are used to implement high-level components, which are essential for practical work with large systems.
+
+It is assumed that the reader is broadly familiar with object oriented concepts and with C++. However, we begin with a brief review of object oriented design, to provide some context. Some readers may be more familiar with Java™: the paper closes by comparing EPOC’s API disciplines with those of Java.
+
+Contents
+ 1. Introduction 
+2. Basics of object oriented design 
+2.1 Classes and encapsulation 
+2.2 Uses and has relationships 
+2.3 Inheritance and polymorphism 
+2.4 Components 
+2.5 Visualizing OO designs 
+3. Specifying C++ APIs 
+3.1 Object orientation and classes 
+3.2 A closer look at functions 
+3.3 Non-class API elements 
+3.4 Some bad practices 
+4. Delivering C++ APIs 
+4.1 Header files 
+4.2 DLL basics 
+4.3 DLLs and C++ APIs 
+4.4 EPOC Components 
+4.5 Binary compatibility 
+5. Comparison with Java 
+5.1 Object orientated APIs 
+5.2 Packages 
+5.3 Conclusion  
+
+1. Introduction
+In October 1994, Symbian’s design team (then working at Psion) chose to implement EPOC in C++. The designers already had considerable experience in object orientation in the context of Psion’s 16-bit ROM-based PDA software and GUIs. In preparing for EPOC, they surveyed the currently available object oriented (OO) languages, and many systems designed using the OO paradigm.
+
+The EPOC project was by no means academic: it was developed for commercial success under time-to-market pressure. Even so, it took nearly three years to release the first EPOC product and, in retrospect, it was during the first two years that the OO disciplines required for really effective large-scale system design in C++ became fully mature.
+
+This paper summarizes Symbian’s central insights into OO system design gained throughout that period and subsequently. Its two main aims are to show how C++ language constructs are used to implement OO designs and deliver OO APIs (application programming interfaces), and to show how DLLs (dynamic link libraries) are used to implement components, which are essential for practical work with large systems.
+
+To provide context, the paper begins with a brief review of object oriented concepts and vocabulary.
+
+During roughly the same period as Symbian’s engineers tackled these problems in C++, Sun’s Java™ team tackled them, independently, in the context of their new language. Many of the disciplines we use when programming and delivering APIs in C++ were designed by Sun into the heart of the Java language: the comparison is interesting and we close the paper with a brief review.
+
+2. Basics of object oriented design
+ 2.1 Classes and encapsulation 
+2.2 Uses and has relationships 
+2.2.1 Distinguishing has and uses 
+2.2.2 Cardinality 
+2.3 Inheritance and polymorphism 
+2.4 Components 
+2.5 Visualizing OO designs  
+
+Object orientation (OO) provides a natural paradigm in which to view real-world problems, design solutions to them, and then implement them using a suitable language such as C++, Java, Smalltalk etc.
+
+The first stage in this process is design which, to a great extent, can be conducted independently of the intended implementation language. In this section we will quickly review the standard OO vocabulary as it is used at design time. If you are already familiar with OO or at least one OO language, you will find this section a useful, brief, review. If you are new to OO, you may wish to consult some of the references cited at the end of the paper.
+
+Object-oriented design requires us to consider
+
+what are classes and objects 
+the significance of encapsulation, and how a class makes data and function members available to classes in uses or has relationships 
+the significance of inheritance, polymorphism, and is relationships 
+the use of larger-scale groupings of classes into components 
+a notation such as UML (Unified Modelling Language) to visualize designs 
+2.1 Classes and encapsulation
+The fundamental unit of all OO designs is the class: a class describes objects (or instances of the class) which might be instantiated, and which each have separate instances of the class’s data members (or instance variables). The class also has functions (or methods) which can be called on objects of that class. Some functions and data members apply to the class as a whole rather than to individual objects. Functions which construct objects (constructors, or factory functions) or destroy them (destructors) have a special status.
+
+Encapsulation is achieved firstly by making a strong association of functions with classes (in addition to the previously-established ideas of associating data members with structures), and secondly by allowing some data and function members to be private, so that they can be used only by the class’s own functions. The public, or exposed, members are available for wider use.
+
+Encapsulation is powerful. But, with time, it has become clear that the most powerful aspect of OO arises from relationships between classes. The most significant relationships are uses, has and is.
+
+2.2 Uses and has relationships
+ 2.2.1 Distinguishing has and uses 
+2.2.2 Cardinality  
+
+If one class A uses another class B, then A refers to an instance of B, and uses one or more aspects of B’s public interface — data or functions. Often, A will have a pointer (or reference) to a B so that it can get to the relevant B quickly.
+
+2.2.1 Distinguishing has and uses
+It is not always obvious, by looking at a class prototype, whether a relationship is a has or uses relationship. If a class A contains a B, then a has relationship is usually indicated. If A refers to a B (by pointer or reference), of if B is in any case a kind of pointer or reference object, then the relationship could be either has or uses. The best way to tell is to look at the class’s destructor: if the B is destroyed there, that indicates ownership — a has relationship. Otherwise, a uses relationship is indicated.
+
+A further complication is that ownership may be transferred during an object’s lifetime, eg a B may be owned initially by an A1, and then by an A2. Both A1 and A2’s destructors must test for the existence of a non-null B reference, and destroy the B if necessary. The ownership transfer should be clean, so that the B is guaranteed to be destroyed precisely once.
+
+has and uses relationships, and ownership transfer, are easy enough if you think about them, and thinking about them is easier if you have a visual design language such as UML.
+
+If you don’t think about these relationships clearly, it can be difficult to know where to code destructors. This makes C++ programming error-prone for people who have not been introduced to the higher-level OO ideas: people either forget destructors (which hogs memory) or code them too often (which causes very difficult problems). This is the main reason why Java has garbage collection: objects are destroyed when the system determines they are no longer needed.
+
+In some types of programming, eg the kind of search algorithms used by artificial intelligence (AI), has and uses relationships can become very intertwined. In these domains garbage collection is essential: it has been a feature of AI languages ever since it was incorporated in LISP in 1959.
+
+2.2.2 Cardinality
+With both the has and uses relationships, it is sometimes instructive to look at cardinality — ie, the number of Bs that A either has or uses.
+
+Most often, cardinality is 1: ie, A has or uses just one B. A may contain the B, or refer to it.
+
+Sometimes, cardinality may be 0 or 1: A may have, or use, a B — but during A’s lifetime there may be periods when it has no B. This is often represented by a reference which may be null.
+
+Sometimes, cardinality may be more than 1: usually, we simply say n. A dialog, for instance, may have n controls. Cardinality-n may be implemented by lists, arrays or other containers but, in many cases, this is an implementation detail. From a design point of view, the distinctions between cardinality 1, 0..1, 0..n and 1..n are what matters most. Visual design languages such as UML provide clear visualization of cardinality.
+
+2.3 Inheritance and polymorphism
+If a class D is a class B, then B is the base class and D, the derived class, inherits all B’s data members and functions. In straightforward inheritance, D just adds more data members and functions to those in B.
+
+Inheritance is however most usefully used as the basis for polymorphism, in which base-class functions are declared as abstract (and are possibly given a trivial default implementation). In the base class, abstract functions specify required behaviour. In a concrete derived class, this behaviour must be implemented (or overridden) in such a way as to define the specific behaviour of the derived class. The derived class can, and usually does, add its own data and function members in order to support its implementation.
+
+Vocabulary such as “a D is a B” applies most naturally to this polymorphic use of inheritance. If a base class is abstract (ie, it has at least one abstract function), then it cannot be instantiated directly. A class derived immediately from an abstract base class may not implement all the abstract functions — or it may implement them all and introduce some more. In this way, a derived class may implement some concrete behaviour, but may still remain abstract. For instance, a dialog is a control — but a dialog is itself an abstract class. Further derivation is required in order to produce a concrete class.
+
+There is a tendency among those new to OO (and even among instructors, writers and designers) to overuse inheritance, and to talk about “class hierarchies”, produced by is relationships, as if inheritance were the only significant aspect of OO. But the uses and has relationships are just as important as the is relationship. The design diagrams of any significant system will contain far more uses and has relationships than is relationships (if we discount the derivation of most classes from a common base class such as Object). A very common error is to misuse the is relationship where a has relationship should have been used instead.
+
+Smalltalk and Java use the terms superclass for B and subclass for D. This vocabulary is conventional, but potentially misleading since, as we have seen, a derived class may both implement base class functionality and define new abstract functions which require implementation. Java says that D extends B, even though D is a subclass of B! The main thing in favour of this is that the language keywords are brief and pleasant to read.
+
+2.4 Components
+Although classes provide the basic building block for OO designs, larger building blocks are also required. A rule of thumb says that people can only think of “seven plus or minus a few” things at once: if more things are required, then we must categorize. Classes may be grouped together into larger groups, known variously as categories, modules, components, or packages. If at least one class in component X uses, has or is at least one class in component Y, then we can say that X depends on Y (or, loosely, X uses Y). Often, there is a difference between the “public” members of a class intended for other classes in that component, and the truly public members intended for users outside that component.
+
+The requirement for controlled dependencies between components introduces a need for a special kind of abstract base class: the interface, which has only abstract functions and no data. An interface may be defined by one component C, but implemented in one or more other components which depend on C. A class may be derived from at most one base class, but may implement any number of interfaces.
+
+The C++ language is deficient in its support for components, and overkills in its support for interfaces. In EPOC, the packaging of classes into components (usually DLLs) is of critical importance, and forms the subject of §3. Specifying C++ APIs in this paper. EPOC’s controlled use of C++ multiple inheritance to implement interfaces is described in §3.1.4 Interfaces. Java, as a more mature OO language, provides built-in support for components through its package mechanism, and for interfaces as a language construct: we briefly review these in §5. Comparison with Java.
+
+2.5 Visualizing OO designs
+OO designs can be much easier to portray graphically than to describe in words. Several notations have arisen for this purpose. Symbian used to use the Booch notation, but has now switched to UML (Unified Modelling Language), which is clearer, and which in any case is now championed by Grady Booch, the originator of Booch notation. UML is a comprehensive notation: for full descriptions see the references.
+
+3. Specifying C++ APIs
+ 3.1 Object orientation and classes 
+3.1.1 Encapsulation 
+3.1.2 has and uses relationships 
+3.1.3 Polymorphism 
+3.1.4 Interfaces 
+3.2 A closer look at functions 
+3.2.1 Parameter passing 
+3.2.2 this 
+3.2.3 Constness 
+3.2.4 Non-member and special functions 
+3.3 Non-class API elements 
+3.3.1 Constants 
+3.3.2 Inline functions 
+3.3.3 Templates 
+3.3.4 Preprocessor macros 
+3.4 Some bad practices  
+
+The C++ language was evolved from the C language in such a way that:
+
+most programs written in C will still build successfully with a C++ compiler 
+C’s close-to-the-machine culture is still accessible for those who need it 
+C++ introduces the notion of a class and everything else needed for a first-rate object-oriented language: this supports an effective close-to-the-problem culture 
+We will begin by looking at how C++ classes implement the basic OO concepts described in §2. Basics of object oriented design. Then we will then take a much closer look at functions and argument passing. Next we will look at API elements delivered through other mechanisms — including templates, constants, and preprocessor macros. Finally we will take a brief look at some common bad practices.
+
+3.1 Object orientation and classes
+ 3.1.1 Encapsulation 
+3.1.2 has and uses relationships 
+3.1.3 Polymorphism 
+3.1.3.1 protected and private APIs 
+3.1.3.2 Pitfalls with virtual functions 
+3.1.3.3 Polymorphism without virtual functions 
+3.1.4 Interfaces  
+
+3.1.1 Encapsulation
+A class definition such as
+
+    class X {
+    public:
+          void foo();
+          int i;
+    private:
+          void bar();
+          int j;
+          };
+defines a class X with a public data and function member, and a private data and function member.
+
+Encapsulation is supported by C++ in that the functions are strongly associated with the class, and some members are private. The public members may be used by other classes (through uses, has or even is relationships).
+
+Because the public functions are available to other users, they should probably be documented. A key issue addressed by this paper and by EPOC’s programming disciplines — but not by the C++ language in and of itself — is whether a function is intended to be available for use by others, and therefore whether it is intended to be documented. A given class is intended for use by others if:
+
+the component to which it belongs is intended for public use (some components may not be intended for public use) 
+the class is defined in a header file accessible to users of the component (some classes are defined in private header files, or even inline in a C++ source file) 
+Furthermore, a public non-virtual function is intended for use by others only if it is exported from the DLL in which it is defined. We will see in §4.3 DLLs and C++ APIs how to identify whether a class or function is really available for public use, in the context of a real system with components implemented by DLLs.
+
+3.1.2 has and uses relationships
+A typical EIKON application contains an app UI (application user interface) class which demonstrates the distinction between uses and has: In the class prototype, both iAppView and iAppDoc use a pointer:
+
+    class CExampleAppUi : public CEikAppUi
+          {
+    public:
+          ...
+    private:
+          CExampleAppView* iAppView; // has an app view
+          CExampleDocument* iDoc; // uses a document
+          ...
+          };
+A glance at the constructor and destructor will reveal what the class has and what it uses: the constructor receives the document as a parameter (so it can use it), and constructs the app view. The destructor destroys the app view, but does nothing to the document. So an app UI has an app view, but uses a document.
+
+The rationale for this is clear enough if you are familiar with EIKON. A document has an independent existence whether or not an app UI has been constructed to display or edit it. Therefore, it is inappropriate for the app UI to have the document: rather, it uses it. On the other hand, the app view is the means by which the app UI displays the document to the user: the app UI constructs it specifically for this purpose, and destroys it again when the app UI has finished. So it is quite appropriate for the app UI to have the app view.
+
+In both cases, the has and uses relationships were implemented with a pointer. This need not always be the case:
+
+containment may often be used for has relationships: C++ causes the constructors and destructors of contained objects to be called at the appropriate time. EPOC’s T classes are designed for containment. 
+a C++ reference may sometimes be used rather than a pointer (this is awkward in practice and is not usually practiced in EPOC) 
+certain EPOC classes, such as RFile and many others whose name begins with R, refer to objects maintained by servers, and are in effect a sophisticated form of reference. So although they may appear in C++ terms to be contained as class members and therefore in a has relationship, contained R class members may actually be in a uses relationship. 
+Class prototypes may be ambiguous about has and uses relationships. Visual design languages, such as UML, make the relationships much more obvious.
+
+3.1.3 Polymorphism
+In C++, polymorphism is usually expressed by deriving from an abstract base class with one or more virtual functions. In the base class, a virtual function is either pure (ie, completely abstract) or has a trivial default implementation. In a derived class, the function must be implemented (or the default implementation overridden). As a result, you can access derived-class behaviour through a base-class reference (or pointer).
+
+In the following code
+
+    class CCoeControl { // unit of user interaction with GUI
+    public:
+          virtual void Draw() const =0; // draw the control
+          void GetExtent(TRect& aRect) const; // location on screen
+          ...
+    protected:
+          TRect iExtent; // location on screen
+          ...
+          };
+    class CRichTextEditor : public CCoeControl { // displays and edits text
+          ...
+    private:
+          void Draw() const; // draw the text
+          ...
+    private:
+          CRichText* iText; // text to edit
+          ...
+          };
+The base class, CCoeControl, represents a rectangular area of the screen. All controls have an extent, ie the rectangle of their owning window which they occupy: the extent is represented by member data in the base class and can also be obtained by a function defined in the base class.
+
+Each control must draw itself within this extent, but derived controls will draw themselves in quite different ways, depending on the precise behaviour of the control. For this reason, the Draw() function is pure virtual in the base class, and is implemented by derived classes such as the CRichTextEditor above.
+
+3.1.3.1 protected and private APIs
+C++’s inheritance syntax introduces the protected keyword, which indicates a part of the API accessible only to derived classes.
+
+public APIs remain accessible to all other classes (though see the implications of DLLs in §4.3.1 What is a part of the API?), while private APIs are accessible only to the class in which they are defined.
+
+Surprisingly, however, a private virtual function in a base class must be understood and documented because, although it cannot be called from any other class than the base class, it must be implemented by derived classes. The Draw() function in Control above is such a function. To assist in distinguishing such apparently private functions from truly private ones, programmers should mark them with appropriate comments.
+
+3.1.3.2 Pitfalls with virtual functions
+When browsing a C++ API, it is vital to know which functions are virtual and, if so, whether they are defining required behaviour, or implementing it. In some cases, a definition of required behaviour, in an abstract base class, may also include a default implementation which may be overridden by derived classes.
+
+The basic C++ rules unfortunately do not provide sufficient information to tell this at a glance:
+
+the ultimate base class must use the virtual specifier to indicate that a function is virtual 
+the =0 syntax must be used to indicate if a function is pure virtual 
+in a derived class, the virtual specification is optional 
+This means that, when you look at a function signature,
+
+if it does not include the virtual specifier, then you have to check through all the base classes, and you can only assume it is non-virtual if you do not find the virtual specifier in any of them 
+if it does include the virtual specifier, and indicates that the function is pure virtual by the =0 syntax, then the function is probably defining required behaviour 
+if it is virtual but not pure-virtual, then it might be an implementation of concrete-class behaviour 
+but it also might be a default implementation in a base class, which still begs concrete implementations — overrides — in derived classes 
+API designers should comment their C++ class headers sufficiently to distinguish between the cases above.
+
+3.1.3.3 Polymorphism without virtual functions
+In real C++, polymorphism is not always implemented using virtual functions. EPOC’s descriptor classes, and its client-server framework, provide interesting examples of polymorphism implemented differently. We describe here one example of each.
+
+A descriptor represents a string with a fixed maximum length, or a buffer for binary data. There are five concrete descriptor classes, all derived ultimately from one abstract base class TDesC. This base class represents things which are true for all descriptors: namely, that they have a current length, returned by the Length() function, and the address of their data, returned by the Ptr() function. Length() is implemented by looking up the iLength member, and is non-virtual. The Ptr() function depends on the concrete descriptor type and therefore “should be” virtual. But, to save the space that C++ would use for a virtual function table pointer, EPOC uses four bits of the word used by iLength to indicate the type of descriptor: the TDesC::Ptr() function is then implemented by a switch statement which checks these bits and then calculates the pointer address appropriately. This is possible because the descriptor class hierarchy is closed: there can never be any more than the current five concrete descriptor classes. It has a slight performance impact, and reduces the maximum length of any descriptor data to 228-1 bytes (256MB) instead of 232-1 (4GB) — but these are acceptable trade-offs for EPOC’s intended application areas.
+
+A class such as RFile is polymorphic because, on the server side, a file may be implemented in a wide variety of ways — in RAM, on a removable local drive, on a remote drive connected through the network, or some other way. However, although this requires polymorphism in the file server, and some way to control this polymorphism from the client, the functions available to clients through RFile are the same irrespective of the implementation. The RFile class therefore betrays no sign of polymorphism. In general, a client API can be delivered through a non-polymorphic class which acts as some kind of handle to, or proxy for, other classes which implement the required polymorphism. This pattern is widespread in any programming involving comms and networking.
+
+3.1.4 Interfaces
+An interface is an abstract base class containing no data and only pure virtual functions. Therefore, an interface specifies required behaviour, but does nothing to implement it.
+
+Interfaces are represented in EPOC by classes whose names begin with M (originally this stood for “mixin”), such as MPrintProcessObserver below:
+
+    class MPrintProcessObserver
+          {
+    public:
+          virtual void NotifyPrintStarted(TPrintParameters aPrintParams)=0;
+          virtual void NotifyBandPrinted(TInt aPercentageOfPagePrinted, TInt aCurrentPageNum, TInt aCurrentCopyNum)=0;
+          virtual void NotifyPrintEnded(TInt aErrorCode)=0;
+          };
+This interface is defined by the print subsystem, which requires an observer whenever a print job is started by an application. As suggested by the function calls in the interface, the observer is notified at the start and end of job, and fairly frequently (depending on the printer driver) throughout the job.
+
+The print process observer is implemented by the system GUI, such as EIKON or any alternative GUI used on other EPOC machines. But it is highly undesirable for the EPOC print subsystem to depend on the GUI component. Using interfaces, there is no need for such a dependency.
+
+EIKON implements the print process observer using a progress dialog whose definition begins:
+
+    class CEikPrintProgressDialog : public CEikDialog, private MPrintProcessObserver
+          {
+          ...
+The CEikPrintProgressDialog class implements the functions required by the interface specification.
+
+C++ multiple inheritance is used to implement interfaces. This is in our view the only justified use of C++ multiple inheritance. The C++ language does not enforce the restrictions required by good practice: even some EPOC interfaces use non-virtual functions, and some even have data members — but such practices are generally deprecated.
+
+3.2 A closer look at functions
+ 3.2.1 Parameter passing 
+3.2.2 this 
+3.2.3 Constness 
+3.2.4 Non-member and special functions  
+
+C++ functions may be either member functions (of a class), or non-member functions. In either case, the function signature tells us a great deal about the function. The signature of a member function contains the following information:
+
+whether the function is (at the compiler’s discretion) inline 
+whether the function is static (ie refers to the whole class) or not (ie refers to a single object) 
+the return type (or void) 
+the name 
+the type and passing method of all the arguments (with an optional name that hints at purpose, but is not formally part of the signature) 
+whether there are any optional arguments 
+whether the function is const 
+whether the function is virtual and, if so, whether it is pure (unimplemented by this class) 
+This is a lot of information. If a function and its arguments (and class) have been named sensibly and the right type of parameter passing has been used, then it is often possible to guess merely by looking at a function prototype what the function does.
+
+For instance, the function TInt RFile::Write(const TDesC8& aBuffer) is the basic function for writing data to a file. The TInt return is an error code. The aBuffer parameter is a descriptor containing the data. You might wish to find out more about the TDesC8 class and error codes, but you can be confident in your guess about the function’s purpose.
+
+3.2.1 Parameter passing
+Parameters may be passed by value or by reference. If passed by reference, they may be either modifiable (available for output from the function as well as input to it) or const (available for input only). As a subtle implementation detail, parameters passed “by reference” may use either the * syntax available in C, or the new & syntax introduced by C++.
+
+If a parameter is basically of type X, this gives the following possibilities for specifying it in a signature:
+
+ 
+ by value
+ by reference
+ by reference
+ 
+input
+ X
+ const X&
+ const X*
+ 
+output
+  
+ X&
+ X*
+ 
+
+For passing “input” parameters, there is a fundamental distinction between passing by value and passing by reference. When you pass by value, C++ copies the object into a new stack location before calling the function. The copy is done either using a binary bitwise copy or, if one exists, the C++ copy constructor (X::X(const X&)). It is generally advisable to pass by value only if you know that the object type is small — as a rule of thumb, do this only for built-in types, and for types designed to be only one or two machine words. For all other types, pass by reference is preferable.
+
+If passing by reference, there is a much less fundamental decision to be made between the & syntax and the * syntax. The * syntax supports null parameters — though these are generally deprecated. The & syntax is required for C++ copy constructors and assignment operators — though these are little used in EPOC since objects are normally either passed by reference or bitwise copied. Otherwise, use & when the object would normally be referred to without pointer syntax, and use * when the object would normally be referred to using pointer syntax. In EPOC, this usually — though not always — means T and R classes are passed using &, while C classes are passed using *.
+
+3.2.2 this
+When you invoke a non-static member function with syntax such as
+
+    X x;
+    x.foo();
+the function foo() is invoked with an implicit pointer to the x object on which it is supposed to operate. In the body of X::foo(), a pseudovariable named this is set to this implicit parameter, as if some declaration of the form
+
+    X* const this;
+had been made (the const indicates that this cannot be altered, eg by this=(X*) 0;). You can pass the this parameter to other functions, eg
+
+    CExampleAppUi::ConstructL()
+          {
+          ...
+          iAppView=new (ELeave) CExampleAppView(this);
+          ...
+which constructs an application view for this app UI.
+
+3.2.3 Constness
+When you specify const on a function signature, eg
+
+    class CCoeControl
+          {
+          ...
+          void Draw() const =0;
+          ...
+then the function itself is said to be const. In turn, this means that Draw() may not alter any members of the CCoeControl to which it refers, either directly, or by calling any non-const member function. In general, when you see a const function, you should think of it as “read-only” with respect to the object of which it is a member; a function which gets object state, or uses object state, but does not change the state of the object.
+
+Reading from a file is an interesting case. Should RFile::Read() be const? There is a case in favour of constness, and a case against. In favour: the file data is not changed. Against: the state of the RFile is changed (the next read will occur from a different place). In EPOC, the decision was made for constness.
+
+Usually the requirement for constness (or against it) is clear. Constness of function signatures is a very important clue to the purpose of a function, and const correctness is therefore encouraged by designers of C++ APIs. Fortunately, if a system such as EPOC is basically const correct, it is quite hard to write code which uses these APIs, and is not const correct — because the compiler issues warnings when you accidentally get constness wrong.
+
+3.2.4 Non-member and special functions
+Member functions declared as static do not operate on instances of the class. Such functions therefore cannot themselves be const (though their parameters may include const specifications), and cannot be virtual.
+
+Some classes, such as EPOC’s Math or User, contain entirely static functions, and no data members. Such classes are used as convenient categorizing wrappers for similar functions and are sometimes loosely referred to as static classes.
+
+Some classes have static functions of the form
+
+    class CRichText
+          {
+    public:
+          static CRichText* NewL();
+          ...
+In this case, the NewL() function is static but returns an instance of its class. This is an example of a kind of factory function which is closely related to the class’s constructors but ensures they are called in the correct manner. In this case, NewL() handles the correct sequence of operations required to handle out-of-memory during all phases of the rich text object’s construction.
+
+In C, all functions were non-member functions, not formally associated with any class. In C++, it is convenient to associate the majority of functions with a class — because they either are clearly associated with an object, or are wrapped for convenience into “static classes”.
+
+3.3 Non-class API elements
+ 3.3.1 Constants 
+3.3.1.1 Enumerations 
+3.3.1.2 Constants of built-in types 
+3.3.1.3 Constants of other types 
+3.3.1.4 String literals 
+3.3.1.5 UIDs 
+3.3.2 Inline functions 
+3.3.3 Templates 
+3.3.4 Preprocessor macros  
+
+3.3.1 Constants
+APIs require constants for various purposes:
+
+maximum lengths, special numbers, strings and so on — best represented by constants of the appropriate type 
+distinct values governing the mode of some function, with no other requirement but that they be distinct — enumerations are best for bounded sets; UIDs are best for unbounded sets 
+distinct values which must be combined — binary flag bits are most appropriate here 
+These cases are sufficiently different that they merit individual treatment.
+
+3.3.1.1 Enumerations
+Enumerations are best used when a distinct set of values is required, the set is bounded and known, but either the actual values do not matter, or the actual values are small positive integers. This is illustrated by the following EPOC definitions:
+
+    enum TAmPm {EAm,EPm};
+    enum TDay
+          {
+          EMonday,ETuesday,EWednesday,EThursday,
+          EFriday,ESaturday,ESunday
+          };
+In the case of TAmPm, only a distinction between am and pm is required. In the case of days of the week, it is useful to have a sequence of numerical values (in this case from 0 to 6).
+
+Note EPOC’s naming convention: enumeration types have a T prefix (because they are like any other destructor-less type). Enumerated values have an E prefix. We will see below that all other constants use a K prefix.
+
+3.3.1.2 Constants of built-in types
+Constants of built-in types can easily be expressed using C++’s const syntax, eg
+
+    const TInt KMaxName=0x80; // 128-char max filename/processname length
+it is preferable to define flags using this syntax, eg
+
+    const TUint KEntryAttNormal=0x0000;
+    const TUint KEntryAttReadOnly=0x0001;
+    const TUint KEntryAttHidden=0x0002;
+    const TUint KEntryAttSystem=0x0004;
+rather than as enumerations.
+
+3.3.1.3 Constants of other types
+Constants of any class type cannot be handled in the same way as constants of builtin types. This is because constants of class types invoke a constructor of the class (unless the compiler can optimize its way around this problem: GNU C++, used by EPOC, cannot). This would in turn require that apparently constant data was in fact constructed at run-time, which is not supported by ROM-based EPOC implementations.
+
+The preferred solution for small types such as TRgb is to revert to using the preprocessor for pseudo-constants:
+
+    #define KRgbRed TRgb(0x0000ff)
+This is inelegant, but effective, C++.
+
+For complex types, “constants” are best built as needed using an appropriate constructor.
+
+3.3.1.4 String literals
+String literals are a very important type of constant. Code such as
+
+    console.Printf(_L("Hello World\n"));
+requires a string literal. The code above generates a temporary TPtrC descriptor referring to the string data, and used to be the accepted norm in EPOC. From EPOC Release 5, this practice is strongly deprecated. Instead, an explicit constant should be used:
+
+    _LIT(KHelloWorld, "Hello World\n");
+    ...
+    console.Printf(KHelloWorld);
+Although it appears less elegant, the _LIT macro is convenient from a user point of view. It builds a buffer-descriptor in place in the program’s data segment. When the console.Printf() statement is executed at run-time, a reference to this buffer is passed. This saves invoking the TPtrC constructor at run-time and allocating space for it. _L has been replaced with _LIT throughout EPOC, with significant ROM budget savings as a result.
+
+Finally any string literal which forms part of the user interface of a production program should be loaded from a resource file rather than coded directly into the C++ program. Resource files also define other GUI resources such as menu trees, hotkey tables, toolbars, initialization data for standard controls and dialogs, and the controls on app-specific dialogs. The resource file interface is an important part of the total EPOC API. Detailed coverage of EPOC resource files is beyond the scope of this paper.
+
+3.3.1.5 UIDs
+Enumerations may be used to define values which are distinct from one another, known at build time, and confined in scope to an area completely under one programmer’s control.
+
+EPOC provides a unique-id (UID) mechanism, by which 32-bit IDs are allocated centrally by Symbian for use in circumstances where a set of distinct identifiers is required, are known as each program requiring them is built, and yet are not under the control of any individual. These requirements are true for identifying EPOC APIs, and for identifying native document types: therefore several EPOC APIs feature definitions such as
+
+    const TUid KUidAppDllDoc={268435565};
+which defines the second UID required for native document files. The apparently magic number 268435565 was allocated by Symbian.
+
+The role of UIDs in EPOC API identification is described in §4.3.2 API identification with UIDs.
+
+Some programs generate and use unique IDs which are not known at build time, and are not allocated centrally. Typically 128-bit IDs are used for this purpose using industry-standard algorithms. Such IDs are not constants and do not feature in APIs. They are sometimes referred to as UIDs, sometimes as GUIDs (“globally unique IDs”): they are not the same as EPOC UIDs.
+
+3.3.2 Inline functions
+If a function is marked as inline, the compiler tries to expand it inline rather than generating a function in a single place which must be called. For instance, in the following fairly worthless class:
+
+    class Capsule
+          {
+    public:
+          inline int Value() const;
+          inline void SetValue(int aValue);
+    private:
+          int iValue;
+          };
+the code
+
+    Capsule x;
+    x.SetValue(2);
+    int y=x.Value();
+is as good as
+
+    Capsule x;
+    x.iValue=2; // inline version of SetValue()
+    int y=x.iValue; // inline version of Value()
+if iValue were not private.
+
+In EPOC, inline functions are used
+
+for getter/setter functions in cases like that above (hopefully with more obvious justification: a class with both getter and setter functions, for a simple variable whose implementation is unlikely to change, is adding little more value than making iValue public) 
+in conjunction with the thin template idiom (see below) 
+Their use is deprecated in most other circumstances.
+
+3.3.3 Templates
+A C++ template may be expanded to generate a range of classes or functions, depending on the template argument. Usually, the template argument is a class, so that given
+
+    template <class T>
+    inline T Max(T aLeft,T aRight)
+          {return(aLeft<aRight ? aRight : aLeft);}
+two objects of any same class may be compared with the Max() function, provided their class supports operator<(). Or, given
+
+    template <class T>
+    class TArray ...
+it is possible to implement an array which can contain objects of any class. Using similar code any kind of container class (dictionary, list etc) could be constructed.
+
+Sometimes, the parameter to a template class is a number, so that for instance
+
+    template <TInt S>
+    class TBuf8 ...
+allows a set of buffer classes (for 8-bit data) to be generated, whose length is governed by the S parameter.
+
+Templates present difficulties for both compiler vendors, and system designers:
+
+for compiler vendors, the problem is to decide where to generate the expanded template code (given a range of parameters T, S etc), and how to find and eliminate “duplicates” caused by expanding the same template with the same parameters — possibly from two very different places in source code. 
+for system designers, where compactness is key, as with EPOC, the problem is that any expansion of templates may lead to uncontrollable code bloat. Primarily for this reason, Symbian rejected the C++ Standard Library, which is heavily template-based, as a candidate for EPOC’s infrastructure. 
+However, templates provide a convenient means of specifying container classes, and for specifying fixed-length buffer classes. For this reason, EPOC uses them, but only in conjunction with the thin template idiom. The thin template idiom requires that all templated function calls are simply a type-safe layer, using an inline function expansion, which simply invokes an appropriate function instead.
+
+We can see this with reference to the examples above:
+
+the Max() function is simply an inline call to the appropriate operator<() followed by selection of one of the values: there is a little fatness in the generated code, but nothing unpredictable 
+classes such as the array and other container classes are implemented in terms of a non-templated base class which deals in void* pointers; a templated derived class provides access to these functions through type-safe T references (or pointers), eg 
+    template <class T>
+    inline const T& CArrayFix<T>::operator[](TInt anIndex) const
+          {return(*((const T*) CArrayFixBase::At(anIndex)));}
+classes such as the buffer simply include an inline call to a private, non-inline, constructor, eg 
+    template <TInt S>
+    inline TBuf8<S>::TBuf8()
+          : TDes8(0,S)
+          {}
+Therefore any apparent calls to templated code generate instead a call to non-templated code. Without the templates, ugly non-type-safe source code would have been necessary. With thin templates, the ugly code is written by the API provider rather than the user, and code bloat is avoided.
+
+3.3.4 Preprocessor macros
+Preprocessor macros were commonly used in C to implement
+
+constants: but in C++ const and enum make this less necessary, except for non-builtin types as we noted above 
+macros amounting to inline functions: but these were famously obscure, and C++ inline functions should make them completely unnecessary 
+macros amounting to templates: but these were even more famously obscure, and C++ templates should make them completely unnecessary 
+conditional compilation depending on various preprocessor macros used in effect as flags: this is used in EPOC to distinguish between ASCII and UNICODE (_UNICODE flag), debug and release (_DEBUG flag), compiler capabilities and target platform (various flags) 
+inclusion of header files 
+EPOC’s use of the preprocessor is quite conventional for a C++ system. The flags, literals and header files referred to in preprocessor macros are effectively part of the EPOC API and are documented.
+
+3.4 Some bad practices
+We pause briefly to note some bad practices that are commonly found in OO systems.
+
+We have already noted that using inheritance instead of containment is a very common bad practice. Typically in C++ this is seen by the use of private inheritance.
+
+Multiple inheritance is also usually bad practice. The misuse of inheritance, instead of containment, leads to particularly inappropriate forms of multiple inheritance, with all the confusion of so-called virtual base classes. Multiple inheritance should only be used for implementing interfaces.
+
+Virtual functions should usually be coded trivially, or not at all, in their base classes. Use of a non-trivial default leads to problems when overriding. It is usually worth thinking clearly about what aspect of a virtual function is really intended to be overridden, and then designing for that specifically.
+
+This is related to “just-in-case tactics” which can take various forms, such as making functions virtual “just in case” they should be overridden, or protected “just in case” a derived class might wish to use them. Just-in-case tactics leave the designer free to avoid clear thinking. Once written, APIs designed using just-in-case tactics are often very difficult to understand and use correctly.
+
+4. Delivering C++ APIs
+ 4.1 Header files 
+4.2 DLL basics 
+4.2.1 The idea 
+4.2.2 Some other terminology 
+4.2.3 Exporting 
+4.2.4 Linking by name and by ordinal 
+4.3 DLLs and C++ APIs 
+4.3.1 What is a part of the API? 
+4.3.2 API identification with UIDs 
+4.3.3 Polymorphic DLLs 
+4.4 EPOC Components 
+4.5 Binary compatibility  
+
+In a real system of moderate complexity, such as EPOC, the API elements supported by the C++ language must be packaged into components of moderate size, each designed, documented, and delivered with a fair degree of independence from the others.
+
+The established tools of the trade are the header file, the DLL (dynamic link library), and supporting items such as the import library, and the def file. For practical purposes, DLLs will be considered in two flavours: the shared library whose job is to provide APIs for use by many clients, and the polymorphic DLL which implements some kind of abstract interface (such as a driver, or an application program) specified by EPOC.
+
+When we have reviewed this technology, we will define an EPOC component in the sense used by Symbian development groups. Typically, an EPOC component delivers one or more APIs, each of which consists of several header files, one or sometimes more DLLs, and sometimes the specification of some polymorphic interfaces. Significantly, each EPOC component has controlled dependencies on other components.
+
+At the end of this section we will pause to note the issue of binary compatibility. When an API is revised, the revision should be compatible with the original at the level of the run-time binaries. Established disciplines are used by EPOC system developers to ensure that this is the case.
+
+4.1 Header files
+In accordance with standard C++ programming practice, EPOC uses header files to define APIs for build-time purposes.
+
+Header files contain only declarations, and inline functions. No header file used to define a general-purpose API should contain code that compiles into object code.
+
+Header files are included into C++ source files and other header files. In line with common practice, header files prevent themselves from multiple inclusion by code such as
+
+    // foo.h
+    #ifndef __FOO_H
+    #define __FOO_H
+    ... // real header content
+    #endif
+programmers are in any case encouraged to minimize the number of header files included in their source (and header) files, since this may have a major impact on compilation speed.
+
+Typically, a single header file represents either an entire API, or a major portion of it. Ideally, header files would include nothing irrelevant for users of the API. This is an unattainable ideal since header files include private functions and data, and may be required to include declarations needed within the header file rather than by its users. As we have seen, the C++ language provides cues to indicate which parts of a class definition are intended as parts of the API: in some cases, the cues are ambiguous, in which case header file writers are encouraged to comment appropriately.
+
+4.2 DLL basics
+ 4.2.1 The idea 
+4.2.2 Some other terminology 
+4.2.3 Exporting 
+4.2.4 Linking by name and by ordinal  
+
+4.2.1 The idea
+A DLL is constructed by the system developers as follows:
+
+a set of source code is compiled which implements all the functions and static data specified in a set of header files (in C++, most functions are member functions of various classes, and in EPOC, static data must be truly const) 
+the object code modules produced by the compiler are combined by the linker to produce a DLL which contains all these functions and static data, plus (at the same time) an import library which specifies which functions are accessible in the DLL 
+The DLL is then used by an application programmer as follows:
+
+the application programmer uses the same header files as the system designer, to compile C++ source modules 
+the application’s object code is then combined by the linker into an application executable: another input to this process is the import library produced above, which specifies in which DLL to find the system API functions and static data, and where to find them in the DLL 
+when the application code runs, it loads the DLL produced above and, as needed, calls its API functions and refers to its static data 
+4.2.2 Some other terminology
+This then is the basic idea of DLLs. We need to refine the picture given above with some important details.
+
+Before we do so, let’s note two points in passing.
+
+the system above clearly provides a useful mechanism for code re-use. Other mechanisms are available, such as linking system object modules or static libraries into the application code at link time rather than at run time. But these mechanisms produce fat executables, which is unsuited to EPOC’s application areas, and is therefore discouraged. 
+the executable that uses a DLL may be either a .exe, or another DLL. In the descriptions below, we will always use the term executable to mean either of these. If we wish to refer to a .exe specifically, we will always write .exe. 
+4.2.3 Exporting
+Recall that the system developer produced the DLL by linking object modules containing compiled C++ code, with many functions and possibly several items of static data.
+
+But not all of these functions are part of the public API of the component: for instance, private functions are clearly not part of the API. Even many functions declared public in C++ classes may be intended for use only by other classes within the DLL — not by users of the DLL. Making a function (or static data) part of the public interface of a DLL is known as exporting it. Any function or static data exported from the DLL is called an entry point, and the import library produced with a DLL contains a list of all its entry points.
+
+It is on the one hand necessary to export everything that is needed by users, and on the other hand highly desirable to avoid exporting anything else — not only to prevent accidental usage, but to save space and time. It is therefore just as important for the system developer to correctly specify which parts of an API are to be exported from a DLL, as it is for them to correctly specify public, private and protected access to class members.
+
+Static data is exported if (and only if) it is declared as extern: this is a standard part of the C++ language.
+
+Functions are by default not exported from DLLs. The C++ language has no standard method to indicate that export is desired. EPOC defines two macros for this purpose:
+
+mark functions to be exported as EXPORT_C in C++ source code 
+mark such functions as IMPORT_C in header files (from the API user’s point of view, they are imported) 
+Throughout this paper we have been addressing the question, which functions are part of the public API? We have already considered C++’s public, private and protected keywords. We will also have to consider the implications of IMPORT_C and EXPORT_C. Due to the technicalities of C++, there are some surprising aspects to the answer: we will return to this in §4.3 DLLs and C++ APIs.
+
+4.2.4 Linking by name and by ordinal
+We said that the import library contains a list of all the entry points associated with the DLL, and that the import library is all that is linked in with a client executable, that uses the DLL.
+
+We must now address an important technical issue: how does the client executable find the actual entry points used by the DLL, at run-time? There are basically two options: link by name, and link by ordinal. We will consider them both.
+
+The more obvious option is link by name. It works as follows:
+
+all exports from the DLL are named: in C, the name was straightforwardly related to the function or data name; in C++, a “mangling” scheme is used which is less straightforward, but still related to the class and function signature or data name 
+the import library contains the same names as those exported from the DLL 
+when the client executable is loaded (ie, at run time), it causes the DLL to be loaded, and the system loader associates an address with each name: a RAM-based table is used for this purpose, which contains all the names and addresses, and which is shared by all users of the DLL (so that second and subsequent users do not need to re-load the DLL or duplicate this table: that is the whole point of DLLs) 
+when the client executable refers to an entry point in the DLL, a simple indirection is performed through this table, giving access to the entry point in only a couple of machine instructions 
+The advantage of this system is that it is obvious. The technicalities work effectively as a “black box” which does not need to be understood by most users. In particular, if the DLL is revised in such a way as to add some new entry points and remove some old ones, then any program which used the unaffected entry points in the old version will still be able to use them in the new version (provided their behaviour has been preserved appropriately). No special steps need to be taken to ensure this.
+
+But, for a system like EPOC designed specifically for ROM- and RAM-constrained systems, there is a crucial disadvantage: the information about names must be carried in the DLL, in the import library, in every executable that uses the DLL, and in the RAM table which is constructed if the DLL is loaded. This causes a potentially enormous waste of space compared with the alternative scheme, link by ordinal.
+
+Link by ordinal works as follows:
+
+as the DLL is constructed, its exported entry points are given an ordered sequence of numbers from 1 upwards: each entry point is therefore associated with an ordinal number 
+the import library contains the association between name and ordinal for each entry point in the DLL 
+when the client executable is produced, the linker builds in only the ordinal information as needed: it does not need to build in the name information 
+when the client executable is loaded (ie, at run time), it causes the DLL to be loaded, and the system loader associates an address with each ordinal: the RAM-based table needs to contain only a list of addresses, indexed by ordinal 
+when the client executable refers to an entry point in the DLL, a simple index lookup is performed through this table, giving access to the entry point in only a couple of machine instructions 
+With the link by ordinal scheme, DLLs, executables that use them, and RAM footprint are much smaller than with link by name. Load time is also much faster. (After load time, run time performance is much the same.) For these reasons, EPOC uses link by ordinal exclusively. The tools used to generate binaries for EPOC target machines do not even support link by name: neither does the EPOC program loader (though the Windows NT/9x program loader, used by the emulator, does support link by name).
+
+The link by ordinal scheme introduces a significant issue. Although the import library and DLL produced by one run of the linker are guaranteed to work well together, what if the DLL is revised and then introduced into a system built using an old version of the import library? Unless steps are taken to prevent it, there is potential for the DLL’s entry point ordinals to be randomly reassigned, with disastrous results. This issue is at the heart of the binary compatibility problem, which is addressed in §4.5 Binary compatibility.
+
+A second issue is that some polymorphic DLLs are required to guarantee that the ordinal-1 entry point carries out a particular function. We cover this in §4.3.3 Polymorphic DLLs.
+
+4.3 DLLs and C++ APIs
+ 4.3.1 What is a part of the API? 
+4.3.2 API identification with UIDs 
+4.3.3 Polymorphic DLLs  
+
+4.3.1 What is a part of the API?
+If an API is delivered through a DLL, then that API can be defined as everything that may be accessed through the exports of the DLL.
+
+In the context of C++ APIs, we need to refine this further:
+
+constants, class names and other symbols accessible through the header files alone should also be considered part of a component’s API 
+for non-virtual, non-inline functions, it is easy to state the rule that a function must be both exported from the DLL (indicated by IMPORT_C in the header file) and suitably public (or protected) in the C++ sense, for it to be part of the API 
+inline functions allow access to private non-inline functions: these must be exported from a DLL if they are to be successfully used by inline functions used by clients of the DLL 
+virtual functions are accessed through a virtual function table which is constructed by the class’s constructor: virtual functions should not be exported as such, but for some classes it may be necessary to export the constructor — and even to make an empty constructor for the sole purpose of specifying that it is to be exported 
+From the point of view of the user, or documenter, of a class, we can look at it this way:
+
+if a function is non-virtual, and either public or protected, and either inline or exported, then it is a part of the API 
+if a function is non-virtual and private, then it is not part of the API (even though it might be exported, for use by inline functions) 
+if a function is non-virtual, and neither inline nor exported, then it is not a part of the API 
+if a function is virtual, then it need not be exported and should never be inline: these considerations do not affect whether it is part of the API 
+if a function is virtual and either public or protected, then it is part of the API 
+if a function is virtual and private, then it may be implemented (or overridden) by a derived class, and is therefore part of the API 
+since C++’s virtual function mechanism has no way to prevent either overriding or exporting, and since the virtual keyword is optional in derived classes, it is not always straightforward to determine whether a function is virtual at all and, if so, whether it should be overridden further: in this sense, determining whether a function is part of an API, or merely an implementation of required behaviour, is not always straightforward 
+4.3.2 API identification with UIDs
+Like most conventional systems, EPOC searches a set of standard directories for DLLs until it finds one with a name that matches that required by the client executable. The DLL name (without the preceding path) is associated closely with the API and should in a sense be sufficient to identify the API completely.
+
+The EPOC toolchain and file server allow three 32-bit unique identifiers (UIDs, see §3.3.1.5 UIDs) to be associated with any file. The UIDs are used in addition to the name to ensure that the DLL is really an EPOC DLL, and to ensure that the expected API is being implemented.
+
+On shared library DLLs, UID1 is always set to 0x10000079, and UID2 is always set to 0x1000008d (see definitions in e32uid.h). UID3 must be set to a value that uniquely identifies the API and is associated with that DLL alone. This UID3 value is built into the import library and therefore linked into the client executables. When the system loader loads a shared library, it checks not only the name, but all three UIDs and will only load the DLL if all of them match.
+
+UID checking provides an additional measure of assurance that a DLL really implements the intended API. UID2 and UID3 values are specified in the DLL’s .mmp project control file used by EPOC’s makmake utility. UID checking is implemented by the EPOC system loader and is used on all target machines. UIDs on executables are ignored by the Windows NT/9x loader and hence are not checked for shared libraries in the emulator environment.
+
+4.3.3 Polymorphic DLLs
+Most DLLs in EPOC are shared libraries whose function we have already described in some detail. The purpose of a shared library is to deliver an API.
+
+The other major type of DLL is the polymorphic DLL. This is a DLL which implements a polymorphic interface. We can see how this works by looking at an EIKON application program.
+
+The application architecture used by EIKON defines an application program as a DLL that
+
+has a filename which matches \system\apps\name\name.app, on any drive 
+has a UID2 of 0x1000006c 
+has an ordinal-1 export function which allocates and returns a pointer to an object derived from the CEikApplication abstract base class 
+additionally, the UID3 value is used to associate an application with a document file, so that each EIKON application is expected to have a distinct UID3, and all documents created by that application use the same UID3 
+To write an EIKON application, you must therefore
+
+wrap it into a DLL whose name and UID2 meet the requirements above 
+allocate a UID3 so that your application may create documents with unique UID3s, and the system may associate these with your application 
+derive a class from CEikApplication (and, as it happens, write some other classes too) 
+write a factory function which produces an instance of this class (or returns 0 if out of memory), and export this function as ordinal 1 
+This pattern is characteristic of all polymorphic interfaces implemented by DLLs. Other examples include printer drivers, device drivers, serial comms protocols, sockets protocols, telephony drivers etc. Each interface is associated with
+
+a path, search algorithm, or other method such as .ini file, by which a polymorphic DLL implementing the relevant interface may be found 
+a UID2 which identifies the interface uniquely (eg, distinguishes a printer driver from an EIKON application) 
+optional use of a UID3 to distinguish between particular implementations of the interface 
+a C++ abstract base class which must be derived by the implementer of the interface 
+a factory function which must be implemented to produce an instance of the derived class, and exported as ordinal 1 
+As with shared library DLLs, the UID scheme is used to provide more assurance than the name alone that the DLL provides the intended interface. This prevents the system accidentally trying to load a file that is not even a DLL, or to invoke an ordinal-1 that is not the correct type of factory function.
+
+This scheme requires that, if the DLL has more than one export, its factory function be forced to ordinal-1. This can be specified by a makmake directive, or by a def file.
+
+While it is theoretically possible to export other functions from a polymorphic DLL, and thereby provide a shared library in addition, this practice can cause confusion and is deprecated. Nonetheless, functions may sometimes be accidentally exported, even if they are not intended to be used: this is why it is important to force the correct ordinal-1 export.
+
+4.4 EPOC Components
+EPOC has been developed as a system of components. A component is a set of C++ source and header files, which compiles to one or more DLLs, .exes and/or import libraries. Components range in size and complexity. Most components provide APIs. Some specify interfaces which may be implemented. Some components are implementations of interfaces (such as application programs).
+
+This definition of an EPOC component is quite loose and flexible: a single component may deliver more than one DLL, .exe, header file etc, and may therefore deliver more than one API — or even no APIs at all.
+
+However, components are based on an idea that is quite fundamental to the way EPOC developers think: each has controlled dependencies on other components. For instance
+
+the kernel, E32, does not depend on any other component: the system has to start somewhere 
+the Agenda application engine (AGNMODEL) depends on E32, STORE, ETEXT and other data-manipulation components. But the agenda model does not depend on any graphics display components. This allows the agenda engine to be thoroughly tested without introducing the additional complexity of the GUI. 
+the Agenda application itself (AGNVIEW) depends on AGNMODEL and additionally on graphics components and the EIKON GUI. This firstly provides an interface to the engine, and secondly requires that only the view needs to be rewritten if the EIKON GUI were replaced with another GUI. 
+the PRINT component depends on some graphics components, but not on the EIKON GUI. This facilitates testing (as in the case of AGNMODEL), and also allows EIKON to be replaced without changing PRINT. 
+If one component A depends on another component B, then
+
+A may call functions defined in B 
+A may implement interfaces defined in B 
+A may use B’s header files 
+A may link to B’s import library(s) and use its DLL(s) 
+B may not depend on A, either directly or indirectly: circular dependencies are disallowed 
+but B may call functions in A, if A implements an interface defined by B and makes this implementation available in a suitable way 
+The components mentioned above provide two examples of components using functions through an interface:
+
+E32 requires a file server to load programs, including even the boot process: in a real EPOC system, the file server is implemented by F32 
+as we saw in §3.1.4 Interfaces, PRINT requires print process observers to display print job progress to the user: an implementation is provided by EIKON and, if EIKON were replaced, another implementation would also be provided by the replacement GUI 
+The boundaries between components are drawn mainly along pragmatic guidelines, including:
+
+a component should not be too large, and should not contain too many areas of functionality: the fundamental purpose of components is to break down complexity into manageable units 
+EPOC is designed to allow the EIKON GUI to be replaced: this requires that a boundary be drawn carefully between components with no UI, and components with a UI. This consideration is quite fundamental to EPOC system architecture; it can be helpful to think of EPOC at a high level by grouping components into those that depend on the GUI and those that do not. 
+engines and some system components must be tested thoroughly and robustly. For applications it is easier to test an engine without the complication of a GUI, which is another incentive to split an application into an engine and other components. Some particularly complex parts of EPOC, such as its file server, stream store, and database management system, also require individual, complex, testing and are therefore delivered as individual components. 
+some projects use a component architecture which facilitates work breakdown among different individuals, teams or even companies 
+anything that might be replaced, or omitted, from an EPOC implementation, could be developed as a separate component 
+specialist APIs delivered by a project might be split from the more commonly-used APIs by making a component split 
+Sometimes it is worth splitting an existing component (or design) into more than one component, for the reasons mentioned above. Sometimes it is not worth it: having too many components, each too small, requires extra management and imposes slightly greater system overhead.
+
+4.5 Binary compatibility
+The following situation often arises: a program X is built using an EPOC SDK and marketed on the current range of EPOC machines. A new range of EPOC machines is issued, or the current range is upgraded with a maintenance release. It is clearly highly desirable that existing programs such as X should still be able to run, just as they are.
+
+This requirement introduces us to binary compatibility (BC): the need for revisions of an API to be compatible with earlier versions, so that old programs can run without their binaries being changed.
+
+Broadly, BC requires
+
+that all aspects of the original API are still available in the revised API 
+that the behaviour of the revised API, when used in ways which were valid with the original API, is the same as the behaviour of the original API 
+Clearly, there are occasions when revisions must of necessity break BC. Usually, BC violation is small and localized:
+
+a deprecated API might be removed: usually, its users would be given warning that the API was deprecated, or not supported 
+defect fixes will often introduce localized incompatibility. Symbian attempts to minimize such incompatibilities, but sometimes it is better to provide a fix than to preserve compatibility. 
+The vast majority of API revisions are performed by Symbian in a BC manner. BC is violated only when a conscious decision has been reached that the cost of change is less than the cost of no change.
+
+To preserve BC during normal API revisions, Symbian has established a set of disciplines such as:
+
+maintaining constant length for all classes which are allocated on the stack or contained by value (broadly, this means T and R classes: C classes are usually referred to by pointer) 
+maintaining the same order of ordinal exports from DLLs: new functions are added to the end, and removed functions are replaced by null placeholders. Def files are used to achieve this. 
+maintaining the same order of data members and virtual functions — both public and private — defined by any class 
+adding, but not removing, enumerated constants 
+keeping the API classes thin, and using non-exported classes to implement complex parts which are liable to change in specification and optimization 
+If you write application programs — even if you split your application into engine DLL and GUI part — it is not usually important to maintain BC in your components unless you intend to offer their APIs for others to use. But if you are writing EPOC system components, then the disciplines involved in maintaining BC are of real interest. Symbian will describe these in a forthcoming technical paper.
+
+5. Comparison with Java
+ 5.1 Object orientated APIs 
+5.2 Packages 
+5.3 Conclusion  
+
+The Java language was developed during roughly the same period as EPOC. It was therefore able to benefit from about 12 years more experience with object orientation than was the C++ language. Together with Java’s focus on portability and network-oriented delivery, this fact accounts for several OO improvements in the Java language, especially packages and interfaces, which are not addressed directly by C++, but which were found essential for EPOC development.
+
+Some readers of this paper, whether or not they are already familiar with Java, may find it interesting to compare Java’s facilities with EPOC’s API disciplines.
+
+5.1 Object orientated APIs
+Java classes, like C++ classes, support encapsulation, with public and private variables and methods. Static methods and variables have class scope, rather than object scope.
+
+Only single inheritance is allowed, using syntax such as
+
+    class D extends B ...
+In C++ terms, inheritance is always public. This discourages its misuse as a substitute for containment. Multiple inheritance is forbidden.
+
+Functions are “virtual” in the C++ sense, and can be overridden, unless declared final. This firstly eliminates the C++ frustration of guessing (or checking) the virtualness of a function, and secondly allows the end of the chain of implementation/overriding of a virtual function to clearly identified. In place of C++’s =0 syntax for pure-virtual functions, Java uses the keyword abstract.
+
+Constants are supported, at class level, by declaring them as static final. Enumerations are not supported. Since there is no preprocessor, preprocessor macros are not supported either.
+
+Java supports the notion of interfaces, which must contain no data, and only abstract functions:
+
+    public interface PrintProcessObserver
+          {
+          public abstract void notifyPrintStarted(PrintParameters aPrintParams);
+          public abstract void notifyBandPrinted(int aPercentageOfPagePrinted, int aCurrentPageNum, int aCurrentCopyNum);
+          public abstract void notifyPrintEnded(int aErrorCode);
+          };
+A class may extend only one class, but may implement an arbitrary number of interfaces:
+
+    public class EikPrintProgressDialog extends EikDialog implements PrintProcessObserver
+          {
+          ...
+Java has no const keyword. Therefore neither methods as a whole, nor individual reference parameters, may be declared const. All builtin types are passed by value (so they cannot be modified), while all class types are passed by reference (so there is no way to stop them being modified). This is in keeping with Java’s basic elegance — but it deprives programmers of a useful compile-time check, and robs API specifications of useful information.
+
+Java’s syntax is easier to parse than C++’s. Even in C, the statement a*b; could be understood as either a declaration (“b is an a* pointer”) or an expression (“multiply a by b, and then discard the result”). Disambiguating between declarations and expressions could be complex, and for various reasons becomes even more so in C++. By contrast, Java is relatively easy to parse. In particular, it is relatively easy to identify all the declarations within a source file. This makes it easy to create many useful tools, including javadoc, a literate programming tool which extracts comments from Java source files in order to produce system documentation. This is much more difficult in C++, due to its complex syntax, wider range of API facilities, and the use of the preprocessor.
+
+5.2 Packages
+The C++ standards, for good reasons connected with C++’s machine-level orientation, do not specify how APIs are delivered. This issue must be addressed by individual system designers. EPOC’s approach to delivering APIs in DLLs, described in §3. Specifying C++ APIs, is tailored for EPOC’s application domain, and also for the PC-based tools used as EPOC’s main development environment.
+
+By contrast, Java’s package mechanism is an integral part of the language, required to ensure portability of Java implementations, and specified in great detail by the language standards. Packages consist entirely of Java classes: in turn these export methods and variables. Only public methods and variables of public classes may be used by clients of the package. Protected methods and data, and non-public classes, may be used by any other class within the package — there is no special connection between protected and inheritance, as in C++.
+
+Packages may be delivered as .class files either in a directory (the final qualifiers of the directory name are used, with slashes replaced by dots, as the name of the package), or in a Java archive (.jar or .zip file: the name of the package is then contained entirely within the .jar or .zip file). The full name of any class becomes its package name, appended by a dot and the classname, eg java.awt.Applet.
+
+A client specifies class names, of which Java interprets anything before the final dot as a package name. The import statement allows, at compile time, any class name to be abbreviated so as to make code more readable, so that import java.awt.* allows you to specify only Applet and, provided no clashes occur, Java will resolve this to the full classname at compile time.
+
+At run time, the classes required by a program are loaded dynamically from their packages, as needed.
+
+Many packages are used as “shared library” packages, loaded by the Java system when required by a program. Some packages — in particular, applications and applets — are effectively “polymorphic packages” with defined entry-point conventions. For instance, an application must have a class with a public static void main() function, while an applet must have a java.awt.Applet-derived class with implementations of whatever methods it wishes to use (typically, at least, init() and draw()).
+
+5.3 Conclusion
+Java’s main application area is significantly different from that of EPOC’s C++ core. EPOC’s C++ core is intended to deliver a powerful communications-oriented system and application suite, on relatively low-specification CPUs with little memory, packed into hand-portable, battery-powered, wireless information devices. For this purpose, EPOC’s cleanup support, use of thin templates, ROM-centredness, space and time efficiency are of paramount importance: none of these could have been delivered by implementing EPOC in Java from the ground up. To our knowledge, no comparable system has been implemented in C++ with such efficiency and effective object-oriented design.
+
+However, Java will be appropriate for many EPOC applications, particularly in the rapid-development corporate sector, where the networking/database/client-server oriented nature of applications is closer to Java’s core application area, and where the range of Java tools and appropriately skilled programmers looks attractive from the corporate IS viewpoint. EPOC’s efficient and compact Java implementation is well placed to take advantage of this.
+
+Furthermore, Java’s APIs provide an outstanding example of OO system design which is interesting to compare with EPOC’s components, at the detailed level. Java’s use of interfaces rather than multiple inheritance mirrors the constraints practiced in EPOC programming. Java’s use of packages provides a well-specified component infrastructure akin to that delivered by DLLs in EPOC.
+
+Further Reading
+For more information on UML, see Rational Inc’s website. This includes a useful quick reference.
+
+See Sun’s Java website for more information on Java.
+
+Symbian licenses, develops and supports the EPOC operating system, providing leading software, user interfaces, application frameworks and development tools for Wireless Information Devices such as Communicators and Smartphones. Symbian is based in London, with offices worldwide. See Symbian’s website for more technical papers, information about Symbian, and information about EPOC.
+
+Trademarks and acknowledgements
+Symbian and the Symbian logo, EPOC and the EPOC logo are the trademarks of Symbian Ltd.
+
+Java is a trademark of Sun Microsystems Inc.
+
+All other trademarks are acknowledged.
+
+The author wishes to thank many Symbian staff who supplied valuable information and review comments.
+
+  
+

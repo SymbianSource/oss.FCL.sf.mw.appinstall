@@ -1,0 +1,83 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* sisregistryserver.mmp
+* sisregistryserver.exe Implementation of software registry server
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY TCB AllFiles ProtServ
+
+// minimum 4KB maximum 2MB (twice the maximum default)
+EPOCHEAPSIZE	0x1000 0x200000
+
+target sisregistryserver.exe
+targettype exe
+
+UID			0x1000007a 0x10202DCA
+VENDORID	0x70000001
+
+USERINCLUDE ../source/sisregistry/server_legacy
+USERINCLUDE ../source/sisregistry/common
+USERINCLUDE ../source/plan
+USERINCLUDE ../inc/swi 
+USERINCLUDE ../inc
+		    
+
+SOURCEPATH	../source/sisregistry
+
+SOURCE		server_legacy/sisregistryserver.cpp
+SOURCE		server_legacy/sisregistryserversession.cpp
+SOURCE		server_legacy/sisregistryserverstartup.cpp
+SOURCE		server_legacy/sisregistryservershutdown.cpp
+SOURCE		server_legacy/sisregistrycache.cpp
+SOURCE		server_legacy/sisregistryfile.cpp
+SOURCE      server_legacy/sisregistryutil.cpp
+SOURCE		server_legacy/siscontrollerverifier.cpp
+SOURCE		common/sisregistrylog.cpp
+SOURCE		server_legacy/sisregistryserveripcbuf.cpp
+
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+SOURCE      server_legacy/sisrevocationmanager.cpp
+#endif
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+#ifdef __SWI_LOGGING__
+LIBRARY flogger.lib    // Logging & tracing support -- To use define __SWI_LOGGING__ in the .hrh file
+#endif 
+
+LIBRARY	    euser.lib 
+LIBRARY	    estor.lib 
+LIBRARY	    efsrv.lib
+LIBRARY	    sisregistryclient.lib
+LIBRARY	    plan.lib
+LIBRARY     integrityservices.lib
+LIBRARY     swidataprovider.lib
+LIBRARY     siscontroller.lib 
+LIBRARY     hash.lib
+LIBRARY     securitymanager.lib
+LIBRARY		sectcbutil.lib
+LIBRARY		x509.lib
+LIBRARY		swiobserverclient.lib
+LIBRARY     ipcstream.lib
+SMPSAFE

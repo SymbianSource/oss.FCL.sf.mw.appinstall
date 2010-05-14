@@ -1,0 +1,47 @@
+Registry Controller Information:
+
+Registry Entry :.\data\80000010\00000000.reg
+
+Package UID :0x80000010
+Package Name :Test Mime-GE
+Vendor :Vendor
+Package Index :0
+
+Controller1 Version :1.2.3
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 0
+
+SISProperty Count:0
+
+Number Of File Descriptions :3
+
+SIS File Description:
+
+Target1:c:\tswi\text_file1.txt
+File Operation Type :Run
+File Operation Options Type :FileRunOptionInstall
+File Operation Options Type :FileRunOptionByMimeType
+File Operation Options Type :FileRunOptionWaitEnd
+Algorithm :SHA1
+SID :0x0
+
+Target2:c:\tswi\text_file2.txt
+File Operation Type :Run
+File Operation Options Type :FileRunOptionUninstall
+File Operation Options Type :FileRunOptionByMimeType
+File Operation Options Type :FileRunOptionWaitEnd
+Algorithm :SHA1
+SID :0x0
+
+Target3:c:\tswi\test2.txt
+File Operation Type :Run
+File Operation Options Type :FileRunOptionInstall
+File Operation Options Type :FileRunOptionByMimeType
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

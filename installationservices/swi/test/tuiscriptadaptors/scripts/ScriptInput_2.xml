@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?> 
+<Script>
+
+	<dialog name="DisplayInstall">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayGrantCapabilities">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayLanguage">
+
+		<return type="TInt"> -3 </return>
+
+	</dialog>
+
+	<!-- Display security warning, continue if possible -->
+	<dialog name="DisplaySecurityWarning">
+		<return type="TBool">true</return>
+	</dialog>
+</Script>

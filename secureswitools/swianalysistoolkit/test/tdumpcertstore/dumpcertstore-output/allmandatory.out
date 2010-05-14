@@ -1,0 +1,29 @@
+AllMandatory.dat: ROM Based SwiCertstore 
+
+
+[SymbianTestRootCADiffSerial]
+
+file=SymbianTestRootCADiffSerial.der
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= AllFiles
+application=SWInstall
+Mandatory=1
+
+
+[Root5CA]
+
+file=Root5CA.der
+application=SWInstall
+Mandatory=1
+
+
+[SymbianTestRSACA]
+
+file=SymbianTestRSACA.der
+capability= TCB
+capability= CommDD
+application=SWInstall
+Mandatory=1
+

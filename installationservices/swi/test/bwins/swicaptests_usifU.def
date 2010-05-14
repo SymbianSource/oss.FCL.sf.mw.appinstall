@@ -1,0 +1,23 @@
+EXPORTS
+	?CapabilityTestFactory@@YAPAVMCapabilityTestFactory@@XZ @ 1 NONAME ; class MCapabilityTestFactory * CapabilityTestFactory(void)
+	??1CInstallPrefs@Swi@@UAE@XZ @ 2 NONAME ; Swi::CInstallPrefs::~CInstallPrefs(void)
+	?Cancel@RInstallServerSession@Swi@@QAEHXZ @ 3 NONAME ; int Swi::RInstallServerSession::Cancel(void)
+	?Connect@RInstallServerSession@Swi@@QAEHXZ @ 4 NONAME ; int Swi::RInstallServerSession::Connect(void)
+	?ExternalizeL@CInstallPrefs@Swi@@QBEXAAVRWriteStream@@@Z @ 5 NONAME ; void Swi::CInstallPrefs::ExternalizeL(class RWriteStream &) const
+	?InternalizeL@CInstallPrefs@Swi@@QAEXAAVRReadStream@@@Z @ 6 NONAME ; void Swi::CInstallPrefs::InternalizeL(class RReadStream &)
+	?NewL@CInstallPrefs@Swi@@SAPAV12@AAVRReadStream@@@Z @ 7 NONAME ; class Swi::CInstallPrefs * Swi::CInstallPrefs::NewL(class RReadStream &)
+	?NewL@CInstallPrefs@Swi@@SAPAV12@XZ @ 8 NONAME ; class Swi::CInstallPrefs * Swi::CInstallPrefs::NewL(void)
+	?NewLC@CInstallPrefs@Swi@@SAPAV12@AAVRReadStream@@@Z @ 9 NONAME ; class Swi::CInstallPrefs * Swi::CInstallPrefs::NewLC(class RReadStream &)
+	?NewLC@CInstallPrefs@Swi@@SAPAV12@XZ @ 10 NONAME ; class Swi::CInstallPrefs * Swi::CInstallPrefs::NewLC(void)
+	?Restore@RInstallServerSession@Swi@@QAEHABVTIpcArgs@@@Z @ 11 NONAME ; int Swi::RInstallServerSession::Restore(class TIpcArgs const &)
+	?RestoreCommit@RInstallServerSession@Swi@@QAEHXZ @ 12 NONAME ; int Swi::RInstallServerSession::RestoreCommit(void)
+	?RestoreFile@RInstallServerSession@Swi@@QAEHABVTIpcArgs@@@Z @ 13 NONAME ; int Swi::RInstallServerSession::RestoreFile(class TIpcArgs const &)
+	?Close@RSisHelper@Swi@@QAEXXZ @ 14 NONAME ; void Swi::RSisHelper::Close(void)
+	?Connect@RSisHelper@Swi@@QAEHXZ @ 15 NONAME ; int Swi::RSisHelper::Connect(void)
+	?ExecuteDrmIntentL@RSisHelper@Swi@@QAEXW4TIntent@ContentAccess@@@Z @ 16 NONAME ; void Swi::RSisHelper::ExecuteDrmIntentL(enum ContentAccess::TIntent)
+	?ExtractFileL@RSisHelper@Swi@@QAEHAAVRFs@@AAVRFile@@HHAAVRUiHandler@2@@Z @ 17 NONAME ; int Swi::RSisHelper::ExtractFileL(class RFs &, class RFile &, int, int, class Swi::RUiHandler &)
+	?FillDrivesAndSpacesL@RSisHelper@Swi@@QAEXAAV?$RArray@VTChar@@@@AAV?$RArray@_J@@@Z @ 18 NONAME ; void Swi::RSisHelper::FillDrivesAndSpacesL(class RArray<class TChar> &, class RArray<long long> &)
+	?OpenDrmContentL@RSisHelper@Swi@@QAEXW4TIntent@ContentAccess@@@Z @ 19 NONAME ; void Swi::RSisHelper::OpenDrmContentL(enum ContentAccess::TIntent)
+	?SisControllerLC@RSisHelper@Swi@@QAEPAVHBufC8@@XZ @ 20 NONAME ; class HBufC8 * Swi::RSisHelper::SisControllerLC(void)
+	?GetControllerFromSisFileLC@RSisHelper@Swi@@QAEPAVHBufC8@@ABVTDesC16@@@Z @ 21 NONAME ; class HBufC8 * Swi::RSisHelper::GetControllerFromSisFileLC(class TDesC16 const &)
+

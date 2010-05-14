@@ -1,0 +1,52 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Base installation file supporting English and French
+
+;Languages
+&EN, FR
+
+#{"devlangsupport_EN","devlangsupport_FR"},(0x88000200),1,0,0
+
+
+!({"Option1_EN","Option1_FR"},{"Option2_EN","Option2_FR"},{"Option3_EN","Option3_FR"},{"Option4_EN","Option4_FR"}) 
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_FR"}
+
+;Unique Vendor name
+:"Vendor"
+
+if supported_language=01
+"text\option1.txt"		  -"!:\Documents\InstTest\devlangsup_en.txt"
+endif
+
+if supported_language=02
+"text\option2.txt"		  -"!:\Documents\InstTest\devlangsup_fr.txt"
+endif
+
+if option1
+	"text\option1.txt"		  -"!:\Documents\InstTest\option1.txt"
+endif
+
+if option2
+	"text\option1.txt"		  -"!:\Documents\InstTest\option2.txt"
+elseif option3
+	"text\option1.txt"		  -"!:\Documents\InstTest\option3.txt"
+endif
+
+if supported_language=06 or option4
+	"text\option1.txt"		  -"!:\Documents\InstTest\option4.txt"
+endif

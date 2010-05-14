@@ -1,0 +1,15 @@
+EXPORTS
+	?ShowCompleteL@CSifUi@@QAEXXZ @ 1 NONAME ; void CSifUi::ShowCompleteL(void)
+	?ShowConfirmationL@CSifUi@@QAEHABVCAppInfo@Swi@@HPBVCApaMaskedBitmap@@@Z @ 2 NONAME ; int CSifUi::ShowConfirmationL(class Swi::CAppInfo const &, int, class CApaMaskedBitmap const *)
+	?SetMemorySelectionL@CSifUi@@QAEXABV?$RArray@H@@@Z @ 3 NONAME ; void CSifUi::SetMemorySelectionL(class RArray<int> const &)
+	?SetCertificateInfoL@CSifUi@@QAEXABV?$RPointerArray@VCCertificateInfo@Swi@@@@@Z @ 4 NONAME ; void CSifUi::SetCertificateInfoL(class RPointerArray<class Swi::CCertificateInfo> const &)
+	?Mode@CSifUi@@QAE?AW4TMode@1@XZ @ 5 NONAME ; enum CSifUi::TMode CSifUi::Mode(void)
+	?IncreaseProgressBarValueL@CSifUi@@QAEXH@Z @ 6 NONAME ; void CSifUi::IncreaseProgressBarValueL(int)
+	?ShowFailedL@CSifUi@@QAEXH@Z @ 7 NONAME ; void CSifUi::ShowFailedL(int)
+	?SetMode@CSifUi@@QAEXW4TMode@1@@Z @ 8 NONAME ; void CSifUi::SetMode(enum CSifUi::TMode)
+	?ShowFailedL@CSifUi@@QAEXHABVTDesC16@@0@Z @ 9 NONAME ; void CSifUi::ShowFailedL(int, class TDesC16 const &, class TDesC16 const &)
+	?SelectedDrive@CSifUi@@QAEHAAH@Z @ 10 NONAME ; int CSifUi::SelectedDrive(int &)
+	?ShowProgressL@CSifUi@@QAEXABVCAppInfo@Swi@@HH@Z @ 11 NONAME ; void CSifUi::ShowProgressL(class Swi::CAppInfo const &, int, int)
+	?NewL@CSifUi@@SAPAV1@XZ @ 12 NONAME ; class CSifUi * CSifUi::NewL(void)
+	?NewLC@CSifUi@@SAPAV1@XZ @ 13 NONAME ; class CSifUi * CSifUi::NewLC(void)
+

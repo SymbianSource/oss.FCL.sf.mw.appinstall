@@ -1,0 +1,72 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* DESRIPTION:
+* The plan describes the software install process
+* plan.dll describes the software install process
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY All
+
+target		plan.dll
+targettype	dll
+
+UID			0x1000008d 0x10203593
+VENDORID	0x70000001
+
+USERINCLUDE ../inc
+USERINCLUDE ../inc/swi
+USERINCLUDE ../source/plan
+USERINCLUDE	../source/swis/server
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+SOURCEPATH	../source/plan
+
+SOURCE plan.cpp
+SOURCE userselections.cpp
+SOURCE application.cpp
+
+// We need the security check util functions from SWIS
+// to extract details of SIDs from executables in ROM for SIS stubs
+SOURCEPATH	../source/swis/server
+SOURCE securityinfo.cpp
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		plan.DEF
+#else
+DEFFILE		plan_legacy.def
+#endif
+
+LIBRARY euser.lib
+LIBRARY estor.lib
+LIBRARY uissclient.lib // Needed for TAppInfo
+LIBRARY siscontroller.lib       // needed for TSisTrustStatus
+LIBRARY sisregistryclient.lib
+LIBRARY efsrv.lib 
+LIBRARY hal.lib
+LIBRARY securitymanager.lib // needed for Swi::SecUtils::IsExeL
+LIBRARY sectcbutil.lib
+
+start wins
+WIN32_LIBRARY		kernel32.lib
+end
+SMPSAFE

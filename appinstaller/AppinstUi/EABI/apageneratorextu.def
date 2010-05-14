@@ -1,0 +1,18 @@
+EXPORTS
+	_ZN21CAppArcFilesGenerator4NewLER3RFsRK22CMIDletSuiteAttributes4TUidRK6RArrayIS5_EmRK7TDesC165TChar @ 1 NONAME
+	_ZN21CAppArcFilesGenerator8GenerateER14TRequestStatus @ 2 NONAME
+	_ZN21CAppArcFilesGenerator15AddAifDataTypeLEiRK21TDataTypeWithPriority @ 3 NONAME
+	_ZN21CAppArcFilesGenerator17SetAifCapabilityLEiRK17TApaAppCapability @ 4 NONAME
+	_ZN23CAppArcMidletAttributes11GetDataTypeEi @ 5 NONAME
+	_ZN23CAppArcMidletAttributes13DataTypeCountEv @ 6 NONAME
+	_ZN23CAppArcMidletAttributes13GetCapabilityEv @ 7 NONAME
+	_ZN23CAppArcMidletAttributes14SetCapabilityLE17TApaAppCapability @ 8 NONAME
+	_ZN23CAppArcMidletAttributes24SetDataTypeWithPriorityLE21TDataTypeWithPriority @ 9 NONAME
+	_ZN23CAppArcMidletAttributes4NewLEv @ 10 NONAME
+	_ZTI14CIconConverter @ 11 NONAME ; #<TI>#
+	_ZTI21CAppArcFilesGenerator @ 12 NONAME ; #<TI>#
+	_ZTI23CAppArcMidletAttributes @ 13 NONAME ; #<TI>#
+	_ZTV14CIconConverter @ 14 NONAME ; #<VT>#
+	_ZTV21CAppArcFilesGenerator @ 15 NONAME ; #<VT>#
+	_ZTV23CAppArcMidletAttributes @ 16 NONAME ; #<VT>#
+

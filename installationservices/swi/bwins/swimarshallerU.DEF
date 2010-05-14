@@ -1,0 +1,7 @@
+EXPORTS
+	?ReadL@TReadStreamableBase@Swi@@QBEXABVTDesC8@@@Z @ 1 NONAME ; void Swi::TReadStreamableBase::ReadL(class TDesC8 const &) const
+	?StreamInL@Swi@@YAXAAPAVHBufC16@@AAVRReadStream@@@Z @ 2 NONAME ; void Swi::StreamInL(class HBufC16 * &, class RReadStream &)
+	?StreamInL@Swi@@YAXAAV?$RPointerArray@VHBufC16@@@@AAVRReadStream@@@Z @ 3 NONAME ; void Swi::StreamInL(class RPointerArray<class HBufC16> &, class RReadStream &)
+	?StreamOutL@Swi@@YAXABV?$RPointerArray@VHBufC16@@@@AAVRWriteStream@@@Z @ 4 NONAME ; void Swi::StreamOutL(class RPointerArray<class HBufC16> const &, class RWriteStream &)
+	?WriteL@TWriteStreamableBase@Swi@@QBEPAVHBufC8@@XZ @ 5 NONAME ; class HBufC8 * Swi::TWriteStreamableBase::WriteL(void) const
+

@@ -1,0 +1,313 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run all tests for install (upgrade) and uninstall of running application
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWIS-APPINUSE-0001
+//! @SYMTestCaseDesc 		Tests behaviour for upgrades of an application with exes in the package in use
+//! @SYMDEF 			INC058929
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Installs an application, runs contained exes and upgrades (re-installs) the application
+//! @SYMTestExpectedResults 	The applications in use dialog is correctly raised and allows the upgrade to be cancelled,
+//!			    	and running exes are shut down when the upgrade is continued from the dialog.
+//! @SYMDevelopedForRelease 	Mike
+
+// Test various re-install (upgrade) scenarios for an application in use.
+START_TESTCASE API-SEC-SWIS-APPINUSE-0001
+
+// Install Helloworld application suite
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Launch the GUI application, with delay after install to make sure it can start and after execution
+// to make sure it is up and running.
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe -s 30000000
+DELAY 500
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Upgrade (to same version) which cancels from displayApplicationsInUse dialog.  Note that this can only pass,
+// returning the expected KErrCancel code, if the application has been successfully started.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Repeating the same step verifies that the application was left running by the cancelled install above.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Make sure that the upgrade can succeed, actually shutting down the app
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Repeating the install (expecting success) with cancel if the application is still running verifies that the
+// application was successfully shut down in the previous step.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Run Helloworld app as well as console exe which will keep running for 30 seconds
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe
+RUN_PROGRAM -1 runtestexe console_app -s 30000000
+DELAY 500
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Perform upgrade which should succeed but kill/shut down both exes
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Check that another install does not find the app in use.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+
+//Run application which handles shutdown events but takes 30 seconds to shutdown
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe -s 30000000
+DELAY 500
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Test that app is killed after timeout for App that takes too long to shutdown.
+RUN_TEST_STEP 40 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Repeating the install (expecting success) but cancelling if the application is still running verifies that the
+// application was successfully killed in the previous step.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Rerun GUI app for cancel test
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe -s 30000000
+DELAY 500
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Verify again that the application has been successfully started.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Upgrade which shuts down the app but cancels at all cancellable install events
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Repeating the install (expecting success) but cancelling if the application is still running verifies that the
+// application was successfully shut down in the previous step.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Run both exes again, but this time the console exe will hold a file in the package open
+// DELAY 5000
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe
+RUN_PROGRAM -1 runtestexe console_app.exe -h -s 30000000
+DELAY 500
+
+// Upgrade again can only succeed if both apps are shut down, so the file is not in use.
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// If the tasks have been shut down/killed successfully, they shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+END_TESTCASE API-SEC-SWIS-APPINUSE-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWIS-APPINUSE-0002
+//! @SYMTestCaseDesc 		Tests behaviour for removal of an application with exes in the package in use.
+//! @SYMDEF 			INC058929
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Installs an application, runs contained exes and uninstalls the application
+//! @SYMTestExpectedResults 	The applications in use dialog is correctly raised and allows the uninstall to be cancelled,
+//!			    	and running exes are shut down when the operation is continued from the dialog.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SWIS-APPINUSE-0002
+
+// Run exes left installed by previous test case.
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe -s 30000000
+RUN_PROGRAM -1 runtestexe console_app.exe -s 30000000
+DELAY 500
+
+// Uninstall which cancels from displayApplicationsInUse dialog.  This can only pass,
+// returning the expected KErrCancel code, if the exes are running in the first place.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld_cancelifinuse
+
+// Verify that both exes were left installed and running by the cancelled uninstall above.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Uninstall and actually shut down this time
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+
+// Re-install (expecting success) with cancel if the application is still running verifies that the
+// exes were successfully shut down in the previous uninstall step.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+//Run application which takes too long to shutdown
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe -s 30000000
+DELAY 500
+
+// Test that install can complete after killing App that takes more than 10 seconds to shutdown.
+RUN_TEST_STEP 40 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+
+// Re-install (expecting success) with cancel if the application is still running verifies that the
+// application was successfully shut down in the previous uninstall step.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Delay to let apparc notice the install before re-running.
+DELAY 3000
+// Re-run exes after long shutdown has completed.
+RUN_PROGRAM -1 helloworld.exe -s 60000000
+RUN_PROGRAM -1 runtestexe console_app.exe -s 120000000
+DELAY 500
+
+// Verify that the application has been restarted successfully.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld_cancelifinuse
+
+// Install patch with new exe.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini testappinuse_sp
+
+// Verify that both base exes were left running by the installation of the patch.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Uninstall the patch with cancel if in use, expecting success, to verify that the running base exes won't affect the patch removal.
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_testappinuse_sp_cancelifinuse
+
+// Verify that both base exes were left running by the uninstallation of the patch.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Re-install patch.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini testappinuse_sp
+
+// Run the new exe
+DELAY 5000
+RUN_PROGRAM -1 runtestexe console_app2.exe -s 60000000
+
+// Uninstall but cancel on app in use dialog
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_testappinuse_sp_cancelifinuse
+
+// Verify that patch exe is still running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp2_running
+
+// Uninstall the patch, killing the patch exe
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_testappinuse_sp
+
+// Verify that patch exe is not running, but the base exes are.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp2_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Install partial upgrade which replaces one of the exes in the base package, and adds a new data file in a private directory,
+// but cancel on app in use dialog.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini testappinuse_pu_cancelifappinuse
+
+// Verify that base exes are still running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Install partial upgrade completely.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini testappinuse_pu
+
+// Verify that non-upgrade base exe is still running, but that the other one has been killed.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Run the upgraded exe
+DELAY 5000
+RUN_PROGRAM -1 runtestexe console_app.exe -s 60000000
+
+// Verify that the new exe is running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp2_running
+
+// Uninstall with cancel at app in use
+RUN_TEST_STEP_RESULT -3 50 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_testappinuse_pu_cancelifappinuse
+
+// Verify that the exes are still running.
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp2_running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Uninstall with cancel at all cancellable events
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_testappinuse_pu
+
+// Verify that the exes are no longer running.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp2_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Install console app from another standalone package that will hold a file open in a package being removed.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini longrun_app
+
+// Re-install for next step, also making sure the application is no longer running
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_cancelifinuse
+
+// Run both exes in the testappinuse package again, but also run the other console exe that will hold a file in the package open.
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe
+DELAY 500
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+RUN_PROGRAM -1 runtestexe console_app.exe -s 3000000
+RUN_PROGRAM -1 runtestexe console_app_longrun.exe -h -s 5000000
+
+RUN_TEST_STEP_RESULT -14 40 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld_failed
+
+// If the exes in the package have been shut down/killed successfully, they shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini consoleapp_running
+RUN_TEST_STEP_RESULT 106 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld_running
+
+// Uninstall to clean up.
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_longrun_app
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+
+END_TESTCASE API-SEC-SWIS-APPINUSE-0002
+
+ 
+//! @SYMTestCaseID 		API-SEC-SWIS-APPINUSE-0003
+//! @SYMTestCaseDesc 		Tests behaviour on removal of an application when the package has more than 32 UIDs. For this specific  
+//!                  		scenario an exe in the package (which is not in the first 32 UIDs) is in use.
+//!				This tests that TUint variables are being used to process the number of UIDs instead of TUint8 variables. 
+//! @SYMDEF 			DEF123261
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Installs an application. Runs the 36th exe in the package. Attempts to uninstall the application.
+//!				Un-installation is then cancelled at the applications in use dialog.
+//!				Attempts to uninstall the application again. Allows un-installation to continue at the applications in 
+//!                     	use dialog.		
+//! @SYMTestExpectedResults 	On the first un-installation the applications in use dialog is correctly raised and the uninstall is rolled back. 
+//!				On the second un-installation the applications in use dialog is correctly raised and the uninstallation is successful.
+//! @SYMDevelopedForRelease 	Oghma
+ 
+START_TESTCASE API-SEC-SWIS-APPINUSE-0003
+
+// Install the sis file containing 40 exes.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini largenoofuids
+
+// Install Helloworld application suite (this provides runtestexe)
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+ 
+// Run the 36th exe in the package. This has a timer delay so that it is still running when an attempt is made to 
+// un-install.  
+RUN_PROGRAM -1 runtestexe test36_console_app -s 30000000    
+DELAY 500
+
+// Verify that the exes is installed and running 
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini largenoofuids_running
+ 
+// Try to un-install the largenoofuids sis file. This should fail with KErrInUse (-3) as it is cancelled when the applications in 
+// use dialog is flagged.
+RUN_TEST_STEP_RESULT -3 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini  u_error_largenoofuids
+DELAY 500
+
+// Un-install helloworld.  
+RUN_TEST_STEP_RESULT 0 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+ 
+// Un-install the largenoofuids sis file. This will pass this time as no cancel is performed at the applications in use dialog.
+RUN_TEST_STEP_RESULT 0 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_largenoofuids
+
+END_TESTCASE API-SEC-SWIS-APPINUSE-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 10 tuiscriptadaptors SwisNotRunning
