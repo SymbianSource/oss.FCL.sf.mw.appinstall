@@ -71,8 +71,19 @@ public:
 	 * @param aStream - Stream in which the package entries need to be written.
 	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	/**
+	 * Adds the write the iby file details into the stream.
+	 * @param aStream - Stream in which the iby entry need to be written.
+	 * @param aVerbose - If this option is set then detail description of iby
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddIbyEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 */
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 private:
 	CSISUInt16	iDataChecksum;
@@ -126,7 +137,16 @@ template <CSISFieldRoot::TFieldType FieldType>
 #endif // GENERATE_ERRORS
 
 template <CSISFieldRoot::TFieldType FieldType> inline
-		void CChecksum <FieldType>::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+		void CChecksum <FieldType>::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	if(aVerbose)
+		{
+		aStream << L"; CRC16: " << std::hex << iDataChecksum.Value() << std::dec << std::endl;
+		}
+	}
+
+template <CSISFieldRoot::TFieldType FieldType> inline
+		void CChecksum <FieldType>::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if(aVerbose)
 		{

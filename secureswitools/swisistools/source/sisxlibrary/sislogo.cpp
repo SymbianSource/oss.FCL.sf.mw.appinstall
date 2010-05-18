@@ -58,7 +58,7 @@ bool CSISLogo::WasteOfSpace () const
 	return ! (Required () || iLogoFile.HasMimeType ());
 	}
 
-void CSISLogo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISLogo::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if(WasteOfSpace())
 		{
@@ -74,12 +74,36 @@ void CSISLogo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 	delete[] const_cast<wchar_t*>(dataFileNameW); 
 	aStream << L", " ;
 	aStream << L"\"";
-	iLogoFile.MimeType().AddPackageEntry(aStream, aVerbose);
+	iLogoFile.MimeType().AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"\"";
 	aStream << L", " ;
 	aStream << L"\"";
-	iLogoFile.Target().AddPackageEntry(aStream, aVerbose);
+	iLogoFile.Target().AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"\"";
 	aStream << std::endl << std::endl;
 	}
 
+void CSISLogo::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	if(WasteOfSpace())
+		{
+		return;
+		}
+	if (aVerbose)
+		{
+		aStream << L"; Logo" << std::endl;
+		}
+	aStream << L"=";
+	const wchar_t* dataFileNameW = iLogoFile.GetFileName();
+	aStream <<L"\"" << dataFileNameW << L"\"";
+	delete[] const_cast<wchar_t*>(dataFileNameW); 
+	aStream << L", " ;
+	aStream << L"\"";
+	iLogoFile.MimeType().AddIbyEntry(aStream, aVerbose, aCompatible);
+	aStream << L"\"";
+	aStream << L", " ;
+	aStream << L"\"";
+	iLogoFile.Target().AddIbyEntry(aStream, aVerbose, aCompatible);
+	aStream << L"\"";
+	aStream << std::endl << std::endl;
+	}

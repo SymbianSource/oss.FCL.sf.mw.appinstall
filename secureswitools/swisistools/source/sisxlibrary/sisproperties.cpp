@@ -25,7 +25,7 @@
 
 #include "sisproperties.h"
 
-void CSISProperties::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISProperties::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TUint32 propertiesCount = iProperty.size();
 	if (propertiesCount == 0)
@@ -40,7 +40,7 @@ void CSISProperties::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 	TUint32 i = 0;
 	do
 		{
-		iProperty[i].AddPackageEntry(aStream, aVerbose);
+		iProperty[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		if (++i < propertiesCount)
 			{
 			aStream << L", ";

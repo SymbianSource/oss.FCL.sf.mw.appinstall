@@ -76,7 +76,7 @@ void CSISTime::Set (const TUint8 aHours, const TUint8 aMinutes, const TUint8 aSe
 	iSeconds = aSeconds;
 	}
 
-void CSISTime::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISTime::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	aStream << static_cast<int>(iHours)		<< L":"; 
 	aStream << static_cast<int>(iMinutes)	<< L":";

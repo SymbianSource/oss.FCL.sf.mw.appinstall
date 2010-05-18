@@ -88,7 +88,7 @@ void CSISVersion::Verify (const TUint32 aLanguages) const
 		}
 	}
 
-void CSISVersion::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISVersion::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	(void)aVerbose;
 	aStream << iMajor << L", " << iMinor << L", " << iBuild;
