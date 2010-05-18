@@ -69,12 +69,12 @@ void CSISHash::operator=(const CSISHash& aHash)
 	iBlob.Assign (data, size);
 	}
 
-void CSISHash::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISHash::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if(aVerbose)
 		{
 		aStream << L"; " << ((iAlgorithm.Value()==EHashSHA)?L"SHA-1: ":L"Unknown hash: ");
-		iBlob.AddPackageEntry(aStream, aVerbose);
+		iBlob.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << std::endl;
 		}
 	}

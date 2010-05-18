@@ -71,8 +71,10 @@ public:
 	 * @param aStream - Stream in which the package entries need to be written.
 	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	/**
 	 * Get the value of from version.
 	 */

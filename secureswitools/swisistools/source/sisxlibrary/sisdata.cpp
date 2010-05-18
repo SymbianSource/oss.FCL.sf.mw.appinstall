@@ -51,8 +51,12 @@ CSISData::TDataUnitCount CSISData::AppendData (const CSISData& aData)
 	return newData;
 	}
 
-void CSISData::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISData::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
-	iDataUnit.AddPackageEntry(aStream, aVerbose);
+	iDataUnit.AddPackageEntry(aStream, aVerbose, aCompatible);
 	}
 
+void CSISData::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	iDataUnit.AddIbyEntry(aStream, aVerbose, aCompatible);
+	}

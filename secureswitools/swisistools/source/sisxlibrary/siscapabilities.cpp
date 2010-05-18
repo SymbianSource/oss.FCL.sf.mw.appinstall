@@ -141,7 +141,7 @@ void CSISCapabilities::Verify(const TUint32 aLanguages) const
 	
 	}
 
-void CSISCapabilities::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISCapabilities::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if(WasteOfSpace() || !aVerbose)
 		{
