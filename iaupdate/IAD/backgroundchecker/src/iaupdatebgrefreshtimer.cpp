@@ -47,7 +47,7 @@
 _LIT8( KRefreshFromNetworkDenied, "1" );
 _LIT(KIAUpdateResourceFile, "iaupdate.rsc");
 _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
-_LIT(KImageFile, "qgn_note_swupdate_notification.svg");
+//_LIT(KImageFile, "qgn_note_swupdate_notification.svg");
 
 //CONSTANTS
 const TUint KIADUpdateLauncherUid( 0x2001FE2F );
@@ -1483,6 +1483,9 @@ void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const T
         
     iMode = ModeL();
     
+/*    
+    // Commented out, so no icon is shown in the soft notification.
+    // Other functions, used by the code below, are also commented out.
     if ( iMode == ENormalMode )
         {
         TFileName path;
@@ -1495,6 +1498,7 @@ void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const T
             CleanupStack::PopAndDestroy( image );
             }
         }
+*/
   
     
     iSoftNotification->SetTextL( *text, *text );
@@ -1509,8 +1513,9 @@ void CIAUpdateBGTimer::LaunchSoftNotificationL( const TInt& aResourceId, const T
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::GetPrivatePathL()
 // ----------------------------------------------------------
-TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
+TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& /*aPath*/ )
     {
+/*
     RFs fsSession;  
     User::LeaveIfError( fsSession.Connect() );
     CleanupClosePushL( fsSession );
@@ -1531,13 +1536,16 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
     
     CleanupStack::PopAndDestroy( &fsSession ); 
     return err;
+*/
+    return 0;
     }
 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::LoadFileLC()
 // ----------------------------------------------------------
- HBufC8* CIAUpdateBGTimer::LoadFileLC(const TDesC& aFile)
+ HBufC8* CIAUpdateBGTimer::LoadFileLC(const TDesC& /*aFile*/)
      {
+/*
      RFs fs;
     User::LeaveIfError( fs.Connect() );
     CleanupClosePushL( fs );
@@ -1553,6 +1561,8 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
     CleanupStack::PopAndDestroy( &fs ); 
     CleanupDeletePushL(imagebuf);
     return imagebuf;
+*/
+    return NULL;
      } 
 
  
@@ -1560,9 +1570,10 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
  // CIAUpdateBGTimer::SetPrivateDriveL()
  // ----------------------------------------------------------
  void CIAUpdateBGTimer::SetPrivateDriveL( 
-     RFs& aFs,
-     const TDesC& aFileName ) const
+     RFs& /*aFs*/,
+     const TDesC& /*aFileName*/ ) const
      {
+/*
      // First try to find the file from the private directory
      // of the drive where the process exists.
      RProcess process;
@@ -1611,6 +1622,7 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
 
      // Update the session path for the correct file.
      SetSessionPrivatePathL( aFs, finder.File() );
+*/
      }
 
 
@@ -1618,9 +1630,10 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
  // CIAUpdateBGTimer::SetSessionPrivatePathL()
  // ----------------------------------------------------------
  TInt CIAUpdateBGTimer::SetSessionPrivatePathL( 
-     RFs& aFs,
-     const TDesC& aPath ) const
+     RFs& /*aFs*/,
+     const TDesC& /*aPath*/ ) const
      {                      
+/*
      // Use the parser to get the drive information from the path.
      TParsePtrC parser( aPath );
 
@@ -1641,6 +1654,8 @@ TInt CIAUpdateBGTimer::GetPrivatePathL( TFileName& aPath )
      User::LeaveIfError( aFs.SetSessionToPrivate( driveNum ) );
 
      return driveNum;
+*/
+     return 0;
      }
 
 // ----------------------------------------------------------

@@ -115,7 +115,10 @@ void CIAUpdateRoamingHandler::PrepareL( MIAUpdateRoamingHandlerObserver& aObserv
 //
 void CIAUpdateRoamingHandler::CancelPreparing()
     {
-	iNwReg->Cancel();
+    if ( iNwReg )
+        {
+        iNwReg->Cancel();
+        }
     }
 
 

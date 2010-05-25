@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,6 +22,7 @@
 #include <eikenv.h>
 #include <iaupdateobserver.h>
 #include <iaupdateresult.h>
+#include <iaupdateparameters.h>
 
 #include "iaupdatemanager.h"
 #include "iaupdateclient.h"
@@ -95,6 +96,8 @@ void CIAUpdateManager::ConstructL()
 CIAUpdateManager::~CIAUpdateManager()
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::~CIAUpdateManager() begin");
+    delete iUpdateParameters;
+    iUpdateParameters = NULL;
     // If an operation is still active, 
     // then DoCancel will cancel ongoing request
     Cancel();
@@ -130,19 +133,19 @@ void CIAUpdateManager::CheckUpdates( const CIAUpdateParameters& aUpdateParameter
     // Reset result values because we are starting a new operation.
     ResetResults();
 
-    // Set the update type. 
-    // So, we know later in RunL what operation was requested.
-    SetUpdateType( EIAUpdateCheck );
-    
-    TInt error( UpdateClient().Open( ETrue) );
+    //
+    delete iUpdateParameters;
+    iUpdateParameters = NULL;
+    TInt error = KErrNone;
+    TRAP(error,CopyUpdateParamsL( aUpdateParameters ) );
     if ( error == KErrNone )
-        {    
-        error =
-            UpdateClient().CheckUpdates( aUpdateParameters, 
-                                         iSuccessCount, 
-                                         iStatus );
-        }        
-
+        {
+        // Set the update type. 
+        // So, we know later in RunL what operation was requested.
+        SetUpdateType( EIAUpdateStartServer );   
+        error = UpdateClient().OpenToBackroundAsync( iStatus);
+        }
+ 
     if ( error == KErrNone )
         {
         // Set this object active.
@@ -199,7 +202,7 @@ void CIAUpdateManager::ShowUpdates( const CIAUpdateParameters& aUpdateParameters
     // So, we know later in RunL what operation was requested.
     SetUpdateType( EIAUpdateUpdate );
     
-    TInt error( UpdateClient().Open( EFalse ) );
+    TInt error( UpdateClient().Open() );
     if ( error == KErrNone )
         {    
         error =
@@ -280,7 +283,7 @@ void CIAUpdateManager::UpdateQuery()
     // So, we know later in RunL what operation was requested.
     SetUpdateType( EIAUpdateQuery );
     
-    TInt error( UpdateClient().Open( EFalse ) );
+    TInt error( UpdateClient().Open() );
     if ( error == KErrNone )
         {    
         error =
@@ -383,6 +386,18 @@ void CIAUpdateManager::RunL()
     // function to call.
     switch ( updateType )
         {
+        case EIAUpdateStartServer:
+            if ( errorCode == KErrNone )
+                {
+                CheckUpdatesContinue();            
+                }
+            else
+                {
+                UpdateClient().Close();
+                Observer().CheckUpdatesComplete( errorCode, 0);
+                }
+            break;
+            
         case EIAUpdateCheck:
             if ( iSuccessCount == 0 )
                 {
@@ -522,8 +537,71 @@ void CIAUpdateManager::HandleLosingForeground()
     {
     }
 
+// -----------------------------------------------------------------------------
+// CIAUpdateManager::CheckUpdatesContinue
+// 
+// -----------------------------------------------------------------------------
+// 
+void CIAUpdateManager::CheckUpdatesContinue()
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::CheckUpdatesContinue() begin");
+    TInt error = KErrNone;
+    SetUpdateType( EIAUpdateCheck );
+    error = UpdateClient().ConnectToApp();
+    if ( error == KErrNone )
+        {
+        error = UpdateClient().CheckUpdates( *iUpdateParameters, 
+                                             iSuccessCount, 
+                                             iStatus ); 
+        }
+    
+    if ( error == KErrNone )
+        {
+        // Set this object active.
+        // Because everything went ok, 
+        // the operation will be handled asynchronously
+        // and the service provider will inform us when the operation
+        // is finished.
+        SetActive();        
+        }
+    else
+        {
+        // Because we are going to activate this active object,
+        // set the status pending.
+        iStatus = KRequestPending;
+        
+        // An error occurred above. 
+        // Therefore, the operation did not proceed any further.
+        // Set this object active for asynchronous error handling.
+        SetActive();
+                
+        // Now, that everything is ready, just inform the active scheduler
+        // that operation is finished. Pass the error code for the observer.
+        TRequestStatus* status( &iStatus );
+        User::RequestComplete( status, error );                
+        }
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::CheckUpdatesContinue() end");
+    }
 
-
+// -----------------------------------------------------------------------------
+// CIAUpdateManager::CopyUpdateParamsL
+// 
+// -----------------------------------------------------------------------------
+// 
+void CIAUpdateManager::CopyUpdateParamsL( const CIAUpdateParameters& aUpdateParameters )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::CopyUpdateParamsL() begin");
+    iUpdateParameters = CIAUpdateParameters::NewL();
+    iUpdateParameters->SetCommandLineArgumentsL( aUpdateParameters.CommandLineArguments() );
+    iUpdateParameters->SetCommandLineExecutableL( aUpdateParameters.CommandLineExecutable() );
+    iUpdateParameters->SetImportance( aUpdateParameters.Importance() );
+    iUpdateParameters->SetRefresh( aUpdateParameters.Refresh() );
+    iUpdateParameters->SetSearchCriteriaL( aUpdateParameters.SearchCriteria() );
+    iUpdateParameters->SetShowProgress( aUpdateParameters.ShowProgress() );
+    iUpdateParameters->SetType( aUpdateParameters.Type() );
+    iUpdateParameters->SetUid( aUpdateParameters.Uid() );
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::CopyUpdateParamsL() end");
+    }
 
 
 

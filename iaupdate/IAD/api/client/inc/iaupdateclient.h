@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -64,7 +64,7 @@ public:
      *
      * @since S60 v3.2
      */
-    TInt Open( TBool aToBackground );
+    TInt Open();
     
     /** 
      * Close releases the resources allocated by this class object.
@@ -76,6 +76,10 @@ public:
      * 
      * @since S60 v3.2
      */
+    TInt OpenToBackroundAsync( TRequestStatus& aStatus );
+
+    TInt ConnectToApp();
+   
     void Close();
 
 
@@ -168,7 +172,7 @@ public: // RAknAppServiceBase
 
 
 private:
-
+    
     // These functions send the operation requests to the server.
     
     TInt SendCheckUpdatesRequest( TInt aUpdateFunction,
@@ -185,6 +189,8 @@ private:
     
     void ConnectNewAppToBackgroundL( TUid aAppUid );
     
+    void StartNewAppToBackgroundL( TUid aAppUid, TRequestStatus& aStatus ); 
+    
     void ServerName(TName& aServerName, TUid aAppServerUid, TUint aServerDifferentiator);
     
     TUint GenerateServerDifferentiatorAndName(TName& aServerName, TUid aAppServerUid);
@@ -197,6 +203,8 @@ private: //data
     TBool iConnected;
     
     TInt iOwnWgId;
+    
+    TUint iDifferentiator;
     
     TPtr8 iPtr1;
     TPtr8 iPtr2;

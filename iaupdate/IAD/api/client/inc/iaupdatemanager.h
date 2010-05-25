@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -64,7 +64,12 @@ public:
         /**
          * No operation is going on.
          */ 
-        EIAUpdateIdle,       
+        EIAUpdateIdle,    
+        /**
+         * SWUpdate app start requested.
+         */
+        
+        EIAUpdateStartServer,
         
         /**
          * Update check has been requested.
@@ -242,10 +247,17 @@ private: // Functions from MCoeForegroundObserver
 	* Handles the application going into the background.
 	*/
 	void HandleLosingForeground();
-
+	
+private:// new functions
+	
+	void CheckUpdatesContinue();
+	
+	void CopyUpdateParamsL( const CIAUpdateParameters& aUpdateParameters );
 
 private: // data
 
+	CIAUpdateParameters* iUpdateParameters;
+	
     // Observer who will be informed about the completion of the operations. 
     MIAUpdateObserver& iObserver;    
     

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -46,22 +46,15 @@ RIAUpdateClient::RIAUpdateClient()
 // 
 // -----------------------------------------------------------------------------
 // 
-TInt RIAUpdateClient::Open( TBool aToBackground )
+TInt RIAUpdateClient::Open()
     {
     IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Open() begin");
     TInt error( KErrNone );
     
     if ( !iConnected )
         {
-        if ( aToBackground )
-            {
-            TRAP( error, ConnectNewAppToBackgroundL( ServiceUid() ) );
-            }
-        else
-            {
-            TRAP( error, ConnectNewAppL( ServiceUid() ) );
-            }
-         if ( error == KErrNone ) 
+        TRAP( error, ConnectNewAppL( ServiceUid() ) );
+        if ( error == KErrNone ) 
             {
             iConnected = ETrue;
             CEikonEnv* eikEnv = CEikonEnv::Static();
@@ -77,15 +70,69 @@ TInt RIAUpdateClient::Open( TBool aToBackground )
 	            
                 TIpcArgs args;
                 args.Set( 0, iData );
-    
-	            SendReceive( IAUpdateClientDefines::EIAUpdateServerSendWgId, args );    
-		        } 
+                SendReceive( IAUpdateClientDefines::EIAUpdateServerSendWgId, args );    
+	            } 
             }
         }
-    IAUPDATE_TRACE_1("[IAUPDATE] error code: %d", error );
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Open() begin");
+    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::Open() end error code: %d", error );
     return error;
     }
+
+// -----------------------------------------------------------------------------
+// RIAUpdateClient::OpenToBackroundAsync
+// 
+// -----------------------------------------------------------------------------
+//
+TInt RIAUpdateClient::OpenToBackroundAsync( TRequestStatus& aStatus )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::OpenToBackroundAsync() begin");
+    TInt error( KErrNone );
+    if ( !iConnected )
+        {
+        TRAP( error, StartNewAppToBackgroundL( ServiceUid(), aStatus ) );
+        }
+    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::OpenToBackroundAsync() end error code: %d", error );
+    return error;
+    }
+
+// -----------------------------------------------------------------------------
+// RIAUpdateClient::ConnectToApp
+// 
+// -----------------------------------------------------------------------------
+//
+TInt RIAUpdateClient::ConnectToApp()
+    {
+    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::ConnectToApp() begin");
+    TInt error( KErrNone );
+    TName serverName;
+    ServerName(serverName, ServiceUid(), iDifferentiator);
+    TRAP( error,ConnectExistingByNameL( serverName ) );
+    
+    if ( error == KErrNone ) 
+        {
+        iConnected = ETrue;
+        CEikonEnv* eikEnv = CEikonEnv::Static();
+        if ( eikEnv )
+            {
+            RWindowGroup owngroup;
+            iOwnWgId = eikEnv->RootWin().Identifier(); 
+                    
+            TPckg<TInt> wgId( iOwnWgId );
+            delete iData;
+            iData = NULL;
+            TRAP_IGNORE( iData = wgId.AllocL() );
+                    
+            TIpcArgs args;
+            args.Set( 0, iData );
+            SendReceive( IAUpdateClientDefines::EIAUpdateServerSendWgId, args );    
+            } 
+        }
+    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::ConnectToApp() end error code: %d", error );
+    return error; 
+    }
+
+
+
 
 // -----------------------------------------------------------------------------
 // RIAUpdateClient::Close
@@ -307,37 +354,35 @@ TInt RIAUpdateClient::SendUpdateRequest( TInt aUpdateFunction,
     return error;
     }    
 
-void RIAUpdateClient::ConnectNewAppToBackgroundL( TUid aAppUid )
+// -----------------------------------------------------------------------------
+// RIAUpdateClient::StartNewAppToBackgroundL
+// 
+// -----------------------------------------------------------------------------
+//
+void RIAUpdateClient::StartNewAppToBackgroundL( TUid aAppUid, TRequestStatus& aStatus )
     {
+    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::StartNewAppToBackgroundL() begin");
     TName notUsed;
-    const TUint differentiator = GenerateServerDifferentiatorAndName(notUsed, aAppUid);
-    TRequestStatus requestStatusForRendezvous;
-          
+    iDifferentiator = GenerateServerDifferentiatorAndName(notUsed, aAppUid);
+       
     RApaLsSession apa;
     User::LeaveIfError(apa.Connect());
     CleanupClosePushL(apa);
-            
+    
     TApaAppInfo info;
     User::LeaveIfError(apa.GetAppInfo(info, aAppUid));
-
+    
     CApaCommandLine* cmdLine = CApaCommandLine::NewLC();
     cmdLine->SetExecutableNameL(info.iFullName);
-    cmdLine->SetServerRequiredL( differentiator );
+    cmdLine->SetServerRequiredL( iDifferentiator );
     cmdLine->SetCommandL(EApaCommandBackground);
-            
+         
     TThreadId notUsedId;
-    User::LeaveIfError(apa.StartApp(*cmdLine, notUsedId, &requestStatusForRendezvous));
-
+    User::LeaveIfError(apa.StartApp(*cmdLine, notUsedId, &aStatus));
+          
     CleanupStack::PopAndDestroy(2, &apa);   // cmdLine and apa
-      
-    User::WaitForRequest(requestStatusForRendezvous);
-    User::LeaveIfError(requestStatusForRendezvous.Int());
-    
-    TName serverName;
-    ServerName(serverName, aAppUid, differentiator);
-    ConnectExistingByNameL(serverName);
+    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::StartNewAppToBackgroundL() end");
     }
-
 
 
 
