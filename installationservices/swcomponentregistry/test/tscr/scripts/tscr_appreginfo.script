@@ -1,0 +1,613 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// This script tests SCR Application Registration APIs.
+// 
+//
+
+PRINT Run SCR Application Registration API Tests
+
+// Load Suite
+LOAD_SUITE tscr -SharedData
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+LOAD_SUITE tSisRegistryTest
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr_appreginfo.ini db_file 
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0001
+//! @SYMTestCaseDesc 		Add an applications registration info
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0001
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0001
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0002
+//! @SYMTestCaseDesc 		Add an applications registration info with same appuid
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0002
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_sameappuid
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_sameappuid
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0002
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0002a
+//! @SYMTestCaseDesc 		Add an applications registration info with same app file name
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0002a
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_sameappuid
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_sameappfile_1
+// Checking the same app file name with a combination of lower and upper case
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_sameappfile_2
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0002a
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0003
+//! @SYMTestCaseDesc 		Add an applications registration info with null app uid
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0003
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nullappuid
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0003
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0004
+//! @SYMTestCaseDesc 		Add an applications registration info with null app file
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0004
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nullappfile
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0004
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0005
+//! @SYMTestCaseDesc 		Add an applications registration info with doesnot have a caption and icon info associated to it.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0005
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nocaptioniconinfo
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0005
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0006
+//! @SYMTestCaseDesc 		Inserting multiple applications to the same component
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0006
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini test_component_app1
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini test_component_app2
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini del_test_component
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0006
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0007
+//! @SYMTestCaseDesc 		Adding an application to a non-existent component
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0007
+RUN_TEST_STEP !Result=-1 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_to_non_existent_comp
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0007
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0008
+//! @SYMTestCaseDesc 		Get the Service ID Array for a specific App Uid.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0008
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppServicesUids z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_serviceuid
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0008
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0009
+//! @SYMTestCaseDesc 		Get the App ID for a specific Datatype.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0009
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppForDataType z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_appfordatatype
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0009
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0010
+//! @SYMTestCaseDesc 		Get the App ID for a specific Datatype and Service Type.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0010
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppForDataTypeAndService z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_appfordatatypeandservice
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0010
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0011
+//! @SYMTestCaseDesc 		Get the default screen number for a specific App Uid.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0011
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetDefaultScreenNumber z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_defaultscreennumber
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0011
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0012
+//! @SYMTestCaseDesc 		Get the number of defined icons for a specific App Uid.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0012
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetNumberOfDefinedIcons z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_iconcount
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0012
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0013
+//! @SYMTestCaseDesc 		Get the Application Language for a specific Locale
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0013
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetApplicationLanguage z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_applanguage
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0013
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0014
+//! @SYMTestCaseDesc 		Get Files owned by an application
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0014
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppOwnedFilesEntry z:\tusif\tscr\tscr_appreginfo.ini appownedfiles
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0014
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0015
+//! @SYMTestCaseDesc 		Get Files owned by an application , not found
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0015
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noappownedfiles
+RUN_TEST_STEP 100 tscr SCRGetAppOwnedFilesEntry z:\tusif\tscr\tscr_appreginfo.ini noappownedfiles
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0015
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0016
+//! @SYMTestCaseDesc 		Get application capability
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0016
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppCapabilityEntry z:\tusif\tscr\tscr_appreginfo.ini appcapability
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0016
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0017
+//! @SYMTestCaseDesc 		Get application capability, no group name
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0017
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nogroupname
+RUN_TEST_STEP 100 tscr SCRGetAppCapabilityEntry z:\tusif\tscr\tscr_appreginfo.ini appcapability_nogroupname
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0017
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0018
+//! @SYMTestCaseDesc 		Get application Icon
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0018
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppIconEntry z:\tusif\tscr\tscr_appreginfo.ini appicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0018
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0019
+//! @SYMTestCaseDesc 		Get application Icon , not found as localized info not present
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0019
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nolocalizedinfo
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppIconEntry z:\tusif\tscr\tscr_appreginfo.ini noappicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0019
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0020
+//! @SYMTestCaseDesc 		Get application Icon , not found as caption and icon info not present
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0020
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_onlylocalizedinfo
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppIconEntry z:\tusif\tscr\tscr_appreginfo.ini noappicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0020
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0021
+//! @SYMTestCaseDesc 		Get application Icon , found caption and icon info for nearest locale 
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0021
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nolocalizedinfoforenglish
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscr SCRGetAppIconEntry z:\tusif\tscr\tscr_appreginfo.ini appicon_nolocalizedinfoforenglish
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0021
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0022
+//! @SYMTestCaseDesc 		Get application View Icon
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0022
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini appviewicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0022
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0023
+//! @SYMTestCaseDesc 		Get application View Icon , not found as localized info not present
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0023
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nolocalizedinfo
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini noappviewicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0023
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0024
+//! @SYMTestCaseDesc 		Get application View Icon , not found as view data not present
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0024
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_onlylocalizedinfo
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini noappviewicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0024
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0025
+//! @SYMTestCaseDesc 		Get application View Icon , not found as views caption and icon info not present
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0025
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewcaptionandiconinfo
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini noappviewicon
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0025
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0026
+//! @SYMTestCaseDesc 		Get application View Icon ,  found view caption and icon info for nearest locale
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0026
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_nolocalizedinfoforenglish
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini appviewicon_nolocalizedinfoforenglish
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0026
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0027
+//! @SYMTestCaseDesc 		Get application View Icon ,  no view caption and icon info for nearest locale
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0027
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_noviewdatafornearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP_RESULT -1 100 tscr SCRGetAppViewIconEntry z:\tusif\tscr\tscr_appreginfo.ini noviewdatafornearestlanguage
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0027
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0028
+//! @SYMTestCaseDesc 		Get the view info details associated with an application
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0028
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_localizable_info
+RUN_TEST_STEP 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_view_info
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry_details
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0028
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0029
+//! @SYMTestCaseDesc 		Get the partial (caption and icon non-existing) view info details associated with an application
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0029
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_partial_view_info
+RUN_TEST_STEP 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_view_info_partial
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry_details
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0029
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0029b
+//! @SYMTestCaseDesc 		Attempt to get the view info details associated with an application (view data associated to locale not present, although matching locale found)
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0029b
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_partial_view_info_2
+RUN_TEST_STEP 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_view_info_partial_2
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry_details
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0029b
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0030
+//! @SYMTestCaseDesc 		Get the non existent view info details associated with an non existing application
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0030
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini 
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0030
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0031
+//! @SYMTestCaseDesc 		Get the view info details to the nearest language associated with an application when found and if not found
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0031
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_localizable_info_for_international_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_view_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscr ScrGetAppViewInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_view_german
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry_details
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0031
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0032
+//! @SYMTestCaseDesc 		Getallapps without screen mode
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0032
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData01
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0001-AP-loc01
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_french
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0001-AP-loc02
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_english_american
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0001-AP-loc01
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0032
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0033
+//! @SYMTestCaseDesc 		Getallapps with screen mode , screen mode considered 1, 0
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0033
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData01
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0002-AP-loc01
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0002-AP-loc01-A
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0002-AP-loc01-B
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0033
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0034
+//! @SYMTestCaseDesc 		GetallEmbeddableApps with and without screen mode , screen mode considered 0, 5
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0034
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-01
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-02
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-03
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-04
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-05
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0003-AP-loc01
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_french
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0003-AP-loc01-A
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_english
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0003-AP-loc01-B
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0003-AP-loc01-C
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0003-AP-loc01-D
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0034
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0035
+//! @SYMTestCaseDesc 		GetFillteredAppsWithEmbeddabilityFilter  with and without screen mode , screen mode considered 0, 5 
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0035
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-01
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-02
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0004-AP-03
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-04
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-05
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0004-AP-loc01
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0004-AP-loc01-A
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0004-AP-loc01-B
+RUN_TEST_STEP 1000 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0004-AP-loc01-C
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0035
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0036
+//! @SYMTestCaseDesc 		GetFillteredAppsWithCapabilityMaskAndValue with and without screen mode , screen mode considered 0, 5 
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0036
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-01
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-02
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-03
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-04
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-05
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0005-AP-loc01
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0005-AP-loc01-A
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0005-AP-loc01-B
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0036
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0037
+//! @SYMTestCaseDesc 		GetServerApps with and without screen mode , screen mode considered 0, 5
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0037
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData01
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0006-AP-loc01
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0006-AP-loc01-A
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0006-AP-loc01-B
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_french
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0006-AP-loc01-D
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tusif\tscr\tscr_appreginfo.ini langauge_to_english
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession z:\tusif\tscr\tscr_appreginfo.ini AppInfoFilter0006-AP-loc01-C
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry  z:\tusif\tscr\tscr_appreginfo.ini	del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0037
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0038
+//! @SYMTestCaseDesc 		Negative test for  getallapps with and without screen mode
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0038
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData01
+RUN_TEST_STEP 1000 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02
+RUN_TEST_STEP !Result=-6 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini  AppInfoFilter0008-AP-loc01
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0008-AP-loc01-A
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0038
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0039
+//! @SYMTestCaseDesc 		Negative test for GetFillteredAppsWithCapabilityMaskAndValue, big value passed for mask and value
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0039
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-01
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-02
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-03
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-04
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryDataForTC-AppInfoFilter0003-AP-05
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0009-AP-loc01
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0009-AP-loc01-A
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0039
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0040
+//! @SYMTestCaseDesc 		Pass NULL as filter 
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0040
+RUN_TEST_STEP 100 tscr ScrAppViewSubsession  z:\tusif\tscr\tscr_appreginfo.ini	AppInfoFilter0010-AP-loc01
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0040
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0041
+//! @SYMTestCaseDesc 		Attempt to add an application's registration info that contains two sets of localizable inforamtion for the same locale
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0041
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_invalid_localizable_info
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0041
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0042
+//! @SYMTestCaseDesc 		Get the serviceinfo details requested depending on the provided filters set	
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0042
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app1_with_service_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app2_with_service_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app3_with_service_info
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app4_with_service_info
+RUN_TEST_STEP 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_appuid
+RUN_TEST_STEP 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_serviceuid
+RUN_TEST_STEP 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_serviceuid_and_datatype
+RUN_TEST_STEP 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_appuid_and_serviceuid
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_with_service_info
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0042
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0043
+//! @SYMTestCaseDesc 		Get non existing serviceinfo details requested depending on the provided filters set	
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0043
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_appuid
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_serviceuid
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_serviceuid_and_datatype1
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_serviceuid_and_datatype2
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_serviceuid_and_datatype3
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_appuid_and_serviceuid1
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_appuid_and_serviceuid2
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_info_given_nonexisting_appuid_and_serviceuid3
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0043
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0044
+//! @SYMTestCaseDesc 		Get the associated componentId, given the appUid, and get all the apps associated to a particular componentId.
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0044
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app1_comp1
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app2_comp1
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app3_comp1
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app4_comp2
+RUN_TEST_STEP 100 tscr ScrGetComponentIdForApp z:\tusif\tscr\tscr_appreginfo.ini app_to_comp_mapping
+RUN_TEST_STEP 100 tscr ScrGetAppUidsForComponent z:\tusif\tscr\tscr_appreginfo.ini comp_to_app_mapping
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_comp1
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_comp2
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0044
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0045
+//! @SYMTestCaseDesc 		Get the componentId associted to a non existing app and fetch the apps associated to a non existing component.
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0045
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetComponentIdForApp z:\tusif\tscr\tscr_appreginfo.ini nonexisting_appuid
+RUN_TEST_STEP !Result=-1 100 tscr ScrGetAppUidsForComponent z:\tusif\tscr\tscr_appreginfo.ini nonexisting_compid
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0045
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0046
+//! @SYMTestCaseDesc 		Get the Service UID Array for a specific App Uid.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0046
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02
+RUN_TEST_STEP 100 tscr SCRGetAppServicesUids z:\tusif\tscr\tscr_appreginfo.ini AppEntryData02_get_serviceuid
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_component_and_AppEntry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0046
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0047
+//! @SYMTestCaseDesc 		Get the Service UID Array for a specific App Uid, Uid Not exists.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0047
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini test_component_app1
+RUN_TEST_STEP 100 tscr SCRGetAppServicesUids z:\tusif\tscr\tscr_appreginfo.ini test_component_app1_get_serviceUid
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_test_component
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0047
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0048
+//! @SYMTestCaseDesc 		Get the App Uid for an App having specific DataType, app does not exists.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0048
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppForDataType z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_appfordatatype_notexist
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0048
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0049
+//! @SYMTestCaseDesc 		Get the App Uid for an App having specific DataType and service uid, app does not exists.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0049
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr SCRGetAppForDataTypeAndService z:\tusif\tscr\tscr_appreginfo.ini app_reg_info_get_appfordatatypeandservice_notexist
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0049
+
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0050
+//! @SYMTestCaseDesc 		Get the App Uid for an App having specific DataType and service uid, app does not exists.
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0050
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app1_with_service_info
+RUN_TEST_STEP 100 tscr SCRGetDefaultScreenNumber z:\tusif\tscr\tscr_appreginfo.ini add_app1_with_service_info_get_notexists
+RUN_TEST_STEP 100 tscr SCRGetNumberOfDefinedIcons z:\tusif\tscr\tscr_appreginfo.ini add_app1_with_service_info_get_notexists
+RUN_TEST_STEP 100 tscr SCRGetApplicationLanguage z:\tusif\tscr\tscr_appreginfo.ini add_app1_with_service_info_get_notexists
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_with_service_info
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0050
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0051
+//! @SYMTestCaseDesc 		Get the applicaiton information for a given AppUid when no locale is specified. Get application information for a non existing app.
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0051
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_localizable_info_english_and_international_french
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_default_locale_english
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_default_locale_international_french
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_for_nonexisting_app
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0051
+
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0052
+//! @SYMTestCaseDesc 		Get the applicaiton information for a given AppUid and a given locale
+
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0052
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_with_localizable_info_english_and_international_french
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_international_french
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_french
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_german_nonexiting
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0052
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0053
+//! @SYMTestCaseDesc 		create  transactions for two sessions
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0053
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP_RESULT -10320 100 tscr ScrAddConcurrentApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini SimultaneousCreateTransaction
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0053
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0054
+//! @SYMTestCaseDesc 		Create the transaction then write the data and read the db using the same session/subsession
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0054
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr ScrAddConcurrentApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini SimultaneousWriteReadAppInfoSameSession
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0054
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0055
+//! @SYMTestCaseDesc 		Create the transaction for the first session and add appInfo, then add another appInfo using other session without transaction
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0055
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP_RESULT -10320 100 tscr ScrAddConcurrentApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini SimultaneousWriteAppInfoDiffSession
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0055
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0056
+//! @SYMTestCaseDesc 		Simultaneosly Reading the db with two differnt subsessions without a transaction
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0056
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info
+RUN_TEST_STEP 100 tscr ScrAddConcurrentApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini SimultaneousReadAppInfoDiffSessionWithoutTransaction
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0056
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0057
+//! @SYMTestCaseDesc 		Add an applications registration info, using the Interface without optional fields
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0057
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_ObjectWithoutOptionalFields
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0057
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0058
+//! @SYMTestCaseDesc 		Add array of opaque data with different values
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0058
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_array_of_opaque_data
+RUN_TEST_STEP 100 tscr ScrGetAppServiceInfo z:\tusif\tscr\tscr_appreginfo.ini get_service_opaquedata
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0058
+
+//! @SYMTestCaseID		APPINS-SCR-APPREGINFO-API-0059
+//! @SYMTestCaseDesc 		Get the application information for a given AppUid when only a default locale is specified. Get application information 
+START_TESTCASE APPINS-SCR-APPREGINFO-API-0059
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini add_app_reg_info_with_only_default_locale
+RUN_TEST_STEP 100 tscr ScrGetAppInfo z:\tusif\tscr\tscr_appreginfo.ini get_app_info_only_default_locale
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tscr\tscr_appreginfo.ini del_app_entry
+END_TESTCASE APPINS-SCR-APPREGINFO-API-0059
+

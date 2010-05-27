@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<api id="2b294559662ec5659fbd2410e7f69ebe" dataversion="1.0">
+  <name>Task plugin API</name>
+  <description>For creating tasks during install/uninstall operations. Tasks are implemented as ECom plug-ins.</description>
+  <type>c++</type>
+  <subsystem>appinstaller</subsystem>
+  <libs>
+  </libs>
+  <release category="domain"/>
+  <attributes>
+     <!-- This indicates wether the api provedes separate html documentation -->
+     <!-- or is the additional documentation generated from headers. -->
+     <!-- If you are unsuere then the value is "no" -->
+     <htmldocprovided>yes</htmldocprovided>
+     <adaptation>no</adaptation>
+  </attributes>
+</api>

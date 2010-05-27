@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LayeredExecutionEnvironments SYSTEM "swtype.dtd">
+<LayeredExecutionEnvironments>
+	<softwareType1 name="testSoftwareType">
+		<localizedName language="15">testSwTypeLoc15</localizedName>
+		<localizedName language="31">testSwTypeLoc31</localizedName>
+		<mimeType>text/sif-testpkg</mimeType>
+		<sifPluginUid>102866EF</sifPluginUid>
+		<installerSecureId>10285BCB</installerSecureId>
+		<executionLayerSecureId>80285DE0</executionLayerSecureId>
+	</softwareType1>
+</LayeredExecutionEnvironments>

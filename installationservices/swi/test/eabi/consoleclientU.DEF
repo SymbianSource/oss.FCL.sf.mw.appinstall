@@ -1,0 +1,5 @@
+EXPORTS
+	_ZN3Swi4Test21RConsoleServerSession5GetchEv @ 1 NONAME
+	_ZN3Swi4Test21RConsoleServerSession6PrintfERK7TDesC16 @ 2 NONAME
+	_ZN3Swi4Test21RConsoleServerSession7ConnectEv @ 3 NONAME
+

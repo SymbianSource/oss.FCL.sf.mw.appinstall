@@ -1,0 +1,242 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-UISA-Hugecontroller-I-FH-0001
+//! @SYMTestCaseDesc		Installs a file with a very large controller
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a very large controller
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Hugecontroller-I-FH-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+
+END_TESTCASE API-SEC-UISA-Hugecontroller-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-InsufficientSpace-I-FH-0001
+//! @SYMTestCaseDesc		Tries to install a SISX file onto a drive with insufficient free space.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Fill target drive to leave very little space free, then try to install SISX file requiring more space
+//! 				than available to install data files.
+//! @SYMTestExpectedResults	Installation fails
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-InsufficientSpace-I-FH-0001
+
+// Create temporary file to leave very little space free on the target drive
+// Note that this can only work if the drive has less than KMaxTInt bytes free.  Drive X is used on the emulator
+// and drive E on hardware.
+RUN_TEST_STEP 100 tuiscriptadaptors FillDrive z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini almostfilldrive
+
+RUN_TEST_STEP_RESULT -26 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini diskfull
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini u_diskfull
+
+// Delete space hogging file for both drive X (used in emulator test) and drive E (used in hardware test); one will fail but this
+// isn't counted in the summary as a test failure.
+RUN_UTILS DeleteFile e:\BigTempFile
+RUN_UTILS DeleteFile x:\BigTempFile
+
+END_TESTCASE API-SEC-UISA-InsufficientSpace-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DriveNotReady-I-FH-0001
+//! @SYMTestCaseDesc		Tries to install a SISX file onto drive q, which is not present
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a SISX file onto drive q, which is not present
+//! @SYMTestExpectedResults	Installation fails with -10146
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DriveNotReady-I-FH-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini drivenotready
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_drivenotready
+
+END_TESTCASE API-SEC-UISA-DriveNotReady-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-InvalidSisxFile-I-FH-0001
+//! @SYMTestCaseDesc		Tries to install a script file as a SISX file
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a script file as a SISX file
+//! @SYMTestExpectedResults	Installation fails, appropriate dialog displayed, and error returned.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-InvalidSisxFile-I-FH-0001
+
+RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidsisxfile
+
+END_TESTCASE API-SEC-UISA-InvalidSisxFile-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-InvalidFileName-I-FH-0001
+//! @SYMTestCaseDesc		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-InvalidFileName-I-FH-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidfilename
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_invalidfilename
+
+END_TESTCASE API-SEC-UISA-InvalidFileName-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DisplayText-I-FH-0001
+//! @SYMTestCaseDesc		Display a text file and install/uninstall it
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Display text file and install/uninstall it
+//! @SYMTestExpectedResults	Display text file dialog called, file [un]installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DisplayText-I-FH-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayinstall
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayonly
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayonly
+
+END_TESTCASE API-SEC-UISA-DisplayText-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-SimpleTest-I-FH-0001
+//! @SYMTestCaseDesc		Install text file in a simple unsigned SISX package
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Install a simple unsigned package
+//! @SYMTestExpectedResults	Text file is installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-SimpleTest-I-FH-0001
+
+/// Simple file installation from a compressed SIS file
+// Be sure that the registry entries are deleted because they may have been left
+// from previous failed test cases
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+/// Simple file installation from a non-compressed SIS file
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simplenc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simplenc
+/// Bad language selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini badlangsel
+/// Bad drive selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddrivesel
+
+END_TESTCASE API-SEC-UISA-SimpleTest-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-LOGOTEST-0006
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-LOGOTEST-0006
+
+// Installation of a SIS file that contains a logo.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini logo
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_logo
+
+END_TESTCASE API-SEC-LOGOTEST-0006
+
+
+// embeded tests
+
+//! @SYMTestCaseID		API-SEC-UISA-EmbeddedSISFiles-I-FH-0001
+//! @SYMTestCaseDesc		Install package with embedded packages
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package and embedded packages
+//! @SYMTestExpectedResults	Package and embedded packages installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-FH-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-SignedTest-I-FH-0001
+//! @SYMTestCaseDesc		Install simple SIS file with 1 signature
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+// Signed SIS tests
+
+START_TESTCASE API-SEC-UISA-SignedTest-I-FH-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+END_TESTCASE API-SEC-UISA-SignedTest-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-MissingDepTest-I-FH-0001
+//! @SYMTestCaseDesc		Install SIS file with missing dependency
+//! @SYMTestPriority		High 
+//! @SYMTestActions		Missing dependency prevents SIS package installation 
+//! @SYMTestExpectedResults	Files are not installed
+//! @SYMDevelopedForRelease	Yankee
+// Missing dependency tests
+
+START_TESTCASE API-SEC-UISA-MissingDepTest-I-FH-0001
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddepend
+
+END_TESTCASE API-SEC-UISA-MissingDepTest-I-FH-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Sids-I-FH-0001
+//! @SYMTestCaseDesc		Test installation of two executables with the same SID
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install various combinations of executables with the same SID
+//! @SYMTestExpectedResults	Only one executable with a certain SID will be allowed on the device at once
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Sids-I-FH-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_A
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_B
+
+END_TESTCASE API-SEC-UISA-Sids-I-FH-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

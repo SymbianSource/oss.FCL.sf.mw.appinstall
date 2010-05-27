@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!-- Uninstall dialog cancelled returned from UI aborts setup -->
+<Script>
+	<dialog name="DisplayUninstall">
+		<return type="TBool">false</return>
+	</dialog>
+	<dialog name="DisplayDependencyBreak">
+		<return type="TBool">true</return> 
+	</dialog>
+  </Script>

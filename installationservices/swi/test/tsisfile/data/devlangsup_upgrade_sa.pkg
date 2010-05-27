@@ -1,0 +1,40 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; SA upgrade package supporting English, French and German
+
+;Languages
+&EN, FR, GE
+
+#{"devlangsupport_EN","devlangsupport_FR","devlangsupport_GE"},(0x88000100),1,0,1,TYPE=SA
+
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_FR","Vendor_GE"}
+
+;Unique Vendor name
+:"Vendor"
+
+if supported_language=01
+"text\option1.txt"		  -"!:\Documents\InstTest\devlangsup_en_upgrade.txt"
+endif
+
+if supported_language=02
+"text\option2.txt"		  -"!:\Documents\InstTest\devlangsup_fr_upgrade.txt"
+endif
+
+if supported_language=03
+"text\options.txt"		  -"!:\Documents\InstTest\devlangsup_ge_upgrade.txt"
+endif

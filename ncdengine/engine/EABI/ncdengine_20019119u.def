@@ -1,0 +1,9 @@
+EXPORTS
+	_ZN15CCatalogsEngine15EndMaintenanceLEv @ 1 NONAME
+	_ZN15CCatalogsEngine17StartMaintenanceLEv @ 2 NONAME
+	_ZN15CCatalogsEngine4NewLER23MCatalogsEngineObserver @ 3 NONAME
+	_ZN15CCatalogsEngine5NewLCER23MCatalogsEngineObserver @ 4 NONAME
+	_ZN15CCatalogsEngine6StateLEv @ 5 NONAME
+	_ZTI15CCatalogsEngine @ 6 NONAME ; #<TI>#
+	_ZTV15CCatalogsEngine @ 7 NONAME ; #<VT>#
+

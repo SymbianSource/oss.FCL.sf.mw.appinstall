@@ -1,0 +1,267 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-UNSIGNED-0001
+//! @SYMTestCaseDesc		Ensures unsigned SIS files cannot be installed when automatic signing is turned on
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts to install 3 unsigned SIS files of varying capabilities
+//! @SYMTestExpectedResults	3 Failed Installs
+//! @SYMPREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-UNSIGNED-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 1-1unsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 1-2unsignedexenocap
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 1-3unsignedexedrmcap
+
+END_TESTCASE API-SEC-TAUTOSIGNING-UNSIGNED-0001
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0001
+//! @SYMTestCaseDesc		Installs/Uninstalls a Self-Signed SIS file containing executables with user capabilities
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMPREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-1selfsignedusercaps
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-1selfsignedusercaps
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0001
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0002
+//! @SYMTestCaseDesc		Installs/Uninstalls a Self-Signed SIS file containing only data files
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMPREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0002
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0003
+//! @SYMTestCaseDesc		Installs a Self-Signed SIS file containing executables with user capabilities, refusing to grant the capabilties
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install
+//! @SYMTestExpectedResults	Failed Install
+//! @SYMPREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-1selfsignedusercapsunauthorised
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0003
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0004
+//! @SYMTestCaseDesc		Installs a Self-Signed SIS file containing executables no capabilities
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install, Followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-3selfsignedexenocap
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-3selfsignedexenocap
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0004
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0005
+//! @SYMTestCaseDesc		Installs a Self-Signed SIS file containing executables with user grantable and DRM capabilities
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install
+//! @SYMTestExpectedResults	Failed Install
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-4selfsignedexeuserdrmcaps
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0005
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0001
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with user grantable capabilities
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-1signedusergrantable
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-1signedusergrantable
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0001
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0002
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with (authorised) DRM capability
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-2signeddrmfirst
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-2signeddrmfirst
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0002
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0003
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with (authorised) DRM capability, the signature order is reversed
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-3signeddrmlast
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-3signeddrmlast
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0003
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0004
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with user grantable capabilities authorised by the signature
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-4signeduserauthorised
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-4signeduserauthorised
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0004
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0005
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with DRM and user grantable capabilities authorised by the signature
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install followed by an Uninstall
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-5signedallauthorised
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-5signedallauthorised
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0005
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SIGNED-0006
+//! @SYMTestCaseDesc		Installs a Signed and Self-Signed SIS file containing executables with user grantable capabilities not authorised by the signature, the user will no authorise the capabilities
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an Install 
+//! @SYMTestExpectedResults	Failed install
+//! @SYMREQ			PREQ986
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-6signeduserunauthorised
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0006
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+//! @SYMTestCaseDesc		Installs/Uninstalls a Self-Signed SIS file with AllowSelfSigned 
+//! 						Central Reposatory setting as True. Then change the Central Reposatory 
+//! 						setting as False and then Install Again.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall. Change the Central Reposatory 
+//! 					setting. Attempts an install.
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall. Sucessful Change Setting. Unsucessful Install.
+//! @SYMPREQ			PREQ7308
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini ResetKeyVAlue
+RUN_TEST_STEP_RESULT 106 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini SetKeyVAlue
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0008
+//! @SYMTestCaseDesc		Installs/Uninstalls a Embedded Self-Signed SIS file with AllowSelfSigned 
+//! 						Central Reposatory setting as True. Then change the Central Reposatory 
+//! 						setting as False and then Install Again.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall. Change the Central Reposatory 
+//! 					setting. Attempts an install.
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall. Sucessful Change Setting. Unsucessful Install.
+//! @SYMPREQ			PREQ7308
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini ResetKeyVAlue
+RUN_TEST_STEP_RESULT 106 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini SetKeyVAlue
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0008

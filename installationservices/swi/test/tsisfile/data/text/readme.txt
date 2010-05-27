@@ -1,0 +1,1 @@
+End User License Agreement for Infinite Dreams Software

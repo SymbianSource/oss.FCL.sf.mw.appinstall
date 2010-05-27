@@ -1,0 +1,89 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// asynccancel.script
+LOAD_SUITE asynccancelserver
+
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-VERYSHORT-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-VERYSHORT-0001
+//RUN_TEST_STEP 100 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini veryshort
+//END_TESTCASE API-SEC-ASYNCCANCEL-VERYSHORT-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-LONG-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-LONG-0001
+//RUN_TEST_STEP 1000 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini long
+//END_TESTCASE API-SEC-ASYNCCANCEL-LONG-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-VERYLONG-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-ASYNCCANCEL-VERYLONG-0001
+
+RUN_TEST_STEP 6000 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini verylong
+
+END_TESTCASE API-SEC-ASYNCCANCEL-VERYLONG-0001
+
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_OKSIS_VERYSHORT-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_OKSIS_VERYSHORT-0001
+//RUN_TEST_STEP 100 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_oksis_veryshort
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_OKSIS_VERYSHORT-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_OKSIS_LONG-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_OKSIS_LONG-0001
+//RUN_TEST_STEP 2000 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_oksis_long
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_OKSIS_LONG-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_VERYSHORT-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_VERYSHORT-0001
+//RUN_TEST_STEP 100 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_veryshort
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_VERYSHORT-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_LONG-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_LONG-0001
+//RUN_TEST_STEP 100 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_long
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_LONG-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_HANG_TEMP-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_HANG_TEMP-0001
+
+RUN_TEST_STEP 4000 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_hang_temp
+
+END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_HANG_TEMP-0001
+
+
+// For found defects:
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_MEMORYLEAK-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_MEMORYLEAK-0001
+//RUN_TEST_STEP 100 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_memoryleak
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_MEMORYLEAK-0001
+
+//! @SYMTestCaseID 		API-SEC-ASYNCCANCEL-OCSP_HANG-0001
+//! @SYMTestStatus		3. Released
+//START_TESTCASE API-SEC-ASYNCCANCEL-OCSP_HANG-0001
+//RUN_TEST_STEP 500 asynccancelserver AsyncCancelStep z:\tswi\tasynccancel\scripts\asynccancel.ini ocsp_hang
+//END_TESTCASE API-SEC-ASYNCCANCEL-OCSP_HANG-0001

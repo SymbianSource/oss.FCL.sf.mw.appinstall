@@ -1,0 +1,58 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Partial upgrade with lots of files
+;
+&EN
+#{"Backup & Restore upgrades test - 1"}, (0x0a000019), 1, 0, 1, TYPE=PU
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+; Upgrade base application exe
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable.exe"-"!:\sys\bin\tswiusergrantable.exe";
+
+; Add a new exe ... make sure the PU controller is verified
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswinocapability.exe"-"!:\sys\bin\tswinocapability.exe";
+
+; Upgrades should overwrite this file to test access to protected directories
+"osver.txt"-"$:\private\81000005\upgrademe.txt"
+
+; Install a file into the private directory of the exe delivered by this PU
+"osver.txt"-"$:\private\81000002\bigpu.txt"
+
+; Public data file to overwrite with upgrades
+"osver.txt"-"$:\upgrademe_public.txt"
+
+; Make the controller larger than the base
+"osver.txt"-"$:\br1_bigpu_01.txt"
+"osver.txt"-"$:\br1_bigpu_02.txt"
+"osver.txt"-"$:\br1_bigpu_03.txt"
+"osver.txt"-"$:\br1_bigpu_04.txt"
+"osver.txt"-"$:\br1_bigpu_05.txt"
+"osver.txt"-"$:\br1_bigpu_06.txt"
+"osver.txt"-"$:\br1_bigpu_07.txt"
+"osver.txt"-"$:\br1_bigpu_08.txt"
+"osver.txt"-"$:\br1_bigpu_09.txt"
+"osver.txt"-"$:\br1_bigpu_10.txt"
+"osver.txt"-"$:\br1_bigpu_11.txt"
+"osver.txt"-"$:\br1_bigpu_12.txt"
+"osver.txt"-"$:\br1_bigpu_13.txt"
+"osver.txt"-"$:\br1_bigpu_14.txt"
+"osver.txt"-"$:\br1_bigpu_15.txt"
+"osver.txt"-"$:\br1_bigpu_16.txt"
+"osver.txt"-"$:\br1_bigpu_17.txt"
+"osver.txt"-"$:\br1_bigpu_18.txt"
+"osver.txt"-"$:\br1_bigpu_19.txt"
+"osver.txt"-"$:\br1_bigpu_20.txt"

@@ -1,0 +1,10 @@
+EXPORTS
+	?Close@RBackupSession@Swi@@QAEXXZ @ 1 NONAME ; void Swi::RBackupSession::Close(void)
+	?Close@RRestoreSession@Swi@@QAEXXZ @ 2 NONAME ; void Swi::RRestoreSession::Close(void)
+	?CommitPackageL@RRestoreSession@Swi@@QAEXXZ @ 3 NONAME ; void Swi::RRestoreSession::CommitPackageL(void)
+	?Connect@RBackupSession@Swi@@QAEHXZ @ 4 NONAME ; int Swi::RBackupSession::Connect(void)
+	?Connect@RRestoreSession@Swi@@QAEHXZ @ 5 NONAME ; int Swi::RRestoreSession::Connect(void)
+	?GetMetaDataL@RBackupSession@Swi@@QAEPAVHBufC8@@VTUid@@AAV?$RPointerArray@VHBufC16@@@@@Z @ 6 NONAME ; class HBufC8 * Swi::RBackupSession::GetMetaDataL(class TUid, class RPointerArray<class HBufC16> &)
+	?RestoreFileL@RRestoreSession@Swi@@QAEXAAVRFile@@AAVTDesC16@@@Z @ 7 NONAME ; void Swi::RRestoreSession::RestoreFileL(class RFile &, class TDesC16 &)
+	?StartPackageL@RRestoreSession@Swi@@QAEXVTUid@@ABVHBufC8@@@Z @ 8 NONAME ; void Swi::RRestoreSession::StartPackageL(class TUid, class HBufC8 const &)
+

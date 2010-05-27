@@ -1,0 +1,37 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+LOAD_SUITE tsis -SharedData
+
+PRINT
+//! @file
+//! @SYMTestCaseID 		API-SEC-SISXRecognize-0001
+//! @SYMTestCaseDesc 		Recognizing .sis and .sisx only, all other extensions will be rejected
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Recognized 053177a_0.sis and 053177a_0.sisx; 053177a_0.sisa and 053177a_0 will be rejected
+//! @SYMTestExpectedResults 	KErrNone, ESignatureNotPresent
+
+START_TESTCASE API-SEC-SISXRecognize-0001
+
+RUN_TEST_STEP 100 tsis RecognizeStep z:\tswi\tsis\scripts\tsis_new_recognizer.ini recognize1
+RUN_TEST_STEP 100 tsis RecognizeStep z:\tswi\tsis\scripts\tsis_new_recognizer.ini recognize2
+RUN_TEST_STEP 100 tsis RecognizeStep z:\tswi\tsis\scripts\tsis_new_recognizer.ini recognize3
+RUN_TEST_STEP 100 tsis RecognizeStep z:\tswi\tsis\scripts\tsis_new_recognizer.ini recognize4
+
+END_TESTCASE API-SEC-SISXRecognize-0001
+
+
+PRINT

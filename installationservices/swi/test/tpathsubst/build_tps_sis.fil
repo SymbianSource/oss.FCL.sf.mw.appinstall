@@ -1,0 +1,37 @@
+MAKEDATA :
+!IF "$(PLATFORM)" == "GCCXML" || "$(PLATFORM)" == "TOOLS"
+	cd
+	echo ----------------
+	echo  Do nothing ...
+	echo ----------------
+!ELSE
+	cd
+	echo ---------------------------
+	echo Building path subst test sis files...
+	echo ---------------------------
+
+	perl -w preparepkg.pl $(PLATFORM)
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+FINAL : DO_NOTHING
+RELEASABLES : DO_NOTHING
+
+SAVESPACE : BLD
+
+BLD : MAKEDATA
+
+CLEAN : 
+	cd build
+	del *.sis

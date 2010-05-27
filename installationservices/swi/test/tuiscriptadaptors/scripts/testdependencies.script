@@ -1,0 +1,187 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS integration dependency tests
+PRINT Run SWI dependency tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-Dependencies-I-0001
+//! @SYMTestCaseDesc 		Tests dependencies
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests dependecies
+//! @SYMTestExpectedResults 	Dependency rules observed correctly
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-Dependencies-I-0001
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini Defect58262a
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_Defect58262a
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini dependB
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend3B
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend3
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend3
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend2
+
+// todo, actually do a test where we don't allow base to be removed, since depend and depend3 depend on it
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend3
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini dependB
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend
+
+END_TESTCASE API-SEC-UISA-Dependencies-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-Dependencies-I-0002
+//! @SYMTestCaseDesc 		Tests target dependencies
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests target dependecies
+//! @SYMTestExpectedResults 	Target dependency rules observed correctly
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-Dependencies-I-0002
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedependB
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend3
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedependB
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedependC
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend3B
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend3
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini devicedepend3C
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_devicedepend3
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend_option_off
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend_option
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend_option_on_fail
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini depend_option_on
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend_option
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_base
+
+END_TESTCASE API-SEC-UISA-Dependencies-I-0002
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-Dependencies-I-0003
+//! @SYMTestCaseDesc 		Tests dependencies In SIS
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests dependencies In SIS
+//! @SYMTestExpectedResults 	SIS can be installed successfully
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-UISA-Dependencies-I-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embedded_dependencyInSIS_1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embedded_dependencyInSIS_1
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embedded_dependencyInSIS_2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embedded_dependencyInSIS_2
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embedded_dependencyInSIS_3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embedded_dependencyInSIS_3
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embedded_dependencyInSIS_4
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embedded_dependencyInSIS_4
+
+END_TESTCASE API-SEC-UISA-Dependencies-I-0003
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-Dependencies-I-0004
+//! @SYMTestCaseDesc 		Tests new uninstalling policy considering dependencies
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests whether removing a package only with uninstalling the last dependency changes the default behaviour 
+//! @SYMTestExpectedResults 	New policy does not change default behaviour
+//! @SYMDevelopedForRelease 	Argus
+
+START_TESTCASE API-SEC-UISA-Dependencies-I-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embedC
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embeddependE
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini embeddependF
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embeddependE
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embeddependF
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_embedC
+
+END_TESTCASE API-SEC-UISA-Dependencies-I-0004
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Dependencies-I-0005
+//! @SYMTestCaseDesc 		Tests dependencies in embedded patch
+//!				Scenario - 
+//!					A embeds B.
+//!					B is an augmentation.
+//!					C embeds D.
+//!					B depends on D.
+//!				Test Process & Behaviour -
+//!					1. Install C.
+//!					2. Install A.
+//!					3. Uninstall C, D should remain.
+//!					4. Uninstall A, D should be removed.
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Tests dependecies
+//! @SYMTestExpectedResults 	Dependency rules observed correctly
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-Dependencies-I-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini testdependency_c
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini testdependency_a
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_testdependency_c
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_testdependency_a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_simple
+
+END_TESTCASE API-SEC-UISA-Dependencies-I-0005

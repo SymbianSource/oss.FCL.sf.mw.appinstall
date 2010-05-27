@@ -1,0 +1,335 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run SWI writable certstore tests
+LOAD_SUITE tuiscriptadaptors
+
+// give emulator time to start up so APPARC can initialize
+DELAY 5000
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0001
+//! @SYMTestCaseDesc		Install SIS file that runs SwiCertStore updater TCB exe synchronously on install
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		The writable SWI certstore is updated
+//! @SYMTestExpectedResults	The writable SWI certstore is updated
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0001
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini corruptsc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_corruptsc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc2
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc2
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini emptysc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_emptysc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc2
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc2
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0002
+//! @SYMTestCaseDesc		Attempt to write to c:\resource\swicertstore
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Attempt to copy files to c:\resource\swicertstore and below
+//! @SYMTestExpectedResults	All tests should fail on install
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0002
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini overwrite0
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_overwrite0
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini overwrite1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_overwrite1
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini overwrite2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_overwrite2
+clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0003
+//! @SYMTestCaseDesc		Attempt to remove file from c:\resource\swicertstore
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Attempt to remove files from c:\resource\swicertstore and below
+//! @SYMTestExpectedResults	All tests should fail on install
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0003
+
+RUN_PROGRAM 2 clean_certstore.exe
+RUN_PROGRAM 2 removetest_setup.exe
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove0
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove0
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove1
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove2
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove3
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove3
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove4
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove4
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove5
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove5
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini remove6
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_remove6
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0004
+//! @SYMTestCaseDesc		Check that capabilties are enforced in the writable SWI certstore
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Install exe that depends on capabilities assigned to a certificate in the writable SWI certstore.
+//! @SYMTestExpectedResults	Application can be installed once certificate is installed
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0004
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini capsfail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_capsfail
+
+// Deliver certstore that contains certificate with req assigned
+// capbilites.
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc1
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc1
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini caps
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_caps
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0004
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0005
+//! @SYMTestCaseDesc		Ensure that uninstallation of a SIS package works in the event that the certificate upon which it depends has been removed from the writabel SWI certstore.
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Deliver certstore to writable certstore.  Install sis file.  Remove certstore.  Uninstall application.
+//! @SYMTestExpectedResults	All tests should succeed.
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0005
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+// Deliver certstore that contains the req certificate
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini mandatorysc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_mandatorysc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini mandatory
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_mandatory
+clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0005
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0006
+//! @SYMTestCaseDesc		Ensure that a SIS that depends on a certificate duplicated in both certstore can be installed
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Deliver duplicate certstore to writable certstore.
+//! @SYMTestExpectedResults	All tests should succeed.
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0006
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+// Deliver duplicate certstore
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini duplicatesc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_duplicatesc
+
+// Until defect DEF061635 has been fixed, sttempting to install a SIS
+// that depends upon certificates duplicated in both certstores
+// results in a "general unspecified error"
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc2
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc2
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0006
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0007
+//! @SYMTestCaseDesc		Ensure that a SIS file signed with a certificate in the writable SWI certstore and the ROM certstore can be installed.  The certificates are not duplicates. 
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Deliver certstore to writable certstore.  Install sis file.
+//! @SYMTestExpectedResults	All tests should succeed.
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0007
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+// This should fail becuase one of the required certificates is missing
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini doublesignedfail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_doublesignedfail
+
+// Deliver certstore that contains the req certificate
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc1
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc1
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini doublesigned
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_doublesigned
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0007
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0008
+//! @SYMTestCaseDesc		Ensure that a SIS file signed with a certificate installed in the ROM certstore can be installed in the presence of the writable SWI certstore.  
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Deliver a certstore containing no duplicate certificates to writable certstore.
+//! @SYMTestExpectedResults	All tests should succeed.
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0008
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+// Deliver new certstore
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc1
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc1
+
+// Deliver new certstore
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc2
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc2
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0008
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0009
+//! @SYMTestCaseDesc		Ensure that a SIS file signed with a mandatory certificate in the writable SWI certstore can be installed.
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Deliver certstore to writable certstore.  Install sis file.
+//! @SYMTestExpectedResults	All tests should succeed.
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0009
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+// This should fail becuase one of the required certificates is missing
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini mandatoryfail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_mandatoryfail
+
+// Deliver certstore that contains the req certificate
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini mandatorysc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_mandatorysc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini mandatory
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_mandatory
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0009
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0010
+//! @SYMTestCaseDesc		Ensure correct behavior of Swi certstore in the event that a newer version of a certificate in the ROM certstore is delivered to the writable certstore.
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		The writable SWI certstore is updated
+//! @SYMTestExpectedResults	The writable SWI certstore is updated
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0010
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini emptysc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_emptysc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini expiredsc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_expiredsc
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini updatesc2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_updatesc2
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini renewedfail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_renewedfail
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini renewedsc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_renewedsc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini renewed
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_renewed
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0010
+
+
+//! @SYMTestCaseID		API-SEC-UISA-WRITABLESWICERTSTORE-I-0011
+//! @SYMTestCaseDesc		Check that cert chains are followed to the root in the writable swicertstore
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		deliver a certstore update that contains the root certificate of the chain under test.
+//! @SYMTestExpectedResults	success
+//! @SYMDevelopedForRelease	Mike and Bravo
+
+START_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0011
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini chainfail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_chainfail
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini chainsc
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_chainsc
+
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini chain
+RUN_TEST_STEP_RESULT 0 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testwritableswicertstore.ini u_chain
+
+RUN_PROGRAM 2 clean_certstore.exe
+
+END_TESTCASE API-SEC-UISA-WRITABLESWICERTSTORE-I-0011
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

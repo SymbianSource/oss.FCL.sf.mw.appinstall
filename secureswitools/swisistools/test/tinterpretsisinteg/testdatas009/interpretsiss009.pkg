@@ -1,0 +1,51 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package to test the use of HAL attributes.
+
+;Languages
+&EN,FR,GE
+
+; Installation header
+; Three component names as we support English, French and German
+#{"MultiLanguageOption-EN", "MultiLanguageOption-FR", "MultiLanguageOption-GE"}, (0x81111103), 1, 2, 3
+
+%{"Vendor-EN","Vendor-FR", "Vendor-GE"}
+:"Unique vendor name"
+; For CR1200
+
+{"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\englishfile1.txt" "\epoc32\winscw\c\tswi\tinterpretsisinteg\data\frenchfile1.txt" "\epoc32\winscw\c\tswi\tinterpretsisinteg\data\germanfile1.txt"}-"!:\private\81111103\import\file1.txt"
+
+IF (CPUSPEED <> 600) 
+;CHECK FOR GREATER THAN OR LESSER THAN
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\testinterpretsiss001i.txt"-"!:\private\81111103\import\testinterpretsiss001i.txt"
+ENDIF
+IF (CPUSPEED > 700) 
+;CHECK FOR GREATER THAN
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\testinterpretsiss001j.txt"-"!:\private\81111103\import\testinterpretsiss001j.txt"
+ENDIF
+IF (CPUSPEED < 400) 
+;CHECK FOR LESSER THAN
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\testinterpretsiss001k.txt"-"!:\private\81111103\import\testinterpretsiss001k.txt"
+ENDIF
+IF (CPUSPEED >= 600) 
+;CHECK FOR GREATER THAN OR EQUAL TO
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\testinterpretsiss001l.txt"-"!:\private\81111103\import\testinterpretsiss001l.txt"
+ENDIF
+IF (CPUSPEED <= 600) 
+;CHECK FOR LESSER THAN OR EQUAL TO
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\testinterpretsiss001m.txt"-"!:\private\81111103\import\testinterpretsiss001m.txt"
+ENDIF
+

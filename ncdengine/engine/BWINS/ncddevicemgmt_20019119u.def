@@ -1,0 +1,6 @@
+EXPORTS
+	?CreateDeviceServiceL@NcdDeviceInteractionFactory@@SAPAVMNcdDeviceService@@XZ @ 1 NONAME ; class MNcdDeviceService * NcdDeviceInteractionFactory::CreateDeviceServiceL(void)
+	?CreateDeviceServiceLC@NcdDeviceInteractionFactory@@SAPAVMNcdDeviceService@@XZ @ 2 NONAME ; class MNcdDeviceService * NcdDeviceInteractionFactory::CreateDeviceServiceLC(void)
+	?CreateInstallationServiceL@NcdDeviceInteractionFactory@@SAPAVMNcdInstallationService@@XZ @ 3 NONAME ; class MNcdInstallationService * NcdDeviceInteractionFactory::CreateInstallationServiceL(void)
+	?CreateInstallationServiceLC@NcdDeviceInteractionFactory@@SAPAVMNcdInstallationService@@XZ @ 4 NONAME ; class MNcdInstallationService * NcdDeviceInteractionFactory::CreateInstallationServiceLC(void)
+

@@ -1,0 +1,41 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+target				swiobserver.exe        
+targettype			exe
+
+uid					0x0 0x102836C3
+
+ MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+userinclude			../../../inc
+userinclude			../inc_private
+
+sourcepath			../server
+
+source				startup.cpp swiobserver.cpp swiobsession.cpp
+source				swiobprocessor.cpp swiobservationreader.cpp
+source				swiobserverwaiter.cpp 
+
+library				scsserver.lib euser.lib efsrv.lib estor.lib ecom.lib
+library				swiobservedinfo.lib swiobserverplugin.lib
+
+capability			ProtServ
+
+vendorid			0x70000001
+SMPSAFE

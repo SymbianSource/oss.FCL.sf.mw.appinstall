@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test file tests upgrades. This file has a different case in the filename to the base package, should still pass
+
+;Languages
+&EN
+
+;Header
+#{"testupgrade"}, (0x811111FD), 3, 2, 1,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"files\option1.txt"-"!:\Documents\InstTest\UPGRADE1.txt";
+"files\option1.txt"-"!:\Documents\iNSTtEST\upgrade4.txt";

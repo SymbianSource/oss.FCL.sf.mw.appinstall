@@ -1,0 +1,35 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A SISX file, with 3 embedded SISX files
+
+;Languages
+&EN
+
+;Header
+#{"embed 16 uids"}, (0x88001113), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;Embedded component
+@"testdependencies_embeddedinsis4.sis",(0x811118FF)
+@"devlangsup_embedded.sis",(0x88000102)
+@"testembed2lvl.sis",(0x8000001C)
+@"3datafiles.sis",(0xA0000206)
+@"053177c_6.sis",(0x81115016)
+
+;Ordinary file to selected drive
+"text\cpu.txt"-"!:\Documents\def053177\cpu1.txt"

@@ -1,0 +1,161 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* @description	Generic "corrupt package" error text
+* @localize	yes
+* @uicontext	errortext
+* @restriction	none
+*
+*/
+
+
+
+
+rls_string STRING_r_error_res_swi_sisx_file_corrupt "Package is corrupt."
+
+/*&
+@description	Error text to show when a SISX file uses an unsupported compression scheme
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_sisx_file_unsupported_compression "Package uses an unsupported compression scheme."
+
+/*&
+@description	Error text to show when a SISX package specifies an invalid target file
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_sisx_file_invalid_filedesc "Package contains an illegal target filename."
+
+/*&
+@description	Error text to show when a SISX package attempts to overwrite a file on device illegally
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_sisx_file_overwrite "Package overwrites a file already installed on device."
+
+ /*&
+@description	Error text to show when a SISX file cannot be installed due to insufficient disk space
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_sisx_file_insufficient_space "Not enough space available on install drive."
+
+/*&
+@description	Reserved for future use
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_sisx_file_reserved ""
+
+/*&
+@description	Error text to show when the install engine leaves for an unknown reason
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_process_failed "Unexpected error encountered while processing package."
+
+/*&
+@description	Error text to show when the swipolicy.ini on the ROM is corrupt
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_swi_policy_corrupt "Installation policy file is corrupt. Contact your device vendor."
+
+/*&
+@description	Error text to show when a SISX package is signed with an unknown signature scheme
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_sig_scheme_unsupported "Package is signed with an unsupported algorithm. Cannot verify its authenticity."
+
+/*&
+@description	Error text to show when a file in a SISX package fails a hash check
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_bad_digest "Files in package are corrupt or have been tampered with."
+
+/*&
+@description	Error text to show when a SISX package fails one of the many security checks in the install engine
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_security_error "Package has failed a security check."
+
+/*&
+@description	Error text to show when the user attempts to install an upgrade without first isntalling the base package
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_no_base_package "Package is an upgrade to a package not presently installed on this device."
+
+/*&
+@description	Error text to show when a SISX package is not a valid upgrade to its base package
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_invalid_upgrade "Package is not a valid upgrade to the base package already installed."
+
+/*&
+@description	Error text to show when a SISX package attempts to illegally eclipse a file
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_invalid_eclipsing "Package attempts to illegally override a file already installed."
+
+/*&
+@description	Error text to show when an executable in a package contains a pre-v5 header, or is for an alternative platform
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_invalid_exe_header "Package contains executables that are unsupported on this device."
+
+/*&
+@description	Error text to show when an executable in a package doesn't match the capabilities baked in to the package header
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_caps_mismatch "Executables in this package are corrupt or have been tampered with."
+
+/*&
+@description	Error text to show when the device doesn't understand an expression in the SISX package
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_instserv_bad_expression "Package contains installation instructions this device is unable to process."
+
+/*&
+@description	Error text to show when an old style SIS file is installed on a v9+ device
+@localize	yes
+@uicontext	errortext
+@restriction	none
+*/
+rls_string STRING_r_error_res_swi_legacy_sis "SIS file is incompatible with this device"

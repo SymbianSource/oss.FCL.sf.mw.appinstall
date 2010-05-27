@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Base package for backup & restore upgrades test 
+;
+&EN
+#{"Backup & Restore upgrades test - 1"}, (0x0a000019), 1, 0, 0, TYPE=SA
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+; Application exe
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable.exe"-"!:\sys\bin\tswiusergrantable.exe";
+
+; File delivered only by base package
+"main.cpp"-"$:\private\81000005\base.txt",VR
+
+; Upgrades should overwrite this file to test access to protected directories
+"main.cpp"-"$:\private\81000005\upgrademe.txt"
+
+; Public data file to overwrite with upgrades
+"main.cpp"-"$:\upgrademe_public.txt"

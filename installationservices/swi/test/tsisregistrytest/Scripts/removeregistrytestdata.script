@@ -1,0 +1,214 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Uses TUISCRIPTADAPTORS to remove the generated registry entries.
+//
+LOAD_SUITE tuiscriptadaptors
+//
+#
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0001
+//! @SYMTestCaseDesc		Removes the registry entry for a simple unsigned SISX package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entry for a simple unsigned SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+// don't need to explicitly remove this as it gets removed by u_embed2 anyway
+//START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0001
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+//END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0001
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0002
+//! @SYMTestCaseDesc		Removes the registry entries for a SISX package and the other packages it embeds.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entries for a SISX package and the other packages it embeds.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0003
+//! @SYMTestCaseDesc		Removes the registry entry for a signed SISX package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entry for a signed SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0004
+//! @SYMTestCaseDesc		Removes the registry entry that contains a SID
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entry that contains a SID
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_A
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0005
+//! @SYMTestCaseDesc		Removes registry entries for a SISX package and an augmentation to that package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes registry entries for a SISX package and an augmentation to that package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini u_augmentation_A
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testaugmentations.ini u_augmentation
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0006
+//! @SYMTestCaseDesc		Removes registry entries for a SISX package, and packages that depend on it.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes registry entries for a SISX package, and packages that depend on it.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_base
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testdependencies.ini u_depend3
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0007
+//! @SYMTestCaseDesc		Removes registry entries for a SISX package that has a preinstalled patch.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes registry entries for a SISX package that has a preinstalled patch.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base2
+RUN_UTILS DELETEFILE e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledpatch2.txt
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0008
+//! @SYMTestCaseDesc		Removes registry entries for a SISX package that has been upgraded.
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes registry entries for a SISX package that has been upgraded.
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0008
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0009
+//! @SYMTestCaseDesc		Removes registry entries for a SISX package that validates to a known root
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes registry entries for a SISX package that that validates to a known root
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\registrytestdata.ini u_optionsnc
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0009
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0010
+//! @SYMTestCaseDesc		Removes the registry entry for a simple SISX package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entry for a simple SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF			DEF054596
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tsisregistrytest\scripts\registrytestdata.ini u_def054596
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0010
+ 
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0011
+//! @SYMTestCaseDesc		Removes the registry entry for a SISX package containning 1500 files
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Removes the registry entry for a SISX package containning 1500 files
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMDEF			DEF112425
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0011
+
+RUN_TEST_STEP 4000 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_1500files
+
+END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0011
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYREMOVETESTDATA-0012
+//! @SYMTestCaseDesc		Removes the registry entry for smlsyncagent SISX package
+//! @SYMTestPriority		High
+//! @SYMTestActions		Removesthe registry entry for the smlsyncagent SISX package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			DEF140011
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0012
+
+RUN_TEST_STEP 5000 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_smlsyncagent
+
+END_TESTCASE API-SEC-SISREGISTRYCREATETESTDATA-0012
+

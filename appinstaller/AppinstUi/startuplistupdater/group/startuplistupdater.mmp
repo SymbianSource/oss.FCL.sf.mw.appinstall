@@ -1,0 +1,49 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:  Project file for startup list updater.
+*               Applications that needs to be started at boot time install
+*               resource file containing STARTUP_ITEM_INFO resource into
+*               the import directory of the startup list updater. Startup
+*               list updater registers these applications to system, to be
+*               started at boot time. Uninstalled applications are removed
+*               from the startup list too.
+*/
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET          startuplistupdater.exe
+TARGETTYPE      exe
+UID             0x100039CE 0xE5F88F39   // TODO: Change UID3 to 0x101F875A after SWInstSvrUI has been removed
+CAPABILITY      CAP_SERVER AllFiles
+VENDORID        VID_DEFAULT
+
+SOURCEPATH      ../src
+SOURCE          main.cpp
+SOURCE          startuplistupdater.cpp
+
+MW_LAYER_SYSTEMINCLUDE
+USERINCLUDE     ../inc
+
+LIBRARY         euser.lib
+LIBRARY         efsrv.lib               // RFs, RFile
+LIBRARY         dscstore.lib            // RDscStore, CDscItem
+LIBRARY         sisregistryclient.lib   // Swi::RSisRegistrySession, Swi::RSisRegistryEntry
+LIBRARY         siscontroller.lib       // Swi::TSisTrustStatus::IsTrusted
+LIBRARY         featmgr.lib             // FeatureManager
+LIBRARY         bafl.lib                // RResourceFile
+LIBRARY         platformenv.lib         // DriveInfo
+
+SMPSAFE
+

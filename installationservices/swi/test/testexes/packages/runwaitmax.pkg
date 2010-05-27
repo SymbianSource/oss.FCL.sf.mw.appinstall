@@ -1,0 +1,42 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs three exes which are launched after install is complete and 
+; the exes 'expect' to be run in the right order.
+; It also launches a mimehandler via a file. 
+
+;Languages 
+&EN
+
+;Header
+#{"runwaitmax"}, (0x8000887D), 1, 2, 3,TYPE=SA
+
+%{"Vendor"} 
+:"Symbian S&DP"
+
+"\epoc32\data\Z\plugin\testplugin_102836C9.rsc"-"$:\resource\plugins\testplugin_102836C9.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\testplugin_102836C9.dll"-"$:\sys\bin\testplugin_102836C9.dll"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait1.exe"-"$:\sys\bin\runwait1.exe", FR, RUNAFTERINSTALL, RW
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait2.exe"-"$:\sys\bin\runwait2.exe", FR, RUNAFTERINSTALL, RW
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait3.exe"-"$:\sys\bin\runwait3.exe", FR, RUNAFTERINSTALL, RW
+
+"\epoc32\data\z\mimehandler\mimehandler.rsc"-"$:\resource\apps\mimehandler.rsc"
+"\epoc32\data\z\mimehandler\mimehandler_reg.rsc"-"$:\private\10003a3f\import\apps\mimehandler_reg.rsc"
+"\epoc32\data\z\mimehandler\mimehandler_loc.rsc"-"$:\resource\apps\mimehandler_loc.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\mimehandler.exe"-"$:\sys\bin\mimehandler.exe"
+
+"packages\mimehandler.txt"-"$:\mimehandler.txt", FILEMIME,"x-epoc/x-rai-app", RA, RW
+; we don't expect this to run but it provides extra coverage
+"packages\mimehandler.txt"-"$:\mimehandler2.xxx", FR , RA

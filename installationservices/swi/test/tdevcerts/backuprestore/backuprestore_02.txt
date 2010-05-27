@@ -1,0 +1,25 @@
+#Embedded SIS file, Top level SIS file constrained by multiple vid, sid1 and dev1. The device ID will be changed after the SIS files is backed up.
+#This will cause the restore fail
+[main]
+name=backuprestore_02
+template=simple.txt
+inifile=notused.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,user_caps,single_vid1,single_sid1,single_dev1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+sis1=backuprestore_01.sis
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=2
+exist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+exist1=c:\sys\bin\tswisystemcapability_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnoexist=2
+noexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+noexist1=c:\sys\bin\tswisystemcapability_protected.exe

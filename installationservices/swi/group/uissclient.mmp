@@ -1,0 +1,87 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* uissclient.dll Client DLL for UISS used by SWIS
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY All
+
+TARGET		uissclient.dll
+TARGETTYPE	dll
+
+//             KUidUissClient
+UID			0x1000008d 0x10203521
+VENDORID	0x70000001
+
+USERINCLUDE	../source/uiss/client
+USERINCLUDE	../source/uiss/common
+USERINCLUDE	../source/uiss/server
+USERINCLUDE	../inc ../inc/swi
+
+SOURCEPATH	../source/uiss/client
+
+SOURCE	uissclient.cpp
+SOURCE	appinfo.cpp
+SOURCE	sisuihandler.cpp
+SOURCE	writestream.cpp
+SOURCE	uissstream.cpp
+SOURCE	uisscommand.cpp
+SOURCE  nativecomponentinfo.cpp
+
+SOURCE	../common/msisuihandlers.cpp
+SOURCE	commands/displayapplicationsinuse.cpp
+SOURCE	commands/displaycannotoverwritefile.cpp
+SOURCE	commands/displaydrive.cpp
+SOURCE	commands/displayerror.cpp
+SOURCE	commands/displaygrantcapabilities.cpp
+SOURCE	commands/handlecancellableinstallevent.cpp
+SOURCE	commands/handleinstallevent.cpp
+SOURCE	commands/displayinstall.cpp
+SOURCE	commands/displaylanguage.cpp
+SOURCE	commands/displayocspresult.cpp
+SOURCE	commands/displayoptions.cpp
+SOURCE	commands/displayquestion.cpp
+SOURCE	commands/displaysecuritywarning.cpp
+SOURCE	commands/displaytext.cpp
+SOURCE	commands/displayuninstall.cpp
+SOURCE	commands/displayupgrade.cpp
+SOURCE	commands/displaydeviceincompatibility.cpp
+SOURCE	commands/displaydependencywarning.cpp
+SOURCE	commands/displaydependencybreak.cpp
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		uissclient.DEF
+#else
+DEFFILE		uissclient_legacy.def
+#endif
+
+LIBRARY euser.lib
+LIBRARY estor.lib
+LIBRARY x509.lib
+LIBRARY x500.lib
+LIBRARY crypto.lib
+LIBRARY pkixcertbase.lib
+LIBRARY sisregistryclient.lib
+LIBRARY efsrv.lib
+SMPSAFE

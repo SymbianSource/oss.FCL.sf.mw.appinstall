@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test SIS file (C) embeds and depends on (B) and SP of (B).
+
+;Languages
+&EN
+
+;Header
+#{"SCENARIO_5_C"}, (0x8AAAAAA2), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;Ordinary file to selected drive
+"text\embedC.txt"-"!:\Documents\InstTest\ecc1.txt";
+
+@"testuninstall_scenario3__b_sp.sis",(0x8AAAAAA1)
+
+(0x8AAAAAA1), 1, 2, 4, {"SCENARIO_3_B_SP"}
+(0x8AAAAAA1), 1, 2, 5, {"SCENARIO_4_B_PU"}

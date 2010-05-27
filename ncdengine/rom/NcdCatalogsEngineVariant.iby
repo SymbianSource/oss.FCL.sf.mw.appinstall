@@ -1,0 +1,37 @@
+/*
+* Copyright (c) 2005-2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Catalogs variation
+ *
+*/
+ 
+#ifndef __PREMINET_NCD_ENGINE_ALTAIR_VARIANT_IBY__
+#define __PREMINET_NCD_ENGINE_ALTAIR_VARIANT_IBY__
+
+#ifdef FF_NCD_ENGINE
+
+// NOTE! For now variant flag is not available.
+
+// #ifdef __PREMINET_OPERATOR_VARIANT
+// // Use engine/provider configuration file that has variant flag set
+// data=ZPRIVATE\20019119\config_variant.xml		            PRIVATE\20019119\config.xml
+// #else
+// Use regular engine/provider configuration file
+data=ZPRIVATE\20019119\config.xml		            PRIVATE\20019119\config.xml
+// #endif // __PREMINET_OPERATOR_VARIANT
+
+
+#endif
+
+#endif
+

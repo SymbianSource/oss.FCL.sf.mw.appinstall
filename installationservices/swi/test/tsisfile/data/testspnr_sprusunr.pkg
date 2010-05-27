@@ -1,0 +1,23 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+; Non-removable system upgrade patch
+#{"Test Application SP1"}, (0x01001811), 1, 0, 1, TYPE=SP,RU,NR
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+"text\file1.txt"-"c:\spnr\sp_ru_su_nr.txt"

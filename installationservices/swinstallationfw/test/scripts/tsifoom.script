@@ -1,0 +1,71 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run tsif OOM Suite Tests
+
+// Delete the SCR Database file
+LOAD_SUITE tscr
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+
+LOAD_SUITE tUsifSuite
+
+// ************************ SIF Component OOM test cases ************************
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-oom-0001
+//! @SYMTestCaseDesc 		Test OOM on server side
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-oom-0001
+
+// by file name - simulate OOM at server side
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileNameOOM
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendorOOM
+// by file name - simulate OOM at client side
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallClientOOM
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallClientOOM
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileHandleOOM
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendorOOM
+
+END_TESTCASE API-SEC-SIF-tsif-oom-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-oom-0002
+//! @SYMTestCaseDesc 		Test OOM on getting component information
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-oom-0002
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsif\tsif.ini GetComponentInfoByFileNameOOM
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsif\tsif.ini GetComponentInfoByFileHandleOOM
+
+END_TESTCASE API-SEC-SIF-tsif-oom-0002
+
+
+// ************************ SIF Unit test cases ************************
+//! @SYMTestCaseID 		API-SEC-SIF-tsifunit-OOM-0001
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsifunit-OOM-0001
+
+RUN_TEST_STEP 100 tUsifSuite SifCommonUnitTestStep z:\tusif\tsif\tsif.ini SifCommonOOM 
+
+END_TESTCASE API-SEC-SIF-tsifunit-OOM-0001
+
+
+// Wait 3 seconds in order to let the SIF server shutdown itself
+DELAY 3
+
+PRINT Complate_te_Sif_Tests

@@ -1,0 +1,25 @@
+EXPORTS
+	_ZN14TCatalogsDebug5PrintE11TRefByValueIK7TDesC16Ez @ 1 NONAME
+	_ZN14TCatalogsDebug5PrintEPKcz @ 2 NONAME
+	_ZN14TCatalogsDebug8DumpDataEPKvii @ 3 NONAME
+	_ZN14TCatalogsDebugC1ENS_5TTypeEPKciS2_ji @ 4 NONAME
+	_ZN14TCatalogsDebugC2ENS_5TTypeEPKciS2_ji @ 5 NONAME
+	_ZN18RCatalogsDebugHeap8ActivateEi @ 6 NONAME
+	_ZN18RCatalogsDebugHeap8InstallLEi @ 7 NONAME
+	_ZN18RCatalogsDebugHeap9UninstallEv @ 8 NONAME
+	_ZN23TCatalogsLocalExitTrace7DisableEv @ 9 NONAME
+	_ZN23TCatalogsLocalExitTraceC1EPKciS1_ @ 10 NONAME
+	_ZN23TCatalogsLocalExitTraceC2EPKciS1_ @ 11 NONAME
+	_ZN23TCatalogsLocalExitTraceD1Ev @ 12 NONAME
+	_ZN23TCatalogsLocalExitTraceD2Ev @ 13 NONAME
+	_ZN32TCatalogsLocalDebugHeapActivatorC1Ev @ 14 NONAME
+	_ZN32TCatalogsLocalDebugHeapActivatorC2Ev @ 15 NONAME
+	_ZN32TCatalogsLocalDebugHeapActivatorD1Ev @ 16 NONAME
+	_ZN32TCatalogsLocalDebugHeapActivatorD2Ev @ 17 NONAME
+	_ZN33TCatalogsLocalCleanupStackWatcherC1Ev @ 18 NONAME
+	_ZN33TCatalogsLocalCleanupStackWatcherC2Ev @ 19 NONAME
+	_ZN33TCatalogsLocalCleanupStackWatcherD1Ev @ 20 NONAME
+	_ZN33TCatalogsLocalCleanupStackWatcherD2Ev @ 21 NONAME
+	_ZTI18RCatalogsDebugHeap @ 22 NONAME ; #<TI>#
+	_ZTV18RCatalogsDebugHeap @ 23 NONAME ; #<VT>#
+

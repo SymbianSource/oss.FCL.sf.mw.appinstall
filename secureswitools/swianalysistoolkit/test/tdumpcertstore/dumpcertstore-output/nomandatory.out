@@ -1,0 +1,86 @@
+NoMandatory.dat: ROM Based SwiCertstore 
+
+
+[SymbianTestRootCADiffSerial]
+
+file=SymbianTestRootCADiffSerial.der
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= AllFiles
+application=SWInstall
+Mandatory=0
+
+
+[Root5CA]
+
+file=Root5CA.der
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= AllFiles
+application=SWInstall
+Mandatory=0
+
+
+[SymbianTestDSACA]
+
+file=SymbianTestDSACA.der
+capability= MultimediaDD
+capability= NetworkServices
+capability= LocalServices
+capability= Location
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[SymbianTestRSACA]
+
+file=SymbianTestRSACA.der
+capability= ReadUserData
+capability= WriteUserData
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[SymbianTestTCBRSACA]
+
+file=SymbianTestTCBRSACA.der
+capability= TCB
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[SymbianTestExpiredRSACA]
+
+file=SymbianTestExpiredRSACA.der
+capability= DRM
+capability= NetworkServices
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[SymbianTestChainRSACA]
+
+file=SymbianTestChainRSACA.der
+capability= DRM
+capability= NetworkServices
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[first]
+
+file=first.der
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= AllFiles
+application=SWInstall
+Mandatory=0
+

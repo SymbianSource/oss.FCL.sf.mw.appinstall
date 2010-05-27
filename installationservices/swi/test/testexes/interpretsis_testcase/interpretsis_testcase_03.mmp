@@ -1,0 +1,53 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// using relative paths for sourcepath and user includes
+//
+
+TARGET        interpretsis_testcase_03.exe
+TARGETTYPE    exe
+UID           0x100039CE 0xE800005C
+VENDORID 	  0x70000001
+SOURCEPATH    .
+SOURCE        interpretsis_testcase_Main.cpp
+SOURCE        interpretsis_testcase_Application.cpp
+SOURCE        interpretsis_testcase_Document.cpp
+SOURCE        interpretsis_testcase_AppUi.cpp
+SOURCE        interpretsis_testcase_AppView.cpp
+USERINCLUDE   .
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+SYSTEMINCLUDE /epoc32/include/platform/app/techview
+SYSTEMINCLUDE /epoc32/include/platform/app
+
+START RESOURCE	interpretsis_testcase_03.rss
+HEADER
+TARGETPATH		/resource/apps
+LANG 04			// Build Spanish language versions of resources
+END
+
+START RESOURCE	interpretsis_testcase_03_reg.rss
+TARGETPATH		/private/10003a3f/apps
+END
+
+// Icons for Spanish language version
+START BITMAP	interpretsis_testcase04_03.mbm
+TARGETPATH		/resource/apps
+SOURCEPATH		04
+SOURCE			c8,1 icon24.BMP
+END
+
+LIBRARY       euser.lib apparc.lib cone.lib eikcore.lib gdi.lib
+
+
+SMPSAFE

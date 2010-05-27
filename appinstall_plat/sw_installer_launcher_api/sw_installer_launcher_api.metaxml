@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<api id="e68919662f41d0c936a841e96a473e26" dataversion="1.0">
+  <name>SW Installer Launcher API</name>
+  <description>Provides access to the software/content installation and uninstallation services.</description>
+  <type>c++</type>
+  <subsystem>appinstaller</subsystem>
+  <libs>
+    <lib name="SwInstCli.lib" />
+  </libs>
+  <release category="domain"/>
+  <attributes>
+     <!-- This indicates wether the api provedes separate html documentation -->
+     <!-- or is the additional documentation generated from headers. -->
+     <!-- If you are unsuere then the value is "no" -->
+     <htmldocprovided>yes</htmldocprovided>
+     <adaptation>no</adaptation>
+  </attributes>
+</api>

@@ -1,0 +1,86 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+PRINT Run Developer Certificates corrupt test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-corrupt-0001
+//! @SYMTestCaseDesc 		The device id constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0dev, then SWI should interpret this as "corrupt certificate."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-corrupt-0001
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\corrupt.ini corrupt_01
+
+END_TESTCASE API-SEC-corrupt-0001
+
+
+//! @SYMTestCaseID 		API-SEC-corrupt-0002
+//! @SYMTestCaseDesc 		The sid constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0sid, then SWI should interpret this as "corrupt certificate."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-corrupt-0002
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\corrupt.ini corrupt_02
+
+END_TESTCASE API-SEC-corrupt-0002
+
+
+//! @SYMTestCaseID 		API-SEC-corrupt-0003
+//! @SYMTestCaseDesc 		The vid constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0vid, then SWI should interpret this as "corrupt certificate."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-corrupt-0003
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\corrupt.ini corrupt_03
+
+END_TESTCASE API-SEC-corrupt-0003
+
+
+//! @SYMTestCaseID 		API-SEC-corrupt-0004
+//! @SYMTestCaseDesc 		The capability constraint is present, but the constraints contained in the certificate chain
+//!		     		is corrupt_0caps, then SWI should interpret this as "corrupt certificate."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-corrupt-0004
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\corrupt.ini corrupt_04
+
+END_TESTCASE API-SEC-corrupt-0004
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

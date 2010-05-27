@@ -1,0 +1,35 @@
+/*
+* Copyright (c) 2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for IAUpdater.
+*
+*/
+
+
+
+NAME SIUI
+
+#include <eikon.rh>
+#include <data_caging_paths_strings.hrh>
+
+#ifdef __S60_32__
+#include "iaupdate.loc"
+#else
+#include <iaupdate.loc>
+#endif
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE LBUF r_iaupdater_installing { txt = qtn_swupdate_installing; }
+
+// EOF

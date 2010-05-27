@@ -1,0 +1,6 @@
+EXPORTS
+	?RetrieveFileHandlesL@RScrHelper@Usif@@QAEXAAVRFile@@0@Z @ 1 NONAME ; void Usif::RScrHelper::RetrieveFileHandlesL(class RFile &, class RFile &)
+	?Connect@RScrHelper@Usif@@QAEHXZ @ 2 NONAME ; int Usif::RScrHelper::Connect(void)
+	??0RScrHelper@Usif@@QAE@XZ @ 3 NONAME ; Usif::RScrHelper::RScrHelper(void)
+	?Close@RScrHelper@Usif@@QAEXXZ @ 4 NONAME ; void Usif::RScrHelper::Close(void)
+

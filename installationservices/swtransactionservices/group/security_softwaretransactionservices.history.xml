@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Software Transaction Services">
+  <purpose>
+    Provide transactional services on top of Symbian OS file system.
+  </purpose>
+  
+  <defect number="DEF130781" title="PREQ1269: STS deletes the existing empty directories on rollback of transaction" revision="008">
+	Issue solved for empty directories on rollback of transaction
+  </defect>
+  
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="007">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+
+  <defect number="DEF130602" title="PREQ1269: STS returns -15 error when rollback large number of files" revision="006">
+	 STS returns -15 error when rollback large number of files
+  </defect>
+  
+  <defect number="DEF130332" title=" PREQ1269: STS server creating unnecessarry directories." revision="005">
+	 STS server now doesn't create unnecessarry directories 
+  </defect>
+
+  <defect number="DEF130535" title="PREQ1269: TFileMode enum is used as function paramter type, which is incorrect." revision="004">
+	Used TUint as function paramter type in the following methods:
+    1)RStsSession::CreateTemporaryL()
+	2)RStsSession::CreateNewL() 
+	3)RStsSession::OverwriteL() 
+  </defect>
+  
+  <deliverystep number="1117" name="PREQ1269: Crypto Services: Plugin management and highly desirable features
+ (Phase 2)" osproject="Diran" revision="003">
+	  <milestone project="GT0433" number="3.2"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  1) Post-manufacture plugin management 2) Complex queries in the SCR
+			3) Additional smaller requirements and changes and 4) Improved security in the SCR
+	  </preq>
+  </deliverystep>
+
+  <defect number="DEF128988" title="RollBackAllL() should be TRAPed in CStsServer::ConstructL()" revision="002">
+	RollBackAllL() call in CStsServer::ConstructL() has been put in TRAP_IGNORE to ignore any errors returned form the roll-back all procedure and provide smooth STS server startup
+  </defect>
+
+  <deliverystep number="1116" name="PREQ1269: Security and Data Privacy: Universal Software Install Framework (Phase 1)" osproject="Diran" revision="001">
+	  <milestone project="GT0433" number="3.1"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		   Delivers the main set of features for the Diran Early Phase. Includes the new components (SCR, SIF and STS), migration of the native installer to use the new components and most reference code.
+			Excludes non-mandatory features and post-production plugin management.
+	  </preq>
+  </deliverystep>
+
+</relnotes>

@@ -1,0 +1,3 @@
+EXPORTS
+	?DummyExport@@YAPAXXZ @ 1 NONAME ; void * DummyExport(void)
+

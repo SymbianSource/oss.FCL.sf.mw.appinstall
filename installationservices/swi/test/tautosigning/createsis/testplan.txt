@@ -1,0 +1,113 @@
+## Just Package file
+####################
+
+# No cert/key and passphase in the package file
+1. createsis create simple.pkg
+
+# No cert/key and passphase in the package file, multiple languages; EN in various place
+2. createsis create simple2.pkg
+
+# No cert/key and passphase in the package file, multiple languages; EN in various place
+3. createsis create simple3.pkg
+
+# No cert/key and passphase in the package file, multiple languages; EN in various place
+4. createsis create simple4.pkg
+
+# No cert/key and passphase in the package file, multiple languages; EN in different place
+5. createsis create simple5.pkg
+
+# No cert/key and passphase in package file; passphase in command line; multiple languages
+6. createsis create simple6.pkg -pass helloworld
+
+# cert/key in package file; multiple languages line
+7. createsis create simple7.pkg
+
+# cert/key and passphase in package file; multiple languages split into few lines.
+8. createsis create simple8.pkg
+
+# cert/key and passphase in package file; multiple languages split into few lines.
+8a. createsis create simple8a.pkg -pass "asdf"
+
+# (ERROR Path) cert/key and unquated passphase in package file; multiple languages split into few lines.
+9. createsis create simple9.pkg
+
+# cert/key in command line
+10. createsis create -key key.key -cert cert.cer simple10.pkg
+
+# cert/key and passphase in command line
+11. createsis create -key key-gen.key -cert cert-gen.cer -pass "asdf" simple11.pkg
+
+# cert/key and passphase in command line
+12. createsis create -key key.key -cert cert.cer -pass HelloWorld simple12.pkg
+
+# (ERROR Path)No cert; only key in command line.
+13. createsis create -key key.key simple.pkg
+
+# (ERROR Path) No key; only cert in command line.
+14. createsis create -cert cert.cer simple.pkg
+
+# (ERROR Path) key/cert in command line but missing package file
+15. createsis create -key key.key -cert cert.cer
+
+# (ERROR Path) No key/cert in command line and missing package file
+16. createsis create
+
+# (ERROR Path) makesis invalid file name
+17. createsis create simsim.pkg
+
+# (ERROR Path) signsis invalid file name
+18. createsis create -key k.key -cert.cer simple.pkg
+
+# (ERROR Path) makekeys failed to write file (make cert-gen.key readonly file)
+19. createsis create simple19.pkg 
+
+# (ERROR Path) Test USAGE
+20. createsis
+
+# (ERROR Path) Test USAGE
+21. createsis asd;fkljas
+
+# (ERROR Path) Test USAGE
+22. createsis create -?
+
+# (ERROR Path) Test USAGE
+23. createsis -help
+
+# signing without passpharase
+24. createsis sign -cert cert.cer -key key.key simple.SIS simple-out.SIS
+
+# signing with passpharase
+25. createsis sign -cert cert-gen.cer -key key-gen.key -pass asdf simple-out.SIS simple-out.SIS
+
+# (ERROR Path) signing without key
+26. createsis sign -cert cert.cer simple.SIS simple-out.SIS
+
+# (ERROR Path) signing without cert
+27. createsis sign -key key.key simple.SIS simple-out.SIS
+
+# (ERROR Path) signing without SIS file
+28. createsis sign -key key.key -cert cert.cer simple.SIS
+
+# (ERROR Path) signing with extra parameter
+29. createsis sign -key key.key -cert cert.cer simple.SIS simple-out.SIS asdgd
+ 
+# dump sis
+30. createsis dump simple-out.SIS
+
+# (ERROR Path) dump with extra parameter
+31. createsis dump simple-out.SIS asdgd
+
+# (ERROR Path) dump without SIS file
+32. createsis dump
+
+# strip sis
+33. createsis strip simple-out.SIS simple-less.SIS
+
+# (ERROR Path) strip sis with extra parameter
+34. createsis strip simple-out.SIS simple-less.SIS asdf
+
+# (ERROR Path) strip sis with -pass asdf
+35. createsis strip simple-out.SIS simple-less.SIS -pass asdf
+
+# (ERROR Path) strip sis without SIS file
+36 createsis strip 

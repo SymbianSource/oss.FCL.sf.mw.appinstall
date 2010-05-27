@@ -1,0 +1,45 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for AppMngr2 Runtime Plugin API
+*
+*/
+
+
+#include <platform_paths.hrh>
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+../inc/appmngr2appinfo.h                MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2appinfo.h )
+../inc/appmngr2cleanuputils.h           MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2cleanuputils.h )
+../inc/appmngr2cleanuputils.inl         MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2cleanuputils.inl )
+../inc/appmngr2driveutils.h             MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2driveutils.h )
+../inc/appmngr2drmutils.h               MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2drmutils.h )
+../inc/appmngr2common.hrh               MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2common.hrh )
+../inc/appmngr2infobase.h               MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2infobase.h )
+../inc/appmngr2infoiterator.h           MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2infoiterator.h )
+../inc/appmngr2packageinfo.h            MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2packageinfo.h )
+../inc/appmngr2runtime.h                MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2runtime.h )
+../inc/appmngr2runtimeobserver.h        MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2runtimeobserver.h )
+../inc/appmngr2recognizedfile.h         MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2recognizedfile.h )
+../inc/appmngr2debugconfig.h            MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2debugconfig.h )
+../inc/appmngr2debugutils.h             MW_LAYER_PLATFORM_EXPORT_PATH( appmngr2debugutils.h )
+
+// export iby files
+../rom/appmngr2runtime.iby              CORE_MW_LAYER_IBY_EXPORT_PATH( appmngr2runtime.iby )
+
+PRJ_MMPFILES
+appmngr2pluginapi.mmp
+

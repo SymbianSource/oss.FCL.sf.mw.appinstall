@@ -1,0 +1,15 @@
+<!ELEMENT testlist (baseResultDir?, test+)>
+<!ELEMENT baseResultDir (#PCDATA)>
+<!ELEMENT test (title, command, check, setup?, cleanup?)>
+<!ATTLIST test id CDATA #REQUIRED>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT command (#PCDATA)>
+<!ATTLIST command dir CDATA #IMPLIED>
+<!ATTLIST command log (yes|no) #IMPLIED>
+<!ELEMENT check (#PCDATA)>
+<!ATTLIST check type (diff|result|program) #REQUIRED>
+<!ATTLIST check name CDATA #IMPLIED>
+<!ATTLIST check dir CDATA #IMPLIED>
+<!ELEMENT setup (#PCDATA)>
+<!ELEMENT cleanup (#PCDATA)>
+

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Reference Application Manager">
+  <purpose>
+    Provides a reference implementation of Application Manager for browsing and removing installed components through the Universal Software Install Framework APIs.
+  </purpose>
+
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="003">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+
+  <defect number="DEF130796" title="PREQ1269: Can set the component size negative" revision="002"> 
+	 The API wasn't changed to Uint, as this would require the DB also to support unsigned values in the relevant column, and I couldn't see an option for doing it without disrupting the schema. 
+  </defect> 
+
+  <deliverystep number="1116" name="PREQ1269: Security and Data Privacy: Universal Software Install Framework (Phase 1)" osproject="Diran" revision="001">
+	  <milestone project="GT0433" number="3.1"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		   Delivers a console based Application Manager that provides for browsing and removing installed components. These commands demonstrate basic SIF and SCR software management operations.
+	  </preq>
+  </deliverystep>
+
+</relnotes>

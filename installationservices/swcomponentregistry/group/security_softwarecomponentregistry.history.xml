@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Software Component Registry">
+  <purpose>
+    Provide APIs and data repository for software management on the device.
+  </purpose>
+
+  <defect number="DEF137187" title="Move SCR OOM tests to a new script" revision="018">
+	Created a new script.
+  </defect>
+
+ <defect number="DEF128695" title="PREQ1269: SetServerHeapFail causing panic in SCRSERVER.EXE" revision="017">
+	panic in SCRSERVER.EXE  is fixed. 
+  </defect>
+  <defect number="DEF131414" title="Performance in RSisRegistryEntry::InstalledDrivesL is low " revision="016">
+	Modified SCR interface to allow avoiding drive management when registering a file. 
+  </defect>
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="015">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+  
+  <defect number="DEF131262" title="Building ROMs results in a file not being found in siflauncherconfig.iby" revision="014"> 
+	 As described in proposed solution in the defect - added EPOCROOT## to the path 	
+  </defect> 
+
+  <defect number="DEF128680" title="PREQ1269: Thread scrserver.exe::Main Panic USER 21" revision="013"> 
+	 Added a check when processing filters in SCR.
+  </defect> 
+
+  <defect number="DEF130740" title="PREQ1269: RSoftwareComponentRegistryView leaving with -4" revision="012"> 
+	 Added validation of input parameters in the SCR 	
+  </defect> 
+
+  <defect number="DEF130796" title="PREQ1269: Can set the component size negative" revision="011"> 
+	 The API wasn't changed to Uint, as this would require the DB also to support unsigned values in the relevant column, and I couldn't see an option for doing it without disrupting the schema. 
+  </defect> 
+
+  <defect number="DEF130814" title="PREQ1269: ALLOC Panic raised in scrserver.exe during uninstallation" revision="010"> 
+	 In ref. installer, fixed the order of closing sub-sessions and sessions in the SCR
+  </defect> 
+
+  <defect number="DEF129121" title="scr.iby references missing files when building Techview" revision="009">
+    Refered to the generic data file's path; and cleanup the iby file. 	
+  </defect>
+
+  <defect number="DEF131245" title="Incorrect date/time handling in the SCR" revision="008">
+	Fixed date/time handling in the SCR, so that CComponentEntry construction won't fail on the last month of the year or last day of the month. 
+  </defect>
+
+  <deliverystep number="1117" name="PREQ1269: Crypto Services: Plugin management and highly desirable features
+ (Phase 2)" osproject="Diran" revision="007">
+	  <milestone project="GT0433" number="3.2"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  1) Post-manufacture plugin management 2) Complex queries in the SCR
+			3) Additional smaller requirements and changes and 4) Improved security in the SCR
+	  </preq>
+  </deliverystep>
+
+ <defect number="DEF128602" title="PREQ1269 - Application Manager is unresponsive" revision="006">
+	Added caching for the CComponentEntry object in the subsession. Improved the performance of RSisRegistryEntry::OpenL. Several other minor improvements. 
+  </defect>
+  
+  <defect number="DEF128615" title="PREQ1269 - SCR database consumes much more disk space than SIS Registry" revision="005">
+	As N- series devices tend to have many in ROM components, most settings in the SCR DB were changed to favour ROM components as the default settings. Additionally, more settings were made optional for all components (index etc.) 
+  </defect>
+ 
+  <defect number="DEF128618" title="PREQ1269 - Processing of ROM stubs is very slow" revision="004">
+	Removing queries while adding files. Improving bitmask management for installed drives. Making more properties optional. Made default options to favour ROM components.
+  </defect>
+
+  <defect number="DEF129328" title="PREQ1269: Read-Write lock fails" revision="003">
+	State variables were moved to the sub-session class instead of CRequestImpl class. This way the state is not shared across sub-sessions. 
+  </defect>
+ 
+  <defect number="DEF129120" title="PREQ1269: scrserver.exe::Main Panic KERN-EXEC 3 when listing with locale" revision="002">
+	Fixed a crash while matching downgraded locales for properties.
+  </defect>
+
+  <deliverystep number="1116" name="PREQ1269: Security and Data Privacy: Universal Software Install Framework (Phase 1)" osproject="Diran" revision="001">
+	  <milestone project="GT0433" number="3.1"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		   Delivers the main set of features for the Diran Early Phase. Includes the new components (SCR, SIF and STS), migration of the native installer to use the new components and most reference code.
+			Excludes non-mandatory features and post-production plugin management.
+	  </preq>
+  </deliverystep>
+
+</relnotes>

@@ -1,0 +1,4 @@
+EXPORTS
+	?UninstallL@Usif@@YAXH@Z @ 1 NONAME ; void Usif::UninstallL(int)
+	?GenerateNewAppUidL@Usif@@YA?AVTUid@@XZ @ 2 NONAME ; class TUid Usif::GenerateNewAppUidL(void)
+

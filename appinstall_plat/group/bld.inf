@@ -1,0 +1,29 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Includes all the Domain API specific bld.inf files, which 
+*                export files.
+*
+*/
+
+
+#include "../iaupdate_api/group/bld.inf"
+#include "../task_plugin_api/group/bld.inf"
+#include "../sw_installer_common_ui_api/group/bld.inf"
+#include "../sw_installer_launcher_api/group/bld.inf"
+#include "../task_management_api/group/bld.inf"
+#include "../sw_installer_ui_plugin_api/group/bld.inf"
+#include "../sw_installer_cr_keys/group/bld.inf"
+#include "../sw_installer_ps_keys/group/bld.inf"
+#include "../sifui_api/group/bld.inf"
+

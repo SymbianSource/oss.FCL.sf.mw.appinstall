@@ -1,0 +1,373 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// This script implements Software Component Registry Performance tests.
+// For more information about the test cases, please see TMS:\Security,Privacy and Control Protection\USIF\SCR\tscr_performance
+// 
+//
+
+PRINT Run Software Component Registry (SCR) Performance Tests
+
+// Load the event logger test suite
+LOAD_SUITE EventLogServer -SharedData
+
+// Load SCR test suite
+LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
+SHARED_DATA z:\tusif\tscr\tscr_performance.ini shared_data
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0001
+//! @SYMTestCaseDesc 		The time taken to generate a localised list of removable software components.
+//! SYMTestPerformanceTarget   1000ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0001
+
+RUN_TEST_STEP 100 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_removable
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0001
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0002
+//! @SYMTestCaseDesc 		The time taken to add a new component to the Components table.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0002
+
+RUN_TEST_STEP 100 tscr Performance-SCRAddComponent z:\tusif\tscr\tscr_performance.ini component_names
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0002
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0003
+//! @SYMTestCaseDesc 		The time taken to add a new component with localizable names to the Components table.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0003
+
+RUN_TEST_STEP 100 tscr Performance-SCRAddComponent z:\tusif\tscr\tscr_performance.ini component_localizable_names
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0003
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0004
+//! @SYMTestCaseDesc 		The time taken to register a file to an existing component.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0004
+
+RUN_TEST_STEP 100 tscr Performance-SCRRegisterFile z:\tusif\tscr\tscr_performance.ini register_file
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0004
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0005
+//! @SYMTestCaseDesc 		The time taken to set 9 common properties of an existing component.
+//! SYMTestPerformanceTarget   500ms (~50ms for each common property)
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0005
+
+RUN_TEST_STEP 250 tscr Performance-SCRSetCommonProperty z:\tusif\tscr\tscr_performance.ini update_component_attributes
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0005
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0006
+//! @SYMTestCaseDesc 		The time taken to set a custom property of an registered file.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0006
+
+RUN_TEST_STEP 100 tscr Performance-SCRAddFileProperty z:\tusif\tscr\tscr_performance.ini file_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0006
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0007
+//! @SYMTestCaseDesc 		The time taken to update a common property of a component.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0007
+
+RUN_TEST_STEP 100 tscr Performance-SCRSetComponentProperty z:\tusif\tscr\tscr_performance.ini component_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0007
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0008
+//! @SYMTestCaseDesc 		The time taken to update a localizable property (name or vendor) of a component.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0008
+
+RUN_TEST_STEP 100 tscr Performance-SCRSetComponentProperty z:\tusif\tscr\tscr_performance.ini localizable_component_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0008
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0009
+//! @SYMTestCaseDesc 		The time taken to unregister a file from a component.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0009
+
+RUN_TEST_STEP 100 tscr Performance-SCRUnregisterFile z:\tusif\tscr\tscr_performance.ini unregister_file
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0009
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0010
+//! @SYMTestCaseDesc 		The time taken to delete a custom component property.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0010
+
+RUN_TEST_STEP 100 tscr Performance-SCRDeleteComponentProperty z:\tusif\tscr\tscr_performance.ini component_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0010
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0011
+//! @SYMTestCaseDesc 		The time taken to delete a custom file property.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0011
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr_performance.ini register_file
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr_performance.ini file_property
+RUN_TEST_STEP 100 tscr Performance-SCRDeleteFileProperty z:\tusif\tscr\tscr_performance.ini delete_file_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0011
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0012
+//! @SYMTestCaseDesc 		The time taken to delete a component together with all its properties and files.
+//! SYMTestPerformanceTarget   500ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0012
+
+// Add a complete component which to delete.
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr_performance.ini component_localizable_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr_performance.ini update_component_attributes
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr_performance.ini full_component_properties
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr_performance.ini full_files_registration
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr_performance.ini full_file_properties
+RUN_TEST_STEP 500 tscr Performance-SCRDeleteComponent z:\tusif\tscr\tscr_performance.ini delete_component
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0012
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0013
+//! @SYMTestCaseDesc 		The time taken to install a typical component installed by SWI.
+//! SYMTestPerformanceTarget   1000ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0013
+
+// Measure a complete component installation performance. The component values are hardcoded.
+RUN_TEST_STEP 1000 tscr Performance-SCRInstallComponent z:\tusif\tscr\tscr_performance.ini install_component
+// Add another complete component which is used by the rest of test cases.
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr_performance.ini component_localizable_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr_performance.ini update_component_attributes
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr_performance.ini full_component_properties
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr_performance.ini full_files_registration
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr_performance.ini full_file_properties
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0013
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0014
+//! @SYMTestCaseDesc 		The time taken to retrieve a component registry entry by using the component Id.
+//! SYMTestPerformanceTarget   60ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0014
+
+RUN_TEST_STEP 50 tscr Performance-SCRGetComponent z:\tusif\tscr\tscr_performance.ini updated_component
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0014
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0015
+//! @SYMTestCaseDesc 		The time taken to retrieve a specific file property.
+//! SYMTestPerformanceTarget   50ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0015
+
+RUN_TEST_STEP 50 tscr Performance-SCRGetFileProperty  z:\tusif\tscr\tscr_performance.ini specific_file_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0015
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0016
+//! @SYMTestCaseDesc 		The time taken to retrieve all properties of a file
+//! SYMTestPerformanceTarget   200ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0016
+
+RUN_TEST_STEP 200 tscr Performance-SCRGetFileProperties z:\tusif\tscr\tscr_performance.ini full_file_properties
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0016
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0017
+//! @SYMTestCaseDesc 		The time taken to retrieve a specific component property.
+//! SYMTestPerformanceTarget   50ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0017
+
+RUN_TEST_STEP 50 tscr Performance-SCRGetComponentProperty z:\tusif\tscr\tscr_performance.ini specific_component_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0017
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0018
+//! @SYMTestCaseDesc 		The time taken to retrieve all properties of a typical component installed by SWI.
+//! SYMTestPerformanceTarget   300ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0018
+
+RUN_TEST_STEP 300 tscr Performance-SCRGetComponentProperties z:\tusif\tscr\tscr_performance.ini full_component_properties
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0018
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0019
+//! @SYMTestCaseDesc 		The time taken to retrieve a specific localized component property.
+//! SYMTestPerformanceTarget   50ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0019
+
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr_performance.ini localizable_component_properties
+RUN_TEST_STEP 50 tscr Performance-SCRGetComponentProperty z:\tusif\tscr\tscr_performance.ini specific_localized_component_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0019
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0020
+//! @SYMTestCaseDesc 		The time taken to filter all components for an installer
+//! SYMTestPerformanceTarget   1200ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0020
+
+RUN_TEST_STEP 1000 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini all_components
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0020
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0021
+//! @SYMTestCaseDesc 		The time taken to filter components by using name and vendor.
+//! SYMTestPerformanceTarget   70ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0021
+
+RUN_TEST_STEP 70 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_name_vendor
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0021
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0022
+//! @SYMTestCaseDesc 		The time taken to filter components by using name,vendor and a property.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0022
+
+RUN_TEST_STEP 100 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_name_vendor_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0022
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0023
+//! @SYMTestCaseDesc 		The time taken to filter components by using a single property.
+//! SYMTestPerformanceTarget   70ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0023
+
+RUN_TEST_STEP 70 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_property
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0023
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0024
+//! @SYMTestCaseDesc 		The time taken to filter components by a file name.
+//! SYMTestPerformanceTarget   70ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0024
+
+RUN_TEST_STEP 70 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_file
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0024
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0025
+//! @SYMTestCaseDesc 		The time taken to filter components installed into a specific drive.
+//! SYMTestPerformanceTarget   1100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0025
+
+RUN_TEST_STEP 1000 tscr Performance-ScrComponentRegistrySubsession z:\tusif\tscr\tscr_performance.ini filter_drive
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0025
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0026
+//! @SYMTestCaseDesc 		The time taken to add a new dependency to the SCR.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0026
+
+RUN_TEST_STEP 100 tscr Performance-SCRAddComponentDependency z:\tusif\tscr\tscr_performance.ini dependency
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0026
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0027
+//! @SYMTestCaseDesc 		The time taken to delete an existing dependency from the SCR.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0027
+
+RUN_TEST_STEP 100 tscr Performance-SCRDeleteComponentDependency z:\tusif\tscr\tscr_performance.ini dependency
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0027
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0028
+//! @SYMTestCaseDesc 		The time taken to list all suppliers of a dependant component.
+//! SYMTestPerformanceTarget   50ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0028
+
+RUN_TEST_STEP 100 tscr Performance-SCRGetGlobalIdList z:\tusif\tscr\tscr_performance.ini supplier_components
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0028
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0029
+//! @SYMTestCaseDesc 		The time taken to list all dependants of a supplier component.
+//! SYMTestPerformanceTarget   50ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0029
+
+RUN_TEST_STEP 100 tscr Performance-SCRGetGlobalIdList z:\tusif\tscr\tscr_performance.ini dependant_components
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0029
+
+
+//! @SYMTestCaseID		API-SEC-SCR-PERFORMANCE-0030
+//! @SYMTestCaseDesc 		The time taken to retrieve a component with its global id.
+//! SYMTestPerformanceTarget   100ms
+
+START_TESTCASE API-SEC-SCR-PERFORMANCE-0030
+
+RUN_TEST_STEP 100 tscr Performance-SCRGetComponentWithGlobalId z:\tusif\tscr\tscr_performance.ini component_globalid
+
+END_TESTCASE API-SEC-SCR-PERFORMANCE-0030
+

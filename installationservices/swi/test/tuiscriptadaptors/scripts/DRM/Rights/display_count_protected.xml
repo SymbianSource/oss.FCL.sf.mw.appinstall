@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<drmrights>
+	<rights cid="Sis">
+		<intent type ="display">
+			<count>
+			1
+			</count>
+		</intent>
+	</rights>
+</drmrights>

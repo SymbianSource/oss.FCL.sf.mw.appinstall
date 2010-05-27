@@ -1,0 +1,522 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run all SisRegistry tests
+//
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tuiscriptadaptors
+//
+
+
+// after startup wait for registry to shutdown so it can restart and reinitialize with the test registry files
+DELAY 5000
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0001
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a swicerstore.dat file with a root certificate(contained in the sis file)
+//!		    		2) Install a signed sis file with a certificate chain
+//!		    		3) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		4) Open the sis registry
+//!		    		5) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		6) Uninstall the sis file
+//!		    		7) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0001
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0001
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0001
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0002
+//! @SYMTestCaseDesc		Passing improper parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a swicertstore.dat file with a root certificate(contained in the sis file)
+//!		    		2) Install a signed sis file with a certificate chain
+//!		    		3) Load x509 certificates(the series of certificates do not contain the root certificate)
+//!		    		4) Open the sis registry
+//!		    		5) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		6) Uninstall the sis file
+//!		    		7) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return False
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0002
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0002
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0002
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0003
+//! @SYMTestCaseDesc		Passing parameters to the VerifyControllerSignature and a sis file 
+//!		     		not being signed
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a swicertstore.dat file with a root certificate
+//!		    		2) Install a sis file(without signing)
+//!		    		3) Load x509 certificates(the series of certificates)
+//!		    		4) Open the sis registry
+//!		    		5) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		6) Uninstall the sis file
+//!		    		7) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return False
+//! @SYMTestType		CIT
+
+//RUN_UTILS copy Z:\tswi\tsisregistrytest\data\0003.dat Z:\resource\swicertstore.dat
+//START_TESTCASE API-SEC-SWI-CR0914-B-0003
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0003
+//RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck C:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0003
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0003
+//END_TESTCASE API-SEC-SWI-CR0914-B-0003
+//RUN_UTILS delete  Z:\resource\swicertstore.dat
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0004
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature without passing any parameters.swicertstore 
+//!		     		to contain the root certificate as it is in the sis file
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) create a swicertstore.dat file using the swicertstore tool
+//!		    		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a sis file( with signed certificate chains and the rootcertifcate available in the certstore)
+//!		    		4) Open the sis registry by passing the package uid
+//!		    		5) Call the verifycontroller without passing any parameters
+//!		    		6) Uninstall the sis file
+//!		    		7) Delete the swicertstore
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0004
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0004
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0004
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0005
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature without passing any parameters. 
+//!		     		swicertstore to contain different rootcertificate than it is in the 
+//!		     		sis file
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a  swicertstore.dat file using the swicertstore tool(having the root certificate present in the sis file.
+//!		     		2) Copy the swicertstore.dat file to the Z:\resource
+//!		     		3) Install a sis file( with signed certificate chains and the rootcertifcate same as it is in the certstore)
+//!		     		4) Delete the current swicertstore.dat file
+//!		     		5) Create a new swicertstore.dat file(without the rootcertificate that is present in the installed sis file)
+//!		     		6) Copy the new swicertstore.dat file to Z:\resource
+//!		     		7) Open the sis registry by passing the package uid
+//!		     		8) Call the verifycontroller without passing any parameters
+//!		     		9) Uninstall the sis file
+//!		    		10) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return False
+//! @SYMTestType		CIT
+
+//RUN_UTILS copy Z:\tswi\tsisregistrytest\data\0005.dat Z:\resource\swicertstore.dat
+//START_TESTCASE API-SEC-SWI-CR0914-B-0005
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0005
+//RUN_UTILS delete  Z:\resource\swicertstore.dat
+//RUN_UTILS CopyFile Z:\tswi\tsisregistrytest\data\0005A.dat Z:\resource\swicertstore.dat
+//RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck  Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0005
+//RUN_UTILS delete  Z:\resource\swicertstore.dat
+//RUN_UTILS CopyFile Z:\tswi\tsisregistrytest\data\0005.dat Z:\resource\swicertstore.dat
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0005
+//END_TESTCASE API-SEC-SWI-CR0914-B-0005
+//RUN_UTILS delete  Z:\resource\swicertstore.dat
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0006
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature by passing a certificate chain as 
+//!		     		parameter.(the sis file being an upgrade where the sis file A(base package)  
+//!		     		and the sis file B(upgrade package) having the same certificate chains
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a swicertstore.dat file using the swicertstore tool (having the root certificate present in both the base and the upgrade sis file).
+//!	            		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a sis file( with signed certificate as it is in the certstore)
+//!		    		4) Install a upgrade sis file.( with the same signed certificate as it is in the initial or base sis file)
+//!		    		5) Load x509 certificate chain(array of chain of certificates)
+//!		    		6) Open the sis registry by passing the package uid
+//!		    		7) Call the verifycontroller by passing the certificate chain as parameters
+//!		    		8) Uninstall the sis file
+//!	            		9) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UP0006
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0006
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0006
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0007
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature by passing a certificate chain as parameter.(the 
+//!		     		sis file being an upgrade where the sis file A(base package) and the sis 
+//!		     		file B(upgrade package) having the different certificate chains
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a swicertstore.dat file using the swicertstore tool (having the root certificate present in both the base and the upgrade sis file).
+//!         	    		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a sis file( with signed certificate as it is in the certstore)
+//!		    		4) Install a upgrade sis file.( with a different signed certificate as it is in the in the initial or base sis file)
+//!		    		5) Load x509 certificate chain(array of chain of certificates) (both the certificates ie the sis file A and sis file B)
+//!		    		6) Open the sis registry by passing the package uid
+//!		    		7) Call the verifycontroller by passing the certificate chain as parameters(both the certificates belonging to sis files A and B)
+//!		    		8) Uninstall the sis file
+//!		    		9) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0007
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UP0007
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0007
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0007
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0008
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature by passing a certificate chain as parameter.(the sis file being an upgrade where the sis 
+//!		     		file A(base package) and the sis file B(upgrade package) having the 
+//!		     		different certificate chains
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a swicertstore.dat file using the swicertstore tool (having the root certificate present in both the base and the upgrade sis file).
+//!	            		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a sis file( with signed certificate as it is in the certstore)
+//!		    		4) Install a upgrade sis file.( with a different signed certificate as it is in the initial or base sis file)
+//!		   		5) Load x509 certificate chain(array of chain of certificates) (loading only the certificate of the Sis file A)
+//!		   		6) Open the sis registry by passing the package uid
+//!		   		7) Call the verifycontroller by passing the certificate chain as parameters(only certificate belonging to sis file A)
+//!		   		8) Uninstall the sis file
+//!		   		9) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0008
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UP0008
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0008
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UN0008
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0008
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0009
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature by passing a certificate chain as 
+//!		     		parameter.(the sis file being an upgrade where the sis file A(base package)
+//!		     		and the sis file B(upgrade package) having the different certificate chains
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a swicertstore.dat file using the swicertstore tool (having the root certificate present in both the base and the upgrade sis file).
+//!                 		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a sis file( with signed certificate as it is in the certstore)
+//!		    		4) Install a upgrade sis file.( with a different signed certificate as it is in the as it is in the initial or base sis file)
+//!		    		5) Load x509 certificate chain(array of chain of certificates) (loading only the certificate of the Sis file B)
+//!		    		6) Open the sis registry by passing the package uid
+//!		    		7) Call the verifycontroller by passing the certificate chain as parameters(certificate of sis file B)
+//!		    		8) Uninstall the sis file
+//!		    		9) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return False
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0009
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UP0009
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0009
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0009
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0009
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-CR0914-B-0010
+//! @SYMTestCaseDesc		Calling VerifyControllerSignature by passing a certificate chain as 
+//!		     		parameter.(the sis file being a patchup where the sis file A(base package) 
+//!		     		and the sis file B(patchup package) having the same certificate chains
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Create a swicertstore.dat file using the swicertstore tool (having the root certificate present in both the base and the patchup sis file).
+//!                 		2) Copy the swicertstore.dat file to the Z:\resource
+//!		    		3) Install a base sis file( with signed certificate as it is in the certstore)
+//!		    		4) Install a pacthup sis file.( with the same signed certificate as it is in the as it is in the initial or base sis file)
+//!		    		5) Open the sis registry by passing the package uid's(load the base package)
+//!		    		6) Call the verifycontroller by passing the certificate chain as parameters
+//!		    		7) Uninstall the sis file
+//!		    		8) Delete the swicertstore.dat file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-CR0914-B-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-UP0010
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0010
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-CR0914-0010
+
+END_TESTCASE API-SEC-SWI-CR0914-B-0010
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0001
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0011
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0011
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0002
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0012
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0012
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0003
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0013
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0013
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0004
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0014
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0014
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0005
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0015
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0015
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0006
+//! @SYMTestCaseDesc		Passing correct parameters to the VerifyControllerSignature
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a signed multiple signed sis file
+//!		    		2) Load x509 certificates(the series of certificates contains the root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		    		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return True
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0016
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0016
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0011
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-B-0007
+//! @SYMTestCaseDesc		Testing self-signed sis file.
+//! @SYMTestPriority		High
+//! @SYMTestActions		1) Install a self-signed sis file
+//!		    		2) Load x509 certificates(the series of certificates does not contain the self-signed root certificate)
+//!		    		3) Open the sis registry
+//!		    		4) Call the verifycontroller and pass the array of x509 certificates 
+//!		   		5) Uninstall the sis file
+//! @SYMTestExpectedResults	Function should return False
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-SISREG-B-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0017
+RUN_TEST_STEP 100 tSisRegistryTest IntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-0017
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-UN0012
+
+END_TESTCASE API-SEC-SWI-SISREG-B-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-DATETIME-B-0001
+//! @SYMTestCaseDesc		Testing RSisRegistryEntry::VerifyControllerSignatureL() date and time checking behaviour.
+//! @SYMCR 			CR1240
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		1) Install the SIS file.
+//! 				2) Open the SIS registry entry.
+//! 				3) Set the system time to a value after the validity period of the certificate used to sign the SIS file.
+//! 				4) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				5) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in EFalse to aCheckDateAndTime. 
+//! 				6) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				7) Reset the system time. 
+//! 				8) Uninstall the SIS file.
+//! @SYMTestExpectedResults	Calls with aCheckDateAndTime set to EFalse should validate successfully. Those passing in ETrue should error with EDateOutOfRange.
+//! @SYMCreationDate 		08/03/2008
+//! @SYMTestType		CIT
+//! @SYMTestPurpose 		1) Check that current behaviour has not been altered and we still fail to validate out of date certificate chains.  
+//! 				2) Check that new behaviour works correctly by allowing a certificate chain with an invalid date to validate successfully when explicitly told to.  
+//! 				3) Then ensure this has left the system in the correct state to maintain normal behaviour.
+
+START_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0001
+RUN_TEST_STEP 100 tSisRegistryTest DateAndTimeIntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0001
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-UN0001
+
+END_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-DATETIME-B-0002
+//! @SYMTestCaseDesc		Testing RSisRegistryEntry::VerifyControllerSignatureL() date and time checking behaviour.
+//! @SYMCR 			CR1240
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		1) Install the SIS file.
+//! 				2) Open the SIS registry entry.
+//! 				3) Set the system time to a value before the validity period of the certificate used to sign the SIS file.
+//! 				4) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				5) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in EFalse to aCheckDateAndTime. 
+//! 				6) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				7) Reset the system time. 
+//! 				8) Uninstall the SIS file.
+//! @SYMTestExpectedResults	Calls with aCheckDateAndTime set to EFalse should validate successfully. Those passing in ETrue should error with EDateOutOfRange.
+//! @SYMCreationDate 		08/03/2008
+//! @SYMTestType		CIT
+//! @SYMTestPurpose 		1) Check that current behaviour has not been altered and we still fail to validate out of date certificate chains.  
+//! 				2) Check that new behaviour works correctly by allowing a certificate chain with an invalid date to validate successfully when explicitly told to.  
+//! 				3) Then ensure this has left the system in the correct state to maintain normal behaviour.
+
+START_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0002
+RUN_TEST_STEP 100 tSisRegistryTest DateAndTimeIntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0002
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-UN0001
+
+END_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SWI-SISREG-DATETIME-B-0003
+//! @SYMTestCaseDesc		Testing RSisRegistryEntry::VerifyControllerSignatureL() date and time checking behaviour.
+//! @SYMCR 			CR1240
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		1) Install the SIS file.
+//! 				2) Open the SIS registry entry.
+//! 				3) Set the system time to a value during the validity period of the certificate used to sign the SIS file.
+//! 				4) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				5) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in EFalse to aCheckDateAndTime. 
+//! 				6) Call RSisRegistryEntry::VerifyControllerSignatureL() passing in ETrue to aCheckDateAndTime. 
+//! 				7) Reset the system time. 
+//! 				8) Uninstall the SIS file.
+//! @SYMTestExpectedResults	Calls with aCheckDateAndTime set to EFalse should validate successfully. Those passing in ETrue should error with EDateOutOfRange.
+//! @SYMCreationDate 		08/03/2008
+//! @SYMTestType		CIT
+//! @SYMTestPurpose 		1) Check that current behaviour has not been altered and we still fail to validate out of date certificate chains.  
+//! 				2) Check that new behaviour works correctly by allowing a certificate chain with an invalid date to validate successfully when explicitly told to.  
+//! 				3) Then ensure this has left the system in the correct state to maintain normal behaviour.
+
+START_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0003
+RUN_TEST_STEP 100 tSisRegistryTest DateAndTimeIntegrityCheck Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-0003
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep Z:\tswi\tsisregistrytest\scripts\integritychecktest.ini SEC-SWI-SISREG-DATETIME-UN0001
+
+END_TESTCASE API-SEC-SWI-SISREG-DATETIME-B-0003

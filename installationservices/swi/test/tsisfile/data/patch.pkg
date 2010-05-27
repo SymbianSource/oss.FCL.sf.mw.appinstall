@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A patch sis file
+
+;Languages
+&EN,FR
+
+;Header
+#{"DependPatch-EN", "DependPatch-FR"}, (0x80000003), 2, 2, 3, TYPE=SP
+
+%{"Vendor-EN","Vendor-FR"}
+:"Vendor"
+
+(0x80000003), 1, 2, 3, {"Depend-EN", "Depend-FR"}
+
+;Install an extra file
+"text\romeo.txt"-"!:\Documents\InstTest\romeo.txt"

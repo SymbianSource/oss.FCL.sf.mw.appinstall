@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LayeredExecutionEnvironments SYSTEM "swtype.dtd">
+<LayeredExecutionEnvironments>
+	<softwareType name="testSoftwareType1">
+		<localizedName language="15">testSwTypeLoc15</localizedName>
+		<localizedName language="31">testSwTypeLoc31</localizedName>
+		<mimeType>text/sif-testpkg1</mimeType>
+		<sifPluginUid>A02866EF</sifPluginUid>
+		<installerSecureId>A0285BCB</installerSecureId>
+		<executionLayerSecureId>A0285DE0</executionLayerSecureId>
+	</softwareType>
+	<softwareType name="testSoftwareType2">
+		<mimeType>text/sif-testpkg2</mimeType>
+		<sifPluginUid>B02866EF</sifPluginUid>
+		<installerSecureId>B0285BCB</installerSecureId>
+		<executionLayerSecureId>B0285DE0</executionLayerSecureId>
+	</softwareType>
+	<softwareType name="testSoftwareType3">
+		<mimeType>text/sif-testpkg3</mimeType>
+		<sifPluginUid>C02866EF</sifPluginUid>
+		<installerSecureId>C0285BCB</installerSecureId>
+		<executionLayerSecureId>C0285DE0</executionLayerSecureId>
+	</softwareType>
+	<softwareType name="testSoftwareType4">
+		<localizedName language="5">testSwTypeLoc5</localizedName>
+		<localizedName language="3">testSwTypeLoc3</localizedName>
+		<mimeType>text/sif-testpkg4</mimeType>
+		<sifPluginUid>D02866EF</sifPluginUid>
+		<installerSecureId>D0285BCB</installerSecureId>
+		<executionLayerSecureId>D0285DE0</executionLayerSecureId>
+	</softwareType>
+</LayeredExecutionEnvironments>

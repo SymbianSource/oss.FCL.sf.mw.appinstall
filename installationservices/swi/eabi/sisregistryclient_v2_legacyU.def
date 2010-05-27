@@ -1,0 +1,218 @@
+EXPORTS
+	_ZN3Swi14CHashContainer12InternalizeLER11RReadStream @ 1 NONAME
+	_ZN3Swi14CHashContainer4NewLEN14CMessageDigest7THashIdERK6TDesC8 @ 2 NONAME
+	_ZN3Swi14CHashContainer4NewLER11RReadStream @ 3 NONAME
+	_ZN3Swi14CHashContainer4NewLERKNS_3Sis5CHashE @ 4 NONAME
+	_ZN3Swi14CHashContainer5NewLCEN14CMessageDigest7THashIdERK6TDesC8 @ 5 NONAME
+	_ZN3Swi14CHashContainer5NewLCER11RReadStream @ 6 NONAME
+	_ZN3Swi14CHashContainer5NewLCERKNS_3Sis5CHashE @ 7 NONAME
+	_ZN3Swi14CHashContainerD0Ev @ 8 NONAME
+	_ZN3Swi14CHashContainerD1Ev @ 9 NONAME
+	_ZN3Swi14CHashContainerD2Ev @ 10 NONAME
+	_ZN3Swi15CControllerInfo12InternalizeLER11RReadStream @ 11 NONAME
+	_ZN3Swi15CControllerInfo4NewLE8TVersionRKNS_14CHashContainerE @ 12 NONAME
+	_ZN3Swi15CControllerInfo4NewLER11RReadStream @ 13 NONAME
+	_ZN3Swi15CControllerInfo4NewLERKS0_ @ 14 NONAME
+	_ZN3Swi15CControllerInfo5NewLCE8TVersionRKNS_14CHashContainerE @ 15 NONAME
+	_ZN3Swi15CControllerInfo5NewLCER11RReadStream @ 16 NONAME
+	_ZN3Swi15CControllerInfo5NewLCERKS0_ @ 17 NONAME
+	_ZN3Swi17CSisRegistryToken12InternalizeLER11RReadStream @ 18 NONAME
+	_ZN3Swi17CSisRegistryToken14SetFixedDrivesEj @ 19 NONAME
+	_ZN3Swi17CSisRegistryToken17AddRemovableDriveEi @ 20 NONAME
+	_ZN3Swi17CSisRegistryToken20RemoveRemovableDriveEi @ 21 NONAME
+	_ZN3Swi17CSisRegistryToken4NewLER11RReadStream @ 22 NONAME
+	_ZN3Swi17CSisRegistryToken4NewLERKS0_ @ 23 NONAME
+	_ZN3Swi17CSisRegistryToken4NewLEv @ 24 NONAME
+	_ZN3Swi17CSisRegistryToken5NewLCER11RReadStream @ 25 NONAME
+	_ZN3Swi17CSisRegistryToken5NewLCERKS0_ @ 26 NONAME
+	_ZN3Swi17CSisRegistryToken5NewLCEv @ 27 NONAME
+	_ZN3Swi17RSisRegistryEntry10IsBuiltInLEv @ 28 NONAME ABSENT
+	_ZN3Swi17RSisRegistryEntry10IsPresentLEv @ 29 NONAME
+	_ZN3Swi17RSisRegistryEntry12ControllersLER13RPointerArrayI6HBufC8E @ 30 NONAME
+	_ZN3Swi17RSisRegistryEntry12PackageNameLEv @ 31 NONAME
+	_ZN3Swi17RSisRegistryEntry14AugmentationsLER13RPointerArrayI7HBufC16ES4_ @ 32 NONAME
+	_ZN3Swi17RSisRegistryEntry14AugmentationsLER13RPointerArrayINS_19CSisRegistryPackageEE @ 33 NONAME
+	_ZN3Swi17RSisRegistryEntry15IsAugmentationLEv @ 34 NONAME
+	_ZN3Swi17RSisRegistryEntry17UniqueVendorNameLEv @ 35 NONAME
+	_ZN3Swi17RSisRegistryEntry18CertificateChainsLER13RPointerArrayI6HBufC8E @ 36 NONAME
+	_ZN3Swi17RSisRegistryEntry20LocalizedVendorNameLEv @ 37 NONAME
+	_ZN3Swi17RSisRegistryEntry4OpenERNS_19RSisRegistrySessionE4TUid @ 38 NONAME
+	_ZN3Swi17RSisRegistryEntry4OpenERNS_19RSisRegistrySessionERK7TDesC16S5_ @ 39 NONAME
+	_ZN3Swi17RSisRegistryEntry4UidLEv @ 40 NONAME
+	_ZN3Swi17RSisRegistryEntry5CloseEv @ 41 NONAME
+	_ZN3Swi17RSisRegistryEntry5HashLERK7TDesC16 @ 42 NONAME
+	_ZN3Swi17RSisRegistryEntry5OpenLERNS_19RSisRegistrySessionERKNS_19CSisRegistryPackageE @ 43 NONAME
+	_ZN3Swi17RSisRegistryEntry5SidsLER6RArrayI4TUidE @ 44 NONAME
+	_ZN3Swi17RSisRegistryEntry5SizeLEv @ 45 NONAME
+	_ZN3Swi17RSisRegistryEntry6FilesLER13RPointerArrayI7HBufC16E @ 46 NONAME
+	_ZN3Swi17RSisRegistryEntry8IsInRomLEv @ 47 NONAME
+	_ZN3Swi17RSisRegistryEntry8PackageLEv @ 48 NONAME
+	_ZN3Swi17RSisRegistryEntry8VersionLEv @ 49 NONAME
+	_ZN3Swi17RSisRegistryEntry9IsSignedLEv @ 50 NONAME
+	_ZN3Swi17RSisRegistryEntry9LanguageLEv @ 51 NONAME
+	_ZN3Swi17RSisRegistryEntry9PropertyLEi @ 52 NONAME
+	_ZN3Swi18CSisRegistryObject12InternalizeLER11RReadStream @ 53 NONAME
+	_ZN3Swi18CSisRegistryObject16FileDescriptionsEv @ 54 NONAME ABSENT
+	_ZN3Swi18CSisRegistryObject23ProcessInRomControllerLERKNS_3Sis11CControllerERK6TDesC8 @ 55 NONAME
+	_ZN3Swi18CSisRegistryObject4NewLER11RReadStream @ 56 NONAME
+	_ZN3Swi18CSisRegistryObject4NewLEv @ 57 NONAME
+	_ZN3Swi18CSisRegistryObject5NewLCER11RReadStream @ 58 NONAME
+	_ZN3Swi18CSisRegistryObject5NewLCEv @ 59 NONAME
+	_ZN3Swi19CSisRegistryPackage12InternalizeLER11RReadStream @ 60 NONAME
+	_ZN3Swi19CSisRegistryPackage4NewLE4TUidRK7TDesC16S4_ @ 61 NONAME
+	_ZN3Swi19CSisRegistryPackage4NewLER11RReadStream @ 62 NONAME
+	_ZN3Swi19CSisRegistryPackage4NewLERKS0_ @ 63 NONAME
+	_ZN3Swi19CSisRegistryPackage5NewLCE4TUidRK7TDesC16S4_ @ 64 NONAME
+	_ZN3Swi19CSisRegistryPackage5NewLCER11RReadStream @ 65 NONAME
+	_ZN3Swi19CSisRegistryPackage5NewLCERKS0_ @ 66 NONAME
+	_ZN3Swi19CSisRegistryPackageD0Ev @ 67 NONAME
+	_ZN3Swi19CSisRegistryPackageD1Ev @ 68 NONAME
+	_ZN3Swi19CSisRegistryPackageD2Ev @ 69 NONAME
+	_ZN3Swi19RSisRegistrySession11ModifiableLERK7TDesC16 @ 70 NONAME
+	_ZN3Swi19RSisRegistrySession12IsInstalledLE4TUid @ 71 NONAME
+	_ZN3Swi19RSisRegistrySession12IsInstalledLER6TDesC8 @ 72 NONAME
+	_ZN3Swi19RSisRegistrySession13SidToPackageLE4TUid @ 73 NONAME
+	_ZN3Swi19RSisRegistrySession14InstalledUidsLER6RArrayI4TUidE @ 74 NONAME
+	_ZN3Swi19RSisRegistrySession18InstalledPackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 75 NONAME
+	_ZN3Swi19RSisRegistrySession5HashLERK7TDesC16 @ 76 NONAME
+	_ZN3Swi19RSisRegistrySession7ConnectEv @ 77 NONAME
+	_ZN3Swi20CSisRegistryProperty12InternalizeLER11RReadStream @ 78 NONAME
+	_ZN3Swi20CSisRegistryProperty4NewLER11RReadStream @ 79 NONAME
+	_ZN3Swi20CSisRegistryProperty4NewLERKNS_3Sis9CPropertyE @ 80 NONAME
+	_ZN3Swi20CSisRegistryProperty5NewLCER11RReadStream @ 81 NONAME
+	_ZN3Swi20CSisRegistryProperty5NewLCERKNS_3Sis9CPropertyE @ 82 NONAME
+	_ZN3Swi22CSisRegistryDependency12InternalizeLER11RReadStream @ 83 NONAME
+	_ZN3Swi22CSisRegistryDependency4NewLER11RReadStream @ 84 NONAME
+	_ZN3Swi22CSisRegistryDependency4NewLERKS0_ @ 85 NONAME
+	_ZN3Swi22CSisRegistryDependency4NewLERKNS_3Sis11CDependencyE @ 86 NONAME
+	_ZN3Swi22CSisRegistryDependency5NewLCER11RReadStream @ 87 NONAME
+	_ZN3Swi22CSisRegistryDependency5NewLCERKS0_ @ 88 NONAME
+	_ZN3Swi22CSisRegistryDependency5NewLCERKNS_3Sis11CDependencyE @ 89 NONAME
+	_ZN3Swi25RSisRegistryWritableEntry12ControllersLER13RPointerArrayINS_3Sis11CControllerEE @ 90 NONAME ABSENT
+	_ZN3Swi25RSisRegistryWritableEntry12InstallTypeLEv @ 91 NONAME
+	_ZN3Swi17RSisRegistryEntry13DependenciesLER13RPointerArrayINS_22CSisRegistryDependencyEE @ 92 NONAME
+	_ZN3Swi17RSisRegistryEntry13PreInstalledLEv @ 93 NONAME
+	_ZN3Swi25RSisRegistryWritableEntry14SelectedDriveLEv @ 94 NONAME
+	_ZN3Swi17RSisRegistryEntry17EmbeddedPackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 95 NONAME
+	_ZN3Swi25RSisRegistryWritableEntry17FileDescriptionsLER13RPointerArrayINS_27CSisRegistryFileDescriptionEE @ 96 NONAME
+	_ZN3Swi17RSisRegistryEntry18DependentPackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 97 NONAME
+	_ZN3Swi17RSisRegistryEntry18EmbeddingPackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 98 NONAME
+	_ZN3Swi27CSisRegistryFileDescription12InternalizeLER11RReadStream @ 99 NONAME
+	_ZN3Swi27CSisRegistryFileDescription4NewLER11RReadStream @ 100 NONAME
+	_ZN3Swi27CSisRegistryFileDescription4NewLERKNS_3Sis16CFileDescriptionE5TChari @ 101 NONAME
+	_ZN3Swi27CSisRegistryFileDescription4NewLERKS0_ @ 102 NONAME
+	_ZN3Swi27CSisRegistryFileDescription5NewLCER11RReadStream @ 103 NONAME
+	_ZN3Swi27CSisRegistryFileDescription5NewLCERKNS_3Sis16CFileDescriptionE5TChari @ 104 NONAME
+	_ZN3Swi27CSisRegistryFileDescription5NewLCERKS0_ @ 105 NONAME
+	_ZN3Swi27CSisRegistryFileDescriptionD0Ev @ 106 NONAME
+	_ZN3Swi27CSisRegistryFileDescriptionD1Ev @ 107 NONAME
+	_ZN3Swi27CSisRegistryFileDescriptionD2Ev @ 108 NONAME
+	_ZN3Swi27RSisRegistryWritableSession12DeleteEntryLERKNS_19CSisRegistryPackageEx @ 109 NONAME
+	_ZN3Swi27RSisRegistryWritableSession12RemoveDriveLEi @ 110 NONAME
+	_ZN3Swi27RSisRegistryWritableSession12UpdateEntryLERKNS_12CApplicationERK6TDesC8x @ 111 NONAME
+	_ZN3Swi27RSisRegistryWritableSession17PackageUsingFileLERK7TDesC16 @ 112 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession9AddDriveLEi @ 113 NONAME
+	_ZN3Swi27RSisRegistryWritableSession9AddEntryLERKNS_12CApplicationERK6TDesC8x @ 114 NONAME
+	_ZNK3Swi14CHashContainer12ExternalizeLER12RWriteStream @ 115 NONAME
+	_ZNK3Swi15CControllerInfo12ExternalizeLER12RWriteStream @ 116 NONAME
+	_ZNK3Swi17CSisRegistryToken12ExternalizeLER12RWriteStream @ 117 NONAME
+	_ZNK3Swi18CSisRegistryObject10DependsOnLER13RPointerArrayINS_22CSisRegistryDependencyEE @ 118 NONAME
+	_ZNK3Swi18CSisRegistryObject11InstallTypeEv @ 119 NONAME ABSENT
+	_ZNK3Swi18CSisRegistryObject12ExternalizeLER12RWriteStream @ 120 NONAME
+	_ZNK3Swi18CSisRegistryObject12PreInstalledEv @ 121 NONAME ABSENT
+	_ZNK3Swi18CSisRegistryObject13EmbedsPackageERKNS_19CSisRegistryPackageE @ 122 NONAME
+	_ZNK3Swi18CSisRegistryObject15DependsOnObjectERKS0_ @ 123 NONAME
+	_ZNK3Swi18CSisRegistryObject16FileDescriptionLERK7TDesC16 @ 124 NONAME
+	_ZNK3Swi18CSisRegistryObject17EmbeddedPackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 125 NONAME
+	_ZNK3Swi18CSisRegistryObject5InRomEv @ 126 NONAME ABSENT
+	_ZNK3Swi18CSisRegistryObject5SizeLEv @ 127 NONAME
+	_ZNK3Swi18CSisRegistryObject8IsSignedEv @ 128 NONAME ABSENT
+	_ZNK3Swi18CSisRegistryObject8PropertyEi @ 129 NONAME
+	_ZNK3Swi19CSisRegistryPackage12ExternalizeLER12RWriteStream @ 130 NONAME
+	_ZNK3Swi19CSisRegistryPackageeqERKS0_ @ 131 NONAME
+	_ZNK3Swi20CSisRegistryProperty12ExternalizeLER12RWriteStream @ 132 NONAME
+	_ZNK3Swi22CSisRegistryDependency12ExternalizeLER12RWriteStream @ 133 NONAME
+	_ZNK3Swi22CSisRegistryDependency12IsCompatibleERK8TVersion @ 134 NONAME
+	_ZNK3Swi27CSisRegistryFileDescription12ExternalizeLER12RWriteStream @ 135 NONAME
+	_ZTIN3Swi14CHashContainerE @ 136 NONAME ; #<TI>#
+	_ZTIN3Swi15CControllerInfoE @ 137 NONAME ; #<TI>#
+	_ZTIN3Swi17CSisRegistryTokenE @ 138 NONAME ; #<TI>#
+	_ZTIN3Swi18CSisRegistryObjectE @ 139 NONAME ; #<TI>#
+	_ZTIN3Swi19CSisRegistryPackageE @ 140 NONAME ; #<TI>#
+	_ZTIN3Swi27CSisRegistryFileDescriptionE @ 141 NONAME ; #<TI>#
+	_ZTVN3Swi14CHashContainerE @ 142 NONAME ; #<VT>#
+	_ZTVN3Swi15CControllerInfoE @ 143 NONAME ; #<VT>#
+	_ZTVN3Swi17CSisRegistryTokenE @ 144 NONAME ; #<VT>#
+	_ZTVN3Swi18CSisRegistryObjectE @ 145 NONAME ; #<VT>#
+	_ZTVN3Swi19CSisRegistryPackageE @ 146 NONAME ; #<VT>#
+	_ZTVN3Swi27CSisRegistryFileDescriptionE @ 147 NONAME ; #<VT>#
+	_ZN3Swi27RSisRegistryWritableSession16RegenerateCacheLEv @ 148 NONAME
+	_ZN3Swi19RSisRegistrySession14SidToFileNameLE4TUidR6TDes16 @ 149 NONAME
+	_ZNK3Swi18CSisRegistryObject16FileDescriptionLE4TUid @ 150 NONAME
+	_ZN3Swi17RSisRegistryEntry14SelectedDriveLEv @ 151 NONAME
+	_ZNK3Swi17RSisRegistryEntry15TrustTimeStampLEv @ 152 NONAME
+	_ZNK3Swi17RSisRegistryEntry6TrustLEv @ 153 NONAME
+	_ZN3Swi17RSisRegistryEntry12TrustStatusLEv @ 154 NONAME
+	_ZN3Swi18CSisRegistryObject14SetTrustStatusERKNS_15TSisTrustStatusE @ 155 NONAME
+	_ZNK3Swi18CSisRegistryObject11TrustStatusEv @ 156 NONAME
+	_ZNK3Swi18CSisRegistryObject20InstallChainIndiciesEv @ 157 NONAME
+	_ZN3Swi19RSisRevocationEntry22CheckRevocationStatusLERK6TDesC8 @ 158 NONAME
+	_ZN3Swi19RSisRevocationEntry23CancelRevocationStatusLEv @ 159 NONAME
+	_ZN3Swi19RSisRevocationEntry21CheckRevocationStatusERK6TDesC8R14TRequestStatus @ 160 NONAME
+	_ZN3Swi27CSisRegistryFileDescription4NewLERNS_14CHashContainerERK7TDesC16S5_NS_3Sis17TSISFileOperationENS6_24TSISFileOperationOptionsExm4TUid @ 161 NONAME
+	_ZN3Swi15CControllerInfo4NewLE8TVersionRKNS_14CHashContainerEi @ 162 NONAME
+	_ZN3Swi15CControllerInfo5NewLCE8TVersionRKNS_14CHashContainerEi @ 163 NONAME
+	_ZN3Swi19RSisRegistrySession13IsSidPresentLE4TUid @ 164 NONAME
+	_ZTIN3Swi9CSidCacheE @ 165 NONAME ABSENT ; #<TI>#
+	_ZTVN3Swi9CSidCacheE @ 166 NONAME ABSENT ; #<VT>#
+	_ZN3Swi17RSisRegistryEntry24IsDeletablePreInstalledLEv @ 167 NONAME
+	_ZN3Swi18CSisRegistryObject15EmbeddedPackageEi @ 168 NONAME
+	_ZN3Swi17RSisRegistryEntry16ShutdownAllAppsLEv @ 169 NONAME
+	_ZN3Swi17RSisRegistryEntry26VerifyControllerSignatureLER13RPointerArrayI16CX509CertificateE @ 170 NONAME
+	_ZN3Swi17RSisRegistryEntry24RemoveWithLastDependentLEv @ 171 NONAME
+	_ZN3Swi17RSisRegistryEntry27SetRemoveWithLastDependentLE4TUid @ 172 NONAME
+	_ZN3Swi18CSisRegistryObject26SetRemoveWithLastDependentEv @ 173 NONAME
+	_ZNK3Swi18CSisRegistryObject23RemoveWithLastDependentEv @ 174 NONAME
+	_ZN3Swi17RSisRegistryEntry20AugmentationsNumberLEv @ 175 NONAME
+	_ZN3Swi17RSisRegistryEntry10RemovableLEv @ 176 NONAME
+	_ZN3Swi19RSisRegistrySession18RemovablePackagesLER13RPointerArrayINS_19CSisRegistryPackageEE @ 177 NONAME
+	_ZN3Swi27RSisRegistryWritableSession19PackageExistsInRomLERK4TUid @ 178 NONAME
+	_ZN3Swi19RSisRegistrySession8RecoverLEv @ 179 NONAME
+	_ZN3Swi19RSisRegistrySession16RetrieveLogFileLER13RPointerArrayINS_9CLogEntryEE @ 180 NONAME
+	_ZNK3Swi9CLogEntry10GetPkgNameEv @ 181 NONAME
+	_ZNK3Swi9CLogEntry14GetInstallTypeEv @ 182 NONAME
+	_ZNK3Swi9CLogEntry15GetBuildVersionEv @ 183 NONAME
+	_ZNK3Swi9CLogEntry15GetMajorVersionEv @ 184 NONAME
+	_ZNK3Swi9CLogEntry15GetMinorVersionEv @ 185 NONAME
+	_ZNK3Swi9CLogEntry6GetUidEv @ 186 NONAME
+	_ZNK3Swi9CLogEntry7GetTimeEv @ 187 NONAME
+	_ZTIN3Swi9CLogEntryE @ 188 NONAME
+	_ZTVN3Swi9CLogEntryE @ 189 NONAME
+	_ZN3Swi27RSisRegistryWritableSession26GetFilesForRomApplicationLERK4TUidR13RPointerArrayI7HBufC16E @ 190 NONAME
+	_ZN3Swi17RSisRegistryEntry16InstalledDrivesLEv @ 191 NONAME
+	_ZN3Swi17RSisRegistryEntry17IsSignedBySuCertLEv @ 192 NONAME
+	_ZN3Swi17RSisRegistryEntry26VerifyControllerSignatureLER13RPointerArrayI16CX509CertificateEi @ 193 NONAME
+	_ZN3Swi19RSisRegistrySession14SidToFileNameLE4TUidR6TDes1610TDriveUnit @ 194 NONAME
+	_ZN3Swi22CSisRegistryDependency4NewLE4TUid8TVersionS2_ @ 195 NONAME ABSENT
+	_ZN3Swi22CSisRegistryDependency5NewLCE4TUid8TVersionS2_ @ 196 NONAME ABSENT
+	_ZN3Swi27CSisRegistryFileDescription4NewLEv @ 197 NONAME ABSENT
+	_ZN3Swi27CSisRegistryFileDescription5NewLCEv @ 198 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession18ActivateComponentLEi @ 199 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession20DeactivateComponentLEi @ 200 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession18CommitTransactionLEv @ 201 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession18CreateTransactionLEv @ 202 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession20RollbackTransactionLEv @ 203 NONAME ABSENT
+	_ZNK3Swi27CSisRegistryFileDescription14SerializedSizeEv @ 204 NONAME
+	_ZN3Swi19RSisRegistrySession17IsFileRegisteredLERK7TDesC16 @ 205 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession12UpdateEntryLERKNS_12CApplicationERK6TDesC8RK13RPointerArrayINS_20CSoftwareTypeRegInfoEEx @ 206 NONAME ABSENT
+	_ZN3Swi27RSisRegistryWritableSession9AddEntryLERKNS_12CApplicationERK6TDesC8RK13RPointerArrayINS_20CSoftwareTypeRegInfoEEx @ 207 NONAME ABSENT
+	_ZN3Swi19RSisRegistrySession21GetComponentIdForUidLERK4TUid @ 208 NONAME ABSENT
+	_ZN3Swi19CSisRegistryPackage8SetNameLERK7TDesC16 @ 209 NONAME
+	_ZN3Swi18RSisRegistryHelper23GetEquivalentLanguagesLE9TLanguageR6RArrayIS1_E @ 210 NONAME
+	_ZN3Swi18RSisRegistryHelper5CloseEv @ 211 NONAME
+	_ZN3Swi18RSisRegistryHelper7ConnectEv @ 212 NONAME
+	_ZN3Swi18RSisRegistryHelperC1Ev @ 213 NONAME
+	_ZN3Swi18RSisRegistryHelperC2Ev @ 214 NONAME
+	_ZN3Swi25RSisRegistryWritableEntry30GetMatchingSupportedLanguagesLER6RArrayI9TLanguageE @ 215 NONAME
+	_ZN3Swi17RSisRegistryEntry14RegistryFilesLER13RPointerArrayI7HBufC16E @ 216 NONAME
+

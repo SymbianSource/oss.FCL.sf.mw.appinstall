@@ -1,0 +1,192 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests with the allowRunOnInstallUninstall flag off
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0007
+//! @SYMTestCaseDesc		Install non-TrustedToAnchor SIS file that runs an app synchronously on install
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0007
+
+// The app in non-TrustedToAnchor SIS file should not be running.
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW2
+
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIRW2
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0007
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0008
+//! @SYMTestCaseDesc		Install TrustedToAnchor SIS file that runs an app synchronously on install
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0008
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW2ROOT5
+
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+DELAY 5000
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIRW2ROOT5
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0008
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0009
+//! @SYMTestCaseDesc		Install an non-TrustedToAnchor SIS file that can not run an app asynchronously on install.
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0009
+
+// Install a non-TrustedToAnchor SIS file contains a app the need to be run on install asynchronously
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRI
+
+// The exe should not be found correctly running asynchronously. 
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Install the non-TrustedToAnchor sp
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRI_sp
+
+// The new exe should not be found running. 
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+// Uninstall the sp alone
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRI_sp
+
+// Install the non-TrustedToAnchor pu
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRI_pu
+
+// The exe should not be found running. 
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRI
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0009
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0010
+//! @SYMTestCaseDesc		Install a TrustedToAnchor SIS file that can run an app asynchronously on install.
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0010
+
+// Install a TrustedToAnchor SIS file contains a app the need to be run on install asynchronously
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIROOT5
+
+// The exe should be found correctly running asynchronously. 
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Let the exe complete its run.
+DELAY 5000
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIROOT5
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0010
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0011
+//! @SYMTestCaseDesc		Install a non-TrustedToAnchor SIS file that runs an app synchronously on removal
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0011
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe2
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe2
+
+// If the exe was correctly run synchronously during the uninstall, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0011
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0012
+//! @SYMTestCaseDesc		Install a TrustedToAnchor SIS file that runs an app synchronously on removal
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0012
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe2ROOT5
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe2ROOT5
+
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0012
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-C-0013
+//! @SYMTestCaseDesc		Install package and apply pu and sp upgrades which attempt to run an app asynchronously on install.
+//! @SYMDEF 			INC077078
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled, FR/RI is ignored for untrusted packages
+//! but exes are run on install from packages signed by a trusted anchor
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-C-0013
+
+// Install a TrustedToAnchor SIS file contains a app the need to be run on install asynchronously
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIROOT5
+
+// The exe should be found correctly running asynchronously. 
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Install the TrustedToAnchor pu
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIROOT5_pu
+
+// The exe should be found running. 
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Install the TrustedToAnchor sp
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIROOT5_sp
+
+// The exe should be found running. 
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRI
+
+END_TESTCASE API-SEC-UISA-RunTest-I-C-0013
+
+
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,65 @@
+/*
+* Copyright (c) 2004 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Series 60 ROM description for Software install application
+*
+*/
+
+
+#ifndef APPINSTUI_IBY
+#define APPINSTUI_IBY
+
+// Client API
+file = ABI_DIR\BUILD_DIR\SWInstCli.dll                       SHARED_LIB_DIR\SWInstCli.dll
+
+// Server application
+S60_APP_EXE(SWInstSvrUI)
+S60_APP_AIF_ICONS(SWInstSvrUI)
+S60_APP_AIF_RSC(SWInstSvrUI)
+
+// CommonUI
+file = ABI_DIR\BUILD_DIR\SWInstCommonUI.dll                  SHARED_LIB_DIR\SWInstCommonUI.dll
+
+#ifdef __INSTALLER_SISX
+ // Sisx plugin
+ ECOM_PLUGIN(SisxUI.dll,101F875D.rsc)
+#endif
+
+#ifndef RD_JAVA_ARCHITECTURE_RENEWAL_PHASE1
+#ifdef __JAVA_MIDP20
+ // Midlet plugin
+ ECOM_PLUGIN(MidletUI.dll,101F875F.rsc) 
+#endif
+#endif
+
+// Task manager
+file = ABI_DIR\BUILD_DIR\SWInstTaskManager.dll               SHARED_LIB_DIR\SWInstTaskManager.dll
+
+// Log task
+ECOM_PLUGIN(SWInstLogTask.dll,10207211.rsc)
+data=ZPRIVATE\100012a5\policy\10207216.spd                   PRIVATE\100012a5\policy\10207216.spd
+
+// File task
+ECOM_PLUGIN(SWInstFileTask.dll,102073EC.rsc)
+
+#ifdef __EXTENDED_STARTUP
+ // Startup task
+ ECOM_PLUGIN(SWInstStartupTask.dll,1020720E.rsc)
+#endif
+
+// Backup
+data=ZPRIVATE\101F875A\backup_registration.xml               PRIVATE\101F875A\backup_registration.xml
+
+#endif // APPINSTUI_IBY
+
+//  End of File

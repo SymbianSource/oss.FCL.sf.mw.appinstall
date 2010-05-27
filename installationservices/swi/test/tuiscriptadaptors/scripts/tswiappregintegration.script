@@ -1,0 +1,207 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// SWI integreation test cases for appreg parsing
+//
+
+PRINT Run all SWI integreation test cases for appreg parsing
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+LOAD_SUITE tscr
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr_appreginfo.ini db_file 
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0001
+//! @SYMTestCaseDesc	Installs a SIS file having complete appregistration data for EN, GE and IF
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0001
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_IF
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_spanish
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0001
+
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0002
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SA having new application and new details for FR and GE
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0002
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base02
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0002
+
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0003
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SP having new application and new details for GE
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0003
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0003
+
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0004
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an PU having new application and new details for FR and GE
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_pu
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0004
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0005
+//! @SYMTestCaseDesc	Installs an SA pacakge having an application with registration resource file with localized opaque data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0005
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration03
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration03_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration03_IF
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration03
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0005
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0006
+//! @SYMTestCaseDesc	Installs a package containg an app with registration resouce file which has no appfile name
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		
+//! @SYMTestExpectedResults	Sis installation fails
+//START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0006
+//RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case04_noappfile
+//END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0006
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0007
+//! @SYMTestCaseDesc	Installs a package containg an app with registration resouce file which has no application uid
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		
+//! @SYMTestExpectedResults	Sis installation fails
+//START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0007
+//RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case04_noappuid
+//END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0007
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0008
+//! @SYMTestCaseDesc	Installs a package having some resource file but not application registration resource file
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		
+//! @SYMTestExpectedResults	Sis installation fails
+//START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0008
+//RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case04_wronguid2
+//END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0008
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0009
+//! @SYMTestCaseDesc	Tests the SA upgrade that is SU signed.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that followed by an SA upgrade that is SU signed and reflects the latest SA installation. Reg data updated in second SA(Group name changed.)
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0009
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_SA
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_reg_SA
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_SA_SU
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_reg_SA_SU
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_SA
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0009
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0010
+//! @SYMTestCaseDesc	Tests the installation of an SIS file which delivers no files followed by a SA upgrade that delivers an app.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installation succeeds
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0010
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0011
+//! @SYMTestCaseDesc	Tests the installation of an SIS file which delivers some files followed by a SA upgrade that delivers no files.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installation succeeds
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0011
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0011
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-INTEGRATION-0012
+//! @SYMTestCaseDesc	Tests the installation of an SIS file embeds an SP, which embeds a PU, which in turn embeds another SP, that embeds another SP. (SA->SP->PU->SP->SP)
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that embeds recursively other SIS files with various upgrade combinations.
+//! @SYMTestExpectedResults	File installs sucessfully
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0012
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_base
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_sa
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_sa
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case06
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0012
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,50 @@
+;
+; Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description: 
+;
+&EN
+
+;Header 
+#{"Application update"}, (0x2000f85a), 2, 1, 0, TYPE=SA
+
+;Localised Vendor Name
+%{"Nokia"}
+
+;Unique Vendor Name
+:"Nokia"
+
+;EXEs
+""-"z:\sys\bin\iaupdate.exe"
+""-"z:\sys\bin\iaupdatelauncher.exe"
+""-"z:\sys\bin\iaupdatebg.exe"
+
+;DLLs
+""-"z:\sys\bin\iaupdateengine.dll"
+""-"z:\sys\bin\iaupdateapi.dll"
+""-"z:\sys\bin\iaupdatefwupdate.dll"
+""-"z:\sys\bin\bgcindicatorplugin.dll"
+
+
+
+;Resources
+""-"z:\private\10003a3f\import\apps\iaupdate_reg.rs*"
+""-"z:\resource\apps\iaupdate.r*"
+""-"z:\private\10003a3f\import\apps\iaupdatelauncher_reg.rs*"
+""-"z:\resource\apps\iaupdatelauncher.r*"
+
+;Icons
+""-"z:\private\200211f4\qgn_note_swupdate_notification.svg"
+
+;Other Files
+""-"z:\private\2000F85A\iaupdateengineconfig.xml"

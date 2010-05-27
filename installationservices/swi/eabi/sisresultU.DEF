@@ -1,0 +1,7 @@
+EXPORTS
+	_ZN3Swi19CInstallationResult12InternalizeLER11RReadStream @ 1 NONAME
+	_ZN3Swi19CInstallationResult4NewLEv @ 2 NONAME
+	_ZNK3Swi19CInstallationResult12ExternalizeLER12RWriteStream @ 3 NONAME
+	_ZTIN3Swi19CInstallationResultE @ 4 NONAME ; #<TI>#
+	_ZTVN3Swi19CInstallationResultE @ 5 NONAME ; #<VT>#
+

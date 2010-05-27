@@ -1,0 +1,84 @@
+/*
+* Copyright (c) 2002-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification for SWInstSvrUI.
+*                This component is an server application providing S60 specific
+*                UI for software installation.
+*
+*/
+
+
+//  INCLUDES
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+#include "SWInstPrivateUid.h"
+
+TARGET             SWInstSvrUI.exe
+EPOCSTACKSIZE      0x5000
+EPOCHEAPSIZE       0x1000 0x1000000
+TARGETTYPE         exe
+UID                0x100039CE KSWInstSvrUid
+CAPABILITY         CAP_SERVER AllFiles TrustedUI PowerMgmt
+VENDORID           VID_DEFAULT
+
+// Resources
+
+START RESOURCE      ../Server/Data/SWInstSvrUI.rss
+HEADER
+TARGETPATH         APP_RESOURCE_DIR
+LANGUAGE_IDS
+END  
+
+START RESOURCE     ../Server/Data/SWInstSvrUI_reg.rss 
+DEPENDS            swinstsvrui.rsg
+// Do not change the UID below.
+TARGETPATH         /private/10003a3f/apps
+END
+
+// Sources
+SOURCEPATH          ../Server/Src
+SOURCE              SWInstApplication.cpp
+SOURCE              SWInstAppUi.cpp
+SOURCE              SWInstDocument.cpp
+SOURCE              SWInstServer.cpp
+SOURCE              SWInstSession.cpp
+SOURCE              SWInstServerPanic.cpp
+SOURCE              SWInstRequestObject.cpp
+SOURCE              SWInstInstallRequest.cpp
+SOURCE              SWInstUninstallRequest.cpp
+SOURCE              SWInstRequestStore.cpp
+
+// Includes
+USERINCLUDE         . ../Server/Inc ../Client/Inc ../Plugin/Inc ../Plugin/CommonUI/Inc
+MW_LAYER_SYSTEMINCLUDE
+
+// Libraries
+LIBRARY             euser.lib
+LIBRARY             apparc.lib
+LIBRARY             cone.lib
+LIBRARY             eikcore.lib
+LIBRARY             eikcoctl.lib 
+LIBRARY             avkon.lib
+LIBRARY             ecom.lib
+LIBRARY             efsrv.lib
+LIBRARY             commonengine.lib
+LIBRARY             caf.lib
+LIBRARY             drmhelper.lib
+LIBRARY             SWInstCommonUI.lib
+LIBRARY             SWInstTaskManager.lib
+LIBRARY             apgrfx.lib
+LIBRARY             sysutil.lib
+LIBRARY             ws32.lib // for RWsSession
+LIBRARY             estor.lib  //RDesReadStream
+
+SMPSAFE

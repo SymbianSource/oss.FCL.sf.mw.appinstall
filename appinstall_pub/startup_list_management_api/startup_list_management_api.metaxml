@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<api id="83790caf35a2a9d9f780dc52917c2b82" dataversion="1.0">
+  <name>Startup list Management API</name>
+  <description>The interface defines rules and policies, which allow third party application to make modification to the device's startup list during the installation/uninstallation process.
+1. SW Installer UI accepts the modification request to the startup list only from trusted software.
+2. SW Installer UI allows third party applications to add to/remove from the startup list only executables delivered within their own installation package.
+3. Startup list modification requests must be installed to the SW Installer UI server import directory (c:\private\101F875A\import).
+4. The modification request is accepted if its name (file name) equals to the UID of the currently proceeding installation package. Otherwise it is rejected.
+5. The modification request must contain: the name of the executable file and the exception policy.</description>
+  <type>c++</type>
+  <subsystem>appinstaller</subsystem>
+  <libs>
+  </libs>
+  <release category="sdk" sinceversion="3.0"/>
+  <attributes>
+     <!-- This indicates wether the api provedes separate html documentation -->
+     <!-- or is the additional documentation generated from headers. -->
+     <!-- If you are unsuere then the value is "no" -->
+     <htmldocprovided>yes</htmldocprovided>
+     <adaptation>no</adaptation>
+  </attributes>
+</api>

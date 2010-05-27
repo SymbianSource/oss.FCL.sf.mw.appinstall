@@ -1,0 +1,88 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+MACRO __DATA_CAGING__
+
+CAPABILITY 		TrustedUI ReadUserData AllFiles WriteDeviceData ReadDeviceData  
+ 
+TARGET         swidaemon.exe
+TARGETTYPE     exe
+TARGETPATH     sys/bin
+
+UID            0x1000007A 0x10202DCE
+VENDORID        VID_DEFAULT
+
+START RESOURCE  ../Daemon/Src/swidaemon.rss
+HEADER
+TARGETPATH      RESOURCE_FILES_DIR
+LANGUAGE_IDS
+END
+
+SOURCEPATH     ../Daemon/Src
+SOURCE         daemon.cpp
+SOURCE         main.cpp
+SOURCE         drivewatcher.cpp
+SOURCE         daemonbehaviour.cpp
+SOURCE         daemoninstaller.cpp
+SOURCE         SilentLauncher.cpp
+SOURCE         DialogWrapper.cpp
+SOURCE         previouslyInstalledAppsCache.cpp
+SOURCE         installationFailedAppsCache.cpp
+SOURCE         ShutdownWatcher.cpp
+//Uninstaller
+SOURCE         versionRevisor.cpp		
+SOURCE         uninstaller.cpp
+SOURCE         programstatus.cpp
+SOURCE         silentuninstaller.cpp
+//Dialog watcher AO
+SOURCE         dialogwatcher.cpp
+
+USERINCLUDE    ../Client/Inc
+USERINCLUDE    . ../Daemon/Inc
+USERINCLUDE    /sf/mw/appinstall/installationservices/swi/inc
+USERINCLUDE    /sf/mw/appinstall/installationservices/swi/inc/swi
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY        euser.lib 
+LIBRARY        efsrv.lib
+LIBRARY        apgrfx.lib 			//For AppForDocument()
+LIBRARY        apmime.lib
+LIBRARY        apparc.lib
+LIBRARY        sisregistryclient.lib
+LIBRARY        swinstcli.lib
+LIBRARY        swidataprovider.lib
+LIBRARY        sisxfile.lib
+LIBRARY        estor.lib
+LIBRARY        siscontroller.lib
+LIBRARY        platformenv.lib
+LIBRARY        sysutil.lib         // For Uninstaller
+LIBRARY        ecom.lib            // For Plug-in support
+LIBRARY        stsclient.lib
+LIBRARY        swiobserverclient.lib
+LIBRARY        sif.lib               // USIF SW Installer FW
+LIBRARY        scrclient.lib
+LIBRARY        hbwidgets.lib         // For Symbian Device Dialogs
+LIBRARY        hbcore.lib	    // For HbIndicatorSymbian
+
+DEBUGLIBRARY   flogger.lib
+
+SMPSAFE

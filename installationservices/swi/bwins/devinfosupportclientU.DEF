@@ -1,0 +1,7 @@
+EXPORTS
+	??0RDeviceInfo@Swi@@QAE@XZ @ 1 NONAME ; Swi::RDeviceInfo::RDeviceInfo(void)
+	?Close@RDeviceInfo@Swi@@QAEXXZ @ 2 NONAME ; void Swi::RDeviceInfo::Close(void)
+	?Connect@RDeviceInfo@Swi@@QAEHXZ @ 3 NONAME ; int Swi::RDeviceInfo::Connect(void)
+	?DeviceIdsL@RDeviceInfo@Swi@@QAEABV?$RPointerArray@VHBufC16@@@@XZ @ 4 NONAME ; class RPointerArray<class HBufC16> const & Swi::RDeviceInfo::DeviceIdsL(void)
+	?StartServer@RDeviceInfo@Swi@@AAEHXZ @ 5 NONAME ; int Swi::RDeviceInfo::StartServer(void)
+

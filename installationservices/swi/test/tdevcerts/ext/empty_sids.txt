@@ -1,0 +1,2 @@
+# An empty list of secure ids
+[sid_list]

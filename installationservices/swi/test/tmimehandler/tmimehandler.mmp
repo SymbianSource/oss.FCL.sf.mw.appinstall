@@ -1,0 +1,64 @@
+/*
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+TARGET          tmimehandler.exe
+TARGETTYPE		exe
+TARGETPATH		/sys/bin
+
+CAPABILITY ALL -TCB
+
+UID             0x100039CE 0x1021234d
+
+epocstacksize	0x8000
+
+USERINCLUDE     .
+
+
+SOURCEPATH	.
+SOURCE 		tmimehandler.cpp
+
+
+// Application exe specific resource which is localised to the application
+start resource	tmimehandler.rss
+targetpath		/resource/apps
+lang			sc
+header
+end
+
+// Application exe registration resource file
+start resource 	aif/tmimehandler_reg.rss
+targetpath 	/private/10003a3f/apps
+lang		sc
+end
+
+// Application localisable resource file
+start resource 	aif/tmimehandler_loc.rss
+targetpath 	/resource/apps
+lang		sc
+end
+
+APP_LAYER_SYSTEMINCLUDE_SYMBIAN
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+library			euser.lib cone.lib estor.lib ws32.lib
+library		    bafl.lib apparc.lib etext.lib gdi.lib
+library			eikcore.lib eikctl.lib eikdlg.lib eikcoctl.lib viewcli.lib
+library			apgrfx.lib efsrv.lib
+SMPSAFE

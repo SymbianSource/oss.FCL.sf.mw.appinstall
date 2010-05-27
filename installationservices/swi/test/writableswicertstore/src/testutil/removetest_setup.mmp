@@ -1,0 +1,29 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+CAPABILITY	  TCB
+TARGET		  removetest_setup.exe
+TARGETTYPE	  exe
+UID		  0x1000007A 0x80172652
+VENDORID	  0x00000000
+SOURCEPATH	  .
+SOURCE		  removetest_setup.cpp
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+LIBRARY		  euser.lib
+LIBRARY		  efsrv.lib
+LIBRARY		  hash.lib 
+SMPSAFE

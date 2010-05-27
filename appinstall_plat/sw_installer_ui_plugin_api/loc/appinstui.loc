@@ -1,0 +1,1700 @@
+/*
+* Copyright (c) 2002-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   This files contains localised strings for sw installer.
+*
+*/
+
+
+//------------------------------------------------------------------------------
+// ERRORS
+//------------------------------------------------------------------------------
+
+// d: Text in an info note in appinst. 
+// d: Informs that installation is aborted because the app is not suitable for the terminal.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_incomp "Cannot install. Application %U is incompatible with the device"
+
+// d: Text in an info note in appinst. 
+// d: Informs that installation is aborted because the app is not suitable for the terminal
+// d: due to the incompatible version. %0U is the name of the app and %1U is the version number.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_need_version "Cannot install!Compatible with %0U, version %1U."
+
+// d: Text in an info note in appinst. 
+// d: Informs that installation is aborted because the app requires a newer version of some 
+// d: already-present component in the terminal.%0U is the name of the app and %1U is the version number.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_need_vers_gre "Cannot install!Requires %0U version %1U or greater"
+
+// d: Text in an info note in appinst. . 
+// d: Indicates that installation cannot be done because the component to be installed is already part of permanent system functionality.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_rom "Cannot install!This component is built-in!"
+
+// d: Text in an info note in appinst.
+// d: Indicates that uninstallation was no properly finished because some files could not be deleted from the device.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_incomp_delete "Cannot delete file!"
+
+// d: Text in an info note in appinst. 
+// d: Indicates that installation could not be done because some file(s) could not be read.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_incomp_read "Cannot read file!"
+
+// d: Text in an error note in appinst. 
+// d: Indicates that installation could not be started because the file is corrupted.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_file_corrupt "File is corrupted!"
+
+// d: Text in an error note in appinst. 
+// d: Indicates that the drive user selected has not enough free space.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_note_memerror "Not enough space in the selected memory."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that ocsp check could not be conducted.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_ocsp_sett "Online certificate check could not be conducted. Check your settings."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that ocsp check failed.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_ocsp_fail "Online certificate check failed."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that certificate check failed.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_cert_fail "Certificate check failed. Contact application supplier."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that application is untrusted when "signed only" is set on in Application Manager.
+// l: popup_note_window
+// r: 3.2
+#define qtn_swins_note_check_settings "Only signed applications can be installed. Check your Installation settings in Application Manager."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that some general error occured in installation 
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_install_failed "Unable to install" 
+
+// d: Text in an error note in appinst. 
+// d: Indicates that disk needed by the installation is not present.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_no_mmc "Unable to install. Disk not present." 
+
+// d: Text in an error note in appinst. 
+// d: Indicates that installation is trying to owerwrite a file that 
+// d: does not belong to it.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_update_err "Update error"
+
+// d: Text in an error note in appinst. 
+// d: Indicates that some general error occured in uninstallation.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_unable_uninstall "Uninstallation failed" 
+
+// d: Text in an error note in appinst. 
+// d: Indicates that the drive user selected has not enough free space.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_no_memory "Unable to install. Insufficient memory."
+
+// d: Text in an error note in appinst. 
+// d: Indicates that installer could not grant capabilities.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_capab_fail "Cannot grant capabilities requested by the application"
+
+// d: Text in an error note in appinst.
+// d: Indicates that OCSP revocation check failed with certificate revoked result.
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_ocsp_warn_cert_revoked "Certificate revoked"
+
+// d: Text in an error note in appinst.
+// d: Indicates that package is not supported by the device
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_not_supp "Installation of package %U is not supported."
+
+// d: Text in an error note in appinst.
+// d: Indicates that installer is already installing some package.
+// l: popup_note_window
+// r: 3.0
+#define qtn_inst_err_installer_active "Unable to start installation. Installation is ongoing."
+
+// d: Text in an error note in appinst.
+// d: Indicates that installer did not recieve usage rights for a installation package.
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_note_drm_notrecieved "Usage rights not recieved"
+
+// d: Text in an error note in appinst.
+// d: Indicates that file is targeted to data gaged location, which is not accessible.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_access_denied "Cannot install. Access denied."
+
+// d: Text in an error note in appinst.
+// d: Indicates that certificate is expired.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_expired "Certificate expired"
+
+// d: Text in an error note in appinst.
+// d: Indicates that certificate is valid in future.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_date_mismatch "Certificate validity dates do not match with the phone's date. Check your date settings."
+
+// d: Text in an error note in appinst.
+// d: Indicates that user is trying to install a sis patch, but the base package is missing.
+// l: popup_note_window
+// w:
+// r: 3.0
+#define qtn_swins_note_base_missing "Unable to install. Install the base package first."
+
+// d: Text in an error note in appinst.
+// d: Indicates that uninstallation is not allowed
+// l: popup_note_window
+// w: 
+// r: 3.2
+#define qtn_am_note_uninst_not_allowed "Uninstallation not allowed"
+
+// d: Text in an error note in appinst.
+// d: Indicates that user is trying uninstall a partial upgrade.
+// l: popup_note_window
+// w: 
+// r: 3.0
+#define qtn_swins_note_uninst_partial "Cannot uninstall partial upgrades"
+
+// d: Text in an error note in appinst.
+// d: Indicates that the package to be installed in untrusted but contains
+// d: protected package uid, sid or vid.
+// l: popup_note_window
+// w: 
+// r: 3.0
+#define qtn_swins_note_protected "Cannot install a protected application from untrusted supplier"
+
+// d: Text in an error note in appinst.
+// d: Indicates that the certificate used to sign the package constrains the installation.
+// l: popup_note_window
+// w: 
+// r: 3.0
+#define qtn_swins_note_cert_constrained "Unable to install. Constrained by the certificate."
+
+
+//------------------------------------------------------------------------------
+// OTA status codes
+//------------------------------------------------------------------------------
+
+// d: Text in an info note in appinst.
+// d: Indicates that the installation was completed successfully.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_900_complete "Installation complete"
+
+// d: Text in an error note in appinst.
+// d: Indicates that the device does not have enough memory in midlet install.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_901_no_memory "Insufficient memory"
+
+// d: Text in an error note in appinst.
+// d: Indicates that the midlet install was cancelled.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_902_user_canc "Installation cancelled"
+
+// d: Text in an error note in appinst.
+// d: Indicates a network error during midlet installation.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_903_netw_lost "Network lost"
+
+// d: Text in an error note in appinst.
+// d: Indicates an error that Jar size does not match the one defined in Jad.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_904_jar_miss "Jar size mismatch"
+
+// d: Text in an error note in appinst.
+// d: Indicates an error that Jad and Jar attributes do not match
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_905_attr_miss "Attribute mismatch"
+
+// d: Text in an error note in appinst.
+// d: Indicates an error tha mandatory attribute in Jad are missing.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_906_inv_desc "Mandatory attributes missing"
+
+// d: Text in an error note in appinst.
+// d: Indicates an error in Jar file.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_907_inv_jar "Invalid Jar file"
+
+// d: Text in an error note in appinst.
+// d: Indicates that the midlet is incompatible with the device.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_908_incomp "Application is incompatible with the device"
+
+// d: Text in an error note in appinst.
+// d: Indicates that there is an fatal error in one of the certificates.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_909_authen "Certificate check failed. Contact application supplier."
+
+// d: Text in an error note in appinst.
+// d: Indicates that there is an fatal error in one of the certificates.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_910_author "Application authorization failure."
+
+// d: Text in an error note in appinst.
+// d: Indicates that there is an fatal error in one of the certificates.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_911_reg_fail "Push registration failure"
+
+// d: Text in an info note in appinst.
+// d: Indicates to the user that uninstallation was succesfully finished.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_912_uninst_compl "Uninstallation complete"
+
+// d: Text in an error note in appinst.
+// d: Indicates that package is not supported by the device
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_ota_913_not_supp "Installation of package %U is not supported."
+
+
+//------------------------------------------------------------------------------
+// Install
+//------------------------------------------------------------------------------
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to continue installation of the application in question (=%U).
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_inst_conf_head "Install\n%U?"
+
+// d: Text in a confirmation query in appinst. 
+// d: Asks from the user if the already present version in the device is replaced with the one in the 
+// d: installation package.
+// l: popup_note_window
+// r: 3.0
+#define qtn_inst_conf_replace "%0U exists. Replace version %1U with %2U"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to close application in order to proceed installation.
+// d: %U is the application needed to be closed
+// l: popup_note_window
+// r: 3.0
+#define qtn_inst_conf_close_single "%U needs to be closed before installation can continue. Close application?"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to close applications in order to proceed installation.
+// d: %U is a list of all the applications that need to be closed
+// l: popup_note_window
+// r: 3.0
+#define qtn_inst_conf_close_multi "Some applications need to be closed before installation can continue. Close applications?"
+
+// d: Text in a confirmation query in appinst.
+// d: Indicates that OCSP revocation check failed.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_security_warn "Installation security warning. Unable to verify supplier. Continue anyway?"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he/she really wants to cancel installation.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_cancel_conf "Do you want to cancel installation?"
+
+// d: Note with progress bar in Appinst
+// d: Indicates with a progress bar that installation is going on.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_swins_note_install "Installing"
+
+// d: Text in waiting note in Appinst
+// d: Indicates pre-installation is going on. Pre-installed applications
+// d: can be in memory card or in internal mass storage.
+// l: popup_note_wait_window
+// r: 3.1
+#define qtn_swins_note_install_preinstalled "Installing applications"
+
+// d: Text in waiting note in Appinst
+// d: Indicates pre-installation is going on. Firmware update may bring
+// d: newer versions of ROM applications in device. These same applications
+// d: may have been updated earlier with SIS-files. After firmware update,
+// d: pre-installation removes old SIS-updates if necessary.
+// l: popup_note_wait_window
+// r: 5.2
+#define qtn_swins_note_uninstall_old_versions "Finalizing installations"
+
+// d: Text in an info note in appinst. 
+// d: Indicates to the user that installation was succesfully finished.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_install_complete "Installation complete"
+
+// d: Text in an info note in appinst. 
+// d: Indicates to the user that installation was cancelled (because of user action).
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_cancelled "Installation cancelled"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he wants to continue installation despite of the fact that some components required 
+// d: by the installable application are not present in the device (i.e. the app may not be able to run).
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_comp_missing "Component %U missing. Continue?"
+
+// d: Heading of the optional files selection list 
+// d: Indicates that list is meant to show the possible optional files to be installed.
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_swins_title_optional_files "Install optional files:"
+
+// d: User name in a combined data and code query popup window
+// d: used to ask for username and password
+// l: popup_query_data_code_window/opt2
+// r: 3.0
+#define qtn_jam_ad_user_name "User name"
+
+// d: Password in a combined data and code query popup window
+// d: used to ask for username and password
+// l: popup_query_data_code_window/opt2
+// r: 3.0
+#define qtn_jam_ad_password "Password"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he wants to download and install a jar file.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_conf_jar_download "Download and install %U?"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he wants to download and install a jar file.
+// l: heading_pane_t1
+// r: 5.0
+#define qtn_swins_header_download "Download and install?"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he wants to download and upgrade a jar file.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_conf_jar_replace "Download and replace %0U %1U with %2U?"
+
+// d: Note with progress bar in Appinst
+// d: Indicates with a progress bar that file downloading is going on.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_swins_download_count "Downloading\n%0N kB / %1N kB"
+
+// d: Wait note in Appinst
+// d: Indicates that the device is connecting to the network.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_jam_ota_msg_connecting "Connecting"
+
+// d: Text in confirmation query in appinst. 
+// d: Confirms from the user if he wants to keep existing midlet data in case of upgrade.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_keeprmsdata "Keep existing RMS data?"
+
+// d: Wait note in Appinst
+// d: Indicates that the cancellation is in progress.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_inst_note_cancel "Cancelling"
+
+// d: Text in confirmation query in appinst. 
+// d: Informs the user that the app is not marked as compatible and therefore might damage the device
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_incomp_applic "Application not compatible with phone. Continue anyway?"
+
+// d: Wait note in installer.
+// d: Indicates that installation preparations are in progress.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_swins_note_prep_inst "Preparing installation"
+
+// d: Wait note in installer.
+// d: Indicates that installer is waiting for usage rights to arrive.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_am_note_drm_waiting "Waiting for usage rights"
+
+// d: Text in message query in appinst. 
+// d: Confirms from the user that he understands that the package to be installed has been signed
+// d: with developer certificate.
+// l: popup_info_list_pane_t1
+// w: 
+// r: 3.0
+#define qtn_swins_query_dev_cert "This Application is for development use only. Continuing installation may cause serious problems to your device. Continue?"
+
+// d: Text in an info note in appinst. 
+// d: Indicates that drm rights object was not recieved and downloaded jar 
+// d: was copied to application manager installation directory.
+// w: 
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_note_java_no_drm "Usage rights not recieved. Try installing again from Application Manager."
+
+// d: Text in confirmation query in appinst.
+// d: Confirms from the user if he wants to upgrade midlet although that would mean losing application data.
+// l: popup_note_window 
+// r: 3.2
+#define qtn_jam_rmsdatalost "The old application data stored to the non present memory card will be lost. Do you want to continue?"
+
+
+//------------------------------------------------------------------------------
+// Uninstall
+//------------------------------------------------------------------------------
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to continue removal of the application in question.
+// l:  popup_note_window
+// r: 3.0
+#define qtn_swins_note_uninst_conf_head "'%U' and associated data will be removed from phone. Continue?"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to continue removal of MIDlet suite that includes several MIdlets
+// d: %U is replaced by the name of MIDlet suite. 
+// l: popup_info_list_pane_t1
+// r: 3.2
+#define qtn_swins_query_uninst_midlet_suite "Uninstalling %0U will result in removal of: \n%1U. Continue?"
+
+// d: Title heading in the uninstall confirmation dialog(which is a message query). 
+// d: Dialog title 
+// l: heading_pane_t1
+// r: 3.2
+#define qtn_swins_heading_uninst_midlet_suite "Warning" 
+
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to continue removal despite of the fact that the app in question is needed by other apps.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_note_uninst_conf_warn "Removal may stop other applications working. Continue?"
+
+// d: Text in an info note in appinst. 
+// d: Indicates to the user that uninstallation was succesfully finished.
+// l: popup_note_window
+// r: 3.0
+#define qtn_jam_uninstall_done_info "Removal complete"
+
+// d: Text in an info note in appinst. 
+// d: Indicates to the user that uninstallation was cancelled
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_uninstall_cancel "Uninstallation cancelled"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to close application in order to proceed the uninstallation.
+// d: %U is the application to be closed.
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_close_running "Application %U has to be closed before uninstalling. Close?"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to close some applications in order to proceed the uninstallation.
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_close_running_multi "Some applications have to be closed before uninstalling. Close?"
+
+// d: Text in an info note in appinst. 
+// d: Indicates that drm protected application was succefully removed.
+// l: popup_note_window
+// r: 3.0
+#define qtn_drm_app_deleted "Object deleted. Activation key still available in key list."
+
+
+//------------------------------------------------------------------------------
+// OCSP
+//------------------------------------------------------------------------------
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to do an OCSP revocation check.
+// d: This note is shown in the case that OCSP setting is set to yes.
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_ocsp_on_query "Do you want to check certificate validity online?"
+
+// d: Text in confirmation query in appinst. 
+// d: Asks for the permission from the user to do an OCSP revocation check.
+// d: This note is shown in the case that OCSP setting is set to must check
+// l: popup_note_window
+// r: 3.0
+#define qtn_am_ocsp_must_check_query "Online checking for certificate validity needed. Continue?"
+
+// d: Note with progress bar in Appinst
+// d: Indicates with a progress bar that OCSP revocation check is ongoing.
+// l: popup_note_wait_window 
+// r: 3.0
+#define qtn_am_ocsp_wait_check "Checking certificate"
+
+
+//------------------------------------------------------------------------------
+// Certificate details
+//------------------------------------------------------------------------------
+
+// d: Title heading in the certificate dialog(which is message query/Security info note pop up window) in appinst. 
+// d: Dialog title 
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_swins_heading_cert "Certificate details:" 
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the subject of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_cert_subject "Subject name:"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the issuer of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_lsh2_issuer "Issuer:"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the start of the validity period of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_lsh2_valid "Valid from:"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the date of expiration of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_cert_valid "Valid until:"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the serial number of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_lsh2_serial "Serial number:"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the fingerprint of the certificate.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_cert_fingerprint "Fingerprint (SHA1):"
+
+// d: Heading in the certificate dialog(which is message query/Security info note pop up window) in appinst.
+// d: This is the heading in the certificate dialog for the fingerprint of the certificate.
+// l: heading_pane_t1
+// r: 3.2
+#define qtn_swins_cert_fingerprint_md "Fingerprint (MD5):"
+
+
+//------------------------------------------------------------------------------
+// Capabilities
+//------------------------------------------------------------------------------
+
+// d: Title heading in the capabilities dialog
+// d: Dialog title 
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_swins_capab_header "Capabilities" 
+
+// d: Text in capabilities dialog in appinst.
+// d: The heading (within text) of the of the capabilities dialog.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_inst_conf_capab "The application has requested permission to:"
+
+// d: Text in capabilities dialog in appinst.
+// d: Read user data capability.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_inst_capab_read "Read user's personal data"
+
+// d: Text in capabilities dialog in appinst.
+// d: Write user data capability.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_inst_capab_modify "Modify user's personal data"
+
+// d: Text in capabilities dialog in appinst.
+// d: Local connect capability with 1 media.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_capab_local "Connect using local connectivity"
+
+// d: Text in capabilities dialog in appinst.
+// d: Access device camera or microphone.
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_swins_capab_userenv "Access user environment"
+
+// d: Text in capabilities dialog in appinst.
+// d: Access network
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_inst_capab_network "Make network connections or phone calls"
+
+// d: Text in capabilities dialog in appinst.
+// d: Access location information
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_inst_capab_location "Access the location information"
+
+// d: Link component in Appinst
+// d: Link to more info about capabilities
+//l:list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_capab_info "More info"
+
+
+//------------------------------------------------------------------------------
+// Security warning dialog
+//------------------------------------------------------------------------------
+
+// d: Text in a message query in appinst.
+// d: The header for the security warning dialog
+// l: heading_pane_t1/opt2
+// r: 3.0
+#define qtn_am_note_head_security_warn "Security warning"
+
+// d: Text in a message query in appinst.
+// d: Asks from the user if the installation is continued although the digital signature is either not present
+// d: or could not be verified properly (but is not tampered).
+// l: popup_info_list_pane_t1
+// r: 3.0
+#define qtn_am_note_text_security_warn "The application is untrusted and may be harmful to your phone."
+
+// d: Link component in Appinst
+// d: Link to more info about untrusted applications
+//l:list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_link_more_info "More info"
+
+
+//------------------------------------------------------------------------------
+// Details
+//------------------------------------------------------------------------------
+
+// d: Header for a dialog showing program details
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_swins_heading_det "Details:"
+
+// d: Header for a dialog showing program details during installation 
+// l: heading_pane_t1
+// r: 5.0
+#define qtn_swins_header_install "Install?"
+
+// d: Heading in a dialog showing program details
+// d: The technology that is used to make the program
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_am_detail_technology "Technology"
+
+// d: Heading in a dialog showing program details
+// d: Program name
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_name "Name"
+
+// d: Heading in a dialog showing program details
+// d: Program version
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_version "Version"
+
+// d: Heading in a dialog showing program details
+// d: Program type (value is one of addon, upgrade, patch or config)
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_type "Type"
+
+// d: Heading in a dialog showing program details
+// d: Program file size
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_size "Size"
+
+// d: Heading in a dialog showing program details
+// d: Program supplier/vendor
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_from "Supplier"
+
+// d: Heading in a dialog showing program details
+// d: Program status (value is for example installed, uninstalled, running..)
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lsh2_apps_status "Status"
+
+// d: Heading in a dialog showing program details
+// d: URL/web address
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_jam_info_url "URL"
+
+// d: Heading in a dialog showing program details
+// d: Program data size
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_jam_info_data_size "Data"
+
+// d: Heading in a dialog showing program details
+// d: Program storage memory (mmc or device)
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_jam_info_memory "Memory"
+
+// d: Heading in a dialog showing program details
+// d: The required permissions of the midlet suite
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_am_info_midlet_domain_trust "Domain category"
+
+// d: Heading in a dialog showing program details
+// d: The security domain of the midlet suite
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_am_info_midlet_permissions "Required permissions"
+
+// d: Heading in a dialog showing program details
+// d: The content of midlet suite
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_am_detail_suite_content "Content"
+
+// d: Heading in a dialog showing program details
+// d: Certificates from the package
+// l: list_double_pane_t1_cp2
+// r: 3.0
+#define qtn_am_detail_cert "Certificates"
+
+// d: Heading in a dialog showing program details
+// d: DRM information of the package
+// l: list_double_pane_t1_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_drm "DRM"
+
+
+// DETAILS DIALOG VALUES
+
+// d: value in a dialog showing program details
+// d: Application size
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_swins_ls1_kilobyte "%N kB"
+
+// d: Value in a dialog showing program details
+// d: Unknown supplier
+// l: list_double_pane_t2_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_unknown_supplier "Unknown"
+
+// d: Value in a dialog showing program details
+// d: Unknown size
+// l: list_double_pane_t2_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_unknown_size "Unknown"
+
+// d: Value in a dialog showing program details
+// d: Unknown data
+// l: list_double_pane_t2_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_unknown_data "Unknown"
+
+// d: Value in a dialog showing program details
+// d: Unknown type
+// l: list_double_pane_t2_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_unknown_type "Unknown"
+
+// d: Value in a dialog showing program details
+// d: Unknown info url
+// l: list_double_pane_t2_cp2
+// w:
+// r: 3.0
+#define qtn_am_detail_unknown_url "Unknown"
+
+
+//type field
+
+// d: value in a dialog showing program details
+// d: Installation package, which contains an application
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_swins_ls1_install_app "Application"
+
+// d: value in a dialog showing widget details
+// d: widget type
+// l: list_double_pane_t2_cp2
+// r: 3.2
+#define qtn_swins_ls1_install_widget "Widget"
+
+//status field
+
+// d: value in a dialog showing program details
+// d: Installed
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_swins_ls1_fully_inst "Installed"
+
+// d: value in a dialog showing program details
+// d: Not installed
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_swins_ls1_not_inst "Not installed"
+
+// d: value in a dialog showing program details
+// d: The program is running now
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_jam_info_stat_running "Running"
+
+// d: value in a dialog showing program details
+// d: Not downloaded, you only have part of the software on device 
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_jam_info_stat_not_loaded "Not downl."
+
+//memory field
+
+// d: value in a dialog showing program details
+// d: Location of file, device
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_jam_info_mem_device "Phone"
+
+// d: value in a dialog showing program details
+// d: Location of file, memory card
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_jam_info_mem_mmc "Memory card"
+
+// d: value in a dialog showing program details
+// d: Location of file, device
+// d: %U is replaced by the drive letter without colon, e.g. "C"
+// l: list_double_pane_t2_cp2
+// r: 5.0
+#define qtn_am_details_mem_device "%U: Device"
+
+// d: value in a dialog showing program details
+// d: Location of file, removable memory (memory card)
+// d: %U is replaced by the drive letter without colon, e.g. "F"
+// l: list_double_pane_t2_cp2
+// r: 5.0
+#define qtn_am_details_mem_memory_card "%U: Memory card"
+
+// d: value in a dialog showing program details
+// d: Location of file, internal mass storage
+// d: %U is replaced by the drive letter without colon, e.g. "E"
+// l: list_double_pane_t2_cp2
+// r: 5.0
+#define qtn_am_details_mem_mass_storage "%U: Mass Storage"
+
+//domain category field
+
+// d: value in a dialog showing program details
+// d: Operator domain
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_am_info_operator "Operator"
+
+// d: value in a dialog showing program details
+// d: Manufacturer domain
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_am_info_manufacturer "Manufacturer"
+
+// d: value in a dialog showing program details
+// d: Trusted 3rd party domain
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_am_info_trusted_3rd_party "Trusted 3rd party"
+
+// d: value in a dialog showing program details
+// d: Untrusted 3rd party domain
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_am_info_untrusted_3rd_party "Untrusted 3rd party"
+
+// d: value in a dialog showing program details
+// d: View certificate details link
+// l: list_double_pane_t2_cp2
+// r: 3.0
+#define qtn_am_cert_details "View details"
+
+// d: value in a dialog showing program details
+// d: View DRM details link
+// l: list_double_pane_t2_cp2
+// w: 
+// r: 3.0
+#define qtn_am_drm_details "View details"
+
+
+//------------------------------------------------------------------------------
+// Installation complete dialog for Java applications
+//------------------------------------------------------------------------------
+
+// d: Heading of the complete dialog
+// l: heading_pane_t1
+// r: 3.2
+#define qtn_swins_installation_complete_head "Installation Complete"
+
+// d: Installed folder in 2nd line in the list
+// d: %U is replaced by the name of a folder where application is installed
+// l:list_double_large_graphic_pane_t2_cp2
+// r: 3.2
+#define qtn_jam_installed_folder "In %U"
+
+// d: Default name of Installed folder in 2nd line in the list
+// l:list_double_large_graphic_pane_t2_cp2
+// r: 3.2
+#define qtn_swins_installed_folder "In Installed"
+
+
+//------------------------------------------------------------------------------
+// Misc
+//------------------------------------------------------------------------------
+
+// d: Heading in location query in appinst
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_jam_lqh_instlocation "Install (%N kB):"
+
+// d: Heading in appinst title. 
+// d: Title of the appinst
+// l: title_pane_t2/opt9 
+// r: 3.0
+#define qtn_installer_title "Application Installer" 
+
+// d: Short title. 
+// l: title_pane_t2/opt9 
+// r: 3.0
+#define qtn_installer_short_title "Installer"
+
+// d:Command text associated to a softkey in the control pane.
+// d:Confirms operation.
+// l:control_pane_t1/opt7
+// r: 3.0
+#define text_softkey_continue "Continue"
+
+// d: Text in an info note in appinst.
+// d: Informs that the removable drive (mmc or emmc) contained untrusted application(s), which were not installed.
+// d: User has to go to application manager and manually install them.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_preinst_untrusted "Untrusted software was found. For installing, go to Application Manager."
+
+// d: Text in an info note in appinst.
+// d: Informs that there were some error(s) while installing pre-installed applications from removable drive (mmc or emmc).
+// d: User has to go to application manager and manually install them.
+// l: popup_note_window
+// r: 3.0
+#define qtn_swins_preinst_cancelled "Installation was not completed. Go to Application Manager for installing remaining applications"
+
+//--------------------------------------------------------
+// LANGUAGES
+//--------------------------------------------------------
+
+// d: Heading of the language list query 
+// d: Indicates that list is meant to be shown the possible language alternatives.
+// l: heading_pane_t1
+// r: 3.0
+#define qtn_swins_lqh_lang_sel "Select language:"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language code was not known for the installer.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_unknow "Unknown language"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is UK English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_uk "UK English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is French.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_french "French"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is German.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_german "German"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Spanish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_span "Spanish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Italian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_ital "Italian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Swedish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_swedish "Swedish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Danish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_danish "Danish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Norwegian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_norweg "Norwegian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Finnish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_finnish "Finnish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is US English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_us "US English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is swiss French.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_swissfre "Swiss French"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Swiss German.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_swissger "Swiss German"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Portuguese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_portug "Portuguese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Turkish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_turk "Turkish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Icelandic.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_ice "Icelandic"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Russian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_russ "Russian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Hungarian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_hung "Hungarian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Dutch.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_dutch "Dutch"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Belgian Dutch.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_belgdutch "Belgian Dutch"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Australian English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_austeng "Australian English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Belgian French.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_belgfrench "Belgian French"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Austrian German.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_austrger "Austrian German"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is New Zealand English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_nzeng "New Zealand English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is International French.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_intfrench "International French"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Czech.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_czech "Czech"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Slovak.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_slovak "Slovak"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Polish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_polish "Polish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Slovenian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_sloven "Slovenian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Taiwan Chinese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_taiwchin "Taiwan Chinese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Honk Kong Chinese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_hkchin "Honk Kong Chinese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Prc Chinese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_prcchin "Prc Chinese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Japanese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_japan "Japanese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Thai.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_thai "Thai"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Afrikaans.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_afrik "Afrikaans"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Albanian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_alb "Albanian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Amharic.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_amhar "Amharic"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Arabic.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_arabic "Arabic"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Armenian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_armenian "Armenian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Belarussian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_belarus "Belarussian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Bengali.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_beng "Bengali"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Bulgarian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_bulg "Bulgarian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Burmese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_burm "Burmese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Catalan.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_catalan "Catalan"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Croatian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_croat "Croatian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Canadian English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_caneng "Canadian English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is International English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_inteng "International English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is South African English.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_saeng "South African English"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Estonian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_estonia "Estonian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Farsi.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_farsi "Farsi"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Canadian French.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_canfrench "Canadian French"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Scots gaelic.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_scotgael "Scots gaelic"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Georgian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_georg "Georgian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Greek.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_greek "Greek"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Cyprus Greek.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_cygreek "Cyprus Greek"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Gujarati.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_gujarat "Gujarati"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Hebrew.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_hebr "Hebrew"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Hindi.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_hindi "Hindi"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Indonesian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_indon "Indonesian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Irish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_irish "Irish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Swiss Italian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_swissital "Swiss Italian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Kannada.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_kannada "Kannada"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Kazakh.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_kazakh "Kazakh"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Khmer.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_khmer "Khmer"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Korean.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_korean "Korean"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Lao.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_lao "Lao"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Latvian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_latv "Latvian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Lithuanian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_lith "Lithuanian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Macedonian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_maced "Macedonian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Malay.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_malay "Malay"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Malyalam.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_malyalam "Malyalam"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Marathi.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_marath "Marathi"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Moldavian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_molda "Moldavian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Mongolianh.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_mong "Mongolian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Norwegian nynorsk.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_nornynorsk "Norwegian nynorsk"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Brazilian Portuguese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_brazport "Brazilian Portuguese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Punjabi.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_punj "Punjabi"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Romanian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_roman "Romanian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Serbian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_serb "Serbian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Sinhalese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_sinhal "Sinhalese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Somali.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_somal "Somali"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is International Spanish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_intspan "International Spanish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Latin American Spanish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_latspan "Latin American Spanish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Swahili.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_swahil "Swahili"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Finland Swedish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_finswe "Finland Swedish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Tajik.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_tajik "Tajik"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Tamil.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_tamil "Tamil"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Telugu.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_telugu "Telugu"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Tibetan.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_tibet "Tibetan"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Tigrinya.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_tigrin "Tigrinya"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Cyprus Turkish.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_cyturk "Cyprus Turkish"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Turkmen.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_turkmen "Turkmen"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Ukranian.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_ukran "Ukranian"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Urdu.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_urdu "Urdu"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Uzbek.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_uzbek "Uzbek"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Vietnamese.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_viet "Vietnamese"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Welsh.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_welsh "Welsh"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Zulu.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_zulu "Zulu"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Tagalog.
+// l: list_single_pane_t1_cp2
+// r: 3.0
+#define qtn_swins_lqi_taga "Tagalog"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Basque.
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_basque "Basque"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Galician.
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_galic "Galician"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (APAC).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_apaceng "English (APAC)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (Taiwan).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_tweng "English (Taiwan)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (Hongkong).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_hkeng "English (Hongkong)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (PrcChina).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_prceng "English (PrcChina)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (Japanese).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_jpneng "English (Japanese)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is English (Thai).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_thaieng "English (Thai)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Malay (APAC).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_apacmalay "Malay (APAC)"
+
+// d: One of the items in the language selection list.
+// d: Indicates that the language in question in the selection list is Indonesian (APAC).
+// l: list_single_pane_t1_cp2
+// r: 5.0
+#define qtn_swins_lqi_apacind "Indonesian (APAC)"
+
+// End of File

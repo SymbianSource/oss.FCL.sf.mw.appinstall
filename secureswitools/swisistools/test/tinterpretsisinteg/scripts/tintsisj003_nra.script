@@ -1,0 +1,50 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// @file tintsis.script
+// Creation December 07, 2006
+// interpretsis Integration Test Script
+// Integration Test
+// Component  : SWI
+// Tests      : Ajay Bhandary
+// The scope of this script is to compare the SWI and Interpretsis installation
+// The ini file tintsis.ini is located at the path c:\tinterpretsisintg\testharness_preq1230\scripts\tintsis.script
+//
+
+
+PRINT Run test for installation of sis file 
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tinterpretsis
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-SWI-INTERPRETSIS-J003-NRA-0001
+//! @SYMTestCaseDesc 		Compare installation of SWI and Interpretsis 
+//! @SYMPREQ  			PREQ1230
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install a sis file.
+//! @SYMTestExpectedResults 	Installation is successful     
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+START_TESTCASE API-SEC-SWI-INTERPRETSIS-J003-NRA-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep c:\tswi\tinterpretsisinteg\scripts\ini.ini J003sisfile2
+RUN_TEST_STEP 100 tinterpretsis InterpretsisStep c:\tswi\tinterpretsisinteg\scripts\ini.ini J003sisfile3
+
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   c:\tswi\tinterpretsisinteg\scripts\ini.ini J003removeregistrysisfile
+
+END_TESTCASE API-SEC-SWI-INTERPRETSIS-J003-NRA-0001

@@ -1,0 +1,26 @@
+# CIT_EGUO-6G9J6M_06
+# DLL with no capabilities that has a protected VID that is included in the 
+# VID constraints.
+#
+# Installation should be successful.
+
+[main]
+name=03_protected_vid_match
+template=simple.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_vid1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswidllnocapabilityprotectedvid.dll"-"!:\sys\bin\tswidllnocapabilityprotectedvid.dll";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnexist=1
+nexist0=c:\sys\bin\tswidllnocapabilityprotectedvid.dll
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswidllnocapabilityprotectedvid.dll

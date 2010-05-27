@@ -1,0 +1,36 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test SIS file (E) embeds another (D). It is used to test DEF096906. 
+
+;Languages
+&EN
+
+;Header
+#{"testuninstall_embeddependE"}, (0xA00000EE), 1, 2, 3
+
+%{"Vendor-EN"}
+:"Unique Vendor Name"
+
+;Embedded component
+IF NOT package(0xA00000DD)
+@"testuninstall_embeddependD.sis",(0xA00000DD)
+endif
+
+;Dependencies
+(0xA00000AA), 1, 2, 3, {"testuninstall_embedA"} 
+
+;Installs an extra file
+"text\embedE.txt"-"!:\Documents\InstTest\embedE.txt";

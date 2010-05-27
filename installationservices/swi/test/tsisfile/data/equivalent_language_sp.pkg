@@ -1,0 +1,100 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description: 
+;
+; Installation file supporting Belgian French , Swiss German,  Latin American Spanish , Swiss Italian 
+;	Flemish Belgian , Hong Kong Chinese , Japanese, German (Austrian) 
+
+;Languages
+&EN, AM, BF, SG, LS, SZ, SA, BL, HK, JA, AS
+
+;Package Header
+#{"Equivalent_SP_EN","Equivalent_SP_AM","Equivalent_SP_BF","Equivalent_SP_SG","Equivalent_SP_LS","Equivalent_SP_SZ","Equivalent_SP_SA","Equivalent_SP_BL","Equivalent_SP_HK","Equivalent_SP_JA","Equivalent_SP_AS" },(0x88000108),1,0,0, TYPE=SP
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_AM","Vendor_BF","Vendor_SG","Vendor_LS","Vendor_SZ","Vendor_SA","Vendor_BL","Vendor_HK","Vendor_JA","Vendor_AS"}
+
+;Default vendor name
+:"Vendor"
+
+
+;Supported Language Block
+
+IF SUPPORTED_LANGUAGE = 01
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_en.r01"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 10
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_am.r10"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 21
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_bf.r21"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 12
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_sg.r12"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 83
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_ls.r83"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 61
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_sz.r61"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 48
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_sa.r48"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 19
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_bl.r19"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 30
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_hk.r30"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 32
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_ja.r32"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 22
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_as.r22"
+ENDIF
+
+IF LANGUAGE = 30
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_lang_hk.r30"
+ENDIF
+
+IF LANGUAGE = 01
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sp_lang_en.r01"
+ENDIF
+
+
+; Option List
+!({"Option1 EN","Option1 AM","Option1 BF","Option1 SG" ,"Option1 LS" ,"Option1 SZ" ,"Option1 SA","Option1 BL","Option1 HK","Option1 JA","Option1 AS"}, {"Option2 EN","Option2 AM","Option2 BF" , "Option2 SG" ,"Option2 LS" , "Option2 SZ" , "Option2 SA", "Option2 BL", "Option2 HK", "Option2 JA", "Option2 AS"})
+
+
+if option1 = 1
+"text\option1.txt"-"!:\Documents\InstTest\Option1_sp.txt";
+endif
+
+if option2 = 1
+"text\option2.txt"-"!:\Documents\InstTest\Option2_sp.txt";
+endif

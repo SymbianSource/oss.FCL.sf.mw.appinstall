@@ -1,0 +1,3 @@
+EXPORTS
+	?CreateL@CustomMIDletInstallFactory@@SAPAVMCustomMIDletInstall@@XZ @ 1 NONAME ; class MCustomMIDletInstall * CustomMIDletInstallFactory::CreateL(void)
+

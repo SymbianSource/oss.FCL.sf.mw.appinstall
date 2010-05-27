@@ -1,0 +1,86 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// This script tests SIF GenerateNewAppUid() API
+// 
+//
+
+PRINT Run SIF GenerateNewAppUid() API Tests
+//Load suite
+LOAD_SUITE tscr
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-APPUIDGEN-0001
+//! @SYMTestCaseDesc 		The test cenrep file of SCR specifies two Uid ranges with their total 
+//!					adding upto 302. SCRAddApplicationEntry is called 302 times in a loop to fill
+//!					both the ranges.
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-APPUIDGEN-0001
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr_appreginfo.ini db_file 
+START_REPEAT z:\tusif\tsif\tsif_appuidgen.ini loop_count repeatParam
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini add_app_reg_info_newUid
+END_REPEAT
+END_TESTCASE API-SEC-USIF-APPUIDGEN-0001
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-APPUIDGEN-0002
+//! @SYMTestCaseDesc 		SCRAddApplicationEntry fails as no unused UID is available.
+//! @SYMTestStatus 		3. Released
+
+
+START_TESTCASE API-SEC-USIF-APPUIDGEN-0002
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini add_app_reg_info_newUid
+END_TESTCASE API-SEC-USIF-APPUIDGEN-0002
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-APPUIDGEN-0003
+//! @SYMTestCaseDesc 		Delete 4 Uids from both the ranges
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-APPUIDGEN-0003
+//Third test case , delete 8 uids 
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid1
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid2
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid3
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid4
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid5
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid6
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid7
+RUN_TEST_STEP 100 tscr SCRDeleteApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini deleteAppUid8
+END_TESTCASE API-SEC-USIF-APPUIDGEN-0003
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-APPUIDGEN-0004
+//! @SYMTestCaseDesc 		SCRAddApplicationEntry is called 8 times in a loop.
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-APPUIDGEN-0004
+START_REPEAT z:\tusif\tsif\tsif_appuidgen.ini loop_count repeatParam2
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini add_app_reg_info_newUid
+END_REPEAT
+END_TESTCASE API-SEC-USIF-APPUIDGEN-0004
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-APPUIDGEN-0005
+//! @SYMTestCaseDesc 		SCRAddApplicationEntry fails as no unused UID is available.
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-APPUIDGEN-0005
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddApplicationEntry z:\tusif\tsif\tsif_appuidgen.ini add_app_reg_info_newUid
+END_TESTCASE API-SEC-USIF-APPUIDGEN-0005
+
+
+PRINT Completed SIF AppUid Generation tests.

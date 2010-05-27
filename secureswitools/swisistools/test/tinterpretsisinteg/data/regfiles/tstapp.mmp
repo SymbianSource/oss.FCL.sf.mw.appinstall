@@ -1,0 +1,83 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+//
+// TstApp.MMP for test component TstApp
+//
+
+target		tstapp.exe
+TARGETTYPE 	exe
+
+UID             0x100039CE 0xA000E525
+//targetpath      /sys/bin
+CAPABILITY 	All -Tcb
+VENDORID 	0x70000001
+
+systeminclude   /epoc32/include
+systeminclude   /epoc32/include/techview
+
+SOURCEPATH .
+SOURCE tstapp.cpp
+
+//Application localisable resource file
+resource  	tstapp_loc.RSS
+start resource 	tstapp_loc.RSS
+targetpath 	/resource/apps
+lang		sc 01 02 03
+end
+
+// Application exe registration resource file
+resource  	tstapp_reg.rss
+start resource 	tstapp_reg.rss
+targetpath 	/private/10003a3f/test
+lang		sc
+end
+
+// START resource files for tstapp2
+
+start resource	tstapp2_loc.RSS
+HEADER
+targetpath	/resource/apps
+lang		SC
+end
+
+start resource	tstapp2_reg.RSS
+targetpath	/private/10003a3f/test
+lang		SC 
+end
+
+// START resource files for tstappnouid3
+start resource	tstappnouid3_reg.RSS
+targetpath	/private/10003a3f/test
+lang		SC 
+end
+
+// START resource files for tstappnouid2
+start resource	tstappnouid2_reg.RSS
+targetpath	/private/10003a3f/test
+lang		SC 
+end
+
+// START resource files for tstappnoappfile
+start resource	tstappnoappfile_reg.RSS
+targetpath	/private/10003a3f/test
+lang		SC 
+end
+
+LIBRARY    	euser.lib
+LIBRARY 	ecom.lib
+
+SMPSAFE

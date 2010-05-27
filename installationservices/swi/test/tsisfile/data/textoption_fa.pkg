@@ -1,0 +1,41 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file with ForceAbort text option ,which aborts the installation when dialog returns.
+
+;Languages
+&EN
+
+;Header
+#{"ForceAbort-text"}, (0xA00B000C), 1, 0, 1, TYPE=SA
+%{"ForceAbort-text-L"}
+:"ForceAbort-text-U"
+
+!({"Continue"},{"ForceAbort"},{"Exit"})
+
+IF OPTION1
+"text\continue.txt"-"", FT, TC
+endif
+
+IF OPTION2
+"text\forceabort.txt"-"", FT, FA
+endif
+
+IF OPTION3
+"text\file1.txt"-"", FT, TE
+endif
+
+
+

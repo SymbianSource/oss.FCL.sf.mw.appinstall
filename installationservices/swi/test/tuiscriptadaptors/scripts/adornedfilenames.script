@@ -1,0 +1,804 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS adorned file name tests; see PDEF114642 for testspec
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0101
+//! @SYMTestCaseDesc		Installing another version using package type SA Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	only e:\sys\bin\adornedfilenametestingdll{000A0002}.dll  is installed after upgrade;
+//!                        	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are removed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0101
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_1_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_1_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_1_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0101
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0102
+//! @SYMTestCaseDesc		Installing another version using package type SA Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1 
+//!                     	and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and  e:\sys\bin\adornedfilenametestingdll{000A0002}.dll
+//!                        	are installed after upgrade; c:\sys\bin\adornedfilenametestingdll.dll is removed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0102
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_2_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_2_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase1_2_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0102
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0201
+//! @SYMTestCaseDesc		Installing another version using package type SP Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0201
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_1267_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_1_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0201
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0202
+//! @SYMTestCaseDesc		Installing another version using package type SP Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Upgrade package installs e:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and e:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0202
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_1267_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_2_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0202
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0203
+//! @SYMTestCaseDesc		Installing another version using package type SP Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0203
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0203
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0204
+//! @SYMTestCaseDesc		Installing another version using package type SP Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Upgrade package installs e:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//! @SYMTestExpectedResults	e:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0204
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_4_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0204
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0205
+//! @SYMTestCaseDesc		Installing another version using package type SP Testcase 5
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation fails (Reason: -10147 File already exists)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0205
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP_RESULT -10147 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_5_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0205
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0206
+//! @SYMTestCaseDesc		Installing another version using package type PU Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0206
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_1267_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_6_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0206
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0207
+//! @SYMTestCaseDesc		Installing another version using package type PU Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Upgrade package installs e:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and e:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0207
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_1267_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_7_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0207
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0208
+//! @SYMTestCaseDesc		Installing another version using package type PU Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0208
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_8_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0208
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0209
+//! @SYMTestCaseDesc		Installing another version using package type PU Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Upgrade package installs e:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//! @SYMTestExpectedResults	e:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0209
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_9_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0209
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0210
+//! @SYMTestCaseDesc		Installing another version using package type PU Testcase 5
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1
+//!                  		b)Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll is installed after the upgrade.
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0210
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_3458910_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_10_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase2_general_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0210
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0301
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)No ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll3.dll
+//!                  		b)Package installs c:\sys\bin\adornedfilenametestingdll3.dll with version 10.0.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll3.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0301
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_1_install
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0301
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0302
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)No ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll3.dll
+//!                  		b)Package installs c:\sys\bin\adornedfilenametestingdll3{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll3{000A0001}.dll is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0302
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_2_install
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0302
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0303
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA,RU Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) No ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll3.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll3.dll with version 10.0.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll3.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0303
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_3_install
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0303
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0304
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA,RU Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) No ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll3.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll3{000A0001}.dll with version 10.0.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll3{000A0001}.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0304
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_4_install
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0304
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0305
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA,RU Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4.dll  is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0305
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_5_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_5_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0305
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0306
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SA,RU Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll  is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0306
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_6_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_6_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0306
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0309
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SP Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4.dll is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0309
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_9_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_9_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0309
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0310
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type SP Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0310
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_10_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_10_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0310
+
+
+//create a backup of c:\sys\install\sisregistry\2baecad8\ so that we can restore original files later
+//RUN_UTILS MkDir c:\PDEF114642_sisregistry_2baecad8\
+//RUN_UTILS CopyFile c:\sys\install\sisregistry\2baecad8\00000000.reg c:\PDEF114642_sisregistry_2baecad8\00000000.reg
+//RUN_UTILS CopyFile c:\sys\install\sisregistry\2baecad8\00000000_0000.ctl c:\PDEF114642_sisregistry_2baecad8\00000000_0000.ctl
+
+//We have to first try SP upgrades (9-10) since they can be separately uninstalled from the base package
+//as opposed to PU upgrades that can not. PU upgrades are tested in 7-8
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0307
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type PU Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4.dll is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0307
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_7_install
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_7_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0307
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0308
+//! @SYMTestCaseDesc		Installing another version of ROM file using ROM stub and upgrade package of type PU Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) ROM stub claims ownership of z:\sys\bin\adornedfilenametestingdll4.dll
+//!                  		b) Package installs c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll4{000A0001}.dll is installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0308
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_8_install
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase3_8_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0308
+
+
+//cleanup after Use_case_3_7 and Use_case_3_8 (PU upgrades of ROM stubs can not be uninstalled so we have to manually remove them from the system)
+//to be deleted: c:\sys\install\sisregistry\2baecad8\
+//               c:\sys\bin\DummyDll4.dll
+//               c:\sys\bin\DummyDll4{000A0001}.dll
+//               c:\sys\hash\DummyDll4.dll
+//               c:\sys\hash\DummyDll4{000A0001}.dll
+//to be restored: c:\sys\install\sisregistry\2baecad8\00000000.reg
+//                c:\sys\install\sisregistry\2baecad8\00000000_0000.ctl
+//RUN_UTILS DeleteDirectory c:\sys\install\sisregistry\2baecad8\
+//RUN_UTILS DeleteFile c:\sys\bin\DummyDll4.dll
+//RUN_UTILS DeleteFile c:\sys\bin\DummyDll4{000A0001}.dll
+//RUN_UTILS DeleteFile c:\sys\hash\DummyDll4.dll
+//RUN_UTILS DeleteFile c:\sys\hash\DummyDll4{000A0001}.dll
+//RUN_UTILS MkDir c:\sys\install\sisregistry\2baecad8\
+//RUN_UTILS CopyFile c:\PDEF114642_sisregistry_2baecad8\00000000.reg c:\sys\install\sisregistry\2baecad8\00000000.reg
+//RUN_UTILS CopyFile c:\PDEF114642_sisregistry_2baecad8\00000000_0000.ctl c:\sys\install\sisregistry\2baecad8\00000000_0000.ctl
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0401
+//! @SYMTestCaseDesc		Installing multiple new versions using package type SP Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1
+//!                     	and c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and
+//!                        	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0401
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_12_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_1_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_13_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0401
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0402
+//! @SYMTestCaseDesc		Installing multiple new versions using package type SP Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with
+//!                     	version 10.1 and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll 
+//!                        	and  e:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0402
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_12_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_2_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_24_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0402
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0403
+//! @SYMTestCaseDesc		Installing multiple new versions using package type SP Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and 
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll 
+//!                        	and  c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0403
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_3_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_13_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0403
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0404
+//! @SYMTestCaseDesc		Installing multiple new versions using package type SP Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and 
+//!                     	e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll 
+//!                        	and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0404
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_4_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_24_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0404
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0405
+//! @SYMTestCaseDesc		Installing multiple new versions using package type SP Testcase 5
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1 and
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	installation fails (Reason: -10147 File already exists)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0405
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_5_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_5_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0405
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0406
+//! @SYMTestCaseDesc		Installing multiple new versions using package type PU Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1
+//!                     	and c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and
+//!                        	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0406
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_12_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_6_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_13_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0406
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0407
+//! @SYMTestCaseDesc		Installing multiple new versions using package type PU Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with
+//!                     	version 10.1 and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll
+//!                        	and  e:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0407
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_12_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_7_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_24_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0407
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0408
+//! @SYMTestCaseDesc		Installing multiple new versions using package type PU Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll
+//!                        	and  c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0408
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_8_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_13_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0408
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0409
+//! @SYMTestCaseDesc		Installing multiple new versions using package type PU Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                     	e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll , c:\sys\bin\adornedfilenametestingdll{000A0001}.dll
+//!                        	and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0409
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_9_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_24_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0409
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0410
+//! @SYMTestCaseDesc		Installing multiple new versions using package type PU Testcase 5
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a) Base package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b) Upgrade package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1 and
+//!                     	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	installation succeeds and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and  
+//!                        	c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed after upgrade
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0410
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_345_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_10_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase4_10_base_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0410
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0501
+//! @SYMTestCaseDesc		Installing multiple versions using package type SA Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                    		c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0501
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_1_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_1_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0501
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0502
+//! @SYMTestCaseDesc		Installing multiple versions using package type SA Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0 and
+//!                    		e:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll.dll and e:\sys\bin\adornedfilenametestingdll{000A0001}.dll are installed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0502
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_2_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_2_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0502
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0503
+//! @SYMTestCaseDesc		Installing multiple versions using package type SA Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1 and
+//!                    		c:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and c:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0503
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_3_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_3_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0503
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0504
+//! @SYMTestCaseDesc		Installing multiple versions using package type SA Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)Package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1 and
+//!                    		e:\sys\bin\adornedfilenametestingdll{000A0002}.dll with version 10.2.
+//! @SYMTestExpectedResults	c:\sys\bin\adornedfilenametestingdll{000A0001}.dll and e:\sys\bin\adornedfilenametestingdll{000A0002}.dll are installed
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0504
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_4_base_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase5_4_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0504
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0601
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0601
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_1_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_1_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_1_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0601
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0602
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 2
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs e:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0602
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_2_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_2_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_2_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0602
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0603
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 3
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dllwith version 10.1.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll.dll  with version 10.0.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0603
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_3_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_3_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_3_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0603
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0604
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 4
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs e:\sys\bin\adornedfilenametestingdll{000A0001}.dllwith version 10.1.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll.dll  with version 10.0.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0604
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_4_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_4_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_4_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0604
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0605
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 5
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0002}.dll  with version 10.2.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0002}.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0605
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_5_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_5_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_5_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0605
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0606
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SA and different package UID Testcase 6
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs e:\sys\bin\adornedfilenametestingdll{000A0001}.dll with version 10.1.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0002}.dll  with version 10.2.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0002}.dll  is not installed (Reason: invalid eclipsing -10257)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0606
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_6_base_install
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_6_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_6_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0606
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0607
+//! @SYMTestCaseDesc		installing another or multiple versions using package type SP and different package UID Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  with version 10.1.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  is not installed (Reason: missing base package -10255)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0607
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_7_base_install
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_7_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_7_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0607
+
+
+//! @SYMTestCaseID		API-SEC-SWI-ADORNEDFILENAMEHANDLING-0608
+//! @SYMTestCaseDesc		installing another or multiple versions using package type PU and different package UID Testcase 1
+//! @SYMDEF			PDEF114642 Cannot install adorned filename
+//! @SYMTestPriority		High
+//! @SYMTestActions		a)First package installs c:\sys\bin\adornedfilenametestingdll.dll with version 10.0.
+//!                  		b)Second package installs c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  with version 10.1.
+//! @SYMTestExpectedResults	installation fails and c:\sys\bin\adornedfilenametestingdll{000A0001}.dll  is not installed (Reason: missing base package -10255)
+
+START_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0608
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_8_base_install
+RUN_TEST_STEP_RESULT -10255 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_8_upgrade_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini usecase6_8_cleanup
+
+END_TESTCASE API-SEC-SWI-ADORNEDFILENAMEHANDLING-0608
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

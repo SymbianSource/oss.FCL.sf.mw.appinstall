@@ -1,0 +1,26 @@
+This directory contains the scripts and data required to create the
+SIS files for testing.
+
+Writable SwiCertstore testing is performed in tuiscriptadaptors.
+
+tuiscriptadaptors
+=================
+
+copytuiscriptadaptors.bat is run prior to each tuiscriptadaptors test script,
+this can be seen in
+/common/generic/security/testframework/test/autotesting/test_spec_9_1.txt
+and
+/common/generic/security/testframework/test/autotesting/test_spec_9_2.txt
+
+/common/generic/security/swi/group/bld.inf 
+copies:
+..\test\tsisfile\data\signedsis\swicertstore.dat 
+to:
+\epoc32\winscw\c\tswi\certstore\tsis_swicertstore.dat
+
+copytuiscriptadaptors.bat 
+copies:
+\epoc32\winscw\c\tswi\certstore\tsis_swicertstore.dat
+to:
+\epoc32\release\winscw\urel\z\resource\swicertstore.dat
+

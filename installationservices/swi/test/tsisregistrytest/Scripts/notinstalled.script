@@ -1,0 +1,33 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+LOAD_SUITE tSisRegistryTest
+//! @file
+//! @SYMTestCaseID 		API-SEC-SISREGISTRY-NOTINSTALLED-0001
+//! @SYMTestCaseDesc 		Checks that packages and UIDs that are not installed cannot be opened
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Queries the registry for a number of packages/UIDs
+//! @SYMTestExpectedResults 	None should be reported present
+//! @SYMDEF 			DEF087131 
+
+START_TESTCASE API-SEC-SISREGISTRY-NOTINSTALLED-0001
+
+RUN_TEST_STEP_RESULT 106 100 tSisRegistryTest IsUidInstalled z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini UidIsNotInstalled
+
+RUN_TEST_STEP_RESULT 106 100 tSisRegistryTest IsPackageInstalled z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini PackageNotInstalled
+RUN_TEST_STEP_RESULT 106 100 tSisRegistryTest IsPackageInstalled z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini PackageUidNoDetail
+
+END_TESTCASE API-SEC-SISREGISTRY-NOTINSTALLED-0001

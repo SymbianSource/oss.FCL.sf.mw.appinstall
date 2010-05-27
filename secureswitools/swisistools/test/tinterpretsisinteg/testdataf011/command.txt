@@ -1,0 +1,1 @@
+interpretsis -z d:\romdrive -c \epoc32\winscw\c -s \epoc32\winscw\c\tswi\tinterpretsisinteg\sisfiles\realexe.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness.txt 

@@ -1,0 +1,12 @@
+EXPORTS
+	??1CDeviceIdList@Swi@@UAE@XZ @ 1 NONAME ; Swi::CDeviceIdList::~CDeviceIdList(void)
+	?AppendL@CDeviceIdList@Swi@@QAEXABVTDesC16@@@Z @ 2 NONAME ; void Swi::CDeviceIdList::AppendL(class TDesC16 const &)
+	?DeviceIds@CDeviceIdList@Swi@@QBEABV?$RPointerArray@VHBufC16@@@@XZ @ 3 NONAME ; class RPointerArray<class HBufC16> const & Swi::CDeviceIdList::DeviceIds(void) const
+	?ExternalizeL@CDeviceIdList@Swi@@QBEXAAVRWriteStream@@@Z @ 4 NONAME ; void Swi::CDeviceIdList::ExternalizeL(class RWriteStream &) const
+	?InternalizeL@CDeviceIdList@Swi@@QAEXAAVRReadStream@@@Z @ 5 NONAME ; void Swi::CDeviceIdList::InternalizeL(class RReadStream &)
+	?NewL@CDeviceIdList@Swi@@SAPAV12@ABVTDesC8@@@Z @ 6 NONAME ; class Swi::CDeviceIdList * Swi::CDeviceIdList::NewL(class TDesC8 const &)
+	?NewL@CDeviceIdList@Swi@@SAPAV12@XZ @ 7 NONAME ; class Swi::CDeviceIdList * Swi::CDeviceIdList::NewL(void)
+	?NewLC@CDeviceIdList@Swi@@SAPAV12@ABVTDesC8@@@Z @ 8 NONAME ; class Swi::CDeviceIdList * Swi::CDeviceIdList::NewLC(class TDesC8 const &)
+	?NewLC@CDeviceIdList@Swi@@SAPAV12@XZ @ 9 NONAME ; class Swi::CDeviceIdList * Swi::CDeviceIdList::NewLC(void)
+	?PackL@CDeviceIdList@Swi@@QBEPAVHBufC8@@XZ @ 10 NONAME ; class HBufC8 * Swi::CDeviceIdList::PackL(void) const
+

@@ -1,0 +1,50 @@
+/*
+* Copyright (c) 2002-2004 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification for SWInstTaskManager.
+*                This component implements a Task Manager for SW Installer UIs.
+*                It is used to store and execute persistent and nonpersistent 
+*                tasks for e.g. recovery purposes. 
+*
+*/
+
+
+//  INCLUDES
+#include <platform_paths.hrh>
+#include "SWInstPrivateUid.h"
+
+TARGET          SWInstTaskManager.dll
+TARGETTYPE      dll
+UID             0x1000008D KSWInstTaskManagerUid
+
+// Capability assignment.
+CAPABILITY      CAP_GENERAL_DLL DRM
+VENDORID        VID_DEFAULT
+
+// Sources
+SOURCEPATH      ../Plugin/TaskManager/Src
+SOURCE          TaskManager.cpp
+SOURCE          TaskManagerImpl.cpp
+
+// Includes
+USERINCLUDE     . ../Plugin/TaskManager/Inc
+MW_LAYER_SYSTEMINCLUDE
+
+// Libraries
+LIBRARY         euser.lib
+LIBRARY         ecom.lib
+LIBRARY         estor.lib
+LIBRARY         efsrv.lib
+LIBRARY         platformenv.lib
+
+SMPSAFE

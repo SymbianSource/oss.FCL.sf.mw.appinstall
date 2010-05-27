@@ -1,0 +1,11 @@
+[database]
+read
+capability = ReadDeviceData
+write
+capability = WriteDeviceData
+schema
+capability = WriteDeviceData
+
+[backup]
+SID = 101F875A
+

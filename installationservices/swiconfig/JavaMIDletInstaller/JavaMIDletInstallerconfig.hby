@@ -1,0 +1,12 @@
+#ifndef __JAVAMIDLETINSTALLER_HBY__
+#define __JAVAMIDLETINSTALLER_HBY__
+
+data=ZRESOURCE\JavaHelper\javahelper.mbm			Resource\JavaHelper\javahelper.mbm
+data=MULTI_LINGUIFY(RSC ZRESOURCE\JavaHelper\JavaHelper		Resource\JavaHelper\JavaHelper)
+data=MULTI_LINGUIFY(RSC ZRESOURCE\JavaHelper\MidletIconSizes	Resource\JavaHelper\MidletIconSizes)
+data=MULTI_LINGUIFY(RSC ZRESOURCE\JavaHelper\jmidialogs		Resource\JavaHelper\jmidialogs)
+
+// Export the JMI CenRep initialization file in to ROM (Z drive)
+data = \epoc32\release\winscw\udeb\z\private\10202be9\20010c68.txt	private\10202be9\20010c68.txt
+
+#endif

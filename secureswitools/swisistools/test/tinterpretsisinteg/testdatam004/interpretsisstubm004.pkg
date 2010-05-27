@@ -1,0 +1,31 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package to test the Language select option.
+; This test case is to test the behaviour of interpretsis tool when the exe to be installed is already installed in the ROM.
+
+;Languages
+&EN,FR,GE
+
+; Installation header
+; Three component names as we support English, French and German
+#{"MultiLanguageOption-EN", "MultiLanguageOption-FR", "MultiLanguageOption-GE"}, (0x81111106), 1, 2, 3
+
+%{"Vendor-EN","Vendor-FR", "Vendor-GE"}
+:"Unique vendor name"
+; For CR1200
+
+
+""-"!:\sys\bin\helloworld.exe"

@@ -1,0 +1,40 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; test handling data by MIME type When testapp is not present
+
+;Languages
+&EN,GE
+
+;Header
+#{"Test Mime-EN", "Test Mime-GE"}, (0x802744D5), 1, 2, 3
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+; an image
+"files\tbit.gif"-"!:\tswi\dummynoapp_image.txt",FILEMIME,"x-epoc/x-dummy-noapp",RUNWAITEND,RI
+
+; single text file
+"text\englishfile.txt"-"!:\tswi\dummy_text_file1.txt",FILEMIME,"x-epoc/x-dummy-noapp",RUNWAITEND
+
+; single text file
+"text\englishfile.txt"-"!:\tswi\dummy_text_file2.txt",FILEMIME,"x-epoc/x-dummy-noapp",RUNWAITEND,RR
+
+;language dependent file
+{
+"text\englishfile.txt"
+"text\germanfile.txt"
+}-"!:\tswi\dummy_test2.txt",FILEMIME,"x-epoc/x-dummy-noapp"

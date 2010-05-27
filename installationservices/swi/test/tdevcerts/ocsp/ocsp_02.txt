@@ -1,0 +1,24 @@
+# OCSP checking with multiple certificate chains
+[main]
+name=ocsp_02
+template=simple.txt
+inifile=ocsp.ini
+
+[chains]
+chain0=root5CA,single_sid1
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple_ocsp.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+ocsp_uri=http://cam-ocsptest01.intra:19010/
+ocsp_flag=1
+FatalOcspResponseExpected=true
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnoexist=1
+noexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

@@ -1,0 +1,54 @@
+EXPORTS
+	??0CAppMngr2AppInfo@@IAE@AAVCAppMngr2Runtime@@AAVRFs@@@Z @ 1 NONAME ; CAppMngr2AppInfo::CAppMngr2AppInfo(class CAppMngr2Runtime &, class RFs &)
+	??0CAppMngr2InfoIterator@@QAE@AAVCAppMngr2InfoBase@@W4TAppMngr2InfoType@@@Z @ 2 NONAME ; CAppMngr2InfoIterator::CAppMngr2InfoIterator(class CAppMngr2InfoBase &, enum TAppMngr2InfoType)
+	??0CAppMngr2PackageInfo@@IAE@AAVCAppMngr2Runtime@@AAVRFs@@@Z @ 3 NONAME ; CAppMngr2PackageInfo::CAppMngr2PackageInfo(class CAppMngr2Runtime &, class RFs &)
+	??0CAppMngr2Runtime@@IAE@AAVMAppMngr2RuntimeObserver@@@Z @ 4 NONAME ; CAppMngr2Runtime::CAppMngr2Runtime(class MAppMngr2RuntimeObserver &)
+	??1CAppMngr2AppInfo@@UAE@XZ @ 5 NONAME ; CAppMngr2AppInfo::~CAppMngr2AppInfo(void)
+	??1CAppMngr2InfoIterator@@UAE@XZ @ 6 NONAME ; CAppMngr2InfoIterator::~CAppMngr2InfoIterator(void)
+	??1CAppMngr2PackageInfo@@UAE@XZ @ 7 NONAME ; CAppMngr2PackageInfo::~CAppMngr2PackageInfo(void)
+	??1CAppMngr2RecognizedFile@@UAE@XZ @ 8 NONAME ; CAppMngr2RecognizedFile::~CAppMngr2RecognizedFile(void)
+	??1CAppMngr2Runtime@@UAE@XZ @ 9 NONAME ; CAppMngr2Runtime::~CAppMngr2Runtime(void)
+	?AddNearestResourceFileL@CAppMngr2Runtime@@QAEHABVTDesC16@@@Z @ 10 NONAME ; int CAppMngr2Runtime::AddNearestResourceFileL(class TDesC16 const &)
+	?BaseConstructL@CAppMngr2InfoIterator@@QAEXXZ @ 11 NONAME ; void CAppMngr2InfoIterator::BaseConstructL(void)
+	?ConstructL@CAppMngr2AppInfo@@QAEXXZ @ 12 NONAME ; void CAppMngr2AppInfo::ConstructL(void)
+	?ConstructL@CAppMngr2PackageInfo@@QAEXXZ @ 13 NONAME ; void CAppMngr2PackageInfo::ConstructL(void)
+	?DataType@CAppMngr2RecognizedFile@@QAEABVTDataType@@XZ @ 14 NONAME ; class TDataType const & CAppMngr2RecognizedFile::DataType(void)
+	?EikonEnv@CAppMngr2Runtime@@QAEAAVCEikonEnv@@XZ @ 15 NONAME ; class CEikonEnv & CAppMngr2Runtime::EikonEnv(void)
+	?FileName@CAppMngr2RecognizedFile@@QAEABVTDesC16@@XZ @ 16 NONAME ; class TDesC16 const & CAppMngr2RecognizedFile::FileName(void)
+	?FullBitmapFileNameLC@CAppMngr2Runtime@@QAEPAVHBufC16@@ABVTDesC16@@@Z @ 17 NONAME ; class HBufC16 * CAppMngr2Runtime::FullBitmapFileNameLC(class TDesC16 const &)
+	?FullBitmapFileNameLC@TAppMngr2DriveUtils@@SAPAVHBufC16@@ABVTDesC16@@AAVRFs@@@Z @ 18 NONAME ; class HBufC16 * TAppMngr2DriveUtils::FullBitmapFileNameLC(class TDesC16 const &, class RFs &)
+	?GetAdditionalDirsToScanL@CAppMngr2Runtime@@UAEXAAVRFs@@AAV?$RPointerArray@VHBufC16@@@@@Z @ 19 NONAME ; void CAppMngr2Runtime::GetAdditionalDirsToScanL(class RFs &, class RPointerArray<class HBufC16> &)
+	?GetMenuItemsL@CAppMngr2InfoBase@@UAEXAAV?$RPointerArray@USData@CEikMenuPaneItem@@@@@Z @ 20 NONAME ; void CAppMngr2InfoBase::GetMenuItemsL(class RPointerArray<struct CEikMenuPaneItem::SData> &)
+	?GetMiddleSoftkeyCommandL@CAppMngr2InfoBase@@UAEXAAH0@Z @ 21 NONAME ; void CAppMngr2InfoBase::GetMiddleSoftkeyCommandL(int &, int &)
+	?HasNext@CAppMngr2InfoIterator@@UBEHXZ @ 22 NONAME ; int CAppMngr2InfoIterator::HasNext(void) const
+	?IndicatorIconIndex@CAppMngr2InfoBase@@UBEHXZ @ 23 NONAME ; int CAppMngr2InfoBase::IndicatorIconIndex(void) const
+	?IsDRMForwardable@TAppMngr2DRMUtils@@SAHABVTDesC16@@@Z @ 24 NONAME ; int TAppMngr2DRMUtils::IsDRMForwardable(class TDesC16 const &)
+	?IsDRMProtected@TAppMngr2DRMUtils@@SAHABVTDesC16@@@Z @ 25 NONAME ; int TAppMngr2DRMUtils::IsDRMProtected(class TDesC16 const &)
+	?IsDRMRightsObjectExpiredOrMissingL@TAppMngr2DRMUtils@@SAHABVTDesC16@@@Z @ 26 NONAME ; int TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL(class TDesC16 const &)
+	?IsDRMRightsObjectMissingL@TAppMngr2DRMUtils@@SAHABVTDesC16@@@Z @ 27 NONAME ; int TAppMngr2DRMUtils::IsDRMRightsObjectMissingL(class TDesC16 const &)
+	?IsShowOnTop@CAppMngr2InfoBase@@QBEHXZ @ 28 NONAME ; int CAppMngr2InfoBase::IsShowOnTop(void) const
+	?Location@CAppMngr2InfoBase@@QBE?AW4TAppMngr2Location@@XZ @ 29 NONAME ; enum TAppMngr2Location CAppMngr2InfoBase::Location(void) const
+	?LocationDrive@CAppMngr2InfoBase@@QBE?AVTDriveUnit@@XZ @ 30 NONAME ; class TDriveUnit CAppMngr2InfoBase::LocationDrive(void) const
+	?LocationFromDriveL@TAppMngr2DriveUtils@@SA?AW4TAppMngr2Location@@HAAVRFs@@@Z @ 31 NONAME ; enum TAppMngr2Location TAppMngr2DriveUtils::LocationFromDriveL(int, class RFs &)
+	?LocationFromFileNameL@TAppMngr2DriveUtils@@SA?AW4TAppMngr2Location@@ABVTDesC16@@AAVRFs@@@Z @ 32 NONAME ; enum TAppMngr2Location TAppMngr2DriveUtils::LocationFromFileNameL(class TDesC16 const &, class RFs &)
+	?NearestResourceFileLC@TAppMngr2DriveUtils@@SAPAV?$TBuf@$0BAA@@@ABVTDesC16@@AAVRFs@@@Z @ 33 NONAME ; class TBuf<256> * TAppMngr2DriveUtils::NearestResourceFileLC(class TDesC16 const &, class RFs &)
+	?NewL@CAppMngr2RecognizedFile@@SAPAV1@ABVTDesC16@@ABVTDataType@@@Z @ 34 NONAME ; class CAppMngr2RecognizedFile * CAppMngr2RecognizedFile::NewL(class TDesC16 const &, class TDataType const &)
+	?NewL@CAppMngr2RecognizedFile@@SAPAV1@PAVHBufC16@@0@Z @ 35 NONAME ; class CAppMngr2RecognizedFile * CAppMngr2RecognizedFile::NewL(class HBufC16 *, class HBufC16 *)
+	?NewL@CAppMngr2Runtime@@SAPAV1@VTUid@@AAVMAppMngr2RuntimeObserver@@@Z @ 36 NONAME ; class CAppMngr2Runtime * CAppMngr2Runtime::NewL(class TUid, class MAppMngr2RuntimeObserver &)
+	?Next@CAppMngr2InfoIterator@@UAEXAAVTPtrC16@@0@Z @ 37 NONAME ; void CAppMngr2InfoIterator::Next(class TPtrC16 &, class TPtrC16 &)
+	?Observer@CAppMngr2Runtime@@QAEAAVMAppMngr2RuntimeObserver@@XZ @ 38 NONAME ; class MAppMngr2RuntimeObserver & CAppMngr2Runtime::Observer(void)
+	?ReadMenuItemDataFromResourceL@CAppMngr2InfoBase@@QAEXHAAUSData@CEikMenuPaneItem@@@Z @ 39 NONAME ; void CAppMngr2InfoBase::ReadMenuItemDataFromResourceL(int, struct CEikMenuPaneItem::SData &)
+	?Reset@CAppMngr2InfoIterator@@UAEXXZ @ 40 NONAME ; void CAppMngr2InfoIterator::Reset(void)
+	?Runtime@CAppMngr2InfoBase@@QBEAAVCAppMngr2Runtime@@XZ @ 41 NONAME ; class CAppMngr2Runtime & CAppMngr2InfoBase::Runtime(void) const
+	?RuntimeUid@CAppMngr2Runtime@@QBE?BVTUid@@XZ @ 42 NONAME ; class TUid const CAppMngr2Runtime::RuntimeUid(void) const
+	?SetAllFieldsL@CAppMngr2InfoIterator@@MAEXXZ @ 43 NONAME ; void CAppMngr2InfoIterator::SetAllFieldsL(void)
+	?SetFieldL@CAppMngr2InfoIterator@@IAEXHABVTDesC16@@@Z @ 44 NONAME ; void CAppMngr2InfoIterator::SetFieldL(int, class TDesC16 const &)
+	?SetLocationL@CAppMngr2InfoIterator@@MAEXXZ @ 45 NONAME ; void CAppMngr2InfoIterator::SetLocationL(void)
+	?SetOtherFieldsL@CAppMngr2InfoIterator@@MAEXXZ @ 46 NONAME ; void CAppMngr2InfoIterator::SetOtherFieldsL(void)
+	?SetStatusL@CAppMngr2InfoIterator@@MAEXXZ @ 47 NONAME ; void CAppMngr2InfoIterator::SetStatusL(void)
+	?ShowDeleteConfirmationQueryL@CAppMngr2PackageInfo@@IAEHXZ @ 48 NONAME ; int CAppMngr2PackageInfo::ShowDeleteConfirmationQueryL(void)
+	?SizeStringWithUnitsL@CAppMngr2InfoBase@@QAEPAVHBufC16@@_J@Z @ 49 NONAME ; class HBufC16 * CAppMngr2InfoBase::SizeStringWithUnitsL(long long)
+	?SpecificIconL@CAppMngr2InfoBase@@UBEPAVCGulIcon@@XZ @ 50 NONAME ; class CGulIcon * CAppMngr2InfoBase::SpecificIconL(void) const
+	?SpecificIndicatorIconL@CAppMngr2InfoBase@@UBEPAVCGulIcon@@XZ @ 51 NONAME ; class CGulIcon * CAppMngr2InfoBase::SpecificIndicatorIconL(void) const
+	?SupportsGenericCommand@CAppMngr2InfoBase@@UAEHH@Z @ 52 NONAME ; int CAppMngr2InfoBase::SupportsGenericCommand(int)
+

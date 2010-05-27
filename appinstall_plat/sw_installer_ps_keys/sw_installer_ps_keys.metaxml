@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<api id="6cee7ae73208f0bfeac8741a84772eea" dataversion="1.0">
+  <name>SW Installer PS Keys</name>
+  <description>SW Installer Publish&amp;Subcsribe keys</description>
+  <type>c++</type>
+  <subsystem>appinstaller</subsystem>
+  <libs>
+  </libs>
+  <release category="domain"/>
+  <attributes>
+     <!-- This indicates wether the api provedes separate html documentation -->
+     <!-- or is the additional documentation generated from headers. -->
+     <!-- If you are unsuere then the value is "no" -->
+     <htmldocprovided>yes</htmldocprovided>
+     <adaptation>no</adaptation>
+  </attributes>
+</api>

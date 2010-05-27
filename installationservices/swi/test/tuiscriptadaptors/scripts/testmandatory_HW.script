@@ -1,0 +1,116 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run SWIS System capability checking tests
+LOAD_SUITE tuiscriptadaptors
+
+//Swi certstore: (Root5CA is mandatory)
+
+//Root5CA		ReadDeviceData	WriteDeviceData	DRM	AllFiles
+//SymbianTestDSACA	MultimediaDD, NetworkServices	LocalServices	Location
+//SymbianTestRSACA	ReadUserData	WriteUserData
+
+// Exes
+//tswisystemcapability.exe - ReadDeviceData, WriteDeviceData
+//tswiallcapabilities.exe - ReadDeviceData, WriteDeviceData, ReadUserData, WriteUserData
+//tswisignedcap_8.exe - ReadUserData, WriteUserData, LocalServices, MultimediaDD, ReadDeviceData, WriteDeviceData, LocalServices, NetworkServices
+
+//! @SYMTestCaseID 		API-SEC-UISA-SystemCapTest-I-HW-0001
+//! @SYMTestCaseDesc 		Install signed executables with various capabilities signed with multiple certs (also effectively covers REQ 2679.1)
+//! @SYMREQ 			REQ3467
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+// Signed SIS tests
+START_TESTCASE API-SEC-UISA-SystemCapTest-I-HW-0001
+
+// unsigned should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini syscaps
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_syscaps
+
+// signed with Root5, passes
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini syscaps_Root5
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_syscaps
+
+// signed with SymbianTestDSACA should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini syscaps_DSA
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_syscaps
+
+//tswiallcapabilities unsigned - should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini allcaps
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_allcaps
+
+//tswiallcapabilities signed with SymbiantestRSACA - should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini allcaps_RSA
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_allcaps
+
+//tswiallcapabilities signed with Root5CA - should pass and display dialog
+RUN_TEST_STEP tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini allcaps_Root5
+RUN_TEST_STEP tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_allcaps
+
+//tswiallcapabilities signed with Root5CA, SymbiantestRSACA - should pass and display no dialog
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini allcaps_Root5_RSA
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_allcaps
+
+
+//tswisignedcap_8	unsigned - should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+//tswisignedcap_8	signed with Root5CA - should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8_Root5
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+//tswisignedcap_8	signed with Root5CA, SymbianTestRSACAA - should fail
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8_Root5_RSA
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+//tswisignedcap_8	signed with Root5CA, SymbianTestDSACA - should pass
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8_Root5_DSA
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+//tswisignedcap_8	signed with Root5CA, SymbianTestRSACA, SymbianTestDSACA - should pass
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8_R5_DSA_RSA
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+//tswisignedcap_8	signed with Root5CA, SymbianTestDSACA, SymbianTestRSACA - should pass
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini cap8_R5_RSA_DSA
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini u_cap8
+
+END_TESTCASE API-SEC-UISA-SystemCapTest-I-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-DEF053088-I-HW-0005
+//! @SYMTestCaseDesc 		Install executables signed with/without a mandatory certificate
+//! @SYMREQ 			REQ3468
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Only the SIS file signed with the mandatory certificate is installed
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF053088-I-HW-0005
+
+//tswinocaps	signed with mandatory Root5CA, should pass
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testmandatory.ini nocapsRoot5
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testmandatory.ini u_nocapsRoot5
+
+END_TESTCASE API-SEC-UISA-DEF053088-I-HW-0005
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

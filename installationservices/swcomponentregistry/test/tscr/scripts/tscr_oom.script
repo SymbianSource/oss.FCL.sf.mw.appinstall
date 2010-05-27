@@ -1,0 +1,43 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// 
+//
+
+PRINT Run all SCR performance tests.
+LOAD_SUITE tscr
+
+// Copy SCR DB
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_medium_db
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-OOM-0001
+//! @SYMTestCaseDesc 	Testing for OOM condition at various locations in SCR Server
+
+START_TESTCASE API-SEC-SCR-API-OOM-0001
+RUN_TEST_STEP -1 tscr SCROutOfMemory
+END_TESTCASE API-SEC-SCR-API-OOM-0001
+
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_multiapp
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-OOM-0002
+//! @SYMTestCaseDesc 	Testing for OOM condition at various locations in SCR Server for operations on application registration info
+
+START_TESTCASE API-SEC-SCR-API-OOM-0002
+RUN_TEST_STEP -1 tscr SCROutOfMemory z:\tusif\tscr\tscr_appreginfo.ini SCROutOfMemory_App_RegistrationInfo
+END_TESTCASE API-SEC-SCR-API-OOM-0002
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
