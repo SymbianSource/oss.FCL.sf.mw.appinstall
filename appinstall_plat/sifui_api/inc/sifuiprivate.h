@@ -24,8 +24,11 @@
 
 class CHbDeviceDialog;
 class CHbSymbianVariantMap;
+class CHbSymbianVariant;
 class CActiveSchedulerWait;
 class CApaMaskedBitmap;
+class CSifUiCertificateInfo;
+class CSifUiAppInfo;
 
 namespace Swi {
     class CAppInfo;
@@ -43,13 +46,11 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         CSifUiPrivate::~CSifUiPrivate();
 
     public:     // new functions
-        TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo, TInt aAppSize,
-        		const CApaMaskedBitmap* aAppIcon );
+        TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
         void SetMemorySelectionL( const RArray<TInt>& aDriveNumbers );
         TInt SelectedDrive( TInt& aDriveNumber );
-        void SetCertificateInfoL( const RPointerArray<Swi::CCertificateInfo>& aCertificates );
-        void ShowProgressL( const Swi::CAppInfo& aAppInfo, TInt aAppSize,
-                TInt aProgressBarFinalValue );
+        void SetCertificateInfoL( const RPointerArray<CSifUiCertificateInfo>& aCertificates );
+        void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue );
         void IncreaseProgressBarValueL( TInt aIncrement );
         void ShowCompleteL();
         void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
@@ -66,14 +67,14 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
     private:    // new functions
         CSifUiPrivate();
         void ConstructL();
-        void ClearParamsL();
+        void ClearParams();
+        CHbSymbianVariantMap* VariantMapL();
         void ChangeNoteTypeL( TInt aType );
         void AddParamL( const TDesC& aKey, TInt aValue );
         void AddParamL( const TDesC& aKey, const TDesC& aValue );
         void AddParamListL( const TDesC& aKey, const MDesCArray& aList );
-        void AddParamsAppInfoAndSizeL( const Swi::CAppInfo& aAppInfo, TInt aAppSize );
+        void AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo );
         void AddParamsIconL( const CApaMaskedBitmap* aIcon );
-        void AddParamsCertificatesL( const RPointerArray<Swi::CCertificateInfo>& aCertificates );
         void DisplayDeviceDialogL();
         TInt WaitForResponse();
         void ResponseReceived( TInt aCompletionCode );
@@ -89,6 +90,7 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         HBufC* iSelectableDrives;
         TBool iSelectedDriveSet;
         TChar iSelectedDrive;
+        CHbSymbianVariant* iCertificateInfo;
     };
 
 

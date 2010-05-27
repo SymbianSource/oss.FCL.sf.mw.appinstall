@@ -15,22 +15,12 @@
 *
 */
 
-#include "sisxsifpluginuihandlersilent.h"   // CSisxSifPluginUiHandlerSilentSilent
+#include "sisxsifpluginuihandlersilent.h"   // CSisxSifPluginUiHandlerSilent
+#include "sisxsifplugininstallparams.h"     // CSisxSifPluginInstallParams
 #include "sisxsifplugin.pan"                // Panic codes
 #include "sisxsifcleanuputils.h"            // CleanupResetAndDestroyPushL
 
 using namespace Usif;
-
-// TODO: replace with proper tracing support
-#ifdef _DEBUG
-#define FLOG(x)         RDebug::Print(x);
-#define FLOG_1(x,y)     RDebug::Print(x, y);
-#define FLOG_2(x,y,z)   RDebug::Print(x, y, z);
-#else
-#define FLOG(x)
-#define FLOG_1(x,y)
-#define FLOG_2(x,y,z)
-#endif
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -41,7 +31,6 @@ using namespace Usif;
 //
 CSisxSifPluginUiHandlerSilent* CSisxSifPluginUiHandlerSilent::NewL( RFs& aFs )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::NewL") );
     CSisxSifPluginUiHandlerSilent *self = new( ELeave ) CSisxSifPluginUiHandlerSilent( aFs );
     CleanupStack::PushL( self );
     self->ConstructL();
@@ -55,7 +44,6 @@ CSisxSifPluginUiHandlerSilent* CSisxSifPluginUiHandlerSilent::NewL( RFs& aFs )
 //
 CSisxSifPluginUiHandlerSilent::~CSisxSifPluginUiHandlerSilent()
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::~CSisxSifPluginUiHandlerSilent") );
     }
 
 // ---------------------------------------------------------------------------
@@ -65,9 +53,23 @@ CSisxSifPluginUiHandlerSilent::~CSisxSifPluginUiHandlerSilent()
 TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TFileTextOption /*aOption*/, const TDesC& /*aText*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayTextL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->PackageInfo() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+				// TODO: EPolicyUserConfirm
+				break;
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -77,19 +79,31 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppIn
 void CSisxSifPluginUiHandlerSilent::DisplayErrorL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TErrorDialog /*aType*/, const TDesC& /*aParam*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayErrorL") );
+	// TODO: error handling
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandlerSilent::
+// CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL()
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL( const Swi::CAppInfo& /*aAppInfo*/,
         const RPointerArray<TDesC>& /*aComponents*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->AllowAppBreakDependency() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -99,9 +113,21 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL( const Swi::CAppInf
 TBool CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL( const Swi::CAppInfo& /*aAppInfo*/,
         const RPointerArray<TDesC>& /*aAppNames*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->AllowAppShutdown() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -111,18 +137,45 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL( const Swi::CAppI
 TBool CSisxSifPluginUiHandlerSilent::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TQuestionDialog aQuestion, const TDesC& /*aDes*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayQuestionL") );
-
-    TBool result = ETrue;
+	TBool okToContinue = EFalse;
     switch( aQuestion )
         {
         case Swi::EQuestionIncompatible:
+        	if( iInstallParams )
+        		{
+				switch( iInstallParams->PackageInfo() )
+					{
+					case EAllowed:
+					case EUserConfirm:
+						okToContinue = ETrue;
+						break;
+					case ENotAllowed:
+					default:
+						break;
+					}
+        		}
             break;
+
         case Swi::EQuestionOverwriteFile:
+        	if( iInstallParams )
+        		{
+				switch( iInstallParams->AllowOverwrite() )
+					{
+					case EAllowed:
+						okToContinue = ETrue;
+						break;
+					case EUserConfirm:
+					case ENotAllowed:
+					default:
+						break;
+					}
+        		}
+        	break;
+
         default:
             break;
         }
-    return result;
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -133,8 +186,6 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayInstallL( const Swi::CAppInfo& /*aAp
         const CApaMaskedBitmap* /*aLogo*/,
         const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayInstallL") );
-
     return ETrue;
     }
 
@@ -145,9 +196,21 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayInstallL( const Swi::CAppInfo& /*aAp
 TBool CSisxSifPluginUiHandlerSilent::DisplayGrantCapabilitiesL( const Swi::CAppInfo& /*aAppInfo*/,
         const TCapabilitySet& /*aCapabilitySet*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayGrantCapabilitiesL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->GrantCapabilities() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -155,11 +218,31 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayGrantCapabilitiesL( const Swi::CAppI
 // ---------------------------------------------------------------------------
 //
 TInt CSisxSifPluginUiHandlerSilent::DisplayLanguageL( const Swi::CAppInfo& /*aAppInfo*/,
-        const RArray<TLanguage>& /*aLanguages*/ )
+        const RArray<TLanguage>& aLanguages )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayLanguageL") );
-
-    return 0;
+	TInt languageIndex = 0;
+	TBool found = EFalse;
+	TInt languageCount = aLanguages.Count();
+	if( iInstallParams )
+		{
+		TLanguage lang = iInstallParams->Language();
+		TInt index = aLanguages.Find( lang );
+		if( index >= 0 && index < languageCount )
+			{
+			languageIndex = index;
+			found = ETrue;
+			}
+		}
+	if( !found )
+		{
+		TLanguage lang = User::Language();
+		TInt index = aLanguages.Find( lang );
+		if( index > 0 && index < languageCount )
+			{
+			languageIndex = index;
+			}
+		}
+    return languageIndex;
     }
 
 // ---------------------------------------------------------------------------
@@ -167,12 +250,32 @@ TInt CSisxSifPluginUiHandlerSilent::DisplayLanguageL( const Swi::CAppInfo& /*aAp
 // ---------------------------------------------------------------------------
 //
 TInt CSisxSifPluginUiHandlerSilent::DisplayDriveL( const Swi::CAppInfo& /*aAppInfo*/,
-        TInt64 /*aSize*/, const RArray<TChar>& /*aDriveLetters*/,
-        const RArray<TInt64>& /*aDriveSpaces*/ )
+        TInt64 aSize, const RArray<TChar>& aDriveLetters,
+        const RArray<TInt64>& aDriveSpaces )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayDriveL") );
-
-    return 0;
+	TInt driveIndex = 0;
+	TBool found = EFalse;
+	TInt driveCount = aDriveLetters.Count();
+	if( iInstallParams )
+		{
+		TChar driveLetter = 0;
+		RFs::DriveToChar( iInstallParams->Drive(), driveLetter );
+		TInt index = aDriveLetters.Find( driveLetter );
+		if( index >= 0 && index < driveCount )
+			{
+			if( aDriveSpaces[ index ] > aSize )
+				{
+				driveIndex = index;
+				found = ETrue;
+				}
+			}
+		}
+	// TODO: should there be some default drive?
+	if( !found )
+		{
+		User::Leave( KErrNoMemory );
+		}
+    return driveIndex;
     }
 
 // ---------------------------------------------------------------------------
@@ -182,9 +285,21 @@ TInt CSisxSifPluginUiHandlerSilent::DisplayDriveL( const Swi::CAppInfo& /*aAppIn
 TBool CSisxSifPluginUiHandlerSilent::DisplayUpgradeL( const Swi::CAppInfo& /*aAppInfo*/,
         const Swi::CAppInfo& /*aExistingAppInfo*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayUpgradeL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->AllowUpgrade() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -192,11 +307,27 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayUpgradeL( const Swi::CAppInfo& /*aAp
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayOptionsL( const Swi::CAppInfo& /*aAppInfo*/,
-        const RPointerArray<TDesC>& /*aOptions*/, RArray<TBool>& /*aSelections*/ )
+        const RPointerArray<TDesC>& aOptions, RArray<TBool>& aSelections )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayOptionsL") );
-
-    return ETrue;
+	TBool allowOptions = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->InstallOptionalItems() )
+			{
+			case EAllowed:
+				allowOptions = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+	for( TInt index = 0; index < aOptions.Count(); ++index )
+		{
+		aSelections[ index ] = allowOptions;
+		}
+    return ETrue;		// always ok to continue
     }
 
 // ---------------------------------------------------------------------------
@@ -206,8 +337,6 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOptionsL( const Swi::CAppInfo& /*aAp
 TBool CSisxSifPluginUiHandlerSilent::HandleInstallEventL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TInstallEvent /*aEvent*/, TInt /*aValue*/, const TDesC& /*aDes*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::HandleInstallEventL") );
-
     return ETrue;
     }
 
@@ -217,9 +346,8 @@ TBool CSisxSifPluginUiHandlerSilent::HandleInstallEventL( const Swi::CAppInfo& /
 //
 void CSisxSifPluginUiHandlerSilent::HandleCancellableInstallEventL(
         const Swi::CAppInfo& /*aAppInfo*/, Swi::TInstallCancellableEvent /*aEvent*/,
-        Swi::MCancelHandler& /*aCancelHandler*/, TInt /*aValue*/,const TDesC& /*aDes*/ )
+        Swi::MCancelHandler& /*aCancelHandler*/, TInt /*aValue*/, const TDesC& /*aDes*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::HandleCancellableInstallEventL") );
     }
 
 // ---------------------------------------------------------------------------
@@ -232,15 +360,15 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
         RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/,
         TBool aInstallAnyway )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL") );
-    TBool result = EFalse;
+    TBool okToContinue = EFalse;
 
     switch( aSigValidationResult )
         {
         case Swi::EValidationSucceeded:
-            result = ETrue;
+        	okToContinue = ETrue;
             break;
 
+        // TODO: check these, now same functionality as before
         case Swi::ESignatureSelfSigned:
         case Swi::ENoCertificate:
         case Swi::ECertificateValidationError:
@@ -249,9 +377,18 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
         case Swi::ENoCodeSigningExtension:
         case Swi::ENoSupportedPolicyExtension:
         case Swi::EMandatorySignatureMissing:
-            if( aInstallAnyway )
+            if( aInstallAnyway && iInstallParams )
                 {
-                result = ETrue;
+				switch( iInstallParams->AllowUntrusted() )
+					{
+					case EAllowed:
+						okToContinue = ETrue;
+						break;
+					case EUserConfirm:
+					case ENotAllowed:
+					default:
+						break;
+					}
                 }
             break;
 
@@ -259,7 +396,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
             break;
         }
 
-    return result;
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -268,11 +405,24 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayOcspResultL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TRevocationDialogMessage /*aMessage*/, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
-        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/,TBool /*aWarningOnly*/ )
+        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/, TBool aWarningOnly )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayOcspResultL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	// TODO: KSWInstallerOcspProcedure setting (off/on/must)
+	if( iInstallParams && aWarningOnly )
+		{
+		switch( iInstallParams->IgnoreOCSPWarnings() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -280,9 +430,9 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOcspResultL( const Swi::CAppInfo& /*
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandlerSilent::DisplayCannotOverwriteFileL( const Swi::CAppInfo& /*aAppInfo*/,
-        const Swi::CAppInfo& /*aInstalledAppInfo*/,const TDesC& /*aFileName*/ )
+        const Swi::CAppInfo& /*aInstalledAppInfo*/, const TDesC& /*aFileName*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayCannotOverwriteFileL") );
+	// TODO: error handling
     }
 
 // ---------------------------------------------------------------------------
@@ -293,9 +443,21 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
         const TDesC& /*aDependencyName*/, TVersion /*aWantedVersionFrom*/,
         TVersion /*aWantedVersionTo*/, TVersion /*aInstalledVersion*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL") );
-
-    return ETrue;
+	TBool okToContinue = EFalse;
+	if( iInstallParams )
+		{
+		switch( iInstallParams->AllowAppBreakDependency() )
+			{
+			case EAllowed:
+				okToContinue = ETrue;
+				break;
+			case EUserConfirm:
+			case ENotAllowed:
+			default:
+				break;
+			}
+		}
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -304,16 +466,42 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandlerSilent::DisplayUninstallL") );
-
     return ETrue;
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerSilent::DisplayPreparingInstallL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerSilent::DisplayPreparingInstallL( const TDesC& /*aFileName*/ )
+    {
+    // nothing displayed in silent mode
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerSilent::DisplayCompleteL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerSilent::DisplayCompleteL()
+    {
+    // nothing displayed in silent mode
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerSilent::DisplayFailedL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerSilent::DisplayFailedL( TInt /*aErrorCode*/ )
+    {
+    // nothing displayed in silent mode
     }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent( RFs& aFs ) : iFs( aFs )
+CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent( RFs& aFs ) :
+        CSisxSifPluginUiHandlerBase( aFs )
     {
     }
 

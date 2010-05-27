@@ -269,14 +269,14 @@ void CSifUiTest::ConstructL()
     {
     User::LeaveIfError( iFs.Connect() );
 
-    // Read logger settings
-    RSettingServer settingServer;
-    TInt ret = settingServer.Connect();
-    User::LeaveIfError( ret );
+    RSettingServer settingsServer;
+    User::LeaveIfError( settingsServer.Connect() );
+    CleanupClosePushL( settingsServer );
+
     TLoggerSettings loggerSettings;
-    ret = settingServer.GetLoggerSettings( loggerSettings );
-    User::LeaveIfError( ret );
-    settingServer.Close();
+    User::LeaveIfError( settingsServer.GetLoggerSettings( loggerSettings ) );
+
+    CleanupStack::PopAndDestroy( &settingsServer );
 
     iAddTestCaseTitleToLogName = loggerSettings.iAddTestCaseTitle;
     iStdLog = CStifLogger::NewL( KSifUiTestLogPath, KSifUiTestLogFile );

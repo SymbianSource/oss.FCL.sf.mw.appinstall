@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies). 
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,8 +22,10 @@ PRJ_PLATFORMS
 DEFAULT
 
 PRJ_EXPORTS
-../inc/sifui.h          MW_LAYER_PLATFORM_EXPORT_PATH( sifui.h )
-../rom/sifui.iby        CORE_MW_LAYER_IBY_EXPORT_PATH( sifui.iby )
+../inc/sifui.h                  MW_LAYER_PLATFORM_EXPORT_PATH( sifui.h )
+../inc/sifuiappinfo.h           MW_LAYER_PLATFORM_EXPORT_PATH( sifuiappinfo.h )
+../inc/sifuicertificateinfo.h   MW_LAYER_PLATFORM_EXPORT_PATH( sifuicertificateinfo.h )
+../rom/sifui.iby                CORE_MW_LAYER_IBY_EXPORT_PATH( sifui.iby )
 
 PRJ_MMPFILES
 sifui.mmp

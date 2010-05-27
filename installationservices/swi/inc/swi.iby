@@ -29,7 +29,6 @@ file=ABI_DIR\BUILD_DIR\siscontroller.dll		sys\bin\siscontroller.dll
 file=ABI_DIR\BUILD_DIR\sisresult.dll			sys\bin\sisresult.dll
 file=ABI_DIR\BUILD_DIR\uiss.dll				sys\bin\uiss.dll
 file=ABI_DIR\BUILD_DIR\uissclient.dll		sys\bin\uissclient.dll
-file=ABI_DIR\BUILD_DIR\swidaemon.exe			sys\bin\swidaemon.exe
 file=ABI_DIR\BUILD_DIR\sisregistryclient.dll		sys\bin\sisregistryclient.dll
 file=ABI_DIR\BUILD_DIR\sisregistryserver.exe		sys\bin\sisregistryserver.exe
 file=ABI_DIR\BUILD_DIR\sislauncherclient.dll		sys\bin\sislauncherclient.dll
@@ -70,5 +69,6 @@ ECOM_PLUGIN(recsisx.dll, 0x10202DD0.rsc)
 ECOM_PLUGIN(swisidchecker.dll, 10281FBC.rsc)
 
 #include "swiconfig.iby"
+#include "swidaemon.iby"
 
 #endif

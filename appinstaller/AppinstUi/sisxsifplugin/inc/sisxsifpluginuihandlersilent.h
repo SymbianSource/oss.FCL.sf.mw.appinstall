@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:  MUiHandler for silent install/uninstall operations.
+* Description:  UI Handler for silent install/uninstall operations.
 *
 */
 
@@ -19,25 +19,21 @@
 #define C_SISXSIFPLUGUIHANDLERSILENT_H
 
 #include <e32base.h>                    // CBase
-#include <swi/msisuihandlers.h>         // MUiHandler
-#include <f32file.h>                    // RFs
+#include "sisxsifpluginuihandlerbase.h" // CSisxSifPluginUiHandlerBase
 
 
 namespace Usif
 {
     /**
-     *  Silent SISX SIF plugin UI handler
-     *  Universal Software Install Framework (USIF) plugin for native SISX
-     *  installation. CSisxSifPluginActiveImpl is active object that takes
-     *  care of SISX installation operations.
+     * UI handler for silent install/uninstall operations.
      */
-    class CSisxSifPluginUiHandlerSilent : public CBase, public Swi::MUiHandler
+    class CSisxSifPluginUiHandlerSilent : public CSisxSifPluginUiHandlerBase
         {
     public:     // constructors and destructor
         static CSisxSifPluginUiHandlerSilent* NewL( RFs& aFs );
         ~CSisxSifPluginUiHandlerSilent();
 
-    public:     // from MUiHandler
+    public:     // from MUiHandler (via CSisxSifPluginUiHandlerBase)
         // from MCommonDialogs
         TBool DisplayTextL( const Swi::CAppInfo& aAppInfo, Swi::TFileTextOption aOption,
                 const TDesC& aText );
@@ -85,6 +81,11 @@ namespace Usif
         // from MUninstallerUiHandler
         TBool DisplayUninstallL( const Swi::CAppInfo& aAppInfo );
 
+    public:     // from CSisxSifPluginUiHandlerBase
+        void DisplayPreparingInstallL( const TDesC& aFileName );
+        void DisplayCompleteL();
+        void DisplayFailedL( TInt aErrorCode );
+
     protected:  // new functions
         CSisxSifPluginUiHandlerSilent( RFs& aFs );
 
@@ -92,7 +93,6 @@ namespace Usif
         void ConstructL();
 
     protected:  // data
-        RFs& iFs;
         };
 
 }   // namespace Usif

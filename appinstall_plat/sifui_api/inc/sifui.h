@@ -29,6 +29,9 @@
 
 class CSifUiPrivate;
 class CApaMaskedBitmap;
+class CSifUiCertificateInfo;
+class CSifUiAppInfo;
+
 namespace Swi {
     class CAppInfo;
     class CCertificateInfo;
@@ -72,13 +75,10 @@ class CSifUi : public CBase
          * If the installation confirmation query should contain memory selection option,
          * then set the selectable drives with SetMemorySelectionL() first. User selected
          * drive can be retrieved with SelectedDrive().
-         * @param aAppInfo - application information (name, version, and vendor)
-         * @param aAppSize - application size in bytes, not displayed if zero
-         * @param aAppIcon - application icon, default icon is displayed if NULL
+         * @param aAppInfo - application information (name, size, version, vendor, icon)
          * @return TBools - ETrue if user accepted the query, EFalse otherwise
          */
-        IMPORT_C TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-                TInt aAppSize = 0, const CApaMaskedBitmap* aAppIcon = NULL );
+        IMPORT_C TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
 
         /**
          * Defines memory selection alternatives for the main installation
@@ -101,7 +101,7 @@ class CSifUi : public CBase
          * @param aCertificates - certificate details
          */
         IMPORT_C void SetCertificateInfoL(
-                const RPointerArray<Swi::CCertificateInfo>& aCertificates );
+                const RPointerArray<CSifUiCertificateInfo>& aCertificates );
 
         /**
          * Displays main installation progress note. If the progress note or main
@@ -110,12 +110,10 @@ class CSifUi : public CBase
          * Dialog remains on the screen after progress bar shows full 100% value.
          * Use ShowFailedL() or ShowCompleteL() to replace the dialog content
          * with the final error or complete note.
-         * @param aAppInfo - application information (name, version, and vendor)
-         * @param aAppSize - application size in bytes (not displayed if zero)
+         * @param aAppInfo - application information (name, size, version, vendor, icon)
          * @param aProgressBarFinalValue - final value of the progress bar
          */
-        IMPORT_C void ShowProgressL( const Swi::CAppInfo& aAppInfo,
-                TInt aAppSize, TInt aProgressBarFinalValue );
+        IMPORT_C void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue );
 
         /**
          * Updates the progress bar value displayed in progress note. Initially progress bar
@@ -153,6 +151,12 @@ class CSifUi : public CBase
         IMPORT_C void SetMode( TMode aMode );
         IMPORT_C TMode Mode();
         IMPORT_C void ShowFailedL( TInt aErrorCode );
+        IMPORT_C void SetCertificateInfoL(
+                const RPointerArray<Swi::CCertificateInfo>& aCertificates );
+        IMPORT_C TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
+                TInt aAppSize = 0, const CApaMaskedBitmap* aAppIcon = NULL );
+        IMPORT_C void ShowProgressL( const Swi::CAppInfo& aAppInfo,
+                 TInt aAppSize, TInt aProgressBarFinalValue );
 
     private:    // new functions
         CSifUi();

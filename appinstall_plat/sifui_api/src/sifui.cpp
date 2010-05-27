@@ -11,12 +11,16 @@
 *
 * Contributors:
 *
-* Description:  Implementation of RSifUiCli class.
+* Description:  Implementation of CSifUi class.
 *
 */
 
 #include "sifui.h"                              // CSifUi
 #include "sifuiprivate.h"                       // CSifUiPrivate
+
+// TODO: remove
+#include <swi/msisuihandlers.h>                 // Swi::CAppInfo
+#include "sifuiappinfo.h"                       // CSifUiAppInfo
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -50,55 +54,54 @@ EXPORT_C CSifUi* CSifUi::NewL()
 //
 CSifUi::~CSifUi()
     {
-	delete iPrivate;
+    delete iPrivate;
     }
 
 // ---------------------------------------------------------------------------
 // CSifUi::ShowConfirmationL()
 // ---------------------------------------------------------------------------
 //
-EXPORT_C TBool CSifUi::ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-    TInt aAppSize, const CApaMaskedBitmap* aAppIcon )
-	{
-	return iPrivate->ShowConfirmationL( aAppInfo, aAppSize, aAppIcon );
-	}
+EXPORT_C TBool CSifUi::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+    {
+    return iPrivate->ShowConfirmationL( aAppInfo );
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUi::SetMemorySelectionL()
 // ---------------------------------------------------------------------------
 //
 EXPORT_C void CSifUi::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
-	{
-	iPrivate->SetMemorySelectionL( aDriveNumbers );
-	}
+    {
+    iPrivate->SetMemorySelectionL( aDriveNumbers );
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUi::SelectedDrive()
 // ---------------------------------------------------------------------------
 //
 EXPORT_C TInt CSifUi::SelectedDrive( TInt& aDriveNumber )
-	{
-	return iPrivate->SelectedDrive( aDriveNumber );
-	}
+    {
+    return iPrivate->SelectedDrive( aDriveNumber );
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUi::SetCertificateInfoL()
 // ---------------------------------------------------------------------------
 //
 EXPORT_C void CSifUi::SetCertificateInfoL(
-        const RPointerArray<Swi::CCertificateInfo>& aCertificates )
-	{
-	iPrivate->SetCertificateInfoL( aCertificates );
-	}
+        const RPointerArray<CSifUiCertificateInfo>& aCertificates )
+    {
+    iPrivate->SetCertificateInfoL( aCertificates );
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUi::ShowProgressL()
 // ---------------------------------------------------------------------------
 //
-EXPORT_C void CSifUi::ShowProgressL( const Swi::CAppInfo& aAppInfo,
-        TInt aAppSize, TInt aProgressBarFinalValue )
+EXPORT_C void CSifUi::ShowProgressL( const CSifUiAppInfo& aAppInfo,
+        TInt aProgressBarFinalValue )
     {
-	iPrivate->ShowProgressL( aAppInfo, aAppSize, aProgressBarFinalValue );
+    iPrivate->ShowProgressL( aAppInfo, aProgressBarFinalValue );
     }
 
 // ---------------------------------------------------------------------------
@@ -107,7 +110,7 @@ EXPORT_C void CSifUi::ShowProgressL( const Swi::CAppInfo& aAppInfo,
 //
 EXPORT_C void CSifUi::IncreaseProgressBarValueL( TInt aNewValue )
     {
-	iPrivate->IncreaseProgressBarValueL( aNewValue );
+    iPrivate->IncreaseProgressBarValueL( aNewValue );
     }
 
 // ---------------------------------------------------------------------------
@@ -116,7 +119,7 @@ EXPORT_C void CSifUi::IncreaseProgressBarValueL( TInt aNewValue )
 //
 EXPORT_C void CSifUi::ShowCompleteL()
     {
-	iPrivate->ShowCompleteL();
+    iPrivate->ShowCompleteL();
     }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +129,7 @@ EXPORT_C void CSifUi::ShowCompleteL()
 EXPORT_C void CSifUi::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
         const TDesC& aErrorDetails )
     {
-	iPrivate->ShowFailedL( aErrorCode, aErrorMessage, aErrorDetails );
+    iPrivate->ShowFailedL( aErrorCode, aErrorMessage, aErrorDetails );
     }
 
 // ---------------------------------------------------------------------------
@@ -143,7 +146,7 @@ CSifUi::CSifUi()
 //
 void CSifUi::ConstructL()
     {
-	iPrivate = CSifUiPrivate::NewL();
+    iPrivate = CSifUiPrivate::NewL();
     }
 
 
@@ -167,5 +170,28 @@ EXPORT_C void CSifUi::ShowFailedL( TInt /*aErrorCode*/ )
     User::Invariant();
     }
 
+EXPORT_C void CSifUi::SetCertificateInfoL(
+        const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
+    {
+    User::Invariant();
+    }
 
+EXPORT_C TBool CSifUi::ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
+    TInt aAppSize, const CApaMaskedBitmap* aAppIcon )
+    {
+    CSifUiAppInfo* appInfo = CSifUiAppInfo::NewLC( aAppInfo.AppName(),
+            aAppInfo.AppVendor(), aAppInfo.AppVersion(), aAppSize, aAppIcon );
+    TBool retVal = iPrivate->ShowConfirmationL( *appInfo );
+    CleanupStack::PopAndDestroy( appInfo );
+    return retVal;
+    }
+
+EXPORT_C void CSifUi::ShowProgressL( const Swi::CAppInfo& aAppInfo,
+        TInt aAppSize, TInt aProgressBarFinalValue )
+    {
+    CSifUiAppInfo* appInfo = CSifUiAppInfo::NewLC( aAppInfo.AppName(),
+            aAppInfo.AppVendor(), aAppInfo.AppVersion(), aAppSize, NULL );
+    iPrivate->ShowProgressL( *appInfo, aProgressBarFinalValue );
+    CleanupStack::PopAndDestroy( appInfo );
+    }
 

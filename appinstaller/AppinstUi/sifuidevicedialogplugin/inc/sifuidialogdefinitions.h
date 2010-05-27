@@ -43,7 +43,7 @@ const QString KSifUiApplicationVersion = "ver";         // string
 const QString KSifUiApplicationSize = "size";           // integer
 const QString KSifUiApplicationDetails = "details";     // string list
 const QString KSifUiMemorySelection = "mem";            // string (comma separated drive letters)
-const QString KSifUiCertificates = "cert";              // string list ??
+const QString KSifUiCertificates = "cert";              // binary
 
 // Variant map keys for "progress note" dialog parameters
 const QString KSifUiProgressNoteText = "txt";           // string

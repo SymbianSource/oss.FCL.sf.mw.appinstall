@@ -119,7 +119,9 @@ void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     iPreviouslyInstalledAppsCache = CPreviouslyInstalledAppsCache::NewL();
     iInstallationFailedAppsCache = CInstallationFailedAppsCache::NewL();
     iShutdownWatcher = CShutdownWatcher::NewL( *this );
-    iShutdownWatcher->Start();
+    iShutdownWatcher->Start();        
+    iPercentValue = 0;
+    
     // For uninstaller
     // SisInstaller do not own this so do not delete.     
     iProgramStatus = &aMainStatus;  
@@ -266,7 +268,7 @@ void CSisInstaller::DoCancel()
 // -----------------------------------------------------------------------
 //
 void CSisInstaller::RunL()
-    {
+    {    
     FLOG_1( _L("Daemon: Installer RunL status:%d"), iStatus.Int() );  
     FLOG_1( _L("Daemon: Installer RunL state:%d"), iState );                
     
@@ -401,6 +403,9 @@ void CSisInstaller::RunL()
                 
                 if ( iFileIndex < iFilesToInstall.Count() )
                     { 
+                    // Let's calc. values before index is updated.
+                    CalcPercentValue();
+                                                       
                     // Get next sisx package from array.                 
                     iSisFile.Copy( *iFilesToInstall[iFileIndex] );
                     ++iFileIndex;    
@@ -458,7 +463,12 @@ void CSisInstaller::RunL()
                                                         iSisFile, 
                                                         iStatus );
                             
-                            iDialogs->ShowWaitingNoteL(); 
+                            // Start to show progress dialog. Dialog is shown 
+                            // only 3 sec. 
+                            iDialogs->ShowWaitingNoteL();    
+                            // Start also the universal indicator.
+                            iDialogs->ActivateIndicatorL( iPercentValue );
+                            
                             iState = EDSisInstallerStateInstalling;                       
                             iInstallerState = iState;                                                   
                             SetActive();                               
@@ -578,6 +588,9 @@ void CSisInstaller::NotifyShuttingDown()
 //
 void CSisInstaller::InstallationCompleted( TInt aResult )
     {
+    // Let's update universal indicator ones more.   
+    iDialogs->ActivateIndicatorL( 100 );
+    
     FLOG_1( _L("Daemon: InstallationCompleted with result = %d"), aResult );  
     iState = EDSisInstallerStateIdle;    
     iInstallErr = KErrNone;     
@@ -602,8 +615,11 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
         iSisFileHandle.Close();
         iFileOpen = EFalse;
         }    
-                            
-    TRAP_IGNORE( iDialogs->CancelWaitingNoteL() );
+    
+    // Make sure that progress note is closed.
+    TRAP_IGNORE( iDialogs->CancelWaitingNote() );
+    // Close the universal indicator. 
+    iDialogs->CancelIndicatorL();
         
     if ( aResult != KErrNone && 
          iSisFile.Length() > 0 && 
@@ -780,7 +796,46 @@ TBool CSisInstaller::IsValidPackageL()
     FLOG_1( _L("Daemon: IsValidPackageL = %d"), result );  
     return result;    
     }
-    
+ 
+// -----------------------------------------------------------------------
+// CSisInstaller::CalcPrecentValue
+// -----------------------------------------------------------------------
+//
+void CSisInstaller::CalcPercentValue()
+    {  
+    FLOG( _L("Daemon: CSisInstaller::CalcPercentValue") );
+    FLOG_1( _L("Daemon: iFileIndex = %d"), iFileIndex ); 
+    // Let's calculate indicator value for UI now.
+    TInt sisxFileCount = iFilesToInstall.Count();
+    FLOG_1( _L("Daemon: iFilesToInstall.Count = %d"), sisxFileCount ); 
+    iPercentValue = 0;
+
+    // Note! if iFileIndex is zero, no package is installed bacause
+    // installation process starts after this function.     
+    if ( iFileIndex && sisxFileCount )
+        {
+        // Let's calculate new precent value after some
+        // package is installed.     
+        if ( iFileIndex <= sisxFileCount )
+            {
+            TReal32 realFileIndex = iFileIndex;
+            TReal32 realFileCount = sisxFileCount;
+            iPercentValue = (realFileIndex/realFileCount)*100;                                   
+            }
+        else
+            {
+            // Most probably all is installed if index is bigger then
+            // filen count. Let's not show over 100% to user.
+            // This may happend after last package is processed since 
+            // index counter is updated before install starts.
+            iPercentValue = 100;
+            }
+        }
+        
+    //TInt tempVal = (TInt)iPercentValue;    
+    FLOG_1( _L("Daemon: CalcPercentValue value = %d"), (TInt)iPercentValue );
+    }
+
 //EOF
 
 

@@ -22,17 +22,20 @@
 //  INCLUDES
 #include <e32base.h>
 #include <f32file.h>
-
-// TODO probably removed in 10.1
-// #include <barsc.h>
 #include "dialogwatcher.h"
 
 class CHbDeviceProgressDialogSymbian;
 class CHbDeviceNotificationDialogSymbian;
+class CHbIndicatorSymbian;
 
 namespace Swi
 {
+// Define uninstaller mode for universal indicator.
+const TInt KSWIDaemonUninstallerMode = -1; 
+// Define installer mode for universal indicator.
+const TInt KSWIDaemonInstallerMode = 0;
 
+class CDialogTimer;
 /**
 * This class wraps functions for showing some global dialogs.
 * 
@@ -75,7 +78,7 @@ class CDialogWrapper : public CBase
         * Cancel global waiting note (after installing).
         * @since 3.0
         */
-        void CancelWaitingNoteL();
+        void CancelWaitingNote();
         
         /**
          * Sets dialog control flag.
@@ -89,6 +92,40 @@ class CDialogWrapper : public CBase
           * @since 3.2         
           */              
         void ShowWaitingNoteForUninstallerL();
+        
+        /**
+         * Cancel global waiting note (after installing).
+         * @since 10.1
+         */        
+        void CancelWaitingNoteForUninstaller();
+ 
+        /**
+         * Show universal indicator for install or uninstall process.
+         * @since 10.1          
+         */ 
+        void ActivateIndicatorL( TReal aProcessValue );
+        
+        /**
+         * Set mode for universal indicator plugin. 
+         * @since 10.1 
+         * @parm aMode Flag for switchig to uninstaller mode. By default
+         * plugin works as installer mode.       
+         */        
+        void SetModeToIndicatorL( TInt aMode );
+        
+        /**
+         * Close universal indicator for install or uninstall process.
+         * @since 10.1         
+         */        
+        void CancelIndicatorL();
+ 
+//TODO: remove, it seems that this is no needed after wk18.        
+        /**
+         * Check system state. This is needed to know, can Daemon show UI
+         * dialogs.
+         * @since 10.1         
+         */       
+        //void CheckSystemState();
 
     private:
 
@@ -117,10 +154,83 @@ class CDialogWrapper : public CBase
         TInt iDisableAllNotes;
         CDialogWatcher* iWatcher;
         
-        TBool iIsProgressDialog;
+        TBool iIsProgressDialog; // Defines that dialog is constructed.  
         CHbDeviceProgressDialogSymbian* iHbProgressDialog;
-        TBool iIsUninstallerProgressDialog;                    
-        CHbDeviceProgressDialogSymbian* iHbProgressDialogForUninstaller;                
+        TBool iIsUninstallerProgressDialog; // Defines that dialog is constructed.                   
+        CHbDeviceProgressDialogSymbian* iHbProgressDialogForUninstaller;
+        TBool iIsIndicator; // Defines that indicator is constructed.
+        CHbIndicatorSymbian* iHbIndicator;  // Univeral indicator.
+        CDialogTimer* iTimer;   // Timer for closing procress dialog.
+        // Defines that dialog has used the time interval and can not be shown.
+        TBool iTimeOffDisableProgress;         
+    };
+
+/**
+* Helper class for closing the progress dialogs shown by 
+* the DialogWrapper class.
+* 
+* @since 10.1 
+*/
+class CDialogTimer : public CActive
+    {
+    public:
+    
+        /**
+        * Destructor.
+        */
+        virtual ~CDialogTimer();
+        
+        /**
+        * Two-phased constructor.
+        */
+        static CDialogTimer* NewL( CDialogWrapper* aDialog );
+        
+        /**
+         * Function sets time interva for progress dialog.
+         * After this time interval the progress dialog is closed.
+         * @param aRefresTime Time in microseconds.
+         */          
+         void StartDialogTimer( TUint32 aRefreshTime );
+        
+    private:
+
+        /**
+        * C++ default constructor.
+        */
+        CDialogTimer();
+
+        /**
+        * 2nd phase constructor. 
+        * @param 
+        */
+        void ConstructL( CDialogWrapper* aDialog );
+        
+        /**
+         * Function sets time.
+         * @param aRefresTime Time in microseconds.
+         */          
+         void TimerSet( TUint32 aRefreshTime );
+      
+        /**
+        * 
+        */        
+        void RunL();
+
+        /**
+        * Cancel timer.
+        */        
+        void DoCancel();
+        
+        /**
+        * Handles a leave occurring in the request completion 
+        * event handler RunL.
+        */             
+        TInt RunError( TInt aError );
+
+    private:
+
+        RTimer          iRTimer;     // Timer.   
+        CDialogWrapper* iDialog;     // Dialog class.                     
     };
 }
 

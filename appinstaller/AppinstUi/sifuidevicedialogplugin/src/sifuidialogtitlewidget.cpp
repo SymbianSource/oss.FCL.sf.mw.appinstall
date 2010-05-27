@@ -17,14 +17,18 @@
 
 #include "sifuidialogtitlewidget.h"
 #include "sifuidialog.h"                    // dialogType, dialogMode
+#include "sifuidialogcertificatedetails.h"  // SifUiDialogCertificateDetails
 #include <QGraphicsLinearLayout>
 #include <hblabel.h>
 #include <hbpushbutton.h>
+#include <hbmessagebox.h>
 
-const char KSifUiCertTrusted[]    = "qtg_small_secure.svg";
-// TODO: enable when available, take also in use
-//const char KSifUiCertNotTrusted[] = "qtg_small_untrusted.svg";
+// TODO: change these to mono icons when available, see graphics request TLIS-855ECE
+const char KSifUiCertTrusted[]    = "qtg_small_secure";
+const char KSifUiCertNotTrusted[] = "qtg_small_untrusted";
 
+
+// ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
 // SifUiDialogTitleWidget::SifUiDialogTitleWidget()
@@ -32,7 +36,7 @@ const char KSifUiCertTrusted[]    = "qtg_small_secure.svg";
 //
 SifUiDialogTitleWidget::SifUiDialogTitleWidget(QGraphicsItem *parent,
         Qt::WindowFlags flags): HbWidget(parent, flags),
-        mLayout(0), mTitle(0), mCertButton(0)
+        mLayout(0), mTitle(0), mCertButton(0), mCertificates(0), mDetailsDialog(0)
 {
 }
 
@@ -42,6 +46,8 @@ SifUiDialogTitleWidget::SifUiDialogTitleWidget(QGraphicsItem *parent,
 //
 SifUiDialogTitleWidget::~SifUiDialogTitleWidget()
 {
+    delete mDetailsDialog;
+    delete mCertificates;
 }
 
 // ----------------------------------------------------------------------------
@@ -51,22 +57,8 @@ SifUiDialogTitleWidget::~SifUiDialogTitleWidget()
 void SifUiDialogTitleWidget::constructFromParameters(const QVariantMap &parameters)
 {
     mLayout = new QGraphicsLinearLayout(Qt::Horizontal);
-
-    Q_ASSERT(mTitle == 0);
-    HbLabel *titleLabel = 0;
-    if (parameters.contains(KSifUiDialogTitle)) {
-        QString titleText = parameters.value(KSifUiDialogTitle).toString();
-        titleLabel = new HbLabel(titleText);
-    } else {
-        SifUiDeviceDialogType type = SifUiDialog::dialogType(parameters);
-        titleLabel = new HbLabel(defaultTitle(type));
-    }
-    titleLabel->setFontSpec(HbFontSpec(HbFontSpec::Title));
-    mLayout->addItem(titleLabel);
-    mTitle = titleLabel;
-
-    createCertButton();
-
+    updateTitle(parameters);
+    updateCertificates(parameters);
     setLayout(mLayout);
 }
 
@@ -76,18 +68,8 @@ void SifUiDialogTitleWidget::constructFromParameters(const QVariantMap &paramete
 //
 void SifUiDialogTitleWidget::updateFromParameters(const QVariantMap &parameters)
 {
-    Q_ASSERT(mTitle != 0);
-
-    QString titleText;
-    if (parameters.contains(KSifUiDialogTitle)) {
-        titleText = parameters.value(KSifUiDialogTitle).toString();
-    } else {
-        SifUiDeviceDialogType type = SifUiDialog::dialogType(parameters);
-        titleText = defaultTitle(type);
-    }
-    if (titleText != mTitle->plainText()) {
-        mTitle->setPlainText(titleText);
-    }
+    updateTitle(parameters);
+    updateCertificates(parameters);
 }
 
 // ----------------------------------------------------------------------------
@@ -133,33 +115,72 @@ QString SifUiDialogTitleWidget::defaultTitle(SifUiDeviceDialogType type)
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialogTitleWidget::createCertButton()
+// SifUiDialogTitleWidget::updateTitle()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialogTitleWidget::createCertButton()
+void SifUiDialogTitleWidget::updateTitle(const QVariantMap &parameters)
+{
+    QString titleText;
+    if (parameters.contains(KSifUiDialogTitle)) {
+        titleText = parameters.value(KSifUiDialogTitle).toString();
+    } else {
+        SifUiDeviceDialogType type = SifUiDialog::dialogType(parameters);
+        titleText = defaultTitle(type);
+    }
+    if (mTitle) {
+        if (titleText != mTitle->plainText()) {
+            mTitle->setPlainText(titleText);
+        }
+    } else {
+        mTitle = new HbLabel(titleText);
+        mTitle->setFontSpec(HbFontSpec(HbFontSpec::Title));
+        mLayout->addItem(mTitle);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialogTitleWidget::updateCertificates()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialogTitleWidget::updateCertificates(const QVariantMap &parameters)
 {
     if (!mCertButton) {
-        HbPushButton *certButton = new HbPushButton;
-        // TODO: show KSifUiCertNotTrusted when needed (and when available)
-        certButton->setIcon(HbIcon(KSifUiCertTrusted));
-        connect(certButton,SIGNAL(clicked()),this,SIGNAL(certificatesClicked()));
+        mCertButton = new HbPushButton;
+        connect(mCertButton, SIGNAL(clicked()), this, SLOT(certificatesClicked()));
+
+        if (parameters.contains(KSifUiCertificates)) {
+            Q_ASSERT(mCertificates == 0);
+            mCertificates = getCertificates(parameters.value(KSifUiCertificates).toByteArray());
+            mCertButton->setIcon(HbIcon(KSifUiCertTrusted));
+        } else {
+            mCertButton->setIcon(HbIcon(KSifUiCertNotTrusted));
+        }
+
         mLayout->addStretch();
-        mLayout->addItem(certButton);
-        mLayout->setAlignment(certButton, Qt::AlignRight|Qt::AlignVCenter);
-        mCertButton = certButton;
+        mLayout->addItem(mCertButton);
+        mLayout->setAlignment(mCertButton, Qt::AlignRight|Qt::AlignVCenter);
+    } else {
+        if (mCertificates == 0 && parameters.contains(KSifUiCertificates)) {
+            mCertificates = getCertificates(parameters.value(KSifUiCertificates).toByteArray());
+            mCertButton->setIcon(HbIcon(KSifUiCertTrusted));
+        }
     }
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialogTitleWidget::removeCertButton()
+// SifUiDialogTitleWidget::certificatesClicked()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialogTitleWidget::removeCertButton()
+void SifUiDialogTitleWidget::certificatesClicked()
 {
-    if (mCertButton && mLayout) {
-        mLayout->removeItem(mCertButton);
-        delete mCertButton;
-        mCertButton = 0;
+    if (mCertificates) {
+        if (mDetailsDialog) {
+            delete mDetailsDialog;
+            mDetailsDialog = 0;
+        }
+        mDetailsDialog = new SifUiDialogCertificateDetails(*mCertificates);
+        mDetailsDialog->showDetails();
+    } else {
+        HbMessageBox::warning(tr("Application is not certified. It's origin and authenticity cannot be proved."));
     }
 }
-

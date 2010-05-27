@@ -20,6 +20,7 @@
 #include "sisxsifcleanuputils.h"        // CleanupResetAndDestroyPushL
 #include "sisxsifuiselectioncache.h"    // CSisxUISelectionCache
 #include <sifui.h>                      // CSifUi
+#include <sifuicertificateinfo.h>       // CSifUiCertificateInfo
 #include <bautils.h>                    // BaflUtils
 #include <driveinfo.h>                  // DriveInfo
 #include <featmgr.h>                    // FeatureManager
@@ -148,14 +149,11 @@ TBool CSisxSifPluginUiHandler::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo
 //
 TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*/,
         const CApaMaskedBitmap* /*aLogo*/,
-        const RPointerArray<Swi::CCertificateInfo>& aCertificates )
+        const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
 
-    if( iSifUi )
-        {
-        iSifUi->SetCertificateInfoL( aCertificates );
-        }
+    iMode = EModeInstall;
     return ETrue;
     }
 
@@ -255,11 +253,17 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
     switch( aEvent )
         {
         case Swi::EEventSetProgressBarFinalValue:
-            iSifUi->ShowProgressL( aAppInfo, iMaxInstalledSize, aValue );
+            if( iMode == EModeInstall )
+                {
+                iSifUi->ShowProgressL( aAppInfo, iMaxInstalledSize, aValue );
+                }
             break;
 
         case Swi::EEventUpdateProgressBar:
-            iSifUi->IncreaseProgressBarValueL( aValue );
+            if( iMode == EModeInstall )
+                {
+                iSifUi->IncreaseProgressBarValueL( aValue );
+                }
             break;
 
         case Swi::EEventOcspCheckEnd:
@@ -348,7 +352,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
 //
 TBool CSisxSifPluginUiHandler::DisplayOcspResultL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TRevocationDialogMessage /*aMessage*/, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
-        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/,TBool /*aWarningOnly*/ )
+        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/, TBool /*aWarningOnly*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayOcspResultL") );
 
@@ -360,7 +364,7 @@ TBool CSisxSifPluginUiHandler::DisplayOcspResultL( const Swi::CAppInfo& /*aAppIn
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandler::DisplayCannotOverwriteFileL( const Swi::CAppInfo& /*aAppInfo*/,
-        const Swi::CAppInfo& /*aInstalledAppInfo*/,const TDesC& /*aFileName*/ )
+        const Swi::CAppInfo& /*aInstalledAppInfo*/, const TDesC& /*aFileName*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayCannotOverwriteFileL") );
 
@@ -383,11 +387,12 @@ TBool CSisxSifPluginUiHandler::DisplayMissingDependencyL( const Swi::CAppInfo& /
 // CSisxSifPluginUiHandler::DisplayUninstallL()
 // ---------------------------------------------------------------------------
 //
-TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& aAppInfo )
+TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayUninstallL") );
 
-    return iSifUi->ShowConfirmationL( aAppInfo );
+    iMode = EModeUninstall;
+    return ETrue;       // uninstall is always silent
     }
 
 // ---------------------------------------------------------------------------
@@ -396,7 +401,8 @@ TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& aAppInfo 
 //
 void CSisxSifPluginUiHandler::DisplayPreparingInstallL( const TDesC& /*aFileName*/ )
     {
-    // TODO: should this be displayed?
+    FLOG( _L("CSisxSifPluginUiHandler::DisplayPreparingInstallL") );
+    // TODO: display preparing install
     }
 
 // ---------------------------------------------------------------------------
@@ -405,10 +411,10 @@ void CSisxSifPluginUiHandler::DisplayPreparingInstallL( const TDesC& /*aFileName
 //
 void CSisxSifPluginUiHandler::DisplayCompleteL()
     {
-    if( iSifUi )
-        {
-        iSifUi->ShowCompleteL();
-        }
+    FLOG( _L("CSisxSifPluginUiHandler::DisplayCompleteL") );
+
+    iSifUi->ShowCompleteL();
+    iMode = EModeUndefined;
     }
 
 // ---------------------------------------------------------------------------
@@ -417,36 +423,18 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
 //
 void CSisxSifPluginUiHandler::DisplayFailedL( TInt aErrorCode )
     {
-    if( iSifUi )
-        {
-        _LIT( KErrorMessage, "Error" );
-        iSifUi->ShowFailedL( aErrorCode, KErrorMessage );
-        }
-    }
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, aErrorCode=%d"), aErrorCode );
 
-// ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::SetDriveSelectionRequired()
-// ---------------------------------------------------------------------------
-//
-void CSisxSifPluginUiHandler::SetDriveSelectionRequired( TBool aIsRequired )
-    {
-    iDriveSelectionRequired = aIsRequired;
-    }
-
-// ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::SetMaxInstalledSize()
-// ---------------------------------------------------------------------------
-//
-void CSisxSifPluginUiHandler::SetMaxInstalledSize( TInt aSize )
-    {
-    iMaxInstalledSize = aSize;
+    _LIT( KErrorMessage, "Error" );
+    iSifUi->ShowFailedL( aErrorCode, KErrorMessage );
     }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandler::CSisxSifPluginUiHandler()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandler::CSisxSifPluginUiHandler( RFs& aFs ) : iFs( aFs )
+CSisxSifPluginUiHandler::CSisxSifPluginUiHandler( RFs& aFs ) :
+        CSisxSifPluginUiHandlerBase( aFs )
     {
     }
 
@@ -505,16 +493,17 @@ void CSisxSifPluginUiHandler::AddCertificatesL(
     {
     ASSERT( aCertificates.Count() == aPkixResults.Count() );
 
-    RPointerArray<Swi::CCertificateInfo> certificates;
-    CleanupClosePushL( certificates );  // does not own array items
+    RPointerArray<CSifUiCertificateInfo> certificates;
+    CleanupResetAndDestroyPushL( certificates );
 
     for( TInt index = 0; index < aCertificates.Count(); ++index )
         {
         TValidationStatus status = aPkixResults[ index ]->Error();
         if( status.iReason == EValidatedOK )
             {
-            Swi::CCertificateInfo* cert = aCertificates[ index ];
-            certificates.AppendL( cert );   // not owned
+            CSifUiCertificateInfo* cert = CSifUiCertificateInfo::NewLC( *aCertificates[ index ] );
+            certificates.AppendL( cert );
+            CleanupStack::Pop( cert );
             }
         }
     iSifUi->SetCertificateInfoL( certificates );

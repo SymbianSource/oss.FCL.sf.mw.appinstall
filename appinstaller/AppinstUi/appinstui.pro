@@ -17,5 +17,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += sifuidevicedialogplugin/sifuidevicedialogplugin.pro \
-    sifuiinstallindicatorplugin/sifuiinstallindicatorplugin.pro
+    sifuiinstallindicatorplugin/sifuiinstallindicatorplugin.pro \
+    sisxsilentinstallindicatorplugin/sisxsilentinstallindicatorplugin.pro
 

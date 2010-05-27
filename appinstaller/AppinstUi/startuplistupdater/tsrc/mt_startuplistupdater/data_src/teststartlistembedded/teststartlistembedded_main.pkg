@@ -1,0 +1,37 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:  Test exe for startup list updater test module.
+;
+
+
+#{"TestStartListEmbedded"},(0xED2159D3),1,0,0
+
+; S60 platform dependencies
+[0x101F7961],0,0,0,{"Series60ProductID"}
+[0x1028315F],0,0,0,{"Series60ProductID"}
+[0x10283160],0,0,0,{"Series60ProductID"}
+[0x20022E6D],0,0,0,{"Series60ProductID"}
+
+; Localised Vendor name
+%{"Nokia"}
+
+; Unique Vendor name
+:"Nokia"
+
+; Files
+"datafile.txt" - "c:\data\datafile.txt"
+
+; Embeddded package containing startable exe
+@{"teststartlistembedded.sisx"}, (0xEC35FEAB)
+

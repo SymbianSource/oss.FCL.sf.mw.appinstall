@@ -81,6 +81,7 @@ LIBRARY        swiobserverclient.lib
 LIBRARY        sif.lib               // USIF SW Installer FW
 LIBRARY        scrclient.lib
 LIBRARY        hbwidgets.lib         // For Symbian Device Dialogs
+LIBRARY        hbcore.lib	    // For HbIndicatorSymbian
 
 DEBUGLIBRARY   flogger.lib
 

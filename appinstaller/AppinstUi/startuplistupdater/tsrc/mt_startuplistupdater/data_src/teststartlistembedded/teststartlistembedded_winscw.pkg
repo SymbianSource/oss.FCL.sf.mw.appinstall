@@ -1,0 +1,36 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:  Test exe for startup list updater test module.
+;
+
+
+#{"TestStartListEmbedded"},(0xEC35FEAB),1,0,0
+
+; S60 platform dependencies
+[0x101F7961],0,0,0,{"Series60ProductID"}
+[0x1028315F],0,0,0,{"Series60ProductID"}
+[0x10283160],0,0,0,{"Series60ProductID"}
+[0x20022E6D],0,0,0,{"Series60ProductID"}
+
+; Localised Vendor name
+%{"Nokia"}
+
+; Unique Vendor name
+:"Nokia"
+
+; Files
+"\epoc32\release\winscw\udeb\teststartlistembedded.exe" - "c:\sys\bin\teststartlistembedded.exe"
+; "\epoc32\data\z\private\101f875a\import\ec35feab.rsc" - "c:\private\101f875a\import\[0xec35feab].rsc"
+"\epoc32\data\z\private\101f875a\import\ec35feab.rsc" - "c:\private\E5F88F39\import\[0xec35feab].rsc"
+

@@ -24,6 +24,8 @@ PRJ_EXPORTS
 ../conf/mt_startuplistupdater.cfg   /epoc32/winscw/c/testframework/mt_startuplistupdater.cfg
 ../conf/mt_startuplistupdater.cfg   /epoc32/data/z/testframework/mt_startuplistupdater.cfg
 ../rom/mt_startuplistupdater.iby    CORE_MW_LAYER_IBY_EXPORT_PATH( mt_startuplistupdater.iby )
+../data/mmc/teststartlist_winscw.sisx   /epoc32/winscw/c/data/installs/teststartlist.sisx
+../data/mmc/teststartlistembedded_winscw.sisx /epoc32/winscw/c/data/installs/teststartlistembedded.sisx
 
 PRJ_TESTMMPFILES
 mt_startuplistupdater.mmp

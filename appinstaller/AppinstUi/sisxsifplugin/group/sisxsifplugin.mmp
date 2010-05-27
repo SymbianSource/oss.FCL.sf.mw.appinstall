@@ -33,9 +33,11 @@ SOURCEPATH      ../src
 SOURCE          sisxsifpluginmain.cpp
 SOURCE          sisxsifplugin.cpp
 SOURCE          sisxsifpluginactiveimpl.cpp
+SOURCE          sisxsifpluginuihandlerbase.cpp
 SOURCE          sisxsifpluginuihandler.cpp
-SOURCE          sisxsifuiselectioncache.cpp
 SOURCE          sisxsifpluginuihandlersilent.cpp
+SOURCE          sisxsifplugininstallparams.cpp
+SOURCE          sisxsifuiselectioncache.cpp
 
 USERINCLUDE     ../inc
 USERINCLUDE     ../../../../installationservices/swi/inc

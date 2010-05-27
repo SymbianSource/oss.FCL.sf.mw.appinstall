@@ -77,7 +77,6 @@ private slots:
     void handleAccepted();
     void handleCancelled();
     void handleMemorySelectionChanged(const QChar &driveLetter);
-    void handleDisplayCertificateDetails();
     void handleHidePressed();
     void handleIndicatorActivityChanged();
     void handleShowInstalled();

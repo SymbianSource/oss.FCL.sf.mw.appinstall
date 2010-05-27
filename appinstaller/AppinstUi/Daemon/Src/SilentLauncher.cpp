@@ -60,9 +60,7 @@ void CSilentLauncher::ConstructL()
     iSifOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, EFalse ); 
     // Defined for the install.
     iSifOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, ETrue );          
-    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue ); 
-    // TODO: Is this removed from current USIF ?	  
-    //iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );     
+    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue );            
     iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
@@ -70,6 +68,8 @@ void CSilentLauncher::ConstructL()
     
 // TODO: is this defined in USIF?    
     //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );
+// TODO: Not supported anymore after wk18, do we have some other param for this.
+    //iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );
     
 // TODO: remove old params.
     /*

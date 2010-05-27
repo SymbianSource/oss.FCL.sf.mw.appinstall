@@ -20,10 +20,12 @@
 
 #include <hbwidget.h>
 #include "sifuidialogdefinitions.h"         // SifUiDeviceDialogType, SifUiDeviceDialogMode
+#include "sifuidialogcertificateinfo.h"     // SifUiDialogCertificateInfo
 
 class QGraphicsLinearLayout;
 class HbLabel;
 class HbPushButton;
+class SifUiDialogCertificateDetails;
 
 
 class SifUiDialogTitleWidget : public HbWidget
@@ -37,19 +39,22 @@ public:
     void constructFromParameters(const QVariantMap &parameters);
     void updateFromParameters(const QVariantMap &parameters);
 
-signals:
-    void certificatesClicked();
-
 private:
     Q_DISABLE_COPY(SifUiDialogTitleWidget)
     QString defaultTitle(SifUiDeviceDialogType type);
-    void createCertButton();
-    void removeCertButton();
+    void updateTitle(const QVariantMap &parameters);
+    void updateCertificates(const QVariantMap &parameters);
+    QList<SifUiDialogCertificateInfo*> *getCertificates(QByteArray array);
+
+private slots:
+    void certificatesClicked();
 
 private:    // data
     QGraphicsLinearLayout *mLayout;
     HbLabel *mTitle;
     HbPushButton *mCertButton;
+    QList<SifUiDialogCertificateInfo*> *mCertificates;
+    SifUiDialogCertificateDetails *mDetailsDialog;
 };
 
 #endif // SIFUIDIALOGTITLEWIDGET_H

@@ -37,11 +37,12 @@ MW_LAYER_SYSTEMINCLUDE
 USERINCLUDE     ../inc
 
 LIBRARY         euser.lib
-LIBRARY         efsrv.lib				// RFs, RFile
-LIBRARY         dscstore.lib			// RDscStore, CDscItem
-LIBRARY         sisregistryclient.lib	// Swi::RSisRegistrySession, Swi::RSisRegistryEntry
-LIBRARY         featmgr.lib				// FeatureManager
-LIBRARY         bafl.lib				// RResourceFile
+LIBRARY         efsrv.lib               // RFs, RFile
+LIBRARY         dscstore.lib            // RDscStore, CDscItem
+LIBRARY         sisregistryclient.lib   // Swi::RSisRegistrySession, Swi::RSisRegistryEntry
+LIBRARY         siscontroller.lib       // Swi::TSisTrustStatus::IsTrusted
+LIBRARY         featmgr.lib             // FeatureManager
+LIBRARY         bafl.lib                // RResourceFile
 LIBRARY         platformenv.lib         // DriveInfo
 
 SMPSAFE

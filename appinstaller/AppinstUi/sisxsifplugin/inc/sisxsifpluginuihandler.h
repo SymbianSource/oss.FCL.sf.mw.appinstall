@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:  MUiHandler for SISX SIF plugin.
+* Description:  UI Handler for normal (non-silent) install/uninstall operations.
 *
 */
 
@@ -19,28 +19,24 @@
 #define C_SISXSIFPLUGUIHANDLER_H
 
 #include <e32base.h>                    // CBase
-#include <swi/msisuihandlers.h>         // MUiHandler
-#include <f32file.h>                    // RFs
-#include <sifui.h>                      // CSifUi
+#include "sisxsifpluginuihandlerbase.h" // CSisxSifPluginUiHandlerBase
 
+class CSifUi;
 class CSisxSifUiSelectionCache;
 
 
 namespace Usif
 {
     /**
-     *  SISX SIF plugin UI handler
-     *  Universal Software Install Framework (USIF) plugin for native SISX
-     *  installation. CSisxSifPluginActiveImpl is active object that takes
-     *  care of SISX installation operations.
+     * UI Handler for normal (non-silent) install/uninstall operations.
      */
-    class CSisxSifPluginUiHandler : public CBase, public Swi::MUiHandler
+    class CSisxSifPluginUiHandler : public CSisxSifPluginUiHandlerBase
         {
     public:     // constructors and destructor
         static CSisxSifPluginUiHandler* NewL( RFs& aFs );
         ~CSisxSifPluginUiHandler();
 
-    public:     // from MUiHandler
+    public:     // from MUiHandler (via CSisxSifPluginUiHandlerBase)
         // from MCommonDialogs
         TBool DisplayTextL( const Swi::CAppInfo& aAppInfo, Swi::TFileTextOption aOption,
                 const TDesC& aText );
@@ -88,12 +84,13 @@ namespace Usif
         // from MUninstallerUiHandler
         TBool DisplayUninstallL( const Swi::CAppInfo& aAppInfo );
 
-    public:     // new functions
+    public:     // from CSisxSifPluginUiHandlerBase
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
         void DisplayFailedL( TInt aErrorCode );
+
+    public:     // new functions
         void SetDriveSelectionRequired( TBool aIsRequired );
-        void SetMaxInstalledSize( TInt aSize );
 
     private:    // new functions
         CSisxSifPluginUiHandler( RFs& aFs );
@@ -103,12 +100,16 @@ namespace Usif
                 RPointerArray<CPKIXValidationResultBase>& aPkixResults );
 
     private:    // data
-        RFs& iFs;
-        CSisxSifUiSelectionCache* iSelectionCache;
+        enum TMode
+            {
+            EModeUndefined,
+            EModeInstall,
+            EModeUninstall
+            } iMode;
         CSifUi* iSifUi;
+        CSisxSifUiSelectionCache* iSelectionCache;
         CApaMaskedBitmap* iLogo;
         TBool iQuestionIncompatibleDisplayed;
-        TInt iMaxInstalledSize;
         TBool iDriveSelectionRequired;
         RArray<TInt> iSelectableDrives;
         };

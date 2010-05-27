@@ -16,8 +16,7 @@
 
 TEMPLATE = lib
 TARGET = sifuidevicedialogplugin
-CONFIG += plugin
-CONFIG += hb
+CONFIG += hb plugin
 #TRANSLATIONS = sifuidevicedialogplugin.ts
 
 INCLUDEPATH += .
@@ -31,31 +30,37 @@ HEADERS += inc/sifuidevicedialogplugin.h \
     inc/sifuidialogdefinitions.h \
     inc/sifuidialog.h \
     inc/sifuidialogtitlewidget.h \
-    inc/sifuidialogcontentwidget.h
+    inc/sifuidialogcontentwidget.h \
+    inc/sifuidialogcertificateinfo.h \
+    inc/sifuidialogcertificatedetails.h
 
 SOURCES += src/sifuidevicedialogplugin.cpp \
     src/sifuidialog.cpp \
     src/sifuidialogtitlewidget.cpp \
-    src/sifuidialogcontentwidget.cpp
+    src/sifuidialogcontentwidget.cpp \
+    src/sifuidialogcertificateinfo.cpp \
+    src/sifuidialogcertificatedetails.cpp
 
 symbian: {
     TARGET.EPOCALLOWDLLDATA = 1
     TARGET.CAPABILITY = CAP_GENERAL_DLL
     TARGET.UID3 = 0x2002C3AC
 
+    SOURCES += src/sifuidialogtitlewidget_symbian.cpp
+
     pluginstub.sources = sifuidevicedialogplugin.dll
     pluginstub.path = /resource/plugins/devicedialogs
     DEPLOYMENT += pluginstub
 
-	LIBS += -lfbscli -lPlatformEnv
+    LIBS += -lfbscli -lPlatformEnv -lestor
 }
 
 BLD_INF_RULES.prj_exports += \
-  "$${LITERAL_HASH}include <platform_paths.hrh>" \
-  "qmakepluginstubs/sifuidevicedialogplugin.qtplugin /epoc32/data/z/pluginstub/sifuidevicedialogplugin.qtplugin" \
-  "inc/sifuidialogdefinitions.h MW_LAYER_PLATFORM_EXPORT_PATH(sifuidialogdefinitions.h)" \
-  "rom/sifuidevicedialogplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH(sifuidevicedialogplugin.iby)" \
-  "rom/sifuidevicedialogplugin_resources.iby LANGUAGE_MW_LAYER_IBY_EXPORT_PATH(sifuidevicedialogplugin_resources.iby)"
+    "$${LITERAL_HASH}include <platform_paths.hrh>" \
+    "qmakepluginstubs/sifuidevicedialogplugin.qtplugin /epoc32/data/z/pluginstub/sifuidevicedialogplugin.qtplugin" \
+    "inc/sifuidialogdefinitions.h MW_LAYER_PLATFORM_EXPORT_PATH(sifuidialogdefinitions.h)" \
+    "rom/sifuidevicedialogplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH(sifuidevicedialogplugin.iby)" \
+    "rom/sifuidevicedialogplugin_resources.iby LANGUAGE_MW_LAYER_IBY_EXPORT_PATH(sifuidevicedialogplugin_resources.iby)"
 
 LIBS += -lxqservice
 

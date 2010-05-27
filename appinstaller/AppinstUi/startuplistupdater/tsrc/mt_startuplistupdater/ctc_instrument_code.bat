@@ -17,7 +17,7 @@ rem
 
 echo ----------------------------------------------------------------------
 echo.
-echo Instrumenting code (armv5 urel and winscw udeb, function coverage)
+echo Instrumenting code (armv5 urel and winscw udeb, decision coverage)
 echo.
 echo ----------------------------------------------------------------------
 echo.
@@ -26,7 +26,7 @@ if exist MON.sym del MON.sym
 if exist MON.dat del MON.dat
 if exist profile.txt del profile.txt
 call sbs reallyclean
-call ctcwrap -i f -2comp -C "EXCLUDE+*.UID.CPP" sbs -c armv5_urel
-call ctcwrap -i f -2comp -C "EXCLUDE+*.UID.CPP" sbs -c winscw_udeb
+call ctcwrap -i d -2comp -C "EXCLUDE+*.UID.CPP" sbs -c armv5_urel
+call ctcwrap -i d -2comp -C "EXCLUDE+*.UID.CPP" sbs -c winscw_udeb
 popd
 

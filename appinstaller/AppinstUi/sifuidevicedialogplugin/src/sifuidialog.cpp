@@ -27,6 +27,7 @@
 #include <QFile>
 #include <hbmessagebox.h>
 #include <qvaluespacesubscriber.h>
+#include <xqappmgr.h>                       // XQApplicationManager
 
 QTM_USE_NAMESPACE
 
@@ -195,15 +196,11 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
 
     mDialogType = dialogType(parameters);
 
-    // Title
     Q_ASSERT(mTitle == 0);
     mTitle = new SifUiDialogTitleWidget(this);
     mTitle->constructFromParameters(parameters);
-    connect(mTitle, SIGNAL(certificatesClicked()),
-            this, SLOT(handleDisplayCertificateDetails()));
     setHeadingWidget(mTitle);
 
-    // Content
     Q_ASSERT(mContent == 0);
     mContent = new SifUiDialogContentWidget(this);
     mContent->constructFromParameters(parameters);
@@ -211,7 +208,6 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
             this, SLOT(handleMemorySelectionChanged(const QChar &)));
     setContentWidget(mContent);
 
-    // Buttons
     updateButtons();
 
     return true;
@@ -367,16 +363,6 @@ void SifUiDialog::handleMemorySelectionChanged(const QChar &driveLetter)
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialog::handleDisplayCertificateDetails()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialog::handleDisplayCertificateDetails()
-{
-    // TODO: display certificate details, or the following note:
-    HbMessageBox::warning(tr("Application is not certified. It's origin and authenticity cannot be proved."));
-}
-
-// ----------------------------------------------------------------------------
 // SifUiDialog::handleHidePressed()
 // ----------------------------------------------------------------------------
 //
@@ -417,8 +403,22 @@ void SifUiDialog::handleIndicatorActivityChanged()
 //
 void SifUiDialog::handleShowInstalled()
 {
-    // TODO: launch applib
-    HbMessageBox::warning(tr("Not implemented yet"));
+    QUrl openRecentView("appto://20022F35?activityname=AppLibRecentView");
+
+    XQApplicationManager applicationManager;
+    XQAiwRequest *request = applicationManager.create(openRecentView);
+    if (request) {
+        bool result = request->send();
+        if (result) {
+            closeDeviceDialog(false);
+        } else {
+            // TODO: proper error handling
+            int error = request->lastError();
+            QString messageText = tr("Unable to open AppLib. Error %1").arg(error);
+            HbMessageBox::warning(messageText);
+        }
+        delete request;
+    }
 }
 
 // ----------------------------------------------------------------------------

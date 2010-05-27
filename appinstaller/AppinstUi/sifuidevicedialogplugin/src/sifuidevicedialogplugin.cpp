@@ -91,7 +91,7 @@ bool SifUiDeviceDialogPlugin::deviceDialogInfo( const QString &deviceDialogType,
     Q_UNUSED(deviceDialogType);
     Q_UNUSED(parameters);
 
-    info->group = DeviceNotificationDialogGroup;
+    info->group = GenericDeviceDialogGroup;
     info->flags = NoDeviceDialogFlags;
     info->priority = DefaultPriority;
 

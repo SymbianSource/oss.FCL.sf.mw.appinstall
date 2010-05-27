@@ -50,6 +50,8 @@ private:    // new functions
     void RemoveImportedResourceFiles( RPointerArray<HBufC>& aResourceFileArray );
     void AppendExecutablesFromResourceFileL( const TDesC& aResourceFile,
             RPointerArray<HBufC>& aExecutableArray );
+    TBool IsValidExecutableForStartupL( const TDesC& aResourceFile,
+        const TDesC& aExecutableName );
     void GetInstalledAppsL( RPointerArray<HBufC>& aInstalledExecutableArray );
     void GetStartupListAppsL( RDscStore& aDscStore,
             RPointerArray<HBufC>& aStartedExecutableArray );

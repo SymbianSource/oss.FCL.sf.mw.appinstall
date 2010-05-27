@@ -22,6 +22,7 @@ echo.
 echo ----------------------------------------------------------------------
 echo.
 pushd group
+call sbs reallyclean
 call sbs -c armv5_urel
 call sbs -c winscw_udeb
 popd

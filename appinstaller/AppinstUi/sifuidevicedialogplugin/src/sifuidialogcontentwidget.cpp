@@ -30,7 +30,7 @@ QTM_USE_NAMESPACE
 #include <fbs.h>                            // CFbsBitmap
 #endif  // Q_OS_SYMBIAN
 
-const char KSifUiDefaultApplicationIcon[] = "qtg_large_application.svg";
+const char KSifUiDefaultApplicationIcon[] = "qtg_large_application";
 
 const int KSifUiKilo = 1024;
 const int KSifUiMega = 1024*1024;
@@ -159,7 +159,7 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
     Q_ASSERT(mMemorySelection == 0);
     mMemorySelection = new HbComboBox;
     connect(mMemorySelection, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(handleMemorySelectionChange(int)));
+            this, SLOT(handleMemorySelectionChange(int)));
     mStackedWidget->addWidget(mMemorySelection);
 
     Q_ASSERT(mProgressBar == 0);

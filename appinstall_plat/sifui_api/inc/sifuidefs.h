@@ -49,7 +49,7 @@ _LIT( KSifUiApplicationVersion, "ver" );            // descriptor
 _LIT( KSifUiApplicationSize, "size" );              // integer
 _LIT( KSifUiApplicationDetails, "details" );        // descriptor array
 _LIT( KSifUiMemorySelection, "mem" );               // descriptor (comma separated drive letters)
-_LIT( KSifUiCertificates, "cert" );                 // boolean ???
+_LIT( KSifUiCertificates, "cert" );                 // binary
 
 // Variant map keys for "progress note" dialog parameters
 _LIT( KSifUiProgressNoteText, "txt" );              // string

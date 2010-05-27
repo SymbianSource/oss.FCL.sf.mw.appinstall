@@ -11,17 +11,20 @@
 *
 * Contributors:
 *
-* Description:  Implementation of RSifUiCli class.
+* Description:  Implementation of CSifUiPrivate class.
 *
 */
 
 #include "sifuiprivate.h"                       // CSifUiPrivate
 #include "sifuidefs.h"                          // SIF UI device dialog parameters
+#include "sifuicertificateinfo.h"               // CSifUiCertificateInfo
+#include "sifuiappinfo.h"                       // CSifUiAppInfo
 #include <hb/hbcore/hbsymbianvariant.h>         // CHbSymbianVariantMap
-#include <swi/msisuihandlers.h>                 // Swi::CAppInfo
 #include <apgicnfl.h>                           // CApaMaskedBitmap
+#include <s32mem.h>                             // RDesReadStream
 
 const TInt KDriveLettersLen = 32;
+const TInt KCertificateBufferGranularity = 1024;
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -51,99 +54,120 @@ CSifUiPrivate::~CSifUiPrivate()
     delete iVariantMap;
     delete iBitmap;
     delete iSelectableDrives;
+    delete iCertificateInfo;
     }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::ShowConfirmationL()
 // ---------------------------------------------------------------------------
 //
-TBool CSifUiPrivate::ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-    TInt aAppSize, const CApaMaskedBitmap* aAppIcon )
-	{
-	ChangeNoteTypeL( ESifUiConfirmationQuery );
+TBool CSifUiPrivate::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+    {
+    ChangeNoteTypeL( ESifUiConfirmationQuery );
 
-	AddParamsAppInfoAndSizeL( aAppInfo, aAppSize );
-	if( aAppIcon )
-		{
-		AddParamsIconL( aAppIcon );
-		}
-	if( iSelectableDrives )
-		{
-		AddParamL( KSifUiMemorySelection, *iSelectableDrives );
-		}
+    AddParamsAppInfoL( aAppInfo );
+    if( iSelectableDrives )
+        {
+        AddParamL( KSifUiMemorySelection, *iSelectableDrives );
+        }
+    if( iCertificateInfo )
+        {
+        User::LeaveIfError( VariantMapL()->Add( KSifUiCertificates, iCertificateInfo ) );
+        iCertificateInfo = NULL;
+        }
 
-	DisplayDeviceDialogL();
-	User::LeaveIfError( WaitForResponse() );
-	return( iReturnValue == KErrNone );
-	}
+    DisplayDeviceDialogL();
+    User::LeaveIfError( WaitForResponse() );
+    return( iReturnValue == KErrNone );
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::SetMemorySelectionL()
 // ---------------------------------------------------------------------------
 //
 void CSifUiPrivate::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
-	{
-	if( iSelectableDrives )
-		{
-		delete iSelectableDrives;
-		iSelectableDrives = NULL;
-		}
+    {
+    if( iSelectableDrives )
+        {
+        delete iSelectableDrives;
+        iSelectableDrives = NULL;
+        }
 
-	TInt driveCount = aDriveNumbers.Count();
-	if( driveCount > 0 )
-		{
-		const TChar KComma = ',';
-		TBuf<KDriveLettersLen> driveList;
-		for( TInt index = 0; index < driveCount; ++index )
-			{
-			TChar driveLetter;
-			TInt err = RFs::DriveToChar( aDriveNumbers[ index ], driveLetter );
-			if( !err )
-				{
-				driveList.Append( driveLetter );
-				driveList.Append( KComma );
-				}
-			}
-		iSelectableDrives = driveList.AllocL();
-		}
-	}
+    TInt driveCount = aDriveNumbers.Count();
+    if( driveCount > 0 )
+        {
+        const TChar KComma = ',';
+        TBuf<KDriveLettersLen> driveList;
+        for( TInt index = 0; index < driveCount; ++index )
+            {
+            TChar driveLetter;
+            TInt err = RFs::DriveToChar( aDriveNumbers[ index ], driveLetter );
+            if( !err )
+                {
+                driveList.Append( driveLetter );
+                driveList.Append( KComma );
+                }
+            }
+        iSelectableDrives = driveList.AllocL();
+        }
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::SelectedDrive()
 // ---------------------------------------------------------------------------
 //
 TInt CSifUiPrivate::SelectedDrive( TInt& aDriveNumber )
-	{
+    {
     if( iSelectedDriveSet )
         {
         return RFs::CharToDrive( iSelectedDrive, aDriveNumber );
         }
     return KErrNotFound;
-	}
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::SetCertificateInfoL()
 // ---------------------------------------------------------------------------
 //
 void CSifUiPrivate::SetCertificateInfoL(
-        const RPointerArray<Swi::CCertificateInfo>& aCertificates )
-	{
-   if( aCertificates.Count() )
-		{
-		AddParamsCertificatesL( aCertificates );
-		}
-	}
+        const RPointerArray<CSifUiCertificateInfo>& aCertificates )
+    {
+    if( iCertificateInfo )
+        {
+        delete iCertificateInfo;
+        iCertificateInfo = NULL;
+        }
+    if( aCertificates.Count() )
+        {
+        CBufBase* buf = CBufFlat::NewL( KCertificateBufferGranularity );
+        CleanupStack::PushL( buf );
+        RBufWriteStream writeStream( *buf );
+        CleanupClosePushL( writeStream );
+
+        TInt32 count = aCertificates.Count();
+        writeStream.WriteInt32L( count );
+        for( TInt index = 0; index < count; ++index )
+           {
+           aCertificates[ index ]->ExternalizeL( writeStream );
+           }
+
+        const TPtrC8 dataPtr( buf->Ptr( 0 ).Ptr(), buf->Size() );
+        iCertificateInfo = CHbSymbianVariant::NewL( &dataPtr, CHbSymbianVariant::EBinary );
+
+        CleanupStack::PopAndDestroy( 2, buf );  // writeStream, buf
+        }
+    }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::ShowProgressL()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::ShowProgressL( const Swi::CAppInfo& aAppInfo,
-        TInt aAppSize, TInt aProgressBarFinalValue )
+void CSifUiPrivate::ShowProgressL( const CSifUiAppInfo& aAppInfo,
+        TInt aProgressBarFinalValue )
     {
     ChangeNoteTypeL( ESifUiProgressNote );
 
-    AddParamsAppInfoAndSizeL( aAppInfo, aAppSize );
+    AddParamsAppInfoL( aAppInfo );
     AddParamL( KSifUiProgressNoteFinalValue, aProgressBarFinalValue );
 
     DisplayDeviceDialogL();
@@ -169,6 +193,7 @@ void CSifUiPrivate::IncreaseProgressBarValueL( TInt aNewValue )
 void CSifUiPrivate::ShowCompleteL()
     {
     ChangeNoteTypeL( ESifUiCompleteNote );
+
     DisplayDeviceDialogL();
     User::LeaveIfError( WaitForResponse() );
     }
@@ -226,10 +251,10 @@ void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
     {
     const CHbSymbianVariant* selectedDriveVariant = aData.Get( KSifUiSelectedMemory );
     if( selectedDriveVariant )
-    	{
-		iSelectedDrive = *( selectedDriveVariant->Value<TChar>() );
-		iSelectedDriveSet = ETrue;
-    	}
+        {
+        iSelectedDrive = *( selectedDriveVariant->Value<TChar>() );
+        iSelectedDriveSet = ETrue;
+        }
 
     const CHbSymbianVariant* acceptedVariant = aData.Get( KSifUiQueryAccepted );
     if( acceptedVariant )
@@ -277,17 +302,29 @@ void CSifUiPrivate::ConstructL()
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::ClearParamsL()
+// CSifUiPrivate::ClearParams()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::ClearParamsL()
+void CSifUiPrivate::ClearParams()
     {
     if( iVariantMap )
         {
         delete iVariantMap;
         iVariantMap = NULL;
         }
-    iVariantMap = CHbSymbianVariantMap::NewL();
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::VariantMapL()
+// ---------------------------------------------------------------------------
+//
+CHbSymbianVariantMap* CSifUiPrivate::VariantMapL()
+    {
+    if( !iVariantMap )
+        {
+        iVariantMap = CHbSymbianVariantMap::NewL();
+        }
+    return iVariantMap;
     }
 
 // ---------------------------------------------------------------------------
@@ -296,7 +333,7 @@ void CSifUiPrivate::ClearParamsL()
 //
 void CSifUiPrivate::ChangeNoteTypeL( TInt aType )
     {
-    ClearParamsL();
+    ClearParams();
     AddParamL( KSifUiDialogType, aType );
     }
 
@@ -308,7 +345,7 @@ void CSifUiPrivate::AddParamL( const TDesC& aKey, TInt aValue )
     {
     CHbSymbianVariant* variant = NULL;
     variant = CHbSymbianVariant::NewL( &aValue, CHbSymbianVariant::EInt );
-    iVariantMap->Add( aKey, variant );
+    User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
     }
 
 // ---------------------------------------------------------------------------
@@ -319,7 +356,7 @@ void CSifUiPrivate::AddParamL( const TDesC& aKey, const TDesC& aValue )
     {
     CHbSymbianVariant* variant = NULL;
     variant = CHbSymbianVariant::NewL( &aValue, CHbSymbianVariant::EDes );
-    iVariantMap->Add( aKey, variant );
+    User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
     }
 
 // ---------------------------------------------------------------------------
@@ -330,28 +367,29 @@ void CSifUiPrivate::AddParamListL( const TDesC& aKey, const MDesCArray& aList )
     {
     CHbSymbianVariant* variant = NULL;
     variant = CHbSymbianVariant::NewL( &aList, CHbSymbianVariant::EDesArray );
-    iVariantMap->Add( aKey, variant );
+    User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::AddParamsAppInfoAndSizeL()
+// CSifUiPrivate::AddParamsAppInfoL()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::AddParamsAppInfoAndSizeL( const Swi::CAppInfo& aAppInfo, TInt aAppSize )
+void CSifUiPrivate::AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo )
     {
-    AddParamL( KSifUiApplicationName, aAppInfo.AppName() );
-    const TVersion& version( aAppInfo.AppVersion() );
+    // TODO: icons missing, could use binary transfer as in certificates
+    AddParamL( KSifUiApplicationName, aAppInfo.Name() );
+    const TVersion& version( aAppInfo.Version() );
     if( version.iBuild || version.iMajor || version.iMinor )
         {
         AddParamL( KSifUiApplicationVersion, version.Name() );
         }
-    if( aAppInfo.AppVendor().Length() )
+    if( aAppInfo.Vendor().Length() )
         {
-        AddParamL( KSifUiApplicationDetails, aAppInfo.AppVendor() );
+        AddParamL( KSifUiApplicationDetails, aAppInfo.Vendor() );
         }
-    if( aAppSize > 0 )
+    if( aAppInfo.Size() > 0 )
         {
-        AddParamL( KSifUiApplicationSize, aAppSize );
+        AddParamL( KSifUiApplicationSize, aAppInfo.Size() );
         }
     }
 
@@ -361,6 +399,7 @@ void CSifUiPrivate::AddParamsAppInfoAndSizeL( const Swi::CAppInfo& aAppInfo, TIn
 //
 void CSifUiPrivate::AddParamsIconL( const CApaMaskedBitmap* aIcon )
     {
+    // TODO: remove this function
     if( aIcon )
         {
         if( iBitmap )
@@ -370,23 +409,15 @@ void CSifUiPrivate::AddParamsIconL( const CApaMaskedBitmap* aIcon )
             }
         iBitmap = CApaMaskedBitmap::NewL( aIcon );
 
+        CHbSymbianVariantMap* map = VariantMapL();
         CHbSymbianVariant* variant = NULL;
         TInt bitmapHandle = iBitmap->Handle();
         variant = CHbSymbianVariant::NewL( &bitmapHandle, CHbSymbianVariant::EInt );
-        iVariantMap->Add( KSifUiApplicationIconHandle, variant );
+        User::LeaveIfError( map->Add( KSifUiApplicationIconHandle, variant ) );
         TInt bitmapMaskHandle = iBitmap->Mask()->Handle();
         variant = CHbSymbianVariant::NewL( &bitmapMaskHandle, CHbSymbianVariant::EInt );
-        iVariantMap->Add( KSifUiApplicationIconMaskHandle, variant );
+        User::LeaveIfError( map->Add( KSifUiApplicationIconMaskHandle, variant ) );
         }
-    }
-
-// ---------------------------------------------------------------------------
-// CSifUiPrivate::AddParamsCertificatesL()
-// ---------------------------------------------------------------------------
-//
-void CSifUiPrivate::AddParamsCertificatesL( const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
-    {
-    // TODO: implement
     }
 
 // ---------------------------------------------------------------------------
@@ -397,7 +428,7 @@ void CSifUiPrivate::DisplayDeviceDialogL()
     {
     if( iDeviceDialog && iIsDisplayingDialog )
         {
-        iDeviceDialog->Update( *iVariantMap );
+        User::LeaveIfError( iDeviceDialog->Update( *VariantMapL() ) );
         }
     else
         {
@@ -405,7 +436,7 @@ void CSifUiPrivate::DisplayDeviceDialogL()
             {
             iDeviceDialog = CHbDeviceDialogSymbian::NewL();
             }
-        iDeviceDialog->Show( KSifUiDeviceDialog, *iVariantMap, this );
+        User::LeaveIfError( iDeviceDialog->Show( KSifUiDeviceDialog, *VariantMapL(), this ) );
         iIsDisplayingDialog = ETrue;
         }
     }

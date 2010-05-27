@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -411,7 +411,7 @@ void CPackageParser::ParseLanguagesL()
 			dialect = CSISLanguage::IdentifyLanguage (iTokenValue.pszString);
 			if (dialect == CSISLanguage::ELangNone) throw ErrUnknownLanguagesId;
 			}
-		else if (iToken==NUMERIC_TOKEN && iTokenValue.dwNumber>=0 && iTokenValue.dwNumber<=1000)
+		else if (iToken==NUMERIC_TOKEN && iTokenValue.dwNumber>=0 )
 			{
 			dialect = static_cast <CSISLanguage::TDialect> (iTokenValue.dwNumber);
 			}

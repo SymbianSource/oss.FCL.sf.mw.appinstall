@@ -34,8 +34,8 @@ namespace Swi
 
 namespace Usif
 {
-    class CSisxSifPluginUiHandler;
-    class CSisxSifPluginUiHandlerSilent;
+    class CSisxSifPluginUiHandlerBase;
+    class CSisxSifPluginInstallParams;
 
     /**
      *  SISX SIF plugin active implementation
@@ -76,9 +76,11 @@ namespace Usif
     private:    // new functions
         CSisxSifPluginActiveImpl();
         void ConstructL();
-        Swi::MUiHandler& UiHandlerL( TBool aUseSilentMode = EFalse );
+        void CommonRequestPreamble( TRequestStatus& aStatus );
         void CommonRequestPreamble( const COpaqueNamedParams& aInputParams,
                 COpaqueNamedParams& aOutputParams, TRequestStatus& aStatus );
+        void CreateUiHandlerL();
+        TBool IsSilentMode();
         void CompleteClientRequest( TInt aResult );
         void DoUninstallL( TComponentId aComponentId );
         void DoActivateL( TComponentId aComponentId );
@@ -98,16 +100,15 @@ namespace Usif
     private:    // data
         RFs iFs;
         Swi::CAsyncLauncher* iAsyncLauncher;
-        CSisxSifPluginUiHandler* iUiHandler;
-        CSisxSifPluginUiHandlerSilent* iUiHandlerSilent;
+        CSisxSifPluginUiHandlerBase* iUiHandler;
         Swi::CInstallPrefs* iInstallPrefs;
         TRequestStatus* iClientStatus;
-        const COpaqueNamedParams* iInputParams;
-        COpaqueNamedParams* iOutputParams;
+        const COpaqueNamedParams* iInputParams;     // not owned
+        COpaqueNamedParams* iOutputParams;      // not owned
+        CSisxSifPluginInstallParams* iInstallParams;
         CComponentInfo* iComponentInfo;
         HBufC* iFileName;
         RFile* iFileHandle;             // not owned
-        TBool iUseSilentMode;
         enum TOperationType
             {
             ENone,

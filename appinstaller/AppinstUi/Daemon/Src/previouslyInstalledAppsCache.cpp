@@ -201,6 +201,7 @@ CPreviouslyInstalledAppsCache::CPreviouslyInstalledAppsCache()
 //  
 void CPreviouslyInstalledAppsCache::ConstructL()
 	{
+    FLOG( _L("Daemon: CPreviouslyInstalledAppsCache::ConstructL ") );
 	User::LeaveIfError(iFs.Connect());
 	TInt drive = 0;
     iFs.CharToDrive( 
@@ -211,13 +212,13 @@ void CPreviouslyInstalledAppsCache::ConstructL()
 
 	// Read cache file
 	TRAP_IGNORE(InitFromCacheFileL());
-		
-    TRAPD( err, UpdateAllL() );
-    if(err == KErrNone)
-        {
-        // If we managed to scan the registry, and update the cache, flush to disk.
-        TRAP_IGNORE(FlushToDiskL());
-        }	
+	
+//TODO: Test if this is really needed. Let's not do updateall 2 time in boot.		
+   // TRAPD( err, UpdateAllL() );
+   // if(err == KErrNone)
+   //     {        
+   //     TRAP_IGNORE(FlushToDiskL());
+   //     }	
 
 	}
 

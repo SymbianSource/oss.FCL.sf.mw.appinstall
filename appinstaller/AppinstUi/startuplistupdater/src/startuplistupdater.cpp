@@ -26,6 +26,7 @@
 #include <swi/sisregistrysession.h>     // Swi::RSisRegistrySession
 #include <swi/sisregistrypackage.h>     // Swi::CSisRegistryPackage
 #include <swi/sisregistryentry.h>       // Swi::RSisRegistryEntry
+#include <swi/sistruststatus.h>         // Swi::TSisTrustStatus::IsTrusted
 
 _LIT( KImport, "import\\" );
 _LIT( KDriveAndPathFormat, "%c:%S" );
@@ -310,7 +311,7 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
 
         CleanupStack::PopAndDestroy( buffer );
 
-        if( recoveryPolicy == EStartupItemExPolicyNone )
+        if( versionInfo == 0 && recoveryPolicy == EStartupItemExPolicyNone )
             {
             // PKG files use '!' for drive letters that user can decide at installation time
             if( executableName.Length() > 0 && executableName[ 0 ] == '!' )
@@ -318,7 +319,7 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
                 executableName.Replace( 0, 1, KAsterisk );
 
                 TFindFile fileFinder( iFs );
-                CDir* executableDir;
+                CDir* executableDir;            // next FindWildByDir needs AllFiles capability
                 TInt err = fileFinder.FindWildByDir( executableName, KNullDesC, executableDir );
                 if( !err )
                     {
@@ -328,8 +329,7 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
                     }
                 }
 
-            TEntry entry;
-            if( iFs.Entry( executableName, entry ) == KErrNone )    // needs AllFiles capability
+            if( IsValidExecutableForStartupL( aResourceFile, executableName ) )
                 {
                 aExecutableArray.AppendL( executableName.AllocL() );
                 }
@@ -337,6 +337,95 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
         }
 
     CleanupStack::PopAndDestroy( &resource );
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::IsValidExecutableForStartupL()
+// ---------------------------------------------------------------------------
+//
+TBool CStartupListUpdater::IsValidExecutableForStartupL( const TDesC& aResourceFile,
+        const TDesC& aExecutableName )
+    {
+    TBool isValid = EFalse;
+
+    TEntry entry;
+    if( iFs.Entry( aExecutableName, entry ) == KErrNone )   // needs AllFiles capability
+        {
+        isValid = ETrue;
+
+        // Extract package UID from the resource file name
+        // - allow both "[1234ABCD]" and "1234ABCD" formats
+        // - allow possible "0x" prefix too
+        TUid packageUid = KNullUid;
+        TParsePtrC parse( aResourceFile );
+        TPtrC parseName = parse.Name();
+        TInt fileNameLength = parseName.Length();
+        if( !parse.IsNameWild() && fileNameLength > 0 )
+            {
+            TPtr fileName( const_cast<TUint16*>( parseName.Ptr() ),
+                fileNameLength, fileNameLength );
+
+            if( fileName[ 0 ] == '[' && fileName[ fileNameLength - 1 ] == ']' )
+                {
+                const TInt KTwoCharsLength = 2;
+                fileNameLength -= KTwoCharsLength;
+                fileName = fileName.Mid( 1, fileNameLength );
+                }
+
+            _LIT( KHexPrefix, "0x" );
+            const TInt KHexPrefixLength = 2;
+            if( fileName.Left( KHexPrefixLength ) == KHexPrefix )
+                {
+                fileNameLength -= KHexPrefixLength;
+                fileName = fileName.Mid( KHexPrefixLength, fileNameLength );
+                }
+
+            TLex lex( fileName );
+            TUint32 uidValue = 0;
+            TInt lexError = lex.Val( uidValue, EHex );
+            if( !lexError )
+                {
+                packageUid.iUid = uidValue;
+                }
+            }
+
+        // Get package info from RSisRegistry, and check that
+        // - the package contains the resource file
+        // - the package is properly signed
+        if( packageUid != KNullUid )
+            {
+            Swi::RSisRegistrySession sisRegSession;
+            User::LeaveIfError( sisRegSession.Connect() );
+            CleanupClosePushL( sisRegSession );
+
+            Swi::RSisRegistryEntry package;
+            CleanupClosePushL( package );
+            TInt openError = package.Open( sisRegSession, packageUid );
+            if( !openError )
+                {
+                TBool hasResourceFile = EFalse;
+
+                RPointerArray<HBufC> files;
+                CleanupResetAndDestroyPushL( files );
+                package.FilesL( files );
+                for( TInt index = 0; index < files.Count() && !hasResourceFile; ++index )
+                    {
+                    hasResourceFile = ( aResourceFile.CompareF( *files[ index ] ) == 0 );
+                    }
+
+                if( hasResourceFile && package.TrustStatusL().IsTrusted() )
+                    {
+                    isValid = ETrue;
+                    }
+
+                CleanupStack::PopAndDestroy( &files );
+                }
+
+            CleanupStack::PopAndDestroy( 2, &sisRegSession );  // package, sisRegSession
+            }
+        }
+
+    return isValid;
     }
 
 // ---------------------------------------------------------------------------
@@ -359,7 +448,7 @@ void CStartupListUpdater::GetInstalledAppsL(
         Swi::RSisRegistryEntry entry;
         CleanupClosePushL( entry );
         entry.OpenL( sisRegistrySession, *( removablePackages[ index ] ) );
-        if( entry.IsPresentL() && entry.RemovableL() )
+        if( entry.RemovableL() )
             {
             GetExecutablesFromEntryL( entry, aInstalledExecutableArray );
             }
