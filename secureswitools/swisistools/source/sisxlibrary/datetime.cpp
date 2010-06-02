@@ -71,10 +71,10 @@ void CSISDateTime::SetNow ()
 	iTime.Set (gmt -> tm_hour, gmt -> tm_min, gmt -> tm_sec);
 	}
 
-void CSISDateTime::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISDateTime::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
-	iDate.AddPackageEntry(aStream, aVerbose);
+	iDate.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L" ";
-	iTime.AddPackageEntry(aStream, aVerbose);
+	iTime.AddPackageEntry(aStream, aVerbose, aCompatible);
 	}
 

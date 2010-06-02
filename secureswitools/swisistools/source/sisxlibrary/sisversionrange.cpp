@@ -44,13 +44,13 @@ std::string CSISVersionRange::Name () const
 	return "Version Range";
 	}
 
-void CSISVersionRange::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISVersionRange::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
-	iFromVersion.AddPackageEntry(aStream, aVerbose);
+	iFromVersion.AddPackageEntry(aStream, aVerbose, aCompatible);
 	if (iToVersion.Specified())
 		{
 		aStream << L" ~ ";
-		iToVersion.AddPackageEntry(aStream, aVerbose);
+		iToVersion.AddPackageEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 

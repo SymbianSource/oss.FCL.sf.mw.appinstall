@@ -116,13 +116,16 @@ int main(int argc, char *argv[])
 		
 		SISLogger::SetStream(std::wcout);
 		
-		CDumpSis dumpsis(options->SISFileName(), options->Verbose());
+		CDumpSis dumpsis(options->SISFileName(), options->Verbose(), options->GetCompatibleMode() );
 		
 		CDumpSis::TExtractionLevel extractionLevel = CDumpSis::ENone;
 		
 		if(options->ExtractFiles())
 			{
-			extractionLevel = (options->Verbose())? CDumpSis::EEverything : CDumpSis::EAllButCerts;
+			if(options->GetIBYFlag())
+				extractionLevel = CDumpSis::EIbyFiles;
+			else
+				extractionLevel = (options->Verbose())? CDumpSis::EEverything : CDumpSis::EAllButCerts;
 			}
 		else
 			{
@@ -146,7 +149,7 @@ int main(int argc, char *argv[])
 		switch(oops.ErrorCategory())
 			{
 			case CSISException::EFileProblem:
-				std::cerr << "cannot open specified SIS file for reading" << std::endl;
+				std::cerr << "File I/O error" << std::endl;
 				break;
 			case CSISException::EFileFormat:
 			case CSISException::EMemory:
@@ -181,6 +184,10 @@ int main(int argc, char *argv[])
 		std::cout << argv[0] << " Finished" << std::endl;
 		getchar ();
 		}
+
+	if(options->GetIBYFlag())
+		std::cout << std::endl << "IBY file created. Note, please remember to add stub-SIS file entry to IBY file!" << std::endl;
+
 	delete options;
 
 	return retVal;

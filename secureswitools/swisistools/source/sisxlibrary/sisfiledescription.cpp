@@ -96,6 +96,7 @@ static const SKeyword1 KEscSymbols [] =
 		{NULL}
 	};
 
+int FileOrData = 0;
 void CSISFileDescription::InsertMembers ()
 	{
 	InsertMember (iTarget);
@@ -364,21 +365,33 @@ void CSISFileDescription::ExtractCapabilities(const std::wstring& aFileName)
 	
 	}
 
-void CSISFileDescription::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISFileDescription::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
+	std::wstring filePath = iTarget.GetString();
 	aStream <<L";";
-	iTarget.AddPackageEntry(aStream, aVerbose);
+	iTarget.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << std::endl << L"; File length " << iLength << L" (" << iUncompressedLength << L")" << std::endl;
-	iCapabilities.AddPackageEntry(aStream, aVerbose);
-	iHash.AddPackageEntry(aStream, aVerbose);
+	iCapabilities.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iHash.AddPackageEntry(aStream, aVerbose, aCompatible);
 	
-	const wchar_t* fileName = GetFileName(); 
-	
-	aStream <<std::endl <<L"\"" << fileName << L"\"";
-	delete[] const_cast<wchar_t*>(fileName);
+	if(aCompatible)
+		{
+		const wchar_t* fileName = GetFileName(); 
+		aStream << L"\"" << fileName << L"\"";
+		delete[] const_cast<wchar_t*>(fileName);
+		}
+	else
+		{
+		int index = filePath.find_first_of(L":");
+		if(index!=-1)
+				filePath = filePath.substr(index+2,filePath.length()-index-2);
+
+		aStream << L"\"" << filePath << L"\"";
+		}
+
 	aStream << L"-";
 	aStream << L"\"";
-	iTarget.AddPackageEntry(aStream, aVerbose);
+	iTarget.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"\"";
 
 	TUint32 operation = (TUint32) iOperation;
@@ -403,7 +416,7 @@ void CSISFileDescription::AddPackageEntry(std::wostream& aStream, bool aVerbose)
 			{
 			options &= ~EInstFileRunOptionByMimeType;
 			aStream << L", " << (aVerbose?L"FILEMIME, ":L"FM,\" ");
-			iMimeType.AddPackageEntry(aStream, aVerbose);
+			iMimeType.AddPackageEntry(aStream, aVerbose, aCompatible);
 			aStream<<L"\"";
 			}
 		else
@@ -493,6 +506,68 @@ void CSISFileDescription::AddPackageEntry(std::wostream& aStream, bool aVerbose)
 		}
 	}
 
+void CSISFileDescription::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	std::wstring fileExt = iTarget.GetString();
+	std::wstring filePath = fileExt;
+	if(fileExt.length()>0)
+		{
+		int index = fileExt.find_last_of(L".");
+		if(index!=-1)
+			fileExt = fileExt.substr(index+1,fileExt.length()-index-1);
+		}
+
+	if(fileExt.compare(L"exe")==0 || fileExt.compare(L"EXE")==0 || fileExt.compare(L"dll")==0 || fileExt.compare(L"DLL")==0)
+		{
+		if(FileOrData==2)
+			aStream << std::endl;
+			
+		FileOrData = 1;
+		}
+	else
+		{
+		if(FileOrData==1)
+			aStream << std::endl;
+			
+		FileOrData = 2;
+		}
+
+	if(fileExt.length()==0)
+		aStream << L"; Unknown file name" << std::endl;
+
+	aStream << L"; File length " << iLength << L" (" << iUncompressedLength << L")";
+	
+	aStream << std::endl;
+
+	if(fileExt.length()==0)
+		aStream << L"; ";
+
+	if(FileOrData==1)
+		aStream << L"file=";
+	else
+		aStream << L"data=";
+
+	if(aCompatible)
+		{
+		const wchar_t* fileName = GetFileName(); 
+		aStream << L"\"" << fileName << L"\"";
+		delete[] const_cast<wchar_t*>(fileName);
+		}
+	else
+		{
+		int index = filePath.find_first_of(L":");
+		if(index!=-1)
+				filePath = filePath.substr(index+2,filePath.length()-index-2);
+
+		aStream << L"\"" << filePath << L"\"";
+		}
+	aStream << L"          ";
+	aStream << L"\"";
+	iTarget.AddIbyEntry(aStream, aVerbose, aCompatible);
+	aStream << L"\"";
+
+	aStream << std::endl;
+	}
 const wchar_t* CSISFileDescription::GetFileName() const
 	{
 	// Using actual iFileIndex rather than iFileNum because source file might be

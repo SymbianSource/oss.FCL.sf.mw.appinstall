@@ -56,7 +56,7 @@ public:
 	inline const TUint8*			Data();
 	inline int						DataSize() const;
 	inline void					SetDataByteCount(unsigned int aSize);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 protected:
 	CSISSignatureAlgorithm	iSignatureAlgorithm;
@@ -114,14 +114,14 @@ inline const CSISSignatureAlgorithm& CSignatureData::GetAlgorithm()
 	return iSignatureAlgorithm;
 	}
 
-inline void CSignatureData::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSignatureData::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if (aVerbose)
 		{
 		aStream << L"; Signature:"; 
-		iSignatureAlgorithm.AddPackageEntry(aStream, aVerbose);
+		iSignatureAlgorithm.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L";";
-		iData.AddPackageEntry(aStream, aVerbose);
+		iData.AddPackageEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 

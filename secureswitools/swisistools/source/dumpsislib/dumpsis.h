@@ -57,6 +57,7 @@ public:
 		EAllDataFiles,		// Extract all files including those present in the embedded SIS.
 		EAllButCerts,		// EAllFiles + Embedded SIS files and their packages
 		EEverything,		// EAllButCerts + certificates
+		EIbyFiles			// EAllButCerts + certificates +IBY files
 		};
 public:
 	/**
@@ -64,7 +65,7 @@ public:
 	 * in memory for future operation. In case of an invalid SIS the 
 	 * constructor will throw an exception.
 	 */
-	explicit CDumpSis(const std::wstring& aSISFileName, bool aVerbose = false);
+	explicit CDumpSis(const std::wstring& aSISFileName, bool aVerbose = false, bool aCompatible = false);
 	/**
 	 * Desctructor. Will delete or free the owned resources.
 	 */
@@ -77,11 +78,23 @@ public:
 	 */
 	void CreatePackage(const std::wstring& aPkgFileName);
 	/**
+	 * This function will create the iby file for the SIS file.
+	 * @param Name of the iby file to be created.
+	 */
+	void CreateIbyFile(const std::wstring& aIbyFileName);
+	/**
 	 * This function will generate package file for a specific controller.
 	 * @param aSisController controller for which the package file needs to be generated.
 	 * @param aPkgFileName Name of the package file to be created.
 	 */
 	void CreatePackage(const CSISController& aSisController, const std::wstring& aPkgFileName);
+	/**
+	 * This function will generate iby file for a specific controller.
+	 * @param aSisController controller for which the iby file needs to be generated.
+	 * @param aIbyFileName Name of the iby file to be created.
+	 */
+	void CreateIbyFile(const CSISController& aSisController, const std::wstring& aIbyFileName);
+	
 	/**
 	 * This will extract contents of the SIS file based on the extraction level provided.
 	 * Please refer TExtractionLevel for details.
@@ -101,6 +114,11 @@ public:
 	 * @param aTargetDir Directory to which the package file needs to be extracted.
 	 */ 
 	void ExtractBasePackageFile(const std::wstring& aTargetDir);
+	/**
+	 * Extract the iby file to a specified directory.
+	 * @param aTargetDir Directory to which the iby file needs to be extracted.
+	 */ 
+	void ExtractIBYFile(const std::wstring& aTargetDir);
 	/**
 	 * Extract all the certificate chains present in the sis file.
 	 * @param aTargetDir Destination folder.
@@ -123,6 +141,7 @@ private:
 	void CreateTargetDir(std::wstring& aTargetDir);
 	void CreateDirectoriesRecursively(std::wstring aTargetDir);
 	void SisFileNameToPkgFileName(std::wstring& aFileName);
+	void SisFileNameToIbyFileName(std::wstring& aFileName);
 	void CreateEmbeddedSis(const std::wstring& aFileName, CSISController& aController, int aStart, int aEnd);
 	void ExtractNestedSisFile(	const std::wstring& aTargetDir, 
 								const CSISController& aController, 
@@ -139,6 +158,7 @@ private: //Private Member Variables
 	CSISController*	iController;
 	std::wstring	iSisFileName;
 	TBool			iVerbose;
+	TBool			iCompatible;
 	TBool			iIsStub;
 	};
 

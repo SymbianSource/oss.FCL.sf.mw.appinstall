@@ -690,7 +690,7 @@ public:
 	TLanguage Value () const;
 
 	static TDialect IdentifyLanguage (const std::wstring& aIdentifier);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	
 private:
 	const wchar_t* GetLanguageCode(TDialect& aDialect) const;
