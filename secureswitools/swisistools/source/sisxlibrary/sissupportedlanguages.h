@@ -47,7 +47,7 @@ public:
 	bool AreLanguagesSpecified () const;
 	TUint32 LanguageCount () const;
 	CSISLanguage::TLanguage Language (const TUint32 aIndex) const;
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 private:
 	CSISArray <CSISLanguage, CSISFieldRoot::ESISLanguage> iSupportedLanguage;

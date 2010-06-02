@@ -213,8 +213,19 @@ public:
 	 * @param aStream - Stream in which the package entries need to be written.
 	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	virtual void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	virtual void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	/**
+	 * Adds the write the iby file details into the stream.
+	 * @param aStream - Stream in which the iby entry need to be written.
+	 * @param aVerbose - If this option is set then detail description of iby
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddIbyEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 */
+	virtual void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	/**
 	 * Class name
 	 */
@@ -301,11 +312,25 @@ protected:
 #endif // GENERATE_ERRORS
 	};
 
-
-inline void CSISFieldRoot::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+//	
+// Default AddPackageEntry function.
+// Might be overridden by sub-classes
+//
+inline void CSISFieldRoot::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	(void)aStream;
 	(void)aVerbose;
+	(void)aCompatible;
+	}
+//	
+// Default AddIbyEntry function.
+// Might be overridden by sub-classes
+//
+inline void CSISFieldRoot::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	(void)aStream;
+	(void)aVerbose;
+	(void)aCompatible;
 	}
 
 inline void CSISFieldRoot::InitInstance ()

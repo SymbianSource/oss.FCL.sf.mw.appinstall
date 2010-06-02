@@ -51,7 +51,8 @@ public:
 	inline CSISArray <CSignatureData, CSISFieldRoot::ESISSignature>	& Signatures();
 	inline const CCertChainData& CertificateChain() const;
 	inline void AddSignature(CSignatureData& aSignature);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 protected:
 	CSISArray <CSignatureData, CSISFieldRoot::ESISSignature>	iSignatures;
@@ -102,13 +103,23 @@ inline void CSignatureCertChainData::AddSignature(CSignatureData& aSignature)
 	iSignatures.Push(aSignature);
 	}
 
-inline void CSignatureCertChainData::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSignatureCertChainData::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if (aVerbose)
 		{
 		aStream << L"; Signing chain:" << std::endl;
-		iCertificateChain.AddPackageEntry(aStream, aVerbose);
-		iSignatures.AddPackageEntry(aStream, aVerbose);
+		iCertificateChain.AddPackageEntry(aStream, aVerbose, aCompatible);
+		iSignatures.AddPackageEntry(aStream, aVerbose, aCompatible);
+		}
+	}
+
+inline void CSignatureCertChainData::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	if (aVerbose)
+		{
+		aStream << L"; Signing chain:" << std::endl;
+		iCertificateChain.AddIbyEntry(aStream, aVerbose, aCompatible);
+		iSignatures.AddIbyEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 

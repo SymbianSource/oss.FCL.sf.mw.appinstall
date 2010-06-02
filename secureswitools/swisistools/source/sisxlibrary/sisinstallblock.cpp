@@ -132,12 +132,12 @@ void CSISInstallBlock::GetEmbeddedControllers(TControllerMap& aControllers, bool
 		}
 	}
 
-void CSISInstallBlock::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISInstallBlock::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TUint32 descriptionsCount = iFiles.size();
 	for (TUint32 i = 0; i < descriptionsCount; ++i)
 		{
-		iFiles[i].AddPackageEntry(aStream, aVerbose);
+		iFiles[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		}
 	TUint32 embeddedCount = iEmbeddedFiles.size();
 	if (embeddedCount)
@@ -157,5 +157,16 @@ void CSISInstallBlock::AddPackageEntry(std::wostream& aStream, bool aVerbose) co
 			aStream << L"@\"" << sisFileName << L"\",(0x" << std::hex << iEmbeddedFiles[i].UID1() << std::dec << L")" << std::endl;
 			}
 		}
-	iIfs.AddPackageEntry(aStream, aVerbose);
+	iIfs.AddPackageEntry(aStream, aVerbose, aCompatible);
+	}
+
+void CSISInstallBlock::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	TUint32 descriptionsCount = iFiles.size();
+	for (TUint32 i = 0; i < descriptionsCount; ++i)
+		{
+		iFiles[i].AddIbyEntry(aStream, aVerbose, aCompatible);
+		}
+
+	iIfs.AddIbyEntry(aStream, aVerbose, aCompatible);
 	}

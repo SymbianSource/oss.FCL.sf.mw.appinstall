@@ -44,7 +44,7 @@ public:
 	virtual std::string Name () const;
 
 	void AddProperty (const TUint32 aKey, const TUint32 aValue);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	inline const SISPropertyArray& Properties() const;
 
 private:

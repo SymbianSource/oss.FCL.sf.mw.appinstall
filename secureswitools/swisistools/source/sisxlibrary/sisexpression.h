@@ -98,13 +98,13 @@ public:
 	void SetNumeric (const TInt32 aValue);
 	void SetLanguageComparision (const TInt32 aValue);
 	void SetVariable (const std::wstring& aIdentifier);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	inline CSISUInt32 Operator() const;
 	inline const CSISString& String() const;
 	inline TInt IntValue() const;
 		
-	void 		WriteVersionCondition (std::wostream& aStream, bool aVerbose) const;
-	void 		WriteSupportedLanguageCondition (std::wostream& aStream, bool aVerbose) const;
+	void 		WriteVersionCondition (std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	void 		WriteSupportedLanguageCondition (std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	static bool	ExtractNextToken(std::wstring& aParseString, std::wstring& aTokenString);
 	static bool	IsHexadecimal(const std::wstring& aString);
 	static bool	IsHexadecimal(const std::wstring& aString, TUint32& aHexValue);
