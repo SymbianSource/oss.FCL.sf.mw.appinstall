@@ -353,6 +353,7 @@ void  CIAUpdateMainView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
                                       const TDesC8& /*aCustomMessage*/ )
     {
     UpdateStatusPaneL();
+    Toolbar()->SetToolbarVisibility( ETrue );
     if( !iContainer )
         {    
         iContainer = CIAUpdateMainContainer::NewL( ClientRect(), *this );
@@ -380,6 +381,7 @@ void  CIAUpdateMainView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
 void CIAUpdateMainView::DoDeactivate()
     {
     RemoveSelectionInfoInNaviPane();
+    Toolbar()->SetToolbarVisibility( EFalse );
     }
 
 // -----------------------------------------------------------------------------

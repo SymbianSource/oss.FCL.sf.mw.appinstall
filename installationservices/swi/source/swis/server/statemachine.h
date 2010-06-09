@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -44,7 +44,7 @@
 namespace Swi
 {
 class CPlan;
-
+class CProgressBarValuePublisher;
 /** Panic ID for panics raised in state machine */
 enum StateMachinePanic
 	{
@@ -108,10 +108,10 @@ protected:
 	void FinalizeJournalsL(TInt aError);
 	void CompleteClientL(TInt aError);
 	RUiHandler& UiHandler();
+	void SetFinalProgressBarValue(TInt aValue);
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	Usif::RStsSession& TransactionSession();
 	CRegistryWrapper& RegistryWrapper();
-	void SetFinalProgressBarValue(TInt aValue);
 	// Is the state machine runs in information extraction mode or normal installation/uninstallation mode?
 	TBool iIsInInfoMode;
 #else
@@ -151,11 +151,11 @@ private:
 	TState*             iState;             ///< Curent state
 	const RMessage2     iMessage;           ///< Message to complete when done
 	RUiHandler          iUiHandler;         ///< UI handler server session
+	CProgressBarValuePublisher* iProgressPublisher; ///< Pointer to the progress bar value publisher object..
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	Usif::RStsSession	iStsSession;		///< Transaction service session handle
 	CRegistryWrapper* 	iRegistryWrapper;	///< Registry wrapper to access the registry
-	CProgressBarValuePublisher* iProgressPublisher;	///< Pointer to the progress bar value publisher object..
 #else
 	CIntegrityServices* iIntegrityServices; ///< Shared integrity services.
 #endif

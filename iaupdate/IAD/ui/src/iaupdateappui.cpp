@@ -128,7 +128,7 @@ CIAUpdateAppUi::CIAUpdateAppUi(): iIsDMSet( EFalse ), iUiRefreshAllowed( ETrue )
 CIAUpdateAppUi::~CIAUpdateAppUi()
     {    
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateAppUi::~CIAUpdateAppUi() begin");
-    
+    iShowStatusDialogAgain = EFalse;
     delete iGlobalLockHandler;
     iDestIdArray.Reset();
 	delete iController;

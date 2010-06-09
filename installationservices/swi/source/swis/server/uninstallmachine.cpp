@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -218,9 +218,8 @@ void CUninstallMachine::TPlanUninstallationState::EnterL()
 	// the UI sothat we don't need to display anything (cancellation is not an
 	// error). See RunError() for more details.
 	iUninstallMachine.iPlanner->PlanUninstallationL(*iUninstallMachine.iPackage);
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-	iUninstallMachine.SetFinalProgressBarValue(iUninstallMachine.iPlanner->FinalProgressBarValue());
-#endif	
+	TInt finalProgressBarValue = iUninstallMachine.iPlanner->FinalProgressBarValue();
+	iUninstallMachine.SetFinalProgressBarValue(finalProgressBarValue);
 	iUninstallMachine.iPlan=iUninstallMachine.iPlanner->TransferPlanOwnership();
 	iUninstallMachine.CompleteSelf();
 	iUninstallMachine.SetActive();

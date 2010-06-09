@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -52,11 +52,11 @@ CSwisStateMachine::~CSwisStateMachine()
 	Cancel();
 	// close UISS session
 	iUiHandler.Close();
+	delete iProgressPublisher;
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	iStsSession.Close();
 	delete iRegistryWrapper;
-	delete iProgressPublisher;
 #else
 	delete iIntegrityServices;
 #endif
@@ -69,12 +69,12 @@ void CSwisStateMachine::ConstructL()
 	{
 	// mark the installation/un-installation operation as unconfirmed to start with
 	iOperationConfirmed = EFalse;
-
+	iProgressPublisher = Swi::CProgressBarValuePublisher::NewL();
+	iUiHandler.SetProgressBarValuePublisher(iProgressPublisher);
+	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	iStsSession.CreateTransactionL();	
 	iRegistryWrapper = CRegistryWrapper::NewL();
-	iProgressPublisher = CProgressBarValuePublisher::NewL();
-	iUiHandler.SetProgressBarValuePublisher(iProgressPublisher);
 #else
 	// Create integrity services, use the current time as transaction ID
 	TTime currentTime;
@@ -423,10 +423,10 @@ void CSwisStateMachine::SetIsInInfoMode(TBool aOperationalMode)
 	{
 	iIsInInfoMode = aOperationalMode;
 	}
+#endif
 
 void CSwisStateMachine::SetFinalProgressBarValue(TInt aValue)
 	{
 	iProgressPublisher->SetFinalProgressBarValue(aValue);
 	}
-#endif
 } // namespace Swi

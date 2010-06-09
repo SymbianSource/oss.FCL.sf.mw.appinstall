@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,7 +30,7 @@
 #include "writestream.h"
 #include "swispubsubdefs.h"
 #include <e32property.h> 
-
+#include "progressbar.h"
 
 namespace Swi
 {
@@ -62,28 +62,29 @@ EXPORT_C void RUiHandler::UpdateProgressBarL(const TAppInfo& aAppInfo, TInt aAmo
 		return;
 		}
 	
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	_LIT(KProgressorPanicDescriptor, "UISSCLIENT:The progress bar value publisher has not been set!");
 	__ASSERT_ALWAYS(iPublisher, User::Panic(KProgressorPanicDescriptor,KErrAbort));
-	iPublisher->UpdateProgressBarValueL(aAmount);	
-#endif	
+	TInt progressAmount = iPublisher->CalculateProgressBarValue(aAmount);	
 	
-	CHandleInstallEvent* event=CHandleInstallEvent::NewLC(aAppInfo, EEventUpdateProgressBar, aAmount, KNullDesC);
-	ExecuteL(*event);
-	
-	if (!event->ReturnResult())
-		{
-		User::Leave(KErrCancel);
-		}
-	CleanupStack::PopAndDestroy(event);
+	if (progressAmount != 0)
+	    {
+	    CHandleInstallEvent* event=CHandleInstallEvent::NewLC(aAppInfo, EEventUpdateProgressBar, progressAmount, KNullDesC);
+	    ExecuteL(*event);
+	        
+	    if (!event->ReturnResult())
+	        {
+	        User::Leave(KErrCancel);
+	        }
+	    CleanupStack::PopAndDestroy(event);
+	    }
 	}
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
 EXPORT_C void RUiHandler::SetProgressBarValuePublisher(CProgressBarValuePublisher* aPublisher)
 	{
 	iPublisher = aPublisher;
 	}
-#endif
+
 
 // CUissCmd
 
@@ -118,7 +119,6 @@ EXPORT_C void CUissCmd::UnmarshallArgumentsL()
 	// default base class version which does not do any unmarshalling
 	}
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 // CProgressBarValuePublisher
 CProgressBarValuePublisher::CProgressBarValuePublisher()
 	{
@@ -142,8 +142,8 @@ EXPORT_C CProgressBarValuePublisher* CProgressBarValuePublisher::NewL()
 
 void CProgressBarValuePublisher::ConstructL()
 	{
-	// Initialize the value of the install progress bar property
-	User::LeaveIfError(RProperty::Set(KUidInstallServerCategory, KUidSwiProgressBarValueKey, 0));
+	iLastPercentCompletion = 0;
+	iLastProgressValue = 0;
 	}
 
 EXPORT_C void CProgressBarValuePublisher::SetFinalProgressBarValue(TInt aValue)
@@ -151,11 +151,16 @@ EXPORT_C void CProgressBarValuePublisher::SetFinalProgressBarValue(TInt aValue)
 	iFinalProgressValue = aValue;
 	}
 
-EXPORT_C void CProgressBarValuePublisher::UpdateProgressBarValueL(TInt aValue)
+EXPORT_C TInt CProgressBarValuePublisher::CalculateProgressBarValue(TInt aValue)
 	{
 	iCurrentProgressValue += aValue;
 	TUint percentage = (iFinalProgressValue <= 0) ? 100 : (iCurrentProgressValue * 100) / iFinalProgressValue;
-	User::LeaveIfError(RProperty::Set(KUidInstallServerCategory, KUidSwiProgressBarValueKey, percentage));
+	if ((percentage - iLastPercentCompletion) >= KProgressBarIncrement)
+	    {
+	    TInt amountCompleted = iCurrentProgressValue - iLastProgressValue; 
+	    iLastProgressValue = iCurrentProgressValue;
+	    return amountCompleted;
+	    }
+	return 0;
 	}	 
-#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 } // namespace Swi
