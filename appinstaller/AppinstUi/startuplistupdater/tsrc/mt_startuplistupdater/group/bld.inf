@@ -1,0 +1,35 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies). 
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* 
+* Description:  Startup list updater test module.
+*
+*/
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+../init/TestFramework.ini   /epoc32/winscw/c/testframework/TestFramework.ini
+../init/TestFramework.ini   /epoc32/data/z/system/data/TestFramework.ini
+../conf/mt_startuplistupdater.cfg   /epoc32/winscw/c/testframework/mt_startuplistupdater.cfg
+../conf/mt_startuplistupdater.cfg   /epoc32/data/z/testframework/mt_startuplistupdater.cfg
+../rom/mt_startuplistupdater.iby    CORE_MW_LAYER_IBY_EXPORT_PATH( mt_startuplistupdater.iby )
+../data/mmc/teststartlist_winscw.sisx   /epoc32/winscw/c/data/installs/teststartlist.sisx
+../data/mmc/teststartlistembedded_winscw.sisx /epoc32/winscw/c/data/installs/teststartlistembedded.sisx
+
+PRJ_TESTMMPFILES
+mt_startuplistupdater.mmp
+
+PRJ_MMPFILES
+mt_startuplistupdater_nrm.mmp
+

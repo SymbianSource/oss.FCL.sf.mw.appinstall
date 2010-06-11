@@ -1,0 +1,57 @@
+
+File1:!:\Documents\testarmv5\apparc.dll
+	CommDD
+	PowerMgmt
+	MultimediaDD
+	ReadDeviceData
+	WriteDeviceData
+	DRM
+	TrustedUI
+	ProtServ
+	DiskAdmin
+	NetworkControl
+	AllFiles
+	SwEvent
+	NetworkServices
+	LocalServices
+	ReadUserData
+	WriteUserData
+	Location
+	SurroundingsDD
+	UserEnvironment
+
+File2:!:\sys\bin\tswiallcapabilities.exe
+	ReadDeviceData
+	WriteDeviceData
+	ReadUserData
+	WriteUserData
+
+File3:!:\sys\bin\dummy.exe
+	CommDD
+	PowerMgmt
+	MultimediaDD
+	ReadDeviceData
+	WriteDeviceData
+	DRM
+	TrustedUI
+	ProtServ
+	DiskAdmin
+	NetworkControl
+	AllFiles
+	SwEvent
+	NetworkServices
+	LocalServices
+	ReadUserData
+	WriteUserData
+	Location
+	SurroundingsDD
+	UserEnvironment
+
+Executable1: capabilities matched with the SIS file header capabilities
+
+
+Executable2: capabilities matched with the SIS file header capabilities
+
+
+Executable3: capabilities matched with the SIS file header capabilities
+

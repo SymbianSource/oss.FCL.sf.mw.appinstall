@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe that is run synchronously on installation, which runs for 5 seconds before exiting.
+
+;Languages
+&EN
+
+;Header
+#{"testrun_exeRIRW2"}, (0x8000887C), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\console_app_forpackage.exe"-"!:\sys\bin\console_app.exe";
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runtestexe_forpackage.exe"-"!:\sys\bin\runtestexe_app.exe", FR, RI, RW

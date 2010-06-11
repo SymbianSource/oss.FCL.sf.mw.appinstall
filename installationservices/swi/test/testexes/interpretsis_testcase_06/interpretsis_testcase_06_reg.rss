@@ -1,0 +1,96 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+#include <appinfo.rh>
+#include <interpretsis_testcase_06.rsg>
+
+UID2 KUidAppRegistrationResourceFile
+//UID3 0xE800005A // application UID
+UID3 0x00000ABC // application UID
+
+RESOURCE APP_REGISTRATION_INFO
+	{
+	app_file = "interpretsis_testcase_06";
+	localisable_resource_file = "\\resource\\apps\\interpretsis_testcase_06";
+	localisable_resource_id = R_LAI;	
+	    //
+    hidden = KAppNotHidden;
+    embeddability = KAppNotEmbeddable;
+    newfile = KAppDoesNotSupportNewFile;
+    launch = KAppLaunchInForeground;
+    group_name = "AppNameGroup";
+    //
+    default_screen_number = 2;
+    //
+    datatype_list = 
+        {
+        DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg1"; },
+        DATATYPE { priority=EDataTypePriorityNormal; type="image/gif1"; }
+        };
+    //
+    file_ownership_list =
+        {
+        FILE_OWNERSHIP_INFO {file_name="z:\\temp\\AppNameTempFile.txt"; },
+        FILE_OWNERSHIP_INFO {file_name="z:\\temp\\AppName.txt"; }
+        };
+	
+   //
+    service_list =
+        {
+        SERVICE_INFO
+            {
+            uid = 268123123;
+            datatype_list = 
+                {
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg2"; },
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/gif2"; }
+                };   
+            opaque_data = r_first_service_specific_data;
+            },
+        SERVICE_INFO
+            {
+            uid = 268123124;
+            datatype_list = 
+                {
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg3"; },
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/gif3"; }
+                };
+            opaque_data = r_second_service_specific_data;
+            }
+        };
+    
+    
+    opaque_data = r_third_service_specific_data;
+	}
+	
+STRUCT SERVICE_NAME
+	{
+	LTEXT name = "";
+	}
+
+RESOURCE SERVICE_NAME r_first_service_specific_data
+	{
+	name = "Non-localised_service_uid_01020304";
+	}
+
+RESOURCE SERVICE_NAME r_second_service_specific_data
+	{
+	name = "Non-localised_service_uid_02030405";
+	}
+
+RESOURCE SERVICE_NAME r_third_service_specific_data
+	{
+	name = "Non-localised_resource";
+	}

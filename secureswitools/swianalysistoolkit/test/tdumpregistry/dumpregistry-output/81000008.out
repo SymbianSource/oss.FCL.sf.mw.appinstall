@@ -1,0 +1,21 @@
+Package Information:
+
+Registry File :.\data\81000008\00000000.reg
+
+Package UID :0x81000008
+Package Name :File Null - Remove a file created in another apps import directory
+Vendor :Symbian
+Package Index :0
+Drives :4
+No of executables :0
+Package Version :2.5.4
+Languages :English
+Selected Drive :C
+File Major Version :4
+File Minor Version :0
+Package Vendor Localized Name :Symbian
+Package Install Type :Installation
+Is Package in ROM :No
+Package Preinstalled :No
+Package Signed :Yes
+Package Trust :SisPackageCertificateChainValidatedToTrustAnchor

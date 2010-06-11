@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?> 
+<Script>
+
+	<dialog name="DisplayInstall">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayLanguage">
+
+		<return type="TInt"> 5 </return>
+
+	</dialog>
+
+	<dialog name="DisplayDrive">
+
+		<return type="TInt"> c </return>
+
+	</dialog>
+
+	<dialog name="DisplayQuestion">
+
+		<return type="TBool">false</return>
+
+	</dialog>
+
+	<dialog name="DisplayOptions">
+		<selection>
+			<item index="0">true</item>
+			<item index="1">false</item>
+		</selection>
+		<return type="TBool">true</return>
+	</dialog>
+
+	<dialog name="DisplayText">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+
+	<dialog name="DisplayGrantCapabilities">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayUpgrade">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	
+	<dialog name="DisplaySecurityWarning">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+
+	<dialog name="DisplayOcspResult">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+
+	<dialog name="DisplayUninstall">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayDependencyBreak">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+	<dialog name="DisplayApplicationsInUse">
+
+		<return type="TBool">true</return>
+
+	</dialog>
+
+</Script>

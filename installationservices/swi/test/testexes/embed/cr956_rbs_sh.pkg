@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe that is run infinitely on install , and another exe which runs for 3 minutes before exiting, together with installed exe.
+
+;Languages
+&EN
+
+;Header
+#{"testrun_exe"}, (0x8000887A), 1, 2, 3, SH
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;embedded
+@"testrun_exe_CR956_root5.sis",(0x8000887B)
+
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\console_infinite_exe.exe"-"!:\sys\bin\console_infinite_exe.exe", FR, RI
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\testlargeexe2.exe"-"!:\sys\bin\testlargeexe2.exe", FR, RBS

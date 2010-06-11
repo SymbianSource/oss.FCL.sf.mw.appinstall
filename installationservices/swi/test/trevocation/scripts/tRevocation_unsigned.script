@@ -1,0 +1,44 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Revocation tests... which install unsigned SIS files when AllowUnsigned == True in swipolicy.ini
+
+LOAD_SUITE tRevocation
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-REVOCATION-I-0013
+//! @SYMTestCaseDesc 		Scenario where SisRegistry’s ValidationStatus = EUnsigned
+//! @SYMREQ 			REQ4053.4, REQ4053.5, REQ4053.5.3, REQ4053.6
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Installs then uninstalls a file that has been signed by a revoked certificate.
+//! @SYMTestExpectedResults 	File installs then uninstalls sucessfully
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0013
+
+// Revoked certificate not yet available
+RUN_TEST_STEP_RESULT 0 100 	tRevocation INSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.3
+RUN_TEST_STEP_RESULT 0 100 	tRevocation PRESENT 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.3
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini Test1.3
+RUN_TEST_STEP_RESULT 0 100 	tRevocation UNINSTALL 	z:\tswi\tRevocation\scripts\trevocation.ini Test1.3
+RUN_TEST_STEP_RESULT 0 100	tRevocation	ABSENT		z:\tswi\tRevocation\scripts\trevocation.ini Test1.3
+
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0013
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

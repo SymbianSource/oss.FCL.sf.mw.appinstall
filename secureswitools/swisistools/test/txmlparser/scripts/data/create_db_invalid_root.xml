@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE CreateDatabase SYSTEM "create_db.dtd">
+
+<invalidroot>
+	<SQLQuery>"CREATE TABLE SoftwareTypes(SoftwareTypeId INTEGER PRIMARY KEY NOT NULL,SoftwareTypeName TEXT NOT NULL UNIQUE,SifPluginUid INTEGER,InstallerSecureId INTEGER,ExecutionLayerSecureId INTEGER);"</SQLQuery>
+</invalidroot>
+

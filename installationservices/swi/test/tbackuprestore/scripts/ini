@@ -1,0 +1,1495 @@
+[A]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+
+[A1_NR]
+SIS1 = c:\tswi\tsis\data\int_nr_option_05_sucert.sis
+UID1 = 80000077
+DATA1.1 = C:\Documents\abc4.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[NR_SP]
+SIS1 = c:\tswi\tsis\data\sp_int_nr_option_06_sucert.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc5.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[A_NR]
+SIS1 = c:\tswi\tsis\data\int_nr_option_04_sucert.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc1.txt
+INSTALLDRIVE1 = C
+UninstallResult = -5
+
+[A_SP]
+SIS1 = c:\tswi\tsis\data\sp_int_nr_option_04.sis
+UID1 = 80000076
+DATA1.1 = C:\Documents\abc3.txt
+INSTALLDRIVE1 = C
+
+[A_SP_U]
+uid=80000076
+vendorName=Nokia
+packageName=Interpretsis_NR_option_SP
+script=c:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[A_SP_U_NR]
+uid=80000076
+vendorName=Nokia
+packageName=Interpretsis_NR_option_SP_NR
+script=c:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[B]
+SIS1 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID1 = 81113022
+FILE1.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE1 = C
+
+[C]
+SIS1 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID1 = 81113006
+FILE1.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE1 = C
+
+[D]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+FILE1.2 = C:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE1 = C
+
+[E]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+
+[E2]
+SIS1 = z:\tswi\tsis\data\tswinocapability2.sis
+UID1 = 81113002
+FILE1.1 = C:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE1 = C
+
+[F]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = ÿ
+
+[G]
+SIS1 = z:\tswi\tsis\data\tswinocapabilitysp.sis
+UID1 = A00001FD
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE1 = ÿ
+
+[H]
+SIS1 = z:\tswi\tsis\data\tswinocapabilitypu.sis
+UID1 = A00001FD
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE1 = C
+
+[FG]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+ 
+[FH]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE1 = ÿ
+
+
+[AB]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE2 = C
+
+[AC]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+SIS2 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID2 = 81113006
+FILE2.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE2 = C
+
+[BC]
+SIS1 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID1 = 81113022
+FILE1.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE1 = C
+SIS2 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID2 = 81113006
+FILE2.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE2 = C
+
+[ABC]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE2 = C
+SIS3 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID3 = 81113006
+FILE3.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE3 = C
+
+[ABCD]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE2 = C
+SIS3 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID3 = 81113006
+FILE3.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE3 = C
+SIS4 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID4 = 81113002
+FILE4.1 = C:\sys\bin\tswinocapability.exe
+FILE4.2 = C:\sys\bin\tswinocapability2.exe
+INSTALLDRIVE4 = C
+
+[TRUSTED_PROTECTED_VID]
+SIS1 = z:\tswi\tsis\data\tswidllnocapabilityprotectedvid_Root5.sis
+UID1 = 81113027
+FILE1.1 = C:\sys\bin\tswidllnocapabilityprotectedvid.dll
+INSTALLDRIVE1 = C
+
+[SELF_SIGNED_PROTECTED_VID]
+// This SIS file can only be installed if SWIS is modified to allow
+// DLLs with protected VIDs from untrusted SIS files
+SIS1 = z:\tswi\tsis\data\tswidllnocapabilityprotectedvid.sis
+UID1 = 81113027
+FILE1.1 = C:\sys\bin\tswidllnocapabilityprotectedvid.dll
+INSTALLDRIVE1 = C
+
+[datarestore]
+SIS1 = z:\tswi\tsis\data\3datafiles.sis
+UID1 = A0000206
+DATA1.1 = c:\restore\pic1.bmp
+DATA1.2 = c:\restore\pic2.bmp
+DATA1.3 = c:\restore\pic3.gif
+INSTALLDRIVE1 = ÿ
+
+[filenullrestore]
+SIS1 = z:\tswi\tsis\data\filenullrestore.sis
+UID1 = A0000205
+DATA1.1 = c:\restore\pic1.bmp
+DATA1.2 = c:\restore\filenull.txt
+INSTALLDRIVE1 = ÿ
+
+[filenullprivategood]
+SIS1 = z:\tswi\tsis\data\filenullprivategood.sis
+UID1 = 81000007
+FILE1.1 = c:\sys\bin\createprivatefile.exe
+DATA1.1 = c:\private\81000013\helloworld.txt
+INSTALLDRIVE1 = C
+
+[longdestfilenames]
+SIS1 = z:\tswi\tsis\data\nameandpathmaxfilenamechars.sis
+UID1 = 80000006
+DATA1.1 = X:\ThisNameIsExactly254CharactersLongWithTheRoot0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.txt
+DATA1.2 = X:\ThisNameWithNonRootPath\IsExactly254CharactersLongWithTheRoot012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345.txt
+INSTALLDRIVE1 = ÿ
+
+[filenullrestore_emulator]
+sis=c:\tswi\tsis\data\def075099.sis
+script=c:\tswi\tuiscriptadaptors\scripts\simple.xml
+UID1 = 81320938
+DATA1.1 = c:\restore\pic1.bmp
+DATA1.2 = X:\restore\filenull.txt
+
+[removea]
+numfiles=4
+file0=c:\sys\install\sisregistry\81113001
+file1=c:\sys\install\integrityservices
+file2=c:\sys\install\sisregistry\swiregfirstinit.log
+file3=c:\sys\install\sisregistry\backup.lst
+INSTALLDRIVE1 = C
+
+[removef]
+numfiles=4
+file0=c:\sys\install\sisregistry\A00001FD
+file1=c:\sys\install\integrityservices
+file2=c:\sys\install\sisregistry\swiregfirstinit.log
+file3=c:\sys\install\sisregistry\backup.lst
+INSTALLDRIVE1 = C
+
+[removefwithhash]
+numfiles=5
+file0=c:\sys\install\sisregistry\A00001FD
+file1=c:\sys\install\integrityservices
+file2=c:\sys\install\sisregistry\swiregfirstinit.log
+file3=c:\sys\hash\tswinocapability.exe
+file4=c:\sys\install\sisregistry\backup.lst
+INSTALLDRIVE1 = C
+
+[eclipsingupgradesp]
+SIS1=z:\tswi\tsis\data\eclipsingdllupgradesp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\sys\bin\eclipsetest.dll
+INSTALLDRIVE1 = 
+
+
+[u_eclipsingupgradesp]
+uid=802730A1
+vendorName=Crypto Services
+packageName=Dll Upgrade SP
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+nonexist=1
+nonexist0=c:\sys\bin\eclipsetest.dll
+
+[eclipsingupgradesp_mimic_oldmetaformat]
+SIS1=z:\tswi\tsis\data\eclipsingdllupgradesp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\sys\bin\eclipsetest.dll
+METADATACROPBYTES1=4
+
+[eclipsingupgradewildcardsp]
+SIS1=z:\tswi\tsis\data\eclipsingdllupgradewildcardsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\sys\bin\eclipsetest.dll
+
+[eclipsingupgradewildcardsp_mimic_oldmetaformat]
+SIS1=z:\tswi\tsis\data\eclipsingdllupgradewildcardsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\sys\bin\eclipsetest.dll
+METADATACROPBYTES1=12
+
+[privatesidupgrade]
+SIS1=z:\tswi\tsis\data\stubprivatesidsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\private\10273581\test.txt
+INSTALLDRIVE1 = 
+
+
+[privatesidupgradewildcard]
+sis=z:\tswi\tsis\data\stubprivatesidwildcardsp_Root5CA.sis
+script=z:\tswi\tuiscriptadaptors\scripts\simple_drive_e.xml
+SIS1=z:\tswi\tsis\data\stubprivatesidwildcardsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=e:\private\10273581\test.txt
+
+[privatesidupgrade_mimic_oldmetaformat]
+SIS1=z:\tswi\tsis\data\stubprivatesidsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=c:\private\10273581\test.txt
+METADATACROPBYTES1=4
+
+[privatesidupgradewildcard_mimic_oldmetaformat]
+SIS1=z:\tswi\tsis\data\stubprivatesidwildcardsp_Root5CA.sis
+UID1=802730A1
+FILE1.1=e:\private\10273581\test.txt
+METADATACROPBYTES1=12
+
+[u_privatesidupgrade]
+uid=802730A1
+vendorName=Crypto Services
+packageName=Private SID upgrade SP
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+nonexist=2
+nonexist0=c:\private\10273581\test.txt
+nonexist0=e:\private\10273581\test.txt
+
+[checkrestoretemp]
+dirpath=c:\sys\install\temp\
+numfiles=0
+
+[resource_modr]
+SIS1 = z:\tswi\tsis\data\resourcefiles.sis
+UID1 = 81036421
+FILE1.1 = c:\ReSource\foo.rsc
+MODIFY1.1=1
+FILE1.2 = c:\private\10003a3f\import\bar.rsc
+INSTALLDRIVE1 = ÿ
+
+[resource_modi]
+SIS1 = z:\tswi\tsis\data\resourcefiles.sis
+UID1 = 81036421
+FILE1.1 = c:\ReSource\foo.rsc
+FILE1.2 = c:\private\10003a3f\import\bar.rsc
+MODIFY1.2=1
+
+[filetext_restore]
+SIS1 = z:\tswi\tsis\data\def069533_1.sis
+UID1 = 81000001
+
+[augmentation_base]
+sis=z:\tswi\tsis\data\testaugmentations_base.sis
+script=z:\tswi\tuiscriptadaptors\scripts\simple_drive_e.xml
+numexist=2
+exist0=e:\Documents\InstTest\abase1.txt
+exist1=e:\Documents\InstTest\abase4.txt
+
+[augmentation_A]
+sis=z:\tswi\tsis\data\testaugmentations_A.sis
+script=z:\tswi\tuiscriptadaptors\scripts\Simple.xml
+numexist=4
+exist0=e:\Documents\InstTest\abase1.txt
+exist1=e:\Documents\InstTest\abase4.txt
+exist2=c:\Documents\InstTest\aA1.txt
+exist3=c:\Documents\InstTest\clashing.txt
+
+[augmentation_D]
+sis=z:\tswi\tsis\data\testaugmentations_D.sis
+script=z:\tswi\tuiscriptadaptors\scripts\Simple_drive_e.xml
+numexist=6
+exist0=e:\Documents\InstTest\abase1.txt
+exist1=e:\Documents\InstTest\abase4.txt
+exist2=c:\Documents\InstTest\aA1.txt
+exist3=c:\Documents\InstTest\clashing.txt
+exist4=e:\Documents\InstTest\aD1.txt
+exist5=e:\Resource\apps\RESOURCED.txt
+
+[u_augmentedpackage]
+uid=81111207
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+numnonexist=6
+nonexist0=c:\Documents\InstTest\aA1.txt
+nonexist1=e:\Documents\InstTest\aD1.txt
+nonexist2=e:\Resource\apps\RESOURCED.txt
+nonexist3=e:\Documents\InstTest\abase1.txt
+nonexist4=e:\Documents\InstTest\abase4.txt
+nonexist5=c:\Documents\InstTest\clashing.txt
+
+[augmentedpackagebackup]
+UID1=81111207
+FILE1.1=c:\Documents\InstTest\aA1.txt
+FILE1.2=e:\Documents\InstTest\aD1.txt
+FILE1.3=e:\Resource\apps\RESOURCED.txt
+FILE1.4=e:\Documents\InstTest\abase1.txt
+FILE1.5=e:\Documents\InstTest\abase4.txt
+FILE1.6=c:\Documents\InstTest\clashing.txt
+
+[augmentedpackagebackup_missingonespdrive]
+UID1=81111207
+FILE1.1=c:\Documents\InstTest\aA1.txt
+FILE1.2=e:\Documents\InstTest\aD1.txt
+FILE1.3=e:\Resource\apps\RESOURCED.txt
+FILE1.4=e:\Documents\InstTest\abase1.txt
+FILE1.5=e:\Documents\InstTest\abase4.txt
+FILE1.6=c:\Documents\InstTest\clashing.txt
+METADATACROPBYTES1=20
+
+[augmentedpackagebackup_mimic_oldmetaformat]
+UID1=81111207
+FILE1.1=c:\Documents\InstTest\aA1.txt
+FILE1.2=e:\Documents\InstTest\aD1.txt
+FILE1.3=e:\Resource\apps\RESOURCED.txt
+FILE1.4=e:\Documents\InstTest\abase1.txt
+FILE1.5=e:\Documents\InstTest\abase4.txt
+FILE1.6=c:\Documents\InstTest\clashing.txt
+METADATACROPBYTES1=24
+
+[u_augmentation_A]
+uid=81111207
+vendorName=Unique Vendor Name
+packageName=Augmentations_A
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+numexist=4
+exist0=e:\Documents\InstTest\abase1.txt
+exist1=e:\Documents\InstTest\abase4.txt
+exist2=e:\Documents\InstTest\aD1.txt
+exist3=e:\Resource\apps\RESOURCED.txt
+nonexist=2
+nonexist0=c:\Documents\InstTest\aA1.txt
+nonexist1=c:\Documents\InstTest\clashing.txt
+
+[u_augmentation_D]
+uid=81111207
+vendorName=Unique Vendor Name
+packageName=Augmentations_D
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+numexist=2
+exist0=e:\Documents\InstTest\abase1.txt
+exist1=e:\Documents\InstTest\abase4.txt
+nonexist=4
+nonexist0=c:\Documents\InstTest\aA1.txt
+nonexist1=c:\Documents\InstTest\clashing.txt
+nonexist2=e:\Documents\InstTest\aD1.txt
+nonexist3=e:\Resource\apps\RESOURCED.txt
+
+[patchupgrade]
+SIS1 = z:\tswi\tsis\data\filebase.sis
+UID1 = A0000A93
+FILE1.1 = c:\files\overwriteme2.txt
+FILE1.2 = c:\files\overwriteme.txt
+
+
+[u_eclipsingmultifiles]
+uid=802730A1
+vendorName=Crypto Services
+packageName=Multi Files Eclipse SP
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+nonexist=3
+nonexist0=c:\sys\bin\tswisidupgradeexe.exe
+nonexist1=c:\eclipsetest\file2.txt
+nonexist2=c:\eclipsetest\file1.txt
+
+[eclipsemutlifiles]
+UID1=802730A1
+SIS1=z:\tswi\tsis\data\eclipsingmultifilessp_root5.sis
+FILE1.1=c:\sys\bin\tswisidupgradeexe.exe
+FILE1.2=c:\eclipsetest\file2.txt
+FILE1.3=c:\eclipsetest\file1.txt
+
+[INC128848_install_non_rom_sa_base_package]
+UID1 = 2BAECDE3
+SIS1 = z:\tswi\tsis\data\backuprestore_test_sa_base_Root5.sis
+
+[INC128848_install_non_rom_pu_upgrade]
+UID1 = 2BAECDE3
+SIS1 = z:\tswi\tsis\data\backuprestore_test_pu_upgrade_Root5.sis
+
+[INC128848_non_rom_package]
+UID1 = 2BAECDE3
+FILE1.1 = C:\sys\bin\backuprestore_test_library_sa.dll
+FILE1.2 = C:\sys\bin\backuprestore_test_execute_sa.exe
+FILE1.3 = C:\sys\bin\backuprestore_test_library_pu.dll
+FILE1.4 = C:\sys\bin\backuprestore_test_execute_pu.exe
+
+
+[INC128848_install_pu_rom_upgrade]
+UID1 = 2BAECDE2
+SIS1 = z:\tswi\tsis\data\backuprestore_test_rom_stub_pu_upgrade_Root5.sis
+
+[INC128848_rom_package]
+UID1 = 2BAECDE2
+FILE1.1 = C:\sys\bin\backuprestore_test_library2.dll
+FILE1.2 = C:\sys\bin\backuprestore_test_execute2.exe
+
+[basic]
+SIS1=z:\tswi\tsis\data\filebase.sis
+UID1=A0000A93
+INSTALLDRIVE1 = ÿ
+
+[partialupgrade]
+SIS1=z:\tswi\tsis\data\filepu.sis
+UID1=A0000A93
+FILE1.1=c:\files\overwriteme.txt
+INSTALLDRIVE1 = C
+
+[patch]
+SIS1=z:\tswi\tsis\data\filesp.sis
+UID1=A0000A93
+FILE1.1=c:\files\overwriteme.txt
+INSTALLDRIVE1 = C
+
+[unsigned]
+SIS1=z:\tswi\tautosigning\data\1-2unsignedexenocap.sis
+UID1=8000A002
+FILE1.1= c:\sys\bin\exe-nocap.exe
+INSTALLDRIVE1 = ÿ
+
+[devidcons_01]
+SIS1=z:\tswi\tdevcerts\data\aggregate_01.sis
+UID1=E1112228
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_02]
+SIS1=z:\tswi\tdevcerts\data\aggregate_05.sis
+UID1=E111222C
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_03]
+SIS1=z:\tswi\tdevcerts\data\corrupt_01.sis
+UID1=E1112230
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_04]
+SIS1=z:\tswi\tdevcerts\data\mismatch_01.sis
+UID1=E1112242
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_05]
+SIS1=z:\tswi\tdevcerts\data\mismatch_05.sis
+UID1=E1112246
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_01]
+SIS1=z:\tswi\tdevcerts\data\aggregate_02.sis
+UID1=E1112229
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_02]
+SIS1=z:\tswi\tdevcerts\data\corrupt_02.sis
+UID1=E1112231
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_03]
+SIS1=z:\tswi\tdevcerts\data\aggregate_06.sis
+UID1=E111222D
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_01]
+SIS1=z:\tswi\tdevcerts\data\aggregate_03.sis
+UID1=E111222A
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_02]
+SIS1=z:\tswi\tdevcerts\data\aggregate_07.sis
+UID1=E111222E
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_03]
+SIS1=z:\tswi\tdevcerts\data\corrupt_03.sis
+UID1=E1112232
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_04]
+SIS1=z:\tswi\tdevcerts\data\mismatch_03.sis
+UID1=E1112244
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_05]
+SIS1=z:\tswi\tdevcerts\data\mismatch_07.sis
+UID1=E1112248
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_01]
+SIS1=z:\tswi\tdevcerts\data\aggregate_04.sis
+UID1=E111222B
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_02]
+SIS1=z:\tswi\tdevcerts\data\corrupt_04.sis
+UID1=E1112233
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_03]
+SIS1=z:\tswi\tdevcerts\data\devcertwarn.sis
+UID1=E1112234
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_04]
+SIS1=z:\tswi\tdevcerts\data\mismatch_04.sis
+UID1=E1112245
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_05]
+SIS1=z:\tswi\tdevcerts\data\mismatch_08.sis
+UID1=E1112249
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_06]
+SIS1=z:\tswi\tdevcerts\data\mismatch_09.sis
+UID1=E111224A
+FILE1.1=c:\sys\bin\tswiunprotectedvid.exe
+INSTALLDRIVE1 = C
+
+[seccons_01]
+SIS1=z:\tswi\tdevcerts\data\mismatch_02.sis
+UID1=E1112243
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[seccons_02]
+SIS1=z:\tswi\tdevcerts\data\mismatch_06.sis
+UID1=E1112247
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[certcons_01]
+SIS1=z:\tswi\tdevcerts\data\mismatch_10.sis
+UID1=E111224B
+FILE1.1=c:\sys\bin\tswisystemcapability_protected.exe
+INSTALLDRIVE1 = C
+
+[protected_vid_mismatch]
+SIS1=z:\tswi\tdevcerts\data\02_protected_vid_mismatch.sis
+UID1=E1112223
+FILE1.1=c:\sys\bin\tswidllnocapabilityprotectedvid.dll
+INSTALLDRIVE1 = C
+
+[ocsp_expired]
+SIS1=z:\tswi\tdevcerts\data\ocsp_03.sis
+UID1=E111224E
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[signedcap]
+SIS1=z:\tswi\tsis\data\tswiallcapabilities.sis
+UID1=81113000
+INSTALLDRIVE1 = C
+
+[syscaps]
+SIS1=z:\tswi\tsis\data\tswisystemcapability.sis
+UID1=81113006
+INSTALLDRIVE1 = C
+
+[syscaps_DSA]
+SIS1=z:\tswi\tsis\data\tswisystemcapability_DSACA.sis
+UID1=81113006
+INSTALLDRIVE1 = C
+
+[syscaps_RSA]
+SIS1=z:\tswi\tsis\data\tswiallcapabilities_RSACA.sis
+UID1=81113000
+INSTALLDRIVE1 = C
+
+[cap8]
+SIS1=z:\tswi\tsis\data\tswisignedcap_8.sis
+UID1=81113004
+INSTALLDRIVE1 = C
+
+[cap8_Root5]
+SIS1=z:\tswi\tsis\data\tswisignedcap_8_Root5.sis
+UID1=81113004
+INSTALLDRIVE1 = C
+
+[cap8_Root5_RSA]
+SIS1=z:\tswi\tsis\data\tswisignedcap_8_Root5_RSACA.sis
+UID1=81113004
+INSTALLDRIVE1 = C
+
+[nocapsRSA]
+SIS1=z:\tswi\tsis\data\tswinocapability_RSA.sis
+UID1=81113001
+INSTALLDRIVE1 = C
+
+[capsfail]
+SIS1=z:\tswi\tsis\data\wsc\capabilities.sis
+UID1=80172A37
+FILE1.1=c:\sys\bin\wsc_exe.exe
+INSTALLDRIVE1 = C
+
+[doublesignedfail]
+SIS1=z:\tswi\tsis\data\wsc\doublesigned.sis
+UID1=80172A38
+FILE1.1=c:\sys\bin\wsc_exe.exe
+INSTALLDRIVE1 = C
+
+[untrustedVid]
+SIS1=z:\tswi\tsis\data\testuntrustedVid.sis
+UID1=81113020
+FILE1.1=c:\sys\bin\testUntrustedVid.exe
+INSTALLDRIVE1 = C
+
+[untrustedSid]
+SIS1=z:\tswi\tsis\data\testuntrustedSid.sis
+UID1=81113019
+FILE1.1=c:\sys\bin\testUntrustedSid.exe
+INSTALLDRIVE1 = C
+
+[untrustedPkg]
+SIS1=z:\tswi\tsis\data\testuntrustedPackage.sis
+UID1=11113001
+FILE1.1=c:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+
+[eclipseROM]
+SIS1=z:\tswi\tsis\data\twoeclipses2_Root5CA.sis
+UID1=802730A1
+INSTALLDRIVE1 = ÿ
+
+[u_eclipseROM]
+uid=802730A1
+vendorName=Crypto Services
+packageName=Text File Upgrades PA 2
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[eclipseROMPresent]
+FILE1.1=c:\eclipsetest\file1.txt
+
+[removedummyswiplugin]
+numfiles=3
+file0=c:\dummy-swi-plugin\001
+file1=c:\dummy-swi-plugin\001-MediaRemoved
+file2=c:\tswi\tbackuprestore\metadata81320938
+INSTALLDRIVE1 = C
+
+[removeregistryfolder]
+numfiles=1
+file0=c:\sys\install\sisregistry\81113001
+
+[removeregistryfolderfiles]
+numfiles=2
+file0=c:\sys\install\sisregistry\81113001\1200000000.reg
+file1=c:\sys\install\sisregistry\81113001\00000000_0000.ctl
+
+[removeregistryfiles]
+numfiles=3
+file0=c:\sys\install\sisregistry\81113001
+file1=c:\sys\install\sisregistry\swiregfirstinit.log
+file2=c:\sys\install\sisregistry\backup.lst
+
+[removeregistryfolderfilesandbackup]
+numfiles=4
+file0=c:\sys\install\sisregistry\81113001\1200000000.reg
+file1=c:\sys\install\sisregistry\81113001\00000000_0000.ctl
+file2=c:\sys\install\sisregistry\swiregfirstinit.log
+file3=c:\sys\install\sisregistry\backup.lst
+
+[copycorruptreg]
+copynum=1
+copyto0=c:\sys\install\sisregistry\81113001\00000000.reg
+copyfrom0=Z:\tswi\tbackuprestore\data\00000000.reg
+
+[removebackuplstfile]
+numfiles=2
+file0=c:\sys\install\sisregistry\swiregfirstinit.log
+file1=c:\sys\install\sisregistry\backup.lst
+
+
+[appusingdll_running]
+uid=89334572
+
+[appusingdll]
+sis=z:\tswi\tsis\data\appusingdll_suite.sis
+script=z:\tswi\tuiscriptadaptors\scripts\Simple.xml
+numexist=1
+exist0=c:\sys\bin\AppUsingDLL.exe
+SIS1 = z:\tswi\tsis\data\appusingdll_suite.sis
+UID1 = 89334572
+FILE1.1 = c:\sys\bin\AppUsingDLL.exe
+INSTALLDRIVE1 = C
+
+[u_appusingdll]
+uid=89334572
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[removeappregistryfolder]
+numfiles=1
+file0=c:\sys\install\sisregistry\89334572
+
+[large_array_dll]
+sis=z:\tswi\tsis\data\largearraydll_suite.SIS
+script=z:\tswi\tuiscriptadaptors\scripts\Simple.xml
+
+[u_large_array_dll]
+uid=802732E0
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[deleteplaindatafile]
+SIS1 = z:\tswi\tsis\data\3datafiles.sis
+UID1 = A0000206
+DATA1.1 = c:\restore\pic1.bmp
+DATA1.2 = c:\restore\pic2.bmp
+DATA1.3 = c:\restore\pic3.gif
+INSTALLDRIVE1 = ÿ
+
+[deleteexecutablefile]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+
+[removedrive]
+sis = z:\tswi\tsis\data\test2drives.sis
+script = z:\tswi\tuiscriptadaptors\scripts\Simple_drive_x.xml
+numexist = 3
+exist0 = C:\Documents\InstTest\file1.txt
+exist1 = E:\Documents\InstTest\file2.txt
+exist2 = X:\Documents\InstTest\file3.txt
+
+[removedrive_backup]
+SIS1 = z:\tswi\tsis\data\test2drives.sis
+UID1 = 80000009
+FILE1.1 = C:\Documents\InstTest\file1.txt
+FILE1.2 = E:\Documents\InstTest\file2.txt
+FILE1.3 = X:\Documents\InstTest\file3.txt
+INSTALLDRIVE1 = ÿ
+
+[u_removedrive]
+uid = 80000009
+script = z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+numnonexist = 3
+nonexist0 = C:\Documents\InstTest\file1.txt
+nonexist1 = E:\Documents\InstTest\file2.txt
+nonexist2 = X:\Documents\InstTest\file3.txt
+
+[drivename]
+drivechar = X
+
+[cyclicinstall]
+repeatValue=3
+SIS1 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID1 = 81113006
+FILE1.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE1 = C
+
+[largedatafile]
+SIS1 = z:\tswi\tsis\data\largedata.SIS
+UID1 = 80000001
+FILE1.1 = C:\largedata\largefile.txt
+INSTALLDRIVE1 = C
+
+[datafiledeleted]
+SIS1 = z:\tswi\tsis\data\filenullrestore.sis
+UID1 = A0000205
+DATA1.1 = c:\restore\pic1.bmp
+INSTALLDRIVE1 = ÿ
+
+[importfolderremoved]
+SIS1 = z:\tswi\tsis\data\testlocations_importdir.sis
+UID1 = 81113013
+DATA1.1 = c:\private\81000002\import\file.txt
+DATA1.2 = c:\private\FFFAAFFF\import\file.txt
+
+[removeimportfolder]
+numfiles=2
+file0=c:\private\FFFAAFFF\import
+file1=c:\private\81000002\import
+INSTALLDRIVE1 = C
+
+[backupctlfile]
+copynum=1
+copyto0=c:\sys\install\sisregistry\81113001\00000000_0000.ctl.bak
+copyfrom0=c:\sys\install\sisregistry\81113001\00000000_0000.ctl
+
+[copycorruptctlfile]
+copynum=1
+copyto0=c:\sys\install\sisregistry\81113001\00000000_0000.ctl
+copyfrom0=Z:\tswi\tbackuprestore\data\corrupt00000000_0000.ctl
+
+[restorectlfile]
+copynum=1
+copyto0=c:\sys\install\sisregistry\81113001\00000000_0000.ctl
+copyfrom0=c:\sys\install\sisregistry\81113001\00000000_0000.ctl.bak
+
+[copycorruptlstfile]
+copynum=1
+copyto0=c:\sys\install\sisregistry\swiregfirstinit.log
+copyfrom0=Z:\tswi\tbackuprestore\data\corruptbackup.lst
+
+[swipolicy]
+SIS1=z:\tswi\tautosigning\data\1-2unsignedexenocap.sis
+UID1=8000A002
+FILE1.1= c:\sys\bin\exe-nocap.exe
+INSTALLDRIVE1 = ÿ
+
+[missingcertificates]
+SIS1 = z:\tswi\tsis\data\tswinocapability_Root5.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+
+[largecontroller]
+SIS1 = z:\tswi\tsis\data\testhugecontroller.sis
+UID1 = 8000007c
+FILE1.1 = C:\Documents\InstTest\testhugecontroller.txt
+INSTALLDRIVE1 = C
+
+[largecontroller_base]
+SIS1 = z:\tswi\tsis\data\testhugecontroller_base.sis
+UID1 = 8100007c
+FILE1.1 = C:\Documents\InstTest\testhugecontroller.txt
+INSTALLDRIVE1 = C
+
+[largecontroller_withpu]
+SIS1 = z:\tswi\tsis\data\testhugecontroller_pu.sis
+UID1 = 8100007c
+FILE1.1 = C:\Documents\InstTest\testhugecontroller.txt
+FILE1.2 = C:\Documents\InstTest\testhugecontroller1.txt
+INSTALLDRIVE1 = C
+
+[elseif1]
+sis=z:\tswi\tsis\data\testexpressions_elseif.sis
+script=z:\tswi\tuiscriptadaptors\scripts\options1.xml
+
+numexist=2
+exist0=c:\Documents\InstTest\elseif1.txt
+exist1=c:\Documents\InstTest\option--1.txt
+
+
+numnonexist=8
+nonexist0=c:\Documents\InstTest\elseif-.txt
+nonexist1=c:\Documents\InstTest\option321.txt
+nonexist2=c:\Documents\InstTest\option32-.txt
+nonexist3=c:\Documents\InstTest\option3-1.txt
+nonexist4=c:\Documents\InstTest\option3--.txt
+nonexist5=c:\Documents\InstTest\option-21.txt
+nonexist6=c:\Documents\InstTest\option-2-.txt
+nonexist7=c:\Documents\InstTest\option---.txt
+
+[backupelseif1]
+SIS1 = z:\tswi\tsis\data\testexpressions_elseif.sis
+UID1 = 811111FC
+DATA1.1 = c:\Documents\InstTest\elseif1.txt
+DATA1.2 = c:\Documents\InstTest\option--1.txt
+INSTALLDRIVE1 = C
+
+
+[elseif2]
+sis=z:\tswi\tsis\data\testexpressions_elseif.sis
+script=z:\tswi\tuiscriptadaptors\scripts\options2.xml
+
+numexist=2
+exist0=c:\Documents\InstTest\elseif-.txt
+exist1=c:\Documents\InstTest\option-2-.txt
+
+numnonexist=8
+nonexist0=c:\Documents\InstTest\elseif1.txt
+nonexist1=c:\Documents\InstTest\option321.txt
+nonexist2=c:\Documents\InstTest\option32-.txt
+nonexist3=c:\Documents\InstTest\option3-1.txt
+nonexist4=c:\Documents\InstTest\option3--.txt
+nonexist5=c:\Documents\InstTest\option-21.txt
+nonexist6=c:\Documents\InstTest\option--1.txt
+nonexist7=c:\Documents\InstTest\option---.txt
+
+[backupelseif2]
+SIS1 = z:\tswi\tsis\data\testexpressions_elseif.sis
+UID1 = 811111FC
+DATA1.1 = c:\Documents\InstTest\elseif-.txt
+DATA1.2 = c:\Documents\InstTest\option-2-.txt
+INSTALLDRIVE1 = C
+
+[u_elseif]
+uid=811111FC
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+numnonexist=10
+nonexist0=c:\Documents\InstTest\elseif1.txt
+nonexist1=c:\Documents\InstTest\elseif1.txt
+nonexist2=c:\Documents\InstTest\option321.txt
+nonexist3=c:\Documents\InstTest\option32-.txt
+nonexist4=c:\Documents\InstTest\option3-1.txt
+nonexist5=c:\Documents\InstTest\option3--.txt
+nonexist6=c:\Documents\InstTest\option-21.txt
+nonexist7=c:\Documents\InstTest\option-2-.txt
+nonexist8=c:\Documents\InstTest\option--1.txt
+nonexist9=c:\Documents\InstTest\option---.txt
+
+
+[manycontrollers]
+SIS1 = z:\tswi\tsis\data\testlocations_importdir.sis
+UID1 = 81113013
+DATA1.1 = c:\private\81000002\import\file.txt
+DATA1.2 = c:\private\FFFAAFFF\import\file.txt
+
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+INSTALLDRIVE2 = C
+
+SIS3 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID3 = 81113006
+FILE3.1 = C:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE3 = C
+
+[CR1027ROM_SA_Upgrade]
+SIS1 = z:\tswi\tsis\data\CR1027ROMUpgradeSA_root5.sis
+UID1 = 802730A2
+FILE1.1 = c:\sys\bin\saromupgrade_execute.exe
+FILE1.2 = c:\sys\bin\saromupgrade_library.dll
+DATA1.1 = c:\cr1027test\cr1027_file1.txt
+DATA1.2 = c:\Private\10273582\cr1027_config1.txt
+DATA1.3 = c:\Private\10273582\cr1027_config2.txt
+INSTALLDRIVE1 = ÿ
+
+[CR1122WILDCARDED_ROM_APP]
+SIS1 = z:\tswi\tsis\data\CR1122WCROMUpgradeSA_root5.sis
+UID1 = 802730B1
+FILE1.1 = c:\sys\bin\wildcard_rom_stub_lib1.dll
+FILE1.2 = c:\sys\bin\wildcard_rom_stub_lib2.dll
+FILE1.3 = c:\sys\bin\wildcard_testrun1.exe
+FILE1.4 = c:\sys\bin\wildcard_testrun2.exe
+DATA1.1 = c:\private\90008ACE\wcrom1.txt
+DATA1.2 = c:\private\89334567\wcrom2.txt
+DATA1.3 = c:\cr1122test\data1.txt
+DATA1.4 = c:\cr1122test\fact2.txt
+DATA1.5 = c:\cr1122test\wildcard_config1.cnf
+DATA1.6 = c:\cr1122test\wildcard_config2.cnf
+INSTALLDRIVE1 = ÿ
+
+[corrupthash]
+copynum=1
+copyto0=c:\sys\hash\tswinocapability.exe
+copyfrom0=C:\sys\bin\tswinocapability.exe
+
+[verifyonrestore]
+SIS1 = z:\tswi\tsis\data\verifyonrestore.sis
+UID1 = 80123457
+FILE1.1 = c:\Documents\InstTest\modifiablefile.txt
+FILE1.2 = c:\Documents\InstTest\verifyonrestore1.txt
+FILE1.3 = c:\Documents\InstTest\verifyonrestore2.txt
+INSTALLDRIVE1 = C
+
+[datacagingcheck_winscw]
+SIS1 = z:\tswi\tsis\data\tpropagation_winscw.sis
+UID1 = e1116768
+FILE1.1 = c:\system\tpropagationfile1.txt
+FILE1.2 = c:\resources\tpropagationfile2.txt
+FILE1.3 = c:\tpropagationfile3.txt
+FILE1.4 = c:\resource\tpropagationfile5.txt
+INSTALLDRIVE1 = C
+
+[datacagingcheck_armv5]
+SIS1 = z:\tswi\tsis\data\tpropagation_armv5.sis
+UID1 = e1116768
+FILE1.1 = c:\system\tpropagationfile1.txt
+FILE1.2 = c:\resources\tpropagationfile2.txt
+FILE1.3 = c:\tpropagationfile3.txt
+FILE1.4 = c:\resource\tpropagationfile5.txt
+FILE1.5 = c:\sys\bin\tpropagationfile4.exe
+INSTALLDRIVE1 = C
+
+[br1_base]
+SIS1 = z:\tswi\tsis\data\br1_base_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\private\81000005\base.txt
+FILE1.3 = c:\private\81000005\upgrademe.txt
+DATA1.1 = c:\upgrademe_public.txt
+
+[br1_all_files]
+SIS1 = z:\tswi\tsis\data\br1_base_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\sys\bin\tswinocapability.exe
+FILE1.3 = c:\sys\bin\tswinocapability2.exe
+FILE1.4 = c:\private\81000005\base.txt
+FILE1.5 = c:\private\81000005\upgrademe.txt
+FILE1.6 = c:\private\81000002\bigpu.txt
+FILE1.7 = c:\private\81000008\bigsp1_1.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\br1_bigpu_01.txt
+DATA1.3 = c:\br1_bigpu_20.txt
+DATA1.4 = c:\br1_bigsp1_1_01.txt
+DATA1.5 = c:\br1_bigsp1_1_20.txt
+DATA1.6 = c:\br1_bigsp2_01.txt
+DATA1.7 = c:\br1_bigsp2_20.txt
+
+[br1_bigpu]
+SIS1 = z:\tswi\tsis\data\br1_bigpu_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\sys\bin\tswinocapability.exe
+FILE1.3 = c:\private\81000005\upgrademe.txt
+FILE1.4 = c:\private\81000002\bigpu.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\br1_bigpu_01.txt
+DATA1.3 = c:\br1_bigpu_20.txt
+
+[br1_base_plus_bigpu]
+SIS1 = z:\tswi\tsis\data\br1_bigpu_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\sys\bin\tswinocapability.exe
+FILE1.3 = c:\private\81000005\base.txt
+FILE1.4 = c:\private\81000005\upgrademe.txt
+FILE1.5 = c:\private\81000002\bigpu.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\br1_bigpu_01.txt
+DATA1.3 = c:\br1_bigpu_20.txt
+
+[br1_base_plus_bigsp1]
+SIS1 = z:\tswi\tsis\data\br1_bigsp1_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+FILE1.3 = c:\private\81000005\base.txt
+FILE1.4 = c:\private\81000005\upgrademe.txt
+FILE1.5 = c:\private\81000005\bigsp1.txt
+FILE1.6 = c:\private\81000008\bigsp1.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\br1_bigsp1_01.txt
+DATA1.3 = c:\br1_bigsp1_20.txt
+
+[br1_bigsp1]
+SIS1 = z:\tswi\tsis\data\br1_bigsp1_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+FILE1.2 = c:\private\81000005\bigsp1.txt
+FILE1.3 = c:\private\81000008\bigsp1.txt
+DATA1.1 = c:\br1_bigsp1_01.txt
+DATA1.2 = c:\br1_bigsp1_20.txt
+
+[br1_bigsp1_1]
+SIS1 = z:\tswi\tsis\data\br1_bigsp1_1_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+FILE1.2 = c:\private\81000005\bigsp1_1.txt
+FILE1.3 = c:\private\81000008\bigsp1_1.txt
+DATA1.1 = c:\br1_bigsp1_1_01.txt
+DATA1.2 = c:\br1_bigsp1_1_20.txt
+
+[br1_bigsp1_1_checkoverwrite]
+numexist=4
+exist0=c:\private\81000005\bigsp1_1.txt
+exist0=c:\private\81000008\bigsp1_1.txt
+exist1=c:\br1_bigsp1_1_01.txt
+exist2=c:\br1_bigsp1_1_20.txt
+numnonexist=4
+nonexist0=c:\private\81000005\bigsp1.txt
+nonexist1=c:\private\81000008\bigsp1.txt
+nonexist2=c:\br1_bigsp1_01.txt
+nonexist3=c:\br1_bigsp1_20.txt
+
+[br1_bigsp2]
+SIS1 = z:\tswi\tsis\data\br1_bigsp2_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\private\81000005\bigsp2.txt
+DATA1.1 = c:\br1_bigsp2_01.txt
+DATA1.2 = c:\br1_bigsp2_20.txt
+
+[br1_base_plus_bigsp2]
+SIS1 = z:\tswi\tsis\data\br1_base_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\private\81000005\base.txt
+FILE1.3 = c:\private\81000005\upgrademe.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\private\81000005\bigsp2.txt
+DATA1.3 = c:\br1_bigsp2_01.txt
+DATA1.4 = c:\br1_bigsp2_20.txt
+
+[br1_base_plus_bigsp1_plus_bigsp2]
+SIS1 = z:\tswi\tsis\data\br1_bigsp1_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 0A000019
+FILE1.1 = c:\sys\bin\tswiusergrantable.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+FILE1.3 = c:\private\81000005\base.txt
+FILE1.4 = c:\private\81000005\upgrademe.txt
+FILE1.5 = c:\private\81000005\bigsp1.txt
+FILE1.6 = c:\private\81000008\bigsp1.txt
+DATA1.7 = c:\private\81000005\bigsp2.txt
+DATA1.1 = c:\upgrademe_public.txt
+DATA1.2 = c:\br1_bigsp1_01.txt
+DATA1.3 = c:\br1_bigsp1_20.txt
+DATA1.4 = c:\br1_bigsp2_01.txt
+DATA1.5 = c:\br1_bigsp2_20.txt
+
+[romstubpu]
+SIS1 = z:\tswi\tsis\data\romstubupgradepu_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 802730A0
+FILE1.1 = c:\sys\bin\tswinocapability4.exe
+DATA1.1 = c:\romupgrade_pu.txt
+
+[romstubsaru]
+SIS1 = z:\tswi\tsis\data\romstubupgradesaru_root5.sis
+INSTALLDRIVE1 = C
+UID1 = 802730A0
+DATA1.1 = c:\romupgradesaru.txt
+
+[romstubsaru_clean]
+numnonexist=3
+nonexist0=c:\sys\bin\tswinocapability4.exe
+nonexist1=c:\romupgrade_pu.txt
+nonexist2=c:\romupgradesaru.txt
+
+[install_en_fr]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_outerpkg.sis
+UID1 = 88000106
+devicelanguage0=01
+devicelanguage1=03
+FILE1.1 = C:\Documents\InstTest\devlang_en_out.txt
+FILE1.2 = C:\Documents\InstTest\devsuplang_en_out.txt
+FILE1.3 = C:\Documents\InstTest\devsuplang_ge_out.txt
+FILE1.4 = C:\Documents\InstTest\devlang_en_emb.txt
+FILE1.5 = C:\Documents\InstTest\devsuplang_en_emb.txt
+FILE1.6 = C:\Documents\InstTest\devsuplang_ge_emb.txt
+INSTALLDRIVE1 = C
+
+[install_en_fr_base]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_outerpkg.sis
+UID1 = 88000106
+devicelanguage0=01
+devicelanguage1=03
+FILE1.1 = C:\Documents\InstTest\devlang_en_out.txt
+FILE1.2 = C:\Documents\InstTest\devsuplang_en_out.txt
+FILE1.3 = C:\Documents\InstTest\devsuplang_ge_out.txt
+INSTALLDRIVE1 = C
+
+[install_en_fr_emb]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_embedded.sis
+UID1 = 88000105
+devicelanguage0=01
+devicelanguage1=03
+FILE1.1 = C:\Documents\InstTest\devlang_en_emb.txt
+FILE1.2 = C:\Documents\InstTest\devsuplang_en_emb.txt
+FILE1.3 = C:\Documents\InstTest\devsuplang_ge_emb.txt
+INSTALLDRIVE1 = C
+
+[langauge_to_english]
+language=01
+
+[langauge_to_german]
+language=03
+
+[langauge_to_spanish]
+language=04
+
+[package_info_english]
+uid-01=88000106
+package-01=devlangsup_outer_EN
+vendor-01=Vendor
+
+[package_info_german]
+uid-01=88000106
+package-01=devlangsup_outer_GE
+vendor-01=Vendor
+
+[package_emb_info_english]
+uid-01=88000105
+package-01=devlangsup_embedded_EN
+vendor-01=Vendor
+
+[package_emb_info_german]
+uid-01=88000105
+package-01=devlangsup_embedded_GE
+vendor-01=Vendor
+
+[package_upgrade_info_german]
+uid-01=88000105
+package-01=devlangsup_UpgradePU_GE
+vendor-01=Vendor
+
+[install_en_fr_upg_base]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_embedded.sis
+UID1 = 88000105
+devicelanguage0=01
+devicelanguage1=03
+FILE1.1 = C:\Documents\InstTest\devlang_en_emb.txt
+FILE1.2 = C:\Documents\InstTest\devsuplang_en_emb.txt
+FILE1.3 = C:\Documents\InstTest\devsuplang_ge_emb.txt
+INSTALLDRIVE1 = C
+
+[install_en_fr_upg_sp]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_upgradesp.sis
+UID1 = 88000105
+devicelanguage0=01
+devicelanguage1=02
+devicelanguage2=03
+FILE1.1 = C:\Documents\InstTest\devlang_en_upgrade.txt
+FILE1.2 = C:\Documents\InstTest\devlang_fr_upgrade.txt
+FILE1.3 = C:\Documents\InstTest\devlang_ge_upgrade.txt
+INSTALLDRIVE1 = C
+
+[install_en_fr_upg_pu]
+SIS1 = z:\tswi\tsis\data\tbackup_devlang_upgradepu.sis
+UID1 = 88000105
+devicelanguage0=03
+FILE1.1 = C:\Documents\InstTest\devsuplang_ge_emb.txt
+INSTALLDRIVE1 = C
+
+[install_en_fr_upg]
+UID1 = 88000105
+FILE1.1 = C:\Documents\InstTest\devlang_en_emb.txt
+FILE1.2 = C:\Documents\InstTest\devsuplang_en_emb.txt
+FILE1.3 = C:\Documents\InstTest\devsuplang_ge_emb.txt
+FILE1.4 = C:\Documents\InstTest\devlang_en_upgrade.txt
+FILE1.5 = C:\Documents\InstTest\devlang_fr_upgrade.txt
+FILE1.6 = C:\Documents\InstTest\devlang_ge_upgrade.txt
+
+[ROM_SP_backup_restore]
+UID1 = 88000110
+SIS1 = z:\tswi\tsis\data\a_sp.sis
+
+[defineProperty]
+DefineProperty=true
+
+[API-INST-PAS-SWI-0001]
+PublishedUidCount=1
+PublishedUidValue0=88000105
+
+[API-INST-PAS-SWI-0001-A]
+PublishedUidCount=1
+PublishedUidValue0=88000106
+
+[AppRegData_Install]
+sis=z:\tswi\tsis\data\swiappregintegration01.sis
+script=z:\tswi\tuiscriptadaptors\scripts\devlangsel.xml
+devicelanguage0=01
+devicelanguage1=03
+devicelanguage2=24
+
+[AppRegData]
+SIS1 = z:\tswi\tsis\swiappregintegration01.sis
+UID1 = 80010002
+FILE1.1 = C:\sys\bin\swiappregintegration.exe
+FILE1.2 = C:\private\10003a3f\import\apps\swiappregintegration01_reg.rsc
+FILE1.3 = C:\resource\apps\swiappregintegration01_loc.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration01_rsc.mbm
+FILE1.5 = C:\resource\apps\swiappregintegration01_loc.r01
+FILE1.6 = C:\resource\apps\swiappregintegration01_01.mbm
+FILE1.7 = C:\resource\apps\swiappregintegration01_loc.r03
+FILE1.8 = C:\resource\apps\swiappregintegration01_03.mbm
+FILE1.9 = C:\resource\apps\swiappregintegration01_loc.r24
+FILE1.10 = C:\resource\apps\swiappregintegration01_24.mbm
+INSTALLDRIVE1 = C
+
+[AppRegData_Base]
+SIS1 = z:\tswi\tsis\swiappregintegration_base01.sis
+UID1 = 80010003
+FILE1.1 = C:\sys\bin\swiappregintegration_base01.exe
+FILE1.2 = C:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+FILE1.3 = C:\resource\apps\swiappregintegration_base01_loc.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration_base01_rsc.mbm
+FILE1.5 = C:\resource\apps\swiappregintegration_base01_loc.r01
+FILE1.6 = C:\resource\apps\swiappregintegration_base01_01.mbm
+FILE1.7 = C:\resource\apps\swiappregintegration_base01_loc.r02
+FILE1.8 = C:\resource\apps\swiappregintegration_base01_02.mbm
+INSTALLDRIVE1 = C
+
+[AppRegData_WithUpgrade]
+SIS1 = z:\tswi\tsis\swiappregintegration_base02.sis
+UID1 = 80010003
+FILE1.1 = C:\sys\bin\swiappregintegration_base01.exe
+FILE1.2 = C:\sys\bin\swiappregintegration02.exe
+FILE1.3 = C:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration_base01_loc.rsc
+FILE1.5 = C:\resource\apps\swiappregintegration_base01_rsc.mbm
+FILE1.6 = C:\resource\apps\swiappregintegration_base01_loc.r01
+FILE1.7 = C:\resource\apps\swiappregintegration_base01_01.mbm
+FILE1.8 = C:\resource\apps\swiappregintegration_base01_loc.r02
+FILE1.9 = C:\resource\apps\swiappregintegration_base01_02.mbm
+FILE1.10 = C:\resource\apps\swiappregintegration_base01_loc.r03
+FILE1.11 = C:\resource\apps\swiappregintegration_base01_03.mbm
+FILE1.12 = C:\resource\apps\swiappregintegration02_loc.rsc
+FILE1.13 = C:\resource\apps\swiappregintegration02_rsc.mbm
+FILE1.14 = C:\resource\apps\swiappregintegration02_loc.r01
+FILE1.15 = C:\resource\apps\swiappregintegration02_01.mbm
+FILE1.16 = C:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+INSTALLDRIVE1 = C
+
+[swiappregintegration_sa_app]
+SIS1 = z:\tswi\tsis\swiappregintegration_case08_1_sa2.sis
+UID1 = 80010099
+FILE1.1 = C:\private\10003a3f\import\apps\swiappregintegration_case05_reg.rsc
+FILE1.2 = C:\resource\apps\swiappregintegration_case05_loc.r01
+FILE1.3 = C:\resource\apps\swiappregintegration.mbm
+INSTALLDRIVE1 = C
+
+[swiappregintegration_no_app]
+SIS1 = z:\tswi\tsis\swiappregintegration_case08_1_sa2.sis
+UID1 = 80010099
+
+[Install_NonRemovableBase]
+sis=z:\tswi\tsis\data\nonremovablebase_sucert.sis
+script=z:\tswi\tuiscriptadaptors\scripts\simple.xml
+
+[Upgrade_SP_Over_SA-NR]
+sis=z:\tswi\tsis\data\nonremovableupgrade.sis
+script=z:\tswi\tuiscriptadaptors\scripts\devlangsel.xml
+devicelanguage0=01
+
+[SP_Over_SA-NR]
+SIS1 = z:\tswi\tsis\nonremovableupgrade.sis
+UID1 = 0x80000002
+FILE1.1 = C:\sys\bin\swiappregintegration02.exe
+FILE1.2 = C:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+FILE1.3 = C:\resource\apps\swiappregintegration02_loc.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration02_rsc.mbm
+FILE1.5 = C:\resource\apps\swiappregintegration02_loc.r01
+FILE1.6 = C:\resource\apps\swiappregintegration02_01.mbm
+
+[uninstall_SP_Over_SA-NR]
+uid=80000002
+vendorName=Vendor
+packageName=swiappregintegration_base01_sp_EN
+script=z:\tswi\tuiscriptadaptors\scripts\uninstall.xml
+
+[Restore_SP_Upgrade]
+SIS1 = z:\tswi\tsis\data\swiappregintegration_base01.SIS
+UID1 = 80010003
+FILE1.1 = C:\sys\bin\swiappregintegration_base01.exe
+FILE1.2 = C:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+FILE1.3 = C:\resource\apps\swiappregintegration_base01_loc.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration_base01_rsc.mbm
+FILE1.5 = C:\resource\apps\swiappregintegration_base01_loc.r01
+FILE1.6 = C:\resource\apps\swiappregintegration_base01_01.mbm
+FILE1.7 = C:\resource\apps\swiappregintegration_base01_loc.r02
+FILE1.8 = C:\resource\apps\swiappregintegration_base01_02.mbm
+FILE1.9 = C:\sys\bin\swiappregintegration02.exe
+FILE1.10 = C:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+FILE1.11 = C:\resource\apps\swiappregintegration02_loc.rsc
+FILE1.12 = C:\resource\apps\swiappregintegration02_rsc.mbm
+FILE1.13 = C:\resource\apps\swiappregintegration02_loc.r01
+FILE1.14 = C:\resource\apps\swiappregintegration02_01.mbm
+FILE1.15 = C:\resource\apps\swiappregintegration_base01_loc.r03
+FILE1.16 = C:\resource\apps\swiappregintegration_base01_03.mbm
+INSTALLDRIVE1 = C
+
+[Restore_PU_Upgrade]
+SIS1 = z:\tswi\tsis\data\swiappregintegration_base01.SIS
+UID1 = 80010003
+FILE1.1 = C:\sys\bin\swiappregintegration_base01.exe
+FILE1.2 = C:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+FILE1.3 = C:\resource\apps\swiappregintegration_base01_loc.rsc
+FILE1.4 = C:\resource\apps\swiappregintegration_base01_rsc.mbm
+FILE1.5 = C:\resource\apps\swiappregintegration_base01_loc.r01
+FILE1.6 = C:\resource\apps\swiappregintegration_base01_01.mbm
+FILE1.7 = C:\resource\apps\swiappregintegration_base01_loc.r02
+FILE1.8 = C:\resource\apps\swiappregintegration_base01_02.mbm
+FILE1.9 = C:\sys\bin\swiappregintegration02.exe
+FILE1.10 = C:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+FILE1.11 = C:\resource\apps\swiappregintegration02_loc.rsc
+FILE1.12 = C:\resource\apps\swiappregintegration02_rsc.mbm
+FILE1.13 = C:\resource\apps\swiappregintegration02_loc.r01
+FILE1.14 = C:\resource\apps\swiappregintegration02_01.mbm
+FILE1.15 = C:\resource\apps\swiappregintegration_base01_loc.r03
+FILE1.16 = C:\resource\apps\swiappregintegration_base01_03.mbm
+INSTALLDRIVE1 = C
+
+[AppRegData_embedded]
+SIS1 = z:\tswi\tsis\data\swiappregintegration_case06_sa.SIS
+UID1 = 80010099
+FILE1.1 = C:\private\10003a3f\import\apps\swiappregintegration_case05_reg.rsc
+FILE1.2 = C:\resource\apps\swiappregintegration_case05_loc.r01
+FILE1.3 = C:\resource\apps\swiappregintegration.mbm
+
+FILE1.4 = C:\sys\bin\swiappregintegration02.exe
+FILE1.5 = C:\resource\apps\swiappregintegration_case05_loc.r02
+FILE1.6 = C:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+FILE1.7 = C:\resource\apps\swiappregintegration02_loc.rsc
+FILE1.8 = C:\resource\apps\swiappregintegration02_rsc.mbm
+
+FILE1.9 = C:\sys\bin\swiappregintegration_case06.exe
+FILE1.10 = C:\private\10003a3f\import\apps\swiappregintegration_case06_reg.rsc
+FILE1.11 = C:\resource\apps\swiappregintegration_case06_loc.rsc
+
+FILE1.12 = C:\resource\apps\swiappregintegration_case05_loc.r04
+FILE1.13 = C:\sys\bin\swiappregintegration_case07.exe
+FILE1.14 = C:\private\10003a3f\import\apps\swiappregintegration_case07_reg.rsc
+FILE1.15 = C:\resource\apps\swiappregintegration_case07_loc.rsc
+INSTALLDRIVE1 = C
+

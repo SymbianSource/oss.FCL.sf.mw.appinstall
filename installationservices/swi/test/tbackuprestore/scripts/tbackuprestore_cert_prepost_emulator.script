@@ -1,0 +1,35 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-0021
+//! @SYMTestCaseDesc 		Restore with missing mandatory certificate(s). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Restore should fail with Error -20.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-0021
+
+RUN_TEST_STEP_RESULT   -20   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+RUN_TEST_STEP	100	      tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+
+END_TESTCASE API-SEC-SWI-NQP-BR-0021

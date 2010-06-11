@@ -1,0 +1,39 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This test file tests dependencies. It depends on the base package with the correct version.
+
+;Languages
+&EN
+
+;Header
+#{"testdependencies_optional"}, (0x81111205), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+!({"Option1"},{"Option2"},{"Option3"})
+
+if option1 = 1
+	"files\option1.txt"-"!:\Documents\InstTest\option1.txt";
+endif
+
+if option2 = 1
+	"files\option2.txt"-"!:\Documents\InstTest\option2.txt";
+endif
+
+if option3 = 1
+	@"testdependencies_depend.sis",(0x811111FF)
+endif

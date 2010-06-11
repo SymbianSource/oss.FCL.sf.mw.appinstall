@@ -1,0 +1,63 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run integration tests for validating vendor ids at installation.
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M-0001
+//! @SYMTestCaseDesc 		Allow DLLs with unprotected VIDs to be installed from self signed SIS files.
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Files are installed 
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testvids.ini tswidllnocapabilityunprotectedvid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testvids.ini u_tswidllnocapabilityunprotectedvid
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M-0002
+//! @SYMTestCaseDesc 		Reject installation of dlls with protected VIDs from self signed SIS files.
+//! @SYMTestPriority 		Critical
+//! @SYMTestExpectedResults 	Files are not installed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0002
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testvids.ini tswidllnocapabilityprotectedvid
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0002
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M-0003
+//! @SYMTestCaseDesc 		Allow the installation of DLLs with protected VIDs on for trusted SIS files.
+//! @SYMTestPriority 		Medium
+//! @SYMTestExpectedResults 	Files are installed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testvids.ini tswidllnocapabilityprotectedvid_Root5
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testvids.ini u_tswidllnocapabilityprotectedvid_Root5
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

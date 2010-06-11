@@ -1,0 +1,6 @@
+cpu.txt
+powerbackup.txt
+pen.txt
+Nocpu.txt
+Nopower
+nopen.txt

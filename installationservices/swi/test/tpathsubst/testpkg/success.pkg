@@ -1,0 +1,119 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"PathSub success case"},(0x8150535c),1,0,0
+
+%{"Symbian"}
+
+:"Symbian"
+
+; successful targets from all other packages
+; Combined for BR testing.
+
+; ------------------------------
+; no_subst
+
+"textfile.txt"-"c:\pathsub_success\tf_notrans.txt",FF
+"textfile.txt"-"e:\FIND_C_ONLY\tf_fco_e.txt",FF
+
+
+; ------------------------------
+; single_dir_find
+
+"textfile.txt"-"c:\FIND_C_ONLY\tf_drv_lower.txt",FF
+"textfile.txt"-"C:\FIND_C_ONLY\tf_drv_upper.txt",FF
+"textfile.txt"-"c:\find_c_only\tf_dir_lower.txt",FF
+"textfile.txt"-"c:\FIND_C_ONLY\tf_dir_upper.txt",FF
+
+
+; ------------------------------
+; non_boundary
+
+"textfile.txt"-"c:\FIND_C_ONLYEXTRA\tf_fco_extra.txt",FF
+"textfile.txt"-"c:\FIND_C_ONL\tf_fco_trunc.txt",FF
+"textfile.txt"-"c:\C_ONLY\tf_fco_non_start.txt",FF
+"textfile.txt"-"c:\PRE_DIR\FIND_C_ONLY\tf_pre_dir.txt",FF
+"textfile.txt"-"c:\FIND_C_ONLY\tf_fco_works.txt",FF
+
+
+; ------------------------------
+; multi_find
+
+"textfile.txt"-"c:\FIND_CE\tf_fcd_c.txt",FF
+"textfile.txt"-"e:\FIND_CE\tf_fcd_e.txt",FF
+"textfile.txt"-"e:\FIND_E\tf_fcd_eo.txt",FF
+
+
+; ------------------------------
+; multi_dir_match
+
+"textfile.txt"-"c:\FIND_2DIR_PT1\FIND_2DIR_PT2\tf_2dir_to_1dir.txt",FF
+"textfile.txt"-"e:\FIND_2DIR_PT1\FIND_2DIR_PT2\tf_2dir_to_3dir.txt",FF
+"textfile.txt"-"c:\FIND_2DIR_PT1\tf_2dir_match_start.txt",FF
+
+
+; ------------------------------
+; trail_dirs
+
+"textfile.txt"-"c:\FIND_C_ONLY\extra_dir_1\extra_dir_2\tf_trail.txt",FF
+
+
+; ------------------------------
+; user_sel_drive
+
+"textfile.txt"-"!:\NO_FIND\tf_no_find.txt",FF
+"textfile.txt"-"!:\FIND_E_ONLY\tf_find_e.txt",FF
+"textfile.txt"-"e:\FIND_E_ONLY\tf_find_e_no_user_sel_drive.txt",FF
+"textfile.txt"-"!:\FIND_CE\tf_find_ce.txt",FF
+
+
+; ------------------------------
+; wild_find_drv
+
+"textfile.txt"-"c:\FIND_WILD\tf_fw_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD\tf_fw_e.txt",FF
+"textfile.txt"-"c:\FIND_WILD_E\tf_fwd_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD_E\tf_fwd_e.txt",FF
+"textfile.txt"-"c:\FIND_WILD_E_AFT\tf_fwda_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD_E_AFT\tf_fwda_e.txt",FF
+"textfile.txt"-"!:\FIND_WILD_E\tf_fwd_us.txt",FF
+"textfile.txt"-"!:\FIND_WILD_C\tf_fwc_us.txt",FF
+
+
+; ------------------------------
+; pathsubst_filenull
+
+""-"c:\FIND_FN_DIR_2\file_to_delete.txt",FN
+
+
+; ------------------------------
+; rep_length
+
+; find path is shorter than replace path
+"textfile.txt"-"c:\FIND_SHORTER_THAN_REPLACE\tf_fsr.txt",FF
+
+; find path is longer than replace path
+"textfile.txt"-"c:\FIND_LONGER_THAN_REPLACE\tf_flr.txt",FF
+
+; find path is same length as replace path
+"textfile.txt"-"c:\FIND_SAME_LEN_AS_REPLAC1\tf_same.txt",FF
+
+; ------------------------------
+; to_root
+
+"textfile.txt"-"c:\MMFH_PATH_ROOT\tf_mmfpr_c.txt",FF
+"textfile.txt"-"e:\MMFH_PATH_ROOT\tf_mmfpr_e.txt",FF
+

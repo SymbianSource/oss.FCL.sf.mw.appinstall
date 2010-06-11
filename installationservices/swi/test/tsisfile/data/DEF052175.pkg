@@ -1,0 +1,82 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"Test DEF 052175"},(0x81000555),1,1,1
+
+%{"Symbian"}
+
+:"Symbian"
+
+
+; test case  when the sis file installes a large > 35 files to a device 
+; here we have 55 files and 1 embedded with 2 files
+
+@"zeros.sis",(0xE0000019)
+
+"files\agenda-emb"-"C:\Def052175\agenda-emb"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\badcert.cer"-"C:\Def052175\badcert.cer"
+"text\pass.txt"-"C:\Def052175\pass.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert1.cer"-"C:\Def052175\dsacert1.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert1.der"-"C:\Def052175\dsacert1.der"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert2.cer"-"C:\Def052175\dsacert2.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert2.der"-"C:\Def052175\dsacert2.der"
+"files\dsaprivate1.key"-"C:\Def052175\dsaprivate1.key"
+"files\dsaprivate2.key"-"C:\Def052175\dsaprivate2.key"
+"files\gpl.txt"-"C:\Def052175\gpl.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\mycert.cer"-"C:\Def052175\mycert.cer"
+"files\mykey.key"-"C:\Def052175\mykey.key"
+"files\option1.txt"-"C:\Def052175\option1.txt"
+"files\option2.txt"-"C:\Def052175\option2.txt"
+"files\option32.txt"-"C:\Def052175\option32.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert1.cer"-"C:\Def052175\rsacert1.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert1.der"-"C:\Def052175\rsacert1.der"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert2.cer"-"C:\Def052175\rsacert2.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert2.der"-"C:\Def052175\rsacert2.der"
+"files\rsaprivate1.key"-"C:\Def052175\rsaprivate1.key"
+"files\rsaprivate2.key"-"C:\Def052175\rsaprivate2.key"
+"files\tbit.gif"-"C:\Def052175\tbit.gif"
+"files\zeros"-"C:\Def052175\zeros"
+"files\agenda-emb"-"C:\Def052175\test\agenda-emb"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\badcert.cer"-"C:\Def052175\test\badcert.cer"
+"text\pass.txt"-"C:\Def052175\test\pass.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert1.cer"-"C:\Def052175\test\dsacert1.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert1.der"-"C:\Def052175\test\dsacert1.der"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert2.cer"-"C:\Def052175\test\dsacert2.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\dsacert2.der"-"C:\Def052175\test\dsacert2.der"
+"files\dsaprivate1.key"-"C:\Def052175\test\dsaprivate1.key"
+"files\dsaprivate2.key"-"C:\Def052175\test\dsaprivate2.key"
+"files\gpl.txt"-"C:\Def052175\test\gpl.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\mycert.cer"-"C:\Def052175\test\mycert.cer"
+"files\mykey.key"-"C:\Def052175\test\mykey.key"
+"files\option1.txt"-"C:\Def052175\test\option1.txt"
+"files\option2.txt"-"C:\Def052175\test\option2.txt"
+"files\option32.txt"-"C:\Def052175\test\option32.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert1.cer"-"C:\Def052175\test\rsacert1.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert1.der"-"C:\Def052175\test\rsacert1.der"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert2.cer"-"C:\Def052175\test\rsacert2.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\rsacert2.der"-"C:\Def052175\test\rsacert2.der"
+"files\rsaprivate1.key"-"C:\Def052175\test\rsaprivate1.key"
+"files\rsaprivate2.key"-"C:\Def052175\test\rsaprivate2.key"
+"files\tbit.gif"-"C:\Def052175\test\tbit.gif"
+"files\zeros"-"C:\Def052175\test\zeros"
+"files\agenda-emb"-"C:\Def052175\ttt\agenda-emb"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\files\badcert.cer"-"C:\Def052175\ttt\badcert.cer"
+"text\pass.txt"-"C:\Def052175\ttt\pass.txt"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\\files\dsacert1.cer"-"C:\Def052175\ttt\dsacert1.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\\files\dsacert2.cer"-"C:\Def052175\ttt\dsacert2.cer"
+"..\..\..\..\switestfw\testcertificates\swi\test\tsisfile\data\\files\dsacert2.der"-"C:\Def052175\ttt\dsacert2.der"
+"files\dsaprivate1.key"-"C:\Def052175\ttt\dsaprivate1.key"
+"files\gpl.txt"-"C:\Def052175\ttt\gpl.txt"

@@ -1,0 +1,1862 @@
+<testlist>
+<test id="testdataA001">
+	<title>testdataa001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisa001.bat testdataA001 </command>
+	<check type="result"/>
+	</test>
+<test id="testdataA002">
+	<title>testdataa002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisa002.bat testdataA002 </command>
+	<check type="result"/>
+	</test>
+<test id="testdataA003">
+	<title>testdataa003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisa003.bat testdataA003 </command>
+	<check type="result"/>
+	</test>
+<test id="testdataC001">
+	<title>testdatac001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc001.bat testdataC001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatac001 testcasec001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataC002">
+	<title>testdatac002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc002.bat testdataC002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatac002 testcasec002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataC003">
+	<title>testdatac003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc003.bat testdataC003 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatac003 testcasec003file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataC004">
+	<title>testdatac004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc004.bat testdataC004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatac004 testcasec004file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataD004">
+	<title>testdatad004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisd004.bat testdataD004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatad004 testcased004file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataD005">
+	<title>testdatad005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\copyd005.bat testdataD005</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatad005 testcased005file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataG001">
+	<title>testdatag001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisg001.bat testdataG001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatag001 testcaseg001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataG002">
+	<title>testdatag002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisg002.bat testdataG002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatag002 testcaseg002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataG003">
+	<title>testdatag003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisg003.bat testdataG003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatag003 testcaseg003file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataE001">
+	<title>testdatae001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesise001.bat testdataE001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatae001 testcasee001file.txt 1 "positive" "both" 1</check>
+	</test>
+<test id="testdataE002">
+	<title>testdatae002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesise002.bat testdataE002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatae002 testcasee002file.txt 2 "positive" "both" 1</check>
+	</test>
+<test id="testdataE003">
+	<title>testdatae003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesise003.bat testdataE003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatae003 testcasee003file.txt 1 "positive" "both" 1</check>
+	</test>
+<test id="testdataF001">
+	<title>testdataf001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf001.bat testdataF001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf001 testcasef001file.txt 1 "negative" "both" 0</check>
+	</test>
+<test id="testdataF002">
+	<title>testdataf002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf002.bat testdataF002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf002 testcasef002file.txt 1 "negative" "both" 0</check>
+	</test>
+<test id="testdataF003">
+	<title>testdataf003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf003.bat testdataF003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf003 testcasef003file.txt 2 "positive" "both" 0</check>
+	</test>
+<test id="testdataF004">
+	<title>testdataf004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf004.bat testdataF004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf004 testcasef004file.txt 2 "positive" "both" 1</check>
+	</test>
+<test id="testdataF005">
+	<title>testdataf005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf005.bat testdataF005</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf005 testcasef005file.txt 2 "positive" "both" 0</check>
+	</test>
+<test id="testdataF006">
+	<title>testdataf006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf006.bat A testdataF006</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf006 testcasef006file.txt 1 "negative" "both" 0</check>
+	</test>
+<test id="testdataF007">
+	<title>testdataf007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf007.bat testdataF007</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf007 testcasef007file.txt 1 "positive" "both" 0</check>
+	</test>
+<test id="testdataF008">
+	<title>testdataf008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf008.bat testdataF008</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf008 testcasef008file.txt 1 "positive" "both" 0</check>
+	</test>
+<test id="testdataF010">
+	<title>testdataF010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf010.bat testdataF010</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataF010 testcaseF010file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB001a">
+	<title>testdatab001a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001a.bat testdataB001a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001a testcaseb001afile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB001b">
+	<title>testdatab001b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001b.bat testdataB001b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001b testcaseb001bfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB001c">
+	<title>testdatab001c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001c.bat testdataB001c</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001c testcaseb001cfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB001d">
+	<title>testdatab001d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001d.bat testdataB001d</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001d testcaseb001dfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB001e">
+	<title>testdatab001e</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001e.bat testdataB001e</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001e testcaseb001efile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB001f">
+	<title>testdatab001f</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001f.bat testdataB001f</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001f testcaseb001ffile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB001g">
+	<title>testdatab001g</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001g.bat testdataB001g</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001g testcaseb001gfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB001h">
+	<title>testdatab001h</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001h.bat testdataB001h</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001h testcaseb001hfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB001i">
+	<title>testdatab001i</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb001i.bat testdataB001i</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab001i testcaseb001ifile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002a">
+	<title>testdatab002a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002a.bat testdataB002a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002a testcaseb002afile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB002b">
+	<title>testdatab002b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002b.bat testdataB002b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002b testcaseb002bfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB002c">
+	<title>testdatab002c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002c.bat testdataB002c</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002c testcaseb002cfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002d">
+	<title>testdatab002d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002d.bat testdataB002d</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002d testcaseb002dfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB002e">
+	<title>testdatab002e</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002e.bat testdataB002e</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002e testcaseb002efile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002f">
+	<title>testdatab002f</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002f.bat testdataB002f</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002f testcaseb002ffile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002g">
+	<title>testdatab002g</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002g.bat testdataB002g</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002g testcaseb002gfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002h">
+	<title>testdatab002h</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002h.bat testdataB002h</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002h testcaseb002hfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB002i">
+	<title>testdatab002i</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb002i.bat testdataB002i</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab002i testcaseb002ifile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB003a">
+	<title>testdatab003a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003a.bat testdataB003a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003a testcaseb003afile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB003b">
+	<title>testdatab003b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003b.bat testdataB003b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003b testcaseb003bfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB003c">
+	<title>testdatab003c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003c.bat testdataB003c</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003c testcaseb003cfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB003d">
+	<title>testdatab003d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003d.bat testdataB003d</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003d testcaseb003dfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB003e">
+	<title>testdatab003e</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003e.bat testdataB003e</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003e testcaseb003efile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB003f">
+	<title>testdatab003f</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003f.bat testdataB003f</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003f testcaseb003ffile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB003g">
+	<title>testdatab003g</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003g.bat testdataB003g</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003g testcaseb003gfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB003h">
+	<title>testdatab003h</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb003h.bat testdataB003h</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab003h testcaseb003hfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataB004">
+	<title>testdatab004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisb004.bat testdataB004</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab004 testcaseb004file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB005">
+	<title>testdatab005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisb005.bat testdataB005</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab005 testcaseb005file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB006a">
+	<title>testdatab006a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb006a.bat testdataB006a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab006a testcaseb006file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB006b">
+	<title>testdatab006b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisb006b.bat testdataB006b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab006b testcaseb006file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataB007">
+	<title>testdatab007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisb007.bat testdataB007</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatab007 testcaseb007file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataD001a">
+	<title>testdatad001a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisd001a.bat testdataD001a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatad001a testcased001afile.txt 3 "positive" "both" "Spanish"</check>
+	</test>
+<test id="testdataD001b">
+	<title>testdatad001b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisd001b.bat testdataD001b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatad001b testcased001bfile.txt 3 "positive" "both" "English"</check>
+	</test>
+<test id="testdataE004">
+	<title>testdatae004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesise004.bat testdataE004</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatae004 testcasee004file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataE005">
+	<title>testdatae005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesise005.bat testdataE005</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatae005 testcasee005file.txt 2 "positive" "both"</check>
+	</test>
+<test id="testdataH001">
+	<title>testdatah001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesish001.bat testdataH001</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah001 testcaseh001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataH002a">
+	<title>testdatah002a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat A testdataH002a</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002a testcaseh002afile.txt 6 "positive" "both" "nocompare" "nobatchfile" "" </check>
+	</test>
+<test id="testdataH002b">
+	<title>testdatah002b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat B testdataH002b</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002b testcaseh002bfile.txt 6 "positive" "both" "nocompare" "nobatchfile" "info1.txt" "present"</check>
+	</test>
+<test id="testdataH002c">
+	<title>testdatah002c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat C testdataH002c</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002c testcaseh002cfile.txt 6 "positive" "both" "nocompare" "nobatchfile" "warning1.txt" "absent"</check>
+	</test>
+<test id="testdataH002d">
+	<title>testdatah002d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat D testdataH002d</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002d testcaseh002dfile.txt 6 "positive" "both" "nocompare" "nobatchfile" "warning2.txt" "present"</check>
+	</test>
+<test id="testdataH002e">
+	<title>testdatah002e</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat E testdataH002e</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002e testcaseh002efile.txt 6 "positive" "both" "nocompare" "nobatchfile" "error1.txt" "absent"</check>
+	</test>
+<test id="testdataH002f">
+	<title>testdatah002f</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat F testdataH002f</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002f testcaseh002ffile.txt 6 "negative" "both" "nocompare" "nobatchfile" "error2.txt" "present"</check>
+	</test>
+<test id="testdataH002g">
+	<title>testdatah002g</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat G testdataH002g</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002g testcaseh002gfile.txt 6 "negative" "both" "nocompare" "nobatchfile" "silent1.txt" "absent"</check>
+	</test>
+<test id="testdataH002h">
+	<title>testdatah002h</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat H testdataH002h</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002h testcaseh002hfile.txt 6 "negative" "both" "nocompare" "nobatchfile" "error3.txt" "absent"</check>
+	</test>
+<test id="testdataH002i">
+	<title>testdatah002i</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat I testdataH002i</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002i testcaseh002ifile.txt 6 "positive" "both" "nocompare" "nobatchfile" "warning3.txt" "absent"</check>
+	</test>
+<test id="testdataH002j">
+	<title>testdatah002j</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat J testdataH002j</command>
+<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002j testcaseh002jfile.txt 6 "positive" "both" "nocompare" "nobatchfile" "info2.txt" "present"</check>
+	</test>
+<test id="testdataH002k">
+	<title>testdatah002k</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsish002.bat K testdataH002k</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah002k testcaseh002kfile.txt 6 "positive" "both" "nocompare" "nobatchfile" "info3.txt" "present"</check>
+	</test>
+<test id="testdataH003a">
+	<title>testdatah003a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesish003a.bat testdataH003a</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah003a testcaseh003afile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataH003b">
+	<title>testdatah003b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesish003b.bat testdataH003b</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah003b testcaseh003bfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataH003c">
+	<title>testdatah003c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesish003c.bat testdataH003c</command>
+	<check type="program" name ="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatah003c testcaseh003cfile.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataF009" type="nativeonly">
+	<title>testdataf009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf009.bat testdataF009</command>
+<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataf009 testcasef009file.txt 1 "positive" "both" 89334328 "nobatchfile" "tintsisf009.script"</check>
+	</test>
+<test id="testdataJ001a" type="nativeonly">
+	<title>testdataj001a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj001.bat A testdataJ001a</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj001a notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj001_ra.script" "tintsisj001_ra.htm" "NR flag unset" "Noerror"</check>
+	</test>
+<test id="testdataJ001b" type="nativeonly">
+	<title>testdataj001b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj001.bat B testdataJ001b</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj001b notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj001_rb.script" "tintsisj001_rb.htm" "NR flag set" "-10256"</check>
+	</test>
+<test id="testdataJ001c" type="nativeonly">
+	<title>testdataj001c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj001.bat C testdataJ001c</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj001c notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj001_nra.script" "tintsisj001_NRa.htm" "NR flag unset" "-10256"</check>
+	</test>
+<test id="testdataJ001d" type="nativeonly">
+	<title>testdataj001d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj001.bat D testdataJ001d</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj001d notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj001_nrb.script" "tintsisj001_NRb.htm" "NR flag set" "Noerror"</check>
+	</test>
+<test id="testdataJ002a" type="nativeonly">
+	<title>testdataj002a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj002.bat A testdataJ002a</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj002a notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj002_ra.script" "tintsisj002_Ra.htm" "NR flag unset" "Noerror"</check>
+	</test>
+<test id="testdataJ002b" type="nativeonly">
+	<title>testdataj002b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj002.bat B testdataJ002b</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj002b notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj002_rb.script" "tintsisj002_Rb.htm" "NR flag set" "Noerror"</check>
+	</test>
+<test id="testdataJ002c" type="nativeonly">
+	<title>testdataj002c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj002.bat C testdataJ002c</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj002c notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj002_nra.script" "tintsisj002_NRa.htm" "NR flag unset" "-10256"</check>
+	</test>
+<test id="testdataJ002d" type="nativeonly">
+	<title>testdataj002d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj002.bat D testdataJ002d</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj002d notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj002_nrb.script" "tintsisj002_NRb.htm" "NR flag set" "Noerror"</check>
+	</test>
+<test id="testdataJ003a" type="nativeonly">
+	<title>testdataj003a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj003.bat A testdataJ003a</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj003a notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj003_ra.script" "tintsisj003_Ra.htm" "NR flag unset" "Noerror"</check>
+	</test>
+<test id="testdataJ003b" type="nativeonly">
+	<title>testdataj003b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj003.bat B testdataJ003b</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj003b notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj003_rb.script" "tintsisj003_Rb.htm" "NR flag set" "-10256"</check>
+	</test>
+<test id="testdataJ003c" type="nativeonly">
+	<title>testdataj003c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj003.bat C testdataJ003c</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj003c notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj003_nra.script" "tintsisj003_NRa.htm" "NR flag unset" "-10256"</check>
+	</test>
+<test id="testdataJ003d" type="nativeonly">
+	<title>testdataj003d</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj003.bat D testdataJ003d</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj003d notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisj003_nrb.script" "tintsisj003_NRb.htm" "NR flag set" "Noerror"</check>
+	</test>
+<test id="testdataJ006" type="nativeonly">
+	<title>testdataj006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj006.bat testdataJ006</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj006 notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj006.script" "tintsisj006.htm" "NR flag unset" "-5"</check>
+	</test>
+<test id="testdataI001a" type="nativeonly">
+	<title>testdatai001a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisi001.bat A testdataI001a</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatai001a testcasei001afile.txt 4 "positive" "both" "nouid" "nobatchfile" "tintsisi001a.script" "tintsisi001a.htm" "Noflagcheck" "-5"</check>
+	</test>
+<test id="testdataI001b" type="nativeonly">
+	<title>testdatai001b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisi001.bat B testdataI001b</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatai001b testcasei001bfile.txt 2 "negative" "both" "nouid" "nobatchfile" "tintsisi001b.script" "nohtmlsearch" "Noflagcheck" "Noerror"</check>
+	</test>
+<test id="testdataI002a" type="nativeonly">
+	<title>testdatai002a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisi002.bat A testdataI002a</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatai002a notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisi002a.script" "tintsisi002a.htm" "NR flag set" "Noerror"</check>
+	</test>
+<test id="testdataI002b" type="nativeonly">
+	<title>testdatai002b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisi002.bat B testdataI002b</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatai002b notextfile 3 "positive" "both" "nouid" "nobatchfile" "tintsisi002b.script" "tintsisi002b.htm"  "NR flag unset" "Noerror"</check>
+	</test>
+<test id="testdataI003" type="nativeonly">
+	<title>testdatai003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisi003.bat testdataI003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatai003 testcasei003file.txt 2 "positive" "both" "nouid" "nobatchfile" "tintsisi003.script" "nohtmlsearch" "nocheck" "Noerror"</check>
+	</test>
+<test id="testdataH004" type="nativeonly">
+	<title>testdatah004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesish004.bat testdataH004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdatah004 testcaseh004file.txt 2 "positive" "both" "nouid" "nobatchfile" "tintsish004.script" "nohtmlsearch" "nocheck" "Noerror"</check>
+	</test>
+<test id="testdataF011" type="nativeonly">
+	<title>testdataF011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf011.bat testdataF011</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataF011 testcaseF011file.txt 5 "positive" "both" "nouid" "nobatchfile" "tintsisF011.script" "nohtmlsearch" "nocheck" "Noerror" "I did run OK"</check>
+	</test>
+<test id="testdataJ008" type="nativeonly">
+	<title>testdataj008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisj006.bat testdataJ008</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">testdataj008 notextfile 3 "negative" "both" "nouid" "nobatchfile" "tintsisj006.script" "tintsisj006.htm" "NR flag unset" "-5"</check>
+	</test>
+<test id="testdataL001">
+	<title>testdatal001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisl001.bat testdataL001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatal001 testcasel001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataF006Def">
+	<title>testdataf006Def</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf006.bat B testdataF006Def</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf006Def testcasef006Deffile.txt 1 "positive" "both" 0</check>
+	</test>	
+<test id="testdataM001">
+	<title>testdataM001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism001.bat testdataM001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM001 testcasem001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataM002">
+	<title>testdataM002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism002.bat testdataM002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM002 testcaseM002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM003">
+	<title>testdataM003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism003.bat testdataM003 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM003 testcaseM003file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM004">
+	<title>testdataM004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism004.bat testdataM004 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM004 testcaseM004file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM005">
+	<title>testdataM005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism005.bat testdataM005 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM005 testcaseM005file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM006">
+	<title>testdataM006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism006.bat testdataM006 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM006 testcaseM006file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM007">
+	<title>testdataM007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism007.bat testdataM007 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM007 testcaseM007file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM008">
+	<title>testdataM008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism008.bat testdataM008 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM008 testcaseM008file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM009">
+	<title>testdataM009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism009.bat testdataM009 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM009 testcaseM009file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM0010">
+	<title>testdataM0010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism0010.bat testdataM0010 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM0010 testcaseM0010file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM0011">
+	<title>testdataM0011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism0011.bat testdataM0011 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM0011 testcaseM0011file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataM0016" type="nativeonly">
+	<title>testdataM0016</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism0016.bat testdataM0016 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM0016 testcaseM0016file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataM0016c">
+	<title>testdataM0016c</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism0016c.bat testdataM0016c </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM0016c testcaseM0016cfile.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataN001" type="nativeonly">
+	<title>testdataN001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisn001.bat testdataN001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataN001 testcasen001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataN002" type="nativeonly">
+	<title>testdataN002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisn002.bat testdataN002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataN002 testcasen002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataO001">
+	<title>testdataO001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiso001.bat testdataO001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataO001 testcaseo001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataO002" type="nativeonly">
+	<title>testdataO002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiso002.bat testdataO002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataO002 testcaseo002file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataO003">
+	<title>testdataO003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiso003.bat testdataO003 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataO003 testcaseo003file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataO004">
+	<title>testdataO004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiso004.bat testdataO004 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataO004 testcaseo004file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataP001">
+	<title>testdataP001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp001.bat testdataP001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP001 testcasep001file.txt 3 "positive" "both" "French"</check>
+	</test>
+<test id="testdataP002">
+	<title>testdataP002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp002.bat testdataP002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP002 testcasep002file.txt 3 "positive" "both" "English"</check>
+	</test>
+<test id="testdataP003">
+	<title>testdataP003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp003.bat testdataP003 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP003 testcasep003file.txt 3 "positive" "both" "German"</check>
+	</test>
+<test id="testdataP004">
+	<title>testdataP004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp004.bat testdataP004 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP004 testcasep004file.txt 3 "positive" "both" "German"</check>
+	</test>
+<test id="testdataP005">
+	<title>testdataP005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp005.bat testdataP005 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP005 testcasep005file.txt 3 "positive" "both" "English"</check>
+	</test>
+<test id="testdataP006">
+	<title>testdataP006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp006.bat testdataP006 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP006 testcasep006file.txt 3 "positive" "both" "French"</check>
+	</test>
+<test id="testdataP007">
+	<title>testdataP007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisp007.bat testdataP007 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataP007 testcasep007file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataQ001">
+	<title>testdataQ001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisq001.bat testdataQ001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataQ001 testcaseq001file.txt 3 "positive" "both" "French"</check>
+	</test>
+<test id="testdataQ002">
+	<title>testdataQ002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisq002.bat testdataQ002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataQ002 testcaseq002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataR001">
+	<title>testdataR001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisr001.bat testdataR001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataR001 testcaser001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS001">
+	<title>testdataS001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss001.bat testdataS001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS001 testcases001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS002">
+	<title>testdataS002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss002.bat testdataS002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS002 testcases002file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS003">
+	<title>testdataS003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss003.bat testdataS003 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS003 testcases003file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS004">
+	<title>testdataS004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss004.bat testdataS004 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS004 testcases004file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS005">
+	<title>testdataS005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss004.bat testdataS005 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS005 testcases005file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS006">
+	<title>testdataS006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss006.bat testdataS006 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS006 testcases006file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS007">
+	<title>testdataS007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss007.bat testdataS007 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS007 testcases007file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataS008">
+	<title>testdataS008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss008.bat testdataS008 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS008 testcases008file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS009">
+	<title>testdataS009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss009.bat testdataS009 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS009 testcases009file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataS0010">
+	<title>testdataS0010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesiss0010.bat testdataS0010 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataS0010 testcases0010file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataT001">
+	<title>testdataT001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesist001.bat testdataT001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataT001 testcaset001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataT002">
+	<title>testdataT002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesist002.bat testdataT002 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataT002 testcaset002file.txt 1 "negative" "both"</check>
+	</test>
+<test id="testdataU001">
+	<title>testdataU001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisu001.bat testdatau001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataU001 testcaseU001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataV001">
+	<title>testdataV001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisv001.bat testdataV001 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataV001 testcasev001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataW001">
+	<title>testdataW001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisw001.bat testdataW001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataw001 testcasew001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataC005">
+	<title>testdatac005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc005.bat testdataC005</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatac005 testcasec005file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdataC006">
+	<title>testdataC006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisc006.bat testdataC006</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataC006 testcasec006file.txt 1 "positive" "both"</check>
+	</test>
+
+<test id="testdataDef115968">
+	<title>testdataDef115968</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisdef115968.bat testdataDef115968 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataDef115968 testcasea001file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdata_pkgversion_d002">
+	<title>SEC-SWI-PKGVERSION-D002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d001d002.bat testdata_pkgversion_d002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d002 testdata_pkgversion_d002file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_base">
+	<title>SEC-SWI-PKGVERSION-D Base Test Application Installation</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_base.bat testdata_pkgversion_base</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_base testdata_pkgversion_basefile.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d001">
+	<title>SEC-SWI-PKGVERSION-D001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d001d002.bat testdata_pkgversion_d001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d001 testdata_pkgversion_d001file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d003">
+	<title>SEC-SWI-PKGVERSION-D003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d003.bat testdata_pkgversion_d003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d003 testdata_pkgversion_d003file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d004">
+	<title>SEC-SWI-PKGVERSION-D004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d004.bat testdata_pkgversion_d004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d004 testdata_pkgversion_d004file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d005">
+	<title>SEC-SWI-PKGVERSION-D005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d005.bat testdata_pkgversion_d005</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d005 testdata_pkgversion_d005file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d006">
+	<title>SEC-SWI-PKGVERSION-D006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d006.bat testdata_pkgversion_d006</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d006 testdata_pkgversion_d006file.txt 1 "positive" "none"</check>
+	</test>
+<test id="testdata_pkgversion_d007">
+	<title>SEC-SWI-PKGVERSION-D007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsis_pkgversion_d007.bat testdata_pkgversion_d007</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdata_pkgversion_d007 testdata_pkgversion_d007file.txt 1 "positive" "both"</check>
+	</test>
+<test id="INT001-001">
+	<title>SEC-sistools-InterpretSIS-INT001-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-002">
+	<title>SEC-sistools-InterpretSIS-INT001-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-003a">
+	<title>SEC-sistools-InterpretSIS-INT001-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-003a</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-003b">
+	<title>SEC-sistools-InterpretSIS-INT001-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-003b</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-003c">
+	<title>SEC-sistools-InterpretSIS-INT001-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-003c</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-003d">
+	<title>SEC-sistools-InterpretSIS-INT001-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-003d</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-004">
+	<title>SEC-sistools-InterpretSIS-INT001-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-006">
+	<title>SEC-sistools-InterpretSIS-INT001-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-007">
+	<title>SEC-sistools-InterpretSIS-INT001-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-008a">
+	<title>SEC-sistools-InterpretSIS-INT001-008a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-008a</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-008b">
+	<title>SEC-sistools-InterpretSIS-INT001-008b</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-008b</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-009">
+	<title>SEC-sistools-InterpretSIS-INT001-009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-009</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-010">
+	<title>SEC-sistools-InterpretSIS-INT001-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-011">
+	<title>SEC-sistools-InterpretSIS-INT001-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-012">
+	<title>SEC-sistools-InterpretSIS-INT001-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-013">
+	<title>SEC-sistools-InterpretSIS-INT001-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-014">
+	<title>SEC-sistools-InterpretSIS-INT001-014</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-014</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-015">
+	<title>SEC-sistools-InterpretSIS-INT001-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-016">
+	<title>SEC-sistools-InterpretSIS-INT001-016</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-016</command>
+	<check type="result"/>
+	</test>
+<test id="INT001-017">
+	<title>SEC-sistools-InterpretSIS-INT001-017</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT001-017</command>
+	<check type="result"/>
+	</test>
+<test id="SWI001-001" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-001 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi001-001.script" "swi001-001.htm" "nocheck" "PASS = 4"</check>
+	</test>
+<test id="SWI001-002" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-002 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi001-002.script" "swi001-002.htm" "nocheck" "PASS = 5"</check>
+	</test>
+<test id="SWI001-003" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-003 PARAM_INI 4 "negative" "both" "nouid" "nobatchfile" "swi001-003.script" "swi001-003.htm" "nocheck" "PASS = 4"</check>
+	</test>
+<test id="SWI001-004" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-004 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "SWI001-004.script" "swi001-004.htm" "nocheck" "PASS = 3"</check>
+	</test>
+<test id="SWI001-005" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-005</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-005 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "SWI001-005.script" "swi001-005.htm" "nocheck" "PASS = 1"</check>
+	</test>
+<test id="SWI001-006" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-006</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-006 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi001-006.script" "swi001-006.htm" "nocheck" "PASS = 3"</check>
+	</test>
+<test id="SWI001-007" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI001-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI001-007</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI001-007 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi001-007.script" "swi001-007.htm" "nocheck" "PASS = 3"</check>
+	</test>
+<test id="INT002-001a">
+	<title>SEC-sistools-InterpretSIS-INT002-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-001a</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-001b">
+	<title>SEC-sistools-InterpretSIS-INT002-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-001b</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-003">
+	<title>SEC-sistools-InterpretSIS-INT002-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-005">
+	<title>SEC-sistools-InterpretSIS-INT002-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-006">
+	<title>SEC-sistools-InterpretSIS-INT002-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-007">
+	<title>SEC-sistools-InterpretSIS-INT002-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-008">
+	<title>SEC-sistools-InterpretSIS-INT002-008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-008</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-009">
+	<title>SEC-sistools-InterpretSIS-INT002-009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-009</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-010">
+	<title>SEC-sistools-InterpretSIS-INT002-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-011">
+	<title>SEC-sistools-InterpretSIS-INT002-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-012">
+	<title>SEC-sistools-InterpretSIS-INT002-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-013">
+	<title>SEC-sistools-InterpretSIS-INT002-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-014">
+	<title>SEC-sistools-InterpretSIS-INT002-014</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-014</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-015">
+	<title>SEC-sistools-InterpretSIS-INT002-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-016">
+	<title>SEC-sistools-InterpretSIS-INT002-016</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-016</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-017">
+	<title>SEC-sistools-InterpretSIS-INT002-018</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-018</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-018">
+	<title>SEC-sistools-InterpretSIS-INT002-017</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-017</command>
+	<check type="result"/>
+	</test>
+<test id="SWI002-001" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI002-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI002-001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI002-001 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi002-001.script" "swi002-001.htm" "nocheck" "PASS = 2"</check>
+	</test>
+<test id="SWI002-002" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI002-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI002-002</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI002-002 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi002-002.script" "swi002-002.htm" "Noflagcheck" "PASS = 4"</check>
+	</test>
+<test id="SWI002-003" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI002-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI002-003</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI002-003 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi002-003.script" "swi002-003.htm" "nocheck" "PASS = 4"</check>
+	</test>
+<test id="SWI002-004" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI002-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI002-004</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI002-004 PARAM_INI 3 "positive" "both" "nouid" "nobatchfile" "swi002-004.script" "swi002-004.htm" "nocheck" "PASS = 3"</check>
+	</test>
+<test id="INT003-001">
+	<title>SEC-sistools-InterpretSIS-INT003-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-002">
+	<title>SEC-sistools-InterpretSIS-INT003-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-003">
+	<title>SEC-sistools-InterpretSIS-INT003-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-004">
+	<title>SEC-sistools-InterpretSIS-INT003-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-005">
+	<title>SEC-sistools-InterpretSIS-INT003-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-006">
+	<title>SEC-sistools-InterpretSIS-INT003-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-007">
+	<title>SEC-sistools-InterpretSIS-INT003-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-008">
+	<title>SEC-sistools-InterpretSIS-INT003-008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-008</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-009">
+	<title>SEC-sistools-InterpretSIS-INT003-009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-009</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-010">
+	<title>SEC-sistools-InterpretSIS-INT003-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-011">
+	<title>SEC-sistools-InterpretSIS-INT003-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-012">
+	<title>SEC-sistools-InterpretSIS-INT003-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-013">
+	<title>SEC-sistools-InterpretSIS-INT003-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-014">
+	<title>SEC-sistools-InterpretSIS-INT003-014</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-014</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-015">
+	<title>SEC-sistools-InterpretSIS-INT003-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-017">
+	<title>SEC-sistools-InterpretSIS-INT003-017</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-017</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-018">
+	<title>SEC-sistools-InterpretSIS-INT003-018</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-018</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-019">
+	<title>SEC-sistools-InterpretSIS-INT003-019</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-019</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-020" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-INT003-020</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-020</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-021">
+	<title>SEC-sistools-InterpretSIS-INT003-021</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-021</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-022">
+	<title>SEC-sistools-InterpretSIS-INT003-022</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-022</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-023">
+	<title>SEC-sistools-InterpretSIS-INT003-023</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-023</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-024" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-INT003-024</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-024</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-025" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-INT003-025</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-025</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-026" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-INT003-026</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-026</command>
+	<check type="result"/>
+	</test>
+<test id="INT003-027">
+	<title>SEC-sistools-InterpretSIS-INT003-027</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT003-027</command>
+	<check type="result"/>
+	</test>
+<test id="SWI003-001" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-SWI003-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI003-001</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">SWI003-001 PARAM_INI 3 "positive" "all" "nouid" "nobatchfile" "swi003-001.script" "swi003-001.htm" "nocheck" "PASS = 3"</check>
+	</test>
+<test id="INT004-001">
+	<title>SEC-sistools-InterpretSIS-INT004-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-002">
+	<title>SEC-sistools-InterpretSIS-INT004-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-003">
+	<title>SEC-sistools-InterpretSIS-INT004-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-004">
+	<title>SEC-sistools-InterpretSIS-INT004-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-005">
+	<title>SEC-sistools-InterpretSIS-INT004-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-006">
+	<title>SEC-sistools-InterpretSIS-INT004-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-007">
+	<title>SEC-sistools-InterpretSIS-INT004-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-008">
+	<title>SEC-sistools-InterpretSIS-INT004-008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-008</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-009">
+	<title>SEC-sistools-InterpretSIS-INT004-009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-009</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-010">
+	<title>SEC-sistools-InterpretSIS-INT004-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-011">
+	<title>SEC-sistools-InterpretSIS-INT004-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-012">
+	<title>SEC-sistools-InterpretSIS-INT004-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-013">
+	<title>SEC-sistools-InterpretSIS-INT004-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-014">
+	<title>SEC-sistools-InterpretSIS-INT004-014</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-014</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-015" type="nativeonly">
+	<title>SEC-sistools-InterpretSIS-INT004-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT004-016">
+	<title>SEC-sistools-InterpretSIS-INT004-016</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT004-016</command>
+	<check type="result"/>
+	</test>
+<test id="INT005-001">
+	<title>SEC-sistools-InterpretSIS-INT005-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT005-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT005-004">
+	<title>SEC-sistools-InterpretSIS-INT005-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT005-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT006-006">
+	<title>SEC-sistools-InterpretSIS-INT006-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT006-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT008-001">
+	<title>SEC-sistools-InterpretSIS-INT008-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT008-002">
+	<title>SEC-sistools-InterpretSIS-INT008-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT008-003">
+	<title>SEC-sistools-InterpretSIS-INT008-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT008-004">
+	<title>SEC-sistools-InterpretSIS-INT008-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-004</command>
+	<check type="result"/>
+	</test>	
+<test id="INT008-005">
+	<title>SEC-sistools-InterpretSIS-INT008-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-005</command>
+	<check type="result"/>
+	</test>	
+<test id="INT008-006">
+	<title>SEC-sistools-InterpretSIS-INT008-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT008-007">
+	<title>SEC-sistools-InterpretSIS-INT008-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT008-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT009-001">
+	<title>SEC-sistools-InterpretSIS-INT009-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT009-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT009-002">
+	<title>SEC-sistools-InterpretSIS-INT009-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT009-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-001">
+	<title>SEC-sistools-InterpretSIS-INT010-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-002">
+	<title>SEC-sistools-InterpretSIS-INT010-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-003">
+	<title>SEC-sistools-InterpretSIS-INT010-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-004">
+	<title>SEC-sistools-InterpretSIS-INT010-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-005">
+	<title>SEC-sistools-InterpretSIS-INT010-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-006">
+	<title>SEC-sistools-InterpretSIS-INT010-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-007">
+	<title>SEC-sistools-InterpretSIS-INT010-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-008">
+	<title>SEC-sistools-InterpretSIS-INT010-008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-008</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-010">
+	<title>SEC-sistools-InterpretSIS-INT010-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-011">
+	<title>SEC-sistools-InterpretSIS-INT010-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-012">
+	<title>SEC-sistools-InterpretSIS-INT010-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-013">
+	<title>SEC-sistools-InterpretSIS-INT010-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-015">
+	<title>SEC-sistools-InterpretSIS-INT010-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-016">
+	<title>SEC-sistools-InterpretSIS-INT010-016</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-016</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-017">
+	<title>SEC-sistools-InterpretSIS-INT010-017</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-017</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-018">
+	<title>SEC-sistools-InterpretSIS-INT010-018</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-018</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-019">
+	<title>SEC-sistools-InterpretSIS-INT010-019</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-019</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-020">
+	<title>SEC-sistools-InterpretSIS-INT010-020</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-020</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-021">
+	<title>SEC-sistools-InterpretSIS-INT010-021</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-021</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-022">
+	<title>SEC-sistools-InterpretSIS-INT010-022</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-022</command>
+	<check type="result"/>
+	</test>
+<test id="INT010-023">
+	<title>SEC-sistools-InterpretSIS-INT010-023</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT010-023</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-001">
+	<title>SEC-sistools-InterpretSIS-INT011-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-003">
+	<title>SEC-sistools-InterpretSIS-INT011-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-005">
+	<title>SEC-sistools-InterpretSIS-INT011-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-006">
+	<title>SEC-sistools-InterpretSIS-INT011-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-008">
+	<title>SEC-sistools-InterpretSIS-INT011-008</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-008</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-009">
+	<title>SEC-sistools-InterpretSIS-INT011-009</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-009</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-010">
+	<title>SEC-sistools-InterpretSIS-INT011-010</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-010</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-011">
+	<title>SEC-sistools-InterpretSIS-INT011-011</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-011</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-012">
+	<title>SEC-sistools-InterpretSIS-INT011-012</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-012</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-013">
+	<title>SEC-sistools-InterpretSIS-INT011-013</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-013</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-014">
+	<title>SEC-sistools-InterpretSIS-INT011-014</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-014</command>
+	<check type="result"/>
+	</test>
+<test id="INT011-015">
+	<title>SEC-sistools-InterpretSIS-INT011-015</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT011-015</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-001">
+	<title>SEC-sistools-InterpretSIS-INT012-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-002">
+	<title>SEC-sistools-InterpretSIS-INT012-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-003">
+	<title>SEC-sistools-InterpretSIS-INT012-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-003</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-004">
+	<title>SEC-sistools-InterpretSIS-INT012-004</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-004</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-005">
+	<title>SEC-sistools-InterpretSIS-INT012-005</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-005</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-006">
+	<title>SEC-sistools-InterpretSIS-INT012-006</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-006</command>
+	<check type="result"/>
+	</test>
+<test id="INT012-007">
+	<title>SEC-sistools-InterpretSIS-INT012-007</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT012-007</command>
+	<check type="result"/>
+	</test>
+<test id="INT013-001">
+	<title>SEC-sistools-InterpretSIS-INT013-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT013-001</command>
+	<check type="result"/>
+	</test>
+<test id="INT013-002">
+	<title>SEC-sistools-InterpretSIS-INT013-002</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT013-002</command>
+	<check type="result"/>
+	</test>
+<test id="INT013-003">
+	<title>SEC-sistools-InterpretSIS-INT013-003</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT013-003</command>
+	<check type="result"/>
+	</test>
+<test id="testdatainc124436">
+	<title>testdatainc124436</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisinc124436.bat A testdatainc124436 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436 testcaseinc124436file.txt 1 "positive" "both"</check>
+	</test>
+<test id="testdatainc124436_1">
+	<title>testdatainc124436_1</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\interpretsisinc124436.bat B testdatainc124436_1 </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdatainc124436_1 testcaseinc124436file.txt 1 "positive" "both"</check>
+	</test>
+<test id="INT014-001">
+	<title>SEC-sistools-InterpretSIS-INT014-001</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT014-001</command>
+	<check type="result"/>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-01">
+	<title>API-INST-PREQ2525-InterpretSIS-01  Package supports EN and FR  Language selected EN and FR</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-01.bat API-INST-PREQ2525-InterpretSIS-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-01 preq2525-interpretsis-01.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-02">
+	<title>API-INST-PREQ2525-InterpretSIS-02 Package supports FR and EN  Language selected IF and EN </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-02.bat API-INST-PREQ2525-InterpretSIS-02</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-02 preq2525-interpretsis-02.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-03">
+	<title>API-INST-PREQ2525-InterpretSIS-03 Package supports FR and EN  Language selected JA and CE </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-03.bat API-INST-PREQ2525-InterpretSIS-03</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-03 preq2525-interpretsis-03.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-04">
+	<title>API-INST-PREQ2525-InterpretSIS-04 Package supports FR and EN  Language selected PA and MN </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-04.bat API-INST-PREQ2525-InterpretSIS-04</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-04 preq2525-interpretsis-04.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-05">
+	<title>API-INST-PREQ2525-InterpretSIS-05 Package does not support supported_language token   Language selected EN and FR</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-05.bat API-INST-PREQ2525-InterpretSIS-05</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-05 preq2525-interpretsis-05.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-06">
+	<title>API-INST-PREQ2525-InterpretSIS-06 Package supports  EN and FR  Language selected  EN and FR ..SP upgrade  Package supports EN FR and GE language selected GE and MN </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-06.bat API-INST-PREQ2525-InterpretSIS-06</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-06 preq2525-interpretsis-06.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-07">
+	<title>API-INST-PREQ2525-InterpretSIS-07 Package supports  EN and FR  Language selected  EN and FR ..PU upgrade  Package supports EN FR and GE language selected EN and FR </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-07.bat API-INST-PREQ2525-InterpretSIS-07</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-07 preq2525-interpretsis-07.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-08">
+	<title>API-INST-PREQ2525-InterpretSIS-08 Base, SA, PU, SP installation for eqivalent match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-08.bat API-INST-PREQ2525-InterpretSIS-08</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-08 preq2525-interpretsis-08.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-09">
+	<title>API-INST-PREQ2525-InterpretSIS-09 Base, SA, PU, SP installation for exact match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-09.bat API-INST-PREQ2525-InterpretSIS-09</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-09 preq2525-interpretsis-09.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-10">
+	<title>API-INST-PREQ2525-InterpretSIS-10 Base, SA, PU, PU installation for eqivalent match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-10.bat API-INST-PREQ2525-InterpretSIS-10</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-10 preq2525-interpretsis-10.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-11">
+	<title>API-INST-PREQ2525-InterpretSIS-11 Base, SA, SP, PU installation for eqivalent match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-11.bat API-INST-PREQ2525-InterpretSIS-11</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-11 preq2525-interpretsis-11.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-12">
+	<title>API-INST-PREQ2525-InterpretSIS-12 Base, PU, SA, PU installation for eqivalent match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-12.bat API-INST-PREQ2525-InterpretSIS-12</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-12 preq2525-interpretsis-12.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-13">
+	<title>API-INST-PREQ2525-InterpretSIS-13 Base, PU, SA, SP installation for eqivalent match </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-13.bat API-INST-PREQ2525-InterpretSIS-13</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-13 preq2525-interpretsis-13.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-14">
+	<title>API-INST-PREQ2525-InterpretSIS-14 Base, Package supports FR and EN  Language selected some negative language id </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-14.bat API-INST-PREQ2525-InterpretSIS-14</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-14 preq2525-interpretsis-14.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-15">
+	<title>API-INST-PREQ2525-InterpretSIS-15 Package supports FR and EN  passed same supported language id  more then once</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-15.bat API-INST-PREQ2525-InterpretSIS-15</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-15 preq2525-interpretsis-15.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-16">
+	<title>API-INST-PREQ2525-InterpretSIS-16 Package supports FR and EN  passed some big number as language id </title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-16.bat API-INST-PREQ2525-InterpretSIS-16</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-16 preq2525-interpretsis-16.txt 1 "negative" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-17">
+	<title>API-INST-PREQ2525-InterpretSIS-17 Package supports FR and EN  pased some string as supported language id</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-17.bat API-INST-PREQ2525-InterpretSIS-17</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-17 preq2525-interpretsis-17.txt 1 "negative" "none"</check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-18" type="nativeonly">
+	<title>API-INST-PREQ2525-InterpretSIS-18  Base, SA, PU, SP Installation for eqivalent match and then launch epoc to see localised package names are shown correctly</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-18.bat  API-INST-PREQ2525-InterpretSIS-18</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-PREQ2525-InterpretSIS-18  API-INST-preq2525-interpretsis-18 3  "positive"  "both" "nouid" "nobatchfile" "api-inst-preq2525-interpretsis-18.script" "api-inst-preq2525-interpretsis-18.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="API-INST-PREQ2525-InterpretSIS-19">
+	<title>API-INST-PREQ2525-InterpretSIS-19 Install sis having negative language id in supported_language block</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-preq2525-interpretsis-19.bat API-INST-PREQ2525-InterpretSIS-19</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">API-INST-PREQ2525-InterpretSIS-19 preq2525-interpretsis-19.txt 1 "positive" "none"</check>
+	</test>
+
+<test id="INT_NR_Option-01" type="nativeonly">
+	<title>INT_NR_Option-01</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-01.bat  INT_NR_Option-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-01  INT_NR_Option-01 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-01.script" "int_nr_option-01.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-02" type="nativeonly">
+	<title>INT_NR_Option-02</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-02.bat  INT_NR_Option-02</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-02  INT_NR_Option-02 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-02.script" "int_nr_option-02.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-03" type="nativeonly">
+	<title>INT_NR_Option-03</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-03.bat  INT_NR_Option-01</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-03  INT_NR_Option-03 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-03.script" "int_nr_option-03.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-04" type="nativeonly">
+	<title>INT_NR_Option-04</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-04.bat INT_NR_Option-04</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">INT_NR_Option-04 int_nr_option_04.txt 1 "negative" "none"</check>
+	</test>
+	
+<test id="INT_NR_Option-05" type="nativeonly">
+	<title>INT_NR_Option-05</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-05.bat  INT_NR_Option-05</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-05  INT_NR_Option-05 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-05.script" "int_nr_option-05.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-06" type="nativeonly">
+	<title>INT_NR_Option-06</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-06.bat  INT_NR_Option-06</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-06  INT_NR_Option-06 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-06.script" "int_nr_option-06.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-07" type="nativeonly">
+	<title>INT_NR_Option-07</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-07.bat  INT_NR_Option-07</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-07  INT_NR_Option-07 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-07.script" "int_nr_option-07.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="INT_NR_Option-08" type="nativeonly">
+	<title>INT_NR_Option-08</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-08.bat  INT_NR_Option-08</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-08  INT_NR_Option-08 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-08.script" "int_nr_option-08.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-09" type="nativeonly">
+	<title>INT_NR_Option-09</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-09.bat  INT_NR_Option-09</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-09  INT_NR_Option-09 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-09.script" "int_nr_option-09.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-10" type="nativeonly">
+	<title>INT_NR_Option-10</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-10.bat  INT_NR_Option-10</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-10  INT_NR_Option-10 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-10.script" "int_nr_option-10.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-11" type="nativeonly">
+	<title>INT_NR_Option-11</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-11.bat  INT_NR_Option-11</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-11  INT_NR_Option-11 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-11.script" "int_nr_option-11.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-12" type="nativeonly">
+	<title>INT_NR_Option-12</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-12.bat  INT_NR_Option-12</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-12  INT_NR_Option-12 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-12.script" "int_nr_option-12.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-13" type="nativeonly">
+	<title>INT_NR_Option-13</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-13.bat  INT_NR_Option-13</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-13  INT_NR_Option-13 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-13.script" "int_nr_option-13.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-14" type="nativeonly">
+	<title>INT_NR_Option-14</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-14.bat  INT_NR_Option-14</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-14  INT_NR_Option-14 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-14.script" "int_nr_option-14.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-15" type="nativeonly">
+	<title>INT_NR_Option-15</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-15.bat  INT_NR_Option-15</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-15  INT_NR_Option-15 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-15.script" "int_nr_option-15.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-16" type="nativeonly">
+	<title>INT_NR_Option-16</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-16.bat  INT_NR_Option-16</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-16  INT_NR_Option-16 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-16.script" "int_nr_option-16.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-17" type="nativeonly">
+	<title>INT_NR_Option-17</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-17.bat  INT_NR_Option-17</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-17  INT_NR_Option-17 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-17.script" "int_nr_option-17.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-18" type="nativeonly">
+	<title>INT_NR_Option-18</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-18.bat  INT_NR_Option-18</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-18  INT_NR_Option-18 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-18.script" "int_nr_option-18.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-19" type="nativeonly">
+	<title>INT_NR_Option-19</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-19.bat  INT_NR_Option-19</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-19  INT_NR_Option-19 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-19.script" "int_nr_option-19.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-20" type="nativeonly">
+	<title>INT_NR_Option-20</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-20.bat  INT_NR_Option-20</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-20  INT_NR_Option-20 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-20.script" "int_nr_option-20.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-21" type="nativeonly">
+	<title>INT_NR_Option-21</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-21.bat  INT_NR_Option-21</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-21  INT_NR_Option-21 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-21.script" "int_nr_option-21.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-22" type="nativeonly">
+	<title>INT_NR_Option-22</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-22.bat  INT_NR_Option-22</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-22  INT_NR_Option-22 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-22.script" "int_nr_option-22.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-23" type="nativeonly">
+	<title>INT_NR_Option-23</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-23.bat  INT_NR_Option-23</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-23  INT_NR_Option-23 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-23.script" "int_nr_option-23.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-24" type="nativeonly">
+	<title>INT_NR_Option-24</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-24.bat  INT_NR_Option-24</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-24  INT_NR_Option-24 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-24.script" "int_nr_option-24.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-25" type="nativeonly">
+	<title>INT_NR_Option-25</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-25.bat  INT_NR_Option-25</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-25  INT_NR_Option-25 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-25.script" "int_nr_option-25.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-26" type="nativeonly">
+	<title>INT_NR_Option-26</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-26.bat  INT_NR_Option-26</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-26  INT_NR_Option-26 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-26.script" "int_nr_option-26.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-27" type="nativeonly">
+	<title>INT_NR_Option-27</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-27.bat  INT_NR_Option-27</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-27  INT_NR_Option-27 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-27.script" "int_nr_option-27.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-28" type="nativeonly">
+	<title>INT_NR_Option-28</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-28.bat  INT_NR_Option-28</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-28  INT_NR_Option-28 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-28.script" "int_nr_option-28.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-29" type="nativeonly">
+	<title>INT_NR_Option-29</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-29.bat  INT_NR_Option-29</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-29  INT_NR_Option-29 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-29.script" "int_nr_option-29.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-30" type="nativeonly">
+	<title>INT_NR_Option-30</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-30.bat  INT_NR_Option-30</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-30  INT_NR_Option-30 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-30.script" "int_nr_option-30.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-31" type="nativeonly">
+	<title>INT_NR_Option-31</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-31.bat  INT_NR_Option-31</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-31  INT_NR_Option-31 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-31.script" "int_nr_option-31.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-32" type="nativeonly">
+	<title>INT_NR_Option-32</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-32.bat  INT_NR_Option-32</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-32  INT_NR_Option-32 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-32.script" "int_nr_option-32.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-33" type="nativeonly">
+	<title>INT_NR_Option-33</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-33.bat  INT_NR_Option-33</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-33  INT_NR_Option-33 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-33.script" "int_nr_option-33.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-34" type="nativeonly">
+	<title>INT_NR_Option-34</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-34.bat  INT_NR_Option-34</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-34  INT_NR_Option-34 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-34.script" "int_nr_option-34.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-35" type="nativeonly">
+	<title>INT_NR_Option-35</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-35.bat  INT_NR_Option-35</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-35  INT_NR_Option-35 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-35.script" "int_nr_option-35.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-36" type="nativeonly">
+	<title>INT_NR_Option-36</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-36.bat  INT_NR_Option-36</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-36  INT_NR_Option-36 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-36.script" "int_nr_option-36.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-37" type="nativeonly">
+	<title>INT_NR_Option-37</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-37.bat  INT_NR_Option-37</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-37  INT_NR_Option-37 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-37.script" "int_nr_option-37.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="INT_NR_Option-38" type="nativeonly">
+	<title>INT_NR_Option-38</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-38.bat  INT_NR_Option-38</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-38  INT_NR_Option-38 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-38.script" "int_nr_option-38.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT_NR_Option-39" type="nativeonly">
+	<title>INT_NR_Option-39</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-39.bat  INT_NR_Option-39</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-39  INT_NR_Option-39 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-39.script" "int_nr_option-39.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+</testlist>

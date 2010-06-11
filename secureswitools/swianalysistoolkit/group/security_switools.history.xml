@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="SWITools">
+  <purpose>
+    Signing diagnosis tools.
+  </purpose>
+
+  <deliverystep number="1116" name="PREQ1269: Crypto Services: Core Delivery" osproject="Diran" revision="004">
+    <milestone project="GT0433" number="MS3.1"/>
+    <preq number="1269" title="Universal Software Install Framework">
+      Delivers the main set of features for the Diran Early Phase. Includes the new components (SCR, SIF and STS), migration of the native installer to use       the new components and most reference code. Excludes non-mandatory features and post-production plugin management.
+    </preq>
+  </deliverystep>
+
+  <deliverystep number="1129" name="EC062: Harmonise Security and SymbianSigned PC Tools libraries" osproject="Sphinx" revision="003">
+    <milestone project="GT0379" number="MS3.25"/>
+     Refactoring makesis, signsis, dumpsis and interpretsis into libraries so that the code duplication can be avoided. This will also improve the maintenance of the code.
+  </deliverystep>
+
+  <defect number="DEF116415" title="Some security pc-tools do not display the Open SSL copyright notice " revision="002">
+    Security pc tools displays openssl copyright notice.
+  </defect>
+  
+  <deliverystep number="708" name="Security - Alignment of CBR and System Model components" osproject="Oghma" revision="001">
+    <milestone project="GT0313" number="MS3.7"/>
+    <preq number="775" title="Alignment of CBR and System Model components">
+      The signing diagnosis pc tools are split from SWI component into a new component security_switools.
+    </preq>
+  </deliverystep>
+</relnotes>

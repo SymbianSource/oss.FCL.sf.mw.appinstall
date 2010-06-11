@@ -1,0 +1,1 @@
+A simple text file, defined only to provide the SIS package with some contents.

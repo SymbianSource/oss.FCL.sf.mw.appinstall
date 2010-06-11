@@ -1,0 +1,1329 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+// tsts.script
+// Software Transaction Services Tests
+
+PRINT Run Software Transaction Services (STS) Tests
+
+// Load Suite
+LOAD_SUITE tststestserver
+
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+
+//! @SYMTestCaseID		API-SEC-STS-API-0001
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0001 test documented in TMS : Test registering a new file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0001 
+
+// SEC_STS_TestCase001_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase001_Commit.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0001
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0001
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0001 test documented in TMS : Test registering a new file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0001
+
+// SEC_STS_TestCase001_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase001_Rollback.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase001_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0001
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0002
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0002 test documented in TMS : Test creating a new file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0002
+
+// SEC_STS_TestCase002a_Commit
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0002
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0002
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0002 test documented in TMS : Test creating a new file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0002
+
+// SEC_STS_TestCase002a_Rollback
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002a_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0002
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-C-0002
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0002 test documented in TMS : Test creating a new file when transaction is either committed or rolled-back (target exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-C-0002
+
+// SEC_STS_TestCase002b_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase002b_Commit.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Commit_pre_commit
+RUN_TEST_STEP_RESULT -11 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep               z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep                   z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep               z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-C-0002
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-D-0002
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0002 test documented in TMS : Test creating a new file when transaction is either committed or rolled-back (target exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-D-0002
+
+// SEC_STS_TestCase002b_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase002b_Rollback.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Rollback_pre_rollback
+RUN_TEST_STEP_RESULT -11 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep               z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep                 z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep               z:\tusif\tsts\tsts.ini SEC_STS_TestCase002b_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-D-0002
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0003
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0003 test documented in TMS : Test removing a file when transaction is either committed or rolled-back (target file exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0003
+
+// SEC_STS_TestCase003_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase003a_Commit.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0003
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0003
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0003 test documented in TMS : Test removing a file when transaction is either committed or rolled-back (target file exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0003
+
+// SEC_STS_TestCase003_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase003_Rollback.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase003_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0003
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0004
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0004 test documented in TMS : Test registering a  temporary file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0004
+
+// SEC_STS_TestCase004_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase004_Commit.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0004
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0004
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0004 test documented in TMS : Test registering a  temporary file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0004
+
+// SEC_STS_TestCase004_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase004_Rollback.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase004_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0004
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0005
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0005 test documented in TMS : Test creating a  temporary file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0005
+
+// SEC_STS_TestCase005_Commit
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0005
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0005
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0005 test documented in TMS : Test creating a  temporary file when transaction is either committed or rolled-back
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0005
+
+// SEC_STS_TestCase005_Rollback
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase005_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0005
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0006
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0006 test documented in TMS :Test overwriting a file when transaction is either committed or rolled-back (target exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0006
+
+// SEC_STS_TestCase006a_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase006a_Commit.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0006
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0006
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0006 test documented in TMS :Test overwriting a file when transaction is either committed or rolled-back (target exists)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0006
+
+//SEC_STS_TestCase006a_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase006a_Rollback.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006a_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0006
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-C-0006
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0006 test documented in TMS :Test overwriting a file when transaction is either committed or rolled-back (target doesn't exist)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-C-0006
+
+// SEC_STS_TestCase006b_Commit
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-C-0006
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-D-0006
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0006 test documented in TMS :Test overwriting a file when transaction is either committed or rolled-back (target doesn't exist)
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-D-0006
+
+// SEC_STS_TestCase006b_Rollback
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase006b_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-D-0006
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0007
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0007 test documented in TMS : Test committing or rolling-back a  transaction that consists  of multiple file operations
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0007
+
+// SEC_STS_TestCase007_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Commit_register_file.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Commit_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Commit_remove_file.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Commit_overwrite_file.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_register_file
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_create_file
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_remove_file
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_register_temp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_create_temp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit_overwrite_file
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_pre_commit
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Commit_post_commit
+
+END_TESTCASE API-SEC-STS-API-0007
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0007
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0007 test documented in TMS : Test committing or rolling-back a  transaction that consists  of multiple file operations
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0007
+
+// SEC_STS_TestCase007_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Rollback_register_file.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Rollback_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Rollback_remove_file.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase007_Rollback_overwrite_file.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_register_file
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_create_file
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_remove_file
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_register_temp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_create_temp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback_overwrite_file
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_pre_rollback
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase007_Rollback_post_rollback
+
+END_TESTCASE API-SEC-STS-API-B-0007
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0008
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0008 test documented in TMS : Test committing or rolling-back a  transaction that consists  of multiple file operations issued through multiple sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0008
+
+// SEC_STS_TestCase008_Commit
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Commit_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Commit_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Commit_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Commit_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_create_file_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_pre_commit_check_files
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Commit_post_commit_check_files
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr0
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+
+END_TESTCASE API-SEC-STS-API-0008
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0008
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0008 test documented in TMS : Test committing or rolling-back a  transaction that consists  of multiple file operations issued through multiple sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0008
+
+// SEC_STS_TestCase008_Rollback
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Rollback_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Rollback_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Rollback_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase008_Rollback_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_create_file_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_pre_rollback_check_files
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_Rollback_post_rollback_check_files
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr0
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase008_tr1
+
+END_TESTCASE API-SEC-STS-API-B-0008
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0009
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0009 test documented in TMS : Test opening a non-existing transaction
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0009
+
+// SEC_STS_TestCase009
+RUN_TEST_STEP_RESULT -1 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase009_open_by_random_id
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase009_open_by_random_id
+
+END_TESTCASE API-SEC-STS-API-0009
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0010
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0010 test documented in TMS : Test committing or rolling back concurrent sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0010
+
+// SEC_STS_TestCase010a
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010a_after_tr0_commit_before_tr1_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010a_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase010*.txt
+
+END_TESTCASE API-SEC-STS-API-0010
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0010
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0010 test documented in TMS : Test committing or rolling back concurrent sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0010
+
+// SEC_STS_TestCase010b
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010b_after_tr0_commit_before_tr1_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010b_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase010*.txt
+
+END_TESTCASE API-SEC-STS-API-B-0010
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-C-0010
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0010 test documented in TMS : Test committing or rolling back concurrent sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-C-0010
+
+// SEC_STS_TestCase010c
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010c_after_tr0_rollback_before_tr1_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010c_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase010*.txt
+
+END_TESTCASE API-SEC-STS-API-C-0010
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-D-0010
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0010 test documented in TMS : Test committing or rolling back concurrent sessions
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-D-0010
+
+// SEC_STS_TestCase010d
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase010_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010d_after_tr0_rollback_before_tr1_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase010_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase010d_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase010*.txt
+
+END_TESTCASE API-SEC-STS-API-D-0010
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0011
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0011 test documented in TMS : Test committing or rolling back a transaction which affects multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0011
+
+// SEC_STS_TestCase011_Commit
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_remove_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_remove_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_overwrite_file_drive2.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_file_drive1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_file_drive1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_temp_drive1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_temp_drive1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_remove_file_drive1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_overwrite_file_drive1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_file_drive2
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_file_drive2
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_temp_drive2
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_temp_drive2
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_remove_file_drive2
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_overwrite_file_drive2
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_pre_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase011
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_post_commit
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase011*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase011*.txt
+
+END_TESTCASE API-SEC-STS-API-0011
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0011
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0011 test documented in TMS : Test committing or rolling back a transaction which affects multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0011
+
+// SEC_STS_TestCase011_Rollback
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_register_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_register_temp_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_remove_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase011_overwrite_file_drive1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_register_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_register_temp_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_remove_file_drive2.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase011_overwrite_file_drive2.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_file_drive1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_file_drive1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_temp_drive1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_temp_drive1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_remove_file_drive1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_overwrite_file_drive1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_file_drive2
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_file_drive2
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_register_temp_drive2
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_create_temp_drive2
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_remove_file_drive2
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_overwrite_file_drive2
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_pre_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase011
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase011_post_rollback
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase011*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase011*.txt
+
+END_TESTCASE API-SEC-STS-API-B-0011
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0012
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0012 test documented in TMS : Test committing or rolling back concurrent sessions affecting multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0012
+
+// SEC_STS_TestCase012a
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012a_after_tr0_commit_before_tr1_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012a_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase012*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase012*.txt
+
+END_TESTCASE API-SEC-STS-API-0012
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-B-0012
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0012 test documented in TMS : Test committing or rolling back concurrent sessions affecting multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-B-0012
+
+// SEC_STS_TestCase012b
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012b_after_tr0_commit_before_tr1_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012b_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase012*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase012*.txt
+
+END_TESTCASE API-SEC-STS-API-B-0012
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-C-0012
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0012 test documented in TMS : Test committing or rolling back concurrent sessions affecting multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-C-0012
+
+// SEC_STS_TestCase012c
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012c_after_tr0_rollback_before_tr1_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012c_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase012*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase012*.txt
+
+END_TESTCASE API-SEC-STS-API-C-0012
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-D-0012
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0012 test documented in TMS : Test committing or rolling back concurrent sessions affecting multiple drives
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-D-0012
+
+// SEC_STS_TestCase012d
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_register_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\TestCase012_remove_file_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_register_temp_tr1.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr0.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\TestCase012_overwrite_file_tr1.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr0
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_file_tr1
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr0
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_file_tr1
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr0
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_remove_file_tr1
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr0
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_register_temp_tr1
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr0
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_create_temp_tr1
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr0
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_overwrite_file_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_before_any_commit_or_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr0
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012d_after_tr0_rollback_before_tr1_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase012_tr1
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase012d_final
+RUN_UTILS DeleteFile c:\sts_test_dir\TestCase012*.txt
+RUN_UTILS DeleteFile e:\sts_test_dir\TestCase012*.txt
+
+END_TESTCASE API-SEC-STS-API-D-0012
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0014
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0014 test documented in TMS : Test directory support of RegisterNewFileL API when transaction is rolled back.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0014 
+
+// SEC_STS_TestCase014
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase014_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase014_dummydir\SEC_STS_TestCase014.txt
+RUN_UTILS MakeReadWrite c:\sts_test_dir\SEC_STS_TestCase014_dummydir\SEC_STS_TestCase014.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase014
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase014
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase014_pre_rollback
+RUN_TEST_STEP 100 tststestserver    RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase014
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase014_post_rollback
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase014
+
+END_TESTCASE API-SEC-STS-API-0014
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0015
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0015 test documented in TMS : Test directory support of RegisterNewFileL API when transaction is committed.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0015
+
+// SEC_STS_TestCase015
+RUN_UTILS MkDir c:\sts_test_dir
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase015_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase015_dummydir\SEC_STS_TestCase015.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase015
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase015
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase015_pre_post_commit
+RUN_TEST_STEP 100 tststestserver    CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase015
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase015_pre_post_commit
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase015
+
+END_TESTCASE API-SEC-STS-API-0015
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0016
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0016 test documented in TMS : Test directory support of RegisterNewFileL API when transaction is rolled back.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0016
+
+// SEC_STS_TestCase016
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase016_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase016_dummydir\SEC_STS_TestCase016.txt
+RUN_UTILS MakeReadWrite c:\sts_test_dir\SEC_STS_TestCase016_dummydir\SEC_STS_TestCase016.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase016
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase016_dir
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase016_file
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase016_pre_rollback
+RUN_TEST_STEP 100 tststestserver    RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase016
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase016_post_rollback
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase016
+
+END_TESTCASE API-SEC-STS-API-0016
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0017
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0017 test documented in TMS : Test directory support of RegisterNewFileL API when transaction is committed.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0017
+
+// SEC_STS_TestCase017
+RUN_UTILS MkDir c:\sts_test_dir
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase017_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase017_dummydir\SEC_STS_TestCase017.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase017
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase017_dir
+RUN_TEST_STEP 100 tststestserver    RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase017_file
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase017_pre_post_commit
+RUN_TEST_STEP 100 tststestserver    CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase017
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase017_pre_post_commit
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase017
+
+END_TESTCASE API-SEC-STS-API-0017
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0018
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0018 test documented in TMS : Test directory support of RemoveL API when transaction is rolled back.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0018
+
+// SEC_STS_TestCase018
+RUN_UTILS MkDir c:\sts_test_dir
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase018_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase018_dummydir\SEC_STS_TestCase018.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase018
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase018
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase018_pre_rollback
+RUN_TEST_STEP 100 tststestserver    RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase018
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase018_post_rollback
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase018
+
+END_TESTCASE API-SEC-STS-API-0018
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0019
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0019 test documented in TMS : Test directory support of RemoveL API when transaction is committed.
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0019
+
+// SEC_STS_TestCase019
+RUN_UTILS MkDir c:\sts_test_dir
+RUN_UTILS MkDir c:\sts_test_dir\SEC_STS_TestCase019_dummydir
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase019_dummydir\SEC_STS_TestCase019.txt
+RUN_UTILS MakeReadWrite c:\sts_test_dir\SEC_STS_TestCase019_dummydir\SEC_STS_TestCase019.txt
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase019
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase019
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase019_pre_post_commmit
+RUN_TEST_STEP 100 tststestserver    CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase019
+RUN_TEST_STEP 100 tststestserver    CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase019_pre_post_commmit
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase019
+
+END_TESTCASE API-SEC-STS-API-0019
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0021
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0021 test documented in TMS : Test creating files on a non-writable media
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0021
+
+// SEC_STS_TestCase021
+RUN_TEST_STEP        100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+RUN_TEST_STEP_RESULT -21 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+RUN_TEST_STEP        100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+RUN_TEST_STEP_RESULT -21 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+RUN_TEST_STEP        100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+RUN_TEST_STEP_RESULT -21 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_overwrite
+RUN_TEST_STEP        100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase021_create_new_or_temp
+
+END_TESTCASE API-SEC-STS-API-0021
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0022
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0022 test documented in TMS : Test registering files on a non-writable media
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0022
+
+// SEC_STS_TestCase022
+RUN_TEST_STEP        100 tststestserver CreateTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase022
+RUN_TEST_STEP_RESULT -21 tststestserver RegisterNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase022
+RUN_TEST_STEP_RESULT -21 tststestserver RegisterTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase022
+RUN_TEST_STEP        100 tststestserver CloseTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase022
+
+END_TESTCASE API-SEC-STS-API-0022
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0023
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0023 test documented in TMS : Test APIs with non-fully qualified file path
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0023
+
+// SEC_STS_TestCase023
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP !Result=-6 100 tststestserver    CreateTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP !Result=-6 100 tststestserver    RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP !Result=-6 100 tststestserver   RegisterNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP !Result=-6 100 tststestserver   CreateNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase023
+
+END_TESTCASE API-SEC-STS-API-0023
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0024
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0024 test documented in TMS : Test APIs for files in the root directory
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0024
+
+// SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver    CreateTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver    RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver   RegisterNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver   CreateNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase024
+
+END_TESTCASE API-SEC-STS-API-0024
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0025
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0025 test documented in TMS : Test Remove for non-existent file
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0025
+
+// SEC_STS_TestCase025
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase025_1
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase025_1
+RUN_TEST_STEP 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase025_2
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase025_1
+
+END_TESTCASE API-SEC-STS-API-0025
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0026
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0026 test documented in TMS : Test CreateTemporaryL for existent file
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0026
+
+// SEC_STS_TestCase026
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\SEC_STS_TestCase026.txt
+RUN_UTILS MakeReadWrite c:\sts_test_dir\SEC_STS_TestCase026.txt
+RUN_TEST_STEP 100 tststestserver          CreateTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase026
+RUN_TEST_STEP_RESULT -11 tststestserver   CreateTemporaryStep      z:\tusif\tsts\tsts.ini SEC_STS_TestCase026
+RUN_TEST_STEP 100 tststestserver          CloseTransactionStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase026
+
+END_TESTCASE API-SEC-STS-API-0026
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0027
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0027 test documented in TMS : Test APIs for non-existent drive
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0027
+
+// SEC_STS_TestCase027
+RUN_TEST_STEP 100 tststestserver    CreateTransactionStep    z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP !Result=-18 100 tststestserver    CreateTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP !Result=-18 100 tststestserver    RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP !Result=-18 100 tststestserver    RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP !Result=-18 100 tststestserver   RegisterNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP !Result=-18 100 tststestserver   CreateNewFileStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+RUN_TEST_STEP 100 tststestserver    CloseTransactionStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase027
+
+END_TESTCASE API-SEC-STS-API-0027
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0030
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0030 test documented in TMS : Test concurrent access to STS APIs
+//! @SYMTestPriority		High
+
+START_TESTCASE API-SEC-STS-API-0030
+
+// SEC_STS_TestCase030
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_remove.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registernew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createnew
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_remove
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registertemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createtemp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_overwrite
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_pre_commit
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_post_commit
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_post_commit
+
+END_TESTCASE API-SEC-STS-API-0030
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0031
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0031 test documented in TMS : Test concurrent access to STS APIs
+//! @SYMTestPriority		High
+
+START_TESTCASE API-SEC-STS-API-0031
+
+// SEC_STS_TestCase031
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_remove.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registernew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createnew
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_remove
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registertemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createtemp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_overwrite
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase031_pre_rollback
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase031_post_rollback
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase031_post_rollback
+
+END_TESTCASE API-SEC-STS-API-0031
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0032
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0032 test documented in TMS : Test concurrent access to STS APIs
+//! @SYMTestPriority		High
+
+START_TESTCASE API-SEC-STS-API-0032
+
+// SEC_STS_TestCase032
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_remove.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registernew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createnew
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_remove
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registertemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createtemp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_overwrite
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_pre_commit
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver CommitStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_post_commit
+
+END_TESTCASE API-SEC-STS-API-0032
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0033
+//! @SYMTestCaseDesc		Implementation of SEC-STS-API-0033 test documented in TMS : Test concurrent access to STS APIs
+//! @SYMTestPriority		High
+
+START_TESTCASE API-SEC-STS-API-0033
+
+// SEC_STS_TestCase033
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_new.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_register_temp.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_overwrite.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threada_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt c:\sts_test_dir\testcase030_threadb_remove.txt
+RUN_UTILS CopyFile z:\tusif\tsts\data\tstsdummy.txt e:\sts_test_dir\testcase030_threadc_remove.txt
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registernew
+RUN_TEST_STEP 100 tststestserver RegisterNewFileStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registernew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createnew
+RUN_TEST_STEP 100 tststestserver CreateNewFileStep     z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createnew
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_remove
+RUN_TEST_STEP 100 tststestserver RemoveStep            z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_remove
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_registertemp
+RUN_TEST_STEP 100 tststestserver RegisterTemporaryStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_registertemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_createtemp
+RUN_TEST_STEP 100 tststestserver CreateTemporaryStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_createtemp
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_overwrite
+RUN_TEST_STEP 100 tststestserver OverwriteStep         z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_overwrite
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase031_pre_rollback
+CONCURRENT
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadA_transcation
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadB_transcation
+RUN_TEST_STEP 100 tststestserver RollbackStep          z:\tusif\tsts\tsts.ini SEC_STS_TestCase030_threadC_transcation
+CONSECUTIVE
+RUN_TEST_STEP 100 tststestserver CheckFilesStep        z:\tusif\tsts\tsts.ini SEC_STS_TestCase031_post_rollback
+
+END_TESTCASE API-SEC-STS-API-0033
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0034
+//! @SYMTestCaseDesc		Negative testing for duplicate API calls
+
+START_TESTCASE API-SEC-STS-API-0034
+
+// SEC_STS_TestCase034
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction1
+RUN_TEST_STEP !Result=-14 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction1
+RUN_TEST_STEP 100 tststestserver OpenTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction2
+RUN_TEST_STEP !Result=-14 100 tststestserver OpenTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction2
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction1
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase034_transaction2
+
+END_TESTCASE API-SEC-STS-API-0034
+
+
+//! @SYMTestCaseID		API-SEC-STS-API-0035
+//! @SYMTestCaseDesc		File mode vs. file access
+//! @SYMTestPriority		Medium
+
+START_TESTCASE API-SEC-STS-API-0035
+
+// SEC_STS_TestCase035
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep z:\tusif\tsts\tsts.ini SEC_STS_TestCase035
+RUN_TEST_STEP 100 tststestserver FileModeTestStep      z:\tusif\tsts\tsts.ini SEC_STS_TestCase035
+RUN_TEST_STEP 100 tststestserver CloseTransactionStep  z:\tusif\tsts\tsts.ini SEC_STS_TestCase035
+
+END_TESTCASE API-SEC-STS-API-0035
+
+//! @SYMTestCaseID 		API-SEC_STS_InvalidLongFileName_TestCase-0036
+//! @SYMTestCaseDesc 		This test case checks whether the STS has created any directories partially when there  is an error code returned during file creation (e.g. error due to an invalid long file name being used)
+//! @SYMTestPriority 		Medium
+
+START_TESTCASE API-SEC_STS_InvalidLongFileName_TestCase-0036
+
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_TEST_STEP 100 tststestserver CreateTransactionStep        z:\tusif\tsts\tsts.ini SEC_STS_InvalidLongFileName_TestCase036
+RUN_TEST_STEP 100 tststestserver CreateLongFileNameTestStep      z:\tusif\tsts\tsts.ini SEC_STS_InvalidLongFileName_TestCase036
+
+END_TESTCASE API-SEC_STS_InvalidLongFileName_TestCase-0036
+
+
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\

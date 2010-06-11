@@ -1,0 +1,57 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* This file contains default settings for JMI UI Dialogs. In case if dialogs are 
+* not implemented, JMI will use these settings to continue the installation.
+*
+*/
+
+
+NAME JDLG
+
+#include <uikon.rh>
+
+
+RESOURCE RSS_SIGNATURE { }
+
+STRUCT JMI_DIALOG_DEFAULT_SETTINGS
+	{
+	// Install dialogs
+	BYTE launchmidlet; 
+	BYTE selectMidlettolaunch;
+	BYTE bluetoothonqueryatinstall;
+	BYTE bluetoothvisibilityqueryatinstall;
+
+	BYTE bluetoothonqueryatruntime;
+	BYTE bluetoothvisibilityqueryatruntime;
+
+	// Uninstall dialogs
+	BYTE midletsdeleteconfirm;
+	BYTE mildetsprivatefoldersdeleteconfirm;
+	BYTE mildetrmsrecordstoredeleteconfirm;
+	}
+
+RESOURCE JMI_DIALOG_DEFAULT_SETTINGS  jmi_dialog_default_settings 
+	{
+	launchmidlet = 0; // NO
+	selectMidlettolaunch = 1; // Launch MIDlet indexed at possition 1 in input arrary
+	bluetoothonqueryatinstall = 0; // NO
+	bluetoothvisibilityqueryatinstall = 0; // NO
+	bluetoothonqueryatruntime = 0; // NO
+	bluetoothvisibilityqueryatruntime = 0; // NO
+	midletsdeleteconfirm = 1; // YES
+	mildetsprivatefoldersdeleteconfirm = 1; // YES
+	mildetrmsrecordstoredeleteconfirm = 1; // YES
+	}
+

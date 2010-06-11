@@ -1,0 +1,105 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0001
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having an executable
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file an exe
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0001
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini basic_noapp_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_basic_noapp_performance
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0001
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0002
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having complete appregistration data for EN, GE and IF
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0002
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_case01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0002
+
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0003
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having complete appregistration data for EN, GE and IF
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data with zero device supported languages
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0003
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_nolang_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_case01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0003
+
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0004
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having an application with registration resouce file and localized data (3 loc files)
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having a single application with minimal data (app data, loclized App Info and Caption and icon info)
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_oneapp_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0004
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0005
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having two applications with registration resouce file and localized data (3 and 2 loc files)
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having two applications with minimal data (app data, loclized App Info and Caption and icon info)
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0005
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_twoapps_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0005
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0006
+//! @SYMTestCaseDesc		Tests the performance of Installation of a SIS file having five applications with registration resouce file and localized data (3,2,1,1 and 1 loc files)
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having two applications with minimal data (app data, loclized App Info and Caption and icon info)
+//! @SYMTestExpectedResults	File installs sucessfull
+
+START_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_multipleapp_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_base01
+END_TESTCASE APPINSTALL-SWI-APPREG-INTEGRATION-0006
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+//! @SYMTestCaseID		APPINSTALL-SWI-APPREG-PERFORMANCE-0007
+//! @SYMTestCaseDesc		Tests the performance of upgrade of a SIS file which delivers some files and upgrade delivering no files.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installation succeeds
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE APPINSTALL-SWI-APPREG-PERFORMANCE-0007
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_sa_app_performance
+RUN_TEST_STEP 100 tuiscriptadaptors InstallPerformanceStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini swiappregintegration_no_app_performance
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini u_swiappregintegration_no_app
+END_TESTCASE APPINSTALL-SWI-APPREG-PERFORMANCE-0007
+
+

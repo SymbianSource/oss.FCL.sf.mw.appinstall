@@ -1,0 +1,5 @@
+-z ./romdrive 
+-c ./cdrive  
+-s /epoc32/winscw/c/tswi/tsis/data/int_nr_option_02.sis +nonremovablepkg 
+-w info 
+-l /epoc32/winscw/c/interpretsis_test_harness_db.txt

@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A SIS file which embeds zeros.sis and tries to install a file to a private directory
+; which it should not be able to access.
+
+;Languages
+&EN
+
+;Header
+#{"Embeds Zeros SA"}, (0x8000000A), 1, 0, 1
+
+%{"Simple-Vendor"}
+:"Unique Vendor Name"
+
+@"zeros.sis",(0xE0000019)
+;Ordinary file to selected drive
+"embedszerosbadprivatedir.pkg"-"!:\private\abcdabcd\file1.txt"

@@ -1,0 +1,161 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run SisRegistry tests
+//
+LOAD_SUITE tSisRegistryTest
+//
+#
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0001
+//! @SYMTestCaseDesc		Checks that each uid in the expected list of uids is installed
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Checks that each uid in the expected list of uids is installed
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini IsUidInstalled
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0001
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0002
+//! @SYMTestCaseDesc		Opens and closes the registry entry for each of the installed packages by uid
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Opens and closes the registry entry for each of the installed packages by uid
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0002
+
+RUN_TEST_STEP 100 tSisRegistryTest EntryUidOpenClose
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0002
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0003
+//! @SYMTestCaseDesc		Opens and closes the registry entry for each of the installed packages by package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Opens and closes the registry entry for each of the installed packages by package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0003
+
+RUN_TEST_STEP 100 tSisRegistryTest EntryPackageOpenClose
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0003
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0004
+//! @SYMTestCaseDesc		Opens and closes the registry entry for each of the installed packages by name
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Opens and closes the registry entry for each of the installed packages by name
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0004
+
+RUN_TEST_STEP 100 tSisRegistryTest EntryNameOpenClose
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0004
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0005
+//! @SYMTestCaseDesc		Tests the registry entry methods for each of the installed packages
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Tests the registry entry methods for each of the installed packages
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0005
+
+RUN_TEST_STEP 100 tSisRegistryTest EntryMethods
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0005
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0006
+//! @SYMTestCaseDesc		Tests the writable registry entry methods for each of the installed packages
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Tests the writable registry entry methods for each of the installed packages
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+// Test fails because it needs TCB to access this interface
+//START_TESTCASE API-SEC-SISREGISTRYTEST-0006
+//RUN_TEST_STEP 100 tSisRegistryTest WritableEntryMethods
+//END_TESTCASE API-SEC-SISREGISTRYTEST-0006
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0007
+//! @SYMTestCaseDesc		Tests the sids installed in each package
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Tests the sids installed in each package
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0007
+
+RUN_TEST_STEP 100 tSisRegistryTest EntrySids z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini EntrySids
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0007
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0008
+//! @SYMTestCaseDesc		Tests deleting entries by Uid from the registry
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Tests deleting entries by Uid from the registry
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+//! @SYMREQ			REQ3464
+//! @SYMTestType		UT
+// Test fails because it needs TCB to access this interface
+//START_TESTCASE API-SEC-SISREGISTRYTEST-0008
+//RUN_TEST_STEP 100 tSisRegistryTest EntryDelete z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini InstalledPackages
+//END_TESTCASE API-SEC-SISREGISTRYTEST-0008
+
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRYTEST-0009
+//! @SYMTestCaseDesc		Tests IsPresentL after cache refreshes
+//! @SYMTestPriority		High
+//! @SYMTestActions		calls IsPresentL on every supplied UID
+//! @SYMTestExpectedResults	Every entry is present
+//! @SYMDEF 			INC082106 
+
+START_TESTCASE API-SEC-SISREGISTRYTEST-0009
+
+RUN_TEST_STEP 100 tSisRegistryTest IsPackagePresent z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini InstalledUids
+
+END_TESTCASE API-SEC-SISREGISTRYTEST-0009
+
+

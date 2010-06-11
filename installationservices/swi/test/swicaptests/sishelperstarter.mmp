@@ -1,0 +1,94 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* captestframeworkhelper.exe Test harness for capability testing
+*
+*/
+
+
+/**
+ @file
+*/
+
+//         Capability is set as needed
+CAPABILITY ProtServ TrustedUI
+
+TARGET			sishelperstarter.exe
+TARGETTYPE		exe
+UID			0x1000007A 0x101F777D
+VENDORID		0x70000001
+
+SOURCEPATH		.
+SOURCE			sishelperstarter.cpp
+
+
+// sishelper
+//SOURCE			sishelpercaptest.cpp
+SOURCE			../../source/sishelper/sishelperclient.cpp
+//SOURCE			../../source/sishelper/launcher.cpp
+
+SOURCE ../../source/sishelper/sishelper.cpp
+SOURCE ../../source/sishelper/uissclienthandler.cpp
+SOURCE ../../source/sishelper/installprefs.cpp
+
+
+SOURCE	../../source/sishelper/commands/applicationsinusedialog.cpp
+SOURCE	../../source/sishelper/commands/handlecancellableinstallevent.cpp
+SOURCE	../../source/sishelper/commands/cannotoverwritefiledialog.cpp
+SOURCE	../../source/sishelper/commands/dependencybreakdialog.cpp
+SOURCE	../../source/sishelper/commands/deviceincompatibility.cpp
+SOURCE	../../source/sishelper/commands/missingdependency.cpp
+SOURCE	../../source/sishelper/commands/drivedialog.cpp
+SOURCE	../../source/sishelper/commands/errordialog.cpp
+SOURCE	../../source/sishelper/commands/grantcapabilitiesdialog.cpp
+SOURCE	../../source/sishelper/commands/handleinstallevent.cpp
+SOURCE	../../source/sishelper/commands/installdialog.cpp
+SOURCE	../../source/sishelper/commands/languagedialog.cpp
+SOURCE	../../source/sishelper/commands/ocspresultdialog.cpp
+SOURCE	../../source/sishelper/commands/optionsdialog.cpp
+SOURCE	../../source/sishelper/commands/questiondialog.cpp
+SOURCE	../../source/sishelper/commands/securitywarningdialog.cpp
+SOURCE	../../source/sishelper/commands/uninstalldialog.cpp
+SOURCE	../../source/sishelper/commands/upgradedialog.cpp
+SOURCE	../../source/sishelper/commands/textdialog.cpp
+
+
+USERINCLUDE		.
+USERINCLUDE		../..
+USERINCLUDE		../../inc
+USERINCLUDE		../../inc/swi
+USERINCLUDE 	../../source/uiss/common
+USERINCLUDE 	../../source/uiss/client
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY euser.lib
+LIBRARY efsrv.lib
+LIBRARY testexecuteutils.lib
+LIBRARY efsrv.lib
+LIBRARY testexecutelogclient.lib
+LIBRARY flogger.lib
+LIBRARY estor.lib
+LIBRARY uissclient.lib
+LIBRARY sisregistryclient.lib
+LIBRARY sisxfile.lib
+LIBRARY siscontroller.lib
+LIBRARY ImageConversion.lib
+LIBRARY securitymanager.lib
+LIBRARY cafdataprovider.lib
+LIBRARY swidataprovider.lib
+LIBRARY fbscli.lib
+LIBRARY apgrfx.lib
+LIBRARY uiss.lib
+SMPSAFE

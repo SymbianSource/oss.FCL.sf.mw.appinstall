@@ -1,0 +1,52 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Tests  client connection to tintegrityservicesserver
+*
+*/
+
+
+/**
+ @file
+*/
+
+CAPABILITY All
+
+target		tstsintegrityservicesclient.dll
+targettype	dll
+
+UID             0x10285DE6
+VENDORID	0x70000001
+
+//USERINCLUDE .\
+//USERINCLUDE ../../inc
+//USERINCLUDE ../../inc/swi
+//MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+//SOURCEPATH	.\
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+USERINCLUDE ../inc
+
+SOURCEPATH	../source
+
+SOURCE 		tintegrityservicesclientserver.cpp
+
+LIBRARY 	euser.lib 
+LIBRARY 	estor.lib
+LIBRARY 	efsrv.lib 
+LIBRARY		testexecuteutils.lib
+LIBRARY		testexecutelogclient.lib
+//LIBRARY 	stsclient.lib
+SMPSAFE

@@ -1,0 +1,10 @@
+Certificate Chain :
+
+Issued By : /O=Symbian Software Ltd/CN=OCSPSigningRoot-RSA
+Issued To : /O=Symbian Software Ltd/CN=OCSPSigningRoot-RSA
+Valid From : 03/03/04
+Valid To : 01/03/14
+
+: SIS File is signed by a Self Signed Certificate 
+Is Not Validated By Certstore:
+

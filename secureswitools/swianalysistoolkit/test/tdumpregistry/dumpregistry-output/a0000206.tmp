@@ -1,0 +1,39 @@
+Registry Controller Information:
+
+Registry Entry :.\data\a0000206\00000000.reg
+
+Package UID :0xa0000206
+Package Name :3 Data Files
+Vendor :Symbian
+Package Index :0
+
+Controller1 Version :2.5.4
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 0
+
+SISProperty Count:0
+
+Number Of File Descriptions :3
+
+SIS File Description:
+
+Target1:c:\restore\pic1.bmp
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target2:c:\restore\pic2.bmp
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Target3:c:\restore\pic3.gif
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

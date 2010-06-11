@@ -1,0 +1,60 @@
+/*
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* sislauncherclient.dll used by SWIS to run files
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY ALL
+
+TARGET		sislauncherclient.dll
+TARGETTYPE	dll
+
+UID		0x1000008d 0x1020473E
+VENDORID	0x70000001
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		sislauncherclient.DEF
+#else
+DEFFILE		sislauncherclient_legacy.DEF
+#endif
+
+USERINCLUDE	../source/sislauncher/client
+USERINCLUDE	../source/sislauncher/common
+USERINCLUDE	../source/sisregistry/common 
+USERINCLUDE	../inc/swi
+USERINCLUDE	../inc
+
+SOURCEPATH	../source/sislauncher/client
+
+SOURCE		sislauncherclient.cpp
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY		euser.lib 
+LIBRARY		estor.lib
+LIBRARY		efsrv.lib
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+LIBRARY		swtypereginfo.lib
+library 	scrclient.lib
+library		ipcstream.lib
+#endif
+SMPSAFE

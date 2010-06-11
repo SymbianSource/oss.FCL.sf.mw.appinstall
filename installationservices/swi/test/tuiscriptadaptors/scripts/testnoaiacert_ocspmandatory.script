@@ -1,0 +1,31 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID SEC-SWI-INC137499-ocsp_mandatory_test-0001
+//! @SYMTestCaseDesc Tests for installation of sis file signed with certificate which does not have any AIA URI
+//! @SYMDEF INC137499
+//! @SYMTestPriority Medium
+//! @SYMTestActions Tries to install the sis file successfully
+//! @SYMTestExpectedResults Installation should succeed
+//! @SYMDevelopedForRelease Naiad
+
+START_TESTCASE SEC-SWI-INC137499-ocsp_mandatory_test-0001
+RUN_TEST_STEP_RESULT -7603 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini no_aia_cert_ocspmandatory
+END_TESTCASE SEC-SWI-INC137499-ocsp_mandatory_test-0001
+

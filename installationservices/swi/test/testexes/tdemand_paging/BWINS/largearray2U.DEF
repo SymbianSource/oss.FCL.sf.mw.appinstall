@@ -1,0 +1,3 @@
+EXPORTS
+	?GetArray@@YAPBKXZ @ 1 NONAME ; unsigned long const * GetArray(void)
+

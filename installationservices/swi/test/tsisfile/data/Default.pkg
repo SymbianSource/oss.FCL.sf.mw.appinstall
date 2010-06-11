@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file that installs an application to the drive of your choice 
+; with no language or options or other behavior, i.e. a pretty standard/default installation file.
+
+;Languages - None specified, i.e default used.
+
+;Header
+#{"Default"}, (0x81001001), 3, 0, 0, TYPE=SA
+
+;Vendor
+%{"Vendor"}
+:"Unique Vendor Name"
+
+
+"text\osver.txt"-"c:\app1.exe"

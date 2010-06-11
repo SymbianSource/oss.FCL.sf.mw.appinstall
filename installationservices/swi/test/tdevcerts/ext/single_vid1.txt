@@ -1,0 +1,4 @@
+# A single vendor id
+
+[vid_list]
+vid1=0x70000001

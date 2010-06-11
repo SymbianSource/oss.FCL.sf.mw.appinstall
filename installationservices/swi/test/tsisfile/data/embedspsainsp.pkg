@@ -1,0 +1,29 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+&EN
+
+; This SIS file simply SA upgrades its twin in testexes that embeds a ROM upgrade.
+; This SIS file has no embedded packages.
+
+#{"embed ROM exe eclipse SP to embed SA"}, (0x802730A5), 2, 2, 5, TYPE=SP
+%{"Crypto Services"}
+:"Crypto Services"
+
+@"embedspsa.sis", (0x802730A5)
+
+"embedspsa.pkg"-"c:\embed\sourcesa.pkg"
+
+

@@ -1,0 +1,80 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description: 
+;
+; Installation file supporting Belgian French , Swiss German,  Latin American Spanish , Swiss Italian 
+;	Flemish Belgian , Hong Kong Chinese , Japanese, German (Austrian) 
+
+;Languages
+&BF, SG, LS, SZ, SA, BL, HK, JA, AS
+
+;Package Header
+#{"Equivalent_BF","Equivalent_SG","Equivalent_LS","Equivalent_SZ","Equivalent_SA","Equivalent_BL","Equivalent_HK","Equivalent_JA","Equivalent_AS" },(0x88000108),1,0,0
+
+;Localised Vendor name
+%{"Vendor_BF","Vendor_SG","Vendor_LS","Vendor_SZ","Vendor_SA","Vendor_BL","Vendor_HK","Vendor_JA","Vendor_AS"}
+
+;Default vendor name
+:"Vendor"
+
+
+;Supported Language Block
+
+IF SUPPORTED_LANGUAGE = 21
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_bf.r21"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 12
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sg.r12"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 83
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_ls.r83"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 61
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sz.r61"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 48
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_sa.r48"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 19
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_bl.r19"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 30
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_hk.r30"
+ENDIF
+
+
+IF SUPPORTED_LANGUAGE = 32
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_ja.r32"
+ENDIF
+
+IF SUPPORTED_LANGUAGE = 22
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_as.r22"
+ENDIF
+
+IF LANGUAGE = 30
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_lang_hk.r30"
+ENDIF
+
+IF LANGUAGE = 01
+"text\option1.txt"		  -"!:\Documents\InstTest\Equivalent_lang_en.r01"
+ENDIF
+

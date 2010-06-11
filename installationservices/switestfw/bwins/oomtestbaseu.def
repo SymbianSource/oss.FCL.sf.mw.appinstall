@@ -1,0 +1,8 @@
+EXPORTS
+	??0COomTestStep@@IAE@XZ @ 1 NONAME ; COomTestStep::COomTestStep(void)
+	??1COomTestStep@@UAE@XZ @ 2 NONAME ; COomTestStep::~COomTestStep(void)
+	?ClientHandle@COomTestStep@@UAEPAVRScsClientBase@@XZ @ 3 NONAME ; class RScsClientBase * COomTestStep::ClientHandle(void)
+	?doTestStepL@COomTestStep@@UAE?AW4TVerdict@@XZ @ 4 NONAME ; enum TVerdict COomTestStep::doTestStepL(void)
+	?doTestStepPostambleL@COomTestStep@@UAE?AW4TVerdict@@XZ @ 5 NONAME ; enum TVerdict COomTestStep::doTestStepPostambleL(void)
+	?doTestStepPreambleL@COomTestStep@@UAE?AW4TVerdict@@XZ @ 6 NONAME ; enum TVerdict COomTestStep::doTestStepPreambleL(void)
+

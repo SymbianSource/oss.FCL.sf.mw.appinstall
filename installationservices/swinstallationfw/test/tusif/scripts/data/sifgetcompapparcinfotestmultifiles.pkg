@@ -1,0 +1,46 @@
+;
+; Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN
+
+; List of localised vendor names.
+%{"Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English
+#{"sifgetcompinfotestmultifiles_EN"}, (0x88001104), 1,0,0
+
+
+; Language-neutral files to be installed
+"\epoc32\<BUILDMIDPATH>\sifgetcompapparcinfotest.exe"-"!:\sys\bin\sifgetcompapparcinfotest.exe"
+"\epoc32\<ZDRIVEMIDPATH>\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_reg.rsc" - "!:\private\10003a3f\import\apps\sifgetcompapparcinfotest_reg.rsc"
+
+; Lists of language-specific resource files, of which only those files will be installed
+; which are supported by the device.
+"\epoc32\<ZDRIVEMIDPATH>\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_loc.rsc"		-"!:\resource\apps\sifgetcompapparcinfotest_loc.rsc"
+
+"\epoc32\<ZDRIVEMIDPATH>\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_01.mbm"		-"!:\resource\apps\sifgetcompapparcinfotest_01.mbm"
+
+"\epoc32\<ZDRIVEMIDPATH>\z\tusif\tswtype\data\swtypereginfo.xml"-"c:\resource\usif\leestore\77534946.xml", FF
+
+"\epoc32\<BUILDMIDPATH>\testnonnativeplugin2.dll"-"c:\sys\bin\testnonnativeplugin2.dll", FF

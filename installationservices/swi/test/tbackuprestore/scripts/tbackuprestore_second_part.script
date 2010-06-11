@@ -1,0 +1,46 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+// Make sure emulated X drive is not corrupt and is empty.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+
+//! @file
+//! @SYMTestCaseID 		API-ROM_PU_backup_restore-0001
+//! @SYMTestCaseDesc 		Backs up and restores a ROM based pkg with a PU upgrade
+//! @SYMDEF  			PDEF129949
+//! @SYMTestPriority 		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Installs a PU upgrade of a ROM package and backs up
+//! @SYMTestExpectedResults 	Success, clean environment.
+
+START_TESTCASE API-ROM_PU_backup_restore-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	INC128848_install_pu_rom_upgrade
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	INC128848_rom_package
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	INC128848_rom_package
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_rom_package
+
+END_TESTCASE API-ROM_PU_backup_restore-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,37 @@
+# Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+# All rights reserved.
+# This component and the accompanying materials are made available
+# under the terms of the License "Eclipse Public License v1.0"
+# which accompanies this distribution, and is available
+# at the URL "http://www.eclipse.org/legal/epl-v10.html".
+#
+# Initial Contributors:
+# Nokia Corporation - initial contribution.
+#
+# Contributors:
+#
+# Description:
+# This file contains the information of parameters which is used for Negative testing for makesis.
+# 
+#
+
+
+Error Types							Symbol Option
+
+EBugArrayCount						bA or BA
+EBugInsaneBlob						bB or BB
+EBugCRCError						bc or BC
+EBugBigEndian						be or BE
+EBugDuffFieldType					bf or BF
+EBugHashError						bh or BH
+EBugUnknownData						bk or BK
+EBugInvalidLength					bl or  BL
+EBugMissingField					bm or BM
+EBugNegativeLength					bn or BN
+EBugEmptyCaps						bp or BP
+EBugInsaneString					bs or BS
+EBug32As64							bt or BT
+EBugUnexpectedField					bu or BU
+EBugInvalidValues					bv or BV
+EBugUnknownField					bx or BX
+

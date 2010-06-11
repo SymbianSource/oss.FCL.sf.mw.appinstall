@@ -1,0 +1,26 @@
+﻿
+[Root5CA]
+file =c:\ぁつさがくす.der
+
+mandatory =1
+
+capability =DRM
+
+capability =AllFiles
+
+application=SWInstall
+
+[SymbianTestDSACA]
+
+file = C:\Katakana_subjectaltname.der
+
+capability =ReadDeviceData
+
+capability =WriteDeviceData
+
+application=SWInstall
+
+application =SWInstallOCSP
+
+
+

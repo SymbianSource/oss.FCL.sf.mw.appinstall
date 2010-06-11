@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This partial upgrade replaces an exe in the testappinuse base package with a new
+; version and also adds a file in the exe's private directory.
+
+;Languages
+&EN
+
+;Header
+#{"testappinuse_pu2"}, (0x81231235), 1, 0, 1,TYPE=PU
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\console_app_forpackage.exe"-"!:\sys\bin\console_app2.exe"
+"osver.txt"-"!:\private\89334567\file1.txt"
+

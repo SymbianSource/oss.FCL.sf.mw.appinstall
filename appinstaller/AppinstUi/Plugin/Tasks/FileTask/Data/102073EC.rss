@@ -1,0 +1,57 @@
+/*
+* Copyright (c) 2002-2004 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   ECOM resource definition for Log task plugin.
+*
+*/
+
+
+//  INCLUDES
+#include <ecom/registryinfov2.rh>
+#include <SWInstUid.h>
+#include "SWInstPrivateUid.h"
+
+//  RESOURCE DEFINITIONS 
+
+RESOURCE REGISTRY_INFO registry_info
+    {
+    resource_format_version = RESOURCE_FORMAT_VERSION_2;
+    // UID for the DLL	
+    dll_uid = KSWInstFileTaskUid;
+
+    // Interface info array
+    interfaces = 
+        {
+        INTERFACE_INFO
+            {
+            // UID of the implemented interface
+            interface_uid = KSWInstTaskInterfaceUid;
+
+            implementations = 
+                {
+                IMPLEMENTATION_INFO
+                    {
+                    implementation_uid  =  KSWInstFileTaskDeleteImplUid;
+                    version_no          =  1;
+                    display_name        =  "Delete File task implementation";
+                    default_data        =  "*";
+                    opaque_data         =  " ";
+                    rom_only            =  1;
+                    }
+                };
+             }
+        };
+    }
+       
+    
+// End of File

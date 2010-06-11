@@ -1,0 +1,202 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+PRINT Run Developer Certificates mismatch test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0001
+//! @SYMTestCaseDesc 		If the device id constraint is present but empty then SWI should interpret this as "no valid devices."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0001
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_01
+
+END_TESTCASE API-SEC-mismatch-0001
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0002
+//! @SYMTestCaseDesc 		If the secure id constraint is present but empty then SWI should interpret this as "no restricted secure ids."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0002
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_02
+
+END_TESTCASE API-SEC-mismatch-0002
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0003
+//! @SYMTestCaseDesc 		If the vendor id constraint is present but empty then SWI should interpret this as "no non-zero vendor ids."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0003
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_03
+
+END_TESTCASE API-SEC-mismatch-0003
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0004
+//! @SYMTestCaseDesc 		If the intersection of the capabilities is zero then no capabilities are allowed (including user grantable capabilities)
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0004
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_04
+
+END_TESTCASE API-SEC-mismatch-0004
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0005
+//! @SYMTestCaseDesc 		If the device id constraint is present but not matched then installation should be aborted.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0005
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_05
+
+END_TESTCASE API-SEC-mismatch-0005
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0006
+//! @SYMTestCaseDesc 		If a secure id constraint is specified then executables with restricted secure ids must match the constraint.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0006
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_06
+
+END_TESTCASE API-SEC-mismatch-0006
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0007
+//! @SYMTestCaseDesc 		If a vendor id constraint is specified then executables with non zero vendor ids must match the constraint.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0007
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_07
+
+END_TESTCASE API-SEC-mismatch-0007
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0008
+//! @SYMTestCaseDesc 		If a non-empty capabilities constraint is specified then the requested capabilities must lie within that constraint.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0008
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_08
+
+END_TESTCASE API-SEC-mismatch-0008
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0009
+//! @SYMTestCaseDesc 		Check that embedded sis files don't inherit the capabilities of the parent SIS file.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0009
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_09
+
+END_TESTCASE API-SEC-mismatch-0009
+
+
+//! @SYMTestCaseID 		API-SEC-mismatch-0010
+//! @SYMTestCaseDesc 		Verify that certificates with no constraints do not cancel out certificates with constraints.
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-mismatch-0010
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini mismatch_10
+
+END_TESTCASE API-SEC-mismatch-0010
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M-0005
+//! @SYMTestCaseDesc 		Protected VID with trusted signature that does not match a devcert constraint.
+//! @SYMCR 			EGUO-6G9J6M
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Attempt to install a DLL with a protected VID that does not match the VID constraint.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0005
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini 02_protected_vid_mismatch
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M-0005
+
+
+//! @SYMTestCaseID 		API-SEC-protected_puid_mismatch-0004
+//! @SYMTestCaseDesc 		Package with constrained SIDs and with a protected pUID should not be installed.
+//! @SYMDEF 			DEF084528
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Attempt to install a package with a protected pUID with constrained SIDs
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-protected_puid_mismatch-0004
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\mismatch.ini 04_protpuid_constr_sid_mismatch
+
+END_TESTCASE API-SEC-protected_puid_mismatch-0004
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

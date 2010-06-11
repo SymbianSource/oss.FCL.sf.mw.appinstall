@@ -1,0 +1,22 @@
+# two chains, device id constraints contains multiple and empty id 
+[main]
+name=aggregate_05
+template=simple.txt
+inifile=aggregate.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,multi_dev
+chain2=SymbianTestRootCARSA,empty_devs
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

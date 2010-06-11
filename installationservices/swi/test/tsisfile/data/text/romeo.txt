@@ -1,0 +1,67 @@
+Versions and devices
+----------------------
+
+
+Symbian OS is a modular system, and licensees who build products with it 
+are expected to add, remove, and in some cases, modify, components. This 
+means that Symbian OS software written for one phone may or may not be 
+compatible with another phone. As well as cross-device compatibility, you 
+may also want to consider compatibility between different versions (releases) 
+of Symbian OS.
+
+This page summarises these compatibility issues.
+
+Symbian OS phones
+The extensive customisation facilities provided by Symbian OS mean that not 
+all phones support all the functionality it offers. There is, however, a 
+large core of interfaces that will be present on all phones. Example of common 
+interfaces are the large Kernel user library (euser.dll), and the engines for 
+the key PIM applications Contacts and Agenda.
+
+Pre-platform developers should therefore either check with the phone manufacturer 
+that the interfaces that they require are supported in the phone, or rely on the
+common interfaces.
+
+User interfaces are likely to be the area of greatest difference between the Symbian 
+OS and the eventual phone. This variability of UIs, over a common operating system 
+core, means that Symbian OS encourages programs to be written with a clean separation 
+of UI code from application logic (or engine) code. 
+
+Note that if you use a language other than C++, you may gain stronger cross-phone 
+compatibility. MIDP Java, WAP, and HTML, are all designed to allow user interfaces 
+to be coded without detailed knowledge of the target phone, whether Symbian-OS or 
+otherwise.
+
+Symbian OS versions
+The following table lists the key versions of the operating system, its major 
+innovations, and the products (announced before December 2001) that use that release.
+
+Name			Innovations									Products
+Symbian OS v3.	Eikon UI, Agenda and office applications	
+Symbian OS v5.	Contacts application, Media Server, Messaging, Java (JDK 1.1.4), Telephony	
+Symbian OS v5.1	Uikon UI layer, Unicode	
+Symbian OS v6.0	Advanced GSM telephony, PersonalJava and JavaPhone, Quartz and Crystal UIs, WAP	
+Symbian OS v6.1	Bluetooth, GPRS	
+
+Symbian OS v7.0	IPv6, Metrowerks CodeWarrior support, MIDP Java, Multimedia Messaging, 
+Multimode Telephony, Opera web browser, SyncML	
+
+Symbian have attempted to maintain backward compatibility so that developers can write 
+code that runs on multiple versions of Symbian OS.
+
+Backward source compatibility means that code written for older versions can be made 
+to run on newer versions by simply rebuilding it. This compatibility has been broadly 
+maintained across these versions, with the exception of the UI architecture, which was 
+substantially changed at Symbian OS v5.1. The best guide to backward source compatibility 
+is the Support information for each item in the Developer Library's API Reference.
+
+Symbian also try to maintain backward binary compatibility (allowing old code to run on
+newer versions without rebuilding), though this is not always possible when new functionality
+is introduced. The largest binary compatibility break occurred at Symbian OS v5.1, when 
+Symbian OS began using Unicode, causing a break for all interfaces with string (descriptor) 
+parameters.
+
+
+--------------------------------------------------------------------------------
+Copyright ©2003  Symbian Ltd.       unknown-build-id 
+ 

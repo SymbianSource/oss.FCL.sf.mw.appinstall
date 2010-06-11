@@ -1,0 +1,43 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+// tsts_rollbackall.script
+// Software Transaction Services Tests
+
+PRINT Run Software Transaction Services (STS) Tests - RollBackAll interface
+
+//ensure that the boot up time recovery is completed before this script gets run
+DELAY 5000
+
+// Load Suite
+LOAD_SUITE tststestserver
+
+RUN_UTILS MkDir c:\sts_test_dir\
+RUN_UTILS MkDir e:\sts_test_dir\
+
+
+//! @SYMTestCaseID 		API-SEC-STS-API-0029
+//! @SYMTestCaseDesc 		Implementation of SEC-STS-API-0029 test documented in TMS : Test boot up time recovery of interrupted transactions
+//! @SYMTestPriority 		High
+
+START_TESTCASE API-SEC-STS-API-0029
+
+RUN_TEST_STEP 100 tststestserver CheckFilesStep   z:\tusif\tsts\tsts.ini SEC_STS_TestCase029_post_recovery
+
+END_TESTCASE API-SEC-STS-API-0029
+
+
+RUN_UTILS DeleteDirectory c:\sts_test_dir\
+RUN_UTILS DeleteDirectory e:\sts_test_dir\

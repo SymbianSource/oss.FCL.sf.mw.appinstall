@@ -1,0 +1,57 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-B-0020
+//! @SYMTestCaseDesc 		Restore the SIS file which contains unsigned application with a swi policy that doesn't allow it to install.
+//!		     		(policy file swipolicy.ini is located at z:\system\data\swipolicy.ini ). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Restore should fail with Error code -20.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-B-0020
+
+RUN_TEST_STEP_RESULT -20	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		swipolicy
+
+END_TESTCASE API-SEC-SWI-NQP-BR-B-0020
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-BR-B-0021
+//! @SYMTestCaseDesc 		Restore with missing mandatory certificate(s). Requirement NQP.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults 	Restore should fail with Error -20.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-B-0021
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		missingcertificates
+
+END_TESTCASE API-SEC-SWI-NQP-BR-B-0021

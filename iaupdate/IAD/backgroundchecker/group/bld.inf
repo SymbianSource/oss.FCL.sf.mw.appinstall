@@ -1,0 +1,36 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for background checker
+*
+*/
+
+
+
+#include <platform_paths.hrh>
+
+PRJ_PLATFORMS
+DEFAULT
+
+
+PRJ_EXPORTS
+
+/epoc32/s60/icons/qgn_note_swupdate_notification.svg   /epoc32/release/winscw/udeb/z/private/200211f4/qgn_note_swupdate_notification.svg
+/epoc32/s60/icons/qgn_note_swupdate_notification.svg   /epoc32/release/winscw/urel/z/private/200211f4/qgn_note_swupdate_notification.svg
+/epoc32/s60/icons/qgn_note_swupdate_notification.svg   /epoc32/data/z/private/200211f4/qgn_note_swupdate_notification.svg
+
+PRJ_MMPFILES
+./iaupdatebg.mmp
+
+
+

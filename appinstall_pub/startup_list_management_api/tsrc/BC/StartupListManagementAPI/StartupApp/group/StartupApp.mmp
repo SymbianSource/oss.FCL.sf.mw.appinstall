@@ -1,0 +1,36 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:       Test app for StartupListManagement API
+*
+*/
+
+TARGET          StartupApp.exe
+TARGETTYPE      EXE
+UID             0x100039CE 0x11223344
+
+CAPABILITY      NONE
+
+SOURCEPATH      ../src
+SOURCE          StartupApp.cpp
+
+START RESOURCE  ../data/11223344.rss
+TARGETPATH      resource
+END
+
+USERINCLUDE     .
+SYSTEMINCLUDE   /epoc32/include
+SYSTEMINCLUDE   /epoc32/include/mw
+
+LIBRARY         euser.lib
+

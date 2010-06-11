@@ -1,0 +1,1291 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tbackuprestore
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0001
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Uninstall th PA sis file and call ListL 
+//! @SYMTestExpectedResults	ListL should list the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0001
+
+RUN_UTILS DeleteDirectory  e:\private
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listapps
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-A-0001
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs (setting propagation to true in swiPolicy.ini) 
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file and ctl file to relevant folders and call ListL 
+//! @SYMTestExpectedResults	ListL should list the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-A-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-A-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0001
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs (setting propagation to false in swiPolicy.ini) 
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the ctl file to relevant folder and call ListL 
+//! @SYMTestExpectedResults	ListL should list the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0002
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Uninstall the PA sis file and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0002
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexists
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-A-0002
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file and ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-A-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistssisctl
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-A-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0002
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexists
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0003
+//! @SYMTestCaseDesc		Retrieving Package details of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7565
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Uninstall the PA sis file and call API's to get package details 
+//! @SYMTestExpectedResults	Details of uninstalled pkg should be retrieved
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0003
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors GetPackageDetails z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini  getpkgdetails
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-A-0003
+//! @SYMTestCaseDesc		Retrieving Package details of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7565
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file and ctl file to relevant folders and call API's to get the package details 
+//! @SYMTestExpectedResults	Details of uninstalled pkg should be retrieved
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-A-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_TEST_STEP 100 tuiscriptadaptors GetPackageDetails z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini getpkgdetails_stubsis
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-A-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0003
+//! @SYMTestCaseDesc		Retrieving Package details of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7565
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the ctl file to relevant folders and call API's to get the package details
+//! @SYMTestExpectedResults	Details of uninstalled pkg should be retrieved
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_simple
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_TEST_STEP 100 tuiscriptadaptors GetPackageDetails z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini getpkgdetails_stubsis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0010
+//! @SYMTestCaseDesc		Directory removal check for RemoveL 
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether empty directoy is removed 
+//! @SYMTestExpectedResults	The empty directory should be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0010
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt  e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexists
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistsdir
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0010
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0011
+//! @SYMTestCaseDesc		Directory removal check for RemoveL 
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether non-empty directoy is not removed 
+//! @SYMTestExpectedResults	The non-empty directory should not be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0011
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt  e:\tswi\preinstalled\preinstalledinstall_x.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall_x.txt
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt  e:\tswi\preinstalled\preinstalledinstall_x_1.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall_x_1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexists
+RUN_TEST_STEP  !Result=Fail 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistsdir
+RUN_UTILS DeleteDirectory  e:\tswi
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0011
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0012
+//! @SYMTestCaseDesc		File removal check for RemoveL for FN
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred using FN is removed 
+//! @SYMTestExpectedResults	The file should be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0012
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_filenull_edrive.sis e:\private\10202dce\testpreinstalled_install_filenull_edrive.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_filenull_edrive.sis
+RUN_UTILS MKDIR e:\Documents\
+RUN_UTILS MKDIR e:\Documents\InstTest\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\Documents\InstTest\file1.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini filenullchk
+RUN_UTILS DeleteFile e:\restore\filenull.txt
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0012
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0013
+//! @SYMTestCaseDesc		File removal check for RemoveL for not orphaned FN
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred using FN is not removed if it is not orphaned
+//! @SYMTestExpectedResults	The file should not be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0013
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_filenull_edrive.sis e:\private\10202dce\testpreinstalled_install_filenull_edrive.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_filenull_edrive.sis
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeselectedfilenullpkg
+RUN_TEST_STEP !Result=fail 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini filenotorphaned
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_UTILS DeleteDirectory   e:\tswi
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0013
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0014
+//! @SYMTestCaseDesc		File removal check for RemoveL for FN where the file is in data caged area
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred using FN which are in data caged area is not removed
+//! @SYMTestExpectedResults	The file should not be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0014
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_datacaged_filenull.sis e:\private\10202dce\testpreinstalled_datacaged_filenull.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_datacaged_filenull.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copydatacagedfilenull
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP !Result=fail 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini datacagedfilenull
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0014
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0008
+//! @SYMTestCaseDesc		File removal check for RemoveL for not orphaned file
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred is not removed if it is not orphaned
+//! @SYMTestExpectedResults	The file should not be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0008
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x2.sis e:\private\10202dce\testpreinstalled_install_x2.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x2.sis
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeselectedpkg
+RUN_TEST_STEP !Result=fail 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini filenotorphaned
+
+RUN_UTILS DeleteDirectory   e:\tswi
+RUN_UTILS DeleteDirectory   e:\private
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0008
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0006
+//! @SYMTestCaseDesc		Exclusive RemoveL check
+//! @SYMREQ			REQ7566
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and simultaneously install a sis file
+//! @SYMTestExpectedResults	The installation should fail
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x2_edrive.sis e:\private\10202dce\testpreinstalled_install_x2_edrive.sisx
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x2_edrive.sisx
+CONCURRENT
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeallappsfromxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple_concurrent
+CONSECUTIVE
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple1_sis
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x2_edrive.sisx
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0015
+//! @SYMTestCaseDesc		ListL check for invalid ctl file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move an invalid ctl file and call ListL
+//! @SYMTestExpectedResults	The List should not list the ctl file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0015
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctlinvalidfolder
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletectlinvalidfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-A-0015
+//! @SYMTestCaseDesc		ListL check for invalid ctl file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move an invalid ctl file and call ListL
+//! @SYMTestExpectedResults	The List should not list the ctl file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-A-0015
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctlinvalidfolder1
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletectlinvalidfolder1
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-A-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0015
+//! @SYMTestCaseDesc		ListL check for invalid ctl file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move an invalid ctl file and call ListL
+//! @SYMTestExpectedResults	The List should not list the ctl file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0015
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctlinvalidfolder2
+RUN_TEST_STEP !Error=-10283 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletectlinvalidfolder2
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-C-0015
+//! @SYMTestCaseDesc		ListL check for invalid ctl file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move an invalid ctl file and call ListL
+//! @SYMTestExpectedResults	The List should not list the ctl file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-C-0015
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctlinvalidfolder6dig
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletectlinvalidfolder6dig
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-C-0015
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0016
+//! @SYMTestCaseDesc		ListL check for invalid sis file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move an invalid sis file and call ListL
+//! @SYMTestExpectedResults	The List should not list the sis file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0016
+
+// Copy the invalid stub into position on the x: drive
+//The list should not list the file
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_UTILS DeleteDirectory  e:\private
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0016
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0017
+//! @SYMTestCaseDesc		ListL check for invalid ctl file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Move a valid ctl file an invalid ctl file and call ListL
+//! @SYMTestExpectedResults	The List should list only the ctl file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0017
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctlinvalidfolder3
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletectlinvalidfolder3
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0017
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0018
+//! @SYMTestCaseDesc		ListL should list only uninstalled pkg file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a sis file and call ListL
+//! @SYMTestExpectedResults	The List should not list the installed sis file
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0018
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install.sis
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listapps
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+RUN_UTILS DeleteDirectory e:\private
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0018
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0019
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs when stub sis is present in removable drive
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		call ListL 
+//! @SYMTestExpectedResults	ListL should return with KErrNoUninstalledPackages for non-removable drive
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0019
+
+RUN_UTILS MKDIR c:\private\
+RUN_UTILS MKDIR c:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis c:\private\10202dce\testpreinstalled_install.sis
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_UTILS DeleteDirectry c:\private
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0019
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0020
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs when none is present
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		call ListL 
+//! @SYMTestExpectedResults	ListL should return with KErrNoUninstalledPackages
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0020
+
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0020
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0022
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs from non-removable drive 
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file to relevant folders of non-removable drive and call ListL 
+//! @SYMTestExpectedResults	ListL should return with KErrNotRemovable
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0022
+
+RUN_UTILS MKDIR c:\private\
+RUN_UTILS MKDIR c:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis c:\private\10202dce\testpreinstalled_install.sis
+RUN_TEST_STEP !Error=-10280 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappscdrive
+RUN_UTILS DeleteFile c:\private\10202dce\testpreinstalled_install.sis
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0022
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0025
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs when only sys\install\sisregistry is present
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		call ListL 
+//! @SYMTestExpectedResults	ListL should return with KErrNoUninstalledPackages
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0025
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyfiletosisregistry
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletefilefromsisregistry
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyfiletosisregistryfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletefilefromsisregistryfolder
+RUN_TEST_STEP 100 tuiscriptadaptors ListUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsxdrive_0
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0025
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0026
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs  with PU pkg
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Uninstall the PA sis file and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0026
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\fileeclipsepu.sis e:\private\10202dce\fileeclipsepu.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\fileeclipsepu.sis
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistspusis
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0026
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0027
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs, when junk file is present in sys/install/sisregistry with 8 chars
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file and ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0027
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyjunkfile
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistssisctl
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini deletejunkfile
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0027
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0028
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs, when same stub sis file is copied twice
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file(twice) and ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0028
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000002.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000002.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistssisctl
+RUN_UTILS DeleteDirectiry e:\private
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0028
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0026
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs , with SA and SP
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis files and call RemoveL
+//! @SYMTestExpectedResults	RemoveL should remove both the files
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0026
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testaugmentations_base.sis e:\private\10202dce\testaugmentations_base.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testaugmentations_base.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testaugmentations_A.sis e:\private\10202dce\testaugmentations_A.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testaugmentations_A.sis
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps2
+RUN_UTILS RemoveDirectory e:\private
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0026
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0029
+//! @SYMTestCaseDesc		check for pkg with PA and PP
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred is removed
+//! @SYMTestExpectedResults	The file should be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0029
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x3.sis e:\private\10202dce\testpreinstalled_install_x3pa.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x3pa.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x3pp.sis e:\private\10202dce\testpreinstalled_install_x3pp.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x3pp.sis
+RUN_UTILS MKDIR e:\Documents\
+RUN_UTILS MKDIR e:\Documents\InstTest\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\Documents\InstTest\file1.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps2
+RUN_UTILS DeleteDirectory   e:\Documents
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0029
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0030
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs after delete
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Uninstall the PA sis file, delete the file after ListL and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should return with KErrNone
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0030
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis e:\private\10202dce\testpreinstalled_install.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install.sis
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsafterdelete
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexists
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0030
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0031
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs for embedded files 
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0031
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini embedc1install
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_2.sis e:\private\10202dce\053177c_2.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_2.sis
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\Documents\def053177\backlight.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\def053177\backlight.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeembedapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistsembed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_embedc1install
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0031
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0032
+//! @SYMTestCaseDesc		Removing of Uninstalled Preinstalled Pkgs for embedded files
+//! @SYMREQ			REQ7564
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the ctl file to relevant folders and call RemoveL 
+//! @SYMTestExpectedResults	RemoveL should remove the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0032
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini embedc1install
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_2.sis e:\private\10202dce\053177c_2.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_2.sis
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\Documents\def053177\backlight.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\def053177\backlight.txt
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\Documents\def053177\appcap1.txt c:\cr1023\appcap1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_embedc1installc0
+RUN_UTILS CopyFile c:\cr1023\appcap1.txt e:\Documents\def053177\appcap1.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\def053177\appcap1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeembedapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini notexistsembedtxt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_embedc1installc1
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0032
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-B-0006
+//! @SYMTestCaseDesc		Exclusive RemoveL check
+//! @SYMREQ			REQ7566
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and simultaneously restore a sis file
+//! @SYMTestExpectedResults	The installation should fail
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-B-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple1_sis
+CONCURRENT
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple1_sis
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsfromxdrive
+CONSECUTIVE
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple1_sis
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x.sis
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-B-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0024
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs , with file referred as $(system drive) in pkg file
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis file and ctl file to relevant folders and call ListL 
+//! @SYMTestExpectedResults	RemoveL should not remove the file from system drive
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0024
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_sysdrive.sis e:\private\10202dce\testpreinstalled_sysdrive.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_sysdrive.sis
+RUN_UTILS MKDIR c:\Documents\
+RUN_UTILS MKDIR c:\Documents\InstTest\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt c:\Documents\InstTest\file1.txt
+RUN_UTILS MAKEREADWRITE c:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP !Result=Fail 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini filesysdrivechk
+RUN_UTILS DeleteFile c:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteDirectory c:\Documents
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0024
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0007
+//! @SYMTestCaseDesc		File removal check for RemoveL for data caged file
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred is removed if it is data caged
+//! @SYMTestExpectedResults	The file is removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0007
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x3.sis e:\private\10202dce\testpreinstalled_install_x3.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x3.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copydatacagedfile
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini datacagedfile
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0007
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0033
+//! @SYMTestCaseDesc		check for pkg with more than 1 lang
+//! @SYMREQ			REQ7567
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and check whether files referred is removed
+//! @SYMTestExpectedResults	The file should be removed
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0033
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\language_frfirst.sis e:\private\10202dce\language_frfirst.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\language_frfirst.sis
+RUN_UTILS MKDIR e:\Documents\
+RUN_UTILS MKDIR e:\Documents\InstTest\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\Documents\InstTest\file1.txt
+RUN_UTILS MAKEREADWRITE e:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeappsxdrive
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini filelangsis
+RUN_UTILS DeleteFile e:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteDirectory   e:\Documents
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0033
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-C-0006
+//! @SYMTestCaseDesc		Exclusive RemoveL check
+//! @SYMREQ			REQ7566
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Call the removeL and simultaneously uninstall a sis file
+//! @SYMTestExpectedResults	The installation should fail
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-C-0006
+
+// needed for backup to take place
+RUN_UTILS MkDir c:\private\101f72a6\
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS MAKEREADWRITE c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\certclients.dat c:\private\101f72a6\certclients.dat
+RUN_UTILS MAKEREADWRITE c:\private\101f72a6\certclients.dat
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis c:\cr1023\80000001_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_simple
+
+// Copy the stub back into position on the x: drive
+// Copy the controller file to x: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\80000001_0.sis e:\private\10202dce\80000001_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile c:\cr1023\80000001_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copyctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x.sis e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install_x3.sis e:\private\10202dce\testpreinstalled_install_x3.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testpreinstalled_install_x3.sis
+RUN_TEST_STEP 100 tbackuprestore INSTALL z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+RUN_TEST_STEP 100 tbackuprestore PRESENT z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+RUN_TEST_STEP 100 tbackuprestore BACKUP	z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+RUN_TEST_STEP 100 tbackuprestore UNINSTALL z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+CONCURRENT
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeallappsfromx
+RUN_TEST_STEP 100 tbackuprestore RESTORE z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+
+CONSECUTIVE
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini sisfolder
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini cdrivefolder
+RUN_TEST_STEP 100 tbackuprestore UNINSTALL z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini backupandrestore
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x.sis
+RUN_UTILS DeleteFile e:\private\10202dce\testpreinstalled_install_x3.sis
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+
+RUN_UTILS DeleteDirectory   c:\tswi
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-C-0006
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0035
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		uninstall the deepembed sis file and call listL
+//! @SYMTestExpectedResults	ListL should list the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0035
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_8.sis e:\private\10202dce\053177c_8.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_8.sis
+RUN_TEST_STEP_RESULT -10283 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsdeepembed
+RUN_UTILS DeleteFile e:\private\10202dce\053177c_8.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini privatefolder
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0035
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0036
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs  
+//! @SYMREQ			REQ7561
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		uninstall the deepembed sis file and call listL
+//! @SYMTestExpectedResults	ListL should list the uninstalled pkg
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0036
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_1.sis e:\private\10202dce\053177c_1.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_1.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_2.sis e:\private\10202dce\053177c_2.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_2.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_3.sis e:\private\10202dce\053177c_3.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_3.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177c_4.sis e:\private\10202dce\053177c_4.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177c_4.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_0.sis e:\private\10202dce\053177b_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_0.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_1.sis e:\private\10202dce\053177b_1.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_1.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_2.sis e:\private\10202dce\053177b_2.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_2.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_3.sis e:\private\10202dce\053177b_3.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_3.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_4.sis e:\private\10202dce\053177b_4.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_4.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_5.sis e:\private\10202dce\053177b_5.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_5.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\053177b_6.sis e:\private\10202dce\053177b_6.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\053177b_6.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini listappsmorepkgs
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0036
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0037
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs , with SA and two SP
+//! @SYMDEF			DEF110017
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis files and call RemoveL
+//! @SYMTestExpectedResults	RemoveL should remove all 3 files.
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0037
+
+RUN_UTILS MKDIR e:\private\
+RUN_UTILS MKDIR e:\private\10202dce\
+RUN_UTILS CopyFile z:\tswi\tsis\data\testaugmentations_base.sis e:\private\10202dce\testaugmentations_base.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testaugmentations_base.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testaugmentations_A.sis e:\private\10202dce\testaugmentations_A.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testaugmentations_A.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testaugmentations_D.sis e:\private\10202dce\testaugmentations_D.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\testaugmentations_D.sis
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps3
+RUN_UTILS RemoveDirectory e:\private
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0037
+
+
+//! @SYMTestCaseID		API-SEC-SWI-CR1023-H4-0038
+//! @SYMTestCaseDesc		Listing of Uninstalled Preinstalled Pkgs , with SA and two SP with both controller and stub sis file
+//! @SYMREQ			DEF110017
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Copy the stub sis files and the controller files and  call RemoveL
+//! @SYMTestExpectedResults	RemoveL should remove all the files
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-SWI-CR1023-H4-0038
+
+// Install augmentaion base, A and D
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini augmentation_base_e
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini augmentation_A_e
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini augmentation_D_e
+
+// Copy the stub that was created and the controller
+RUN_UTILS MKDIR c:\cr1023\
+RUN_UTILS CopyFile e:\private\10202dce\81111207_0.sis c:\cr1023\81111207_0.sis
+RUN_UTILS CopyFile e:\sys\install\sisregistry\81111207\00000000_0000.ctl c:\cr1023\00000000_0000.ctl
+RUN_UTILS CopyFile e:\sys\install\sisregistry\81111207\00000001_0000.ctl c:\cr1023\00000001_0000.ctl
+RUN_UTILS CopyFile e:\sys\install\sisregistry\81111207\00000002_0000.ctl c:\cr1023\00000002_0000.ctl
+
+// Uninstall augmentaion base, A and D
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini u_augmentation_base_e
+
+// Copy the stub back into position on the e: drive
+// Copy the controller file to e: drive
+//The list should list the file
+
+RUN_UTILS MkDir e:\private\
+RUN_UTILS MkDir e:\private\10202dce\
+RUN_UTILS CopyFile c:\cr1023\81111207_0.sis e:\private\10202dce\81111207_0.sis
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\81111207_0.sis
+RUN_UTILS DeleteFile c:\cr1023\81111207_0.sis
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini copy3ctl
+RUN_UTILS DeleteFile c:\cr1023\00000000_0000.ctl
+RUN_UTILS DeleteFile c:\cr1023\00000001_0000.ctl
+RUN_UTILS DeleteFile c:\cr1023\00000002_0000.ctl
+
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveUninstallPkgsStep z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini removeapps3
+RUN_UTILS RemoveDirectory e:\private
+
+END_TESTCASE API-SEC-SWI-CR1023-H4-0038

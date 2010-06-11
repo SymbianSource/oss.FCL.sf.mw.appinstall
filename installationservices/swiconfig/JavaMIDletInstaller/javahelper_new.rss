@@ -1,0 +1,97 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+NAME JHLP
+
+#include <uikon.rh>
+
+RESOURCE RSS_SIGNATURE { }
+
+STRUCT JAVAOCSP_ERROR_SETTINGS
+	{
+	BYTE unableToObtainCertificateStatus;
+	BYTE invalidRevocationServerUrl;
+	BYTE responseSignatureValidationFailure;
+	BYTE invalidRevocationServerResponse;
+	BYTE missingNonce;
+	BYTE invalidCertificateStatusInformation;
+	BYTE certificateStatusIsUnknown;
+	}
+
+// show warnings for following java ocsp return errors
+// if set to 1, warning is displayed, the user gets choice if they wish to install
+// if set to 0, error is displayed and installation is cancelled
+RESOURCE JAVAOCSP_ERROR_SETTINGS r_javaocsp_error_settings
+	{
+	unableToObtainCertificateStatus = 1;
+	invalidRevocationServerUrl = 1;
+	responseSignatureValidationFailure = 0;
+	invalidRevocationServerResponse = 1;
+	missingNonce = 1;
+	invalidCertificateStatusInformation = 1;
+	certificateStatusIsUnknown = 0;
+	}
+
+STRUCT OTA_RETRIES
+	{
+	LONG Installation;
+	LONG Deletion;
+	}
+
+// define the maximum number of retries for Installation and Deletion notifications
+RESOURCE OTA_RETRIES max_ota_retries
+	{
+	Installation = 5;
+	Deletion = 10;
+	}
+
+//setting to contol OTA response suppression on drm error other than KErrCAPendingRights
+STRUCT SUPPRESS_OTA_RESPONSE_ON_NON_PENDINGRIGHTS_DRM_ERROR 
+	{
+	BYTE suppressotaresponseonnonpendingrightsdrmerror;
+	}
+
+RESOURCE SUPPRESS_OTA_RESPONSE_ON_NON_PENDINGRIGHTS_DRM_ERROR r_suppress_ota_response_on_non_pendingrights_drm_error
+	{
+	suppressotaresponseonnonpendingrightsdrmerror = 1;
+	}
+
+STRUCT CAF_SETTINGS
+	{
+	BYTE retrywithhttpmimetype;
+	BYTE intent;
+	}
+
+//caf / drm options
+RESOURCE CAF_SETTINGS r_caf_settings
+	{
+	retrywithhttpmimetype = 0;
+	intent = 9;
+	}
+
+STRUCT EKU_AlternativeCodeSigningOID
+	{
+	LTEXT codeSigningOID;
+	}
+
+
+RESOURCE EKU_AlternativeCodeSigningOID r_EKU_AlternativeCodeSigningOID
+	{
+	codeSigningOID = "";
+	}

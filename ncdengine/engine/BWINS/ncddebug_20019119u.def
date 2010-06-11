@@ -1,0 +1,16 @@
+EXPORTS
+	??0TCatalogsDebug@@QAE@W4TType@0@PBDH1IH@Z @ 1 NONAME ; TCatalogsDebug::TCatalogsDebug(enum TCatalogsDebug::TType, char const *, int, char const *, unsigned int, int)
+	??0TCatalogsLocalCleanupStackWatcher@@QAE@XZ @ 2 NONAME ; TCatalogsLocalCleanupStackWatcher::TCatalogsLocalCleanupStackWatcher(void)
+	??0TCatalogsLocalDebugHeapActivator@@QAE@XZ @ 3 NONAME ; TCatalogsLocalDebugHeapActivator::TCatalogsLocalDebugHeapActivator(void)
+	??0TCatalogsLocalExitTrace@@QAE@PBDH0@Z @ 4 NONAME ; TCatalogsLocalExitTrace::TCatalogsLocalExitTrace(char const *, int, char const *)
+	??1TCatalogsLocalCleanupStackWatcher@@QAE@XZ @ 5 NONAME ; TCatalogsLocalCleanupStackWatcher::~TCatalogsLocalCleanupStackWatcher(void)
+	??1TCatalogsLocalDebugHeapActivator@@QAE@XZ @ 6 NONAME ; TCatalogsLocalDebugHeapActivator::~TCatalogsLocalDebugHeapActivator(void)
+	??1TCatalogsLocalExitTrace@@QAE@XZ @ 7 NONAME ; TCatalogsLocalExitTrace::~TCatalogsLocalExitTrace(void)
+	?Activate@RCatalogsDebugHeap@@SAHH@Z @ 8 NONAME ; int RCatalogsDebugHeap::Activate(int)
+	?Disable@TCatalogsLocalExitTrace@@QAEXXZ @ 9 NONAME ; void TCatalogsLocalExitTrace::Disable(void)
+	?DumpData@TCatalogsDebug@@QAEXPBXHH@Z @ 10 NONAME ; void TCatalogsDebug::DumpData(void const *, int, int)
+	?InstallL@RCatalogsDebugHeap@@SAXH@Z @ 11 NONAME ; void RCatalogsDebugHeap::InstallL(int)
+	?Print@TCatalogsDebug@@QAAXPBDZZ @ 12 NONAME ; void TCatalogsDebug::Print(char const *, ...)
+	?Print@TCatalogsDebug@@QAAXV?$TRefByValue@$$CBVTDesC16@@@@ZZ @ 13 NONAME ; void TCatalogsDebug::Print(class TRefByValue<class TDesC16 const >, ...)
+	?Uninstall@RCatalogsDebugHeap@@SAXXZ @ 14 NONAME ; void RCatalogsDebugHeap::Uninstall(void)
+

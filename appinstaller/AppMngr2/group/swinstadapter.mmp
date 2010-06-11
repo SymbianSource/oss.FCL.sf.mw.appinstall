@@ -1,0 +1,49 @@
+/*
+* Copyright (c) 2005-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   OMA DM adapter that allows to configure SW Installer settings
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include "../SWInstAdapter/inc/swinstadapteruids.hrh"
+
+TARGET          SWInstAdapter.dll
+TARGETTYPE      PLUGIN
+UID             0x10009D8D KSWInstAdapterDllUid3
+
+CAPABILITY      CAP_ECOM_PLUGIN CAP_GENERAL_DLL
+VENDORID        VID_DEFAULT
+
+SOURCEPATH      ../SWInstAdapter/src
+SOURCE          swinstadapter.cpp
+SOURCE          swinstadaptermain.cpp
+
+USERINCLUDE     ../SWInstAdapter/inc
+
+MW_LAYER_SYSTEMINCLUDE
+SYSTEMINCLUDE   /epoc32/include/ecom    // smldmadapter.h needs this
+
+SOURCEPATH      ../SWInstAdapter/data
+START RESOURCE  ./swinstadapter.rss
+TARGET          swinstadapter.rsc
+END
+
+LIBRARY         euser.lib
+LIBRARY         ecom.lib
+LIBRARY         centralrepository.lib
+LIBRARY         charconv.lib
+
+SMPSAFE
+

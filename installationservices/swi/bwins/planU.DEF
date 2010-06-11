@@ -1,0 +1,83 @@
+EXPORTS
+	??1CPlan@Swi@@UAE@XZ @ 1 NONAME ; Swi::CPlan::~CPlan(void)
+	?AddEmbeddedApplicationL@CApplication@Swi@@QAEXPAV12@@Z @ 2 NONAME ; void Swi::CApplication::AddEmbeddedApplicationL(class Swi::CApplication *)
+	?AddFileL@CApplication@Swi@@QAEXABVCFileDescription@Sis@2@VTChar@@@Z @ 3 NONAME ; void Swi::CApplication::AddFileL(class Swi::Sis::CFileDescription const &, class TChar)
+	?AddInstallFileForProgress@CPlan@Swi@@QAEX_J@Z @ 4 NONAME ; void Swi::CPlan::AddInstallFileForProgress(long long)
+	?AddPropertyL@CApplication@Swi@@QAEXABVTProperty@12@@Z @ 5 NONAME ; void Swi::CApplication::AddPropertyL(class Swi::CApplication::TProperty const &)
+	?AddUninstallFileForProgress@CPlan@Swi@@QAEXXZ @ 6 NONAME ; void Swi::CPlan::AddUninstallFileForProgress(void)
+	?AppInfoL@CPlan@Swi@@QBEABVTAppInfo@2@XZ @ 7 NONAME ; class Swi::TAppInfo const & Swi::CPlan::AppInfoL(void) const
+	?ApplicationL@CPlan@Swi@@UBEABVCApplication@2@XZ @ 8 NONAME ; class Swi::CApplication const & Swi::CPlan::ApplicationL(void) const
+	?ControllerL@CApplication@Swi@@QBEABVCController@Sis@2@XZ @ 9 NONAME ; class Swi::Sis::CController const & Swi::CApplication::ControllerL(void) const
+	?DisplayFileOnInstallL@CApplication@Swi@@QAEXABVCFileDescription@Sis@2@VTChar@@@Z @ 10 NONAME ; void Swi::CApplication::DisplayFileOnInstallL(class Swi::Sis::CFileDescription const &, class TChar)
+	?DisplayFileOnUninstallL@CApplication@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 11 NONAME ; void Swi::CApplication::DisplayFileOnUninstallL(class Swi::CSisRegistryFileDescription const &)
+	?EmbeddedApplications@CApplication@Swi@@QBEABV?$RPointerArray@VCApplication@Swi@@@@XZ @ 12 NONAME ; class RPointerArray<class Swi::CApplication> const & Swi::CApplication::EmbeddedApplications(void) const
+	?FilesToAdd@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 13 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToAdd(void) const
+	?FilesToDisplayOnInstall@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 14 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToDisplayOnInstall(void) const
+	?FilesToDisplayOnUninstall@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 15 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToDisplayOnUninstall(void) const
+	?FilesToRemove@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 16 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToRemove(void) const
+	?FilesToRunOnInstall@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 17 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToRunOnInstall(void) const
+	?FilesToRunOnUninstall@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 18 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToRunOnUninstall(void) const
+	?FinalProgressBarValue@CPlan@Swi@@QBEJXZ @ 19 NONAME ; long Swi::CPlan::FinalProgressBarValue(void) const
+	?IsAugmentation@CApplication@Swi@@QBEHXZ @ 20 NONAME ; int Swi::CApplication::IsAugmentation(void) const
+	?IsInROM@CApplication@Swi@@QBEHXZ @ 21 NONAME ; int Swi::CApplication::IsInROM(void) const
+	?IsInstall@CApplication@Swi@@QBEHXZ @ 22 NONAME ; int Swi::CApplication::IsInstall(void) const
+	?IsPartialUpgrade@CApplication@Swi@@QBEHXZ @ 23 NONAME ; int Swi::CApplication::IsPartialUpgrade(void) const
+	?IsPreInstalledApp@CApplication@Swi@@QBEHXZ @ 24 NONAME ; int Swi::CApplication::IsPreInstalledApp(void) const
+	?IsPreInstalledPatch@CApplication@Swi@@QBEHXZ @ 25 NONAME ; int Swi::CApplication::IsPreInstalledPatch(void) const
+	?IsUninstall@CApplication@Swi@@QBEHXZ @ 26 NONAME ; int Swi::CApplication::IsUninstall(void) const
+	?IsUpgrade@CApplication@Swi@@QBEHXZ @ 27 NONAME ; int Swi::CApplication::IsUpgrade(void) const
+	?NewL@CApplication@Swi@@SAPAV12@XZ @ 28 NONAME ; class Swi::CApplication * Swi::CApplication::NewL(void)
+	?NewL@CPlan@Swi@@SAPAV12@XZ @ 29 NONAME ; class Swi::CPlan * Swi::CPlan::NewL(void)
+	?NewLC@CApplication@Swi@@SAPAV12@XZ @ 30 NONAME ; class Swi::CApplication * Swi::CApplication::NewLC(void)
+	?PackageL@CApplication@Swi@@QBEABVCSisRegistryPackage@2@XZ @ 31 NONAME ; class Swi::CSisRegistryPackage const & Swi::CApplication::PackageL(void) const
+	?Properties@CApplication@Swi@@QBEABV?$RArray@VTProperty@CApplication@Swi@@@@XZ @ 32 NONAME ; class RArray<class Swi::CApplication::TProperty> const & Swi::CApplication::Properties(void) const
+	?RemoveFileL@CApplication@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 33 NONAME ; void Swi::CApplication::RemoveFileL(class Swi::CSisRegistryFileDescription const &)
+	?RunFileOnInstallL@CApplication@Swi@@QAEXABVCFileDescription@Sis@2@VTChar@@@Z @ 34 NONAME ; void Swi::CApplication::RunFileOnInstallL(class Swi::Sis::CFileDescription const &, class TChar)
+	?RunFileOnUninstallL@CApplication@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 35 NONAME ; void Swi::CApplication::RunFileOnUninstallL(class Swi::CSisRegistryFileDescription const &)
+	?SetAppInfoL@CPlan@Swi@@QAEXABVTAppInfo@2@@Z @ 36 NONAME ; void Swi::CPlan::SetAppInfoL(class Swi::TAppInfo const &)
+	?SetApplication@CPlan@Swi@@UAEXPAVCApplication@2@@Z @ 37 NONAME ; void Swi::CPlan::SetApplication(class Swi::CApplication *)
+	?SetApplicationInformationL@CPlan@Swi@@QAEXABVTDesC16@@0ABVTVersion@@@Z @ 38 NONAME ; void Swi::CPlan::SetApplicationInformationL(class TDesC16 const &, class TDesC16 const &, class TVersion const &)
+	?SetAugmentation@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 39 NONAME ; void Swi::CApplication::SetAugmentation(class Swi::Sis::CController const &)
+	?SetController@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 40 NONAME ; void Swi::CApplication::SetController(class Swi::Sis::CController const &)
+	?SetController@CApplication@Swi@@QAEXVTUid@@@Z @ 41 NONAME ; void Swi::CApplication::SetController(class TUid)
+	?SetInROM@CApplication@Swi@@QAEXXZ @ 42 NONAME ; void Swi::CApplication::SetInROM(void)
+	?SetInstall@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 43 NONAME ; void Swi::CApplication::SetInstall(class Swi::Sis::CController const &)
+	?SetOptionsL@CUserSelections@Swi@@QAEXABV?$RArray@H@@@Z @ 44 NONAME ; void Swi::CUserSelections::SetOptionsL(class RArray<int> const &)
+	?SetPackageL@CApplication@Swi@@QAEXABVCSisRegistryPackage@2@@Z @ 45 NONAME ; void Swi::CApplication::SetPackageL(class Swi::CSisRegistryPackage const &)
+	?SetPartialUpgrade@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 46 NONAME ; void Swi::CApplication::SetPartialUpgrade(class Swi::Sis::CController const &)
+	?SetPreInstalledApp@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 47 NONAME ; void Swi::CApplication::SetPreInstalledApp(class Swi::Sis::CController const &)
+	?SetPreInstalledPatch@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 48 NONAME ; void Swi::CApplication::SetPreInstalledPatch(class Swi::Sis::CController const &)
+	?SetUninstallL@CApplication@Swi@@QAEXABVCSisRegistryPackage@2@@Z @ 49 NONAME ; void Swi::CApplication::SetUninstallL(class Swi::CSisRegistryPackage const &)
+	?SetUpgrade@CApplication@Swi@@QAEXABVCController@Sis@2@@Z @ 50 NONAME ; void Swi::CApplication::SetUpgrade(class Swi::Sis::CController const &)
+	?AddSisStubFileL@CApplication@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 51 NONAME ; void Swi::CApplication::AddSisStubFileL(class Swi::CSisRegistryFileDescription const &)
+	?CanPropagate@CApplication@Swi@@QBEHXZ @ 52 NONAME ; int Swi::CApplication::CanPropogate(void) const
+	?StubDrive@CApplication@Swi@@QBE?AVTChar@@XZ @ 53 NONAME ; class TChar Swi::CApplication::StubDrive(void) const
+	?SetPreInstalledApp@CApplication@Swi@@QAEXXZ @ 54 NONAME ; void Swi::CApplication::SetPreInstalledApp(void)
+	?SetPreInstalledPatch@CApplication@Swi@@QAEXXZ @ 55 NONAME ; void Swi::CApplication::SetPreInstalledPatch(void)
+	?RemoveFileL@CApplication@Swi@@QAEXABVTDesC16@@@Z @ 56 NONAME ; void Swi::CApplication::RemoveFileL(class TDesC16 const &)
+	?FilesToRunBeforeShutdown@CPlan@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 57 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CPlan::FilesToRunBeforeShutdown(void) const
+	?RunFilesBeforeShutdownL@CPlan@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 58 NONAME ; void Swi::CPlan::RunFilesBeforeShutdownL(class Swi::CSisRegistryFileDescription const &)
+	?IsInstallSuCertBased@CApplication@Swi@@QBEHXZ @ 59 NONAME ; int Swi::CApplication::IsInstallSuCertBased(void) const
+	?SetInstallSuCertBased@CApplication@Swi@@QAEXXZ @ 60 NONAME ; void Swi::CApplication::SetInstallSuCertBased(void)
+	?AddFileL@CApplication@Swi@@QAEXABVCSisRegistryFileDescription@2@@Z @ 61 NONAME ; void Swi::CApplication::AddFileL(class Swi::CSisRegistryFileDescription const &)
+	?FilesToSkipOnInstall@CApplication@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 62 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CApplication::FilesToSkipOnInstall(void) const
+	?SkipFileOnInstallL@CApplication@Swi@@QAEXABVCFileDescription@Sis@2@VTChar@@@Z @ 63 NONAME ; void Swi::CApplication::SkipFileOnInstallL(class Swi::Sis::CFileDescription const &, class TChar)
+	?SetDrmProtected@CApplication@Swi@@QAEXH@Z @ 64 NONAME ; void Swi::CApplication::SetDrmProtected(int)
+	?IsDrmProtected@CApplication@Swi@@QBEHXZ @ 65 NONAME ; int Swi::CApplication::IsDrmProtected(void) const
+	?FilesToRunAfterInstall@CPlan@Swi@@QBEABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@XZ @ 66 NONAME ; class RPointerArray<class Swi::CSisRegistryFileDescription> const & Swi::CPlan::FilesToRunAfterInstall(void) const
+	?RunFileAfterInstallL@CPlan@Swi@@QAEXABVCFileDescription@Sis@2@VTChar@@H@Z @ 67 NONAME ; void Swi::CPlan::RunFileAfterInstallL(class Swi::Sis::CFileDescription const &, class TChar, int)
+	?AppArcRegFiles@CPlan@Swi@@QBEABV?$RPointerArray@VTDesC16@@@@XZ @ 68 NONAME ; class RPointerArray<class TDesC16> const & Swi::CPlan::AppArcRegFiles(void) const
+	?ContainsPlugins@CPlan@Swi@@QBEHXZ @ 69 NONAME ; int Swi::CPlan::ContainsPlugins(void) const
+	?SetContainsPlugins@CPlan@Swi@@QAEXH@Z @ 70 NONAME ; void Swi::CPlan::SetContainsPlugins(int)
+	?AddAppArcRegFileL@CPlan@Swi@@QAEXABVTDesC16@@@Z @ 71 NONAME ; void Swi::CPlan::AddAppArcRegFileL(class TDesC16 const &)
+	?ResetAppArcRegFiles@CPlan@Swi@@QAEXXZ @ 72 NONAME ; void Swi::CPlan::ResetAppArcRegFiles(void)
+	?CopyDeviceSupportedLanguagesL@CApplication@Swi@@QAEXABV?$RArray@H@@@Z @ 73 NONAME ; void Swi::CApplication::CopyDeviceSupportedLanguagesL(class RArray<int> const &)
+	?GetMatchingDeviceLanguages@CApplication@Swi@@QAEABV?$RArray@H@@XZ @ 74 NONAME ; class RArray<int> const & Swi::CApplication::GetMatchingDeviceLanguages(void)
+	?PopulateMatchingDeviceLanguagesL@CApplication@Swi@@QAEXH@Z @ 75 NONAME ; void Swi::CApplication::PopulateMatchingDeviceLanguagesL(int)
+	?IsDeviceMatchingLanguage@CApplication@Swi@@QBEHH@Z @ 76 NONAME ; int Swi::CApplication::IsDeviceMatchingLanguage(int) const
+	?SetSisHelper@CApplication@Swi@@QAEXABVRSisHelper@2@@Z @ 77 NONAME ; void Swi::CApplication::SetSisHelper(class Swi::RSisHelper const &)
+	?GetSisHelper@CApplication@Swi@@QAEAAVRSisHelper@2@XZ @ 78 NONAME ; class Swi::RSisHelper & Swi::CApplication::GetSisHelper(void)
+	?GetAffectedApps@CPlan@Swi@@QBEXAAV?$RArray@VTAppUpdateInfo@Swi@@@@@Z @ 79 NONAME ; void Swi::CPlan::GetAffectedApps(class RArray<class Swi::TAppUpdateInfo> &) const
+	?ResetAffectedApps@CPlan@Swi@@QAEXXZ @ 80 NONAME ; void Swi::CPlan::ResetAffectedApps(void)
+	?SetAffectedApps@CPlan@Swi@@QAEXAAV?$RArray@VTAppUpdateInfo@Swi@@@@@Z @ 81 NONAME ; void Swi::CPlan::SetAffectedApps(class RArray<class Swi::TAppUpdateInfo> &)
+

@@ -1,0 +1,39 @@
+;
+; Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN
+
+; List of localised vendor names.
+%{"Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English
+#{"sifgetcompinfotestnolocale_EN"}, (0x88001112), 1,0,0
+
+
+; Language-neutral files to be installed
+"\epoc32\<BUILDMIDPATH>\sifgetcompapparcinfotest.exe"-"!:\sys\bin\sifgetcompapparcinfotest.exe"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_reg.rsc" - "!:\private\10003a3f\import\apps\sifgetcompapparcinfotest_reg.rsc"
+
+
+

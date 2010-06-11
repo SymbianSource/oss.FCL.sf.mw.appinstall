@@ -1,0 +1,71 @@
+EXPORTS
+	?PrepareResultsForIpcL@COpaqueNamedParams@Usif@@QAEXAAVTIpcArgs@@H@Z @ 1 NONAME ; void Usif::COpaqueNamedParams::PrepareResultsForIpcL(class TIpcArgs &, int)
+	?HasCapability@TSecurityContext@Usif@@QBEHW4TCapability@@@Z @ 2 NONAME ; int Usif::TSecurityContext::HasCapability(enum TCapability) const
+	?SoftwareTypeName@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 3 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::SoftwareTypeName(void) const
+	?NewL@CComponentInfo@Usif@@SAPAV12@XZ @ 4 NONAME ; class Usif::CComponentInfo * Usif::CComponentInfo::NewL(void)
+	?UserGrantableCaps@CNode@CComponentInfo@Usif@@QBEABVTCapabilitySet@@XZ @ 5 NONAME ; class TCapabilitySet const & Usif::CComponentInfo::CNode::UserGrantableCaps(void) const
+	?IntByNameL@COpaqueNamedParams@Usif@@QBEHABVTDesC16@@@Z @ 6 NONAME ; int Usif::COpaqueNamedParams::IntByNameL(class TDesC16 const &) const
+	?HasCapabilityL@TSecurityContext@Usif@@QBEXW4TCapability@@@Z @ 7 NONAME ; void Usif::TSecurityContext::HasCapabilityL(enum TCapability) const
+	?Close@RSoftwareInstall@Usif@@QAEXXZ @ 8 NONAME ; void Usif::RSoftwareInstall::Close(void)
+	?Authenticity@CNode@CComponentInfo@Usif@@QBE?AW4TAuthenticity@3@XZ @ 9 NONAME ; enum Usif::TAuthenticity Usif::CComponentInfo::CNode::Authenticity(void) const
+	?SetRootNodeAsChildL@CComponentInfo@Usif@@QAEXAAVCNode@12@@Z @ 10 NONAME ; void Usif::CComponentInfo::SetRootNodeAsChildL(class Usif::CComponentInfo::CNode &)
+	?Uninstall@RSoftwareInstall@Usif@@QAEXHAAVTRequestStatus@@H@Z @ 11 NONAME ; void Usif::RSoftwareInstall::Uninstall(int, class TRequestStatus &, int)
+	?StringByNameL@COpaqueNamedParams@Usif@@QBEABVTDesC16@@ABV3@@Z @ 12 NONAME ; class TDesC16 const & Usif::COpaqueNamedParams::StringByNameL(class TDesC16 const &) const
+	?ScomoState@CNode@CComponentInfo@Usif@@QBE?AW4TScomoState@3@XZ @ 13 NONAME ; enum Usif::TScomoState Usif::CComponentInfo::CNode::ScomoState(void) const
+	?Install@RSoftwareInstall@Usif@@QAEXABVTDesC16@@ABVCOpaqueNamedParams@2@AAV42@AAVTRequestStatus@@H@Z @ 14 NONAME ; void Usif::RSoftwareInstall::Install(class TDesC16 const &, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	?AddIntL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@H@Z @ 15 NONAME ; void Usif::COpaqueNamedParams::AddIntL(class TDesC16 const &, int)
+	?NewLC@COpaqueNamedParams@Usif@@SAPAV12@XZ @ 16 NONAME ; class Usif::COpaqueNamedParams * Usif::COpaqueNamedParams::NewLC(void)
+	?InstallStatus@CNode@CComponentInfo@Usif@@QBE?AW4TInstallStatus@3@XZ @ 17 NONAME ; enum Usif::TInstallStatus Usif::CComponentInfo::CNode::InstallStatus(void) const
+	?Children@CNode@CComponentInfo@Usif@@QBEABV?$RPointerArray@VCNode@CComponentInfo@Usif@@@@XZ @ 18 NONAME ; class RPointerArray<class Usif::CComponentInfo::CNode> const & Usif::CComponentInfo::CNode::Children(void) const
+	?Cleanup@COpaqueNamedParams@Usif@@QAEXXZ @ 19 NONAME ; void Usif::COpaqueNamedParams::Cleanup(void)
+	?CancelOperation@RSoftwareInstall@Usif@@QAEXXZ @ 20 NONAME ; void Usif::RSoftwareInstall::CancelOperation(void)
+	?PrepareForIpcL@CComponentInfo@Usif@@QAEXAAVTIpcArgs@@H@Z @ 21 NONAME ; void Usif::CComponentInfo::PrepareForIpcL(class TIpcArgs &, int)
+	?NewLC@CComponentInfo@Usif@@SAPAV12@XZ @ 22 NONAME ; class Usif::CComponentInfo * Usif::CComponentInfo::NewLC(void)
+	?CountL@COpaqueNamedParams@Usif@@QBEHXZ @ 23 NONAME ; int Usif::COpaqueNamedParams::CountL(void) const
+	?SetRootNodeL@CComponentInfo@Usif@@QAEXPAVCNode@12@@Z @ 24 NONAME ; void Usif::CComponentInfo::SetRootNodeL(class Usif::CComponentInfo::CNode *)
+	?GetIntByNameL@COpaqueNamedParams@Usif@@QBEHABVTDesC16@@AAH@Z @ 25 NONAME ; int Usif::COpaqueNamedParams::GetIntByNameL(class TDesC16 const &, int &) const
+	?MaxInstalledSize@CNode@CComponentInfo@Usif@@QBEHXZ @ 26 NONAME ; int Usif::CComponentInfo::CNode::MaxInstalledSize(void) const
+	?GetNamesL@COpaqueNamedParams@Usif@@QBEXAAV?$RPointerArray@VHBufC16@@@@@Z @ 27 NONAME ; void Usif::COpaqueNamedParams::GetNamesL(class RPointerArray<class HBufC16> &) const
+	?Version@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 28 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::Version(void) const
+	?RootNodeL@CComponentInfo@Usif@@QBEABVCNode@12@XZ @ 29 NONAME ; class Usif::CComponentInfo::CNode const & Usif::CComponentInfo::RootNodeL(void) const
+	??1CNode@CComponentInfo@Usif@@UAE@XZ @ 30 NONAME ; Usif::CComponentInfo::CNode::~CNode(void)
+	?GetComponentInfo@RSoftwareInstall@Usif@@QAEXABVTDesC16@@AAVCComponentInfo@2@AAVTRequestStatus@@@Z @ 31 NONAME ; void Usif::RSoftwareInstall::GetComponentInfo(class TDesC16 const &, class Usif::CComponentInfo &, class TRequestStatus &)
+	?Uninstall@RSoftwareInstall@Usif@@QAEXHABVCOpaqueNamedParams@2@AAV32@AAVTRequestStatus@@H@Z @ 32 NONAME ; void Usif::RSoftwareInstall::Uninstall(int, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	?Deactivate@RSoftwareInstall@Usif@@QAEXHAAVTRequestStatus@@@Z @ 33 NONAME ; void Usif::RSoftwareInstall::Deactivate(int, class TRequestStatus &)
+	?AddStringL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@0@Z @ 34 NONAME ; void Usif::COpaqueNamedParams::AddStringL(class TDesC16 const &, class TDesC16 const &)
+	?AddChildL@CNode@CComponentInfo@Usif@@QAEXPAV123@@Z @ 35 NONAME ; void Usif::CComponentInfo::CNode::AddChildL(class Usif::CComponentInfo::CNode *)
+	?ComponentId@CNode@CComponentInfo@Usif@@QBEHXZ @ 36 NONAME ; int Usif::CComponentInfo::CNode::ComponentId(void) const
+	?ExternalizeL@CComponentInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 37 NONAME ; void Usif::CComponentInfo::ExternalizeL(class RWriteStream &) const
+	??0RSoftwareInstall@Usif@@QAE@XZ @ 38 NONAME ; Usif::RSoftwareInstall::RSoftwareInstall(void)
+	?SecureId@TSecurityContext@Usif@@QBE?AVTSecureId@@XZ @ 39 NONAME ; class TSecureId Usif::TSecurityContext::SecureId(void) const
+	?Activate@RSoftwareInstall@Usif@@QAEXHAAVTRequestStatus@@@Z @ 40 NONAME ; void Usif::RSoftwareInstall::Activate(int, class TRequestStatus &)
+	?ExternalizeL@COpaqueNamedParams@Usif@@QBEXAAVRWriteStream@@@Z @ 41 NONAME ; void Usif::COpaqueNamedParams::ExternalizeL(class RWriteStream &) const
+	?Install@RSoftwareInstall@Usif@@QAEXABVTDesC16@@AAVTRequestStatus@@H@Z @ 42 NONAME ; void Usif::RSoftwareInstall::Install(class TDesC16 const &, class TRequestStatus &, int)
+	?Vendor@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 43 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::Vendor(void) const
+	?NewL@COpaqueNamedParams@Usif@@SAPAV12@XZ @ 44 NONAME ; class Usif::COpaqueNamedParams * Usif::COpaqueNamedParams::NewL(void)
+	?GetComponentInfo@RSoftwareInstall@Usif@@QAEXAAVRFile@@AAVCComponentInfo@2@AAVTRequestStatus@@@Z @ 45 NONAME ; void Usif::RSoftwareInstall::GetComponentInfo(class RFile &, class Usif::CComponentInfo &, class TRequestStatus &)
+	?ComponentName@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 46 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::ComponentName(void) const
+	?Connect@RSoftwareInstall@Usif@@QAEHXZ @ 47 NONAME ; int Usif::RSoftwareInstall::Connect(void)
+	?Install@RSoftwareInstall@Usif@@QAEXAAVRFile@@ABVCOpaqueNamedParams@2@AAV42@AAVTRequestStatus@@H@Z @ 48 NONAME ; void Usif::RSoftwareInstall::Install(class RFile &, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	??1CComponentInfo@Usif@@UAE@XZ @ 49 NONAME ; Usif::CComponentInfo::~CComponentInfo(void)
+	?NewLC@CNode@CComponentInfo@Usif@@SAPAV123@ABVTDesC16@@000W4TScomoState@3@W4TInstallStatus@3@H0W4TAuthenticity@3@ABVTCapabilitySet@@HHHPAV?$RPointerArray@VCApplicationInfo@CComponentInfo@Usif@@@@PAV?$RPointerArray@VCNode@CComponentInfo@Usif@@@@@Z @ 50 NONAME ; class Usif::CComponentInfo::CNode * Usif::CComponentInfo::CNode::NewLC(class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TScomoState, enum Usif::TInstallStatus, int, class TDesC16 const &, enum Usif::TAuthenticity, class TCapabilitySet const &, int, int, int, class RPointerArray<class Usif::CComponentInfo::CApplicationInfo> *, class RPointerArray<class Usif::CComponentInfo::CNode> *)
+	??0TSecurityContext@Usif@@AAE@ABVRMessage2@@@Z @ 51 NONAME ; Usif::TSecurityContext::TSecurityContext(class RMessage2 const &)
+	?GlobalComponentId@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 52 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::GlobalComponentId(void) const
+	?PrepareArgumentsForIpcL@COpaqueNamedParams@Usif@@QBEXAAVTIpcArgs@@H@Z @ 53 NONAME ; void Usif::COpaqueNamedParams::PrepareArgumentsForIpcL(class TIpcArgs &, int) const
+	?InternalizeL@COpaqueNamedParams@Usif@@QAEXAAVRReadStream@@@Z @ 54 NONAME ; void Usif::COpaqueNamedParams::InternalizeL(class RReadStream &)
+	??1COpaqueNamedParams@Usif@@UAE@XZ @ 55 NONAME ; Usif::COpaqueNamedParams::~COpaqueNamedParams(void)
+	?Install@RSoftwareInstall@Usif@@QAEXAAVRFile@@AAVTRequestStatus@@H@Z @ 56 NONAME ; void Usif::RSoftwareInstall::Install(class RFile &, class TRequestStatus &, int)
+	?HasExecutable@CNode@CComponentInfo@Usif@@QBEHXZ @ 57 NONAME ; int Usif::CComponentInfo::CNode::HasExecutable(void) const
+	?GroupName@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 58 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::GroupName(void) const
+	?DriveSeletionRequired@CNode@CComponentInfo@Usif@@QBEHXZ @ 59 NONAME ; int Usif::CComponentInfo::CNode::DriveSeletionRequired(void) const
+	?IconFileName@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 60 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::IconFileName(void) const
+	?AppUid@CApplicationInfo@CComponentInfo@Usif@@QBEABVTUid@@XZ @ 61 NONAME ; class TUid const & Usif::CComponentInfo::CApplicationInfo::AppUid(void) const
+	?NewLC@CApplicationInfo@CComponentInfo@Usif@@SAPAV123@ABVTUid@@ABVTDesC16@@11@Z @ 62 NONAME ; class Usif::CComponentInfo::CApplicationInfo * Usif::CComponentInfo::CApplicationInfo::NewLC(class TUid const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
+	?Applications@CNode@CComponentInfo@Usif@@QBEABV?$RPointerArray@VCApplicationInfo@CComponentInfo@Usif@@@@XZ @ 63 NONAME ; class RPointerArray<class Usif::CComponentInfo::CApplicationInfo> const & Usif::CComponentInfo::CNode::Applications(void) const
+	??1CApplicationInfo@CComponentInfo@Usif@@UAE@XZ @ 64 NONAME ; Usif::CComponentInfo::CApplicationInfo::~CApplicationInfo(void)
+	?Name@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 65 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::Name(void) const
+	?AddIntArrayL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@ABV?$RArray@H@@@Z @ 66 NONAME ; void Usif::COpaqueNamedParams::AddIntArrayL(class TDesC16 const &, class RArray<int> const &)
+	?AddStringArrayL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@ABV?$RPointerArray@VHBufC16@@@@@Z @ 67 NONAME ; void Usif::COpaqueNamedParams::AddStringArrayL(class TDesC16 const &, class RPointerArray<class HBufC16> const &)
+	?StringArrayByNameL@COpaqueNamedParams@Usif@@QBEABV?$RPointerArray@VHBufC16@@@@ABVTDesC16@@@Z @ 68 NONAME ; class RPointerArray<class HBufC16> const & Usif::COpaqueNamedParams::StringArrayByNameL(class TDesC16 const &) const
+	?IntArrayByNameL@COpaqueNamedParams@Usif@@QBEABV?$RArray@H@@ABVTDesC16@@@Z @ 69 NONAME ; class RArray<int> const & Usif::COpaqueNamedParams::IntArrayByNameL(class TDesC16 const &) const
+

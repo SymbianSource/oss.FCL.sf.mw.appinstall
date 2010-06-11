@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Check that capabilties assigned to certificates in the writable swi
+;certstore are enforced
+
+;Languages
+&EN
+
+;Header
+#{"DoubleSigned"}, (0x80172A38), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;FILERUN, RUNINSTALL, RUNWAITEND
+"\epoc32\RELEASE\WINSCW\UDEB\wsc_exe.exe" - 
+"C:\sys\bin\wsc_exe.exe", FR, RI, RW

@@ -1,0 +1,7 @@
+component           appinstall_metadata
+source   \sf\mw\appinstall\appinstall_info\appinstall_metadata 
+source   \sf\mw\appinstall\package_definition.xml
+source   \sf\mw\appinstall\distribution.policy.s60
+source   \sf\mw\appinstall\package_definition_v2.xml
+notes_source      \component_defs\release.src
+ipr T 

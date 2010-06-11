@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs an exe, and a file into it's private directory
+
+;Languages
+&EN
+
+;Header
+#{"test PU  upgrades, new version, new files"}, (0x80272EDF), 2, 2, 4,TYPE=PU
+
+%{"tswinocapability"}
+:"Unique Vendor Name"
+
+"files/gpl.txt"-"!:\private\81000002\test.ini"
+"files/zeros"-"!:\private\81000002\zeros.txt"

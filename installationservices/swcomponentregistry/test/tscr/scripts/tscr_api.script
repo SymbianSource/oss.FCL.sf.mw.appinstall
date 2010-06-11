@@ -1,0 +1,1475 @@
+//
+// Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// This script implements Software Component Registry API tests.
+// All APIs provided by SCR are covered by the test cases below.
+// For more information about the test cases, please see TMS:\Security,Privacy and Control Protection\USIF\SCR\tscr_api
+// 
+//
+
+PRINT Run Software Component Registry (SCR) API Tests
+
+// Load Suite
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0001
+//! @SYMTestCaseDesc 		Change current locale to english as some test cases assume it & Add a single software component with component name and vendor
+
+START_TESTCASE API-SEC-SCR-API-0001
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini common_component_attributes
+
+END_TESTCASE API-SEC-SCR-API-0001
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0002
+//! @SYMTestCaseDesc 		Adding a single software component with localizables names
+
+START_TESTCASE API-SEC-SCR-API-0002
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_localizables
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_component_localizables1 
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_component_localizables2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_component_localizables3
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_nonlocalized_names
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_unspecified_names
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_particular_names
+
+END_TESTCASE API-SEC-SCR-API-0002
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0003
+//! @SYMTestCaseDesc 		Adding a software component with an empty component localizable object
+
+START_TESTCASE API-SEC-SCR-API-0003
+
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_empty_localizables
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_empty_name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_set_empty_name
+RUN_TEST_STEP 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_component
+
+END_TESTCASE API-SEC-SCR-API-0003
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0004
+//! @SYMTestCaseDesc 		Set attributes of a software component
+
+START_TESTCASE API-SEC-SCR-API-0004
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_multiple_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_attributes
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_updated_component_attributes
+
+END_TESTCASE API-SEC-SCR-API-0004
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0005
+//! @SYMTestCaseDesc 		Add general and localizable properties of a software component.
+
+START_TESTCASE API-SEC-SCR-API-0005
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini common_component_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini common_component_properties
+
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_single_localized_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_single_localized_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_single_non_localized_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_single_int_property
+
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_multiple_localized_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_nonlocalized_version_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_unspecified_version_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_specific_version_property
+
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini all_unspecified_locale_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini all_non_localized_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini all_particular_properties
+
+END_TESTCASE API-SEC-SCR-API-0005
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0006
+//! @SYMTestCaseDesc 		Update general and localizable properties of a software component.
+
+START_TESTCASE API-SEC-SCR-API-0006
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini common_component_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini common_component_properties
+
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini new_component_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini new_component_properties
+
+END_TESTCASE API-SEC-SCR-API-0006
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0007
+//! @SYMTestCaseDesc 		Register files to existing components.
+
+START_TESTCASE API-SEC-SCR-API-0007
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini first_component_files
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini second_component_files
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini third_component_files
+
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini first_component_files
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini second_component_files
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini third_component_files
+
+END_TESTCASE API-SEC-SCR-API-0007
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0008
+//! @SYMTestCaseDesc 		Add general properties of a registered file
+
+START_TESTCASE API-SEC-SCR-API-0008
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini component_files
+
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_file1_properties
+RUN_TEST_STEP 100 tscr SCRGetFileProperties z:\tusif\tscr\tscr.ini component_file1_properties
+
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_file2_properties
+RUN_TEST_STEP 100 tscr SCRGetFileProperties z:\tusif\tscr\tscr.ini component_file2_properties
+
+RUN_TEST_STEP 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini component_file_property
+
+END_TESTCASE API-SEC-SCR-API-0008
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0009
+//! @SYMTestCaseDesc 		Delete component properties
+
+START_TESTCASE API-SEC-SCR-API-0009
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini common_component_properties
+
+RUN_TEST_STEP 100 tscr SCRDeleteComponentProperty z:\tusif\tscr\tscr.ini delete_component_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties    z:\tusif\tscr\tscr.ini component_properties_left
+
+END_TESTCASE API-SEC-SCR-API-0009
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0010
+//! @SYMTestCaseDesc 		Delete file properties
+
+START_TESTCASE API-SEC-SCR-API-0010
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini common_files
+
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file1_properties
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file2_properties
+
+RUN_TEST_STEP 100 tscr SCRDeleteFileProperty z:\tusif\tscr\tscr.ini delete_common_file1_property1
+RUN_TEST_STEP 100 tscr SCRGetFileProperties  z:\tusif\tscr\tscr.ini common_file1_properties_left
+RUN_TEST_STEP 100 tscr SCRDeleteFileProperty z:\tusif\tscr\tscr.ini delete_common_file2_property1
+RUN_TEST_STEP 100 tscr SCRGetFileProperties  z:\tusif\tscr\tscr.ini common_file2_properties_left
+
+END_TESTCASE API-SEC-SCR-API-0010
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0011
+//! @SYMTestCaseDesc 		Unregister a component file
+
+START_TESTCASE API-SEC-SCR-API-0011
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini component_files_to_be_unregistered
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_file_properties_to_be_unregistered
+
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini unregister_component_file
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini unregistered_file_property
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini registered_files
+
+END_TESTCASE API-SEC-SCR-API-0011
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0012
+//! @SYMTestCaseDesc 		Delete a component
+
+START_TESTCASE API-SEC-SCR-API-0012
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_to_be_deleted
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini common_component_properties
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini common_files
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file1_properties
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file2_properties
+
+RUN_TEST_STEP 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_component
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini deleted_component_properties
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini deleted_component_files
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini deleted_component_file1_properties
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini common_component_attributes
+RUN_TEST_STEP !Result=Fail 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_component_deleted
+RUN_TEST_STEP !Result=-1 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_non_existing_component
+
+END_TESTCASE API-SEC-SCR-API-0012
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0013
+//! @SYMTestCaseDesc 		Retrieve software component entry
+
+START_TESTCASE API-SEC-SCR-API-0013
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini add_component_with_default_language
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini add_component_with_nondefault_language_only
+
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_default_language
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_unspecified_language
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_specified_language
+
+// Try getting the component without specifying locale - we should get the first available language
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_nondefault_language_only_1
+// Try getting the component while specifying matching locale
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_nondefault_language_only_2
+// Try getting the component while specifying a different locale - we should fail
+RUN_TEST_STEP !Result=-10323 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_nondefault_language_only_3
+// Try getting the component while specifying a "non-localized" locale - we should fail
+RUN_TEST_STEP !Result=-10323 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_nondefault_language_only_4
+
+END_TESTCASE API-SEC-SCR-API-0013
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0014
+//! @SYMTestCaseDesc 		Try to retrieve a non-existing software component
+
+START_TESTCASE API-SEC-SCR-API-0014
+
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_non_existing_component
+
+END_TESTCASE API-SEC-SCR-API-0014
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0015
+//! @SYMTestCaseDesc 		Negative tests for retrieving multiple file properties
+
+START_TESTCASE API-SEC-SCR-API-0015
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini common_files
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file1_properties
+
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperties z:\tusif\tscr\tscr.ini getfileproperties_of_nonexisting_component
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperties z:\tusif\tscr\tscr.ini getfileproperties_of_nonexisting_file
+
+END_TESTCASE API-SEC-SCR-API-0015
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0016
+//! @SYMTestCaseDesc 		Negative tests for retrieving single file property
+
+START_TESTCASE API-SEC-SCR-API-0016
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini common_files
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini common_file2_properties
+
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini getfileproperty_of_nonexisting_component
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini getfileproperty_of_nonexisting_file
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini getfileproperty_of_nonexisting_property
+
+END_TESTCASE API-SEC-SCR-API-0016
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0017
+//! @SYMTestCaseDesc 		Get file components
+
+START_TESTCASE API-SEC-SCR-API-0017
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_to_first_component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_to_second_component
+
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component1_file_property
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component2_file_property
+
+RUN_TEST_STEP 100 tscr SCRGetFileComponents z:\tusif\tscr\tscr.ini get_file_components
+
+END_TESTCASE API-SEC-SCR-API-0017
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0018
+//! @SYMTestCaseDesc 		Get component properties
+
+START_TESTCASE API-SEC-SCR-API-0018
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini component_properties_with_localizables
+
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini component_nonlocalized_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini component_localized_properties
+
+END_TESTCASE API-SEC-SCR-API-0018
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0019
+//! @SYMTestCaseDesc 		Get Plugin UID with Mime Type and Component Id
+
+START_TESTCASE API-SEC-SCR-API-0019
+
+RUN_TEST_STEP 100 tscr SCRGetPlugin z:\tusif\tscr\tscr.ini get_plugin_with_mimetype_1
+RUN_TEST_STEP 100 tscr SCRGetPlugin z:\tusif\tscr\tscr.ini get_plugin_with_mimetype_2
+RUN_TEST_STEP 100 tscr SCRGetPlugin z:\tusif\tscr\tscr.ini get_plugin_with_componentid
+
+END_TESTCASE API-SEC-SCR-API-0019
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0020
+//! @SYMTestCaseDesc 		Get components by software type
+
+START_TESTCASE API-SEC-SCR-API-0020
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_dummy_type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_plain_type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_component_with_dummy_type
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_dummy_components
+
+END_TESTCASE API-SEC-SCR-API-0020
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0021
+//! @SYMTestCaseDesc 		Get components by vendor
+
+START_TESTCASE API-SEC-SCR-API-0021
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini first_component_with_same_vendor
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_component_with_same_vendor
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_different_vendor
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_by_vendor
+
+END_TESTCASE API-SEC-SCR-API-0021
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0022
+//! @SYMTestCaseDesc 		Get components by component properties
+
+START_TESTCASE API-SEC-SCR-API-0022
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini first_component_properties
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_properties
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini third_component_properties
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_integer_property1
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_integer_property2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_string_property1
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_string_property2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_localized_property1
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_localized_property2
+
+END_TESTCASE API-SEC-SCR-API-0022
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0023
+//! @SYMTestCaseDesc 		Get components by files
+
+START_TESTCASE API-SEC-SCR-API-0023
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_to_first_component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_to_second_component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_to_third_component
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file1
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file3
+
+END_TESTCASE API-SEC-SCR-API-0023
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0024
+//! @SYMTestCaseDesc 		Get components by common component attributes
+
+START_TESTCASE API-SEC-SCR-API-0024
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_first_component_attributes
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_second_component_attributes
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_removable_components
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_unremovable_components
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_drmprotected_components
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_drmunprotected_components
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_hidden_components
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_nonhidden_components
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_knownrevoked_components
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_knownunrevoked_components
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_originverified_components
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_originnonverified_components
+
+END_TESTCASE API-SEC-SCR-API-0024
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0025
+//! @SYMTestCaseDesc 		Set component SCOMO state
+
+START_TESTCASE API-SEC-SCR-API-0025
+
+RUN_TEST_STEP 100 tscr SCRSetScomoState z:\tusif\tscr\tscr.ini update_component_scomostate
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_non_activated_components
+
+END_TESTCASE API-SEC-SCR-API-0025
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0026
+//! @SYMTestCaseDesc 		Get components by installed drives
+
+START_TESTCASE API-SEC-SCR-API-0026
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_of_first_component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_of_second_component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini files_of_third_component
+
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveC
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveD
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveX
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveZ
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveCE
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveCZ
+
+END_TESTCASE API-SEC-SCR-API-0026
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0027
+//! @SYMTestCaseDesc 		Unregister the file registered to multiple files
+
+START_TESTCASE API-SEC-SCR-API-0027
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini first_registration_of_file
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini second_registration_of_file
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_multiply_registered_file_1
+
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini unregister_first_component_file
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_multiply_registered_file_2
+
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini unregister_second_component_file
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_multiply_registered_file_3
+
+END_TESTCASE API-SEC-SCR-API-0027
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0028
+//! @SYMTestCaseDesc 		Uncommitted transactions are rollbacked automatically
+
+START_TESTCASE API-SEC-SCR-API-0028
+
+RUN_TEST_STEP 100 tscr SCRApplyTransaction z:\tusif\tscr\tscr.ini transaction_component
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini transaction_component_attributes
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini transaction_component_properties_rollback
+RUN_TEST_STEP !Result=Fail 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini transaction_files
+
+END_TESTCASE API-SEC-SCR-API-0028
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0029
+//! @SYMTestCaseDesc 		Commit a started transaction.
+
+START_TESTCASE API-SEC-SCR-API-0029
+
+RUN_TEST_STEP 100 tscr SCRApplyTransaction z:\tusif\tscr\tscr.ini commit_common_component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini transaction_component_attributes
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini transaction_component_properties_commit
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini transaction_files
+
+END_TESTCASE API-SEC-SCR-API-0029
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0030
+//! @SYMTestCaseDesc 		Cancel a started transaction.
+
+START_TESTCASE API-SEC-SCR-API-0030
+
+RUN_TEST_STEP 100 tscr SCRApplyTransaction z:\tusif\tscr\tscr.ini cancel_common_component
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini transaction_component_attributes
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini transaction_component_properties
+RUN_TEST_STEP !Result=Fail 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini transaction_files
+
+END_TESTCASE API-SEC-SCR-API-0030
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0031
+//! @SYMTestCaseDesc 		Create a reading session while a transaction is in progress
+
+START_TESTCASE API-SEC-SCR-API-0031
+
+// First, try to create a reading sub-session while a transaction owned by another session is in progress
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_before_subsession
+// Then, try to create a reading sub-session while a transaction owned by the same session is in progress
+// Also, try creating a transaction while a sub-session is in progress (opposite order)
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini open_reading_in_same_session
+
+END_TESTCASE API-SEC-SCR-API-0031
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0032
+//! @SYMTestCaseDesc 		Create a transaction while a reading session is in progress
+
+START_TESTCASE API-SEC-SCR-API-0032
+
+// First, try to begin a transaction while a reading sub-session created in another session is in progress
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_subsession
+// Try doing a mutating operation while a subsession is in progress
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini mutating_operation_with_subsession
+// Then, try to begin a transaction while a reading sub-session created in the same session is in progress
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_subsession_in_same_session
+
+END_TESTCASE API-SEC-SCR-API-0032
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0033
+//! @SYMTestCaseDesc 		Create a transaction while another transaction is in progress
+
+START_TESTCASE API-SEC-SCR-API-0033
+
+RUN_TEST_STEP !Result=-10320 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_another_begin
+
+END_TESTCASE API-SEC-SCR-API-0033
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0034
+//! @SYMTestCaseDesc 		Create a transaction while another transaction is in progress.
+//!				In addition, invoke mutating and non-mutating functions from another transaction.				
+
+START_TESTCASE API-SEC-SCR-API-0034
+
+RUN_TEST_STEP !Result=-10322 100 tscr SCRManageAnotherTransaction z:\tusif\tscr\tscr.ini commit_another_transaction
+RUN_TEST_STEP !Result=-10320 100 tscr SCRManageAnotherTransaction z:\tusif\tscr\tscr.ini another_transaction_mutating
+RUN_TEST_STEP 100 tscr SCRManageAnotherTransaction z:\tusif\tscr\tscr.ini another_transaction_nonmutating
+
+END_TESTCASE API-SEC-SCR-API-0034
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0035
+//! @SYMTestCaseDesc 		Cancel a transaction while another transaction is in progress
+
+START_TESTCASE API-SEC-SCR-API-0035
+
+RUN_TEST_STEP !Result=-10322 100 tscr SCRManageAnotherTransaction z:\tusif\tscr\tscr.ini cancel_another_transaction
+
+END_TESTCASE API-SEC-SCR-API-0035
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0036
+//! @SYMTestCaseDesc 		Open a subsession while another subsession is already opened by another session
+
+START_TESTCASE API-SEC-SCR-API-0036
+
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini multiple_subsessions
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini multiple_active_subsessions
+
+END_TESTCASE API-SEC-SCR-API-0036
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0037
+//! @SYMTestCaseDesc 		Invoke a mutating SCR interface while a transaction created by a different session is in progress.
+
+START_TESTCASE API-SEC-SCR-API-0037
+
+RUN_TEST_STEP !Result=-10320 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini write_after_begin
+
+END_TESTCASE API-SEC-SCR-API-0037
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0038
+//! @SYMTestCaseDesc 		Invoke a non-mutating SCR interface while a transaction created by a different session is in progress.
+
+START_TESTCASE API-SEC-SCR-API-0038
+
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini read_after_begin
+
+END_TESTCASE API-SEC-SCR-API-0038
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0039
+//! @SYMTestCaseDesc 		Retrieve all components from SCR
+
+START_TESTCASE API-SEC-SCR-API-0039
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_dummy_type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini all_components
+
+END_TESTCASE API-SEC-SCR-API-0039
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0040
+//! @SYMTestCaseDesc 		Concurrent tests
+
+START_TESTCASE API-SEC-SCR-API-0040
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+CONCURRENT
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini concurrent_component_1
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini concurrent_component_2
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini concurrent_component_properties
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini concurrent_component1_attributes
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini concurrent_component2_attributes
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini concurrent_component_properties
+CONSECUTIVE
+
+END_TESTCASE API-SEC-SCR-API-0040
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0041
+//! @SYMTestCaseDesc 		IsMediaPresent - positive tests
+
+START_TESTCASE API-SEC-SCR-API-0041
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini ismediapresent_positive_files_register1
+RUN_TEST_STEP 100 tscr SCRIsMediaPresent z:\tusif\tscr\tscr.ini ismediapresent_positive_files_check1
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini ismediapresent_positive_files_register2
+RUN_TEST_STEP 100 tscr SCRIsMediaPresent z:\tusif\tscr\tscr.ini ismediapresent_positive_files_check2
+
+END_TESTCASE API-SEC-SCR-API-0041
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0042
+//! @SYMTestCaseDesc 		IsMediaPresent - negative tests
+
+START_TESTCASE API-SEC-SCR-API-0042
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini ismediapresent_negative_files_register1
+RUN_TEST_STEP 100 tscr SCRIsMediaPresent z:\tusif\tscr\tscr.ini ismediapresent_negative_files_check1
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini ismediapresent_negative_files_register2
+RUN_TEST_STEP 100 tscr SCRIsMediaPresent z:\tusif\tscr\tscr.ini ismediapresent_negative_files_check2
+RUN_TEST_STEP !Result=-1 100 tscr SCRIsMediaPresent z:\tusif\tscr\tscr.ini ismediapresent_negative_non_existent_component
+
+END_TESTCASE API-SEC-SCR-API-0042
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0043
+//! @SYMTestCaseDesc 		SCR property and file names are case-insensitive	
+
+START_TESTCASE API-SEC-SCR-API-0043
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini lower_case_property
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini lower_case_file_name
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini filter_mixed_case_property_name
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini filter_mixed_case_file_name
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini mixed_lower_case_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini mixed_lower_case_property
+RUN_TEST_STEP 100 tscr SCRGetPlugin z:\tusif\tscr\tscr.ini get_plugin_with_mimetype_1
+
+END_TESTCASE API-SEC-SCR-API-0043
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0044
+//! @SYMTestCaseDesc 		Get only component Ids by using a NULL filter.	
+
+START_TESTCASE API-SEC-SCR-API-0044
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRGetComponentIds z:\tusif\tscr\tscr.ini all_components_component_ids_test44
+
+END_TESTCASE API-SEC-SCR-API-0044
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0045
+//! @SYMTestCaseDesc  		Various negative tests
+
+START_TESTCASE API-SEC-SCR-API-0045
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP !Result=-46 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini wrong_software_type_name
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini no_locales_in_add_component
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP !Result=-6 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini no_drive_file_name
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_twice
+// Try to register the same file twice - should not return an error
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_twice
+// Try to get nonexisting file property
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetFileProperty z:\tusif\tscr\tscr.ini nonexisting_file_property
+// Try to unregister the same file twice - should not return an error
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini unregister_file_twice
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini unregister_file_twice
+// Try to get nonexisting property
+RUN_TEST_STEP !Result=-1 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini missing_single_property
+// Try to get plugin for non-existing MIME type
+RUN_TEST_STEP !Result=-10303 100 tscr SCRGetPlugin z:\tusif\tscr\tscr.ini get_plugin_for_nonexisting_mimetype 
+// Try setting a negative component size
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini set_negative_component_size
+// Add component with invalid operation type
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini add_component_invalid_operation_type
+END_TESTCASE API-SEC-SCR-API-0045
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0046
+//! @SYMTestCaseDesc 		Get components using composite filters - part 1
+
+START_TESTCASE API-SEC-SCR-API-0046
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Register the same file to components 1, 3
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini first_component_file
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini third_component_file
+// Add the same property to components 2, 4
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini fourth_component_property
+// Get all components with same file and property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file_and_property_empty
+
+END_TESTCASE API-SEC-SCR-API-0046
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0047
+//! @SYMTestCaseDesc 		Get components using composite filters - part 2
+
+START_TESTCASE API-SEC-SCR-API-0047
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Do not register files
+// Add the same property to components 2, 4
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini fourth_component_property
+// Get all components with same file and property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file_and_property_empty
+
+END_TESTCASE API-SEC-SCR-API-0047
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0048
+//! @SYMTestCaseDesc 		Get components using composite filters - part 3
+
+START_TESTCASE API-SEC-SCR-API-0048
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Register file to fourth component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini fourth_component_file
+// Add the same property to components 2, 4
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini fourth_component_property
+// Get all components with same file and property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_file_and_property_fourth
+
+END_TESTCASE API-SEC-SCR-API-0048
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0049
+//! @SYMTestCaseDesc 		Get components using composite filters - part 4
+
+START_TESTCASE API-SEC-SCR-API-0049
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini filter_test_names_test49
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini filter_test_names_test49
+// Register file to fourth component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini fourth_component_file
+// Add the same property to components 2, 4
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini fourth_component_property
+// Get all components with same file and property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_names_file_and_property_fourth
+
+END_TESTCASE API-SEC-SCR-API-0049
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0050
+//! @SYMTestCaseDesc 		Get components using composite filters - part 5
+
+START_TESTCASE API-SEC-SCR-API-0050
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini filter_test_names_vendor_test50
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Add the same property to the second component
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+// Get all components with same vendor name and property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_vendor_and_property_second
+
+END_TESTCASE API-SEC-SCR-API-0050
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0051
+//! @SYMTestCaseDesc 		Test Int64 component property functionality
+
+START_TESTCASE API-SEC-SCR-API-0051
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Check adding an int64 property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini single_int64_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_single_int64_property
+// Check updating an int64 property
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini update_single_int64_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_updated_int64_property
+
+// Check filters on int64 property
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini verify_in64_property_filter
+
+RUN_TEST_STEP 100 tscr SCRDeleteComponentProperty z:\tusif\tscr\tscr.ini single_int64_property
+
+// Check handling multiple properties, where one of them is int64
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini multiple_int64_properties
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini multiple_int64_properties
+
+END_TESTCASE API-SEC-SCR-API-0051
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0052
+//! @SYMTestCaseDesc 		Get components using composite filters - part 6
+
+START_TESTCASE API-SEC-SCR-API-0052
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component3_test52
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component2_test52
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component1_test52
+// Add string property A and int property B to the first component
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini first_component_property_test52
+// Add int property B and int property C to the second component
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property_test52
+// Add string property A, int property B and int property C to the third component
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini third_component_property_test52
+// Get all components with integer properties B and C
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_int_properties_test52
+// Get all components with string property A and integer property B
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_str_int_property_test52
+
+END_TESTCASE API-SEC-SCR-API-0052
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0053
+//! @SYMTestCaseDesc 		Check GetComponentFilesCountL API
+
+START_TESTCASE API-SEC-SCR-API-0053
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add two components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Register two files for the first component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini first_component_files
+// Verify files count for both components
+RUN_TEST_STEP 100 tscr SCRGetComponentFilesCount z:\tusif\tscr\tscr.ini verify_first_component_count_test53
+RUN_TEST_STEP 100 tscr SCRGetComponentFilesCount z:\tusif\tscr\tscr.ini verify_second_component_count_test53
+
+END_TESTCASE API-SEC-SCR-API-0053
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0054
+//! @SYMTestCaseDesc 		Get components using composite filters - part 7
+
+START_TESTCASE API-SEC-SCR-API-0054
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+// Components 1,2,3,4 have the same software type
+// Components 1,3,4,5 have the same vendor
+// Components 1,2,3,5 have the same name 
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component1_test54
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component2_test54
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component3_test54
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component4_test54
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component5_test54
+// Retrieve all components with given name, software type and vendor - components 1 and 3 should match
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_subsession_test54
+// Repeat the same, but for component ids 
+RUN_TEST_STEP 100 tscr SCRGetComponentIds z:\tusif\tscr\tscr.ini get_component_ids_test54
+
+END_TESTCASE API-SEC-SCR-API-0054
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0055
+//! @SYMTestCaseDesc 		Verify adding and retrieving components with large size
+
+START_TESTCASE API-SEC-SCR-API-0055
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini huge_component_test55_update
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini huge_component_test55_verify
+
+END_TESTCASE API-SEC-SCR-API-0055
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0057
+//! @SYMTestCaseDesc 		Check filters for multiple locales in properties
+
+START_TESTCASE API-SEC-SCR-API-0057
+
+// Components 1,2 have value EnglishValue for the test property for ELangEnglish and JustValue for ELangNone
+// Component 3 has value EnglishValue for the test property for ELangNone
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component1_test57
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component2_test57
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component3_test57
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini component1_properties
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini component2_properties
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini component3_properties
+// Retrieve all components with the test property EnglishValue for ELangEnglish
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_english_property_test57
+// Retrieve all components with the test property EnglishValue for any locale
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_any_property_test57
+// Retrieve all components with the test property EnglishValue for ELangSwedish
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_negative_property_test57
+
+END_TESTCASE API-SEC-SCR-API-0057
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0058
+//! @SYMTestCaseDesc 		Add a single software component with global id.
+
+START_TESTCASE API-SEC-SCR-API-0058
+
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_global_id
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini component_attributes_with_global_id
+// Add another component with the same global id
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_global_id
+
+END_TESTCASE API-SEC-SCR-API-0058
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0059
+//! @SYMTestCaseDesc 		Add a new component dependency.
+
+START_TESTCASE API-SEC-SCR-API-0059
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// First add the supplier component (S1)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini supplier_component
+RUN_TEST_STEP 100 tscr SCRGetComponentId z:\tusif\tscr\tscr.ini supplier_component_globalid
+// Then add the dependant component (D1)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini dependant_component
+RUN_TEST_STEP 100 tscr SCRGetComponentWithGlobalId z:\tusif\tscr\tscr.ini dependant_component_globalid
+// Add dependency between the supplier and dependant components (D1 -> S1)
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_existing_components
+// Check the dependancy added successfully
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini dependant_components
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini supplier_components
+// Add another component which will be supplier (S2)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_supplier_component
+// Add a second dependancy where the lastly added component is supplier. (D1 -> S2)
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_second_supplier
+// Get the all suppliers of the dependant component (D1)
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini all_supplier_components
+// Add another component which will be a dependant. (D2)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_dependant_component
+// Add a second dependency where the D2 depends on S2
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_second_dependant
+// Get the all dependants of the supplier component (S2)
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini all_dependant_components
+// Try to duplicate an existing dependency
+RUN_TEST_STEP !Result=-11 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_second_dependant
+// Add a dependency to non-existing supplier
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_to_nonexisting_component
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini existing_and_nonexisting_suppliers
+// Delete D2
+RUN_TEST_STEP 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_second_dependant
+// Get the suppliers of the deleted dependant (D2). Should be empty.
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini suppliers_of_deleted_dependant
+// Get the all suppliers of the dependant component (D1). Should be deleted.
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini all_supplier_components
+// Delete S1
+RUN_TEST_STEP 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_first_supplier
+// Dependencies where S1 is supplier should remain
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini remained_dependencies
+
+END_TESTCASE API-SEC-SCR-API-0059
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0060
+//! @SYMTestCaseDesc 		Delete the component dependency.
+
+START_TESTCASE API-SEC-SCR-API-0060
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// First, add a dependency between two existing components, and then delete that dependency
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini supplier_component
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini dependant_component
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_existing_components
+RUN_TEST_STEP 100 tscr SCRDeleteComponentDependency z:\tusif\tscr\tscr.ini dependency_with_existing_components
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini deleted_dependant
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini deleted_supplier
+// Secondly, add a dependency between two non-existing components and then delete it.
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini dependency_with_nonexisting_components
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini dependant_nonexisting_components
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini supplier_nonexisting_components
+
+END_TESTCASE API-SEC-SCR-API-0060
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0061
+//! @SYMTestCaseDesc 		Get components using composite filters - part 8
+
+START_TESTCASE API-SEC-SCR-API-0061
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add components
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Set common component attributes
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_first_component_attributes_test61
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_second_component_attributes_test61
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_third_component_attributes_test61
+// Add a property to the second component
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini second_component_property
+// Get all components with two common properties
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_drm_hidden_common_properties
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_originverified_knownrevoked_properties
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_components_with_common_and_customized_attributes
+
+END_TESTCASE API-SEC-SCR-API-0061
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0062
+//! @SYMTestCaseDesc 		Add & query versioned component dependency.
+
+START_TESTCASE API-SEC-SCR-API-0062
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// First add the supplier component (S1)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini supplier_component
+// Then add the dependant component (D1)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini dependant_component
+// Add dependency between the supplier and dependant components (D1 -> S1)
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini versioned_dependency
+// Check the dependancy added successfully
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini versioned_dependant_components
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini versioned_supplier_components
+// Add another component which will be supplier (S2)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_supplier_component
+// Add a second dependancy where the lastly added component is supplier. (D1 -> S2)
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini versioned_dependency_with_second_supplier
+// Get the all suppliers of the dependant component (D1)
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini versioned_all_supplier_components
+// Add another component which will be a dependant. (D2)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini second_dependant_component
+// Add a second dependency where the D2 depends on S2
+RUN_TEST_STEP 100 tscr SCRAddComponentDependency z:\tusif\tscr\tscr.ini versioned_dependency_with_second_dependant
+// Get the all dependants of the supplier component (S2)
+RUN_TEST_STEP 100 tscr SCRGetGlobalIdList z:\tusif\tscr\tscr.ini versioned_all_dependant_components
+
+END_TESTCASE API-SEC-SCR-API-0062
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0063
+//! @SYMTestCaseDesc 		Post-manufacture plugin management tests
+
+START_TESTCASE API-SEC-SCR-API-0063
+
+// Add a sofwtare component type with only unique name
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_nonlocalized_software_type
+// Add a component to check that the non-localized software type has been added successfully
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_nonlocalized_software_type
+// Check that the component is not orphaned 
+RUN_TEST_STEP 100 tscr SCRIsComponentOrphaned z:\tusif\tscr\tscr.ini non_orphaned_component
+// Add a sofwtare component type with unique and localized names
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type
+// Add a component to check that the localized software type has been added successfully
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_localized_software_type
+// Try to add a component without specifying MIME types
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_software_type_without_mime_types
+// Delete a software component type
+RUN_TEST_STEP 100 tscr SCRDeleteSoftwareType z:\tusif\tscr\tscr.ini
+// Check that the component is orphaned 
+RUN_TEST_STEP 100 tscr SCRIsComponentOrphaned z:\tusif\tscr\tscr.ini orphaned_component
+// Get the orphaned component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini orphaned_component_attributes
+// Get the orphaned component via filter
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_orphaned_component_by_vendor
+// Set the common properties of the orphaned component
+RUN_TEST_STEP !Result=-46 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_orphaned_component_attributes
+// Try to register some files to the orphaned component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini orphaned_component_files
+// Try to add a sutom property to the orphaned component
+RUN_TEST_STEP !Result=-46 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini orphaned_component_properties
+// Re-add the sofwtare component type with only unique name
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_nonlocalized_software_type
+// Check that the component is not orphaned 
+RUN_TEST_STEP 100 tscr SCRIsComponentOrphaned z:\tusif\tscr\tscr.ini non_orphaned_component_after_reinstalling_swtype
+// Check if a non-existing component is orphaned
+RUN_TEST_STEP !Result=-1 100 tscr SCRIsComponentOrphaned z:\tusif\tscr\tscr.ini orphaned_non_existing_component
+// Add the same software type again
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_nonlocalized_software_type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_nonlocalized_software_type
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_different_plugin_uid
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_extra_name
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_missing_name
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_extra_mime
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_missing_mime
+// Add multiple sid with launcher executable
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_multiple_sid_with_launcher_executable
+END_TESTCASE API-SEC-SCR-API-0063
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0064
+//! @SYMTestCaseDesc 		Verify drive bitmask management
+
+START_TESTCASE API-SEC-SCR-API-0064
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Register 2 files on drive C and one file on drive D
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini drives_management_register_files
+// Verify that both C and D drives are used by the component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini drives_management_both_drives
+// Unregister one file on drive C
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini drives_management_unregister_first_c_file
+// Verify that both C and D drives are used by the component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini drives_management_both_drives
+// Unregister one file on drive D
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini drives_management_unregister_first_d_file
+// Verify that drive C is used by the component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini drives_management_c_drive
+// Unregister second file on drive C
+RUN_TEST_STEP 100 tscr SCRUnregisterFile z:\tusif\tscr\tscr.ini drives_management_unregister_second_c_file
+// Verify that no drives are used by the component
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini common_component_attributes
+
+END_TESTCASE API-SEC-SCR-API-0064
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0065
+//! @SYMTestCaseDesc 		Verify language downgrade path functionality
+
+START_TESTCASE API-SEC-SCR-API-0065
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add a single component
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_localizables_test65
+// Set a localizable property for language English
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_base_language_property_test65
+// Get the property for language English
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_base_language_property_test65
+// Get the property for language American
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_child_language_property_test65
+// Get the property for non-specified locale
+RUN_TEST_STEP 100 tscr SCRGetComponentProperty z:\tusif\tscr\tscr.ini get_unspecified_language_property_test65
+// Get component for unspecified, English and American locale
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_unspecified_names_test65
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_base_language_test65
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_with_child_language_test65
+
+END_TESTCASE API-SEC-SCR-API-0065
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0066
+//! @SYMTestCaseDesc 		Install log history tests
+
+START_TESTCASE API-SEC-SCR-API-0066
+
+// Delete database and log files
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+// Add a new component with version (since version is set in the same session, it is reflected to the log record)
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names_with_version
+// Delete the component
+RUN_TEST_STEP 100 tscr SCRDeleteComponent z:\tusif\tscr\tscr.ini delete_component
+// Add the upgrade version of deleted component
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini update_common_component_names
+// Get log entries and compare with the expected ones
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini log_entries
+// Add a component and then set its version. Since a new session is started, version is not reflected the log record.
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_attributes
+// Add a component with dummy type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_dummy_type
+// Get the log entries for dummy software type
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini dummy_log_entries
+// Test the recorded component name for various situations
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_currentlocale_name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_nonlocalized_name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_with_localized_name
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini name_log_entries
+// Delete log file for the following test steps
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+// Add a component to create log file
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names_with_version
+// Make the log file read-only
+RUN_TEST_STEP 100 tscr SCRSetLogFileReadOnlyAttr z:\tusif\tscr\tscr.ini read_only_log_file
+// Try to write into the read-only log file by adding a component 
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Verify that the component log couldn't be added, but the component has been added successfully
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini readonly_log_entries
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini common_component_attributes
+// Make sure SCR server shuts
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// Make the file writable
+RUN_TEST_STEP 100 tscr SCRSetLogFileReadOnlyAttr z:\tusif\tscr\tscr.ini writable_log_file
+// Try to add the component again
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Verify that the component log has been added this time
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini writable_log_entries
+// Delete the log file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+// Add a component with EScrCompHidden type
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini hidden_common_component_names
+// Get log entries. No log is written for a hidden component operation type.
+RUN_TEST_STEP 100 tscr SCRGetLogEntries z:\tusif\tscr\tscr.ini hidden_log_entries
+// Delete the log file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+// Create the scr log file which includes maximum allowed records
+RUN_TEST_STEP 500 tscr SCRCreateLogFile z:\tusif\tscr\tscr.ini log_file_size
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Delete the log file not to affect other tests' performance
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini log_file 
+
+END_TESTCASE API-SEC-SCR-API-0066
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0067
+//! @SYMTestCaseDesc 		Version comparetor tests
+
+START_TESTCASE API-SEC-SCR-API-0067
+
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini less_version_1 
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini less_version_2
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini less_version_3
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini great_version_1
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini great_version_2
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini great_version_3
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini equal_version_1
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini equal_version_2
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini equal_version_3
+RUN_TEST_STEP 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini equal_version_4
+RUN_TEST_STEP !Result=-6 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini wrong_version_1
+RUN_TEST_STEP !Result=-6 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini wrong_version_2
+RUN_TEST_STEP !Result=-6 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini wrong_version_3
+RUN_TEST_STEP !Result=-6 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini wrong_version_4
+RUN_TEST_STEP !Result=-6 100 tscr SCRCompareVersions z:\tusif\tscr\tscr.ini wrong_version_5
+
+END_TESTCASE API-SEC-SCR-API-0067
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0068
+//! @SYMTestCaseDesc 		Test if an isntalled component is on read-only drive
+
+START_TESTCASE API-SEC-SCR-API-0068
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini iscomponentonrom_positive
+RUN_TEST_STEP 100 tscr SCRIsComponentOnReadOnlyDrive z:\tusif\tscr\tscr.ini iscomponentonrom_positive_check
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini iscomponentonrom_negative
+RUN_TEST_STEP 100 tscr SCRIsComponentOnReadOnlyDrive z:\tusif\tscr\tscr.ini iscomponentonrom_negative_check
+
+END_TESTCASE API-SEC-SCR-API-0068
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0069
+//! @SYMTestCaseDesc		Tests for component presence
+
+START_TESTCASE API-SEC-SCR-API-0069
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Check for default componet presence value
+RUN_TEST_STEP 100 tscr ScrComponentPresence z:\tusif\tscr\tscr.ini check_default_componentpresence
+// Set the component presence value to false
+RUN_TEST_STEP 100 tscr ScrComponentPresence z:\tusif\tscr\tscr.ini componentpresence_set_false
+// Reset component presence value to true
+RUN_TEST_STEP 100 tscr ScrComponentPresence z:\tusif\tscr\tscr.ini componentpresence_set_true
+// Register the component files
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_component_files
+// Check for presence after the files registration
+RUN_TEST_STEP 100 tscr ScrComponentPresence z:\tusif\tscr\tscr.ini componentpresence_is_false
+// Set the component presence value to false after files being registered
+RUN_TEST_STEP 100 tscr ScrComponentPresence z:\tusif\tscr\tscr.ini componentpresence_set_false
+
+END_TESTCASE API-SEC-SCR-API-0069
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0070
+//! @SYMTestCaseDesc 		Verify that having the same name on different component's localizables works correctly
+
+START_TESTCASE API-SEC-SCR-API-0070
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add a component with same names on two different locales
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini add_component_with_same_localizables_test70
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_with_same_localizables_names_test70
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_same_localized_property_test70
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_with_same_localizables_properties_test70
+
+END_TESTCASE API-SEC-SCR-API-0070
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0071
+//! @SYMTestCaseDesc 		Verify that filters on empty vendor names work correctly
+
+START_TESTCASE API-SEC-SCR-API-0071
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add a component with a normal vendor name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+// Add a component with an empty vendor name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_empty_vendor_name
+// Retrieve all components with empty vendor names
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_with_empty_vendor_name_test71
+
+END_TESTCASE API-SEC-SCR-API-0071
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0072
+//! @SYMTestCaseDesc 		Verify that setting very long attributes works
+
+START_TESTCASE API-SEC-SCR-API-0072
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Add a component with a regular attributes
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_set_huge_name_vendor
+RUN_TEST_STEP 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini component_huge_property
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_component_huge_name_vendor
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_huge_name_vendor
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_huge_property
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_huge_test
+RUN_TEST_STEP 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_huge_file_property
+RUN_TEST_STEP 100 tscr SCRGetComponentProperties z:\tusif\tscr\tscr.ini component_huge_property
+RUN_TEST_STEP 100 tscr SCRGetFileProperties z:\tusif\tscr\tscr.ini component_huge_file_property
+
+END_TESTCASE API-SEC-SCR-API-0072
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0073
+//! @SYMTestCaseDesc 		Verify that setting extremely long attributes doesn't work and that a proper error code is returned
+
+START_TESTCASE API-SEC-SCR-API-0073
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini very_huge_component_name
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini very_huge_component_vendor_name
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_set_very_huge_name
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetCommonProperty z:\tusif\tscr\tscr.ini update_component_set_very_huge_vendor
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_component_very_huge_property_name
+RUN_TEST_STEP !Result=-6 100 tscr SCRSetComponentProperty z:\tusif\tscr\tscr.ini set_component_very_huge_property_value
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_file_huge_test
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_very_huge_file_property_name
+RUN_TEST_STEP !Result=-6 100 tscr SCRAddFileProperty z:\tusif\tscr\tscr.ini component_very_huge_file_property_value
+RUN_TEST_STEP !Result=-6 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_very_huge_name
+RUN_TEST_STEP !Result=-6 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_very_huge_vendor
+RUN_TEST_STEP !Result=-6 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_very_huge_property_name
+RUN_TEST_STEP !Result=-6 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini get_component_by_very_huge_property_value
+
+END_TESTCASE API-SEC-SCR-API-0073
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0074
+//! @SYMTestCaseDesc 		Verify that invalid parameters in filters don't cause failures
+
+START_TESTCASE API-SEC-SCR-API-0074
+
+RUN_TEST_STEP 100 tscr SCRValuesNegative z:\tusif\tscr\tscr.ini
+
+END_TESTCASE API-SEC-SCR-API-0074
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0075
+//! @SYMTestCaseDesc 		Try closing a session whilst a subsession is open
+
+START_TESTCASE API-SEC-SCR-API-0075
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Make sure that sub-sessions will have entries to iterate on by adding a component
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini common_component_names
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini close_session_with_open_subsession
+
+END_TESTCASE API-SEC-SCR-API-0075
+
+
+//! @SYMTestCaseID 		API-SEC-SCR-API-0076
+//! @SYMTestCaseDesc 		Verify registering files when setting aConsiderForInstalledDrives to false
+
+START_TESTCASE API-SEC-SCR-API-0076
+
+RUN_TEST_STEP 100 tscr SCRDeleteAllComponents z:\tusif\tscr\tscr.ini
+// Register two components with different names
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini test76_component_without_drives
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini test76_component_with_drives
+// Register same files to both components, while setting the flag to false for the first component
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_files_consider_drives_false_test76
+RUN_TEST_STEP 100 tscr SCRRegisterFile z:\tusif\tscr\tscr.ini register_files_consider_drives_true_test76
+// Check that filter on components which have files on drive P does not return component 1, but returns component 2
+RUN_TEST_STEP 100 tscr ScrComponentRegistrySubsession z:\tusif\tscr\tscr.ini components_on_driveP_test76
+// Verify that files were registered to the first component
+RUN_TEST_STEP 100 tscr ScrFileListSubsession z:\tusif\tscr\tscr.ini component_files_test76
+// Verify that the first component does not list any registered drives
+RUN_TEST_STEP 100 tscr SCRGetComponent z:\tusif\tscr\tscr.ini get_no_drives_component_test76
+END_TESTCASE API-SEC-SCR-API-0076
+
+
+//! @SYMTestCaseID		API-SEC-SCR-API-0077
+//! @SYMTestCaseDesc 		Add a single software component with localized information and retrieve the same
+
+START_TESTCASE API-SEC-SCR-API-0077
+RUN_TEST_STEP 100 tscr SCRAddComponent z:\tusif\tscr\tscr.ini component_localized_info
+RUN_TEST_STEP 100 tscr SCRGetComponentLocalizedInfo z:\tusif\tscr\tscr.ini verify_component_localized_info
+END_TESTCASE API-SEC-SCR-API-0077

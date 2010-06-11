@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all overwrite private directory tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-DEF082922-0001
+//! @SYMTestCaseDesc 		Orphaned files in protected dirs can be overwritten by untrusted packages
+//! @SYMDEF 			DEF082922
+//! @SYMTestPriority 		High
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions 		a) Create a file - e:\private\80604020\import\orphan.sis and attempt to install a package which overwites it.
+//! 				b) attempt to install a package which would overwrite an orphan in /resource
+//! 				c) attempt to install a package which would overwrite an orphan in /sys/bin
+//! 				d) remove the blocking files and prove we can still install 
+//! @SYMTestExpectedResults 	a,b,c should fail and d pass
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-DEF082922-0001
+
+RUN_UTILS  MkDir e:\private\
+RUN_UTILS  MkDir e:\private\80604020\
+RUN_UTILS  MkDir e:\private\80604020\import\
+
+RUN_TEST_STEP 5 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+
+# private/xxxxxxxx/import
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /sys/bin
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan2
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /resource
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan3
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# remove the blocking files
+RUN_TEST_STEP 5 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+
+# private/xxxxxxxx/import
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /sys/bin
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+# /resource
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini priv_orphan3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_priv_orphan
+
+
+RUN_UTILS DeleteDir e:\private\80604020\import\
+RUN_UTILS DeleteDir e:\private\80604020\
+
+END_TESTCASE API-SEC-DEF082922-0001

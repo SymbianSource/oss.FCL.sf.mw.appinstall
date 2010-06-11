@@ -1,0 +1,46 @@
+/*
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* This is created to be contained in SIS files with no capabilities.
+* This does not have a protected vendor id and should not require signing
+* by a trusted certificate so long as self signed applications are permitted
+* by the SWI policy file.
+*
+*/
+
+
+/**
+ @file
+*/
+
+TARGET tswidllnocapabilityunprotectedvid.dll
+TARGETTYPE DLL
+
+CAPABILITY None
+
+// UID 
+UID	0x1000007A 0x81000012
+
+SOURCEPATH	.
+
+SOURCE DllMain.cpp
+
+USERINCLUDE .
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_ESTLIB_SYSTEMINCLUDE  	 
+
+LIBRARY euser.lib
+SMPSAFE
+
+

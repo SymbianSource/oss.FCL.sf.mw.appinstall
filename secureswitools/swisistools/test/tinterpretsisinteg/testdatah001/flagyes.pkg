@@ -1,0 +1,40 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package for Ignore non-removable flag on SIS file 
+
+
+; Languages
+; none -  English only by default
+
+; Installation header
+; Only one component name as we only support English
+
+#{"nonremovableflag-set"},(0x89334475),1,0,0,NR
+%{"Vendor"}
+:"Unique Vendor Name"
+"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\flagyes.txt"-"C:\flagyes.txt"
+; for the PREQ1230
+
+
+
+
+
+
+; Required files
+; None
+
+; Component .sis files
+; None

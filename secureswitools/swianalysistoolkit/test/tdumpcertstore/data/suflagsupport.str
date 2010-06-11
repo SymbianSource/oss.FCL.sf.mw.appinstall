@@ -1,0 +1,47 @@
+;This create the certstore for testing writeable certstore.
+
+[SymbianTestRootCADiffSerial]
+
+file = c:\tswi\certstore\SymbianTestRootCADiffSerial.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 1
+
+
+[Root5CA]
+
+file = c:\tswi\certstore\Root5CA.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+Mandatory = 1
+
+
+
+[SymbianTestRSACA]
+
+file = c:\tswi\certstore\Symbian-Test-RSA.der
+capability = DRM
+capability = NetworkServices
+application = SWInstall
+application = SWInstallOCSP
+Mandatory = 0
+SystemUpgrade = 0
+
+[sucert]
+
+file = c:\tswi\certstore\sucert.der
+capability = ReadDeviceData
+capability = WriteDeviceData
+capability = DRM
+capability = AllFiles
+application = SWInstall
+SystemUpgrade = 1
+
+
+

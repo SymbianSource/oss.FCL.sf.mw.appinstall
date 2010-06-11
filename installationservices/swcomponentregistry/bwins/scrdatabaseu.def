@@ -1,0 +1,22 @@
+EXPORTS
+	??1CDatabase@Usif@@UAE@XZ @ 1 NONAME ; Usif::CDatabase::~CDatabase(void)
+	?BindInt64L@CStatement@Usif@@QAEXH_J@Z @ 2 NONAME ; void Usif::CStatement::BindInt64L(int, long long)
+	?ExecuteStatementL@CStatement@Usif@@QAEXXZ @ 3 NONAME ; void Usif::CStatement::ExecuteStatementL(void)
+	?PrepareStatementLC@CDatabase@Usif@@QAEPAVCStatement@2@ABVTDesC16@@@Z @ 4 NONAME ; class Usif::CStatement * Usif::CDatabase::PrepareStatementLC(class TDesC16 const &)
+	?NewL@CStatement@Usif@@CAPAV12@ABVCDatabase@2@PAVCStatementImplementation@2@@Z @ 5 NONAME ; class Usif::CStatement * Usif::CStatement::NewL(class Usif::CDatabase const &, class Usif::CStatementImplementation *)
+	?LastInsertedIdL@CDatabase@Usif@@QAEHXZ @ 6 NONAME ; int Usif::CDatabase::LastInsertedIdL(void)
+	?IntColumnL@CStatement@Usif@@QBEHH@Z @ 7 NONAME ; int Usif::CStatement::IntColumnL(int) const
+	?ResetL@CStatement@Usif@@QAEXXZ @ 8 NONAME ; void Usif::CStatement::ResetL(void)
+	?BinaryColumnL@CStatement@Usif@@QBE?AVTPtrC8@@H@Z @ 9 NONAME ; class TPtrC8 Usif::CStatement::BinaryColumnL(int) const
+	?BindStrL@CStatement@Usif@@QAEXHABVTDesC16@@@Z @ 10 NONAME ; void Usif::CStatement::BindStrL(int, class TDesC16 const &)
+	?ProcessNextRowL@CStatement@Usif@@QAEHXZ @ 11 NONAME ; int Usif::CStatement::ProcessNextRowL(void)
+	??1CStatement@Usif@@UAE@XZ @ 12 NONAME ; Usif::CStatement::~CStatement(void)
+	?BindBinaryL@CStatement@Usif@@QAEXHABVTDesC8@@@Z @ 13 NONAME ; void Usif::CStatement::BindBinaryL(int, class TDesC8 const &)
+	?IsFieldNullL@CStatement@Usif@@QBEHH@Z @ 14 NONAME ; int Usif::CStatement::IsFieldNullL(int) const
+	?StrColumnL@CStatement@Usif@@QBE?AVTPtrC16@@H@Z @ 15 NONAME ; class TPtrC16 Usif::CStatement::StrColumnL(int) const
+	?BindIntL@CStatement@Usif@@QAEXHH@Z @ 16 NONAME ; void Usif::CStatement::BindIntL(int, int)
+	?Int64ColumnL@CStatement@Usif@@QBE_JH@Z @ 17 NONAME ; long long Usif::CStatement::Int64ColumnL(int) const
+	?NewL@CDatabase@Usif@@SAPAV12@AAVRFile@@0@Z @ 18 NONAME ; class Usif::CDatabase * Usif::CDatabase::NewL(class RFile &, class RFile &)
+	?NewLC@CDatabase@Usif@@SAPAV12@AAVRFile@@0@Z @ 19 NONAME ; class Usif::CDatabase * Usif::CDatabase::NewLC(class RFile &, class RFile &)
+	?BindBinaryL@CStatement@Usif@@QAEXHABVTDesC8@@I@Z @ 20 NONAME ; void Usif::CStatement::BindBinaryL(int, class TDesC8 const &, unsigned int)
+

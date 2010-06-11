@@ -1,0 +1,77 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run SWIS User capability checking tests
+LOAD_SUITE tuiscriptadaptors
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-UserCapTest-I-B-0001
+//! @SYMTestCaseDesc 		Install signed executables and check/grant their user caps
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+// Signed SIS tests
+
+START_TESTCASE API-SEC-UISA-UserCapTest-I-B-0001
+
+// Shouldn't work since unsigned
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiallcapabilities
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiallcapabilities
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswinocapability
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswinocapability
+
+// Shouldn't work since unsigned
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswisystemcapability
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswisystemcapability
+
+// shouldn't work since user capabilities are not grantable 
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable
+
+// shouldn't work since user capabilities are not grantable 
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_all
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_all
+
+//DEF116513
+// shouldn't work since user capabilities are not grantable
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_allfiles
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_allfiles
+
+// shouldn't work since user capabilities are not grantable
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_commdd
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_commdd
+
+// shouldn't work since user capabilities are not grantable
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_diskadmin
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_diskadmin
+
+// shouldn't work since user capabilities are not grantable
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_multimediadd
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_multimediadd
+
+// shouldn't work since user capabilities are not grantable
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_networkcontrol
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_networkcontrol
+//End of DEF116513
+
+END_TESTCASE API-SEC-UISA-UserCapTest-I-B-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

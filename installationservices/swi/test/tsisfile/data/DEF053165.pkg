@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A SISX file, with 1 embedded SISX file
+
+;Languages
+&EN
+
+;Header
+#{"DEF053165"}, (0x81115100), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;Ordinary file to selected drive. This overwrites pre-existing file
+"text\english.txt"-"!:\tswi\DEF053165.temp"

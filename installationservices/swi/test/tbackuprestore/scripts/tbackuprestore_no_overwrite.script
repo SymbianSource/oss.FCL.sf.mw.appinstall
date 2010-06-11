@@ -1,0 +1,101 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+// This test scripts exists to verify that SWI does not overwrite applications
+// during restore if AllowOverwriteOnRestore = false in swipolicy.ini
+//
+// At some point a compatibility break should be made and SWI should always overwrite
+// during a restore. Otherwise, there is the risk of fragmenting the behaviour of SWI which
+// makes things difficult for third party developers.
+//
+// See INC127981: Pre-installed backed up content cannot be restored 
+
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+// Make sure emulated X drive is not corrupt and is empty.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+//! @SYMTestCaseID API-SEC-BACKUPRESTORE_NoOverWrite-0001
+//! @SYMTestCaseDesc Sets up the environment for the remaining tests
+//! @SYMTestPriority Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions Installs test certificates, uninstalls applications
+//! @SYMTestExpectedResults Clean environment.
+//! @SYMREQ REQ3469
+//! @SYMTestType UT
+START_TESTCASE API-SEC-BACKUPRESTORE_NoOverWrite-0001
+// Setup Certstore
+RUN_UTILS MkDir c:\tmp\
+RUN_UTILS MkDir c:\tmp\tsis\
+RUN_UTILS MkDir c:\private\101f72a6\
+RUN_UTILS CopyFile c:\private\101f72a6\cacerts.dat c:\tmp\tsis\cacerts.dat
+RUN_UTILS CopyFile c:\private\101f72a6\certclients.dat c:\tmp\tsis\certclients.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\certclients.dat c:\private\101f72a6\certclients.dat
+// Make sure the test directory exists
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tbackuprestore\scripts\ini		ABCD
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		ABCD
+END_TESTCASE API-SEC-BACKUPRESTORE_NoOverWrite-0001
+
+//! @SYMTestCaseID API-SEC-RestoreWithPackageAlreadyPresent-0002
+//! @SYMTestCaseDesc Back up and attempt restore of a package without uninstalling it first.
+//! @SYMTestPriority Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions Installs, backs up, and attempts restores of a package, and checks that the package is
+//! not altered after the restore attempt.
+//! @SYMTestExpectedResults Success, clean environment.
+//! @SYMDevelopedForRelease Mike
+//! @SYMDEF DEF085544
+START_TESTCASE API-SEC-RestoreWithPackageAlreadyPresent-0002  
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP_RESULT -11 100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tuiscriptadaptors MmcGetNumFilesStep z:\tswi\tbackuprestore\scripts\ini	checkrestoretemp
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+END_TESTCASE API-SEC-RestoreWithPackageAlreadyPresent-0002
+
+
+//! @file
+//! @SYMTestCaseID ROM_SP_backup_restore_no_overwrite
+//! @SYMTestCaseDesc Backs up and restores a ROM based pkg with a SP upgrade. Checks whether -11 is thrown in case of a SP restore without formatting the drive if AllowOverwriteOnRestore is set to False ( It should be throwing -11 )
+//! @SYMDEF DEF141084
+//! @SYMTestPriority HIGH
+//! @SYMTestActions Restores the backed up ROM-SP pkg
+//! @SYMTestExpectedResults Success, clean environment.
+START_TESTCASE ROM_SP_backup_restore_no_overwrite
+RUN_TEST_STEP			100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	ROM_SP_backup_restore
+RUN_TEST_STEP			100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	ROM_SP_backup_restore
+RUN_TEST_STEP_RESULT	-11	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	ROM_SP_backup_restore
+END_TESTCASE ROM_SP_backup_restore_no_overwrite
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

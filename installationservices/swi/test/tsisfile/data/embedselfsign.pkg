@@ -1,0 +1,31 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A SISX file, with 1 embedded self signed SISX files
+
+;Languages
+&EN
+
+;Header
+#{"embedselfsign"}, (0x8000AB05), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+;Embedded component
+@"files\2-2selfsigneddata.SIS",(0x8000A005)
+
+;Ordinary file to selected drive
+"text\backlight.txt"-"!:\Documents\def053177\backlight.txt"

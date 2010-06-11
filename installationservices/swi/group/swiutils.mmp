@@ -1,0 +1,39 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* swiutils.mmp
+*
+*/
+
+
+/**
+ @file
+ swiutils
+*/
+
+target      swiutils.dll
+CAPABILITY 	All -Tcb
+targettype  DLL
+UID			0x1000008D 0x2002D4F3
+VENDORID 	0x70000001
+
+USERINCLUDE ../inc
+USERINCLUDE ../inc/swi
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+SOURCEPATH	../source/swiutils
+SOURCE		swiutils.cpp
+
+LIBRARY euser.lib
+SMPSAFE

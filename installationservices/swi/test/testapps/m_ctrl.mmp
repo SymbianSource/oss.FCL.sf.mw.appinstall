@@ -1,0 +1,38 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+//
+// M_CTRL.MMP for test component M_CTRL (released in APPARC)
+//
+
+target          M_CTRL.CTL
+targettype      ctl
+targetpath      /tswi/testapps/m_ctrl\
+
+UID		0x10003A34 98
+VENDORID 0x70000001
+
+SOURCEPATH	../testapps		// source files
+
+userinclude     ../testapps
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+
+source          m_ctrl.cpp
+
+library         EUSER.LIB
+SMPSAFE

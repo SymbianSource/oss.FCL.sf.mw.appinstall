@@ -1,0 +1,42 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Languages
+&FR, EN
+
+#{"defaultlang_FR","defaultlang_EN"},(0x88000103),1,0,1,TYPE=SA
+
+;Localised Vendor name
+%{"Vendor_FR","Vendor_EN"}
+
+;Unique Vendor name
+:"Vendor"
+
+if supported_language=01
+"text\option1.txt"		  -"!:\Documents\InstTest\language_en_upgrade.txt"
+endif
+
+if supported_language=02
+"text\option2.txt"		  -"!:\Documents\InstTest\language_fr_upgrade.txt"
+endif
+
+if supported_language=01 OR supported_language=02
+"text\options.txt"-"!:\Documents\InstTest\language_en_or_fr.txt"
+endif
+
+if supported_language=01 AND supported_language=02
+"text\options.txt"-"!:\Documents\InstTest\language_en_and_fr.txt"
+endif
+

@@ -1,0 +1,4 @@
+EXPORTS
+	?Check@ROcspServerSession@Test@Swi@@QAEHXZ @ 1 NONAME ; int Swi::Test::ROcspServerSession::Check(void)
+	?Connect@ROcspServerSession@Test@Swi@@QAEHXZ @ 2 NONAME ; int Swi::Test::ROcspServerSession::Connect(void)
+

@@ -1,0 +1,341 @@
+# Microsoft Developer Studio Generated Dependency File, included by dumpchainvaliditytool.mak
+
+..\common\certificatechain.cpp : \
+	"..\..\..\..\openssllib\import\inc\openssl\aes.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\asn1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bio.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\blowfish.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bn.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\cast.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\comp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\conf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\crypto.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des_old.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dh.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\e_os2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\err.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\evp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\idea.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\kssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\lhash.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\mdc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\obj_mac.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\objects.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslconf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslv.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ossl_typ.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs12.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs7.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ripemd.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\safestack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\sha.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl23.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl3.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\stack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\symhacks.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\tls1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui_compat.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509_vfy.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509v3.h"\
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+# Make sure \epoc32\include\swicertstore.h does not change to a
+# relative path, it may break the build.
+.\dumpchainvalidity.cpp : \
+	"\epoc32\include\platform\swicertstore.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\aes.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\asn1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bio.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\blowfish.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bn.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\cast.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\comp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\conf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\crypto.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des_old.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dh.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\e_os2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\err.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\evp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\idea.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\kssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\lhash.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\mdc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\obj_mac.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\objects.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslconf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslv.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ossl_typ.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs12.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs7.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ripemd.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\safestack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\sha.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl23.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl3.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\stack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\symhacks.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\tls1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui_compat.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509_vfy.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509v3.h"\
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+
+..\common\dumpchainvaliditytool.cpp : \
+	"..\..\..\..\openssllib\import\inc\openssl\aes.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\asn1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bio.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\blowfish.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bn.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\cast.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\comp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\conf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\crypto.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des_old.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dh.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\e_os2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\err.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\evp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\idea.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\kssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\lhash.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\mdc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\obj_mac.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\objects.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslconf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslv.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ossl_typ.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs12.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs7.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ripemd.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\safestack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\sha.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl23.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl3.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\stack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\symhacks.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\tls1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui_compat.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509_vfy.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509v3.h"\
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+
+..\common\launchprocess.cpp : \
+	"..\common\launchprocess.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+
+.\options.cpp : \
+	"..\common\launchprocess.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+
+..\..\common\osinterface.cpp : \
+	"..\..\common\osinterface.h"\
+	
+
+..\common\siscertificatechain.cpp : \
+	"..\..\..\..\openssllib\import\inc\openssl\aes.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\asn1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bio.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\blowfish.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bn.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\cast.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\comp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\conf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\crypto.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des_old.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dh.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\e_os2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\err.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\evp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\idea.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\kssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\lhash.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\mdc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\obj_mac.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\objects.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslconf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslv.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ossl_typ.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs12.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs7.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ripemd.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\safestack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\sha.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl23.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl3.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\stack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\symhacks.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\tls1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui_compat.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509_vfy.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509v3.h"\
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	
+
+..\common\swicertstore.cpp : \
+	"..\..\..\..\openssllib\import\inc\openssl\aes.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\asn1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bio.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\blowfish.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\bn.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\cast.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\comp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\conf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\crypto.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\des_old.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dh.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\dsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\e_os2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\err.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\evp.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\idea.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\kssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\lhash.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\md5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\mdc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\obj_mac.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\objects.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslconf.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\opensslv.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ossl_typ.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pem2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs12.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\pkcs7.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc4.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rc5.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ripemd.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\rsa.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\safestack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\sha.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl2.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl23.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ssl3.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\stack.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\symhacks.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\tls1.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\ui_compat.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509_vfy.h"\
+	"..\..\..\..\openssllib\import\inc\openssl\x509v3.h"\
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"
+# Make sure a dependency to "c:\apps\msvc6\vc98\include\basetsd.h" is NOT re-added here
+# by Visual Studio - It WILL break customer builds!
+	

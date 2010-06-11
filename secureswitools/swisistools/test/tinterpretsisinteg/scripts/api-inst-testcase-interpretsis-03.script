@@ -1,0 +1,47 @@
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Device supported language tests
+
+// Load Suite
+LOAD_SUITE tscr -SharedData
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-INST-testcase-InterpretSIS-03
+//! @SYMTestCaseDesc 		Add an applications registration info with same appuid.
+//! @SYMPREQ  			PREQ1835
+//! @SYMTestStatus		Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Check Adding an applications registration info with same appuid.
+//! @SYMTestExpectedResults 	Negative Test Case.
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+START_TESTCASE API-INST-testcase-InterpretSIS-03
+
+
+// Delete the SCR Database file
+//RUN_TEST_STEP 100 tscr SCRDeleteDbFile c:\tswi\tinterpretsisinteg\scripts\ini.ini db_file
+
+RUN_TEST_STEP 100 tscr SCRAddApplicationEntry c:\tswi\tinterpretsisinteg\scripts\ini.ini add_app_reg_info_sameappuid
+
+END_TESTCASE API-INST-testcase-InterpretSIS-03
+
+

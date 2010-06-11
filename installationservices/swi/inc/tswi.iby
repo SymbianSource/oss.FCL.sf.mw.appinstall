@@ -1,0 +1,861 @@
+/*
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+
+#ifndef __TSWI_IBY__
+#define __TSWI_IBY__
+
+// Reference Test agent must be present for some tuiscriptadaptors.exe tests
+#include "rta.iby"
+
+define ZDRIVE \epoc32\winscw\c 
+
+REM Software Install test executables.
+#include "tswiexes.iby"
+
+REM Software Install test executables.
+#include "tswisis.iby"
+
+// sim.tsy must be included for the tdevcerts tests
+#include "simtsy.iby"
+
+#include "tpathsubst.iby"
+
+REM Secure Software Install Tests
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\tintegrityservices.exe			sys\bin\tintegrityservices.exe
+file=ABI_DIR\BUILD_DIR\tintegrityservicesclient.dll		sys\bin\tintegrityservicesclient.dll
+file=ABI_DIR\BUILD_DIR\tintegrityservicesserver.exe		sys\bin\tintegrityservicesserver.exe
+#endif
+
+file=ABI_DIR\BUILD_DIR\tsis.exe					sys\bin\tsis.exe
+file=ABI_DIR\BUILD_DIR\tsisfile.exe				sys\bin\tsisfile.exe
+file=ABI_DIR\BUILD_DIR\tocspclient.dll			sys\bin\tocspclient.dll
+file=ABI_DIR\BUILD_DIR\tsishelperserver.exe		sys\bin\tsishelperserver.exe
+file=ABI_DIR\BUILD_DIR\consoleclient.dll		sys\bin\consoleclient.dll
+file=ABI_DIR\BUILD_DIR\consoleserver.exe		sys\bin\consoleserver.exe
+file=ABI_DIR\BUILD_DIR\tuseadapter.exe			sys\bin\tuseadapter.exe
+file=ABI_DIR\BUILD_DIR\tuiscriptadaptors.exe	sys\bin\tuiscriptadaptors.exe
+file=ABI_DIR\BUILD_DIR\tsisregistrytest.exe		sys\bin\tsisregistrytest.exe	
+file=ABI_DIR\BUILD_DIR\testutilclientswi.dll	sys\bin\testutilclientswi.dll
+file=ABI_DIR\BUILD_DIR\testutilserverswi.exe	sys\bin\testutilserverswi.exe
+file=ABI_DIR\BUILD_DIR\tbackuprestore.exe		sys\bin\tbackuprestore.exe
+file=ABI_DIR\BUILD_DIR\tdevinfosupport.exe		sys\bin\tdevinfosupport.exe
+file=ABI_DIR\BUILD_DIR\tdaemon.exe				sys\bin\tdaemon.exe
+file=ABI_DIR\BUILD_DIR\tdataprovider.exe		sys\bin\tdataprovider.exe
+file=ABI_DIR\BUILD_DIR\killrunningprocess.exe	sys\bin\killrunningprocess.exe
+file=ABI_DIR\BUILD_DIR\swicaptests.dll			sys\bin\swicaptests.dll
+
+#ifdef SYMBIAN_DISTINCT_LOCALE_MODEL 
+file=ABI_DIR\BUILD_DIR\elocl_lan.002		Sys\bin\elocl_lan.002
+file=ABI_DIR\BUILD_DIR\elocl_lan.004		Sys\bin\elocl_lan.004
+file=ABI_DIR\BUILD_DIR\elocl_lan.029		Sys\bin\elocl_lan.029
+#else
+file=ABI_DIR\BUILD_DIR\elocl.01		Sys\bin\elocl.01
+file=ABI_DIR\BUILD_DIR\elocl.02		Sys\bin\elocl.02
+file=ABI_DIR\BUILD_DIR\elocl.03		Sys\bin\elocl.03
+file=ABI_DIR\BUILD_DIR\elocl.04		Sys\bin\elocl.04
+file=ABI_DIR\BUILD_DIR\elocl.10		Sys\bin\elocl.10
+file=ABI_DIR\BUILD_DIR\elocl.29		Sys\bin\elocl.29
+file=ABI_DIR\BUILD_DIR\elocl.31		Sys\bin\elocl.31
+#endif
+
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+file=ABI_DIR\BUILD_DIR\trevocation.exe		sys\bin\trevocation.exe
+#endif
+
+REM tmimehandler
+file=ABI_DIR\BUILD_DIR\tmimehandler.exe		 sys\bin\tmimehandler.exe
+data=ZPRIVATE\10003a3f\apps\tmimehandler_reg.rsc private\10003a3f\apps\tmimehandler_reg.rsc
+data=ZRESOURCE\apps\tmimehandler.rsc		 resource\apps\tmimehandler.rsc
+data=ZRESOURCE\apps\tmimehandler_loc.rsc	 resource\apps\tmimehandler_loc.rsc
+
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\swicaptests\data\controller \tswi\swicaptests\data\controller
+data = \epoc32\winscw\c\tswi\swicaptests\data\testdoc.txt \tswi\swicaptests\data\testdoc.txt
+
+data = \epoc32\winscw\c\tswi\tsishelper\scripts\tsishelper.script \tswi\tsishelper\scripts\tsishelper.script
+data = \epoc32\winscw\c\tswi\tsishelper\scripts\tsishelper.ini \tswi\tsishelper\scripts\tsishelper.ini
+data = \epoc32\winscw\c\tswi\tsishelper\data\test1.sis \tswi\tsishelper\data\test1.sis
+data = \epoc32\winscw\c\tswi\tsishelper\data\test1.controller \tswi\tsishelper\data\test1.controller
+data = \epoc32\winscw\c\tswi\tsishelper\data\test1.data \tswi\tsishelper\data\test1.data
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+// Legacy integrity services tests
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\tintegrityservices.script \tswi\tintegrityservices\scripts\tintegrityservices.script
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\tintegrityservices.ini \tswi\tintegrityservices\scripts\tintegrityservices.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\oom.ini \tswi\tintegrityservices\scripts\oom.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini \tswi\tintegrityservices\scripts\install_v1\EFailAddingNewFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailAddingTempFile.ini \tswi\tintegrityservices\scripts\install_v1\EFailAddingTempFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailBackupFilesRemoved.ini \tswi\tintegrityservices\scripts\install_v1\EFailBackupFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\install_v1\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailInstallComplete.ini \tswi\tintegrityservices\scripts\install_v1\EFailInstallComplete.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailNone.ini \tswi\tintegrityservices\scripts\install_v1\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v1\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\install_v1\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailAddingNewFile.ini \tswi\tintegrityservices\scripts\install_v2\EFailAddingNewFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailAddingTempFile.ini \tswi\tintegrityservices\scripts\install_v2\EFailAddingTempFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailBackupFilesRemoved.ini \tswi\tintegrityservices\scripts\install_v2\EFailBackupFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\install_v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailInstallComplete.ini \tswi\tintegrityservices\scripts\install_v2\EFailInstallComplete.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailNone.ini \tswi\tintegrityservices\scripts\install_v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\install_v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\install_v2\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v1\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\rollback_install_v1\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v1\EFailNewFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_install_v1\EFailNewFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini \tswi\tintegrityservices\scripts\rollback_install_v1\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v1\EFailOldFilesRestored.ini \tswi\tintegrityservices\scripts\rollback_install_v1\EFailOldFilesRestored.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v1\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_install_v1\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\rollback_install_v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v2\EFailNewFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_install_v2\EFailNewFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v2\EFailNone.ini \tswi\tintegrityservices\scripts\rollback_install_v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v2\EFailOldFilesRestored.ini \tswi\tintegrityservices\scripts\rollback_install_v2\EFailOldFilesRestored.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_install_v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_install_v2\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailNewFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailNewFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailNone.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailOldFilesRestored.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailOldFilesRestored.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailRestoringFile.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailRestoringFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v1\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailNewFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailNewFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailNone.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailOldFilesRestored.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailOldFilesRestored.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailRestoringFile.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailRestoringFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_uninstall_v2\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNewFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNewFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNone.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailOldFilesRestored.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailOldFilesRestored.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailRestoringFile.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailRestoringFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\rollback_upgrade_v1-v2\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailBackupFilesRemoved.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailBackupFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailInstallComplete.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailInstallComplete.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailNone.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailRemovingFile.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailRemovingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v1\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\uninstall_v1\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailBackupFilesRemoved.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailBackupFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailInstallComplete.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailInstallComplete.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailNone.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailRemovingFile.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailRemovingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\uninstall_v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\uninstall_v2\EFailTempFilesRemoved.ini
+
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingNewFile.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingNewFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingTempFile.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailAddingTempFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailBackupFilesRemoved.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailBackupFilesRemoved.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailDeletingFile.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailDeletingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailInstallComplete.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailInstallComplete.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailNone.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailNone.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailRemovingFile.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailRemovingFile.ini
+data = \epoc32\winscw\c\tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailTempFilesRemoved.ini \tswi\tintegrityservices\scripts\upgrade_v1-v2\EFailTempFilesRemoved.ini
+#endif
+
+//NQP TESTS for DataProvider 
+data =\epoc32\winscw\c\tswi\tdataprovider\scripts\tdataprovider.ini \tswi\tdataprovider\scripts\tdataprovider.ini
+data =\epoc32\winscw\c\tswi\tdataprovider\scripts\tdataprovider.script \tswi\tdataprovider\scripts\tdataprovider.script
+data =\epoc32\winscw\c\tswi\tdataprovider\data\dataprovidfertestfile.txt \tswi\tdataprovider\data\dataprovidfertestfile.txt
+
+//CR0914
+data = \epoc32\winscw\c\tswi\tdumpcertstore\certificates\root5ca.der \tswi\tdumpcertstore\certificates\root5ca.der
+data = \epoc32\winscw\c\tswi\tdumpcertstore\certificates\symbian-test-dsa.der \tswi\tdumpcertstore\certificates\symbian-test-dsa.der
+data = \epoc32\winscw\c\tswi\tdumpcertstore\certificates\symbiantestrootcadiffserial.der \tswi\tdumpcertstore\certificates\symbiantestrootcadiffserial.der
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiregcompfields.script \tswi\tuiscriptadaptors\scripts\tswiregcompfields.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini \tswi\tuiscriptadaptors\scripts\tswiregcompfields.ini
+//tsisregistrytest
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistrytest.script \tswi\tsisregistrytest\scripts\tsisregistrytest.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistrytest.ini \tswi\tsisregistrytest\scripts\tsisregistrytest.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\runregistrytests.script \tswi\tsisregistrytest\scripts\runregistrytests.script
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\generateregistrytestdata.script \tswi\tsisregistrytest\scripts\generateregistrytestdata.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\removeregistrytestdata.script \tswi\tsisregistrytest\scripts\removeregistrytestdata.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\registrytestdata.ini \tswi\tsisregistrytest\scripts\registrytestdata.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\notinstalled.script \tswi\tsisregistrytest\scripts\notinstalled.script
+
+// Tests for Post manufacture installation of a Layered Execution Environment
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswtype.script \tswi\tuiscriptadaptors\scripts\tswtype.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswtype.ini \tswi\tuiscriptadaptors\scripts\tswtype.ini
+
+//tsisregistry performance tests
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistry_performance.script \tswi\tsisregistrytest\scripts\tsisregistry_performance.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistry_performance_cases.script \tswi\tsisregistrytest\scripts\tsisregistry_performance_cases.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistry_performance.ini \tswi\tsisregistrytest\scripts\tsisregistry_performance.ini
+
+//CR0914
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.ini \tswi\tsisregistrytest\scripts\integritychecktest.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.script \tswi\tsisregistrytest\scripts\integritychecktest.script
+
+//SWI AppReg integration test script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiappregintegration.script \tswi\tuiscriptadaptors\scripts\tswiappregintegration.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini \tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini
+
+file=ABI_DIR\BUILD_DIR\sisregistryaccessserver.exe 		sys\bin\sisregistryaccessserver.exe
+#else
+//tsisregistrytest
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistrytest.script \tswi\tsisregistrytest\scripts\tsisregistrytest.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistrytest.ini \tswi\tsisregistrytest\scripts\tsisregistrytest.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\runregistrytests.script \tswi\tsisregistrytest\scripts\runregistrytests.script
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\generateregistrytestdata.script \tswi\tsisregistrytest\scripts\generateregistrytestdata.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\removeregistrytestdata.script \tswi\tsisregistrytest\scripts\removeregistrytestdata.script
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\registrytestdata.ini \tswi\tsisregistrytest\scripts\registrytestdata.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\notinstalled.script \tswi\tsisregistrytest\scripts\notinstalled.script
+
+//CR0914
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.ini \tswi\tsisregistrytest\scripts\integritychecktest.ini
+data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.script \tswi\tsisregistrytest\scripts\integritychecktest.script
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\backup.lst \tswi\tsisregistrytest\data\backup.lst
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\ROMVersionStringCache_localSysUtil.bin \tswi\tsisregistrytest\data\ROMVersionStringCache_localSysUtil.bin
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\a0001022\00000000.reg \tswi\tsisregistrytest\data\a0001022\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\a0001022\00000000_0000.ctl \tswi\tsisregistrytest\data\a0001022\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80000001\00000000.reg \tswi\tsisregistrytest\data\80000001\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80000001\00000000_0000.ctl \tswi\tsisregistrytest\data\80000001\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80000002\00000000.reg \tswi\tsisregistrytest\data\80000002\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80000002\00000000_0000.ctl \tswi\tsisregistrytest\data\80000002\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\1000000f\00000000.reg \tswi\tsisregistrytest\data\1000000f\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\1000000f\00000000_0000.ctl \tswi\tsisregistrytest\data\1000000f\00000000_0000.ctl
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\hashForLang_txt.dat \tswi\tsisregistrytest\data\hashForLang_txt.dat
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\8000001b\00000000.reg \tswi\tsisregistrytest\data\8000001b\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\8000001b\00000000_0000.ctl \tswi\tsisregistrytest\data\8000001b\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\8000001c\00000000.reg \tswi\tsisregistrytest\data\8000001c\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\8000001c\00000000_0000.ctl \tswi\tsisregistrytest\data\8000001c\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111fd\00000000.reg \tswi\tsisregistrytest\data\811111fd\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111fd\00000000_0000.ctl \tswi\tsisregistrytest\data\811111fd\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111fe\00000000.reg \tswi\tsisregistrytest\data\811111fe\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111fe\00000000_0000.ctl \tswi\tsisregistrytest\data\811111fe\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111ff\00000000.reg \tswi\tsisregistrytest\data\811111ff\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\811111ff\00000000_0000.ctl \tswi\tsisregistrytest\data\811111ff\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111201\00000000.reg \tswi\tsisregistrytest\data\81111201\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111201\00000000_0000.ctl \tswi\tsisregistrytest\data\81111201\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111207\00000000.reg \tswi\tsisregistrytest\data\81111207\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111207\00000000_0000.ctl \tswi\tsisregistrytest\data\81111207\00000000_0000.ctl
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111207\00000001.reg \tswi\tsisregistrytest\data\81111207\00000001.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111207\00000001_0000.ctl \tswi\tsisregistrytest\data\81111207\00000001_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111209\00000000.reg \tswi\tsisregistrytest\data\81111209\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111209\00000000_0000.ctl \tswi\tsisregistrytest\data\81111209\00000000_0000.ctl
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111209\00000001.reg \tswi\tsisregistrytest\data\81111209\00000001.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81111209\00000001_0000.ctl \tswi\tsisregistrytest\data\81111209\00000001_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81113014\00000000.reg \tswi\tsisregistrytest\data\81113014\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\81113014\00000000_0000.ctl \tswi\tsisregistrytest\data\81113014\00000000_0000.ctl
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\hashForTestsidcheck_A_exe.dat \tswi\tsisregistrytest\data\hashForTestsidcheck_A_exe.dat
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\11111107\00000000.reg \tswi\tsisregistrytest\data\11111107\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\11111107\00000000_0000.ctl \tswi\tsisregistrytest\data\11111107\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80123456\00000000.reg \tswi\tsisregistrytest\data\80123456\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\80123456\00000000_0000.ctl \tswi\tsisregistrytest\data\80123456\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a1\00000000.reg \tswi\tsisregistrytest\data\802730a1\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a1\00000000_0000.ctl \tswi\tsisregistrytest\data\802730a1\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\10009f46\00000000.reg \tswi\tsisregistrytest\data\10009f46\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\10009f46\00000000_0000.ctl \tswi\tsisregistrytest\data\10009f46\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\101f7989\00000000.reg \tswi\tsisregistrytest\data\101f7989\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\101f7989\00000000_0000.ctl \tswi\tsisregistrytest\data\101f7989\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\10285777\00000000.reg \tswi\tsisregistrytest\data\10285777\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\10285777\00000000_0000.ctl \tswi\tsisregistrytest\data\10285777\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\200020b0\00000000.reg \tswi\tsisregistrytest\data\200020b0\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\200020b0\00000000_0000.ctl \tswi\tsisregistrytest\data\200020b0\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\2000a471\00000000.reg \tswi\tsisregistrytest\data\2000a471\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\2000a471\00000000_0000.ctl \tswi\tsisregistrytest\data\2000a471\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a0\00000000.reg \tswi\tsisregistrytest\data\802730a0\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a0\00000000_0000.ctl \tswi\tsisregistrytest\data\802730a0\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a2\00000000.reg \tswi\tsisregistrytest\data\802730a2\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730a2\00000000_0000.ctl \tswi\tsisregistrytest\data\802730a2\00000000_0000.ctl
+
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730b1\00000000.reg \tswi\tsisregistrytest\data\802730b1\00000000.reg 
+data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730b1\00000000_0000.ctl \tswi\tsisregistrytest\data\802730b1\00000000_0000.ctl
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+
+#endif //SECURITY_NORMAL_SWICERTSTORE__
+
+// tuiscriptadaptors (unit test for SWIS)
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialog.script \tswi\tuiscriptadaptors\scripts\tuileavedialog.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script \tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\leavedialog_armv5.ini \tswi\tuiscriptadaptors\scripts\leavedialog.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testvids.script \tswi\tuiscriptadaptors\scripts\testvids.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testvids.ini \tswi\tuiscriptadaptors\scripts\testvids.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testasynccancel.script \tswi\tuiscriptadaptors\scripts\testasynccancel.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testasync.script \tswi\tuiscriptadaptors\scripts\testasync.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH_hardware.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsMem.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsMem.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testexpressions.ini \tswi\tuiscriptadaptors\scripts\testexpressions.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testexpressions.script \tswi\tuiscriptadaptors\scripts\testexpressions.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testembedded.ini \tswi\tuiscriptadaptors\scripts\testembedded.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdependencies.ini \tswi\tuiscriptadaptors\scripts\testdependencies.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdependencies.script \tswi\tuiscriptadaptors\scripts\testdependencies.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrives.ini \tswi\tuiscriptadaptors\scripts\testdrives.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrives.script \tswi\tuiscriptadaptors\scripts\testdrives.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testlocations.ini \tswi\tuiscriptadaptors\scripts\testlocations.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testlocations.script \tswi\tuiscriptadaptors\scripts\testlocations.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testupgrades.ini \tswi\tuiscriptadaptors\scripts\testupgrades.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testupgrades.script \tswi\tuiscriptadaptors\scripts\testupgrades.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testaugmentations.ini \tswi\tuiscriptadaptors\scripts\testaugmentations.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testaugmentations.script \tswi\tuiscriptadaptors\scripts\testaugmentations.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini \tswi\tuiscriptadaptors\scripts\testpreinstalled.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini \tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini \tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.script \tswi\tuiscriptadaptors\scripts\testdevicelanguages.script
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.script \tswi\tuiscriptadaptors\scripts\testpreinstalled.script
+#else
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script \tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script
+#endif
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\signed.ini \tswi\tuiscriptadaptors\scripts\signed.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\caps.ini \tswi\tuiscriptadaptors\scripts\caps.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrun_armv5.script \tswi\tuiscriptadaptors\scripts\testrun.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrun.ini \tswi\tuiscriptadaptors\scripts\testrun.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrunft.script \tswi\tuiscriptadaptors\scripts\testrunft.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrunft.ini \tswi\tuiscriptadaptors\scripts\testrunft.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simplecanceltext.xml \tswi\tuiscriptadaptors\scripts\simplecanceltext.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testshutdown.script \tswi\tuiscriptadaptors\scripts\testshutdown.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testshutdown.ini \tswi\tuiscriptadaptors\scripts\testshutdown.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testcancel.script \tswi\tuiscriptadaptors\scripts\testcancel.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testcancel.ini \tswi\tuiscriptadaptors\scripts\testcancel.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testnotargetdevices.script \tswi\tuiscriptadaptors\scripts\testnotargetdevices.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testnotargetdevices.ini \tswi\tuiscriptadaptors\scripts\testnotargetdevices.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_armv5.script \tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure.script
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_armv5.ini \tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\data\uninstall_cdrive.log \tswi\tuiscriptadaptors\data\uninstall_cdrive.log
+#else
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_armv5_legacy.ini \tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure_armv5_legacy.ini
+#endif
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\overwriting_executables.ini \tswi\tuiscriptadaptors\scripts\overwriting_executables.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\usercaps.ini \tswi\tuiscriptadaptors\scripts\usercaps.ini
+data = \epoc32\winscw\c\tswi\swicaptests\scripts\swicaptests.ini \tswi\swicaptests\scripts\swicaptests.ini
+data = \epoc32\winscw\c\tswi\tautosigning\scripts\tautosigning.ini \tswi\tautosigning\scripts\tautosigning.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testsystemcaps.ini \tswi\tuiscriptadaptors\scripts\testsystemcaps.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testmandatory.ini \tswi\tuiscriptadaptors\scripts\testmandatory.ini
+data = \epoc32\winscw\c\tswi\swicaptests\scripts\swicaptests.script \tswi\swicaptests\scripts\swicaptests.script
+data = \epoc32\WINSCW\c\tswi\tautosigning\scripts\tautosigning.script \tswi\tautosigning\scripts\tautosigning.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testasynccaps.script \tswi\tuiscriptadaptors\scripts\testasynccaps.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testdiskfullemulator.script \tswi\tuiscriptadaptors\scripts\testdiskfullemulator.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testmandatory_HW.script \tswi\tuiscriptadaptors\scripts\testmandatory_HW.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testnoorphanedoverwrite.script \tswi\tuiscriptadaptors\scripts\testnoorphanedoverwrite.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testsystemcaps.script \tswi\tuiscriptadaptors\scripts\testsystemcaps.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testusercaps.script \tswi\tuiscriptadaptors\scripts\testusercaps.script 
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testusercaps_nousergrantcaps_hw.script \tswi\tuiscriptadaptors\scripts\testusercaps_nousergrantcaps_hw.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testusercaps_restrictedusercaps.script \tswi\tuiscriptadaptors\scripts\testusercaps_restrictedusercaps.script
+data = \epoc32\WINSCW\c\tswi\tuiscriptadaptors\scripts\testrucert_h4.script \tswi\tuiscriptadaptors\scripts\testrucert.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testrucert_h4.ini \tswi\tuiscriptadaptors\scripts\testrucert.ini
+
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple.xml \tswi\tuiscriptadaptors\scripts\simple.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_lang1.xml \tswi\tuiscriptadaptors\scripts\simple_lang1.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_question_false.xml \tswi\tuiscriptadaptors\scripts\simple_question_false.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_question_true.xml \tswi\tuiscriptadaptors\scripts\simple_question_true.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\allow_incompatible.xml \tswi\tuiscriptadaptors\scripts\allow_incompatible.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_drive_d.xml \tswi\tuiscriptadaptors\scripts\simple_drive_d.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_drive_e.xml \tswi\tuiscriptadaptors\scripts\simple_drive_e.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_drive_k.xml \tswi\tuiscriptadaptors\scripts\simple_drive_k.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drivenotpresent.xml \tswi\tuiscriptadaptors\scripts\drivenotpresent.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\badlangsel.xml \tswi\tuiscriptadaptors\scripts\badlangsel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\baddrivesel.xml \tswi\tuiscriptadaptors\scripts\baddrivesel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\gpl.xml \tswi\tuiscriptadaptors\scripts\gpl.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tstapp.xml \tswi\tuiscriptadaptors\scripts\tstapp.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\options1.xml \tswi\tuiscriptadaptors\scripts\options1.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\options2.xml \tswi\tuiscriptadaptors\scripts\options2.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\options3.xml \tswi\tuiscriptadaptors\scripts\options3.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\options123.xml \tswi\tuiscriptadaptors\scripts\options123.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\optionsnone.xml \tswi\tuiscriptadaptors\scripts\optionsnone.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\uninstall.xml \tswi\tuiscriptadaptors\scripts\uninstall.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_appinuse.xml \tswi\tuiscriptadaptors\scripts\simple_appinuse.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\uninstall_appinuse.xml \tswi\tuiscriptadaptors\scripts\uninstall_appinuse.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\simple_abortatsecuritywarning.xml \tswi\tuiscriptadaptors\scripts\simple_abortatsecuritywarning.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\handleinstall_setfinalcancel.xml \tswi\tuiscriptadaptors\scripts\handleinstall_setfinalcancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\handleinstall_updatecancel.xml \tswi\tuiscriptadaptors\scripts\handleinstall_updatecancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\InstallDialogCancel.xml \tswi\tuiscriptadaptors\scripts\InstallDialogCancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\SecurityDialogCancel.xml \tswi\tuiscriptadaptors\scripts\SecurityDialogCancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\OptionsDialogCancel.xml \tswi\tuiscriptadaptors\scripts\OptionsDialogCancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\Displaytextcancel.xml \tswi\tuiscriptadaptors\scripts\Displaytextcancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\Ocspdialogcancel.xml \tswi\tuiscriptadaptors\scripts\Ocspdialogcancel.xml 
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\Upgradedialogcancel.xml \tswi\tuiscriptadaptors\scripts\Upgradedialogcancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\uninstallcancel.xml \tswi\tuiscriptadaptors\scripts\uninstallcancel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\upgrade_cancel.xml \tswi\tuiscriptadaptors\scripts\upgrade_cancel.xml
+data = \epoc32\WINSCW\c\tswi\tautosigning\scripts\nograntcaps.xml \tswi\tautosigning\scripts\nograntcaps.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\upgrade_drive_e.xml \tswi\tuiscriptadaptors\scripts\upgrade_drive_e.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\devlangsel.xml \tswi\tuiscriptadaptors\scripts\devlangsel.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\devlangsel_2option.xml \tswi\tuiscriptadaptors\scripts\devlangsel_2option.xml
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrm.script \tswi\tuiscriptadaptors\scripts\testdrm.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrmasync.script \tswi\tuiscriptadaptors\scripts\testdrmasync.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrmFH.script \tswi\tuiscriptadaptors\scripts\testdrmFH.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrmCAF.script \tswi\tuiscriptadaptors\scripts\testdrmCAF.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdrm.ini \tswi\tuiscriptadaptors\scripts\testdrm.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\combined_delivery.ini \tswi\tuiscriptadaptors\scripts\drm\combined_delivery.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\import.ini \tswi\tuiscriptadaptors\scripts\drm\import.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\separate_delivery.ini \tswi\tuiscriptadaptors\scripts\drm\separate_delivery.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\content\simple.xml \tswi\tuiscriptadaptors\scripts\drm\content\simple.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\display_count_protected.xml \tswi\tuiscriptadaptors\scripts\drm\rights\display_count_protected.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\execute_count_protected.xml \tswi\tuiscriptadaptors\scripts\drm\rights\execute_count_protected.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\execute_date_protected.xml \tswi\tuiscriptadaptors\scripts\drm\rights\execute_date_protected.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\forwardlock.xml \tswi\tuiscriptadaptors\scripts\drm\rights\forwardlock.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\pending.xml \tswi\tuiscriptadaptors\scripts\drm\rights\pending.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\execute_count_expired.xml \tswi\tuiscriptadaptors\scripts\drm\rights\execute_count_expired.xml
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drm\rights\execute_date_expired.xml \tswi\tuiscriptadaptors\scripts\drm\rights\execute_date_expired.xml
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tsisstubhw.script \tswi\tuiscriptadaptors\scripts\tsisstub.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\test_pa_sapropagated_notdelete_armv5.script \tswi\tuiscriptadaptors\scripts\test_pa_sapropagated_notdelete.script
+#else
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tsisstub_delete.script \tswi\tuiscriptadaptors\scripts\tsisstub_delete.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpastub_armv5.script \tswi\tuiscriptadaptors\scripts\testpastub.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testsapropagatedstub_armv5.script \tswi\tuiscriptadaptors\scripts\testsapropagatedstub.script
+#endif
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\teststub_armv5.ini \tswi\tuiscriptadaptors\scripts\teststub.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tsisstubhw.ini \tswi\tuiscriptadaptors\scripts\tsisstub.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testappinuse.script \tswi\tuiscriptadaptors\scripts\testappinuse.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testappinuse.ini \tswi\tuiscriptadaptors\scripts\testappinuse.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\inc098114_h2.script \tswi\tuiscriptadaptors\scripts\inc098114_h2.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\inc098114.ini \tswi\tuiscriptadaptors\scripts\inc098114.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tsilent_h2.script \tswi\tuiscriptadaptors\scripts\tsilent_h2.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tsilent.ini \tswi\tuiscriptadaptors\scripts\tsilent.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswidaemonstub_h2.script \tswi\tuiscriptadaptors\scripts\tswidaemonstub_h2.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini \tswi\tuiscriptadaptors\scripts\tswidaemonstub.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\drives.ini \tswi\tuiscriptadaptors\scripts\drives.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testsilentinstall.sis \tswi\tuiscriptadaptors\scripts\testsilentinstall.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testsilentinstall.pkg \tswi\tuiscriptadaptors\scripts\testsilentinstall.pkg
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstall_patch2.sis \tswi\tuiscriptadaptors\scripts\testpreinstall_patch2.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstall_patch2.pkg \tswi\tuiscriptadaptors\scripts\testpreinstall_patch2.pkg
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstall_patch2_sp.sis \tswi\tuiscriptadaptors\scripts\testpreinstall_patch2_sp.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstall_patch2_sp.pkg \tswi\tuiscriptadaptors\scripts\testpreinstall_patch2_sp.pkg
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\switermination.script \tswi\tuiscriptadaptors\scripts\switermination.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\switermination.ini \tswi\tuiscriptadaptors\scripts\switermination.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\exenonasciichar.sis \tswi\tuiscriptadaptors\scripts\exenonasciichar.sis
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tpropagation_arm.script \tswi\tuiscriptadaptors\scripts\tpropagation_arm.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tpropagation.ini \tswi\tuiscriptadaptors\scripts\tpropagation.ini
+data = ABI_DIR\BUILD_DIR\tpropagationfile4b.exe \tswi\testexes\tpropagation\tpropagationfile4b.exe
+
+data = \epoc32\winscw\c\tswi\INC092755.SIS \tswi\INC092755.SIS
+data = \epoc32\winscw\c\tswi\INC092755-2.SIS \tswi\INC092755-2.SIS
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testmulti.ini \tswi\tuiscriptadaptors\scripts\testmulti.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testmulti.script \tswi\tuiscriptadaptors\scripts\testmulti.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tresetdevice_armv5.script \tswi\tuiscriptadaptors\scripts\tresetdevice.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tresetdevice_armv5.ini \tswi\tuiscriptadaptors\scripts\tresetdevice.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\cr956_test.script \tswi\tuiscriptadaptors\scripts\cr956_test.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\cr956_test.ini \tswi\tuiscriptadaptors\scripts\cr956_test.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\cr956_test_armv5.script \tswi\tuiscriptadaptors\scripts\cr956_test_armv5.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\cr956_test_armv5.ini \tswi\tuiscriptadaptors\scripts\cr956_test_armv5.ini
+
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testextension.script \tswi\tuiscriptadaptors\scripts\testextension.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testextension.ini \tswi\tuiscriptadaptors\scripts\testextension.ini
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.script \tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini \tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.ini
+
+// Test non removable
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testnonremovable.script \tswi\tuiscriptadaptors\scripts\testnonremovable.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testnonremovable.ini \tswi\tuiscriptadaptors\scripts\testnonremovable.ini
+
+// For CR1027 - Upgrade ROM using SA SIS
+data = \epoc32\winscw\c\tswi\teclipsing\data\CR1027ROMUpgradeStub.sis \system\install\CR1027ROMUpgradeStub.sis
+data = \epoc32\winscw\c\tswi\teclipsing\data\CR1122WildCardROMStub.sis \system\install\CR1122WildCardROMStub.sis
+file = ABI_DIR\BUILD_DIR\eclipsetest1.dll 	sys\bin\saromupgrade_library.dll
+file = ABI_DIR\BUILD_DIR\tsaromupgradeexe.exe 	sys\bin\saromupgrade_execute.exe
+
+// Putting a normal sis file as stub under system-install folder
+data = \epoc32\winscw\c\tswi\tsis\data\a_normal_sis_as_stub.sis \system\install\a_normal_sis_as_stub.sis
+
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt \cr1027test\cr1027_file1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt private\10273582\cr1027_config1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt private\10273582\cr1027_config3.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt private\10273582\cr1027_config4.txt
+
+// For preq1912
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt rucerttest\rucert_file1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt rucerttest\rucert_file2.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt rucerttest\rucert_file3.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt private\81000018\rucert_config1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt private\81000018\rucert_config2.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt private\81000018\rucert_config3.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt private\81000018\rucert_config4.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt private\81000018\rucert_config5.txt
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_x.sis \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_x.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_x.pkg \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_x.pkg
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_xdrive.sis \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_xdrive.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_xdrive.pkg \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_xdrive.pkg
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_e.sis \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_e.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_e.pkg \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_e.pkg
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_edrive.sis \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_edrive.sis
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_edrive.pkg \tswi\tuiscriptadaptors\scripts\testpreinstalled_sucert_edrive.pkg
+
+data = \epoc32\data\Z\system\non_stubed_system.txt   \system\non_stubed_system.txt
+data = \epoc32\data\Z\resources\non_stubed_resources.txt \resources\non_stubed_resources.txt
+
+data = \epoc32\winscw\c\tswi\teclipsing\data\sucertromstub.sis \system\install\sucertromstub.sis
+file = ABI_DIR\BUILD_DIR\sucertdll.dll 	sys\bin\sucertromupgrade_library.dll
+file = ABI_DIR\BUILD_DIR\sucerttestexe.exe 	sys\bin\sucertromupgrade_execute.exe
+file = ABI_DIR\BUILD_DIR\sucertcapcheck.exe 	sys\bin\sucertromupgrade_dllmorecaps.exe
+file = ABI_DIR\BUILD_DIR\non_stubbed_exe.exe 	sys\bin\non_stubbed_exe.exe
+
+#endif
+
+// developer mode certs test scripts, ini files and sis files
+// also config.txt for sim.tsy which goes in the root directory
+data = \epoc32\winscw\c\config.txt \tswi\tdevcerts\config.txt
+data = \epoc32\winscw\c\config2.txt \tswi\tdevcerts\config2.txt
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\aggregate.ini \tswi\tdevcerts\scripts\aggregate.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\corrupt.ini \tswi\tdevcerts\scripts\corrupt.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcert.ini \tswi\tdevcerts\scripts\devcert.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\match.ini \tswi\tdevcerts\scripts\match.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\mismatch.ini \tswi\tdevcerts\scripts\mismatch.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\ocsp.ini \tswi\tdevcerts\scripts\ocsp.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\backuprestore.ini \tswi\tdevcerts\scripts\backuprestore.ini
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_aggregate.script \tswi\tdevcerts\scripts\devcerts_aggregate.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_corrupt.script \tswi\tdevcerts\scripts\devcerts_corrupt.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_match.script \tswi\tdevcerts\scripts\devcerts_match.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_mismatch.script \tswi\tdevcerts\scripts\devcerts_mismatch.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_ocsp.script \tswi\tdevcerts\scripts\devcerts_ocsp.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_backuprestore.script \tswi\tdevcerts\scripts\devcerts_backuprestore.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_backup.script \tswi\tdevcerts\scripts\devcerts_backup.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcerts_restore.script \tswi\tdevcerts\scripts\devcerts_restore.script
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\simple.xml \tswi\tdevcerts\scripts\simple.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\devcert.xml \tswi\tdevcerts\scripts\devcert.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\simple_ocsp.xml \tswi\tdevcerts\scripts\simple_ocsp.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\scripts\uninstall.xml \tswi\tdevcerts\scripts\uninstall.xml
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_01.sis \tswi\tdevcerts\data\aggregate_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_02.sis \tswi\tdevcerts\data\aggregate_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_03.sis \tswi\tdevcerts\data\aggregate_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_04.sis \tswi\tdevcerts\data\aggregate_04.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_05.sis \tswi\tdevcerts\data\aggregate_05.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_06.sis \tswi\tdevcerts\data\aggregate_06.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_07.sis \tswi\tdevcerts\data\aggregate_07.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\aggregate_08.sis \tswi\tdevcerts\data\aggregate_08.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\corrupt_01.sis \tswi\tdevcerts\data\corrupt_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\corrupt_02.sis \tswi\tdevcerts\data\corrupt_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\corrupt_03.sis \tswi\tdevcerts\data\corrupt_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\corrupt_04.sis \tswi\tdevcerts\data\corrupt_04.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\devcertwarn.sis \tswi\tdevcerts\data\devcertwarn.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_01.sis \tswi\tdevcerts\data\match_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_02.sis \tswi\tdevcerts\data\match_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_03.sis \tswi\tdevcerts\data\match_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_04.sis \tswi\tdevcerts\data\match_04.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_05.sis \tswi\tdevcerts\data\match_05.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_06.sis \tswi\tdevcerts\data\match_06.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_07.sis \tswi\tdevcerts\data\match_07.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_08.sis \tswi\tdevcerts\data\match_08.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_09.sis \tswi\tdevcerts\data\match_09.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_10.sis \tswi\tdevcerts\data\match_10.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_11.sis \tswi\tdevcerts\data\match_11.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_12.sis \tswi\tdevcerts\data\match_12.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\match_13.sis \tswi\tdevcerts\data\match_13.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_01.sis \tswi\tdevcerts\data\mismatch_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_02.sis \tswi\tdevcerts\data\mismatch_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_03.sis \tswi\tdevcerts\data\mismatch_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_04.sis \tswi\tdevcerts\data\mismatch_04.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_05.sis \tswi\tdevcerts\data\mismatch_05.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_06.sis \tswi\tdevcerts\data\mismatch_06.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_07.sis \tswi\tdevcerts\data\mismatch_07.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_08.sis \tswi\tdevcerts\data\mismatch_08.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_09.sis \tswi\tdevcerts\data\mismatch_09.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\mismatch_10.sis \tswi\tdevcerts\data\mismatch_10.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\ocsp_01.sis \tswi\tdevcerts\data\ocsp_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\ocsp_02.sis \tswi\tdevcerts\data\ocsp_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\ocsp_03.sis \tswi\tdevcerts\data\ocsp_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\backuprestore_01.sis \tswi\tdevcerts\data\backuprestore_01.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\backuprestore_02.sis \tswi\tdevcerts\data\backuprestore_02.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\backuprestore_03.sis \tswi\tdevcerts\data\backuprestore_03.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\01_loader_capabilities.sis \tswi\tdevcerts\data\01_loader_capabilities.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\02_protected_vid_mismatch.sis \tswi\tdevcerts\data\02_protected_vid_mismatch.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\03_protected_vid_match.sis \tswi\tdevcerts\data\03_protected_vid_match.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\04_protpuid_constr_sid_mismatch.sis \tswi\tdevcerts\data\04_protpuid_constr_sid_mismatch.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\05_protpuid_nonconstr_sid_match.sis \tswi\tdevcerts\data\05_protpuid_nonconstr_sid_match.sis
+data = \epoc32\winscw\c\tswi\tdevcerts\data\armv5\06_nonprotpuid_constr_sid_match.sis \tswi\tdevcerts\data\06_nonprotpuid_constr_sid_match.sis
+
+// Legacy SIS file
+data = \epoc32\winscw\c\tswi\tsis\data\legacy.sis \tswi\tsis\data\legacy.sis
+
+// Corrupted length field
+data = \epoc32\winscw\c\tswi\tsis\data\corruptedlengthfield.sis  \tswi\tsis\data\corruptedlengthfield.sis
+
+// test sis files for DEF116847 Vulnerability of code signing applications to chosen-prefix collisions for MD5
+data = \epoc32\winscw\c\tswi\tsis\data\unsupported_signature_fake_rsa_sha1_md2.sis  \tswi\tsis\data\unsupported_signature_fake_rsa_sha1_md2.sis
+data = \epoc32\winscw\c\tswi\tsis\data\unsupported_signature_fake_rsa_sha1_md5.sis  \tswi\tsis\data\unsupported_signature_fake_rsa_sha1_md5.sis
+
+
+data = \epoc32\winscw\c\tswi\tsis\data\test_bufferoverflow.sis \tswi\tsis\data\test_bufferoverflow.sis
+
+// Security Manager test exports
+data = \epoc32\winscw\c\tswi\tsis\data\certstore\cacerts.dat \tswi\tsis\data\certstore\cacerts.dat
+data = \epoc32\winscw\c\tswi\tsis\data\certstore\certclients.dat \tswi\tsis\data\certstore\certclients.dat
+
+// daemon test files
+data = \epoc32\winscw\c\tswi\tdaemon\scripts\tdaemon.script \tswi\tdaemon\scripts\tdaemon.script
+data = \epoc32\winscw\c\tswi\tdaemon\scripts\tdaemon.ini \tswi\tdaemon\scripts\tdaemon.ini
+
+// test files for DEF053165
+data = \epoc32\winscw\c\tswi\DEF053165.perm \tswi\DEF053165.perm
+
+// backup and restore test files
+data = \epoc32\winscw\c\tswi\tbackuprestore\scripts\ini_armv5 \tswi\tbackuprestore\scripts\ini
+data = \epoc32\winscw\c\tswi\tbackuprestore\scripts\tbackuprestore_armv5.script \tswi\tbackuprestore\scripts\tbackuprestore.script
+data = \epoc32\winscw\c\tswi\tbackuprestore\scripts\tbackuprestoredrive_armv5.script \tswi\tbackuprestore\scripts\tbackuprestoredrive_armv5.script
+data = \epoc32\winscw\c\tswi\tbackuprestore\scripts\tbackuptrestore_exploratory.script \tswi\tbackuprestore\scripts\tbackuptrestore_exploratory.script
+data = \epoc32\winscw\c\tswi\tbackuprestore\data\00000000.reg	\tswi\tbackuprestore\data\00000000.reg
+  
+// trevocation test files
+#ifdef SYMBIAN_SWI_POST_INSTALL_REVOCATION
+data = \epoc32\winscw\c\tswi\trevocation\scripts\trevocation.ini \tswi\trevocation\scripts\trevocation.ini
+data = \epoc32\winscw\c\tswi\trevocation\scripts\trevocation.script \tswi\trevocation\scripts\trevocation.script
+data = \epoc32\winscw\c\tswi\trevocation\scripts\simple.xml \tswi\trevocation\scripts\simple.xml
+data = \epoc32\winscw\c\tswi\trevocation\scripts\simple_ocsp.xml \tswi\trevocation\scripts\simple_ocsp.xml
+data = \epoc32\winscw\c\tswi\trevocation\scripts\uninstall.xml \tswi\trevocation\scripts\uninstall.xml
+data = \epoc32\winscw\c\tswi\trevocation\scripts\test.ini \tswi\trevocation\scripts\test.ini
+data = \epoc32\winscw\c\tswi\trevocation\scripts\trust.ini \tswi\trevocation\scripts\trust.ini
+data = \epoc32\winscw\c\tswi\trevocation\scripts\truststatus.script \tswi\trevocation\scripts\truststatus.script
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\test_01.sis \tswi\trevocation\data\test_01.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\test_02.sis \tswi\trevocation\data\test_02.sis 
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\test_03.sis \tswi\trevocation\data\test_03.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\test_04.sis \tswi\trevocation\data\test_04.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\test_05.sis \tswi\trevocation\data\test_05.sis
+
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_01.sis \tswi\trevocation\data\ocsp_01.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_02.sis \tswi\trevocation\data\ocsp_02.sis 
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_03.sis \tswi\trevocation\data\ocsp_03.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_04.sis \tswi\trevocation\data\ocsp_04.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedval.sis \tswi\trevocation\data\certifiedsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedVeriSignval.sis \tswi\trevocation\data\certifiedsignedVeriSignval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\expresssignedval.sis \tswi\trevocation\data\expresssignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\allsignedval.sis \tswi\trevocation\data\allsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\selfsignedval.sis \tswi\trevocation\data\selfsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedrev.sis \tswi\trevocation\data\certifiedsignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedVeriSignrev.sis \tswi\trevocation\data\certifiedsignedVeriSignrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\expresssignedrev.sis \tswi\trevocation\data\expresssignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\allsignedrev.sis \tswi\trevocation\data\allsignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\selfsignedrev.sis \tswi\trevocation\data\selfsignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsprevocation.sis \tswi\trevocation\data\ocsprevocation.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsprevocation-sub1.sis \tswi\trevocation\data\ocsprevocation-sub1.sis
+#endif
+
+// DEF083628: Orphaned files in protected dirs can be overwritten by untrusted packages
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\overwriteprivate.script \tswi\tuiscriptadaptors\scripts\overwriteprivate.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\overwriteprivate_positive.script \tswi\tuiscriptadaptors\scripts\overwriteprivate_positive.script
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.ini \tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.script \tswi\tuiscriptadaptors\scripts\testuninstallation_arm_only.script
+
+#ifndef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\tsis\data\Root5CA\dsa_len1\priv-orphan_dsa_l1.sis \tswi\tsis\data\priv-orphan.sis attrib=w
+data = \epoc32\winscw\c\tswi\tsis\data\Root5CA\dsa_len1\priv-orphan2_dsa_l1.sis \tswi\tsis\data\priv-orphan2.sis attrib=w
+//DEF096906: Regression in SIS file functionality
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testuninstallation.ini \tswi\tuiscriptadaptors\scripts\testuninstallation.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testuninstallation.script \tswi\tuiscriptadaptors\scripts\testuninstallation.script
+
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embedA.sis \tswi\tsis\data\testuninstall_embedA.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embedB.sis \tswi\tsis\data\testuninstall_embedB.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embedC.sis \tswi\tsis\data\testuninstall_embedC.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embeddependD.sis \tswi\tsis\data\testuninstall_embeddependD.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embeddependE.sis \tswi\tsis\data\testuninstall_embeddependE.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_embeddependF.sis \tswi\tsis\data\testuninstall_embeddependF.sis
+//DEF102144: SWI fails in case of embedded or double dependency
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario1__b.sis \tswi\tsis\data\testuninstall_scenario1__b.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario1_a.sis \tswi\tsis\data\testuninstall_scenario1_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario1_c.sis \tswi\tsis\data\testuninstall_scenario1_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario2_a.sis \tswi\tsis\data\testuninstall_scenario2_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario3__b_sp.sis \tswi\tsis\data\testuninstall_scenario3__b_sp.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario3_a.sis \tswi\tsis\data\testuninstall_scenario3_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario4__b_pu.sis \tswi\tsis\data\testuninstall_scenario4__b_pu.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario4_c.sis \tswi\tsis\data\testuninstall_scenario4_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario5_a.sis \tswi\tsis\data\testuninstall_scenario5_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario5_c.sis \tswi\tsis\data\testuninstall_scenario5_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario6_a.sis \tswi\tsis\data\testuninstall_scenario6_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario6_c.sis \tswi\tsis\data\testuninstall_scenario6_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario7_a.sis \tswi\tsis\data\testuninstall_scenario7_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario7_c.sis \tswi\tsis\data\testuninstall_scenario7_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario8_a.sis \tswi\tsis\data\testuninstall_scenario8_a.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_scenario8_c.sis \tswi\tsis\data\testuninstall_scenario8_c.sis
+data = \epoc32\winscw\c\tswi\tsis\data\testuninstall_PDEF118284.sis \tswi\tsis\data\testuninstall_PDEF118284.sis
+data = \epoc32\winscw\c\tswi\tsis\data\armv5\testappinuse_root5.sis \tswi\tsis\data\testappinuse_root5.sis
+#else
+data = ABI_DIR\BUILD_DIR\runwait1.exe \tswi\tuiscriptadaptors\data\runwait1.exe
+data = ABI_DIR\BUILD_DIR\runwait2.exe \tswi\tuiscriptadaptors\data\runwait2.exe
+data = ABI_DIR\BUILD_DIR\runwait3.exe \tswi\tuiscriptadaptors\data\runwait3.exe
+data = ABI_DIR\BUILD_DIR\testplugin_102836C9.dll \tswi\tuiscriptadaptors\data\testplugin_102836C9.dll
+data = DATAZ_\plugin\testplugin_102836C9.rsc \tswi\tuiscriptadaptors\data\testplugin_102836C9.rsc
+#endif
+
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tdempaging.ini \tswi\tuiscriptadaptors\scripts\tdempaging.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tdempaging_armv5.script \tswi\tuiscriptadaptors\scripts\tdempaging_armv5.script		  
+
+// tuiscriptadaptors test files for preinstalled apps and patch (must be copied before install)
+// The exes need to be copied by tuiscriptadaptors using the testutilserver (which can write to sys\bin)
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\data\preinstalledinstall.txt \tswi\tuiscriptadaptors\data\preinstalledinstall.txt 
+data = ABI_DIR\BUILD_DIR\console_app_longrun_forpackage.exe \tswi\tuiscriptadaptors\data\preinstalled_console_app.exe
+data = ABI_DIR\BUILD_DIR\runtestexe2_forpackage.exe \tswi\tuiscriptadaptors\data\preinstalled_runtestexe2.exe
+
+
+// data for eclipsing/rom stub tests
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testeclipse.script \tswi\tuiscriptadaptors\scripts\testeclipse.script 
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testeclipse.ini \tswi\tuiscriptadaptors\scripts\testeclipse.ini
+
+data = \epoc32\winscw\c\tswi\teclipsing\data\eclispingteststub.sis \system\install\eclispingteststub.sis
+data = \epoc32\winscw\c\tswi\teclipsing\data\file1.txt \eclipsetest\file1.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt \eclipsetest\file2.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\file3.txt \eclipsetest\file3.txt
+data = \epoc32\winscw\c\tswi\teclipsing\data\romstub.sis \system\install\romstub.sis
+
+data = \epoc32\winscw\c\tswi\teclipsing\data\file2.txt \noteclipsable\noteclipsable.txt
+
+file = ABI_DIR\BUILD_DIR\eclipsetest1.dll	sys\bin\eclipsetest.dll
+file = ABI_DIR\BUILD_DIR\tswisidupgradeexe.exe	sys\bin\tswisidupgradeexe.exe
+
+
+#ifdef __H4HRP_OBY__
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testWithVFPHw.script \tswi\tuiscriptadaptors\scripts\testVFP.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testWithVFPHw.ini \tswi\tuiscriptadaptors\scripts\testVFP.ini
+#else
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testWithoutVFPHw.script \tswi\tuiscriptadaptors\scripts\testVFP.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testWithoutVFPHw.ini \tswi\tuiscriptadaptors\scripts\testVFP.ini
+#endif
+
+// tuiscriptadaptors test files for DEF094558: Overwriting orphaned executables blows up install process
+data = ABI_DIR\BUILD_DIR\tswiusergrantable_none.exe \tswi\testexes\tswiusergrantable_none.exe
+
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\1-1unsigneddata.sis \tswi\tautosigning\data\1-1unsigneddata.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\1-2unsignedexenocap.sis \tswi\tautosigning\data\1-2unsignedexenocap.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\1-3unsignedexedrmcap.sis \tswi\tautosigning\data\1-3unsignedexedrmcap.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\2-1selfsignedexeusercaps.sis \tswi\tautosigning\data\2-1selfsignedexeusercaps.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\2-2selfsigneddata.sis \tswi\tautosigning\data\2-2selfsigneddata.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\2-3selfsignedexenocap.sis \tswi\tautosigning\data\2-3selfsignedexenocap.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\2-4selfsignedexeuserdrmcaps.sis \tswi\tautosigning\data\2-4selfsignedexeuserdrmcaps.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-1signedusergrantable.sis \tswi\tautosigning\data\3-1signedusergrantable.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-2signeddrmfirst.sis \tswi\tautosigning\data\3-2signeddrmfirst.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-3signeddrmlast.sis \tswi\tautosigning\data\3-3signeddrmlast.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-4signeduserauthorised.sis \tswi\tautosigning\data\3-4signeduserauthorised.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-5signedallauthorised.sis \tswi\tautosigning\data\3-5signedallauthorised.sis
+data = \epoc32\WINSCW\C\tswi\tautosigning\armv5\3-6signeduserunauthorised.sis \tswi\tautosigning\data\3-6signeduserunauthorised.sis
+
+// tuiscriptadaptors test files for PDEF114642 Cannot install adorned filenames (eclipsing ROM files using adorned filenames /USE CASE3/)
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\adornedfilenames.script \tswi\tuiscriptadaptors\scripts\adornedfilenames.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\adornedfilenames.ini \tswi\tuiscriptadaptors\scripts\adornedfilenames.ini
+data = \epoc32\winscw\c\tswi\teclipsing\data\adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis \system\install\adornedfilenamestesting_35_stub_0x2baecad8_symbiantest1_dummydll4pkg_110.sis
+file=ABI_DIR\BUILD_DIR\adornedfilenametestingdll_10_0.dll	sys\bin\adornedfilenametestingdll3.dll
+file=ABI_DIR\BUILD_DIR\adornedfilenametestingdll_10_0.dll	sys\bin\adornedfilenametestingdll4.dll
+#endif
+
+// Cert store with no mandatory cert in if flag is not defined.
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\winscw\c\tswi\certstore\swicertstore.dat resource\swicertstore.dat attrib=r
+#endif
+
+ECOM_PLUGIN(dummy-swi-plugin.dll, dummy-swi-plugin.rsc)
+
+
+ECOM_PLUGIN(tmimerecog.dll, 1028191a.rsc)
+
+file=ABI_DIR\BUILD_DIR\netcontrol.exe		sys\bin\netcontrol.exe
+
+
+// asynccancel test files
+data = \epoc32\winscw\c\tswi\tasynccancel\scripts\asynccancel.script \tswi\tasynccancel\scripts\asynccancel.script
+data = \epoc32\winscw\c\tswi\tasynccancel\scripts\asynccancel.ini \tswi\tasynccancel\scripts\asynccancel.ini
+data = \epoc32\winscw\c\tswi\tasynccancel\data\toinstall.sis \tswi\tasynccancel\data\toinstall.sis
+data = \epoc32\winscw\c\tswi\tasynccancel\data\toinstall_ocsp.sis \tswi\tasynccancel\data\toinstall_ocsp.sis 
+data = \epoc32\winscw\c\tswi\tasynccancel\data\ocsp_01.sis \tswi\tasynccancel\data\ocsp_01.sis
+
+// Export test exes to subdirectories of sys\bin
+data = ABI_DIR\BUILD_DIR\tswisidcache1.exe sys\bin\test\testsidcache1.exe
+data = ABI_DIR\BUILD_DIR\tswisidcache2.exe sys\bin\test1\test2\testsidcache2.exe
+
+// dummy versioned dll to test ROM eclipsing DEF096830
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testeclipse.script sys\bin\testeclipse{00010001}.dll
+
+//SWI Observer Reference Plugin
+
+ECOM_PLUGIN(refswiobsplugin.dll, refswiobsplugin.rsc)
+
+#ifdef __SECURITY_NORMAL_SWICERTSTORE__
+data = \epoc32\data\z\tswi\tswiobserver\scripts\testswiobserver.ini \tswi\tswiobserver\scripts\testswiobserver.ini
+data = \epoc32\data\z\tswi\tswiobserver\scripts\testswiobserver.script \tswi\tswiobserver\scripts\testswiobserver.script
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\installexes.log \tswi\tswiobserver\scripts\data\installexes.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\log_resume_notification \tswi\tswiobserver\scripts\data\log_resume_notification
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\restore.log \tswi\tswiobserver\scripts\data\restore.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallexes.log \tswi\tswiobserver\scripts\data\uninstallexes.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallupgrade.log \tswi\tswiobserver\scripts\data\uninstallupgrade.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\uninstallupgradedpackage.log \tswi\tswiobserver\scripts\data\uninstallupgradedpackage.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradeaugmentation.log \tswi\tswiobserver\scripts\data\upgradeaugmentation.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradepackage.log \tswi\tswiobserver\scripts\data\upgradepackage.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\upgradepartial.log \tswi\tswiobserver\scripts\data\upgradepartial.log
+data = \epoc32\data\z\tswi\tswiobserver\scripts\data\corrupted \tswi\tswiobserver\scripts\data\corrupted
+#endif
+
+#ifdef __SECURITY_MANDATORY_SWICERTSTORE__
+// Tests SWI's resilience to a bad sis file in the ROM.
+// This causes failures in testeclipse.script so is not currently built into the NMCS ROM.
+data = \epoc32\data\z\system\install\testmalformed_stub.sis \system\install\testmalformed_stub.sis
+#endif //__SECURITY_MANDATORY_SWICERTSTORE__
+
+#endif //#ifndef __TSWI_IBY__

@@ -1,0 +1,56 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+;Languages
+&EN,260
+
+;Header
+#{"Testall"<169>"-EN", <169><169>"Testall-FR"<0xA9>}, (0x10000018), 1, 2, 3,IU,SH
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+;Dependencies
+(0x10000003), 1, 2, 3, {"Depend-EN", "Depend-FR"}
+
+;Embedded component
+@"sub.sis",(0x80000002)
+
+;Ordinary file to fixed drive
+{
+"text\englishfile.txt"
+"text\frenchfile.txt"
+}-"C:\Documents\InstTest\lang.txt"
+
+;Ordinary file to selected drive
+"text\file1.txt"-"!:\Documents\InstTest\file1.txt", FF
+
+;Display text files
+"text\textfilec.txt"-"", FT, TC
+"text\textfiles.txt"-"", FT, TS
+"text\file1.txt"-"!:\Documents\InstTest\skipfile.txt", FF
+"text\textfilea.txt"-"", FT, TA
+; UNICODE file
+"text\charsetu.txt"-"", FT, TC
+; UNICODE bigendian file
+"text\charsetbu.txt"-"", FT, TC
+
+;File which does not exist, (deleted when removed)
+""-"!:\Documents\InstTest\createdfile.txt", FN
+
+;Programs run/displayed when install
+"files\tbit.gif"-"!:\Documents\InstTest\tbit.gif", FR, RB, RW
+

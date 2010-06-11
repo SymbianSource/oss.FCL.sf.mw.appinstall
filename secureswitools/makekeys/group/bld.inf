@@ -1,0 +1,41 @@
+/*
+* Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Used with makesis to create digitally signed SIS files
+* MAKEKEYS component
+*
+*/
+
+
+/**
+ @file
+*/
+
+PRJ_PLATFORMS
+TOOLS
+
+PRJ_EXPORTS
+
+PRJ_MMPFILES
+#ifdef TOOLS
+#ifndef TOOLS2
+#ifdef MSVCDOTNET
+makefile ../src/makekeys.net.fil
+#else //!MSVCDOTNET
+makefile ../src/makekeys.fil
+#endif // MSVCDOTNET
+#endif // TOOLS2
+#endif // TOOLS
+
+PRJ_TESTMMPFILES

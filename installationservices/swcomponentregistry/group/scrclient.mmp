@@ -1,0 +1,46 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software Component Registry Client
+*
+*/
+
+
+TARGET				scrclient.dll
+TARGETTYPE			dll
+
+UID					0x0 0x10285BC1
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+USERINCLUDE			../inc
+USERINCLUDE			../inc_private
+USERINCLUDE	  		../../swinstallationfw/common/inc
+
+SOURCEPATH			../source/client
+
+SOURCE				scrclient.cpp
+SOURCE				screntries.cpp
+SOURCE				scrclientsubsessions.cpp appregentries.cpp appreginfo.cpp
+
+DEFFILE				../~/scrclient.def
+
+CAPABILITY			all
+
+VENDORID			0x70000001
+
+LIBRARY				euser.lib 
+LIBRARY 			estor.lib 
+LIBRARY				scsclient.lib ipcstream.lib efsrv.lib 
+SMPSAFE

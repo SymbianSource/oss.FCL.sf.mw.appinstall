@@ -1,0 +1,46 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Device supported language tests
+
+// Load Suite
+LOAD_SUITE tscr -SharedData
+SHARED_DATA z:\tusif\tscr\tscr.ini shared_data
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-INST-testcase-InterpretSIS-05
+//! @SYMTestCaseDesc 		Verify SCR for All positive scenario.
+//! @SYMPREQ  			PREQ1835
+//! @SYMTestStatus		Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Check SCR for All positive scenario.
+//! @SYMTestExpectedResults 	App info should be as expected in the database.
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+START_TESTCASE API-INST-testcase-InterpretSIS-05
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale c:\tswi\tinterpretsisinteg\scripts\ini.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView c:\tswi\tinterpretsisinteg\scripts\ini.ini ApplicationRegistrationData_MultipleApp_Locale
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile c:\tswi\tinterpretsisinteg\scripts\ini.ini db_file 
+
+END_TESTCASE API-INST-testcase-InterpretSIS-05

@@ -1,0 +1,157 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-SWI-SYNCCANCEL-I-0001
+//! @SYMTestCaseDesc 		Install package with embedded packages
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Install package and embedded packages, and try sync cancellation at all dialogs
+//! @SYMTestExpectedResults 	Package and embedded packages installed
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP 600 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SYNCCANCEL-I-0002
+//! @SYMTestCaseDesc 		Display a text file and install/uninstall it
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Display text file and install/uninstall it, and try sync cancellation at all dialogs
+//! @SYMTestExpectedResults 	Display text file dialog called, file [un]installed
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0002
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini testdisplayonly
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_testdisplayonly
+
+END_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SYNCCANCEL-I-0003
+//! @SYMTestCaseDesc 		Installs a file with a very large controller
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Installs a file with a very large controller, and try sync cancellation at all dialogs
+//! @SYMTestExpectedResults 	File installs sucessfully
+//! @SYMDevelopedForRelease 	Mike
+
+//# Commented out, as this takes 1.5 hours to fail on H2 currently.
+//# See "DEF066272: Intermittent testcancel failures on hardware"
+//#
+//# START_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0003
+//#
+//# RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+//# RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+//#
+//# END_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-LOGOTEST-0003
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-LOGOTEST-0003
+
+// Installation of a SIS file that contains a logo.
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini logo
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_logo
+
+END_TESTCASE API-SEC-LOGOTEST-0003
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SYNCCANCEL-I-0004
+//! @SYMTestCaseDesc 		Install simple SIS file with 1 signature
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled, and try sync cancellation at all dialogs
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Mike
+// Signed SIS tests
+
+START_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0004
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 240 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+END_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0004
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-SYNCCANCEL-I-0005
+//! @SYMTestCaseDesc 		Test upgrades
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Perform various upgrades, and try sync cancellation at all dialogs
+//! @SYMTestExpectedResults 	Files installed/uninstalled.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0005
+
+// Make sure none of the files we overwrite are present
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade2.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade3.txt
+RUN_UTILS DeleteFile c:\Documents\InstTest\upgrade4.txt
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_upgrade2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini upgrade_partial
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_upgrade
+
+END_TESTCASE API-SEC-SWI-SYNCCANCEL-I-0005
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-DEF053088-I-0003
+//! @SYMTestCaseDesc 		Cancel while updating the progress bar
+//! @SYMREQ 			REQ2681.5
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Cancel while updating the progress bar
+//! @SYMTestExpectedResults 	Files installed/uninstalled.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-SWI-DEF053088-I-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini manyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStepCancel z:\tswi\tuiscriptadaptors\scripts\testcancel.ini u_manyfiles
+
+END_TESTCASE API-SEC-SWI-DEF053088-I-0003
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+
+

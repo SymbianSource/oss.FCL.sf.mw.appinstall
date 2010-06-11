@@ -1,0 +1,693 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   This is a localisation file for IA Update Client
+*
+*/
+
+
+
+
+// CAPTION STRINGS
+
+// d: Application title for listview
+// l: list_single_large_graphic_pane_t1
+#define qtn_swupdate_caption_list "Application update"
+
+// d: Application title for grid
+// l: cell_app_pane_t1
+#define qtn_swupdate_caption_grid "App update"
+
+
+// d: Application title for listview for phase 2
+// l: list_single_large_graphic_pane_t1
+#define qtn_swupdate_caption_list_ph2 "Software update"
+
+// d: Application title for grid for phase 2
+// l: cell_app_pane_t1
+#define qtn_swupdate_caption_grid_ph2 "SW update"
+
+
+// STATUS PANE
+
+// d: Status pane title
+// d: Shown in Main view
+// l: title_pane_t2/opt12
+#define qtn_swupdate_title "Application update"
+
+
+// d: Status pane title for phase 2
+// d: Shown in Main view
+// l: title_pane_t2/opt12
+#define qtn_swupdate_title_ph2 "Software update"
+
+
+// d: Status pane title 
+// d: Shown in History view 
+// l: title_pane_t2/opt12
+#define qtn_swupdate_history_title "Update history"
+
+//d: Status pane title
+//d: Shown in Settings view
+//l: heading_pane_t1
+#define qtn_swupdate_setting_dialog_title  "Settings"
+
+// NAVI PANE
+
+// d: Navi pane text 
+// d: Shown when main view is active 
+// d: %0N is count of the selected updates 
+// d: %1N is total amount of available updates
+// d: %2N is total size of selected updates in kilobytes
+// l: navi_text_pane_t1
+#define qtn_swupdate_navipane_kilobyte "%0N/%1N (%2N kB)"
+
+// d: Navi pane text 
+// d: Shown when main view is active 
+// d: %0N is count of the selected updates 
+// d: %1N is total amount of available updates
+// d: %2N is total size of selected updates in megabytes
+// l: navi_text_pane_t1
+#define qtn_swupdate_navipane_megabyte "%0N/%1N (%2N MB)"
+
+// MAIN PANE
+
+// d: Text in main pane
+// d: Shown in main view when there are no updates available
+// l: main_list_empty_pane
+#define qtn_swupdate_empty_no_updates_available "Applications are up-to-date"
+
+// d: Text in main pane
+// d: Shown in update history view when there has been no updates done
+// l: main_list_empty_pane
+#define qtn_swupdate_no_updates_done_main_pane "No updates done"
+
+// d: Text in main pane
+// d: Shown in update main view when refreshing has failed for any reason
+// l: main_list_empty_pane
+#define qtn_swupdate_refresh_failed "Refreshing failed. Try again later."
+
+
+// WAITING NOTES
+
+// d: Text in waiting note
+// d: Note is shown during refresh of updates list
+// l: popup_note_wait_window
+#define qtn_swupdate_refreshing_update_list "Refreshing updates list"
+
+// d: Text in waiting note
+// d: Note is shown during downloading
+// d: %0U is the name of the application, 
+// d: %1N is sequence number of the current update 
+// d: %2N is total amount of the selected updates
+// l: popup_note_wait_window
+#define qtn_swupdate_downloading "Downloading\n%0U (%1N of %2N)"
+
+// d: Text in waiting note
+// d: Note is shown during installation
+// d: %0U is the name of the application, 
+// d: %1N is sequence number of the current update 
+// d: %2N is total amount of the selected updates
+// l: popup_note_wait_window
+#define qtn_swupdate_installing "Installing\n%0U (%1N of %2N)"
+
+// CONFIRMATION QUERYS
+
+// d: Text in confirmation query
+// d: Note is shown when automatic update check is disabled
+// l: popup_note_window
+#define qtn_swupdate_program_automatic_update_disabled "Available updates can be checked from Application update."
+
+// d: Text in confirmation query
+// d: Note is shown when automatic update check is disabled
+// l: popup_note_window
+#define qtn_swupdate_program_automatic_update_disabled_ph2 "Available updates can be checked from Software update."
+
+// d: Text in confirmation query
+// d: Note is shown when an update is available
+// l: popup_note_window
+#define qtn_swupdate_program_update "Application update is available from Nokia. Update?"
+
+// d: Text in confirmation query
+// d: Note is shown while roaming
+// l: popup_note_window
+#define qtn_swupdate_connect_to_server "Connect to the Nokia update service while roaming?"
+
+// d: Text in confirmation query
+// d: Note is shown when there is not enough memory available for all the selected updates.
+// l: popup_note_window
+#define qtn_swupdate_insufficient_memory "Insufficient memory. Free some memory and try again."
+
+// d: Text in confirmation query
+// d: Note is shown when started first time.
+// l: popup_note_window
+#define qtn_swupdate_turn_on_autoupd_checks "Turn on setting for Automatic update checks?"
+
+// d: Text in confirmation query
+// d: Note is shown when started first time and no updates available
+// l: popup_note_window
+#define qtn_swupdate_note_no_updates_available "Applications are up-to-date"
+
+// d: Text in confirmation query
+// d: Note is shown when critial and mandatory updates are available
+// l: popup_note_window
+#define qtn_swupdate_update_available "Recommended software update is available from Nokia"
+
+// d: Text in confirmation query
+// d: Note is shown in the first time boot
+// l: popup_note_window
+#define qtn_swupdate_features_available_query "Do you want to check the latest updates from Nokia?"
+
+// d: Text in confirmation query
+// d: Note is shown in the first time boot
+// l: popup_note_window
+#define qtn_swupdate_remind_later "Remind me later?"
+
+// d: Text in confirmation query
+// d: Note is shown when phone restart is needed after update(s)
+// l: popup_note_window
+#define qtn_swupdate_phone_restart_query "Phone restart needed. Restart now?"
+
+// d: Text in confirmation query
+// d: Note is shown when firmware is available
+// l: popup_note_window
+#define qtn_swupdate_startquery_name_and_size_mb "Update device software %U (%N MB)?"
+
+// d: Text in confirmation query
+// d: Note is shown when firmware is available
+// l: popup_note_window
+#define qtn_swupdate_startquery_name_and_size_kb "Update device software %U (%N kB)?"
+
+// d: Text in confirmation query
+// d: Note is shown when firmware is available
+// l: popup_note_window
+#define qtn_swupdate_startquery_name_nsu "Update device software %U ?"
+
+//d: Heading in Message query
+//d: Firmware dialog title 
+//l: heading_pane_t1
+#define qtn_swupdate_startquery_title "Device software"
+
+
+// SOFT KEYS
+
+// d:Command text associated to a softkey in the control pane.
+// d:Confirms operation.
+// l:control_pane_t1/opt7
+#define qtn_swupdate_now "Now"
+
+// d:Command text associated to a softkey in the control pane.
+// d:Confirms operation.
+// l:control_pane_t1/opt7
+#define qtn_swupdate_later "Later"
+
+// d:Command text associated to a softkey in the control pane.
+// d:Confirms operation.
+// l:control_pane_t1/opt7
+#define qtn_swupdate_softkey_decline "Decline"
+
+
+// d:Command text associated to a softkey in the soft notification.
+// d:Confirms operation.
+// l:control_pane_t1/opt7
+#define text_softkey_later "Later"
+
+//MAIN VIEW LIST
+
+// d: First row in double graphic style list
+// d: name and version number
+// d: %0U is the name of the update 
+// d: %1N is major version number
+// d: %2N is minor version number
+// l: None
+#define qtn_swupdate_name_with_version "%0U %1N.%2N" 
+
+
+// d: Second row in double graphic style list
+// d: Required update, size in kilobytes
+// d: %N is size in kilobytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_required_update_kb "Required (%N kB)" 
+
+// d: Second row in double graphic style list
+// d: Required update, size in megabytes
+// d: %N is size in megabytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_required_update_mb "Required (%N MB)" 
+
+// d: Second row in double graphic style list
+// d: Critical update, size in kilobytes
+// d: %N is size in kilobytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_critical_update_kb "Important (%N kB)" 
+
+// d: Second row in double graphic style list
+// d: Critical update, size in megabytes
+// d: %N is size in megabytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_critical_update_mb "Important (%N MB)" 
+
+// d: Second row in double graphic style list
+// d: Critical update, size in megabytes
+// d: %N is size in megabytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_critical_update_no_size "Important"
+
+// d: Second row in double graphic style list
+// d: Recommended update,size in kilobytes 
+// d: %N is size in kilobytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_recommended_update_kb "Recommended (%N kB)"
+
+// d: Second row in double graphic style list
+// d: Recommended update,size in megabytes 
+// d: %N is size in megabytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_recommended_update_mb "Recommended (%N MB)"
+
+// d: Second row in double graphic style list
+// d: Normal update, size in kilobytes
+// d: %N is size in kilobytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_normal_update_kb "Optional (%N kB)"
+
+// d: Second row in double graphic style list
+// d: Normal update, size in megabytes
+// d: %N is size in megabytes
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_normal_update_mb "Optional (%N MB)"
+
+// d: Text in confirmation query
+// d: Note is shown when firmware is selected with others.
+// l: popup_note_window
+#define qtn_swupdate_firmware_with_others "Device software must be updated separetely"
+
+
+// d: Text in confirmation query
+// d: Note is shown when firmware is selected with others.
+// l: popup_note_window
+#define qtn_swupdate_cannot_omit "This required update cannot be omitted"
+
+
+// d: First row in double graphic style list
+// d: Firmware
+// l: None
+#define qtn_swupdate_main_device_fw "DEVICE SOFTWARE" 
+
+
+//HISTORY VIEW LIST
+
+// d: Second row in double graphic style list
+// d: Shown in History view when update is successful
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_update_successful "Update successful %U"
+
+// d: Second row in double graphic style list
+// d: Shown in History view when download has been cancelled
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_download_cancelled "Download cancelled %U"
+
+// d: Second row in double graphic style list
+// d: Shown in History view when download has failed
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_download_failed "Download failed %U"
+
+// d: Second row in double graphic style list
+// d: Shown in History view when installation has been cancelled
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_installation_cancelled "Installation cancelled %U"
+
+// d: Second row in double graphic style list
+// d: Shown in History view when installation has failed
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_installation_failed "Installation failed %U"
+
+// d: Second row in double graphic style list
+// d: Shown in History view when update has failed because of insufficient memory
+// d: %U is formatted time or date
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_not_enough_memory "Not enough memory %U"
+
+//OPTIONS MENU
+
+// d: Command in options list.
+// d: Starts software updating
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_start_update "Start Update"
+
+// d: Command in options list.
+// d: Starts firmware updating with PC
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_update_with_pc "Update with PC"
+
+
+// d: Command in options list.
+// d: Shows Update details
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_update_details "Details"
+
+// d: Command in options list.
+// d: Shows Update history
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_update_history "History"
+
+// d: Command in options list.
+// d: Shows Settings view
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_settings "Settings"
+
+// d: Command in options list.
+// d: Shows Disclaimer view
+// l: list_single_pane_t1_cp2
+#define qtn_swupdate_option_disclaimer "Disclaimer"
+
+//TOUCH TOOLBAR
+
+// d: Command in permanent tool bar in main view
+// d: Starts software updating
+// l: popup_preview_text_window_t1
+#define qtn_swupdate_tb_tooltip_start_update "Start Update"
+
+// d: Command in permanent tool bar in main view
+// d: Shows Update detailsy
+// l: popup_preview_text_window_t1
+#define qtn_swupdate_tb_tooltip_details "Details"
+
+// d: Command in permanent tool bar in main view
+// d: Shows Update history
+// l: popup_preview_text_window_t1
+#define qtn_swupdate_tb_tooltip_history "History"
+
+// AUTOMATIC CHECKS MESSAGE QUERY
+
+//d: Header in message query
+//d: Automatic cheks query dialog heading text 
+//l: heading_pane_t1
+#define qtn_swupdate_allow_nw_title  "Application update"
+
+// d: Text in message query
+// d: Note is shown on the first launch of Software Update application.
+// l: popup_info_list_pane_t1  
+#define qtn_swupdate_allow_automatic_checks "Activate automatic network connections for information on updates from Nokia?"
+
+//d: Text in message query
+//d: text link
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_link_more_info "More info"
+
+
+// UPDATE STATUS DIALOG 
+
+//d: Header in message query
+//d: Update dialog heading text 
+//l: heading_pane_t1
+#define qtn_swupdate_results "Update results"
+
+//d: Text in message query
+//d: Count of succesful updates
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_successful "%N updates successful"
+
+//d: Text in message query
+//d: Count of cancelled updates
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_cancelled "%N updates cancelled"
+
+//d: Text in message query
+//d: Count of failed updates
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_failed "%N updates failed"
+
+//d: Text in message query
+//d: One succesful update
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_successful_one "1 update successful"
+
+//d: Text in message query
+//d: One cancelled update
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_cancelled_one "1 update cancelled"
+
+//d: Text in message query
+//d: One failed update
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_failed_one "1 update failed"
+
+//d: Text in message query
+//d: Error text because of file lock during installation
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_close_all "Close all applications and try again."
+
+//d: Text in message query
+//d: Update status dialog text link
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_text_link "View History"
+
+
+//
+// UPDATE DETAILS DIALOG
+//
+
+//d: Header in message query
+//d: Update details dialog heading text 
+//l: heading_pane_t1
+#define qtn_swupdate_details_title "Update details"
+
+//d: Sub title in message query
+//d: Header of name
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_application_name "Name:"
+
+//d: Sub title in message query
+//l: Header of description 
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_description "Description:"
+
+//d: Sub title in message query
+//d: Header of version number
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_version "Version number:"
+
+//d: Text in message query
+//d: Version number
+//d: %0N is major version number
+//d: %1N is minor version number
+//d: %2N is build number
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_version_format "%0N.%1N(%2N)"
+
+//d: Sub title in message query
+//d: Header of file size
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_file_size "File size"
+
+
+//d: Text in message query
+//d: file size 
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_size_kilobyte "%N kB"
+
+//d: Text in message query
+//d: file size 
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_size_megabyte "%N MB"
+
+
+//d: Text in message query
+//d: details of firmware 
+//l: popup_info_list_pane_t1 
+#define qtn_swupdate_fw_description_text "This update improves your device performance and brings you latest features."
+
+
+
+// DEPENDENCY HANDLING QUERY
+
+//d: Heading in Message query
+//d: Dependencies dialog title 
+//l: heading_pane_t1
+#define qtn_swupdate_dependency_title "Dependencies"
+
+// d: Text in message query
+// d: Note is shown when marked update which have one dependency.
+// l: popup_info_list_pane_t1  
+#define qtn_swupdate_dependency_mark_one "This update needs also \"%U\" for working"
+
+// d: Text in message query
+// d: Note is shown when unmarked update which have one dependency.
+// l: popup_info_list_pane_t1  
+#define qtn_swupdate_dependency_unmark_one "Update \"%U\" needs this update for working"
+
+// d: Text in message query
+// d: Note is shown when marked update which several dependencies.
+// l: popup_info_list_pane_t1  
+#define qtn_swupdate_dependency_mark_many "This update needs also updates %U for working"
+
+// d: Text in message query
+// d: Note is shown when unmarked update which several dependencies.
+// l: popup_info_list_pane_t1 
+#define qtn_swupdate_dependency_unmark_many "Updates %U need this update for working"
+
+// d: Text in message query
+// d: Note is shown when unmarked update which several dependencies.
+// l: popup_info_list_pane_t1 
+#define qtn_swupdate_separator ","
+
+
+//
+// SETTINGS 
+//
+
+//d: Sub title in setting list
+//d: Settings list item for default access point
+//l: list_setting_pane_t1
+#define qtn_swupdate_default_access_point "Default access point"
+
+//d: Sub title in setting list
+//d: Settings list item for automatic update checks
+//l: list_setting_pane_t1
+#define qtn_swupdate_automatic_update_checks "Automatic update checks"
+
+//d: Sub title in setting list
+//d: Settings list item for roaming warning
+//l: list_setting_pane_t1
+#define qtn_swupdate_roaming_warning "Roaming warning"
+
+//d: Setting item selection data
+//d: Default connection is in use
+//l: set_value_pane_t1
+#define qtn_swupdate_default_connection "Default connection"
+
+//d: Setting item selection data
+//d: Roaming warning is on
+//l: list_set_graphic_pane_t1
+#define qtn_swupdate_roaming_warn_on "On"
+
+//d: Setting item selection data
+//d: Roaming warning is off
+//l: list_set_graphic_pane_t1
+#define qtn_swupdate_roaming_warn_off "Off"
+
+//d: Setting item selection data
+//d: Automatic update check is enabled
+//l: list_set_graphic_pane_t1
+#define qtn_swupdate_checks_enabled "Enabled"
+
+//d: Setting item selection data
+//d: Automatic update check is disabled
+//l: list_set_graphic_pane_t1
+#define qtn_swupdate_checks_disabled "Disabled"
+
+//d: Setting item selection data
+//d: Automatic update check is enabled when not roaming
+//l: list_set_graphic_pane_t1
+#define qtn_swupdate_checks_no_when_roaming "In home network"
+
+//
+// DISCLAIMER 
+//
+
+//d: Heading in Message query
+//d: Disclaimer dialog title 
+//l: heading_pane_t1
+#define qtn_swupdate_nokia_agreement_title "Disclaimer"
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1
+#define qtn_swupdate_nokia_agreement_1_phase2 "This application allows you to download and use applications and services provided by Nokia or third parties. Service Terms and Privacy Policy will apply. Nokia will not assume any liability or responsibility for the availability or third party applications or services. Before using the third party application or service, read the applicable terms of use.\n\n"  
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1
+#define qtn_swupdate_nokia_agreement_2_phase2 "Use of this application involves transmission of data. Contact your network service provider for information about data transmission charges.\n\n"
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_3_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_4_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_5_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_6_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_7_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_8_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_9_phase2 ""
+
+//d: Text in Message query
+//d: Disclaimer text
+//l: popup_info_list_pane_t1  
+#define qtn_swupdate_nokia_agreement_copyright_phase2 "(c) %0N-%1N Nokia. All rights reserved."
+
+
+//
+// UPDATE WITH PC DIALOG
+//
+
+//d: Heading in Message query
+//d: Update PC dialog title 
+//l: heading_pane_t1
+#define qtn_swupdate_new_sw_title "New software"
+
+// d: Text in confirmation query
+// d: Note is shown when update firmware with PC
+// l: popup_info_list_pane_t1
+#define qtn_swupdate_info_nsu_1 "To update your phone with a PC please visit: www.nokia.com/softwareupdate.\n"
+
+// d: Text in confirmation query
+// d: Note is shown when update firmware with PC
+// l: popup_info_list_pane_t1
+#define qtn_swupdate_info_nsu_2 "Get new version for more, better, and newer."
+
+
+//
+// OVER THE AIR CONFIGURING
+//
+
+
+//d:Text in Message query
+//d:Text to be shown in DM UI when Software update application is configured on/off over the air
+//l:popup_info_list_pane_t1
+//r:5.2
+//
+#define qtn_swupdate_configuring_title  "Software update"
+
+
+

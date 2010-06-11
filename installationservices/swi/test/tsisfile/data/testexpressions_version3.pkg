@@ -1,0 +1,101 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; testexpressions_version3.pkg
+;
+; Test PKG for the following CR1125 Test Cases:
+; SEC-SWI-PKGVER-B004 - Installing a SIS containing VERSION conditions evaluating a package version range
+
+;Languages
+&EN
+
+;Header
+#{"testexpressions_version3"}, (0xE000B003), 1, 0, 0,TYPE=SA
+
+%{"Symbian Software Limited"}
+:"Symbian Software Limited"
+
+
+; ---------------------------
+; Case A
+; ---------------------------
+
+if VERSION(0xE1285B8E,>=,3,0,0) AND VERSION(0xE1285B8E,<=,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_a.txt";
+endif
+
+
+; ---------------------------
+; Case B
+; ---------------------------
+
+if VERSION(0xE1285B8E,>=,3,1,0) AND VERSION(0xE1285B8E,<=,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_b.txt";
+endif
+
+
+; ---------------------------
+; Case C
+; ---------------------------
+
+if VERSION(0xE1285B8E,>=,3,1,1) AND VERSION(0xE1285B8E,<=,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_c.txt";
+endif
+
+
+; ---------------------------
+; Case D
+; ---------------------------
+
+if VERSION(0xE1285B8F,>=,3,1,1) AND VERSION(0xE1285B8F,<=,4,3,3)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_d.txt";
+endif
+
+
+; ---------------------------
+; Case E
+; ---------------------------
+
+if VERSION(0xE1285B8F,>=,3,1,1) AND VERSION(0xE1285B8F,<=,4,3,2)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_e.txt";
+endif
+
+
+; ---------------------------
+; Case F
+; ---------------------------
+
+if VERSION(0xE1285B8F,>=,3,1,1) AND VERSION(0xE1285B8F,<=,4,3,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_f.txt";
+endif
+
+
+; ---------------------------
+; Case G
+; ---------------------------
+
+if VERSION(0xE1285B8D,>=,3,1,1) AND VERSION(0xE1285B8D,<=,4,3,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_g.txt";
+endif
+
+
+; ---------------------------
+; Case H
+; ---------------------------
+
+if VERSION(0xE1285B8D,>=,1,1,1) AND VERSION(0xE1285B8D,<=,4,3,1)
+	"files\option1.txt"-"c:\tswi\tpkgver\version3_case_h.txt";
+endif
+

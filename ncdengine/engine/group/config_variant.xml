@@ -1,0 +1,13 @@
+<!-- Preminet provider configuration -->
+<preminet-provider-config>
+
+	<!-- Provider type: vanilla/variant -->
+	<type>variant</type>
+	
+	<!-- Provider version -->
+	<version>1.0</version>
+	
+	<!-- Provider provisioning -->
+	<!-- <provisioning>PoronVisio</provisioning> -->
+	
+</preminet-provider-config>

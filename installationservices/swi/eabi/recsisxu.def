@@ -1,0 +1,6 @@
+EXPORTS
+	_Z24ImplementationGroupProxyRi @ 1 NONAME
+	KSisxRecognizerConst @ 2 NONAME DATA 1
+	_ZTIN3Swi18CApaSisxRecognizerE @ 3 NONAME ; #<TI>#
+	_ZTVN3Swi18CApaSisxRecognizerE @ 4 NONAME ; #<VT>#
+

@@ -1,0 +1,11 @@
+component	security_softwarecomponentregistry
+source	\sf\mw\appinstall\installationservices\swcomponentregistry
+source	\sf\mw\appinstall\installationservices\swinstallationfw\common
+binary	\sf\mw\appinstall\installationservices\swcomponentregistry\group	all
+exports	\sf\mw\appinstall\installationservices\swcomponentregistry\group
+notes_source	\component_defs\release.src
+
+ipr D 
+ipr T \sf\mw\appinstall\installationservices\swcomponentregistry\test
+ipr T \sf\mw\appinstall\installationservices\swcomponentregistry\sqlite_secure\test
+

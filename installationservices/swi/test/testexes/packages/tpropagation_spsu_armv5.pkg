@@ -1,0 +1,25 @@
+;
+; Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+&EN
+
+#{"SP SU  media propagation"}, (0x80273066), 1, 2, 5, TYPE=SP, RU
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+"osver.txt"-"e:\system\non_stubed_system_2.txt"
+"osver.txt"-"e:\resources\non_stubed_resources_2.txt"
+"osver.txt"-"e:\resources\new_resources.txt"

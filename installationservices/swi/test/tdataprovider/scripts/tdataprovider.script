@@ -1,0 +1,240 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT **** TDATAPROVIDER***
+LOAD_SUITE tdataprovider 
+
+//**********************************************************************************************************
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-DES-0001
+//! @SYMTestCaseDesc 		Attempt to read as much data as fits into the supplied descriptor.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CDesDataProvider class.
+//				2. Seek to a position in data inside the descriptor. 
+//				3. Read from the data source by passing the descriptor.
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-DES-0001
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA1
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA2
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA3
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA4
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA5
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA6
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA7
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA8
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA9
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA11
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA12
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA13
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA14
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA15
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA16
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA17
+
+END_TESTCASE API-SEC-SWI-NQP-DP-DES-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-DES-0002
+//! @SYMTestCaseDesc 		Read Data without seeking
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CDesDataProvider class.
+//				2. Read from the data source by passing the descriptor.
+//! @SYMTestExpectedResults 	Should return KErrNone on success as it should read data from start of 
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-DES-0002
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA18
+
+END_TESTCASE API-SEC-SWI-NQP-DP-DES-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-DES-0003
+//! @SYMTestCaseDesc 		Read specified amount of data
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CDesDataProvider class.
+//				2. Seek to a position in data inside the descriptor.
+//				3. Read from the data source by passing descriptor along with length to be 		
+//! @SYMTestExpectedResults 	Should return KErrNone on success 
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-DES-0003
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataA19
+
+END_TESTCASE API-SEC-SWI-NQP-DP-DES-0003
+
+
+//**********************************************************************************************************
+//**********************************************************************************************************
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-0001
+//! @SYMTestCaseDesc 		Creating instance by passing a filename.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CFileSisDataProvider class using CFileSisDataProvider::NewL	
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-0001
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB1
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-0003
+//! @SYMTestCaseDesc 		Attempt to read as much data as fits into the supplied descriptor.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CFileSisDataProvider class.
+//				2. Seek to a position in the SIS file. 
+//				3. Read from the SIS file by passing the descriptor.
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-0003
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB3
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB4
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB5
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB6
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB7
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB8
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB9
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB11
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB12
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB14
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB15
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB16
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB17
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-0003
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-0004
+//! @SYMTestCaseDesc 		Read Data without seeking
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CFileSisDataProvider class.
+//				2. Read from the SIS file by passing the descriptor.
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-0004
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB18
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-0004
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-0005
+//! @SYMTestCaseDesc 		Attempt to read the specified amount of data into a descriptor.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CFileSisDataProvider class.
+//				2. Seek to a position in the SIS file.
+//				3. Read from the SIS file by passing the descriptor along with length to be read.
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-0005
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB19
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-0005
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-0002
+//! @SYMTestCaseDesc 		Creating instance by passing a filehandle.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CFileSisDataProvider class using CFileSisDataProvider::NewL
+//! @SYMTestExpectedResults 	Should return KErrNone on success
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-0002
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataB20
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-0002
+
+
+//**********************************************************************************************************
+//**********************************************************************************************************
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-CAF-0002
+//! @SYMTestCaseDesc 		Read Data without opening content.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CCafSisDataProvider class.
+//                    		2. Read from the file by passing descriptor.
+//! @SYMTestExpectedResults 	Should leave as it internally calls DataL () function which leaves if instance of CData is not initialized.
+//! @SYMTestType 		CIT
+
+//  DEF101575: Defect in the SWI::DataProvider CCafSisDataProvider::DataL () When fixed the following test step should run  
+//START_TESTCASE API-SEC-SWI-NQP-DP-CAF-0002
+//RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataC1
+//END_TESTCASE API-SEC-SWI-NQP-DP-CAF-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-CAF-0001
+//! @SYMTestCaseDesc 		Try to open content twice successively using a filename.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CCafSisDataProvider class using CCafSisDataProvider::NewL (const TFileName& aFileName).
+//                    		2. Open the content object with the supplied TIntent.
+//                    		3. Again open the content object successively with the supplied TIntent.
+//! @SYMTestExpectedResults 	Should pass.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-CAF-0001
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataC2
+
+END_TESTCASE API-SEC-SWI-NQP-DP-CAF-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQP-DP-File-B-0003
+//! @SYMTestCaseDesc 		Seek into the content.
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		1. Create an instance of CCafSisDataProvider class.
+//                    		2. Get a read access on the content object based on evaluation of the supplied intent information to OpenDrmContentL ().
+//                    		3. Seek into the content.
+//! @SYMTestExpectedResults 	Should return KErrNone on success 
+//!SYMTestType 			CIT
+
+START_TESTCASE API-SEC-SWI-NQP-DP-File-B-0003
+
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataC3
+RUN_TEST_STEP 100 tdataprovider tdataproviderstep Z:\tswi\tdataprovider\scripts\tdataprovider.ini readdataC4
+
+END_TESTCASE API-SEC-SWI-NQP-DP-File-B-0003
+
+
+//**********************************************************************************************************
+//**********************************************************************************************************
+
+
+
+
+
+
+

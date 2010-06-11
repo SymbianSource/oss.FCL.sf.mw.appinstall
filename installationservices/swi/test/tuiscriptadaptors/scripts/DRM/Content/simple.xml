@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<drmfiles>
+	<content cid = "Sis">
+		<filename>
+		z:\tswi\tsis\data\simple.sis
+		</filename>
+		<name>
+		simpleDRMSis
+		</name>
+		<uniqueId>
+		\Sis
+		</uniqueId>
+		<stringattribute name="mimetype">
+		x-epoc/x-sisx-app
+		</stringattribute>
+	</content>
+</drmfiles>

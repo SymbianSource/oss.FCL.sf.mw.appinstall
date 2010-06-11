@@ -1,0 +1,22 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// localise03strings
+// Strings localised for German
+//
+
+rls_string STRING_r_example_short_caption "Hallo"
+rls_string STRING_r_example_caption "Hallo_Welt"
+rls_string STRING_r_example_iconfile "\\resource\\apps\\interpretsis_testcase03.mbm"
+rls_string STRING_r_view_268123123_caption "view_268123123_caption_ger"
+rls_string STRING_r_view_268123124_caption "view_268123124_caption_ger"

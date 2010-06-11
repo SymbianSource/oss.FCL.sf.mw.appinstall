@@ -1,0 +1,89 @@
+EXPORTS
+	_ZN3Swi12CApplication10SetInstallERKNS_3Sis11CControllerE @ 1 NONAME
+	_ZN3Swi12CApplication10SetUpgradeERKNS_3Sis11CControllerE @ 2 NONAME
+	_ZN3Swi12CApplication11RemoveFileLERKNS_27CSisRegistryFileDescriptionE @ 3 NONAME
+	_ZN3Swi12CApplication11SetPackageLERKNS_19CSisRegistryPackageE @ 4 NONAME
+	_ZN3Swi12CApplication12AddPropertyLERKNS0_9TPropertyE @ 5 NONAME
+	_ZN3Swi12CApplication13SetUninstallLERKNS_19CSisRegistryPackageE @ 6 NONAME
+	_ZN3Swi12CApplication13SetControllerE4TUid @ 7 NONAME
+	_ZN3Swi12CApplication13SetControllerERKNS_3Sis11CControllerE @ 8 NONAME
+	_ZN3Swi12CApplication15SetAugmentationERKNS_3Sis11CControllerE @ 9 NONAME
+	_ZN3Swi12CApplication17RunFileOnInstallLERKNS_3Sis16CFileDescriptionE5TChar @ 10 NONAME
+	_ZN3Swi12CApplication17SetPartialUpgradeERKNS_3Sis11CControllerE @ 11 NONAME
+	_ZN3Swi12CApplication18SetPreInstalledAppERKNS_3Sis11CControllerE @ 12 NONAME
+	_ZN3Swi12CApplication19RunFileOnUninstallLERKNS_27CSisRegistryFileDescriptionE @ 13 NONAME
+	_ZN3Swi12CApplication20SetPreInstalledPatchERKNS_3Sis11CControllerE @ 14 NONAME
+	_ZN3Swi12CApplication21DisplayFileOnInstallLERKNS_3Sis16CFileDescriptionE5TChar @ 15 NONAME
+	_ZN3Swi12CApplication23AddEmbeddedApplicationLEPS0_ @ 16 NONAME
+	_ZN3Swi12CApplication23DisplayFileOnUninstallLERKNS_27CSisRegistryFileDescriptionE @ 17 NONAME
+	_ZN3Swi12CApplication4NewLEv @ 18 NONAME
+	_ZN3Swi12CApplication5NewLCEv @ 19 NONAME
+	_ZN3Swi12CApplication8AddFileLERKNS_3Sis16CFileDescriptionE5TChar @ 20 NONAME
+	_ZN3Swi12CApplication8SetInROMEv @ 21 NONAME
+	_ZN3Swi15CUserSelections11SetOptionsLERK6RArrayIiE @ 22 NONAME
+	_ZN3Swi5CPlan11SetAppInfoLERKNS_8TAppInfoE @ 23 NONAME
+	_ZN3Swi5CPlan14SetApplicationEPNS_12CApplicationE @ 24 NONAME
+	_ZN3Swi5CPlan25AddInstallFileForProgressEx @ 25 NONAME
+	_ZN3Swi5CPlan26SetApplicationInformationLERK7TDesC16S3_RK8TVersion @ 26 NONAME
+	_ZN3Swi5CPlan27AddUninstallFileForProgressEv @ 27 NONAME
+	_ZN3Swi5CPlan4NewLEv @ 28 NONAME
+	_ZN3Swi5CPlanD0Ev @ 29 NONAME
+	_ZN3Swi5CPlanD1Ev @ 30 NONAME
+	_ZN3Swi5CPlanD2Ev @ 31 NONAME
+	_ZNK3Swi12CApplication10FilesToAddEv @ 32 NONAME
+	_ZNK3Swi12CApplication10PropertiesEv @ 33 NONAME
+	_ZNK3Swi12CApplication11ControllerLEv @ 34 NONAME
+	_ZNK3Swi12CApplication11IsUninstallEv @ 35 NONAME
+	_ZNK3Swi12CApplication13FilesToRemoveEv @ 36 NONAME
+	_ZNK3Swi12CApplication14IsAugmentationEv @ 37 NONAME
+	_ZNK3Swi12CApplication16IsPartialUpgradeEv @ 38 NONAME
+	_ZNK3Swi12CApplication17IsPreInstalledAppEv @ 39 NONAME
+	_ZNK3Swi12CApplication19FilesToRunOnInstallEv @ 40 NONAME
+	_ZNK3Swi12CApplication19IsPreInstalledPatchEv @ 41 NONAME
+	_ZNK3Swi12CApplication20EmbeddedApplicationsEv @ 42 NONAME
+	_ZNK3Swi12CApplication21FilesToRunOnUninstallEv @ 43 NONAME
+	_ZNK3Swi12CApplication23FilesToDisplayOnInstallEv @ 44 NONAME
+	_ZNK3Swi12CApplication25FilesToDisplayOnUninstallEv @ 45 NONAME
+	_ZNK3Swi12CApplication7IsInROMEv @ 46 NONAME
+	_ZNK3Swi12CApplication8PackageLEv @ 47 NONAME
+	_ZNK3Swi12CApplication9IsInstallEv @ 48 NONAME
+	_ZNK3Swi12CApplication9IsUpgradeEv @ 49 NONAME
+	_ZNK3Swi5CPlan12ApplicationLEv @ 50 NONAME
+	_ZNK3Swi5CPlan21FinalProgressBarValueEv @ 51 NONAME
+	_ZNK3Swi5CPlan8AppInfoLEv @ 52 NONAME
+	_ZTIN3Swi12CApplicationE @ 53 NONAME ; #<TI>#
+	_ZTIN3Swi5CPlanE @ 54 NONAME ; #<TI>#
+	_ZTVN3Swi12CApplicationE @ 55 NONAME ; #<VT>#
+	_ZTVN3Swi5CPlanE @ 56 NONAME ; #<VT>#
+	_ZN3Swi12CApplication15AddSisStubFileLERKNS_27CSisRegistryFileDescriptionE @ 57 NONAME
+	_ZNK3Swi12CApplication12CanPropagateEv @ 58 NONAME
+	_ZNK3Swi12CApplication9StubDriveEv @ 59 NONAME
+	_ZN3Swi12CApplication18SetPreInstalledAppEv @ 60 NONAME
+	_ZN3Swi12CApplication20SetPreInstalledPatchEv @ 61 NONAME
+	_ZN3Swi12CApplication11RemoveFileLERK7TDesC16 @ 62 NONAME
+	_ZN3Swi5CPlan23RunFilesBeforeShutdownLERKNS_27CSisRegistryFileDescriptionE @ 63 NONAME
+	_ZNK3Swi5CPlan24FilesToRunBeforeShutdownEv @ 64 NONAME
+	_ZN3Swi12CApplication21SetInstallSuCertBasedEv @ 65 NONAME
+	_ZNK3Swi12CApplication20IsInstallSuCertBasedEv @ 66 NONAME
+	_ZN3Swi12CApplication18SkipFileOnInstallLERKNS_3Sis16CFileDescriptionE5TChar @ 67 NONAME
+	_ZN3Swi12CApplication8AddFileLERKNS_27CSisRegistryFileDescriptionE @ 68 NONAME
+	_ZNK3Swi12CApplication20FilesToSkipOnInstallEv @ 69 NONAME
+	_ZN3Swi12CApplication15SetDrmProtectedEi @ 70 NONAME
+	_ZNK3Swi12CApplication14IsDrmProtectedEv @ 71 NONAME
+	_ZN3Swi5CPlan19ResetAppArcRegFilesEv @ 72 NONAME
+	_ZN3Swi5CPlan20RunFileAfterInstallLERKNS_3Sis16CFileDescriptionE5TChari @ 73 NONAME
+	_ZNK3Swi5CPlan14AppArcRegFilesEv @ 74 NONAME
+	_ZNK3Swi5CPlan15ContainsPluginsEv @ 75 NONAME
+	_ZNK3Swi5CPlan22FilesToRunAfterInstallEv @ 76 NONAME
+	_ZN3Swi5CPlan17AddAppArcRegFileLERK7TDesC16 @ 77 NONAME
+	_ZN3Swi5CPlan18SetContainsPluginsEi @ 78 NONAME
+	_ZN3Swi12CApplication26GetMatchingDeviceLanguagesEv @ 79 NONAME
+	_ZN3Swi12CApplication29CopyDeviceSupportedLanguagesLERK6RArrayIiE @ 80 NONAME
+	_ZN3Swi12CApplication32PopulateMatchingDeviceLanguagesLEi @ 81 NONAME
+	_ZNK3Swi12CApplication24IsDeviceMatchingLanguageEi @ 82 NONAME
+	_ZN3Swi12CApplication12SetSisHelperERKNS_10RSisHelperE @ 83 NONAME
+	_ZN3Swi12CApplication12GetSisHelperEv @ 84 NONAME
+	_ZN3Swi5CPlan15SetAffectedAppsER6RArrayINS_14TAppUpdateInfoEE @ 85 NONAME ABSENT
+	_ZN3Swi5CPlan17ResetAffectedAppsEv @ 86 NONAME ABSENT
+	_ZNK3Swi5CPlan15GetAffectedAppsER6RArrayINS_14TAppUpdateInfoEE @ 87 NONAME ABSENT
+	

@@ -1,0 +1,67 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification file for AppMngr2 GS Installed plugin
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET                  appmngr2gsinstalledplugin.dll
+TARGETTYPE              PLUGIN
+UID                     0x10009D8D 0x10282D8E
+
+CAPABILITY              CAP_ECOM_PLUGIN
+VENDORID                VID_DEFAULT
+
+SOURCEPATH              ../GSInstalledPlugin/src
+SOURCE                  appmngr2gsinstalledplugin.cpp
+SOURCE                  appmngr2gsinstalledpluginmain.cpp
+
+START RESOURCE          ../data/10282d8e.rss
+TARGET                  appmngr2gsinstalledplugin.rsc
+TARGETPATH              ECOM_RESOURCE_DIR
+END
+
+START RESOURCE          ../data/appmngr2gsinstalledpluginrsc.rss
+HEADER
+TARGETPATH              RESOURCE_FILES_DIR
+LANGUAGE_IDS
+END
+
+USERINCLUDE             ../inc
+USERINCLUDE             ../GSInstalledPlugin/inc
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY                 euser.lib                   // Base
+LIBRARY                 ecom.lib                    // ECom
+LIBRARY                 gsecomplugin.lib            // CGSPluginInterface
+LIBRARY                 apparc.lib                  // App Framework
+LIBRARY                 cone.lib                    // App Framework
+LIBRARY                 apgrfx.lib                  // App Framework (RApaLsSession)
+LIBRARY                 avkon.lib                   // S60 UI Framework
+LIBRARY                 eikcoctl.lib                // S60 UI Framework
+LIBRARY                 eikcore.lib                 // S60 UI Framework
+LIBRARY                 efsrv.lib                   // File Server
+LIBRARY                 ws32.lib                    // Window Server
+LIBRARY                 bafl.lib                    // BaflUtils
+LIBRARY                 commonengine.lib            // RConeResourceLoader
+LIBRARY                 aknskins.lib                // AknsUtils
+
+DEBUGLIBRARY            flogger.lib                 // RFileLogger
+
+SMPSAFE
+

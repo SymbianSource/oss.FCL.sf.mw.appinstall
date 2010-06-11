@@ -1,0 +1,3 @@
+# A single secure id that should never match
+[sid_list]
+sid1=0x0000C0DE

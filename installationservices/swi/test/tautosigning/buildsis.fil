@@ -1,0 +1,37 @@
+MAKEDATA :
+!IF "$(PLATFORM)" == "GCCXML" || "$(PLATFORM)" == "TOOLS"
+	cd
+	echo ----------------
+	echo  Do nothing ...
+	echo ----------------
+!ELSE
+	cd
+	echo ---------------------------
+	echo Building autosigning sis files...
+	echo ---------------------------
+
+	perl buildsis.pl $(PLATFORM) $(CFG)
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+BLD : DO_NOTHING
+RELEASABLES : DO_NOTHING
+
+SAVESPACE : BLD
+
+FINAL : MAKEDATA
+
+CLEAN :
+	perl buildsis.pl -c $(PLATFORM) $(CFG)
+

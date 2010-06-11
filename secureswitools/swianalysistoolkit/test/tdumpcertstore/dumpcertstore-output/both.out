@@ -1,0 +1,70 @@
+\epoc32\winscw\c\resource\swicertstore\dat\00000001: Is not a dat file 
+or is a corrupt file
+
+Merged ROM Based and C:BASED Writable Certstore 
+
+
+[SymbianTestRootCADiffSerial]
+
+file=SymbianTestRootCADiffSerial.der
+capability= TCB
+capability= CommDD
+capability= PowerMgmt
+capability= MultimediaDD
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= TrustedUI
+capability= ProtServ
+capability= DiskAdmin
+capability= NetworkControl
+capability= AllFiles
+capability= SwEvent
+capability= NetworkServices
+capability= LocalServices
+capability= ReadUserData
+capability= WriteUserData
+capability= Location
+capability= SurroundingsDD
+capability= UserEnvironment
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=1
+
+
+[Root5CA]
+
+file=Root5CA.der
+application=SWInstall
+Mandatory=1
+
+
+[SymbianTestRSACA]
+
+file=SymbianTestRSACA.der
+capability= TCB
+capability= CommDD
+application=SWInstall
+Mandatory=1
+
+
+[SymbianTestChainRSACA]
+
+file=SymbianTestChainRSACA.der
+capability= DRM
+capability= NetworkServices
+application=SWInstall
+application=SWInstallOCSP
+Mandatory=0
+
+
+[first]
+
+file=first.der
+capability= ReadDeviceData
+capability= WriteDeviceData
+capability= DRM
+capability= AllFiles
+application=SWInstall
+Mandatory=0
+

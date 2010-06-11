@@ -1,0 +1,287 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// This script tests the installation to a removable media drive and
+// verifies the correct creation of a SIS stub on that drive
+
+// This script requires the SWIPolicy AllowPackagePropagate to be true in order to pass
+
+PRINT Run Removable media SIS stub installation test
+PRINT SWIPolicy AllowPackagePropagate must be set to true for these tests to pass
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-CreateAndInstallSimpleStub-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-CreateAndInstallSimpleStub-0001
+
+// make sure any previous installation of simple.sis is removed
+// X: is the default removable drive on Symbian OS
+RUN_UTILS DeleteFile x:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile x:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile x:\80000001_0.sis
+RUN_UTILS DeleteFile x:\file1.txt
+
+/// Simple file installation from a compressed SIS file
+// Install the full SIMPLE.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS CopyFile x:\private\10202dce\80000001_0.sis x:\80000001_0.sis
+RUN_UTILS CopyFile x:\Documents\InstTest\file1.txt x:\file1.txt
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_simple
+
+// Now put the file1.txt back in place and install the copy of the stub that was created earlier
+// Need to install the copy of the stub from x:\ because tuiscriptadaptors cant access the \private\10202dce\ directroy
+RUN_UTILS MkDir x:\Documents\
+RUN_UTILS MkDir x:\Documents\InstTest\
+RUN_UTILS CopyFile x:\file1.txt x:\Documents\InstTest\file1.txt 
+RUN_UTILS DeleteFile x:\file1.txt
+// Copy stub back into position
+RUN_UTILS MkDir x:\private\
+RUN_UTILS MkDir x:\private\10202dce\
+RUN_UTILS CopyFile x:\80000001_0.sis x:\private\10202dce\80000001_0.sis 
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simplestub
+
+// Uninstall simple stub
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_stub
+
+// Remove the copy of the sis stub that we created
+RUN_UTILS DeleteFile x:\80000001_0.sis
+
+// Stub files are left on X:, delete them
+RUN_UTILS DeleteFile x:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile x:\private\10202dce\80000001_0.sis
+
+END_TESTCASE API-SEC-CreateAndInstallSimpleStub-0001
+
+
+//! @SYMTestCaseID		API-SEC-InstallOnDriveCNoStub-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-InstallOnDriveCNoStub-0001
+
+/// Install the full SIMPLE.SIS file on Drive C
+// Since C is not a removable drive no stub should be created
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simplec
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_simple
+
+END_TESTCASE API-SEC-InstallOnDriveCNoStub-0001
+
+
+//! @SYMTestCaseID		API-SEC-CreateAndInstallEmbeddedStub-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-CreateAndInstallEmbeddedStub-0001
+
+/// Simple file installation from a compressed SIS file
+// make sure any previous installation of simple.sis is removed
+// X: is the default removable drive on Symbian OS
+RUN_UTILS DeleteFile x:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile x:\private\10202dce\8000001b_0.sis
+RUN_UTILS DeleteFile x:\8000001b_0.sis
+RUN_UTILS DeleteFile x:\file1.txt
+
+// Install the full SIMPLE.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini embed1
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS CopyFile x:\private\10202dce\8000001b_0.sis x:\8000001b_0.sis
+RUN_UTILS CopyFile x:\Documents\InstTest\file1.txt x:\file1.txt
+RUN_UTILS CopyFile x:\Documents\InstTest\file2.txt x:\file2.txt
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_embed1
+
+// Now put the file1.txt back in place and install the stub that was created earlier
+// Need to install the stub from x:\ because tuiscriptadaptors cant access the \private\10202dce\ directroy
+RUN_UTILS MkDir x:\Documents\
+RUN_UTILS MkDir x:\Documents\InstTest\
+RUN_UTILS CopyFile x:\file1.txt x:\Documents\InstTest\file1.txt 
+RUN_UTILS CopyFile x:\file2.txt x:\Documents\InstTest\file2.txt 
+RUN_UTILS DeleteFile x:\file1.txt
+
+// Copy stub back into position
+RUN_UTILS MkDir x:\private\
+RUN_UTILS MkDir x:\private\10202dce\
+RUN_UTILS CopyFile x:\8000001b_0.sis x:\private\10202dce\8000001b_0.sis 
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini embed1stub
+
+// Uninstall simple stub
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_embedstub
+
+// Stub files are left on X:, delete them
+RUN_UTILS DeleteFile x:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\file2.txt
+RUN_UTILS DeleteFile x:\private\10202dce\8000001b_0.sis
+
+// Remove the copy of the SIS stub we created
+RUN_UTILS DeleteFile x:\8000001b_0.sis
+
+END_TESTCASE API-SEC-CreateAndInstallEmbeddedStub-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UpgradedStub-0001
+//! @SYMTestCaseDesc 		Upgrade propagatable package and attempt to reinstall from stub sis file
+//! @SYMDEF 			DEF088493
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Upgraded stub successfully installs
+//! @SYMTestExpectedResults 	Successful install.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-UpgradedStub-0001
+
+// make sure any previous installation of testupgrade sis file is removed
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade2.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade3.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade4.txt
+RUN_UTILS DeleteFile x:\private\10202dce\811111FD_0.sis
+RUN_UTILS DeleteFile x:\upgrade1.txt
+RUN_UTILS DeleteFile x:\upgrade4.txt
+RUN_UTILS DeleteFile x:\811111FD_0.sis
+
+// Install the full testupgrade_base.SIS file and upgrade it
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini testupgrade_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini testupgrade_upgrade
+
+// Copy the stub that was created and the installed files
+RUN_UTILS CopyFile x:\Documents\InstTest\upgrade1.txt x:\upgrade1.txt
+RUN_UTILS CopyFile x:\Documents\InstTest\upgrade4.txt x:\upgrade4.txt
+RUN_UTILS CopyFile x:\private\10202dce\811111FD_0.sis x:\811111FD_0.sis
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_testupgrade
+
+// Now put the target files back in place and install the copy of the stub that was created earlier
+RUN_UTILS MkDir x:\Documents\
+RUN_UTILS MkDir x:\Documents\InstTest\
+RUN_UTILS CopyFile x:\upgrade1.txt x:\Documents\InstTest\upgrade1.txt
+RUN_UTILS CopyFile x:\upgrade4.txt x:\Documents\InstTest\upgrade4.txt
+// Copy stub back into position
+RUN_UTILS MkDir x:\private\
+RUN_UTILS MkDir x:\private\10202dce\
+RUN_UTILS CopyFile x:\811111FD_0.sis x:\private\10202dce\811111FD_0.sis
+RUN_UTILS DeleteFile x:\upgrade1.txt
+RUN_UTILS DeleteFile x:\upgrade4.txt
+RUN_UTILS DeleteFile x:\811111FD_0.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini testupgradestub
+
+// Uninstall simple stub
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_testupgradestub
+
+// Remove the copy of the sis stub that we created
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade1.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\upgrade4.txt
+RUN_UTILS DeleteFile x:\private\10202dce\811111FD_0.sis
+
+END_TESTCASE API-SEC-UpgradedStub-0001
+
+
+//! @SYMTestCaseID 		API-SEC-OrphanedStubSurvivesRollback-0001
+//! @SYMTestCaseDesc 		Make sure that a stub sis file removed during an install is recovered on rollback 
+//! @SYMDEF 			DEF083624
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install a package which replaces a stub sis file but fails to complete, check that the stub sis is
+//! 				recovered on rollback.  Also check that a successful install replaces the stub correctly.
+//! @SYMTestExpectedResults 	Replaced stub sis recovered on rollback, successful install replaces it correctly.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-OrphanedStubSurvivesRollback-0001
+
+// Create orphaned fake stub sis and controller file
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini setuporphanstubandcontroller
+
+// Attempt an install where the orphaned controller file will be held open so that install fails with KErrInUse and rolls back
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simple_hold_controllerfile
+
+// Perform an install which should complete successfully, replacing the orphaned stub and controller file.
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS CopyFile x:\private\10202dce\80000001_0.sis x:\80000001_0.sis
+RUN_UTILS CopyFile x:\Documents\InstTest\file1.txt x:\file1.txt
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_simple
+
+// Put file1.txt and the stub back in place
+RUN_UTILS MkDir x:\Documents\
+RUN_UTILS MkDir x:\Documents\InstTest\
+RUN_UTILS CopyFile x:\file1.txt x:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile x:\file1.txt
+// Copy stub back into position
+RUN_UTILS MkDir x:\private\
+RUN_UTILS MkDir x:\private\10202dce\
+RUN_UTILS CopyFile x:\80000001_0.sis x:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile x:\80000001_0.sis
+
+// Make sure that we can re-install from the stub (so it must be the correct version).
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini simplestub
+
+// Uninstall simple stub
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini u_stub
+
+RUN_UTILS DeleteFile x:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile x:\Documents\InstTest\file1.txt
+
+END_TESTCASE API-SEC-OrphanedStubSurvivesRollback-0001
+
+START_TESTCASE API-INST-PREQ2344-SWI-19
+// Make sure any previous installation of devlangsupport.sis is removed
+RUN_UTILS DeleteFile x:\Documents\InstTest\devlangsup_en.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\devlangsup_fr.txt
+RUN_UTILS DeleteFile x:\private\10202dce\88000100_0.sis
+RUN_UTILS DeleteFile x:\88000100_0.sis
+RUN_UTILS DeleteFile x:\devlangsup_en.txt
+RUN_UTILS DeleteFile x:\devlangsup_fr.txt
+// Install the device language supported sis file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini install_package
+// Copy the stub and files that was created
+RUN_UTILS CopyFile x:\private\10202dce\88000100_0.sis x:\88000100_0.sis
+RUN_UTILS CopyFile x:\Documents\InstTest\devlangsup_en.txt x:\devlangsup_en.txt
+RUN_UTILS CopyFile x:\Documents\InstTest\devlangsup_fr.txt x:\devlangsup_fr.txt
+// Uninstall the package
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini uninstall_package
+// Now put the files back in place and install the copy of the stub that was created earlier
+RUN_UTILS MkDir x:\Documents\
+RUN_UTILS MkDir x:\Documents\InstTest\
+RUN_UTILS CopyFile x:\devlangsup_en.txt x:\Documents\InstTest\devlangsup_en.txt
+RUN_UTILS CopyFile x:\devlangsup_fr.txt x:\Documents\InstTest\devlangsup_fr.txt 
+RUN_UTILS DeleteFile x:\devlangsup_en.txt
+RUN_UTILS DeleteFile x:\devlangsup_fr.txt
+RUN_UTILS MkDir x:\private\
+RUN_UTILS MkDir x:\private\10202dce\
+RUN_UTILS CopyFile x:\88000100_0.sis x:\private\10202dce\88000100_0.sis
+// Install stub
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini install_stub
+// Uninstall stub
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tsisstub.ini uninstall_stub
+// Remove the copy of files that we created
+RUN_UTILS DeleteFile x:\88000100_0.sis
+RUN_UTILS DeleteFile x:\Documents\InstTest\devlangsup_en.txt
+RUN_UTILS DeleteFile x:\Documents\InstTest\devlangsup_fr.txt
+RUN_UTILS DeleteFile x:\private\10202dce\88000100_0.sis
+END_TESTCASE API-INST-PREQ2344-SWI-19
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

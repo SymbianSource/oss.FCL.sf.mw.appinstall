@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; This file installs three exes which are launched after install is complete and 
+; the exes 'expect' to be run in the right order.
+
+;Languages 
+&EN
+
+;Header
+#{"runwait"}, (0x8000887B), 1, 2, 3,TYPE=SA
+
+%{"Vendor"} 
+:"Symbian S&DP"
+
+"\epoc32\data\Z\plugin\testplugin_102836C9.rsc"-"$:\resource\plugins\testplugin_102836C9.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\testplugin_102836C9.dll"-"$:\sys\bin\testplugin_102836C9.dll"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait1.exe"-"$:\sys\bin\runwait1.exe", FR, RUNAFTERINSTALL, RW
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait2.exe"-"$:\sys\bin\runwait2.exe", FR, RUNAFTERINSTALL, RW
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\runwait3.exe"-"$:\sys\bin\runwait3.exe", FR, RUNAFTERINSTALL, RW

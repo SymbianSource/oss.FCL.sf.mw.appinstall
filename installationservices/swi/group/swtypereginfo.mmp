@@ -1,0 +1,44 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software type registration info library. It is used by the following servers:
+* installserver.exe, sisregistryserver.exe, sislauncherserver.exe during
+* installation/uninstallation of a Layered Execution Environment.
+*
+*/
+
+
+/**
+ @file
+*/
+
+TARGET swtypereginfo.dll
+TARGETTYPE dll
+
+UID 0x1000008D 0x1028634D
+
+CAPABILITY All
+
+SOURCEPATH ../source/sisfile
+SOURCE swtypereginfo.cpp
+
+USERINCLUDE ../inc/swi
+USERINCLUDE ../source/sisregistry/common
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY euser.lib efsrv.lib estor.lib
+LIBRARY 	scrclient.lib
+LIBRARY 	ipcstream.lib
+SMPSAFE

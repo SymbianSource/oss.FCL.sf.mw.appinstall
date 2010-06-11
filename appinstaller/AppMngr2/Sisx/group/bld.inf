@@ -1,0 +1,32 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Build information file for AppMngr2 Sisx Runtime Plugin
+*
+*/
+
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXTENSIONS
+START EXTENSION s60/mifconv
+  OPTION TARGETFILE appmngr2sisx.mif
+  OPTION HEADERFILE appmngr2sisx.mbg
+  OPTION SOURCES \
+	-c8,1 qgn_menu_am_sis -c8,8 qgn_prop_drm_exp_large -c8,1 qgn_indi_am_inst_no_add
+END
+
+PRJ_MMPFILES
+appmngr2sisxruntime.mmp
+

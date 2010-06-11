@@ -1,0 +1,37 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+; 
+; Description:  SifUi API test code installation file
+;
+
+; Languages
+&EN
+
+; Provide value for uid
+#{"STIF"},(0x101FB3E7),1,1,0,TYPE=SA
+
+; Series60 product id for S60 3.0 and 5.0
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+[0x1028315F], 0, 0, 0, {"Series60ProductID"}
+
+; Localised Vendor name
+%{"Nokia"}
+
+; Unique Vendor name
+:"Nokia"
+
+; Install files
+"\epoc32\release\armv5\udeb\sifuitest.dll"-"c:\sys\bin\sifuitest.dll"
+"..\init\sifuitestscripter.ini"-"c:\TestFramework\sifuitestscripter.ini"
+"..\data\mmc\test_x509_cert.cer"-"e:\testing\data\test_x509_cert.cer"
+

@@ -1,0 +1,410 @@
+  EPOC Technical Paper  
+ Copyright © 1999 Symbian Ltd. All rights reserved.
+Reproduction of this paper, in any form, in whole or in part,
+without written permission of Symbian Ltd, is prohibited.  
+
+
+EPOC Overview: Core
+Martin Tasker, Head of Technical Communications
+Revision 1.0(010), 29th June 1999
+
+Summary
+EPOC is a whole operating system comprising a base, graphics, applications, Java runtime, wireless communications protocols and applications, SDKs and many other features. The components described in this paper help to define the shape of EPOC and distinguish it from other OSs intended for desktop or hand-portable computers: in this sense, they are truly the core technologies of EPOC.
+
+This paper is part of an EPOC overview series: other papers look at the whole of EPOC, communications, software development options including the Java environment, applications, and data synchronization with PC-based applications.
+
+Contents
+ 1. Introduction 
+2. Base 
+2.1 Portable runtime system 
+2.2 Kernel 
+2.3 File server 
+2.4 User library and file server APIs 
+2.5 Tools 
+3. Engine Support 
+3.1 Data manipulation 
+3.2 Application Architecture 
+3.3 Resource files and utilities 
+3.4 C Standard library 
+3.5 Text 
+4. Graphics 
+4.1 Drawing and user interaction 
+4.2 Fonts 
+4.3 Printing 
+4.4 Views 
+4.5 Text entry 
+5. GUI and System 
+5.1 Device families 
+5.2 EIKON 
+5.3 The shell 
+5.4 System help  
+
+1. Introduction
+EPOC is delivered as a set of components which are built into
+
+ROMs for execution in target machines (components may also be run from flash ROM, removable media, or RAM) 
+the Windows-hosted EPOC emulator 
+the WINC Windows utility package 
+EPOC Connect, for PC-based data synchronization, backup, software installation etc 
+tools and documentation that go into developer SDKs and OEM toolkits 
+The components described in this paper help to define the shape of EPOC and distinguish it from other OSs intended for desktop or hand-portable computers. The core components can be grouped into the following major groups:
+
+Base
+ runtime and tools for building ROM, emulator and WINC components
+ 
+Engine Support
+ components without any user interface, that are used by application engines
+ 
+Graphics
+ components for drawing graphics, printing, fonts and re-usable views
+ 
+System and GUI
+ graphical user interface, system shell, control panel and other components which define the look-and-feel of an EPOC machine, and provide a basis for its graphical programming
+ 
+
+ 
+Core components in context 
+2. Base
+ 2.1 Portable runtime system 
+2.2 Kernel 
+2.2.1 Scheduler 
+2.2.2 Tick interrupt 
+2.2.3 Memory management 
+2.2.4 Executive and server 
+2.2.5 Device drivers 
+2.2.6 Power management 
+2.2.7 Porting and layering 
+2.2.8 Boot sequence 
+2.3 File server 
+2.4 User library and file server APIs 
+2.5 Tools  
+
+The base provides the EPOC runtime, APIs for higher-level programs, and toolchain used for building programs and ROMs.
+
+2.1 Portable runtime system
+EPOC is a portable operating system with three major implementation families:
+
+target machines: EPOC is a full OS which boots on a ROM-based device and manages all aspects of that device — scheduling, memory, power, timers, files, keyboard, pointer, screen, PC Cards, CF-card removable media, etc. Only the ARM3 processor architecture has been made available for general use. EPOC has however run native on x86 PCs, ARM4 and StrongARM. Support for ARM’s Thumb architecture, and for Motorola’s M*Core architecture, is under development. 
+windows-based emulator: EPOC presents the same user-side APIs as its machine implementations, but rather than running native on device hardware, EPOC calls Win32 services to provide a highly effective emulator for software development and demonstration purposes. File access is constrained to specified subdirectories, to prevent uncontrolled access to the user’s PC files by software under development. 
+windows-based tools, the so-called WINC environment: EPOC presents user-side APIs which are binary compatible with the emulator build, but the runtime includes no graphics support and no file mapping. WINC is intended to provide EPOC APIs for higher-level Windows-based programs, including EPOC Connect (which uses it to access EPOC data through application engines already developed for the emulator), the EPOC help builder, and other utilities. 
+EPOC’s runtime system comprises two components, cryptically titled E32 and F32. E32 provides the kernel executive and server, with a kernel API providing services to device drivers. F32 provides a bootstrap loader, file services, an API for writing new file systems, and a command shell for use primarily in test ROMs.
+
+When implementing EPOC on a new target device, a major milestone is the implementation of a ROM which runs E32, F32 and the text shell. In terms of capability, such a ROM is something like a clean and powerful DOS command line: the text shell provides simple utility and debugging commands, and a DOS-like batch language — but with a full multi-tasking infrastructure, and without any legacy 16-bit code.
+
+2.2 Kernel
+ 2.2.1 Scheduler 
+2.2.2 Tick interrupt 
+2.2.3 Memory management 
+2.2.4 Executive and server 
+2.2.5 Device drivers 
+2.2.6 Power management 
+2.2.7 Porting and layering 
+2.2.8 Boot sequence  
+
+EPOC has a very lightweight kernel designed to provide high performance, and to require the minimum amount of code to run in privileged mode.
+
+2.2.1 Scheduler
+The kernel supports pre-emptive multi-tasking using threads, which are the basic unit of execution. The scheduler runs the eligible thread with the highest priority. Thread priorities are not aged.
+
+Processes are the basic unit of memory management: a process has its own address space, a primary thread, and any number of other threads. Context switching and inter-thread communication between threads in different processes is fast, and between threads in the same process is very fast.
+
+2.2.2 Tick interrupt
+A tick interrupt, every 15.625ms (64Hz) on ARM implementations, or 100ms (10Hz) on PC-based implementations, is used to drive timer queues and round-robin scheduling of the highest-priority threads. The tick interrupt is also used by some device drivers, eg for keyboard scanning and digitizer polling. User-side timer requests operate with a maximum resolution defined by the tick interrupt.
+
+A microsecond timer is available for kernel-side use.
+
+2.2.3 Memory management
+EPOC supports a conventional two-level memory management unit (MMU). In other OSs, two-level MMUs use one page directory per process, so that process switching involves changing a single control register (and some cache flushing).
+
+EPOC uses only a single page directory, with each process represented by as many PDEs (page directory entries) as are needed to hold the relevant page tables. This saves RAM, and is possible because there is no requirement for EPOC to support potentially very large virtual address spaces backed by swap files on disk.
+
+Memory is allocated in chunks, which are consecutive in virtual address space. A thread typically uses a single chunk, with a stack at the bottom and a guard page table entry to detect stack overflow, and heap at the top. Such chunks may expand upwards, but not downwards. Chunks are typically private, but may be shared. A chunk requires at least one PDE and, as it expands, may require more PDEs.
+
+For Java, EPOC supports chunks which expand downwards as well as upwards.
+
+Context switching on EPOC’s current ARM3 implementation involves moving all a process’s PDEs from a “low” location, where the process runs, to a “high” location, where its data is accessible only by the kernel. EPOC R5 supports fixed processes whose PDEs do not move, so that switching between these processes, the kernel and one non-fixed user process is much faster. The practical limit on the number of fixed processes is four (a separate protection domain is used for each, and there are only four such domains). The fixed processes in EPOC R5 are the file server, serial comms server (including the telephony server), window server, and font and bitmap server.
+
+2.2.4 Executive and server
+The kernel consists of an executive and a server. The executive is a privileged library running in the context of the calling thread (though with a separate stack). It handles kernel functions which do not require resource allocation. The kernel server is the highest-priority thread in the system, and handles all requests which do require kernel-side resource allocation.
+
+ 
+Kernel executive and server in context 
+User threads may request services from the kernel, from device drivers, or from other user threads which function as servers. EPOC uses server threads, with user privilege, to provide many services which in other systems would be implemented with kernel privilege. This contributes greatly to ease of programming and to system stability.
+
+2.2.5 Device drivers
+The kernel manages calls from user code to device driver functions, which may run as either kernel-executive or kernel-server calls.
+
+Device drivers are also driven by interrupts. Interrupt service routines (ISRs) are short, so as to minimize non-preemptible time. ISRs cannot call kernel services, but they may queue delayed function calls (DFCs). If the system was interrupted in user state, the kernel will run the DFC immediately after the ISR; otherwise, the DFC will be run when control would otherwise have returned to user privilege. DFCs are more potentially powerful than ISRs. Even so, many DFCs simply post a user thread to handle the event.
+
+2.2.6 Power management
+Power management is very important for a handportable machine. The user perceives the machine to be “on” when the screen is on. Internally, power handling is more sophisticated.
+
+If user-thread processing is taking place, the CPU is powered up constantly; otherwise, the CPU is quiesced and only activated for brief processing in response to the tick interrupt. If the machine is off, its DRAM must still be refreshed, and it must be able to switch itself on in response to the ON key, the next alarm or incoming call etc. Devices such as comms links, phone lines, PC cards and other removable media have their own power management requirements.
+
+The kernel and device drivers use a power model to keep track of power requirements and power sources, and close down devices and power sources when not required. Most power sources equate to one of the system clocks, eg the processor clock, and lower-speed clocks for peripherals, DRAM refresh, the tick interrupt etc. The kernel implements power management with a so-called “null thread”, the lowest-priority thread in the system. When the null thread is scheduled, is simply informs the power model that the CPU is no longer needed: the power model then shuts down the CPU until the next interrupt.
+
+Real electrical power comes from primary and backup batteries, as well as external power (from a mains-driven PSU). A non-maskable interrupt is used to process emergency power-down — ie, removal of primary power sources.
+
+2.2.7 Porting and layering
+The kernel is structured in several layers to facilitate porting. Some device drivers also use similar layering.
+
+A platform-independent layer handles communication with the executive, the basic kernel server framework, and much internal kernel processing. A platform layer defines the main differences between emulator/WINC implementations (in which services are implemented as calls to the Win32 APIs), and full EPOC implementations (in which EPOC drives real hardware).
+
+Lower layers implement specifics for CPUs (eg ARM3, StrongARM, M*Core), ASSPs (application-specific standard parts, ie single chips comprising a CPU, MMU and various peripherals), and variants (more minor differences). An EPOC port from one variant to another is relatively easy; an ASSP port involves more work, and a CPU port significantly more.
+
+2.2.8 Boot sequence
+The kernel’s boot sequence brings up the MMU, kernel server, null thread, all kernel devices and drivers, and finally the file server.
+
+On target machines, the file server then loads the window server, which launches other necessary system processes. The base delivers a text window server, which can be used for testing low-level components, including the text shell. The full graphics window server (see §4.1 Drawing and user interaction) launches a graphics shell.
+
+On the emulator, the sequence is reversed: the window server is started first, but it then asks the Win32 version of the EPOC kernel to start. The full graphics window server is delivered as epoc.exe. Command-line test programs contain object code which starts the kernel and text window server before proceeding with the main program.
+
+On WINC, no EPOC window server is involved at all: command-line tools cause the kernel to start automatically, while GUI applications such as EPOC Connect must invoke the kernel start code explicitly.
+
+2.3 File server
+The F32 file server is released as a separate EPOC component but is in fact tied closely into the kernel.
+
+Firstly this is because the file server provides the system loader: the kernel emulates the loader during boot but thereafter uses the file server for all loading.
+
+Secondly the kernel provides support for the file server to allocate RAM for its c: disk: RAM-disk allocation is handled carefully so as to be able to recover data in a warm-boot situation. RAM-disk allocation is completely dynamic, with no user intervention.
+
+The file server uses file system drivers to provide up to 26 disk drives on various devices. On a machine platform, the local file system maps ROM to drive z: and RAM to drive c:. Removable media are supported, on CF cards (compact flash, a small form-factor adaptation of the PC card standard).
+
+Volumes are formatted using VFAT: filenames, including their drive and path, may be up to 256 characters long.
+
+The file server implements the program loader which supports both .exes and DLLs. Both are executed in-place from ROM, or loaded as needed from RAM or from removable media. On machine platforms, DLLs are restricted to linking by ordinal, rather than by name: this prevents space being wasted by potentially long entry-point names. Writeable static data is not available for application program use: instead, object handles must be passed directly, or thread-local storage (TLS) must be used: there is one machine word of TLS per DLL per thread.
+
+A distinctive aspect of the EPOC file system is the use of 32-bit UIDs (unique IDs), which allow the type of every executable (.exe or DLL) to be identified. This serves as a form of identification, used among other things for associating an application file with its owning application. It also protects against accidental loading of a DLL which is not the version or type required. UIDs on DLLs and .exes are checked by the EPOC native loader: on the emulator and WINC, program loading is handled by Win32, so UIDs are not checked.
+
+2.4 User library and file server APIs
+The user library provides APIs and frameworks for higher-level programs. Some of these APIs are implemented purely in user-side code. Others call kernel functions, via the executive and, when required, the kernel server also.
+
+The user library provides four distinctive APIs which set the flavour of any EPOC programming:
+
+cleanup stack and Leave() function which, along with some easily-learned programming disciplines, make it easy for programs to detect errors such as out-of-memory, and to clean up partially allocated resources. This framework is analogous to try/catch and throw in C++ or Java — but uses less memory. 
+descriptors: a unified class hierarchy is used to support binary data buffers, strings of 8-bit characters, and strings of 16-bit characters. 
+active objects: these provide an object-oriented event-handling framework which allows most multi-tasking programs to be structured effectively as event handlers running in a single thread. This is more CPU-efficient, memory-efficient, and programmer-friendly than conventional multi-threaded programming. 
+client-server architecture: only the minimum of EPOC services are provided by the kernel or device drivers. The majority are provided by servers running in user mode. It is very easy to use servers, and quite easy to write them. 
+The user library also provides all the facilities you would expect of an operating system at this level. A conventional group of support functions for DLLs, threads and processes is provided. Data structures include lists, dynamic memory buffers, and extensible arrays which build on these buffers. Good use is made of C++ templates to provide type-safe collection classes. Math functions manipulate IEEE754 double-precision floating-point numbers, and text functions include formatting akin to sprintf() in standard C, and a lexer akin to sscanf().
+
+The file server API allows clients to manipulate drives, volumes, directories and files. Notification APIs are provided to detect changes in files and insertion/removal of removable media.
+
+The user library and file server APIs are completely object oriented. The EPOC C Standard Library (see §3.4 C Standard library) provides POSIX-like non-OO function wrappers on top of these: for instance, User::Alloc() may be accessed using malloc(), and RFile::Open() may be accessed through fopen().
+
+2.5 Tools
+The base delivers tools used for building EPOC. These are packaged into the EPOC C++ SDK, for general software development, and into the OEM Adaptation Kit (OAK), for building new ROM-based EPOC machines.
+
+The EPOC emulator is a key tool for Windows-hosted development. Microsoft Visual C++ Version 5 or 6 are supported for building programs in the emulator or WINC environments. Microsoft Visual C++ must be bought separately from the EPOC SDK or OAK products.
+
+For building programs for target machines, the GNU C++ Compiler gcc, delivered with the C++ SDK, is used, together with other tools for object and binary file processing. The petran tool translates gcc output into a modified PE (portable executable) format, suitable for target machine binaries and for building into ROMs.
+
+EPOC presently supports two instruction sets (x86 and ARM3) and more are planned. Projects may also be built in release or debug variants, and in narrow (8-bit character) and wide (Unicode character) variants. Maintaining makefiles for these projects by hand would be awkward. Instead, C++ projects are specified using a simple EPOC project file format, and built into make files for the relevant toolchain and variants by the makmake tool.
+
+ROMs are built using the rombuild tool, driven by a so-called obey file whose extension is conventionally .oby. Dual-boot ROMs, supporting more than one hardware variant, are supported. Some EPOC machines, and all evaluation boards, use flash ROMs which can be reprogrammed wholesale, or a flash area which can be used for patching. EPOC OAKs, and OEMs, provide the appropriate tools.
+
+3. Engine Support
+ 3.1 Data manipulation 
+3.2 Application Architecture 
+3.3 Resource files and utilities 
+3.4 C Standard library 
+3.5 Text  
+
+Application engines provide the API to application data used both by application UIs, and by the converters and synchronizers found in EPOC Connect. The engine support APIs provide underlying support for application engines. Like the engines themselves, the engine support APIs consist mainly of data manipulation code, with no drawing or other user interaction.
+
+Strictly, some graphics components are required by application engines — and even by some of the components listed here — and could also be included in the engine support category. Examples include the GDI, which defines the graphical interface including fonts etc used by the text content model, and the BITGDI, which renders graphics primitives to on- and off-screen bitmaps: bitmap processing, even without user interaction, is important for many application engines. Graphics components are described in §4. Graphics.
+
+Engine support components may be categorized as data manipulation, application architecture, resource files and utilities, standard library and text handling.
+
+3.1 Data manipulation
+The F32 file server provides basic file services including the ability to read and write binary data to any position in a file. For application data formats, a higher level of utility is required. This is provided by two EPOC components: the stream store (STORE) and the database management system (DBMS).
+
+The stream store provides a stream interface for externalizing and internalizing data. Stores consist of one or more streams. Three types of file store are provided: a direct file store for load/save applications such as a word processor; a permanent file store for database applications; and a dictionary file store used for initialization files. An embedded store provides direct file-store functionality and is used by the application architecture for object embedding.
+
+The database management system provides a complete relational database implementation with API and SQL-based access. Each database may contain multiple tables, each with multiple columns supporting a wide variety of text, binary, numeric, date/time and autoincrement data types. The storage format is compact and robust. APIs and SQL statements support data definition and data manipulation. Transactions, encryption, indexes, space reclamation, rollback, and efficient views are supported. Databases may be shared between multiple concurrent clients, with locking and notification APIs.
+
+3.2 Application Architecture
+The application architecture (APPARC) provides the means to identify the program which should be used to open a file, an embedded object, an attachment, or some data which has not yet been written to a file (such as data being downloaded from the world-wide web). The application architecture supports both EPOC’s native file formats (which use EPOC stream stores), and foreign file formats.
+
+Native document file formats are recognized entirely by their UID: they do not require an extension. Foreign files may be recognized using a combination of content and filename/extension: a MIME type is then associated with the file and used to select associated applications.
+
+The application architecture provides basic user interface elements for file launching. Icons and natural-language captions are contained — along with supported MIME types — in an application information file (AIF), which is generated by aiftool.
+
+EPOC’s native file format supports embedding. An application’s embedding capabilities are specified in its AIF. Embedded documents are represented by a “door”, which may be either an iconic door displaying the associated application icon, or a glass door which displays the application data before it is opened for editing by the user.
+
+The application architecture also supports shell extensions (control panel icons), display of all running applications and open files, and a most-recently used file list for all document files.
+
+The application architecture defines conventions for the locations of applications, control panel icons, file recognizers etc. For instance, applications must reside on some drive with a file and directory name of the form \system\apps\appname\appname.app. APIs are provided to interrogate the currently installed applications and recognizers, etc, and the currently running applications, currently open files, most recently used files etc. The application architecture provides a server which caches lists of these objects, and monitors the file system so that it can update these lists only when necessary. The enquiry APIs use the APPARC server’s cached information and therefore execute quickly, without searching through the file system.
+
+EPOC applications can be installed simply by copying files into their target locations. No system registry settings, with all their inconvenience, are required. When a CF card with applications installed on it is inserted into an EPOC machine, its applications are available for instant use. The APPARC server ensures that this high usability is delivered with high performance.
+
+3.3 Resource files and utilities
+Programs should be written in a manner which does not confuse program code (in C++, say) with strings (which may need to be translated into different natural languages). This is achieved using resource files, built by the rcomp resource compiler, and read by programs using the facilities of the BAFL component (basic application framework library).
+
+BAFL provides other utility APIs, for some specific array types, command-line parsing, incremental matching and for playing and recording sounds. Other utility APIs are provided by EALWL (the alarm and world server) and DIAL, which resolves phone numbers against the current home location, and handles DTMF dialling.
+
+WLDTOOLS and WLDDATA components are of interest only to OEMs: they provide the tools and data needed to prepare country and city information for EALWL.
+
+3.4 C Standard library
+All EPOC’s native code is written in C++. Symbian has achieved the benefits of object orientation that are often touted, but rarely achieved in practice: better-controlled designs, substantial code re-use leading to smaller ROMs and less re-testing, and high performance from a C++ implementation.
+
+The EPOC C Standard Library provides a layer on top of many of EPOC’s native services, supporting a standard POSIX-like set of APIs, with which many programmers are already familiar. The standard library covers
+
+the most fundamental facilities provided by the user library: such as memory allocation (malloc() etc) and string functions (strxxx() and memxxx() etc) 
+file i/o (FILE, fopen() etc) 
+sockets and TCP/IP, including POSIX’s unified file and sockets API (open() etc) 
+processes, pipes, and blocking i/o 
+The standard library allows engine code from POSIX-type environments to be ported to EPOC with relative ease. The user interface (whether text- or graphics-based) must be coded in native EPOC C++.
+
+3.5 Text
+CHARCONV’s APIs provide conversion functions between various character sets and are powerful enough for all Unicode requirements.
+
+LEXICON provides spell-checking functionality for alphabetic languages. LEXICON implements the spell check algorithms in a server containing Lernout & Hauspie’s International CorrectSpell™ technology, which provides a compact dictionary with, in English, about 100,000 words.
+
+ETEXT is a powerful component providing manipulation of arbitrarily long text objects, with character and paragraph formatting, styles, headers and footers, fields such as page numbers, embedded pictures, and support for externalizing and internalizing to streams and stores. ETEXT text objects are used by higher-level EPOC components such as the database and word processor applications.
+
+4. Graphics
+ 4.1 Drawing and user interaction 
+4.2 Fonts 
+4.3 Printing 
+4.4 Views 
+4.5 Text entry  
+
+EPOC’s graphics components provide the basis for a higher-level GUI framework for applications and the system shell.
+
+In EPOC R5, EIKON remains the only GUI framework available to developers in EPOC SDKs. EPOC has been designed to support device families with widely differing hardware specifications and UI requirements. Different device families will include selected graphics components as described in this section. However, they will replace EIKON, the system shell and the application user interfaces with versions tailored to the specifics of the design.
+
+Common graphics components include the central drawing and user interaction components, the font system, the print system, and views.
+
+4.1 Drawing and user interaction
+As the foundation for all other graphics components, the GDI defines graphics devices (to which all drawing is done), graphics contexts (through which all drawing is done), a print subsystem (supporting banded printing, on-screen preview, and model selection), and a range of ancillary classes supporting fonts, colour, measurement and zooming.
+
+ 
+Graphics components 
+For user interaction, the window server (WSERV) shares the screen, keyboard, pointer and other UI resources, and provides the basics of an event-driven interaction mechanism for client programs. The window server thus mediates almost all user control of the EPOC machine. The window server is started by F32 at the end of its boot sequence. It launches the font and bitmap server while initializing. After all other initialization is complete, it starts the system shell, a GUI application which gives the user real access to the machine, its data and applications (see §5.3 The shell).
+
+CONE, the control environment, provides a layer on top of the window server API for building higher-level application GUI frameworks. A control is a rectangular area of the screen and is the fundamental unit of user interaction. Controls may contain other controls. CONE provides an abstraction for keyboard focus, and an algorithm for offering keys to controls using a control stack. CONE provides an active-object-based framework for client applications. Window server events are converted into virtual function calls in control, environment or control stack classes: GUI and application developers implement these functions to provide required behaviour.
+
+Between the GDI and the window server are two highly optimized components for implementing bitmapped graphics operations: the BITGDI renders drawing primitives onto bitmaps — either on- or off-screen, and the font and bitmap server (FBSERV) provides shared-memory implementations of large graphics elements — fonts and off-screen bitmaps. For efficiency, parts of the BITGDI are coded in assembler on ARM implementations — almost the only such code outside the base.
+
+The font and bitmap server uses an EPOC bitmap format supporting multiple bitmaps per file, and optimized implementations in ROM. A tool, bmconv, is provided in EPOC SDKs which converts between EPOC and Windows bitmap formats.
+
+EPOC’s graphics components implement broadly similar functionality to those of Microsoft Windows. EPOC’s use of twips as the basic measurement unit, combined with the specification of its basic drawing primitives, allow for easy conversion of EPOC graphics into Windows graphics. This makes it relatively easy to implement a driver for PC-based windows-hosted printers, with the PC connected to the EPOC machine by cable or infra-red.
+
+On the other hand, the EPOC model is fundamentally different and employs different terminology from the Windows model. The EPOC GDI specifies graphics behaviour; the Windows GDI is more like the EPOC GDI, FBSERV and BITGDI components combined. The EPOC window server and CONE and higher-level GUI such as EIKON act like the Windows graphics, windowing and event systems, plus MFC, all rolled into one: but the EPOC structure is object-oriented from the ground up, and EIKON does not merely add object orientation to existing graphics functionality: rather, it adds real look-and-feel to a lower-level, object oriented, graphics framework.
+
+4.2 Fonts
+The GDI architecture allows the list of available fonts to be queried and, for each font, a list of point sizes to be generated. The architecture requires fonts to be specified with a name and a size (in twips, one-twentieth of a point), and then finds the nearest matching font.
+
+The font store (FNTSTORE) keeps track of all fonts available in EPOC. It can store both bitmapped and vector fonts. New fonts may be added to an EPOC machine at any time, without any need to re-boot.
+
+Standard EPOC implementations release Arial, Times New Roman and Courier fonts in a variety of sizes, in the CP1252 code page. The Euro symbol is included at code point 0x80. Special fonts are also provided, eg symbols for the EIKON GUI and calculator application.
+
+4.3 Printing
+Printing was designed into the GDI from the beginning, with support for any number of printer drivers. The PRINT component handles printing, using the PDRSTORE printer driver manager. New drivers may be installed without rebooting. A selection of common printers is supported, together with a catch-all option which drives any printer via a PC (the PC must be running EPOC Connect), and printing to fax.
+
+On-screen print preview is supported. Printing uses a banded print model which can be supported by application engines with relatively little modification to their drawing code.
+
+4.4 Views
+EPOC’s graphics components contain powerful, re-usable, application-level views:
+
+FORM displays formatted text, honouring all the character, paragraph and style attributes supported by ETEXT, and with highly optimized display refresh and editing code. FORM is used by EPOC Word and many other applications. 
+GRID displays data in a spreadsheet-like grid. GRID is used by the EPOC Sheet, Data and Email applications. 
+CLOCK displays animated clocks, either digital or analog. CLOCK is used by the EPOC Time application, and by all EIKON toolbars. 
+CHART is used by EPOC Sheet to draw data in popular business presentation formats. 
+4.5 Text entry
+EPOC was originally built for keyboard-oriented text input. A front-end-processor (FEP) framework to text entry controls has been introduced, which supports handwriting recognition, and entry of Far Eastern characters by conventional handwriting or keyboard entry methods.
+
+The FEPBASE component provides the basic APIs, and a BRDCST server provides broadcast services required to support FEP-related interactions.
+
+5. GUI and System
+ 5.1 Device families 
+5.2 EIKON 
+5.3 The shell 
+5.4 System help  
+
+EPOC’s GUI and system components provide the environment and programming framework for applications, and define the look-and-feel of an EPOC machine for the end-user.
+
+EIKON is a GUI framework providing standard controls and dialogs for programmer use, a dialog framework, an application and object embedding framework, and many utilities. EIKON builds on CONE, the control environment from EPOC’s graphics layer, and APPARC, the application and data management component from EPOC’s engine support layer.
+
+The SHELL application builds on EIKON and is on the one hand a file/application browser/launcher, on the other hand a control panel which enables all the machine’s hardware and software settings to be displayed and, where appropriate, changed. The control panel includes a software installer/uninstaller.
+
+New applications and control panel extensions may be written using the EIKON and APPARC frameworks.
+
+The EPOC help system displays help for the EPOC system and its applications. It provides convenient browsing and searching. The aleppo tool builds compressed help databases from RTF source documents.
+
+5.1 Device families
+EIKON is designed for colour or greyscale displays, alphanumeric keyboard input, pen input via screen digitizer with extensions for sidebar and taskbar, and screen sizes of 640 wide by 240 or more high.
+
+Slight variations on this specification are feasible (for instance, trackpad or mouse rather than pen, or alternative arrangements for the sidebar and task bar). Such variations would require only minor modifications to EIKON and the SHELL, and none to the applications.
+
+ 
+Devices suitable for EIKON 
+However, EPOC has been designed to support devices with significantly different characteristics from those for which EIKON was envisaged — smaller screens, no pointer at all, different button arrangements, numeric pad or no keyboard at all, sound-based interaction mechanisms, and wireless information devices which look much more like a phone than a computer. Symbian and its partners are working on the specification of a small number of device families, for which it will issue reference designs for convenient adoption by EPOC OEMs and software developers.
+
+Each reference design will be based on a GUI and shell tailored to its own requirements: these will differ from EIKON — in some cases, quite significantly. To obtain maximum re-use when implementing EPOC and its applications on a new device family, EPOC has been designed to allow EIKON, the shell and everything that depends on them to be replaced, with minimal impact on either EPOC’s lower-level components, or on the applications themselves. This is a key reason why Symbian practices — and recommends — the division of applications into two components, an engine and a GUI.
+
+5.2 EIKON
+EIKON presents a GUI designed specifically for its intended target hardware, rather than being scaled down from a GUI suitable for desktop PCs.
+
+The screen real estate is used carefully. Menu bars are only displayed when necessary. Toolbars may be toggled on and off. Application data may be zoomed to suit lighting conditions, eyesight and the type of data. Greyscale or colour screens are supported: the colour scheme is modest yet professional in appearance. The colour scheme may be conveniently modified by OEMs, but not by end-users.
+
+A high-quality keyboard is assumed: EIKON allows novice users to use it easily, and provides shortcuts for expert users.
+
+The pen is different from a mouse: it can draw very easily, it can select and point just as easily as a mouse, but it cannot hover or right-click, and double-click and dragging are error-prone. This led to EIKON’s select-and-open paradigm, whereby a pen tap on an unselected item selects it, while a tap on a selected item opens it — regardless of how long since the item was selected, or even whether it was selected by pen.
+
+EIKON supports extensions of the touch-sensitive screen area to the left, and below, the LCD display. Icons printed on the display surround, in the touch-sensitive area, then serve as buttons. The left-hand side-bar is used to select menu, clipboard, infra-red beaming and zooming functions. The bottom taskbar is used to select applications.
+
+The figure, EIKON shows an EIKON screenshot. The look-and-feel is rich with pleasant features. Menus, scrollbars, buttons and other elements are drawn neatly and look good on all types of screen. Shadows are used to highlight menus, dialog boxes, calendar pop-ups etc. Operation of all applications is convenient with either the keyboard or the pen.
+
+ 
+EIKON 
+Users can send commands to applications using menus, shortcut keys, or toolbar buttons. Menus support cascades and pop-ups. Dialog support includes single and multi-page dialogs and even scrolling dialogs for special applications.
+
+Many standard controls are available, including number and text editors, list boxes and combo boxes, font and sound selectors, colour or greyscale selectors, and controls optimized for personal information management, such as convenient time/date navigation, and latitude and longitude editors.
+
+Standard higher-level components include file browsers, Open and Save As dialogs, print settings and print preview. Scroll bars have dynamically-sized grab handles, and scroll application data while being dragged. A console is available for displaying comms terminals and text-based shells. Many types of list are supported, including hierarchical lists, multi-column lists in which each entry has several aligned fields, and snaking lists which wrap vertically into a container. A variety of standard lists is provided, and owner-draw lists may be written.
+
+All these features are made conveniently accessible through APIs and resource files. The EIKON Style Guide in the SDK describes usage guidelines for producing EIKON applications which conform with Symbian’s look-and-feel standards for EIKON.
+
+Each EIKON application runs in its own process, whose main thread has an instance of the EIKON environment, which controls all interaction on the screen and sidebar, and all keyboard interaction except a small number of hotkeys. Due to the effectiveness of the active object paradigm, secondary threads are rarely if ever used by native EPOC applications.
+
+EIKON also provides a single server which runs in its own thread. The EIKON server is used to take control of the screen for higher-priority purposes than any normal application. The EIKON server uses the window server’s hotkey feature to capture certain key combinations regardless of which application is running. The EIKON server also monitors the taskbar below the screen for application-switching buttons. The EIKON server is responsible for presenting alarm and power-on-password dialogs to the user, for handling screen capture (in response to shift+ctrl+alt+S), for launching the system help application (in response to the help key), for displaying error messages from the kernel (eg for unexpected death in some application or server thread), for running code to close down and restart all applications before and after system backup, and for application-switching interactions with the shell.
+
+5.3 The shell
+The system shell provides a file browser which may be used to launch applications. The shell also controls the application launching/switching buttons on the taskbar (via the EIKON server), and the Extras bar which slides up onto the screen and acts like an extension to the fixed buttons.
+
+ 
+The shell showing browser 
+Instant display of system settings such as memory and disk usage, battery state and owner information is provided by menu items or hotkeys from the System application.
+
+A control panel provides access to settings for time/date, sound, screen, power, keyboard, printer, modems, dialling, internet service provider, and locale including home city. The control panel also allows the extras bar to be configured, and provides access to an application installer/uninstaller for third-party software.
+
+Application installation is very simple: as noted in §3.2 Application Architecture, the application architecture dictates file location conventions and simply scans the file systems to find installed applications. Applications may be instantly installed by copying their files into the right locations, or by inserting a CF card with pre-installed applications on it. The application installer allows application developers to deliver a single file which is expanded into multiple files in the correct directories, on any selected drive. The package file’s extension is .sis: EPOC SDKs contain a makesis tool to build the packages, and .sis files may also be installed directly from a PC using EPOC Connect. After installation, a stripped-down version of the .sis file contains information used by the uninstaller. Versioning and dependency information are also supported.
+
+The shell is started by the graphics window server, which is itself started immediately after F32 has successfully booted. The shell starts the EIKON server, which monitors the task-switching keys. In turn, the EIKON server starts the APPARC server, which monitors the file system and caches information about installed applications, running applications, open application files, and most recently used application files. For efficiency, the shell runs the EIKON server and APPARC server threads in the same process as the shell itself. For reliable multi-tasking even when applications are busy, the shell threads run at higher priority than standard applications.
+
+5.4 System help
+Help for standard applications and the shell (referred to as the System application) is provided in a single compressed database, which is launched (or switched to) using the help key at any time. The database may be conveniently searched or browsed.
+
+Add-in applications may provide their own help, by using a menu item to launch the help browser with their specific help database. The aleppo tool, supplied with EPOC SDKs, creates help databases from Microsoft Word RTF files. An SGML format used in the aleppo processing chain is also documented, and may be used for creating help databases using other editors.
+
+Further Reading
+See EPOC Overview: Summary for an overview of EPOC Release 5, and for references to other papers in this overview series.
+
+Symbian licenses, develops and supports the EPOC operating system, providing leading software, user interfaces, application frameworks and development tools for Wireless Information Devices such as Communicators and Smartphones. Symbian is based in London, with offices worldwide. See Symbian’s website for more technical papers, information about Symbian, and information about EPOC.
+
+Trademarks and acknowledgements
+Symbian and the Symbian logo, EPOC and the EPOC logo are the trademarks of Symbian Ltd.
+
+Java is a trademark of Sun Microsystems Inc.
+
+Microsoft is a registered trademark of Microsoft Corporation. Windows NT is a trademark of Microsoft Corporation.
+
+EPOC’s spell checker, thesaurus and dictionary use International CorrectSpell™, licensed to Symbian by Lernout and Hauspie Speech Products NV.
+
+All other trademarks are acknowledged.
+
+The author wishes to thank the many engineers and managers in Symbian who have contributed comments and information to this paper.
+
+  
+

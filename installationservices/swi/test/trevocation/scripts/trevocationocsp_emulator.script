@@ -1,0 +1,268 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Revocation tests...
+
+LOAD_SUITE tRevocation
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+/! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0047
+//! @SYMTestCaseDesc		Tries to install the sis with Ceritfied Sign check disabled.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid certified sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should not be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0047
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableCertifiedSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0047
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0047
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0048
+//! @SYMTestCaseDesc		Tries to install the sis with Ceritfied Sign check Enabled and with Valid Ceritfied Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid certified sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0048
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0048
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0048
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0048
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0049
+//! @SYMTestCaseDesc		Tries to install the sis with Ceritfied Sign check Enabled and with Revoked Ceritfied Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with revoked certified sign cert. 
+//! @SYMTestExpectedResults	Install should abort with error and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0049
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedSign
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0049
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0049
+
+/! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0050
+//! @SYMTestCaseDesc		Tries to install the sis with Expressed Sign check disabled.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid Expressed sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should not be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0050
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableExpSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0050
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0050
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0050
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0051
+//! @SYMTestCaseDesc		Tries to install the sis with Expressed Sign check Enabled and with Valid Expressed Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid Expressed sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0051
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableExpSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0051
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0051
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0051
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0052
+//! @SYMTestCaseDesc		Tries to install the sis with Expressed Sign check Enabled and with Revoked Expressed Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with revoked Expressed sign cert. 
+//! @SYMTestExpectedResults	Install should abort with error and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0052
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableExpSign
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0052
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0052
+
+/! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0053
+//! @SYMTestCaseDesc		Tries to install the sis with Self Sign check disabled.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid Self sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should not be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0053
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableSelfSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0053
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0053
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0053
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0054
+//! @SYMTestCaseDesc		Tries to install the sis with Self Sign check Enabled and with Valid Self Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid Self sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0054
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableSelfSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0054
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0054
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0054
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0055
+//! @SYMTestCaseDesc		Tries to install the sis with Self Sign check Enabled and with Revoked Self Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with revoked Self sign cert. 
+//! @SYMTestExpectedResults	Install should abort with error and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0055
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableSelfSign
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0055
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0055
+
+/! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0056
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check disabled.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should not be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0056
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableCertifiedVeriSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0056
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0056
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0056
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0057
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check Enabled and with Valid VeriSign Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0057
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedVeriExpSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0057
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0057
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0057
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0058
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check Enabled and with Revoked VeriSign Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with revoked VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should abort with error and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0058
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedVeriExpSign
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0058
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0058
+
+/! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0059
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check disabled.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error and ocsp check should not be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0059
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableExpSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableSelfSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableCertifiedSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepDisableCertifiedVeriSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0059
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0059
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0059
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0060
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check Enabled and with Valid VeriSign Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with valid VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should complete without any error/panic and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0060
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableExpSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableSelfSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedVeriExpSign
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0060
+RUN_TEST_STEP_RESULT 0 100 	tRevocation SISREGCHECK	z:\tswi\tRevocation\scripts\trevocation.ini  API-SEC-SWI-REVOCATION-I-0060
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0060
+
+
+//! @SYMTestCaseID		API-SEC-SWI-REVOCATION-I-0061
+//! @SYMTestCaseDesc		Tries to install the sis with VeriSign Sign check Enabled and with Revoked VeriSign Sign Certificate.
+//! @SYMDEF  			None
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Tries to install the sis signed with revoked VeriSign sign cert. 
+//! @SYMTestExpectedResults	Install should abort with error and ocsp check should be performed.
+//! @SYMDevelopedForRelease 	SymTB10.1
+
+START_TESTCASE API-SEC-SWI-REVOCATION-I-0061
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableExpSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableSelfSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedSign
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\trevocation\scripts\trevocation.ini CenRepEnableCertifiedVeriExpSign
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0061
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\trevocation\scripts\trevocation.ini API-SEC-SWI-REVOCATION-I-0047-U
+END_TESTCASE API-SEC-SWI-REVOCATION-I-0061
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

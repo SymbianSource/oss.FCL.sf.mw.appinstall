@@ -1,0 +1,31 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"PathSub multi-dir match case"},(0x81505355),1,0,0
+
+%{"Symbian"}
+
+:"Symbian"
+
+; replace two directories (with one)
+"textfile.txt"-"c:\FIND_2DIR_PT1\FIND_2DIR_PT2\tf_2dir_to_1dir.txt",FF
+
+; replace two directories (with three)
+"textfile.txt"-"e:\FIND_2DIR_PT1\FIND_2DIR_PT2\tf_2dir_to_3dir.txt",FF
+
+; match first directory in a multi-directory find path (used literally)
+"textfile.txt"-"c:\FIND_2DIR_PT1\tf_2dir_match_start.txt",FF
+

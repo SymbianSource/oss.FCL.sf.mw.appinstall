@@ -1,0 +1,12 @@
+component	security_softwareinstallframework
+source	\sf\mw\appinstall\installationservices\swinstallationfw
+source	\sf\mw\appinstall\installationservices\swinstallationfw\test
+source  \sf\mw\appinstall\installationservices\swinstallationfw\examples\refnativeplugin
+binary	\sf\mw\appinstall\installationservices\swinstallationfw\group	all
+exports	\sf\mw\appinstall\installationservices\swinstallationfw\group
+notes_source	\component_defs\release.src
+
+ipr E 
+ipr T \sf\mw\appinstall\installationservices\swinstallationfw\test
+ipr T \sf\mw\appinstall\installationservices\swinstallationfw\examples\refnativeplugin
+

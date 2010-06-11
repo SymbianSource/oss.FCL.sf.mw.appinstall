@@ -1,0 +1,46 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Project specification file for SIF plugin for native software
+*
+*/
+
+
+/**
+ @file
+ @test
+*/
+
+TARGET			refnativeplugin.dll
+TARGETTYPE		PLUGIN
+
+UID				0x10009D8D 0x10285BC3
+
+CAPABILITY		ProtServ TrustedUI ReadUserData WriteDeviceData
+
+SOURCEPATH		../source
+SOURCE			refnativeplugin.cpp
+
+USERINCLUDE		../../../common/inc
+USERINCLUDE		../../../../swi/inc
+USERINCLUDE		../../../../swi/inc/swi
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+START RESOURCE	10285BC3.rss
+	TARGET refnativeplugin.rsc
+END
+LIBRARY			euser.lib sishelper.lib sif.lib scrclient.lib
+LIBRARY			sisregistryclient.lib
+SMPSAFE

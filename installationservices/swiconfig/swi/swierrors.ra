@@ -1,0 +1,328 @@
+/*
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+// SISX parsing errors
+// most of these errors resolve to a simple "File Corrupt" message 
+RESOURCE ARRAY r_error_res_swi_sisx_file_errors 
+	{
+	items = 
+		{
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10100
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10101
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10102
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10103
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10104
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10105
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10106
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10107
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10108
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10109
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10110
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10111
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10112
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10113
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10114
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10115
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10116
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10117
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10118
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10119
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10120
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10121
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10122
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10123
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10124
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10125
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10126
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10127
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10128
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10129
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10130
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10131
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10132
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10133
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10134
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10135
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10136
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10137
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10138
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10139
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10140
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10141
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10142
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10143
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_unsupported_compression; // -10144
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_corrupt; // -10145
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_invalid_filedesc; // -10146
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_overwrite; // -10147
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_reserved; // -10148, reserved for future use
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_sisx_file_insufficient_space; // -10149
+			}
+		};
+	}
+
+RESOURCE ARRAY r_error_res_swi_process_error
+	{
+	items =
+		{
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_process_failed; // -10200
+			}
+		};
+	}
+
+RESOURCE ARRAY r_error_res_swi_instserv_errors
+	{
+	items = 
+		{
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_swi_policy_corrupt; // -10250
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_sig_scheme_unsupported; // -10251
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_sig_scheme_unsupported; // -10252, digest and signing algs are not issues users are expected to understand
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_bad_digest; // -10253
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_security_error; // -10254
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_no_base_package; // -10255
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_invalid_upgrade; // -10256
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_invalid_eclipsing; // -10257
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_invalid_exe_header; // -10258
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_caps_mismatch; // -10259
+			},		
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_bad_expression; // -10260
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_bad_expression; // -10261
+			},
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_instserv_bad_expression; // -10262
+			}
+		};
+	}
+
+RESOURCE ARRAY  r_error_res_legacy_error
+	{
+	items=
+		{
+		SINGLE_ERROR
+			{
+			text=r_error_res_swi_legacy_sis; // -10270	
+			}
+		};
+	}
+
+RESOURCE TBUF r_error_res_swi_sisx_file_corrupt { buf=STRING_r_error_res_swi_sisx_file_corrupt; } // used for most SISX parsing problems
+RESOURCE TBUF r_error_res_swi_sisx_file_unsupported_compression { buf=STRING_r_error_res_swi_sisx_file_unsupported_compression; } // -10144
+RESOURCE TBUF r_error_res_swi_sisx_file_invalid_filedesc { buf=STRING_r_error_res_swi_sisx_file_invalid_filedesc; } // -10146
+RESOURCE TBUF r_error_res_swi_sisx_file_overwrite { buf=STRING_r_error_res_swi_sisx_file_overwrite; } // -10147
+RESOURCE TBUF r_error_res_swi_sisx_file_insufficient_space { buf=STRING_r_error_res_swi_sisx_file_insufficient_space; } // -10149
+RESOURCE TBUF r_error_res_swi_sisx_file_reserved { buf=STRING_r_error_res_swi_sisx_file_reserved; } // should never be seen
+
+RESOURCE TBUF r_error_res_swi_process_failed { buf=STRING_r_error_res_swi_process_failed; } // -10200
+
+RESOURCE TBUF r_error_res_swi_instserv_swi_policy_corrupt { buf=STRING_r_error_res_swi_instserv_swi_policy_corrupt; } // -10250
+RESOURCE TBUF r_error_res_swi_instserv_sig_scheme_unsupported { buf=STRING_r_error_res_swi_instserv_sig_scheme_unsupported; } // -10251, -10252
+RESOURCE TBUF r_error_res_swi_instserv_bad_digest { buf=STRING_r_error_res_swi_instserv_bad_digest; } // -10253
+RESOURCE TBUF r_error_res_swi_instserv_security_error { buf=STRING_r_error_res_swi_instserv_security_error; } // -10254
+RESOURCE TBUF r_error_res_swi_instserv_no_base_package { buf=STRING_r_error_res_swi_instserv_no_base_package; } // -10255
+RESOURCE TBUF r_error_res_swi_instserv_invalid_upgrade { buf=STRING_r_error_res_swi_instserv_invalid_upgrade; } // -10256
+RESOURCE TBUF r_error_res_swi_instserv_invalid_eclipsing { buf=STRING_r_error_res_swi_instserv_invalid_eclipsing; }
+RESOURCE TBUF r_error_res_swi_instserv_invalid_exe_header { buf=STRING_r_error_res_swi_instserv_invalid_exe_header; }
+RESOURCE TBUF r_error_res_swi_instserv_caps_mismatch { buf=STRING_r_error_res_swi_instserv_caps_mismatch; }
+RESOURCE TBUF r_error_res_swi_instserv_bad_expression { buf=STRING_r_error_res_swi_instserv_bad_expression; } // 1026[012], the user need not know anything about package expressions
+
+RESOURCE TBUF r_error_res_swi_legacy_sis { buf=STRING_r_error_res_swi_legacy_sis; } // -10270

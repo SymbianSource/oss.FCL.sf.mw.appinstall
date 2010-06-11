@@ -1,0 +1,85 @@
+EXPORTS
+	?PrepareResultsForIpcL@COpaqueNamedParams@Usif@@QAEXAAVTIpcArgs@@H@Z @ 1 NONAME ; void Usif::COpaqueNamedParams::PrepareResultsForIpcL(class TIpcArgs &, int)
+	?HasCapability@TSecurityContext@Usif@@QBEHW4TCapability@@@Z @ 2 NONAME ; int Usif::TSecurityContext::HasCapability(enum TCapability) const
+	?NewL@CComponentInfo@Usif@@SAPAV12@XZ @ 3 NONAME ; class Usif::CComponentInfo * Usif::CComponentInfo::NewL(void)
+	?CancelOperation@RSifTransportClient@Usif@@QAEXXZ @ 4 NONAME ; void Usif::RSifTransportClient::CancelOperation(void)
+	??0TTransportTaskParams@Usif@@QAE@XZ @ 5 NONAME ; Usif::TTransportTaskParams::TTransportTaskParams(void)
+	?HasCapabilityL@TSecurityContext@Usif@@QBEXW4TCapability@@@Z @ 6 NONAME ; void Usif::TSecurityContext::HasCapabilityL(enum TCapability) const
+	?Authenticity@CNode@CComponentInfo@Usif@@QBE?AW4TAuthenticity@3@XZ @ 7 NONAME ; enum Usif::TAuthenticity Usif::CComponentInfo::CNode::Authenticity(void) const
+	?SetRootNodeAsChildL@CComponentInfo@Usif@@QAEXAAVCNode@12@@Z @ 8 NONAME ; void Usif::CComponentInfo::SetRootNodeAsChildL(class Usif::CComponentInfo::CNode &)
+	?Activate@RSifTransportClient@Usif@@QAEXHAAVTRequestStatus@@@Z @ 9 NONAME ; void Usif::RSifTransportClient::Activate(int, class TRequestStatus &)
+	?NewSifTransportServerLC@CSifTransportServer@Usif@@SAPAVCScsServer@@XZ @ 10 NONAME ; class CScsServer * Usif::CSifTransportServer::NewSifTransportServerLC(void)
+	?NewLC@COpaqueNamedParams@Usif@@SAPAV12@XZ @ 11 NONAME ; class Usif::COpaqueNamedParams * Usif::COpaqueNamedParams::NewLC(void)
+	?Uninstall@RSifTransportClient@Usif@@QAEXHAAVTRequestStatus@@H@Z @ 12 NONAME ; void Usif::RSifTransportClient::Uninstall(int, class TRequestStatus &, int)
+	?InstallStatus@CNode@CComponentInfo@Usif@@QBE?AW4TInstallStatus@3@XZ @ 13 NONAME ; enum Usif::TInstallStatus Usif::CComponentInfo::CNode::InstallStatus(void) const
+	?Cleanup@COpaqueNamedParams@Usif@@QAEXXZ @ 14 NONAME ; void Usif::COpaqueNamedParams::Cleanup(void)
+	??0RSifTransportClient@Usif@@QAE@XZ @ 15 NONAME ; Usif::RSifTransportClient::RSifTransportClient(void)
+	?CountL@COpaqueNamedParams@Usif@@QBEHXZ @ 16 NONAME ; int Usif::COpaqueNamedParams::CountL(void) const
+	?SecurityContext@CSifTransportTask@Usif@@IBEPBVTSecurityContext@2@XZ @ 17 NONAME ; class Usif::TSecurityContext const * Usif::CSifTransportTask::SecurityContext(void) const
+	?RootNodeL@CComponentInfo@Usif@@QBEABVCNode@12@XZ @ 18 NONAME ; class Usif::CComponentInfo::CNode const & Usif::CComponentInfo::RootNodeL(void) const
+	??1CNode@CComponentInfo@Usif@@UAE@XZ @ 19 NONAME ; Usif::CComponentInfo::CNode::~CNode(void)
+	?GetComponentInfo@RSifTransportClient@Usif@@QAEXABVTDesC16@@AAVCComponentInfo@2@AAVTRequestStatus@@@Z @ 20 NONAME ; void Usif::RSifTransportClient::GetComponentInfo(class TDesC16 const &, class Usif::CComponentInfo &, class TRequestStatus &)
+	?Deactivate@RSifTransportClient@Usif@@QAEXHAAVTRequestStatus@@@Z @ 21 NONAME ; void Usif::RSifTransportClient::Deactivate(int, class TRequestStatus &)
+	?Install@RSifTransportClient@Usif@@QAEXAAVRFile@@ABVCOpaqueNamedParams@2@AAV42@AAVTRequestStatus@@H@Z @ 22 NONAME ; void Usif::RSifTransportClient::Install(class RFile &, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	?ExternalizeL@COpaqueNamedParams@Usif@@QBEXAAVRWriteStream@@@Z @ 23 NONAME ; void Usif::COpaqueNamedParams::ExternalizeL(class RWriteStream &) const
+	?FileHandle@CSifTransportTask@Usif@@IAEPAVRFile@@XZ @ 24 NONAME ; class RFile * Usif::CSifTransportTask::FileHandle(void)
+	?Vendor@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 25 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::Vendor(void) const
+	?ComponentName@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 26 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::ComponentName(void) const
+	?NewLC@CNode@CComponentInfo@Usif@@SAPAV123@ABVTDesC16@@000W4TScomoState@3@W4TInstallStatus@3@H0W4TAuthenticity@3@ABVTCapabilitySet@@HHHPAV?$RPointerArray@VCApplicationInfo@CComponentInfo@Usif@@@@PAV?$RPointerArray@VCNode@CComponentInfo@Usif@@@@@Z @ 27 NONAME ; class Usif::CComponentInfo::CNode * Usif::CComponentInfo::CNode::NewLC(class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TScomoState, enum Usif::TInstallStatus, int, class TDesC16 const &, enum Usif::TAuthenticity, class TCapabilitySet const &, int, int, int, class RPointerArray<class Usif::CComponentInfo::CApplicationInfo> *, class RPointerArray<class Usif::CComponentInfo::CNode> *)
+	??0TSecurityContext@Usif@@AAE@ABVRMessage2@@@Z @ 28 NONAME ; Usif::TSecurityContext::TSecurityContext(class RMessage2 const &)
+	??1COpaqueNamedParams@Usif@@UAE@XZ @ 29 NONAME ; Usif::COpaqueNamedParams::~COpaqueNamedParams(void)
+	?SoftwareTypeName@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 30 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::SoftwareTypeName(void) const
+	?UserGrantableCaps@CNode@CComponentInfo@Usif@@QBEABVTCapabilitySet@@XZ @ 31 NONAME ; class TCapabilitySet const & Usif::CComponentInfo::CNode::UserGrantableCaps(void) const
+	?CancelImpl@CSifTransportTask@Usif@@MAEXXZ @ 32 NONAME ; void Usif::CSifTransportTask::CancelImpl(void)
+	?CustomResults@CSifTransportTask@Usif@@IAEPAVCOpaqueNamedParams@2@XZ @ 33 NONAME ; class Usif::COpaqueNamedParams * Usif::CSifTransportTask::CustomResults(void)
+	?IntByNameL@COpaqueNamedParams@Usif@@QBEHABVTDesC16@@@Z @ 34 NONAME ; int Usif::COpaqueNamedParams::IntByNameL(class TDesC16 const &) const
+	?Install@RSifTransportClient@Usif@@QAEXAAVRFile@@AAVTRequestStatus@@H@Z @ 35 NONAME ; void Usif::RSifTransportClient::Install(class RFile &, class TRequestStatus &, int)
+	?StringByNameL@COpaqueNamedParams@Usif@@QBEABVTDesC16@@ABV3@@Z @ 36 NONAME ; class TDesC16 const & Usif::COpaqueNamedParams::StringByNameL(class TDesC16 const &) const
+	??0CSifTransportTask@Usif@@IAE@AAUTTransportTaskParams@1@H@Z @ 37 NONAME ; Usif::CSifTransportTask::CSifTransportTask(struct Usif::TTransportTaskParams &, int)
+	??1CSifTransportTask@Usif@@MAE@XZ @ 38 NONAME ; Usif::CSifTransportTask::~CSifTransportTask(void)
+	?ScomoState@CNode@CComponentInfo@Usif@@QBE?AW4TScomoState@3@XZ @ 39 NONAME ; enum Usif::TScomoState Usif::CComponentInfo::CNode::ScomoState(void) const
+	?AddIntL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@H@Z @ 40 NONAME ; void Usif::COpaqueNamedParams::AddIntL(class TDesC16 const &, int)
+	?Install@RSifTransportClient@Usif@@QAEXABVTDesC16@@AAVTRequestStatus@@H@Z @ 41 NONAME ; void Usif::RSifTransportClient::Install(class TDesC16 const &, class TRequestStatus &, int)
+	?Children@CNode@CComponentInfo@Usif@@QBEABV?$RPointerArray@VCNode@CComponentInfo@Usif@@@@XZ @ 42 NONAME ; class RPointerArray<class Usif::CComponentInfo::CNode> const & Usif::CComponentInfo::CNode::Children(void) const
+	?FileName@CSifTransportTask@Usif@@IBEPBVTDesC16@@XZ @ 43 NONAME ; class TDesC16 const * Usif::CSifTransportTask::FileName(void) const
+	?Uninstall@RSifTransportClient@Usif@@QAEXHABVCOpaqueNamedParams@2@AAV32@AAVTRequestStatus@@H@Z @ 44 NONAME ; void Usif::RSifTransportClient::Uninstall(int, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	?PrepareForIpcL@CComponentInfo@Usif@@QAEXAAVTIpcArgs@@H@Z @ 45 NONAME ; void Usif::CComponentInfo::PrepareForIpcL(class TIpcArgs &, int)
+	?GetComponentInfo@RSifTransportClient@Usif@@QAEXAAVRFile@@AAVCComponentInfo@2@AAVTRequestStatus@@@Z @ 46 NONAME ; void Usif::RSifTransportClient::GetComponentInfo(class RFile &, class Usif::CComponentInfo &, class TRequestStatus &)
+	?NewLC@CComponentInfo@Usif@@SAPAV12@XZ @ 47 NONAME ; class Usif::CComponentInfo * Usif::CComponentInfo::NewLC(void)
+	?GetIntByNameL@COpaqueNamedParams@Usif@@QBEHABVTDesC16@@AAH@Z @ 48 NONAME ; int Usif::COpaqueNamedParams::GetIntByNameL(class TDesC16 const &, int &) const
+	?SetRootNodeL@CComponentInfo@Usif@@QAEXPAVCNode@12@@Z @ 49 NONAME ; void Usif::CComponentInfo::SetRootNodeL(class Usif::CComponentInfo::CNode *)
+	?CustomArguments@CSifTransportTask@Usif@@IBEPBVCOpaqueNamedParams@2@XZ @ 50 NONAME ; class Usif::COpaqueNamedParams const * Usif::CSifTransportTask::CustomArguments(void) const
+	?GetNamesL@COpaqueNamedParams@Usif@@QBEXAAV?$RPointerArray@VHBufC16@@@@@Z @ 51 NONAME ; void Usif::COpaqueNamedParams::GetNamesL(class RPointerArray<class HBufC16> &) const
+	?MaxInstalledSize@CNode@CComponentInfo@Usif@@QBEHXZ @ 52 NONAME ; int Usif::CComponentInfo::CNode::MaxInstalledSize(void) const
+	?Version@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 53 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::Version(void) const
+	?RequestStatus@CSifTransportTask@Usif@@IAEPAVTRequestStatus@@XZ @ 54 NONAME ; class TRequestStatus * Usif::CSifTransportTask::RequestStatus(void)
+	?Install@RSifTransportClient@Usif@@QAEXABVTDesC16@@ABVCOpaqueNamedParams@2@AAV42@AAVTRequestStatus@@H@Z @ 55 NONAME ; void Usif::RSifTransportClient::Install(class TDesC16 const &, class Usif::COpaqueNamedParams const &, class Usif::COpaqueNamedParams &, class TRequestStatus &, int)
+	?AddStringL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@0@Z @ 56 NONAME ; void Usif::COpaqueNamedParams::AddStringL(class TDesC16 const &, class TDesC16 const &)
+	?ExternalizeL@CComponentInfo@Usif@@QBEXAAVRWriteStream@@@Z @ 57 NONAME ; void Usif::CComponentInfo::ExternalizeL(class RWriteStream &) const
+	?AddChildL@CNode@CComponentInfo@Usif@@QAEXPAV123@@Z @ 58 NONAME ; void Usif::CComponentInfo::CNode::AddChildL(class Usif::CComponentInfo::CNode *)
+	?ComponentId@CNode@CComponentInfo@Usif@@QBEHXZ @ 59 NONAME ; int Usif::CComponentInfo::CNode::ComponentId(void) const
+	?ComponentId@CSifTransportTask@Usif@@IBEHXZ @ 60 NONAME ; int Usif::CSifTransportTask::ComponentId(void) const
+	?StartTransportServer@Usif@@YAHABVTDesC16@@ABVTVersion@@P6APAVCSifTransportTask@1@W4TTaskType@TransportTaskFactory@1@AAUTTransportTaskParams@1@@ZH@Z @ 61 NONAME ; int Usif::StartTransportServer(class TDesC16 const &, class TVersion const &, class Usif::CSifTransportTask * (*)(enum Usif::TransportTaskFactory::TTaskType, struct Usif::TTransportTaskParams &), int)
+	?Close@RSifTransportClient@Usif@@QAEXXZ @ 62 NONAME ; void Usif::RSifTransportClient::Close(void)
+	?SecureId@TSecurityContext@Usif@@QBE?AVTSecureId@@XZ @ 63 NONAME ; class TSecureId Usif::TSecurityContext::SecureId(void) const
+	?NewL@COpaqueNamedParams@Usif@@SAPAV12@XZ @ 64 NONAME ; class Usif::COpaqueNamedParams * Usif::COpaqueNamedParams::NewL(void)
+	?Connect@RSifTransportClient@Usif@@QAEHABVTDesC16@@ABVTVersion@@0VTUid@@@Z @ 65 NONAME ; int Usif::RSifTransportClient::Connect(class TDesC16 const &, class TVersion const &, class TDesC16 const &, class TUid)
+	??1CComponentInfo@Usif@@UAE@XZ @ 66 NONAME ; Usif::CComponentInfo::~CComponentInfo(void)
+	?GlobalComponentId@CNode@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 67 NONAME ; class TDesC16 const & Usif::CComponentInfo::CNode::GlobalComponentId(void) const
+	?ComponentInfo@CSifTransportTask@Usif@@IAEPAVCComponentInfo@2@XZ @ 68 NONAME ; class Usif::CComponentInfo * Usif::CSifTransportTask::ComponentInfo(void)
+	?InternalizeL@COpaqueNamedParams@Usif@@QAEXAAVRReadStream@@@Z @ 69 NONAME ; void Usif::COpaqueNamedParams::InternalizeL(class RReadStream &)
+	?PrepareArgumentsForIpcL@COpaqueNamedParams@Usif@@QBEXAAVTIpcArgs@@H@Z @ 70 NONAME ; void Usif::COpaqueNamedParams::PrepareArgumentsForIpcL(class TIpcArgs &, int) const
+	?HasExecutable@CNode@CComponentInfo@Usif@@QBEHXZ @ 71 NONAME ; int Usif::CComponentInfo::CNode::HasExecutable(void) const
+	?GroupName@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 72 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::GroupName(void) const
+	?IconFileName@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 73 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::IconFileName(void) const
+	?NewLC@CApplicationInfo@CComponentInfo@Usif@@SAPAV123@ABVTUid@@ABVTDesC16@@11@Z @ 74 NONAME ; class Usif::CComponentInfo::CApplicationInfo * Usif::CComponentInfo::CApplicationInfo::NewLC(class TUid const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
+	?DriveSeletionRequired@CNode@CComponentInfo@Usif@@QBEHXZ @ 75 NONAME ; int Usif::CComponentInfo::CNode::DriveSeletionRequired(void) const
+	?AppUid@CApplicationInfo@CComponentInfo@Usif@@QBEABVTUid@@XZ @ 76 NONAME ; class TUid const & Usif::CComponentInfo::CApplicationInfo::AppUid(void) const
+	??1CApplicationInfo@CComponentInfo@Usif@@UAE@XZ @ 77 NONAME ; Usif::CComponentInfo::CApplicationInfo::~CApplicationInfo(void)
+	?Applications@CNode@CComponentInfo@Usif@@QBEABV?$RPointerArray@VCApplicationInfo@CComponentInfo@Usif@@@@XZ @ 78 NONAME ; class RPointerArray<class Usif::CComponentInfo::CApplicationInfo> const & Usif::CComponentInfo::CNode::Applications(void) const
+	?Name@CApplicationInfo@CComponentInfo@Usif@@QBEABVTDesC16@@XZ @ 79 NONAME ; class TDesC16 const & Usif::CComponentInfo::CApplicationInfo::Name(void) const
+	?StringArrayByNameL@COpaqueNamedParams@Usif@@QBEABV?$RPointerArray@VHBufC16@@@@ABVTDesC16@@@Z @ 80 NONAME ; class RPointerArray<class HBufC16> const & Usif::COpaqueNamedParams::StringArrayByNameL(class TDesC16 const &) const
+	?AddIntArrayL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@ABV?$RArray@H@@@Z @ 81 NONAME ; void Usif::COpaqueNamedParams::AddIntArrayL(class TDesC16 const &, class RArray<int> const &)
+	?AddStringArrayL@COpaqueNamedParams@Usif@@QAEXABVTDesC16@@ABV?$RPointerArray@VHBufC16@@@@@Z @ 82 NONAME ; void Usif::COpaqueNamedParams::AddStringArrayL(class TDesC16 const &, class RPointerArray<class HBufC16> const &)
+	?IntArrayByNameL@COpaqueNamedParams@Usif@@QBEABV?$RArray@H@@ABVTDesC16@@@Z @ 83 NONAME ; class RArray<int> const & Usif::COpaqueNamedParams::IntArrayByNameL(class TDesC16 const &) const
+

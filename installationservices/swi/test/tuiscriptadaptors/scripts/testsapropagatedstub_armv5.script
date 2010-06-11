@@ -1,0 +1,230 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run SA propogated stub
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SAPropogatedDeleteFiles-HW-0001
+//! @SYMTestCaseDesc 		Installs a SA package to a Media card, Remove the media card, Delete the Registry , Mount the card back,
+//! 				Install the stub sis file, Remove the Media card, uninstall the stub and Reinsert the card back, files should get deleted
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should be cleaned up
+//! @SYMTestExpectedResults 	Inserts a media card which should be cleaned up
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sa
+
+RUN_UTILS CopyFile e:\readme.txt c:\readme.txt
+RUN_UTILS CopyFile e:\private\10202dce\8000001a_0.sis e:\8000001a_0.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sastub
+RUN_UTILS DeleteFile c:\readme.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_sa_delete
+
+END_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SAPropogatedDeleteFiles-HW-0002
+//! @SYMTestCaseDesc 		Installs a SA package to a Media card, Remove the media card, Delete the Registry , Mount the card back,
+//! 				Install the stub sis file, Remove the Media card, Reinsert the card back, files should not get deleted
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should not be cleaned up
+//! @SYMTestExpectedResults 	Inserts a media card which should not be cleaned up
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0002
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sa
+
+RUN_UTILS CopyFile e:\readme.txt c:\readme.txt
+RUN_UTILS CopyFile e:\private\10202dce\8000001a_0.sis e:\8000001a_0.sis
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sastub
+RUN_UTILS DeleteFile c:\readme.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_sa_notdelete
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sastub
+
+END_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SAPropogatedDeleteFiles-HW-0003
+//! @SYMTestCaseDesc 		Installs a SA package to a Media card, Install SP package over it, Remove the media card, Delete the Registry,
+//! 				Mount the card back, Install SA stub , Install SP stub, Remove the card back, Uninstall SP package, Mount the card back,
+//! 				File related to SP should get deleted.
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should not be cleaned up
+//! @SYMTestExpectedResults 	Inserts a media card which should not be cleaned up
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0003
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+# Install to MMC card first
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini Install_sa_h2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini Install_sp_h2
+
+RUN_UTILS CopyFile e:\private\10202dce\81111207_0.sis  e:\81111207_0.sis
+RUN_UTILS CopyFile e:\private\10202dce\81111207_1.sis  e:\81111207_1.sis
+RUN_UTILS CopyFile e:\Documents\InstTest\abase1.txt e:\abase1.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\abase4.txt e:\abase4.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\aA1.txt e:\aA1.txt
+RUN_UTILS CopyFile e:\Documents\InstTest\clashing.txt e:\clashing.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sa_stub
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sa_stub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sp_stub
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sp_stub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sp_stub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_spdelete_notsa
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sa_stub
+
+END_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0003
+
+
+//! @SYMTestCaseID 		API-SEC-SAPropogatedDeleteFiles-HW-0004
+//! @SYMTestCaseDesc 		Installs SA pkg, Remove the card, Delete the Registry, Mount the card back,
+//! 				Install readonly SA stub, unmount the card, Uninstall the app, Reinsert the card back,
+//! 				Files should not get deleted.
+//! @SYMDEF 			DEF113546
+//! @SYMTestPriority 		Low
+//! @SYMTestActions  		Inserts a media card which should not be cleaned up for read only stub sis file.
+//! @SYMTestExpectedResults 	Media card should not be free of installed files. 
+//! @SYMDevelopedForRelease 	Naiad
+
+START_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0004
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sa
+
+RUN_UTILS CopyFile e:\readme.txt c:\readme.txt
+RUN_UTILS CopyFile e:\private\10202dce\8000001a_0.sis  e:\8000001a_0.sis
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setup_sastub
+
+RUN_TEST_STEP 10 tuiscriptadaptors SetClearReadOnlyStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini setsastubreadonly
+
+RUN_UTILS DeleteFile c:\readme.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini install_sastub
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini u_install_sa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+
+// Files should not get deleted because stub is read only
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\teststub.ini checkfiles_sa_notdelete
+
+RUN_UTILS MAKEREADWRITE e:\private\10202dce\8000001a_0.sis
+// Cleanup the env.
+RUN_UTILS DeleteFile e:\readme.txt
+RUN_UTILS DeleteFile e:\8000001a_0.sis
+RUN_UTILS DeleteFile e:\clashing.txt
+RUN_UTILS DeleteFile e:\aA1.txt
+RUN_UTILS DeleteFile e:\abase4.txt
+RUN_UTILS DeleteFile e:\abase1.txt
+RUN_UTILS DeleteFile e:\81111207_1.sis
+RUN_UTILS DeleteFile e:\81111207_0.sis
+RUN_UTILS DeleteFile e:\private\10202dce\8000001a_0.sis
+
+END_TESTCASE API-SEC-SAPropogatedDeleteFiles-HW-0004
+
+
+
+

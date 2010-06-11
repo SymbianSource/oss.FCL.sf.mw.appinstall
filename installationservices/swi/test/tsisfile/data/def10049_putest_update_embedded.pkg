@@ -1,0 +1,28 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A package that adds a file to CenRep via an embedded SP
+
+;Languages
+&EN
+
+;Header
+#{"Standard"}, (0x811112FF), 1, 2, 5,TYPE=PU
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+"files\option1.txt"-"C:\Documents\InstTest\test.txt";
+"files\option1.txt"-"C:\Documents\InstTest\test2.txt";

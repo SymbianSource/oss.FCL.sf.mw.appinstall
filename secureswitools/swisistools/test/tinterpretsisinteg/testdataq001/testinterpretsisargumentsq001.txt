@@ -1,0 +1,1 @@
+-z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/interpretsisp001.sis -n 2 -w info -l /epoc32/winscw/c/interpretsis_test_harness.txt

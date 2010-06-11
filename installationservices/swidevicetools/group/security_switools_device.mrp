@@ -1,0 +1,9 @@
+component	security_switools_device
+source	\sf\mw\appinstall\installationservices\swidevicetools
+binary	\sf\mw\appinstall\installationservices\swidevicetools\group	all
+exports	\sf\mw\appinstall\installationservices\swidevicetools\group
+
+notes_source	\component_defs\release.src
+
+ipr T 
+
