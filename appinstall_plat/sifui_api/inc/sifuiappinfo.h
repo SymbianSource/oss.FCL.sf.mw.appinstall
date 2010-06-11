@@ -63,6 +63,13 @@ class CSifUiAppInfo : public CBase
                 const CApaMaskedBitmap* aAppIcon );
 
         /**
+         * Creates new CSifUiAppInfo object by copying existing object.
+         * @param aAppInfo - application info to copy
+         * @returns CSifUiAppInfo* -- new CSifUiAppInfo object
+         */
+        IMPORT_C static CSifUiAppInfo* NewL( const CSifUiAppInfo& aAppInfo );
+
+        /**
          * Destructor.
          */
         ~CSifUiAppInfo();
@@ -110,6 +117,7 @@ class CSifUiAppInfo : public CBase
         void ConstructL( const TDesC& aAppName, const TDesC& aAppVendor,
                 const TVersion& aAppVersion, TInt aAppSize,
                 const CApaMaskedBitmap* aAppIcon );
+        void ConstructL( const CSifUiAppInfo& aAppInfo );
 
     private:    // data
         HBufC* iAppName;

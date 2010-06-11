@@ -356,8 +356,18 @@ EXPORT_C COpaqueData* COpaqueData::NewL(RReadStream& aStream)
     }
 
 void COpaqueData::ConstructL(const TDesC8& aOpaqueData, TLanguage aLanguage)
-    {
-    iOpaqueData = aOpaqueData.AllocL();
+    {  
+	//if the length of opaque data is more than 4k, we will truncate it to 4k.
+    const TInt KMaxOpaqueDataLength = 4096;    
+    if (aOpaqueData.Length() > KMaxOpaqueDataLength)
+        {
+        iOpaqueData = HBufC8::NewL(KMaxOpaqueDataLength);
+        iOpaqueData->Des().Copy(aOpaqueData.Ptr(),KMaxOpaqueDataLength);
+        }
+    else
+        {
+        iOpaqueData = aOpaqueData.AllocL();
+        }
     iLanguage = aLanguage;
     }
 

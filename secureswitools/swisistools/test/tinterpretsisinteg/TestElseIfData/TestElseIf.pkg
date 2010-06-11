@@ -1,0 +1,22 @@
+&EN
+
+#{"TestElseIf"}, (0x2002cccf), 1, 0, 0, TYPE=SA
+%{"SJ"}
+:"SJ"
+
+IF (0)
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\file0"-"c:\data\First_first.txt"
+
+ELSEIF (0) 
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\file0"-"c:\data\First_second.txt"
+
+ELSEIF (0) 
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\file0"-"c:\data\First_third.txt"
+
+ELSEIF (1)
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\file0"-"c:\data\First_fourth.txt"
+
+ELSE
+	"\epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\file0"-"c:\data\First_fifth.txt"
+
+ENDIF

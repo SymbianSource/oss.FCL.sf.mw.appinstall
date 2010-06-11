@@ -26,7 +26,7 @@
 {9.5}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
 {9.6}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
 {future}=Common,SWI,SisTools,SwiTools,USIF,Misc,ToolsNew,SwiDiran
-{tb92}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL
+{tb92}=Common,SWI,IntegrityServices,SisTools,SwiTools95Only,SwiTools,Misc,ToolsLegacy,UptoMCL,NonUSIFMCL
 {tb101}=Common,SWI,SisTools,SwiTools,USIF,Misc,ToolsNew,SwiDiran
 
 
@@ -121,6 +121,9 @@ TESTEXECUTE, \logs\testexecute\tsishelper.htm,, -Dstartupmode=1 -- \tswi\tsishel
 [IntegrityServices]
 TESTEXECUTE, \logs\testexecute\tstartuprecovery.htm,, \tswi\tintegrityservices\scripts\tstartuprecovery.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tintegrityservices\scripts\batchfiles\recoverystartup_pre.bat,
 TESTEXECUTE, \logs\testexecute\tintegrityservices.htm,, -Dstartupmode=1 -- \tswi\tintegrityservices\scripts\tintegrityservices.script, 300, UDEB#UREL,,
+
+[NonUSIFMCL]
+TESTEXECUTE, \logs\testexecute\nonusiftuiscriptadaptors.htm,, \tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script, 10000, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tuiscriptadaptors_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tuiscriptadaptors_post.bat
 
 [SWI]
 TESTEXECUTE, \logs\testexecute\testfotaupdate1.htm,,    -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testfotaupdate1.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_post.bat

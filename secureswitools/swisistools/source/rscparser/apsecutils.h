@@ -33,7 +33,7 @@ This is a set of security related methods for apparc internal usage.
 class CApaSecurityUtils
     {
 public:
-    static TInt CheckAppSecurity( const Ptr16 aAppFilename, 
+    static TInt CheckAppSecurity( const Ptr16& aAppFilename, 
                                            TBool& aHasWriteDeviceDataCap, 
                                            TBool& aIsSidProtected,
                                            const std::string& aDerivedPath);

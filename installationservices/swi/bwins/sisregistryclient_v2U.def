@@ -182,8 +182,8 @@ EXPORTS
 	?RollbackTransactionL@RSisRegistryWritableSession@Swi@@QAEXXZ @ 181 NONAME ; void Swi::RSisRegistryWritableSession::RollbackTransactionL(void)
 	?SerializedSize@CSisRegistryFileDescription@Swi@@QBEKXZ @ 182 NONAME ; unsigned long Swi::CSisRegistryFileDescription::SerializedSize(void) const
 	?IsFileRegisteredL@RSisRegistrySession@Swi@@QAEHABVTDesC16@@@Z @ 183 NONAME ; int Swi::RSisRegistrySession::IsFileRegisteredL(class TDesC16 const &)
-	?UpdateEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@_J@Z @ 184 NONAME ; void Swi::RSisRegistryWritableSession::UpdateEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, long long)
-	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@_J@Z @ 185 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, long long)
+	?UpdateEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@_J@Z @ 184 NONAME ; void Swi::RSisRegistryWritableSession::UpdateEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, long long)
+	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@_J@Z @ 185 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, long long)
 	?GetComponentIdForUidL@RSisRegistrySession@Swi@@QAEHABVTUid@@@Z @ 186 NONAME ; int Swi::RSisRegistrySession::GetComponentIdForUidL(class TUid const &)
 	?SetNameL@CSisRegistryPackage@Swi@@QAEXABVTDesC16@@@Z @ 187 NONAME ; void Swi::CSisRegistryPackage::SetNameL(class TDesC16 const &)
 	??0RSisRegistryHelper@Swi@@QAE@XZ @ 188 NONAME ABSENT ; Swi::RSisRegistryHelper::RSisRegistryHelper(void)

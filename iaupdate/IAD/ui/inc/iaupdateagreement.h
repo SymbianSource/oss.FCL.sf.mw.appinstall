@@ -62,12 +62,7 @@ public: // new functions
     * @return True value if agreement accepted 
     */
     TBool AcceptAgreementL();
-    
-    /**
-    * Shows Nokia agreement of Application Update 
-    */
-    void ShowAgreementL();
-    
+        
     /**
     * Is Nokia agreement of Application Update accepted by an user
     *
@@ -89,13 +84,7 @@ private:
      */
     void ConstructL();
     
-    /**
-    * Shows agreement dialog
-    * 
-     */
-    HbAction* ShowDialogL( HbAction *primaryAction, HbAction *secondaryAction );
-    
-    
+       
 private: //data
     
     };

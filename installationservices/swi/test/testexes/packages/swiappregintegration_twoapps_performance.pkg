@@ -1,0 +1,54 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+; SA package containing complete resource files for English and French
+;
+
+;Languages
+&EN, FR
+
+#{"swiappregintegration_base01_EN","swiappregintegration_base01_FR"},(0x80010003),1,1,1,TYPE=SA
+
+;Localised Vendor name
+%{"Vendor_EN","Vendor_FR"}
+
+;Unique Vendor name
+:"Vendor"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\swiappregintegration_base01.exe" - "!:\sys\bin\swiappregintegration_base01.exe"
+
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration_base01\swiappregintegration_base01_reg.rsc" - "!:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration_base01\swiappregintegration_base01_loc.rsc" -"!:\resource\apps\swiappregintegration_base01_loc.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration_base01_rsc.mbm"
+
+if supported_language=01
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration_base01\swiappregintegration_base01_loc.r01" -"!:\resource\apps\swiappregintegration_base01_loc.r01"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration_base01_01.mbm"
+endif
+
+if supported_language=02
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration_base01\swiappregintegration_base01_loc.r02" -"!:\resource\apps\swiappregintegration_base01_loc.r02"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration_base01_02.mbm"
+endif
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\swiappregintegration02.exe" - "!:\sys\bin\swiappregintegration02.exe"
+
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration02\swiappregintegration02_reg.rsc" - "!:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration02\swiappregintegration02_loc.rsc" -"!:\resource\apps\swiappregintegration02_loc.rsc"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration02_rsc.mbm"
+
+if supported_language=01
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration02\swiappregintegration02_loc.r01" -"!:\resource\apps\swiappregintegration02_loc.r01"
+"\epoc32\data\z\tswi\tuiscriptadaptors\data\swiappregintegration01\swiappregintegration.mbm"  -"!:\resource\apps\swiappregintegration02_01.mbm"
+endif

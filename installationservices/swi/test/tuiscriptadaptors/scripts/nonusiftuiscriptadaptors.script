@@ -1,0 +1,42 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-DEF082510-0001
+//! @SYMTestCaseDesc		Import ECOM plugins for apparc SidChecker interface - required by INC069526
+//! @SYMDEF			DEF082510
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Verify Sid presence query via plugni works.
+//! @SYMTestExpectedResults	Present when present, absent when absent
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-DEF082510-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_absent
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe
+RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_present
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_exe
+RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_absent
+
+END_TESTCASE API-SEC-DEF082510-0001
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

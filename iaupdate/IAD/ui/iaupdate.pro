@@ -45,7 +45,6 @@ SOURCES += iaupdatemain.cpp \
     iaupdateapplication.cpp \
     iaupdatemainwindow.cpp \
     iaupdatemainview.cpp \
-    iaupdatehistoryview.cpp \
     iaupdateengine.cpp \
     iaupdateagreement.cpp \
     iaupdateautomaticcheck.cpp \
@@ -67,12 +66,14 @@ SOURCES += iaupdatemain.cpp \
     iaupdatewaitdialog.cpp \
     iaupdatenodeid.cpp \
     iaupdatetools.cpp \
-    iaupdateresultsdialog.cpp
+    iaupdatesettingdialog.cpp \
+    iaupdateresultsdialog.cpp \
+    iaupdatedialogutil.cpp
+
     
 
 HEADERS = iaupdateapplication.h \
     iaupdatemainwindow.h \
-    iaupdatehistoryview.h \
     iaupdatemainview.h \
     iaupdateengine.h \
     iaupdatewaitdialog.h \
@@ -107,7 +108,9 @@ HEADERS = iaupdateapplication.h \
     iaupdateserviceprovider.h \
     iaupdatenodeid.h \
     iaupdatetools.h \
-    iaupdateresultsdialog.h 
+    iaupdatesettingdialog.h \
+    iaupdateresultsdialog.h \ 
+    iaupdatedialogutil.h
 
 
 LIBS += -lbafl
@@ -131,6 +134,7 @@ LIBS += -lws32
 LIBS += -lapparc
 LIBS += -lapgrfx
 LIBS += -lstarterclient
+LIBS += -lcmapplsettingsui
 
 
 

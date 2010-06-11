@@ -18,9 +18,8 @@
 #include <usif/scr/scr.h>
 #include <usif/scr/scrcommon.h>
 #include <usif/scr/screntries.h>
-#include <apgcli.h>    //RApaSession
-//TODO enable apparc support
-//#include <appinfo.h> //TAppInfo
+#include <apgcli.h>    // RApaSession
+#include <apgupdate.h> // TApaAppUpdateInfo
 
 #include "daemonbehaviour.h"
 #include "swispubsubdefs.h"
@@ -30,7 +29,6 @@
 #include "sisregistryentry.h"
 
 using namespace Swi;
-
 
 // -----------------------------------------------------------------------
 // CDaemonBehaviour::NewL
@@ -83,11 +81,8 @@ CDaemonBehaviour::~CDaemonBehaviour()
         }   
     delete iSisInstaller;
     iSisInstaller = NULL;
-    iFs.Close();  
-            
-#ifdef RD_MULTIPLE_DRIVE    
-    iDriveArray.Close();
-#endif        
+    iFs.Close();                
+    iDriveArray.Close();        
     }
 
 // -----------------------------------------------------------------------
@@ -106,7 +101,7 @@ TBool CDaemonBehaviour::StartupL()
 //     
 void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
     {
-    FLOG_1( _L("Daemon: Media change %d"), aDrive );
+    FLOG_1( _L("Daemon: MediaChangeL: Media change %d"), aDrive );
     RSisRegistryWritableSession registrySession;
     
     User::LeaveIfError( registrySession.Connect() );
@@ -115,20 +110,23 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
     
     if ( aChangeType==EMediaInserted )
         {
-        FLOG( _L("Daemon: Media inserted") ); 
-
+        FLOG( _L("Daemon: MediaChangeL: Media inserted") ); 
+        TInt err = KErrNone;
         // Notify SCR and AppArc for media change.
-        UpdateComponentStatusL( aChangeType, aDrive );
+        TRAP( err, UpdateComponentStatusL( aChangeType, aDrive ) );
+        FLOG_1( _L("Daemon: UpdateComponentStatusL err = %d"), err );
 
         // We need call sis registry since this call will
         // activate sis registry to clean uninstalled components
         // from inserted media.
-        registrySession.AddDriveL(aDrive);
+        registrySession.AddDriveL( aDrive );
                                                 
         // Scan directory on the card and run pre-installed through SWIS
-        FLOG( _L("Daemon: Media change: Process preinstalled files") );
-        ProcessPreinstalledFilesL(aDrive);            
-       
+        FLOG( _L("Daemon: MediaChangeL: Process preinstalled files") );
+        ProcessPreinstalledFilesL( aDrive );  
+        FLOG_1( _L("Daemon: MediaChangeL: StartInstalling drive: %d"), aDrive );
+        iSisInstaller->StartInstallingL();
+                      
         // Add inserted media drive to drive array.                     
         if ( iDriveArray.Find(aDrive) == KErrNotFound )
             {                
@@ -137,19 +135,22 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
         }
     else if (aChangeType==EMediaRemoved)
         {
-        FLOG( _L("Daemon: Media removed") );       
-                   
+        FLOG( _L("Daemon: MediaChangeL: Media removed") );       
+        TInt err = KErrNone;           
         // Notify SCR and AppArc for media change.
-        UpdateComponentStatusL( aChangeType, aDrive );
+        TRAP( err, UpdateComponentStatusL( aChangeType, aDrive ) );
+        FLOG_1( _L("Daemon: UpdateComponentStatusL err = %d"), err );
  
         // Get Installer state.                   
         TBool installerRunning = iSisInstaller->IsInstalling();
+        FLOG_1( _L("Daemon: MediaChangeL: IsInstalling = %d"), installerRunning );
         
+        FLOG( _L("Daemon: MediaChangeL: Cancel install process") );
         // Cancel all requests for install
         iSisInstaller->Cancel();                       
     
         // Notify plugin
-        if(iSwiDaemonPlugin)
+        if( iSwiDaemonPlugin )
             {
             TInt index = iDriveArray.Find(aDrive);
             iSwiDaemonPlugin->MediaRemoved(index);
@@ -163,22 +164,24 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
             iDriveArray.Remove(index); 
             iDriveArray.Compress();   
             }
-    
+                
         // Continue installing from other drives if needed.
         if ( installerRunning )
-            {                                     
+            {
+            FLOG( _L("Daemon: MediaChangeL: Continue installing other drives") );
             // Get count of inserted drives.
             TInt count = iDriveArray.Count();
-                    
+            FLOG_1( _L("Daemon: Drive count = %d"), count );        
             if ( count )            
-                {                             
+                {
+                // Find packages for other drives.
                 for(index = 0; index < count; index++ )
                     {                   
-                    ProcessPreinstalledFilesL(iDriveArray[index]);
-                    
-                    FLOG_1( _L("Daemon: StartInstallingL for drive: %d"), index);
-                    iSisInstaller->StartInstallingL();                
+                    ProcessPreinstalledFilesL(iDriveArray[index]);                                        
                     }
+                // Start installing.
+                FLOG( _L("Daemon: MediaChangeL: StartInstallingL") );
+                iSisInstaller->StartInstallingL();
                 }                
             }                      
         }
@@ -192,11 +195,10 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
 //          
 void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
     {
+    FLOG_1( _L("Daemon: ProcessPreinstalledFilesL: Drive index: %d"), 
+            aDrive );
      _LIT( KDaemonPrivatePath,":\\private\\10202dce\\" );
     
-#ifndef RD_MULTIPLE_DRIVE
-    iSisInstaller->Cancel();
-#endif      
     // For uninstaller
     // Set on installing mode.
     iGeneralProcessStatus = EStateInstalling; 
@@ -206,7 +208,7 @@ void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
     ProcessPreinstalledFilesL(aDrive, KDaemonPrivatePath);
     iStartNotified = EFalse;
     iDrive = aDrive;    
-    iSisInstaller->StartInstallingL();
+    FLOG( _L("Daemon: ProcessPreInstalledFilesL END") );
     }
 
 // -----------------------------------------------------------------------
@@ -214,8 +216,7 @@ void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive)
 // -----------------------------------------------------------------------
 //        
 void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory)
-    {
-    FLOG_1( _L("Daemon: ProcessPreInstalledFilesL: Drive index: %d"), aDrive );
+    {    
     TPath preInstalledPath;
     TChar drive;
     RFs::DriveToChar(aDrive, drive);
@@ -240,7 +241,8 @@ void CDaemonBehaviour::ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDire
             if(!entry.IsDir())
                 {
                 TFileName fileName(preInstalledPath);
-                fileName.Append(entry.iName);
+                fileName.Append(entry.iName);                
+                // Add files to sis installer.
                 iSisInstaller->AddFileToInstallL(fileName);
                 }
             }
@@ -337,13 +339,12 @@ void CDaemonBehaviour::RequestPluginInstall( TDesC& aSisFile )
 // CDaemonBehaviour::UpdateComponentStatusL
 // -----------------------------------------------------------------------
 //         
-void CDaemonBehaviour::UpdateComponentStatusL( 
-   TChangeType aChangeType, 
-   TInt aDrive )
+void CDaemonBehaviour::UpdateComponentStatusL( TChangeType aChangeType, 
+                                               TInt aDrive )
     {
     FLOG( _L("Daemon: UpdateComponentStatus") ); 
             
-    Usif::RSoftwareComponentRegistry scrServer; 
+    Usif::RSoftwareComponentRegistry scrServer;       
     User::LeaveIfError( scrServer.Connect() );
     CleanupClosePushL( scrServer );
             
@@ -360,118 +361,178 @@ void CDaemonBehaviour::UpdateComponentStatusL(
    
     if ( componentIdList.Count() )
         {
-// TODO Enabloi AppArcin päivitys. 
-// TODO Hae TAppInfon headeri includeen.        
-//            RArray<TAppInfo> appinfoArray;
-//            CleanupClosePushL( appinfoArray );
-    
-        // Convert the given target drive number to drive letter.
+        RArray<TApaAppUpdateInfo> appInfoArray;         
+        CleanupClosePushL( appInfoArray );
+        FLOG_1( _L("Daemon: target drive: %d"), aDrive );
+                              
+#ifdef _DEBUG
         TChar targetDrive;
         iFs.DriveToChar( aDrive, targetDrive );
-        FLOG_1( _L("Daemon: targetDrive: 0x%x"), TUint( targetDrive ) ); 
+        HBufC* tarceBuf = HBufC::NewL( 16 );
+        TPtr bufPtr = tarceBuf->Des();
+        bufPtr.Append( targetDrive );
+        FLOG_1( _L("Daemon: target drive: %S"), &bufPtr ); 
+        delete tarceBuf;
+#endif         
     
         FLOG( _L("Daemon: Check all SCR native components") ); 
         // Check all components in SCR. If media is removed/inserted
         // change status flag in SCR and in AppArc.
         for ( TInt index=0; index < componentIdList.Count(); index++ )
-            {                       
-            Usif::CComponentEntry* entry = Usif::CComponentEntry::NewL();
-            CleanupStack::PushL( entry );
-            
+            {  
             Usif::TComponentId componentId( componentIdList[index] );
             FLOG_1( _L("Daemon: componentId: %d"), componentId ); 
-            
-            scrServer.GetComponentL( componentId, 
-                                     *entry, 
-                                     Usif::KUnspecifiedLocale ); 
-            
-// TODO poista ei tarvetta jos filter toimii.
-            //if ( entry->SoftwareType() == Usif::KSoftwareTypeNative  )
-            
-            // Get all component drives.
-            TDriveList driveList;                
-            driveList = entry->InstalledDrives();
-               
-            TBool isInTargetDrive = EFalse;
-
-            FLOG( _L("Daemon: Check all drives for this component") ); 
-            // Go through all drives which have files for 
-            // this component.
-            for ( TInt i = 0; i < KMaxDrives; i++ )
-                {                
-                if ( driveList[i] != 0 )
-                    {
-                    TChar installDrive = 
-                            static_cast<TChar>( driveList[i] );
-                
-                    FLOG_1( _L("Daemon: driveList index: %d"), i ); 
-                    FLOG_1( _L("Daemon: installDrive: 0x%x"), TUint( installDrive ) ); 
-                    
-                    if ( targetDrive == installDrive )
-                        {
-                        // Ok we have files in this target drive.
-                        isInTargetDrive = ETrue;
-                        FLOG( _L("Daemon: SW in target drive.") ); 
-                        }
-                    }
-                }
-                                
-            // Check if component or part of it is in the media.
-            if ( isInTargetDrive )
-                {
-                FLOG( _L("Daemon: Set component status to SCR") ); 
-//                    TAppInfo appInfo;                     
-//                    appInfo.iAppUid = componentId;
-                                    
-                if ( aChangeType == EMediaInserted )
-                    {  
-                    // Update component flag to SCR.
-                    scrServer.SetIsComponentPresentL( componentId, 
-                                                      ETrue );
-                    FLOG( _L("Daemon: Set component present = TRUE") );                             
-                    // Set app status for AppArc. AppArc sees this 
-                    // as new component.
-//                        appInfo.iAppUid = TAppInfo::ENewApp;
-                    }
-                else if ( aChangeType==EMediaRemoved )
-                    {
-                   // Update component flag to SCR.
-                    scrServer.SetIsComponentPresentL( componentId, 
-                                                      EFalse );
-                    FLOG( _L("Daemon: Set component present = FALSE") );                            
-                    // Set app status for AppArc. AppArc sees this 
-                    // component as removed.
-//                        appInfo.iAppUid = TAppInfo::ERemoveApp;
-                    }
-                
-                // Add component info to array.
-//                    appinfoArray.Append( appInfo );                    
-                }                     
-            
-            CleanupStack::PopAndDestroy( entry );
-            entry = NULL;
-            } // for
-//TODO enable AppArc support when TAppInfo is available.            
-/*       
-         FLOG( _L("Daemon: Set component status to AppArc") ); 
-         // Update AppArc list after we have all components in array.               
-         RApaLsSession appArcSession;
-         TInt err = appArcSession.Connect();
-         if ( !err )
-             {
-             CleanupClosePushL(appArcSession);
-             appArcSession.UpdateAppListL( appinfoArray );
-             CleanupStack::PopAndDestroy();                   
-             }
         
-        CleanupStack::PopAndDestroy( &appinfoArray );
-*/ 
+            // Check that package is not in ROM. If package is in rom
+            // it can not be removed/not present.
+            TBool inRom = scrServer.IsComponentOnReadOnlyDriveL( componentId );
+            FLOG_1( _L("Daemon: IsComponentOnReadOnlyDriveL: %d"), inRom ); 
+            
+            if ( !inRom )
+                {              
+                UpdateStatusL( scrServer, 
+                               componentId, 
+                               aChangeType,
+                               aDrive,
+                               appInfoArray );
+                }                            
+            } // for loop
+        
+        FLOG_1( _L("Daemon: appInfoArray.Count = %d"), appInfoArray.Count() ); 
+        
+        // Check do we have updated some application info.
+        if ( appInfoArray.Count() )
+            {             
+            // Update AppArc list after we have all application 
+            // uids/status in array. 
+            FLOG( _L("Daemon: Update AppArc") );
+            RApaLsSession appArcSession;
+            TInt err = appArcSession.Connect();
+            FLOG_1( _L("Daemon: appArcSession.Connect err = %d"), err ); 
+            if ( !err )
+                {
+                CleanupClosePushL( appArcSession );            
+                FLOG( _L("Daemon: UpdateAppListL") ); 
+                appArcSession.UpdateAppListL( appInfoArray );            
+                CleanupStack::PopAndDestroy(); // appArcSession                 
+                }
+            }
+        CleanupStack::PopAndDestroy( &appInfoArray );
         } // if componentList.Count()
              
     CleanupStack::PopAndDestroy( &componentIdList ); //componentIDList.Close();
     CleanupStack::PopAndDestroy( filter ); 
     CleanupStack::PopAndDestroy( &scrServer );  
     FLOG( _L("Daemon: UpdateComponentStatus END") ); 
-    }       
+    } 
+
+// -----------------------------------------------------------------------
+// CDaemonBehaviour::UpdateStatusL
+// -----------------------------------------------------------------------
+//    
+void CDaemonBehaviour::UpdateStatusL( 
+    Usif::RSoftwareComponentRegistry& aScrServer,
+    Usif::TComponentId aComponentId,
+    TChangeType aChangeType,
+    TInt aTargetDrive,
+    RArray<TApaAppUpdateInfo>& aAppInfoArray )     
+    {
+    FLOG( _L("Daemon: CDaemonBehaviour::UpdateStatusL start") ); 
     
+    Usif::CComponentEntry* entry = Usif::CComponentEntry::NewL();
+    CleanupStack::PushL( entry );
+        
+    TInt err = KErrNone;
+    TRAP( err, aScrServer.GetComponentL( aComponentId, 
+                                         *entry, 
+                                         Usif::KUnspecifiedLocale ) );    
+    FLOG_1( _L("Daemon: GetComponentL TRAP err = %d"), err );
+    
+    // If we get error let's not stop the loop.
+    if ( !err )
+        { 
+        TBool isInTargetDrive = EFalse;
+        // Get all component drives.
+        TDriveList driveList;                
+        driveList = entry->InstalledDrives();           
+
+        FLOG( _L("Daemon: Check all drives for this component") ); 
+        // Go through all drives which have files for this component.
+        for ( TInt i = 0; i < KMaxDrives; i++ )
+            {                
+            if ( driveList[i] != 0 )
+                {                                           
+                FLOG_1( _L("Daemon: Found drive: %d"), i ); 
+                
+                if ( aTargetDrive == i )
+                    {
+                    // Ok we have files in this target drive.
+                    isInTargetDrive = ETrue;
+                    FLOG( _L("Daemon: Component has files in target drive") ); 
+                    }
+                }
+            } // for
+                            
+        // Check if component or part of it is in the media.
+        if ( isInTargetDrive )
+            {
+            FLOG( _L("Daemon: Set component status to SCR") );
+            // Update component flag to SCR. 
+            if ( aChangeType == EMediaInserted )
+                {  
+                FLOG( _L("Daemon: Set component present = TRUE") );                                  
+                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, ETrue ) );                                                                            
+                }
+            else if ( aChangeType==EMediaRemoved )
+                {
+                FLOG( _L("Daemon: Set component present = FALSE") );                              
+                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, EFalse ) );                                                                               
+                }            
+            FLOG_1( _L("Daemon: SetIsComponentPresentL TRAP err = %d"), err );
+            
+            // We need to update applications status to AppArc when
+            // there is some media change. AppArc needs application
+            // UID (not package UID) so we need to get all app. UIDs
+            // from the package and set them to present or not present.
+            
+            FLOG( _L("Daemon: Create application status for AppArc") );
+            FLOG( _L("Daemon: Get applications UIDs from SCR") );
+            RArray<TUid> appUidArray;
+            CleanupClosePushL( appUidArray );
+                        
+            TRAP( err, aScrServer.GetAppUidsForComponentL( aComponentId, appUidArray ) );
+            FLOG_1( _L("Daemon: GetAppUidsForComponentL TRAP err = %d"), err );                        
+            FLOG_1( _L("Daemon: UID array count = %d"), appUidArray.Count() );
+           
+            for (TInt index = 0; index < appUidArray.Count(); index++)
+                {
+                FLOG_1( _L("Daemon: Add app UID = 0x%x"), 
+                        appUidArray[index].iUid );                
+            
+                TApaAppUpdateInfo appInfo;
+                appInfo.iAppUid = appUidArray[index]; 
+                
+                if ( aChangeType == EMediaInserted  )
+                    {
+                    appInfo.iAction = TApaAppUpdateInfo::EAppPresent;
+                    FLOG( _L("Daemon: Set app = EAppPresent") );
+                    }
+                else
+                    {
+                    appInfo.iAction = TApaAppUpdateInfo::EAppNotPresent;
+                    FLOG( _L("Daemon: Set app = EAppNotPresent") );
+                    }
+                
+                aAppInfoArray.Append( appInfo );   
+                }                           
+            CleanupStack::PopAndDestroy(&appUidArray);                                  
+            }   // if isInTargetDrive        
+        }   // if err
+    
+    CleanupStack::PopAndDestroy( entry );
+    entry = NULL;
+    
+    FLOG( _L("Daemon: CDaemonBehaviour::UpdateStatusL end") ); 
+    }
+
 //EOF

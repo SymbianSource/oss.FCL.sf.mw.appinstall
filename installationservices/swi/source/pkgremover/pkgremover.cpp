@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -25,6 +25,7 @@
 #include "installclientserver.h"
 #include <swi/pkgremover.h>
 #include <connect/sbdefs.h>
+#include "cleanuputils.h"
 
 // Maximum buffer size
 const TInt KMaxBufferSize = 1024;
@@ -43,6 +44,7 @@ TInt FilterErrors(TInt aError);
 /*static*/
 EXPORT_C void UninstalledSisPackages::ListL(TDriveNumber aDrive, RPointerArray<CUninstalledPackageEntry>& aPackageList)
 	{
+	CleanupResetAndDestroyPushL(aPackageList);
 	aPackageList.ResetAndDestroy();
 
 	// Check if SWIS is busy
@@ -150,6 +152,7 @@ EXPORT_C void UninstalledSisPackages::ListL(TDriveNumber aDrive, RPointerArray<C
 
 	// Shutdown InstallServer and SisHelper
 	CleanupStack::PopAndDestroy(2, &server);
+	CleanupStack::Pop(&aPackageList);
 	}
 
 /*static*/

@@ -29,12 +29,12 @@ class QString;
 class ActiveRunnerPrivate : public CActive
 {
 public:     // constructor and destructor
-    ActiveRunnerPrivate(ActiveRunner *aRunner);
+    ActiveRunnerPrivate( ActiveRunner *aRunner );
     ~ActiveRunnerPrivate();
 
 public:     // new functions
     TInt Initialize( bool aUseSif );
-    TInt Install( const QString& aFileName, bool aSilent );
+    TInt Install( const QString& aFileName, bool aSilent, bool aOpenFile );
     TInt Remove( const Usif::TComponentId& aComponentId, bool aSilent );
     TInt Remove( const TUid& aUid, const TDesC8& aMime, bool aSilent );
 
@@ -44,12 +44,14 @@ protected:  // from CActive
     TInt RunError(TInt aError);
 
 private:    // new functions
-    void DoInstallL( const QString& aFileName, bool aSilent );
+    void DoInitializeL( bool aUseSif );
+    void DoInstallL( const QString& aFileName, bool aSilent, bool aOpenFile );
     void DoRemoveL( const Usif::TComponentId& aComponentId, bool aSilent );
     void DoRemoveL( const TUid& aUid, const TDesC8& aMime, bool aSilent );
 
 private:    // data
     ActiveRunner *q_ptr;
+    RFs iFs;
     HBufC* iFileName;
     TBool iUseSif;
     Usif::COpaqueNamedParams *iArguments;

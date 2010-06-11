@@ -20,7 +20,9 @@
 #include "log.h"
 #include "plan.h"
 #include "swispubsubdefs.h"
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  
 #include <usif/scr/appregentries.h>
+#endif
 
 namespace Swi
 {
@@ -348,16 +350,13 @@ TInt CSwisStateMachine::RunError(TInt aError)
 		// re-generate the sisregistry cache .. very time consuming!
 		ResetRegistryCache();
 		}
-#endif
-
-	
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#else
 	// Deregister the force registered applications from AppArc
 	DEBUG_PRINTF(_L8("Deregistering the force registered applications with AppArc"));
 	RSisLauncherSession launcher;
 	CleanupClosePushL(launcher);
 	User::LeaveIfError(launcher.Connect());
-	RPointerArray<Usif::CApplicationRegistrationData> emptyAppRegDataArray;
+	RArray<TAppUpdateInfo> emptyAppRegDataArray;
 	launcher.NotifyNewAppsL(emptyAppRegDataArray);
 	CleanupStack::PopAndDestroy(&launcher);
 #endif

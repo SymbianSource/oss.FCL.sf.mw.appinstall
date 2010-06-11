@@ -17,9 +17,9 @@ EXPORTS
 	_ZN4Usif15CComponentEntryD1Ev @ 16 NONAME
 	_ZN4Usif15CComponentEntryD2Ev @ 17 NONAME
 	_ZN4Usif16CComponentFilter10SetVendorLERK7TDesC16 @ 18 NONAME
-	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16RK6TDesC8 @ 19 NONAME
-	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16S3_9TLanguage @ 20 NONAME
-	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16x @ 21 NONAME
+	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16RK6TDesC8NS0_11TDbOperatorES7_ @ 19 NONAME
+	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16S3_9TLanguageNS0_11TDbOperatorES5_ @ 20 NONAME
+	_ZN4Usif16CComponentFilter12AddPropertyLERK7TDesC16xNS0_11TDbOperatorES4_ @ 21 NONAME
 	_ZN4Usif16CComponentFilter12SetRemovableEi @ 22 NONAME
 	_ZN4Usif16CComponentFilter14SetScomoStateLENS_11TScomoStateE @ 23 NONAME
 	_ZN4Usif16CComponentFilter15SetDrmProtectedEi @ 24 NONAME
@@ -80,7 +80,7 @@ EXPORTS
 	_ZN4Usif26RSoftwareComponentRegistry13AddComponentLERK13RPointerArrayINS_25CLocalizableComponentInfoEERK7TDesC16PS7_NS_26TScrComponentOperationTypeE @ 79 NONAME
 	_ZN4Usif26RSoftwareComponentRegistry13AddComponentLERK7TDesC16S3_S3_PS2_NS_26TScrComponentOperationTypeE @ 80 NONAME
 	_ZN4Usif26RSoftwareComponentRegistry14SetVendorNameLEiRK7TDesC169TLanguage @ 81 NONAME
-	_ZN4Usif26RSoftwareComponentRegistry16AddSoftwareTypeLERK7TDesC164TUid9TSecureIdS5_RK13RPointerArrayI7HBufC16EPKS6_INS_26CLocalizedSoftwareTypeNameEE @ 82 NONAME
+	_ZN4Usif26RSoftwareComponentRegistry16AddSoftwareTypeLERKNS_20CSoftwareTypeRegInfoE @ 82 NONAME
 	_ZN4Usif26RSoftwareComponentRegistry16CompareVersionsLERK7TDesC16S3_ @ 83 NONAME
 	_ZN4Usif26RSoftwareComponentRegistry16DeleteComponentLEi @ 84 NONAME
 	_ZN4Usif26RSoftwareComponentRegistry16SetFilePropertyLEiRK7TDesC16S3_RK6TDesC8 @ 85 NONAME
@@ -380,4 +380,22 @@ EXPORTS
 	_ZNK4Usif9CDataType12ExternalizeLER12RWriteStream @ 379 NONAME
 	_ZNK4Usif9CDataType4TypeEv @ 380 NONAME
 	_ZNK4Usif9CDataType8PriorityEv @ 381 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfo12SetMimeTypeLERK7TDesC16 @ 382 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfo22SetLauncherExecutableLERK7TDesC16 @ 383 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfo29SetLocalizedSoftwareTypeNameLE9TLanguageRK7TDesC16 @ 384 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfo4NewLER11RReadStream @ 385 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfo4NewLERK7TDesC16 @ 386 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfoD0Ev @ 387 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfoD1Ev @ 388 NONAME
+	_ZN4Usif20CSoftwareTypeRegInfoD2Ev @ 389 NONAME
+	_ZN4Usif17TCustomAccessInfoC1E9TSecureIdNS_11TAccessModeE @ 390 NONAME
+	_ZN4Usif17TCustomAccessInfoC2E9TSecureIdNS_11TAccessModeE @ 391 NONAME
+	_ZNK4Usif17TCustomAccessInfo10AccessModeEv @ 392 NONAME
+	_ZNK4Usif17TCustomAccessInfo8SecureIdEv @ 393 NONAME
+	_ZNK4Usif20CSoftwareTypeRegInfo12ExternalizeLER12RWriteStream @ 394 NONAME
+	_ZN4Usif16CComponentFilter17TPropertyOperator12InternalizeLER11RReadStream @ 395 NONAME
+	_ZN4Usif16CComponentFilter17TPropertyOperatorC1ENS0_11TDbOperatorES2_ @ 396 NONAME
+	_ZN4Usif16CComponentFilter17TPropertyOperatorC2ENS0_11TDbOperatorES2_ @ 397 NONAME
+	_ZNK4Usif16CComponentFilter17TPropertyOperator12NameOperatorEv @ 398 NONAME
+	_ZNK4Usif16CComponentFilter17TPropertyOperator13ValueOperatorEv @ 399 NONAME
 

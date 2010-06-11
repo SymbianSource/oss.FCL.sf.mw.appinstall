@@ -16,15 +16,22 @@
 */
 
 #include "sifuiprivate.h"                       // CSifUiPrivate
-#include "sifuidefs.h"                          // SIF UI device dialog parameters
 #include "sifuicertificateinfo.h"               // CSifUiCertificateInfo
 #include "sifuiappinfo.h"                       // CSifUiAppInfo
 #include <hb/hbcore/hbsymbianvariant.h>         // CHbSymbianVariantMap
+#include <hb/hbwidgets/hbdevicenotificationdialogsymbian.h> // CHbDeviceNotificationDialogSymbian
 #include <apgicnfl.h>                           // CApaMaskedBitmap
 #include <s32mem.h>                             // RDesReadStream
+#include <e32property.h>                        // RProperty
 
 const TInt KDriveLettersLen = 32;
 const TInt KCertificateBufferGranularity = 1024;
+const TInt KProgFull = 100;                     // 100%
+
+const TUid KInstallIndicatorCategory = { 0x20022FC5 };
+const TUint KInstallIndicatorStatus = 0x2002E690;
+
+_LIT( KSifUiDefaultApplicationIcon, "qtg_large_application" );
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -52,9 +59,10 @@ CSifUiPrivate::~CSifUiPrivate()
     delete iWait;
     delete iDeviceDialog;
     delete iVariantMap;
-    delete iBitmap;
+    delete iIndicator;
+    delete iAppInfo;
     delete iSelectableDrives;
-    delete iCertificateInfo;
+    delete iCertificateBuffer;
     }
 
 // ---------------------------------------------------------------------------
@@ -70,15 +78,10 @@ TBool CSifUiPrivate::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
         {
         AddParamL( KSifUiMemorySelection, *iSelectableDrives );
         }
-    if( iCertificateInfo )
-        {
-        User::LeaveIfError( VariantMapL()->Add( KSifUiCertificates, iCertificateInfo ) );
-        iCertificateInfo = NULL;
-        }
+    AddParamsCertificatesL();
 
-    DisplayDeviceDialogL();
-    User::LeaveIfError( WaitForResponse() );
-    return( iReturnValue == KErrNone );
+    UpdateDialogAndWaitForResponseL();
+    return( iDialogReturnValue == KErrNone );
     }
 
 // ---------------------------------------------------------------------------
@@ -132,16 +135,15 @@ TInt CSifUiPrivate::SelectedDrive( TInt& aDriveNumber )
 void CSifUiPrivate::SetCertificateInfoL(
         const RPointerArray<CSifUiCertificateInfo>& aCertificates )
     {
-    if( iCertificateInfo )
+    if( iCertificateBuffer )
         {
-        delete iCertificateInfo;
-        iCertificateInfo = NULL;
+        delete iCertificateBuffer;
+        iCertificateBuffer = NULL;
         }
     if( aCertificates.Count() )
         {
-        CBufBase* buf = CBufFlat::NewL( KCertificateBufferGranularity );
-        CleanupStack::PushL( buf );
-        RBufWriteStream writeStream( *buf );
+        iCertificateBuffer = CBufFlat::NewL( KCertificateBufferGranularity );
+        RBufWriteStream writeStream( *iCertificateBuffer );
         CleanupClosePushL( writeStream );
 
         TInt32 count = aCertificates.Count();
@@ -151,10 +153,7 @@ void CSifUiPrivate::SetCertificateInfoL(
            aCertificates[ index ]->ExternalizeL( writeStream );
            }
 
-        const TPtrC8 dataPtr( buf->Ptr( 0 ).Ptr(), buf->Size() );
-        iCertificateInfo = CHbSymbianVariant::NewL( &dataPtr, CHbSymbianVariant::EBinary );
-
-        CleanupStack::PopAndDestroy( 2, buf );  // writeStream, buf
+        CleanupStack::PopAndDestroy( &writeStream );
         }
     }
 
@@ -169,8 +168,10 @@ void CSifUiPrivate::ShowProgressL( const CSifUiAppInfo& aAppInfo,
 
     AddParamsAppInfoL( aAppInfo );
     AddParamL( KSifUiProgressNoteFinalValue, aProgressBarFinalValue );
+    iProgressBarFinalValue = aProgressBarFinalValue;
+    AddParamsHiddenButtonsL();
 
-    DisplayDeviceDialogL();
+    UpdateDialogOrIndicatorWithoutWaitingL();
     }
 
 // ---------------------------------------------------------------------------
@@ -182,8 +183,44 @@ void CSifUiPrivate::IncreaseProgressBarValueL( TInt aNewValue )
     ChangeNoteTypeL( ESifUiProgressNote );
 
     AddParamL( KSifUiProgressNoteValue, aNewValue );
+    iProgressBarCurrentValue += aNewValue;
+    AddParamsHiddenButtonsL();
 
-    DisplayDeviceDialogL();
+    UpdateDialogOrIndicatorWithoutWaitingL();
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::IsCancelled()
+// ---------------------------------------------------------------------------
+//
+TBool CSifUiPrivate::IsCancelled()
+    {
+    return( iDialogReturnValue == KErrCancel );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::SetButtonVisible()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible )
+    {
+    switch( aButton )
+        {
+        case CSifUi::EHideProgressButton:
+            iNoHideProgressButton = !aIsVisible;
+            break;
+        case CSifUi::ECancelProgressButton:
+            iNoCancelProgressButton = !aIsVisible;
+            break;
+        case CSifUi::EShowInAppLibButton:
+            iNoShowInAppLibButton = !aIsVisible;
+            break;
+        case CSifUi::EErrorDetailsButton:
+            iNoErrorDetailsButton = !aIsVisible;
+            break;
+        default:
+            break;
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -194,8 +231,9 @@ void CSifUiPrivate::ShowCompleteL()
     {
     ChangeNoteTypeL( ESifUiCompleteNote );
 
-    DisplayDeviceDialogL();
-    User::LeaveIfError( WaitForResponse() );
+    AddParamsHiddenButtonsL();
+
+    CompleteDialogOrIndicatorAndWaitForResponseL( KErrNone );
     }
 
 // ---------------------------------------------------------------------------
@@ -214,8 +252,7 @@ void CSifUiPrivate::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
         AddParamL( KSifUiErrorDetails, aErrorDetails );
         }
 
-    DisplayDeviceDialogL();
-    User::LeaveIfError( WaitForResponse() );
+    CompleteDialogOrIndicatorAndWaitForResponseL( aErrorCode );
     }
 
 // ---------------------------------------------------------------------------
@@ -226,7 +263,7 @@ void CSifUiPrivate::DoCancel()
     {
     if( iWait && iWait->IsStarted() && iWait->CanStopNow() )
         {
-        iCompletionCode = KErrCancel;
+        iWaitCompletionCode = KErrCancel;
         iWait->AsyncStop();
         }
     }
@@ -256,19 +293,36 @@ void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
         iSelectedDriveSet = ETrue;
         }
 
-    const CHbSymbianVariant* acceptedVariant = aData.Get( KSifUiQueryAccepted );
-    if( acceptedVariant )
+    const CHbSymbianVariant* variant = aData.Get( KSifUiQueryReturnValue );
+    if( variant )
         {
-        TBool* acceptedValue = acceptedVariant->Value<TBool>();
-        if( acceptedValue && *acceptedValue )
+        TInt* value = variant->Value<TInt>();
+        if( value )
             {
-            iReturnValue = KErrNone;
+            TSifUiDeviceDialogReturnValue returnValue =
+                    static_cast<TSifUiDeviceDialogReturnValue>( *value );
+            switch( returnValue )
+                {
+                case ESifUiContinue:
+                    iDialogReturnValue = KErrNone;
+                    WaitedResponseReceived( KErrNone );
+                    break;
+                case ESifUiCancel:
+                    iDialogReturnValue = KErrCancel;
+                    WaitedResponseReceived( KErrNone );
+                    break;
+                case ESifUiIndicator:
+                    ActivateInstallIndicatorL();
+                    break;
+                default:
+                    __ASSERT_DEBUG( EFalse, User::Invariant() );
+                    break;
+                }
             }
         else
             {
-            iReturnValue = KErrCancel;
+            __ASSERT_DEBUG( EFalse, User::Invariant() );
             }
-        ResponseReceived( KErrNone );
         }
     }
 
@@ -279,14 +333,29 @@ void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
 void CSifUiPrivate::DeviceDialogClosed( TInt aCompletionCode )
     {
     iIsDisplayingDialog = EFalse;
-    ResponseReceived( aCompletionCode );
+    WaitedResponseReceived( aCompletionCode );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::IndicatorUserActivated()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::IndicatorUserActivated( const TDesC& aType,
+        CHbSymbianVariantMap& /*aData*/ )
+    {
+    if( aType == KSifUiInstallIndicatorType )
+        {
+        CloseInstallIndicator();
+        TRAP_IGNORE( DisplayDeviceDialogL() );
+        }
     }
 
 // ---------------------------------------------------------------------------
 // CSifUiPrivate::CSifUiPrivate()
 // ---------------------------------------------------------------------------
 //
-CSifUiPrivate::CSifUiPrivate() : CActive( CActive::EPriorityStandard )
+CSifUiPrivate::CSifUiPrivate() : CActive( CActive::EPriorityStandard ),
+        iIsFirstTimeToDisplay( ETrue )
     {
     CActiveScheduler::Add( this );
     }
@@ -298,7 +367,8 @@ CSifUiPrivate::CSifUiPrivate() : CActive( CActive::EPriorityStandard )
 void CSifUiPrivate::ConstructL()
     {
     iWait = new( ELeave ) CActiveSchedulerWait;
-    // iDeviceDialog is allocated later, first call of DisplayDeviceDialogL()
+    // iDeviceDialog is created later, in the first call of DisplayDeviceDialogL()
+    // iIndicator is also created later, in the first call of ActivateInstallIndicator()
     }
 
 // ---------------------------------------------------------------------------
@@ -335,6 +405,7 @@ void CSifUiPrivate::ChangeNoteTypeL( TInt aType )
     {
     ClearParams();
     AddParamL( KSifUiDialogType, aType );
+    iDialogType = static_cast< TSifUiDeviceDialogType >( aType );
     }
 
 // ---------------------------------------------------------------------------
@@ -376,7 +447,6 @@ void CSifUiPrivate::AddParamListL( const TDesC& aKey, const MDesCArray& aList )
 //
 void CSifUiPrivate::AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo )
     {
-    // TODO: icons missing, could use binary transfer as in certificates
     AddParamL( KSifUiApplicationName, aAppInfo.Name() );
     const TVersion& version( aAppInfo.Version() );
     if( version.iBuild || version.iMajor || version.iMinor )
@@ -391,32 +461,238 @@ void CSifUiPrivate::AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo )
         {
         AddParamL( KSifUiApplicationSize, aAppInfo.Size() );
         }
+    // TODO: icons missing, could use binary transfer as in certificates
+
+    if( iAppInfo != &aAppInfo )
+        {
+        if( iAppInfo )
+            {
+            delete iAppInfo;
+            iAppInfo = NULL;
+            }
+        iAppInfo = CSifUiAppInfo::NewL( aAppInfo );
+        }
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::AddParamsIconL()
+// CSifUiPrivate::AddParamsCertificatesL()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::AddParamsIconL( const CApaMaskedBitmap* aIcon )
+void CSifUiPrivate::AddParamsCertificatesL()
     {
-    // TODO: remove this function
-    if( aIcon )
+    if( iCertificateBuffer )
         {
-        if( iBitmap )
-            {
-            delete iBitmap;
-            iBitmap = NULL;
-            }
-        iBitmap = CApaMaskedBitmap::NewL( aIcon );
+        const TPtrC8 dataPtr( iCertificateBuffer->Ptr( 0 ).Ptr(),
+                iCertificateBuffer->Size() );
+        CHbSymbianVariant* certificates = CHbSymbianVariant::NewL( &dataPtr,
+                CHbSymbianVariant::EBinary );
+        CleanupStack::PushL( certificates );
+        User::LeaveIfError( VariantMapL()->Add( KSifUiCertificates, certificates ) );
+        CleanupStack::Pop( certificates );
+        }
+    }
 
-        CHbSymbianVariantMap* map = VariantMapL();
-        CHbSymbianVariant* variant = NULL;
-        TInt bitmapHandle = iBitmap->Handle();
-        variant = CHbSymbianVariant::NewL( &bitmapHandle, CHbSymbianVariant::EInt );
-        User::LeaveIfError( map->Add( KSifUiApplicationIconHandle, variant ) );
-        TInt bitmapMaskHandle = iBitmap->Mask()->Handle();
-        variant = CHbSymbianVariant::NewL( &bitmapMaskHandle, CHbSymbianVariant::EInt );
-        User::LeaveIfError( map->Add( KSifUiApplicationIconMaskHandle, variant ) );
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::AddParamsHiddenButtonsL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::AddParamsHiddenButtonsL()
+    {
+    CHbSymbianVariant* variant = NULL;
+    if( iNoHideProgressButton )
+        {
+        variant = CHbSymbianVariant::NewL( &iNoHideProgressButton, CHbSymbianVariant::EBool );
+        TInt err = VariantMapL()->Add( KSifUiProgressNoteIsHideButtonHidden, variant );
+        User::LeaveIfError( err );
+        }
+    if( iNoCancelProgressButton )
+        {
+        variant = CHbSymbianVariant::NewL( &iNoCancelProgressButton, CHbSymbianVariant::EBool );
+        TInt err = VariantMapL()->Add( KSifUiProgressNoteIsCancelButtonHidden, variant );
+        User::LeaveIfError( err );
+        }
+    if( iNoShowInAppLibButton )
+        {
+        variant = CHbSymbianVariant::NewL( &iNoShowInAppLibButton, CHbSymbianVariant::EBool );
+        TInt err = VariantMapL()->Add( KSifUiCompleteNoteIsShowButtonHidden, variant );
+        User::LeaveIfError( err );
+        }
+    if( iNoErrorDetailsButton )
+        {
+        variant = CHbSymbianVariant::NewL( &iNoErrorDetailsButton, CHbSymbianVariant::EBool );
+        TInt err = VariantMapL()->Add( KSifUiErrorNoteIsDetailsButtonHidden, variant );
+        User::LeaveIfError( err );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ResendAllInstallationDetailsL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::ResendAllInstallationDetailsL()
+    {
+    AddParamL( KSifUiDialogType, iDialogType );
+    if( iAppInfo )
+        {
+        AddParamsAppInfoL( *iAppInfo );
+        }
+    AddParamsCertificatesL();
+    // TODO: AddParamsIconL();
+    AddParamsHiddenButtonsL();
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ActivateInstallIndicatorL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::ActivateInstallIndicatorL()
+    {
+    if( !iIndicator )
+        {
+        iIndicator = CHbIndicatorSymbian::NewL();
+        iIndicator->SetObserver( this );
+        }
+
+    if( iAppInfo && iAppInfo->Name().Length() )
+        {
+        CHbSymbianVariant* param = NULL;
+        TPtrC appName = iAppInfo->Name();
+        param = CHbSymbianVariant::NewL( &appName, CHbSymbianVariant::EDes );
+        CleanupStack::PushL( param );
+        iIndicator->Activate( KSifUiInstallIndicatorType, param );
+        CleanupStack::PopAndDestroy( param );
+        }
+    else
+        {
+        iIndicator->Activate( KSifUiInstallIndicatorType );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::UpdateInstallIndicatorProgressL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::UpdateInstallIndicatorProgressL()
+    {
+    if( iProgressBarFinalValue )
+        {
+        CHbSymbianVariant* param = NULL;
+        TInt progressPercent = KProgFull * iProgressBarCurrentValue / iProgressBarFinalValue;
+        param = CHbSymbianVariant::NewL( &progressPercent, CHbSymbianVariant::EInt );
+        CleanupStack::PushL( param );
+        iIndicator->Activate( KSifUiInstallIndicatorType, param );
+        CleanupStack::PopAndDestroy( param );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::CloseInstallIndicator()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::CloseInstallIndicator()
+    {
+    if( iIndicator )
+        {
+        iIndicator->Deactivate( KSifUiInstallIndicatorType );
+        delete iIndicator;
+        iIndicator = NULL;
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::IsIndicatorActive()
+// ---------------------------------------------------------------------------
+//
+TBool CSifUiPrivate::IsIndicatorActive()
+    {
+    TBool isActive = EFalse;
+
+    if( iIndicator )
+        {
+        TInt value = 0;
+        TInt err = RProperty::Get( KInstallIndicatorCategory, KInstallIndicatorStatus,
+            value );
+        if( !err )
+            {
+            isActive = ( value > 0 );
+            }
+        }
+
+    return isActive;
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowInstallIndicatorCompleteL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::ShowInstallIndicatorCompleteL( TInt aErrorCode )
+    {
+    CHbDeviceNotificationDialogSymbian* completeNote =
+            CHbDeviceNotificationDialogSymbian::NewL();
+    CleanupStack::PushL( completeNote );
+    completeNote->SetIconNameL( KSifUiDefaultApplicationIcon );
+    if( aErrorCode == KErrNone )
+        {
+        // TODO: use HbTextResolverSymbian to get localized text
+        _LIT( KInstalled, "Installed" );
+        completeNote->SetTitleL( KInstalled );
+        }
+    else
+        {
+        // TODO: use HbTextResolverSymbian to get localized text
+        _LIT( KInstallationFailed, "Installation failed" );
+        completeNote->SetTitleL( KInstallationFailed );
+        }
+    completeNote->ShowL();
+    CleanupStack::PopAndDestroy( completeNote );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::UpdateDialogAndWaitForResponseL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::UpdateDialogAndWaitForResponseL()
+    {
+    CloseInstallIndicator();
+    DisplayDeviceDialogL();
+    WaitForResponseL();
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::UpdateDialogOrIndicatorWithoutWaitingL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::UpdateDialogOrIndicatorWithoutWaitingL()
+    {
+    if( IsIndicatorActive() )
+        {
+        UpdateInstallIndicatorProgressL();
+        }
+    else
+        {
+        DisplayDeviceDialogL();
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::CompleteDialogOrIndicatorAndWaitForResponseL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::CompleteDialogOrIndicatorAndWaitForResponseL( TInt aErrorCode )
+    {
+    if( !IsCancelled() )
+        {
+        if( IsIndicatorActive() )
+            {
+            UpdateInstallIndicatorProgressL();
+            ShowInstallIndicatorCompleteL( aErrorCode );
+            CloseInstallIndicator();
+            }
+        else
+            {
+            DisplayDeviceDialogL();
+            WaitForResponseL();
+            }
         }
     }
 
@@ -436,37 +712,42 @@ void CSifUiPrivate::DisplayDeviceDialogL()
             {
             iDeviceDialog = CHbDeviceDialogSymbian::NewL();
             }
+        if( !iIsFirstTimeToDisplay )
+            {
+            ResendAllInstallationDetailsL();
+            }
         User::LeaveIfError( iDeviceDialog->Show( KSifUiDeviceDialog, *VariantMapL(), this ) );
         iIsDisplayingDialog = ETrue;
         }
+    iIsFirstTimeToDisplay = EFalse;
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::WaitForResponse()
+// CSifUiPrivate::WaitForResponseL()
 // ---------------------------------------------------------------------------
 //
-TInt CSifUiPrivate::WaitForResponse()
+void CSifUiPrivate::WaitForResponseL()
     {
-    iCompletionCode = KErrInUse;
-    iReturnValue = KErrUnknown;
+    iWaitCompletionCode = KErrInUse;    // changed in WaitedResponseReceived() or in DoCancel()
+    iDialogReturnValue = KErrUnknown;   // changed in DataReceived()
     if( !IsActive() && iWait && !iWait->IsStarted() )
         {
         iStatus = KRequestPending;
         SetActive();
         iWait->Start();
         }
-    return iCompletionCode;
+    User::LeaveIfError( iWaitCompletionCode );
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::ResponseReceived()
+// CSifUiPrivate::WaitedResponseReceived()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::ResponseReceived( TInt aCompletionCode )
+void CSifUiPrivate::WaitedResponseReceived( TInt aCompletionCode )
     {
     if( IsActive() )
         {
-        iCompletionCode = aCompletionCode;
+        iWaitCompletionCode = aCompletionCode;
         TRequestStatus* status( &iStatus );
         User::RequestComplete( status, KErrNone );
         }

@@ -537,7 +537,7 @@ void CCatalogsAccessPointManager::MapAccessPointL(
 TInt CCatalogsAccessPointManager::AccessPointIdL(
     const TDesC& aNameSpace,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& /* aClientUid */,
+    const TUid& aClientUid,
     TUint32& aAccessPointId ) 
     {
     DLTRACEIN((_L("Namespace: %S, Action: %d, clientUid: %d"), &aNameSpace, aAction, aClientUid.iUid));
@@ -565,7 +565,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
     const TDesC& aNameSpace,
     const TDesC& aCatalogId,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& /* aClientUid */,
+    const TUid& aClientUid,
     TUint32& aAccessPointId) 
     {
     DLTRACEIN((_L("Namespace: %S, CatalogId: %S, Action: %d, clientUid: %d"), &aNameSpace, &aCatalogId, aAction, aClientUid.iUid));
@@ -592,7 +592,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
 TInt CCatalogsAccessPointManager::AccessPointIdL(
     const CNcdNodeIdentifier& aNodeIdentifier,
     const MCatalogsAccessPointManager::TAction& aAction,
-    const TUid& /* aClientUid */,
+    const TUid& aClientUid,
     TUint32& aAccessPointId) 
     {
     DLTRACEIN((_L("Namespace: %S, NodeId: %S, Action: %d, clientUid: %d"),

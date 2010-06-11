@@ -32,10 +32,10 @@ ActiveRunner::~ActiveRunner()
     delete d_ptr;
 }
 
-void ActiveRunner::install(const QString &fileName, bool silent)
+void ActiveRunner::install(const QString &fileName, bool silent, bool openfile)
 {
     if (d_ptr) {
-        d_ptr->Install(fileName, silent);
+        d_ptr->Install(fileName, silent, openfile);
     }
 }
 

@@ -154,7 +154,7 @@ namespace Swi
 		Usif::RStsSession& iStsSession;
 		RSisRegistryWritableSession& iRegistrySession;
 		/** The list of software types to be registered found in the XML registration file. */
-		RCPointerArray<CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
+		RCPointerArray<Usif::CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
 		/**
         * The list of Apparc registration files to parse to populate SCR
         */ 

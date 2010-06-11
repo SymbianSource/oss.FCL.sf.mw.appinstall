@@ -28,7 +28,8 @@ enum TSisxSifPanicCode
     {
     ESisxSifInternalError = 1,
     ESisxSifNotInitialized,
-    ESisxSifNullPointer
+    ESisxSifNullPointer,
+    ESisxSifUnknownErrorCode
     };
 
 inline void Panic( TSisxSifPanicCode aReason )

@@ -84,7 +84,8 @@ namespace Usif
     public:     // from CSisxSifPluginUiHandlerBase
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
-        void DisplayFailedL( TInt aErrorCode );
+        void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
+                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
 
     protected:  // new functions
         CSisxSifPluginUiHandlerSilent( RFs& aFs );

@@ -17,7 +17,7 @@
 TEMPLATE = lib
 TARGET = sifuidevicedialogplugin
 CONFIG += hb plugin
-#TRANSLATIONS = sifuidevicedialogplugin.ts
+TRANSLATIONS = sifuidevicedialogplugin.ts
 
 INCLUDEPATH += .
 INCLUDEPATH += $$MW_LAYER_SYSTEMINCLUDE

@@ -11,7 +11,7 @@
 #
 # Contributors:
 # 
-# Description:  Test applicaiton for SW install indicator plugin
+# Description:  Test application for SW install indicator plugin
 #
 
 TEMPLATE = app

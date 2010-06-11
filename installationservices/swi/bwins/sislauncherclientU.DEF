@@ -10,7 +10,7 @@ EXPORTS
 	?StartDocumentL@RSisLauncherSession@Swi@@QAEXABVTDesC16@@H@Z @ 9 NONAME ; void Swi::RSisLauncherSession::StartDocumentL(class TDesC16 const &, int)
 	?NotifyNewAppsL@RSisLauncherSession@Swi@@QAEXABV?$RPointerArray@VTDesC16@@@@@Z @ 10 NONAME ; void Swi::RSisLauncherSession::NotifyNewAppsL(class RPointerArray<class TDesC16> const &)
 	?CheckApplicationInUseL@RSisLauncherSession@Swi@@QAEXVTUid@@@Z @ 11 NONAME ABSENT ; void Swi::RSisLauncherSession::CheckApplicationInUseL(class TUid)
-	?ParseSwTypeRegFileL@RSisLauncherSession@Swi@@QAEXAAVRFile@@AAV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@@Z @ 12 NONAME ; void Swi::RSisLauncherSession::ParseSwTypeRegFileL(class RFile &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> &)
+	?ParseSwTypeRegFileL@RSisLauncherSession@Swi@@QAEXAAVRFile@@AAV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@@Z @ 12 NONAME ; void Swi::RSisLauncherSession::ParseSwTypeRegFileL(class RFile &, class RPointerArray<class USif::CSoftwareTypeRegInfo> &)
 	?UnregisterSifLauncherMimeTypesL@RSisLauncherSession@Swi@@QAEXABV?$RPointerArray@VHBufC8@@@@@Z @ 13 NONAME ; void Swi::RSisLauncherSession::UnregisterSifLauncherMimeTypesL(class RPointerArray<class HBufC8> const &)
 	?RegisterSifLauncherMimeTypesL@RSisLauncherSession@Swi@@QAEXABV?$RPointerArray@VHBufC8@@@@@Z @ 14 NONAME ; void Swi::RSisLauncherSession::RegisterSifLauncherMimeTypesL(class RPointerArray<class HBufC8> const &)
 	?RunAfterEcomNotificationL@RSisLauncherSession@Swi@@QAEXABV?$RPointerArray@VCSisRegistryFileDescription@Swi@@@@@Z @ 15 NONAME ; void Swi::RSisLauncherSession::RunAfterEcomNotificationL(class RPointerArray<class Swi::CSisRegistryFileDescription> const &)

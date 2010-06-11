@@ -22,6 +22,8 @@
 #include <swi/msisuihandlers.h>         // MUiHandler
 #include <f32file.h>                    // RFs
 #include <sifui.h>                      // CSifUi
+#include <usif/sif/sifcommon.h>         // CComponentInfo::CNode
+#include <usif/sif/sifnotification.h>   // TSifOperationSubPhase, TErrorCategory
 
 
 namespace Usif
@@ -41,18 +43,26 @@ namespace Usif
     public:     // new functions
         virtual void DisplayPreparingInstallL( const TDesC& aFileName ) = 0;
         virtual void DisplayCompleteL() = 0;
-        virtual void DisplayFailedL( TInt aErrorCode ) = 0;
+        virtual void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
+                const TDesC& aErrorMessage, const TDesC& aErrorDetails ) = 0;
 
     public:     // new functions
         void SetInstallParamsL( const CSisxSifPluginInstallParams& aInstallParams );
         void SetMaxInstalledSize( TInt aSize );
         void SetDriveSelectionRequired( TBool aIsRequired );
+        void PublishStartL( const CComponentInfo::CNode& aRootNode );
+        void PublishProgressL( TSifOperationPhase aPhase, TSifOperationSubPhase aSubPhase,
+                TInt aCurrentProgress, TInt aTotal );
+        void PublishCompletionL( TErrorCategory aErrorCategory, TInt aErrorCode,
+                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
 
     protected:	// data
         RFs& iFs;
         TInt iMaxInstalledSize;
         TBool iIsDriveSelectionRequired;
         CSisxSifPluginInstallParams* iInstallParams;
+        HBufC* iGlobalComponentId;
+        CPublishSifOperationInfo* iPublishSifOperationInfo;
         };
 
 }   // namespace Usif

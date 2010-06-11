@@ -31,8 +31,7 @@
 #include <cmconnectionmethodext.h>
 #include <cmconnectionmethoddef.h>
 #include <cmpluginpacketdatadef.h>
-#include <cmconnectionmethoddef.h>
-#include <cmconnectionmethodext.h>
+
 #include <cmdestinationext.h>
 #include <cmmanagerdef.h>
 

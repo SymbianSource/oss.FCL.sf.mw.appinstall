@@ -54,12 +54,12 @@ namespace Usif
         CSisxSifPluginInstallParams();
         void ConstructL( const COpaqueNamedParams& aParams );
         void ConstructL( const CSisxSifPluginInstallParams& aParams );
-        TInt GetIntParamL( const COpaqueNamedParams& aParams,
-                const TDesC& aParamName, TInt aDefaultValue );
-        void GetPolicyParamL( const COpaqueNamedParams& aParams, const TDesC& aParamName,
+        TInt GetIntParam( const COpaqueNamedParams& aParams, const TDesC& aParamName,
+        		TInt aDefaultValue );
+        void GetPolicyParam( const COpaqueNamedParams& aParams, const TDesC& aParamName,
                 TSifPolicy& aPolicy, const TSifPolicy& aDefault );
-        void GetStringParamL( const COpaqueNamedParams& aParams,
-                const TDesC& aParamName, HBufC*& aBuf );
+        void GetStringParamL( const COpaqueNamedParams& aParams, const TDesC& aParamName,
+        		HBufC*& aBuf );
 
     private:    // data
         TBool iUseSilentMode;

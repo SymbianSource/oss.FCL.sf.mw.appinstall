@@ -33,7 +33,7 @@ public:
     IAUpdateResultsDialog(QObject *parent = 0);
     ~IAUpdateResultsDialog();
     
-    void showResults(const TIAUpdateResultsInfo &param);
+    void showResults( const TIAUpdateResultsInfo &param, QObject* receiver, const char* member );
    
 private:
 

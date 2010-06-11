@@ -58,7 +58,7 @@ private:
     
 private:
     
-    float mUpdateValue;
+    int mUpdateValue;
     bool mIsInstallProcess;
     
 };

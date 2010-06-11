@@ -317,8 +317,12 @@ data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730b1\00000000_0000.ctl \t
 #endif //SECURITY_NORMAL_SWICERTSTORE__
 
 // tuiscriptadaptors (unit test for SWIS)
+
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialog.script \tswi\tuiscriptadaptors\scripts\tuileavedialog.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script \tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\leavedialog_armv5.ini \tswi\tuiscriptadaptors\scripts\leavedialog.ini
@@ -347,6 +351,7 @@ data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini \
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini \tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.script \tswi\tuiscriptadaptors\scripts\testdevicelanguages.script
 #ifdef __SECURITY_NORMAL_SWICERTSTORE__
+
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.script \tswi\tuiscriptadaptors\scripts\testpreinstalled.script
 #else
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script \tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script

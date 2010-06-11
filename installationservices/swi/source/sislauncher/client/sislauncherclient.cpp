@@ -303,7 +303,7 @@ EXPORT_C void RSisLauncherSession::RunAfterEcomNotificationL(const RPointerArray
     }
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-EXPORT_C void RSisLauncherSession::ParseSwTypeRegFileL(RFile& aFile, RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray)
+EXPORT_C void RSisLauncherSession::ParseSwTypeRegFileL(RFile& aFile, RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray)
     {
     // Pack the file handle
     TIpcArgs ipcArgs;
@@ -476,35 +476,32 @@ EXPORT_C void RSisLauncherSession::NotifyNewAppsL(const RPointerArray<Usif::CApp
 
 EXPORT_C void RSisLauncherSession::NotifyNewAppsL(const RArray<TAppUpdateInfo>& aAppUpdateInfo)
     {
-    if (aAppUpdateInfo.Count() > 0)
+    TInt bufLen = sizeof(TInt);
+    const TInt appCount = aAppUpdateInfo.Count();
+    for (TInt i=0; i<appCount; ++i)
         {
-        TInt bufLen = sizeof(TInt);
-        const TInt appCount = aAppUpdateInfo.Count();
-        for (TInt i=0; i<appCount; ++i)
-            {
-            bufLen += GetObjectSizeL(&aAppUpdateInfo[i]);
-            }
-
-        HBufC8* buffer = HBufC8::NewLC(bufLen);
-        TPtr8 bufPtr(buffer->Des());
-
-        RDesWriteStream ws(bufPtr);
-        CleanupClosePushL(ws);
-
-        ws.WriteInt32L(appCount);
-        for (TInt i=0; i<appCount; ++i)
-            {
-            const TAppUpdateInfo& info = aAppUpdateInfo[i];
-            ws << info;
-            }
-        ws.CommitL();
-        CleanupStack::PopAndDestroy(&ws);
-        
-        TIpcArgs ipcArgs(&bufPtr);
-        User::LeaveIfError(SendReceive(ENotifyApparcForApps, ipcArgs));
-
-        CleanupStack::PopAndDestroy(buffer);
+        bufLen += GetObjectSizeL(&aAppUpdateInfo[i]);
         }
+
+    HBufC8* buffer = HBufC8::NewLC(bufLen);
+    TPtr8 bufPtr(buffer->Des());
+
+    RDesWriteStream ws(bufPtr);
+    CleanupClosePushL(ws);
+
+    ws.WriteInt32L(appCount);
+    for (TInt i=0; i<appCount; ++i)
+        {
+        const TAppUpdateInfo& info = aAppUpdateInfo[i];
+        ws << info;
+        }
+    ws.CommitL();
+    CleanupStack::PopAndDestroy(&ws);
+    
+    TIpcArgs ipcArgs(&bufPtr);
+    User::LeaveIfError(SendReceive(ENotifyApparcForApps, ipcArgs));
+
+    CleanupStack::PopAndDestroy(buffer);
     }
 
 EXPORT_C TAppUpdateInfo::TAppUpdateInfo()

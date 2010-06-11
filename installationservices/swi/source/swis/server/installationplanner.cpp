@@ -1196,58 +1196,58 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             CleanupStack::PopAndDestroy(targetFileName);  	    
             }                   
             
-            //Here we do extraction of rsc files ,before extracting files we check if there is an enough space on the disk(C drive)
-            //to extract the files then extract the file to a temporary location and
-            //check if it is a registration resource file(using target path) then store it into an array.     
-            TInt noOfFilesToBeExtracted = listOfFilesToBeExtracted.Count();            
-            DEBUG_PRINTF2(_L("Total number resource files (registration/localizable)to be extracted is %d"), noOfFilesToBeExtracted);            
-            if(0 != noOfFilesToBeExtracted)
-                {	
+        //Here we do extraction of rsc files ,before extracting files we check if there is an enough space on the disk(C drive)
+        //to extract the files then extract the file to a temporary location and
+        //check if it is a registration resource file(using target path) then store it into an array.     
+        TInt noOfFilesToBeExtracted = listOfFilesToBeExtracted.Count();            
+        DEBUG_PRINTF2(_L("Total number resource files (registration/localizable)to be extracted is %d"), noOfFilesToBeExtracted);            
+        if(0 != noOfFilesToBeExtracted)
+            {	
+            
+            //Check if there is enough space to extract the resource (registration or localizable) files    
+            if(totalApplicationDataSize > currentAvailableDriveSpace)
+                {
+                //No memory to extract the file
+                User::LeaveIfError(KErrDiskFull);
+                }
+            
+            //Extraction of rsc file to a temporary location and if it is a reg resource filr append t to an array for parsing
+            for (TInt i = 0 ; i < noOfFilesToBeExtracted ; i++)
+                {
+                TFileName resourceFileName;    
+                _LIT(KResourceFileNameFmt, "%c:\\resource\\install\\temp\\0x%08x\\%S"); // Pakage Uid  
+                TFileName finalToBeExtracted = TParsePtrC(listOfFilesToBeExtracted[i]->Target()).NameAndExt();              	             	                 
+                resourceFileName.Format(KResourceFileNameFmt, TUint(systemDrive), aController.Info().Uid().Uid().iUid,
+                        &finalToBeExtracted);
                 
-                //Check if there is enough space to extract the resource (registration or localizable) files    
-                if(totalApplicationDataSize > currentAvailableDriveSpace)
-                    {
-                    //No memory to extract the file
-                    User::LeaveIfError(KErrDiskFull);
-                    }
-                
-                //Extraction of rsc file to a temporary location and if it is a reg resource filr append t to an array for parsing
-                for (TInt i = 0 ; i < noOfFilesToBeExtracted ; i++)
-                    {
-                    TFileName resourceFileName;    
-                    _LIT(KResourceFileNameFmt, "%c:\\resource\\install\\temp\\0x%08x\\%S"); // Pakage Uid  
-                    TFileName finalToBeExtracted = TParsePtrC(listOfFilesToBeExtracted[i]->Target()).NameAndExt();              	             	                 
-                    resourceFileName.Format(KResourceFileNameFmt, TUint(systemDrive), aController.Info().Uid().Uid().iUid,
-                            &finalToBeExtracted);
-                    
-                     TInt err = fs.MkDirAll(resourceFileName);
-                     if (err!= KErrNone && err != KErrAlreadyExists)
-                         User::LeaveIfError(err);                                           
+                 TInt err = fs.MkDirAll(resourceFileName);
+                 if (err!= KErrNone && err != KErrAlreadyExists)
+                     User::LeaveIfError(err);                                           
+                              
+                 RFile resourceFile;    
+                 User::LeaveIfError(resourceFile.Replace(fs, resourceFileName, 
+                     EFileStream|EFileWrite|EFileRead|EFileShareExclusive));
+                 CleanupClosePushL(resourceFile);	         	         
+                 
+                 // Extract resource file to a temporary file.
+                 DEBUG_PRINTF2(_L("Current resource file (registration/localizable) to be extraced is %S"), &resourceFileName);
+                 User::LeaveIfError(iSisHelper.ExtractFileL(fs, resourceFile,
+                         listOfFilesToBeExtracted[i]->Index(), application->AbsoluteDataIndex(), UiHandler()));	 
+                 
+                 CleanupStack::PopAndDestroy(&resourceFile);
                                   
-                     RFile resourceFile;    
-                     User::LeaveIfError(resourceFile.Replace(fs, resourceFileName, 
-                         EFileStream|EFileWrite|EFileRead|EFileShareExclusive));
-                     CleanupClosePushL(resourceFile);	         	         
+                 // If target of the file is apparc's private folder then it is registration resource file for an app
+                 TParsePtrC filename(listOfFilesToBeExtracted[i]->Target());
+                 if (filename.Path().Left(KApparcRegDir().Length()).CompareF(KApparcRegDir) == 0)
+                     {
+                     HBufC* regResourceFileName = resourceFileName.AllocL();
                      
-                     // Extract resource file to a temporary file.
-                     DEBUG_PRINTF2(_L("Current resource file (registration/localizable) to be extraced is %S"), &resourceFileName);
-                     User::LeaveIfError(iSisHelper.ExtractFileL(fs, resourceFile,
-                             listOfFilesToBeExtracted[i]->Index(), application->AbsoluteDataIndex(), UiHandler()));	 
-                     
-                     CleanupStack::PopAndDestroy(&resourceFile);
-                                      
-                     // If target of the file is apparc's private folder then it is registration resource file for an app
-                     TParsePtrC filename(listOfFilesToBeExtracted[i]->Target());
-                     if (filename.Path().Left(KApparcRegDir().Length()).CompareF(KApparcRegDir) == 0)
-                         {
-                         HBufC* regResourceFileName = resourceFileName.AllocL();
-                         
-                         regFilesArray.AppendL(regResourceFileName);   	             
-                         }   
-                     }
-                //Since the files have been extracted the available disk space is reduced
-                currentAvailableDriveSpace -= totalApplicationDataSize;                
-                }            
+                     regFilesArray.AppendL(regResourceFileName);   	             
+                     }   
+                 }
+            //Since the files have been extracted the available disk space is reduced
+            currentAvailableDriveSpace -= totalApplicationDataSize;                
+            }            
     
         DEBUG_PRINTF(_L8("Finished extracting all resource files (registration/localizable) successfuly"));
         //Pass each registration resource file to the parser to fetch the app info  and then if icon file is present fetch the icon file
@@ -1297,109 +1297,122 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             HBufC* iconFileName = NULL;
             TInt fileSize = 0 ;
             
-            //If localizable info for an app is present then get the localized group name else get it from app registration data 
+            //If localizable info for an app is present get the localized group name, else get it from app registration data 
             if(0 == aLocalizableAppInfoList.Count())
                 {
-                groupName = appData->GroupName().AllocLC();
-                DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
+                if(appData->GroupName().Length())
+                    {
+                    groupName = appData->GroupName().AllocLC();
+                    DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
+                    }
                 //Since locale does not exists no need to extract, create CNativeApplicationInfo without iconFileName
-                applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, *groupName, *iconFileName);  
+                applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), _L(""));  
                 }
             else
                 {
                 Usif::CLocalizableAppInfo* localizedInfo = NULL;
                 const Usif::CCaptionAndIconInfo* captionAndIconInfo = NULL;
                 localizedInfo = aLocalizableAppInfoList[0];
-                groupName = localizedInfo->GroupName().AllocLC();	
+                if(localizedInfo->GroupName().Length())
+                    {
+                    groupName = localizedInfo->GroupName().AllocLC();
+                    }
                 captionAndIconInfo = localizedInfo->CaptionAndIconInfo();
                 //Check if caption and icon info for an app is present or not, if present extract the icon file.
                 if(captionAndIconInfo)
                     {
-                    TBuf<100> finalIconFileName;	            
-                    iconFileName = captionAndIconInfo->IconFileName().AllocLC();
+                    if(captionAndIconInfo->IconFileName().Length())
+                        iconFileName = captionAndIconInfo->IconFileName().AllocLC();
+                    
                     if(iconFileName != NULL)
-                      {	              
-                      finalIconFileName = TParsePtrC(*iconFileName).NameAndExt();
+                        {
+                        TBuf<100> finalIconFileName;
+                        finalIconFileName = TParsePtrC(*iconFileName).NameAndExt();
                         
-                      _LIT(KIconFileNameFmt, "%c:\\resource\\install\\icon\\0x%08x\\%S");     // Applicaiton Uid
-                      iconFile.Format(KIconFileNameFmt, TUint(systemDrive), appuid.iUid,
-                            &finalIconFileName);
-                      
-                      TInt err = fs.MkDirAll(iconFile);
-                      if (err!= KErrNone && err != KErrAlreadyExists)
-                          User::LeaveIfError(err);
-                      
-                      //Find from the list of files to be copied , the file description of the icon file returned by the parser
-                      for(TInt k = 0; k < listOfFilesToBeAdded.Count() ; k++)
-                          {                      
-                          currentFileDescription = listOfFilesToBeAdded[k];
-                          if(TParsePtrC(currentFileDescription->Target()).NameAndExt().Compare(finalIconFileName))
-                              {
-                              break;
-                              }
-                          }	              
-                      //Check if there is enough space to extract the icon file           
-                      fileSize = currentFileDescription->UncompressedLength();
-                      if(currentAvailableDriveSpace <  fileSize)
-                         {
-                         //No memory to extract the file
-                         User::LeaveIfError(KErrDiskFull);
-                         }
-                      
-                      //Extracting the icon file to a temp location
-                      RFile tempIconFile;
-                      TInt index = 1;
-                      TBuf<10>  integerAppendStr;
-                      // Check if file already exists, if yes then create file with another name (e.g. *_1 or *_2)
-                      while(1)
-                          {	                  
-                          err = tempIconFile.Create(fs, iconFile, EFileStream|EFileWrite|EFileRead|EFileShareExclusive);
-                          if(err == KErrAlreadyExists)
-                              {	                     
-                              integerAppendStr.TrimAll();
-                              integerAppendStr.Format(_L("%d"), index++);
-                              TInt pos = iconFile.Length()-TParsePtrC(iconFile).Ext().Length();
-                              iconFile.Insert(pos,integerAppendStr);	                      
-                              }
-                          else if(err == KErrNone)
-                              {
-                              //Everthing is fine, proceed	                      
-                              break;               
-                              }
-                          else
-                              {
-                              tempIconFile.Close();
-                              User::Leave(err);
-                              }
-                          }
-                      CleanupClosePushL(tempIconFile);  
-                      
-                      DEBUG_PRINTF2(_L("Icon file to be extraced is %S"), &iconFile);
-                      User::LeaveIfError(iSisHelper.ExtractFileL(fs, tempIconFile, listOfFilesToBeAdded[i]->Index(), application->AbsoluteDataIndex(), UiHandler())); 	              
-                      DEBUG_PRINTF(_L8("Finished extracting Icon file successfuly"));
-                      //After copy the available disk space is reduced
-                      currentAvailableDriveSpace -= fileSize;
-                      CleanupStack::PopAndDestroy(2,iconFileName);  //file,iconFileSize
-                      
-                      //Create CNativeApplicationInfo with iconFileName
-                      applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, *groupName, iconFile);                  
-                      }
+                        _LIT(KIconFileNameFmt, "%c:\\resource\\install\\icon\\0x%08x\\%S");     // Applicaiton Uid
+                        iconFile.Format(KIconFileNameFmt, TUint(systemDrive), appuid.iUid,
+                        &finalIconFileName);
+                        
+                        TInt err = fs.MkDirAll(iconFile);
+                        if (err!= KErrNone && err != KErrAlreadyExists)
+                        User::LeaveIfError(err);
+                        
+                        //Find from the list of files to be copied , the file description of the icon file returned by the parser
+                        for(TInt k = 0; k < listOfFilesToBeAdded.Count() ; k++)
+                            {                      
+                            currentFileDescription = listOfFilesToBeAdded[k];
+                            if(TParsePtrC(currentFileDescription->Target()).NameAndExt().Compare(finalIconFileName))
+                                {
+                                break;
+                                }
+                            }	              
+                        //Check if there is enough space to extract the icon file           
+                        fileSize = currentFileDescription->UncompressedLength();
+                        if(currentAvailableDriveSpace <  fileSize)
+                            {
+                            //No memory to extract the file
+                            User::LeaveIfError(KErrDiskFull);
+                            }
+                        
+                        //Extracting the icon file to a temp location
+                        RFile tempIconFile;
+                        TInt index = 1;
+                        TBuf<10>  integerAppendStr;
+                        // Check if file already exists, if yes then create file with another name (e.g. *_1 or *_2)
+                        while(1)
+                            {	                  
+                            err = tempIconFile.Create(fs, iconFile, EFileStream|EFileWrite|EFileRead|EFileShareExclusive);
+                            if(err == KErrAlreadyExists)
+                                {	                     
+                                integerAppendStr.TrimAll();
+                                integerAppendStr.Format(_L("%d"), index++);
+                                TInt pos = iconFile.Length()-TParsePtrC(iconFile).Ext().Length();
+                                iconFile.Insert(pos,integerAppendStr);	                      
+                                }
+                            else if(err == KErrNone)
+                                {
+                                //Everthing is fine, proceed	                      
+                                break;               
+                                }
+                            else
+                                {
+                                tempIconFile.Close();
+                                User::Leave(err);
+                                }
+                            }
+                        CleanupClosePushL(tempIconFile);  
+                        
+                        DEBUG_PRINTF2(_L("Icon file to be extraced is %S"), &iconFile);
+                        User::LeaveIfError(iSisHelper.ExtractFileL(fs, tempIconFile, listOfFilesToBeAdded[i]->Index(), application->AbsoluteDataIndex(), UiHandler())); 	              
+                        DEBUG_PRINTF(_L8("Finished extracting Icon file successfuly"));
+                        //After copy the available disk space is reduced
+                        currentAvailableDriveSpace -= fileSize;
+                        CleanupStack::PopAndDestroy(2,iconFileName);  //file,iconFileSize
+                        
+                        //Create CNativeApplicationInfo with iconFileName
+                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), iconFile);                  
+                        }
                     else
-                      {
-                      //Since iconFileName does not exists no need to extract, create CNativeApplicationInfo without iconName
-                      applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, *groupName, *iconFileName);  
-                      }
-                }
-             }	    
-           
+                        {
+                        //Since iconFileName does not exists no need to extract, create CNativeApplicationInfo without iconName
+                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), _L(""));  
+                        }
+                    }
+                }	    
+
             DEBUG_PRINTF2(_L("Application Uid 0x%08x"), appuid);
             DEBUG_PRINTF2(_L("Application Name %S"), appname);
-            DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
-            DEBUG_PRINTF2(_L("Application Icon File Name %S"), &iconFile);
+            if(groupName)
+                DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
+            if(iconFile.Length())
+                DEBUG_PRINTF2(_L("Application Icon File Name %S"), &iconFile);
                              
             const_cast <Sis::CController&>(aController).AddApplicationInfoL(applicationInfo);
             CleanupStack::Pop(applicationInfo);
-            CleanupStack::PopAndDestroy(3, appData);	//groupName,appName,appData
+            if(groupName)
+                CleanupStack::PopAndDestroy(3, appData);	//groupName,appName,appData
+            else
+                CleanupStack::PopAndDestroy(2, appData);    //appName,appData
             languages.Close();	    
             }
               
@@ -1418,7 +1431,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 	// Some files may need to be questioned of overwrite only when the planner is not in info collection mode.
 	if (!IsInInfoCollectionMode())	
 	#endif
-	 //Some files may need to be questioned of overwrite
+	//Some files may need to be questioned of overwrite
 		WarnEclipseOverWriteL(*application);
  	
  	// Reset the file list array for next controller use

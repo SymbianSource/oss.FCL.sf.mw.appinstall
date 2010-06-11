@@ -23,7 +23,7 @@
 #include "sifuidialogdefinitions.h"     // enum SifUiDeviceDialogType
 #include <qmobilityglobal.h>            // QTM namespace macros
 
-class QTranslator;
+class HbTranslator;
 class SifUiDialogTitleWidget;
 class SifUiDialogContentWidget;
 class HbIndicator;
@@ -65,12 +65,11 @@ protected:  // from HbPopup (via HbDialog)
     void showEvent(QShowEvent *event);
 
 private:    // new functions
-    void installTranslator();
-    void removeTranslator();
+    bool isInstallIndicatorActive();
     bool constructDialog(const QVariantMap &parameters);
     bool updateFromParameters(const QVariantMap &parameters);
-    void updateButtons();
-    void sendResult(bool accepted);
+    void updateButtons(const QVariantMap &parameters);
+    void sendResult(SifUiDeviceDialogReturnValue value);
     void monitorIndicatorActivity();
 
 private slots:
@@ -78,14 +77,14 @@ private slots:
     void handleCancelled();
     void handleMemorySelectionChanged(const QChar &driveLetter);
     void handleHidePressed();
-    void handleIndicatorActivityChanged();
     void handleShowInstalled();
     void handleErrorDetails();
 
 private:
     Q_DISABLE_COPY(SifUiDialog)
 
-    QTranslator *mTranslator;
+    HbTranslator *mCommonTranslator;
+    HbTranslator *mSifUITranslator;
     int mLastDialogError;
     bool mShowEventReceived;
     SifUiDeviceDialogType mDialogType;
@@ -94,6 +93,8 @@ private:
     int mInstallError;
     QVariantMap mResultMap;
     HbAction *mIgnoreCloseAction;
+    HbAction *mPrimaryAction;
+    HbAction *mSecondaryAction;
     HbIndicator *mIndicator;
 
     QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber) *mSubscriber;

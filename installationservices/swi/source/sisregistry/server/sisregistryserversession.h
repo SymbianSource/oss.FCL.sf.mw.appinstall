@@ -86,6 +86,8 @@ public:
 	TInt GetAugmentationCountL(const TUid& aUid);
 	TBool IdentifyControllerL(Usif::TComponentId aComponentId, const TDesC& aFileName); // Used by CSisRegistrySubSession
 
+	CSisRegistrySession(TSecureId aClientSid);
+	
 private:
 	~CSisRegistrySession();
 	
@@ -172,7 +174,7 @@ private:
 	TUint FixedDrivesL() const;
 	Usif::TComponentId AddRegistryEntryL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aController, Usif::TScrComponentOperationType aOpType);
 	Usif::TComponentId AddEntryL(CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
-	void AddAppEntryL(Usif::TComponentId aCompId, TUid aUid);
+	void AddAppsFromStubL(Usif::TComponentId aCompId, TUid aUid);
 	void AddControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive);
 	void AddCleanupInfrastructureL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aControllerBuffer);
 	TUint CreateSubsessionHandleL(const TUid& aPackageUid);
@@ -185,7 +187,8 @@ private:
 	void ProcessRemovableDriveL(TInt aDrive);
 	void DiscoverControllersL(const TDesC& aRegistryPath, const TDesC& aDirectoryName);
 	void ExecuteUninstallLogL(const TDesC& aUninstallLogFile, const TDesC& aControllerFile);
-	void GetCompIdAndCompSidIndexL(const TUid& aSid, Usif::TComponentId& aComponentId, TInt& aIndex, TInt aExpectedDrive = -1);
+	void GetComponentIdsForSidL(TUid aSid, RArray<Usif::TComponentId>& aComponentIds);
+	HBufC* SidToFileNameL(TUid aSid, Usif::TComponentId& aComponentId, TInt aExpectedDrive);
 	TBool ModifiableL(const TDesC& aFileName);
 	CHashContainer* HashL(const TDesC& aFileName);
 	void RemovablePackageListL(RPointerArray<CSisRegistryPackage>& aPackages);
@@ -193,10 +196,10 @@ private:
 	void RegisterInRomControllerL(const TDesC& aFileName);
 	void RegisterSoftwareTypesL(Usif::TComponentId aComponentId, const RMessage2& aMessage);
 	void UnregisterSoftwareTypesL(Usif::TComponentId aComponentId);
-
 	
-	TBool IsFirmwareUpdatedL();
-	 
+	void ProcessRomStubsL();
+	void ProcessRomApplicationsL();
+	TBool IsFirmwareUpdatedL();	 
 	void  UpdateRecentFWVersionL(); 
 	TInt GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
 
@@ -216,7 +219,9 @@ private:
 	// Session handle to Software Component Registry
 	Usif::RSoftwareComponentRegistry iScrSession;
 
-	TBool isFwUpdated;
+	TSecureId iClientSid;
+	TBool iIsFwUpdated;
+	TBool iIsFirstInit;
 	};
 
 inline RFs& CSisRegistrySession::Fs()
@@ -234,6 +239,12 @@ inline Usif::RSoftwareComponentRegistry& CSisRegistrySession::ScrSession()
 	{
 	return iScrSession;
 	}
+
+inline CSisRegistrySession::CSisRegistrySession(TSecureId aClientSid)
+    :CSession2()
+    {
+    iClientSid = aClientSid;
+    }
 
 } //namespace
 

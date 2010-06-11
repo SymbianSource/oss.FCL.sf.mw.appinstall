@@ -160,7 +160,7 @@ void CSwiLauncherInstallServerUtilCapTest::RunTestL()
 	
 	User::LeaveIfError(file.Open(fs, testDocFileOnSysDrive , EFileShareExclusive|EFileRead));
 	
-	RCPointerArray<Swi::CSoftwareTypeRegInfo> regInfoArray;
+	RCPointerArray<Usif::CSoftwareTypeRegInfo> regInfoArray;
 	CleanupClosePushL(regInfoArray);
 	
 	TRAP(err, launcher.ParseSwTypeRegFileL(file, regInfoArray));

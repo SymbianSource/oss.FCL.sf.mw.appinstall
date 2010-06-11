@@ -20,6 +20,7 @@
 #include "sisxsifcleanuputils.h"        // CleanupResetAndDestroyPushL
 #include "sisxsifuiselectioncache.h"    // CSisxUISelectionCache
 #include <sifui.h>                      // CSifUi
+#include <sifuiappinfo.h>               // CSifUiAppInfo
 #include <sifuicertificateinfo.h>       // CSifUiCertificateInfo
 #include <bautils.h>                    // BaflUtils
 #include <driveinfo.h>                  // DriveInfo
@@ -250,12 +251,21 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
     {
     FLOG_2( _L("CSisxSifPluginUiHandler::HandleInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
 
+    if( iSifUi->IsCancelled() )
+        {
+        return EFalse;
+        }
+
+    TSifOperationPhase phase = ( iMode == EModeInstall ? EInstalling : EUninstalling );
     switch( aEvent )
         {
         case Swi::EEventSetProgressBarFinalValue:
+            iProgressBarFinalValue = aValue;
             if( iMode == EModeInstall )
                 {
-                iSifUi->ShowProgressL( aAppInfo, iMaxInstalledSize, aValue );
+                CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
+                iSifUi->ShowProgressL( *appInfo, aValue );
+                CleanupStack::PopAndDestroy( appInfo );
                 }
             break;
 
@@ -264,6 +274,7 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
                 {
                 iSifUi->IncreaseProgressBarValueL( aValue );
                 }
+            PublishProgressL( phase, EFileOperation, aValue, iProgressBarFinalValue );
             break;
 
         case Swi::EEventOcspCheckEnd:
@@ -313,7 +324,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
     FLOG( _L("CSisxSifPluginUiHandler::DisplaySecurityWarningL") );
     TBool result = EFalse;
 
-    if( iDriveSelectionRequired )
+    if( iIsDriveSelectionRequired )
         {
         AddMemorySelectionL();
         }
@@ -322,7 +333,11 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
     switch( aSigValidationResult )
         {
         case Swi::EValidationSucceeded:
-            result = iSifUi->ShowConfirmationL( aAppInfo, iMaxInstalledSize, iLogo );
+            {
+            CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
+            result = iSifUi->ShowConfirmationL( *appInfo );
+            CleanupStack::PopAndDestroy( appInfo );
+            }
             break;
 
         case Swi::ESignatureSelfSigned:
@@ -335,7 +350,9 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
         case Swi::EMandatorySignatureMissing:
             if( aInstallAnyway )
                 {
-                result = iSifUi->ShowConfirmationL( aAppInfo, iMaxInstalledSize, iLogo );
+                CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
+                result = iSifUi->ShowConfirmationL( *appInfo );
+                CleanupStack::PopAndDestroy( appInfo );
                 }
             break;
 
@@ -421,12 +438,13 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
 // CSisxSifPluginUiHandler::DisplayFailedL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandler::DisplayFailedL( TInt aErrorCode )
+void CSisxSifPluginUiHandler::DisplayFailedL( TErrorCategory /*aCategory*/,
+        TInt aErrorCode, const TDesC& aErrorMessage, const TDesC& /*aErrorDetails*/ )
     {
-    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, aErrorCode=%d"), aErrorCode );
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, aError=%d"), aErrorCode );
 
-    _LIT( KErrorMessage, "Error" );
-    iSifUi->ShowFailedL( aErrorCode, KErrorMessage );
+    // TODO: add error details
+    iSifUi->ShowFailedL( aErrorCode, aErrorMessage );
     }
 
 // ---------------------------------------------------------------------------
@@ -508,5 +526,16 @@ void CSisxSifPluginUiHandler::AddCertificatesL(
         }
     iSifUi->SetCertificateInfoL( certificates );
     CleanupStack::PopAndDestroy( &certificates );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::GetAppInfoLC()
+// ---------------------------------------------------------------------------
+//
+CSifUiAppInfo* CSisxSifPluginUiHandler::GetAppInfoLC( const Swi::CAppInfo& aAppInfo )
+    {
+    CSifUiAppInfo *appInfo = CSifUiAppInfo::NewLC( aAppInfo.AppName(), aAppInfo.AppVendor(),
+            aAppInfo.AppVersion(), iMaxInstalledSize, iLogo );
+    return appInfo;
     }
 

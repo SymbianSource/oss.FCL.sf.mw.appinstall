@@ -582,6 +582,10 @@ TBool CInstallationProcessor::DoStateInitializeL()
 	iFilesToCopyCurrent = 0;
 	iFilesToCopy.ResetAndDestroy();
 	iApparcRegFiles.ResetAndDestroy();
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	iApparcRegFilesForParsing.ResetAndDestroy();
+	iApparcRegFileData.ResetAndDestroy();
+#endif
 	return ETrue;
 	}
 	
@@ -995,7 +999,6 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	iFilesToCopy.ResetAndDestroy();
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-	
 	RArray<TAppUpdateInfo> affectedApps;    
 	CleanupClosePushL(affectedApps);
 	const CApplication& application = ApplicationL();
@@ -1274,7 +1277,7 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
            DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
            DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
            }   
-        const_cast<CPlan&>(Plan()).ResetAffectedApps();
+        //const_cast<CPlan&>(Plan()).ResetAffectedApps();
         const_cast<CPlan&>(Plan()).SetAffectedApps(affectedApps);
         
         CleanupStack::PopAndDestroy(2, &componentIds);

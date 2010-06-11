@@ -17,3 +17,5 @@
 
 #include "mt_startuplistupdater.mmp"
 
+SMPSAFE
+

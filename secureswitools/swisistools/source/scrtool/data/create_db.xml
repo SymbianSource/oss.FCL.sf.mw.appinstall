@@ -9,7 +9,7 @@
 	<SQLQuery>CREATE TABLE SoftwareTypeNames(NameId INTEGER PRIMARY KEY NOT NULL,SoftwareTypeId INTEGER NOT NULL,Locale INTEGER DEFAULT 0,Name TEXT NOT NULL);</SQLQuery>
 	<SQLQuery>CREATE INDEX idx_SoftwareTypeNames_SoftwareTypeId ON SoftwareTypeNames(SoftwareTypeId);</SQLQuery>
 	<SQLQuery>CREATE INDEX idx_SoftwareTypeNames_Name ON SoftwareTypeNames(Name);</SQLQuery>
-	<SQLQuery>CREATE TABLE SoftwareTypes(SoftwareTypeId INTEGER PRIMARY KEY NOT NULL,SifPluginUid INTEGER,LauncherExecutable TEXT);</SQLQuery>
+	<SQLQuery>CREATE TABLE SoftwareTypes(SoftwareTypeId INTEGER PRIMARY KEY NOT NULL,SifPluginUid INTEGER,LauncherExecutable TEXT DEFAULT '');</SQLQuery>
 	<SQLQuery>CREATE TABLE CustomAccessList(AccessId INTEGER PRIMARY KEY AUTOINCREMENT,SoftwareTypeId INTEGER NOT NULL,SecureId INTEGER NOT NULL,AccessMode INTEGER DEFAULT 0);</SQLQuery>
 	<SQLQuery>CREATE TABLE MimeTypes(MimeTypeId INTEGER PRIMARY KEY NOT NULL,SoftwareTypeId INTEGER NOT NULL,MimeType TEXT NOT NULL UNIQUE COLLATE NOCASE);</SQLQuery>
 	<SQLQuery>CREATE INDEX idx_MimeTypes_SoftwareTypeId ON MimeTypes(SoftwareTypeId);</SQLQuery>

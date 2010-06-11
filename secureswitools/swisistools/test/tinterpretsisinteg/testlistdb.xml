@@ -489,6 +489,11 @@
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesisf006_db.bat B testdataF006Def</command>
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataf006Def testcasef006Deffile.txt 1 "positive" "both" 0</check>
 	</test>	
+<test id="testdataM001a">
+	<title>testdataM001a</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism001a_db.bat testdataM001a </command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\check.pl">testdataM001a testcasem001file.txt 1 "positive" "both"</check>
+	</test>
 <test id="testdataM001">
 	<title>testdataM001</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\makesism001_db.bat testdataM001 </command>
@@ -1936,5 +1941,11 @@
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-39_db.bat  INT_NR_Option-39</command>
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-39  INT_NR_Option-39 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-39.script" "int_nr_option-39.htm" "FAIL = 0" "FAIL = 0" </check>
 	</test>
-	
+
+<test id="Test_ELSEIF_Block">
+	<title>Test_ELSEIF_Block</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis_db.bat TestElseIF</command>
+	<check type="result"/>
+	</test>
+
 </testlist>

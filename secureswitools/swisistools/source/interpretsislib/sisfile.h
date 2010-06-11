@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -96,6 +96,10 @@ public:
 	void MakeSISStub(std::wstring& aFileName);
 	
 	const CSISController& GetController(); 
+	
+	void ProcessEmbeddedFileWarning(const CSISInstallBlock& aInstallBlock) const;
+
+	bool ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock, std::string& aError);
 
 private:
 	void GetInstallableFiles(	InstallableFiles& aFiles, 

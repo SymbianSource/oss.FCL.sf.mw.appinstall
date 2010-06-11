@@ -11,10 +11,12 @@
 *
 * Contributors:
 * 
-* Description: MMP file for RSifUi STIF test module.
+* Description:  SifUi API test code
 *
 */
 
-// Same MMP file is used for both "BUILD" and "TEST BUILD" ABLD commands
+// Same MMP file is used both in normal and in test builds
 #include "sifuitest.mmp"
+
+SMPSAFE
 

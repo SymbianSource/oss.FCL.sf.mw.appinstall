@@ -21,15 +21,16 @@
 #include "iaupdatemainwindow.h"
 #include "iaupdateengine.h"
 #include "iaupdatemainview.h"
-#include "iaupdatehistoryview.h"
+#include "iaupdatesettingdialog.h"
 
 
 // ViewManager Constructor
 IAUpdateMainWindow::IAUpdateMainWindow(IAUpdateEngine *engine)
 {
     // Add the views to the main window
-    //addHistoryView();
     addMainView(engine);
+    addSettingView();
+    
     // show the main window (which will display the last view that was added)
     show();   //temp
 }
@@ -46,12 +47,13 @@ void IAUpdateMainWindow::addMainView(IAUpdateEngine *engine)
     addView(mMainView);
 }
 
-void IAUpdateMainWindow::addHistoryView()
-{
-    mHistoryView = new IAUpdateHistoryView();
-    addView(mHistoryView);
-}
 
+void IAUpdateMainWindow::addSettingView()
+{
+    
+    mSettingView = new CIAUpdateSettingDialog(mMainView);
+    addView(mSettingView);
+}
 
 // Slots to handle view change
 void IAUpdateMainWindow::toMainView()
@@ -59,6 +61,10 @@ void IAUpdateMainWindow::toMainView()
     setCurrentView(mMainView);
 }
 
+void IAUpdateMainWindow::toSettingView()
+{
+    setCurrentView(mSettingView);
+}
 void IAUpdateMainWindow::refreshMainView(const RPointerArray<MIAUpdateNode>& nodes,
                                          const RPointerArray<MIAUpdateFwNode>& fwNodes,
                                          int error)
@@ -68,10 +74,15 @@ void IAUpdateMainWindow::refreshMainView(const RPointerArray<MIAUpdateNode>& nod
 } 
 
 
-void IAUpdateMainWindow::toHistoryView()
-{
-    setCurrentView(mHistoryView);
-}
 
+
+IAUpdateMainView* IAUpdateMainWindow::GetMainView()
+{
+    return mMainView;    
+}
+   
+CIAUpdateSettingDialog* IAUpdateMainWindow::GetSettingView()
+{
+    return mSettingView;}
 
 

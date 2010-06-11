@@ -32,6 +32,7 @@
 
 namespace Usif
     {
+    class MOpaqueParam;
 
     /**
         This enumeration defines the possible values of the status of an installation package. This status
@@ -423,7 +424,7 @@ namespace Usif
         This class is designed for sending opaque params across the process boundary. For example, a SIF
         client may use it to send custom arguments to the SIF server or receive custom results.
     */
-    class COpaqueNamedParams : public CBase
+    NONSHARABLE_CLASS(COpaqueNamedParams) : public CBase
         {
     public:
         /**
@@ -494,17 +495,40 @@ namespace Usif
             @leave System wide error code
         */
         IMPORT_C void AddStringL(const TDesC& aName, const TDesC& aValue);
+        
+        /**
+            Adds a string array param to this object. If a param with the same name already exists it gets overwritten.
+
+            @param aName The name of the string param to be added.
+            @param aValueArray The array of value string params to be added.
+            @leave KErrOverflow if the size of the name or any value in the string array being added exceeds 128 bytes or
+            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave System wide error code.
+        */
+        IMPORT_C void AddStringArrayL(const TDesC& aName, const RPointerArray<HBufC>& aValueArray);        
 
         /**
             Adds an integer param to this object. If a param with the same name already exists it gets overwritten.
 
             @param aName The name of the integer param to be added.
             @param aValue The value of the integer param to be added.
-            @leave KErrOverflow if the size of the name the integer param being added exceeds 128 bytes or
+            @leave KErrOverflow if the size of the name being added exceeds 128 bytes or
             the memory allocated for all the params added to this container exceeds 512 bytes.
             @leave System wide error code
         */
         IMPORT_C void AddIntL(const TDesC& aName, TInt aValue);
+        
+        /**
+            Adds an integer array param to this object. If a param with the same name already exists it gets overwritten.
+
+            @param aName The name of the integer param to be added.
+            @param aValueArray The array of value integer params to be added.
+            @leave KErrOverflow if the size of the name being added exceeds 128 bytes or
+            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave System wide error code.
+        */
+        IMPORT_C void AddIntArrayL(const TDesC& aName, const RArray<TInt>& aValueArray);
+        
 
         /**
             Returns the list of the names of params added to the object.
@@ -524,6 +548,16 @@ namespace Usif
             @leave System wide error code
         */
         IMPORT_C const TDesC& StringByNameL(const TDesC& aName) const;
+        
+        /**
+            Gets a reference to the string array param identified by aName.
+
+            @param aName The name of the string param to be obtained.
+            @return The string array param.
+            @leave KErrNotFound if aName is not found.
+			@leave System wide error code.
+        */
+        IMPORT_C const RPointerArray<HBufC>& StringArrayByNameL(const TDesC& aName) const;        
 
         /**
             Returns the integer param identified by aName.
@@ -544,6 +578,16 @@ namespace Usif
             @leave Or other system-wide error code.
         */
         IMPORT_C TInt IntByNameL(const TDesC& aName) const;
+        
+        /**
+            Returns the integer array param identified by aName.
+
+            @param aName The name of the integer param to be obtained.
+            @return The integer array param.
+            @leave KErrNotFound if aName is not found.
+            @leave Or other system-wide error code.
+        */
+        IMPORT_C const RArray<TInt>& IntArrayByNameL(const TDesC& aName) const;        
 
         /**
             Empties the container and frees all memory allocated to the params.
@@ -564,32 +608,22 @@ namespace Usif
         void ConstInternalizeL(RReadStream& aStream) const;
         void ConstCleanup() const;
         void CleanupExternalBuffer() const;
-        void VerifyExternalizedSizeForNewParamL(TInt aNameSize, TInt aValueSize) const;
-        void VerifyExternalizedSizeForExistingParamL(TInt aOldValueSize, TInt aNewValueSize) const;
-
-        struct TItem
-            {
-            HBufC* iName;
-            HBufC* iValue;
-            };
-        RArray<TItem> iParams;
-
+        void VerifyExternalizedSizeForNewParamArrayL(TInt aNameSize, TInt aValueSize) const;
+        void VerifyExternalizedSizeForExistingParamArrayL(TInt aOldValueSize, TInt aNewValueSize) const;
+        void AddOpaqueParamL(MOpaqueParam* aItemBase);
+private:
+        RPointerArray<MOpaqueParam> iParams;
+        
         mutable HBufC8* iExternalBuffer;
         mutable TPtr8 iExternalBufferPtr;
         mutable TBool iDeferredInternalization;
         mutable TInt iExternalizedSize;
 
-        enum
-            {
-            // An arbitrary limit for the length of a single descriptor (the name or value of a param)
-            KMaxDescriptorLength = 128,
-            // An arbitrary size of the internal buffer for sending the component info across the process boundary
-            KMaxExternalizedSize = 512
-            };
-
         };
 
 	/**
+        Input Opaque Parameters:
+
 		Pre-defined opaque arguments and results:
 		"InstallInactive" - Yes/No 
 		If provided in the opaque installation parameters, requests the installation of
@@ -616,7 +650,10 @@ namespace Usif
 		Action in case of OCSP warnings 
 
 		"AllowUpgrade" - TSifPolicy
-		Allow an upgrade (if yes, upgrade the data as well) 
+		Allow an upgrade (if yes, upgrade of the application) 
+
+		"AllowUpgradeData" - TSifPolicy
+		Whether private data of the application to be retained or removed during the upgrade
 
 		"InstallOptionalItems" - TSifPolicy
 		Install optional items in package 
@@ -666,6 +703,10 @@ namespace Usif
 		"AllowIncompatible" -  TSifPolicy
 		Check if installation of incompatible packages is allowed 
 
+        
+
+		Output Opaque parameters:
+
 		"ComponentId" - Array of TUInt
 		If returned in the custom results, provides the id's of the newly added components
 		after an install. Please note that not all installers (i.e. SIF Plugins) may support this.
@@ -696,6 +737,7 @@ namespace Usif
 	_LIT(KSifInParam_PerformOCSP, "PerformOCSP");
 	_LIT(KSifInParam_IgnoreOCSPWarnings, "IgnoreOCSPWarnings");
 	_LIT(KSifInParam_AllowUpgrade, "AllowUpgrade");
+	_LIT(KSifInParam_AllowUpgradeData, "AllowUpgradeData");
 	_LIT(KSifInParam_InstallOptionalItems, "InstallOptionalItems");
 	_LIT(KSifInParam_AllowUntrusted, "AllowUntrusted");
 	_LIT(KSifInParam_GrantCapabilities, "GrantCapabilities");

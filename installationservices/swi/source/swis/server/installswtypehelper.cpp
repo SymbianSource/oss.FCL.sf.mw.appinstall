@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -61,7 +61,7 @@ namespace Swi
 			return ETrue;
 			}
 
-		void ParseRegFileL(RFs& aFs, const TDesC& aFileName, RPointerArray<CSoftwareTypeRegInfo>& aInfoArray)
+		void ParseRegFileL(RFs& aFs, const TDesC& aFileName, RPointerArray<Usif::CSoftwareTypeRegInfo>& aInfoArray)
 			{
 			// Open the file for reading
 			RFile file;
@@ -112,7 +112,7 @@ namespace Swi
 			CleanupStack::PopAndDestroy(2, &file); // launcher
 			}
 
-		void RegisterMimeTypesL(const RPointerArray<CSoftwareTypeRegInfo>& aInfoArray)
+		void RegisterMimeTypesL(const RPointerArray<Usif::CSoftwareTypeRegInfo>& aInfoArray)
 			{
 			const TInt numElems = aInfoArray.Count();
 			if (numElems == 0)

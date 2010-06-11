@@ -19,6 +19,8 @@
 #include "iaupdateapplication.h"
 #include "iaupdatemainwindow.h"
 #include "iaupdateengine.h"
+#include "iaupdatemainview.h"
+#include "iaupdatesettingdialog.h"
 
 IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     HbApplication( argc, argv ),
@@ -26,8 +28,16 @@ IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     mMainWindow (new IAUpdateMainWindow(mEngine))
     {
     
+    // get mainview 
+    IAUpdateMainView* mainView = mMainWindow->GetMainView();
+    
+    // get settig view
+    CIAUpdateSettingDialog* settingView = mMainWindow->GetSettingView();
+    
     // Connect view change signals to the view change slots
-    connect(&(*mEngine), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+    //connect(&(*mEngine), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+    connect(&(*settingView), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+    connect(&(*mainView), SIGNAL(toSettingView()), &(*mMainWindow), SLOT(toSettingView()));
     connect(&(*mEngine), SIGNAL(refresh(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)),
             &(*mMainWindow), SLOT(refreshMainView(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)));
     }

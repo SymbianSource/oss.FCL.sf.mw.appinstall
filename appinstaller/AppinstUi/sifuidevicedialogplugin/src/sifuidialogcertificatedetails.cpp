@@ -19,6 +19,7 @@
 #include "sifuidialogcertificateinfo.h"         // SifUiDialogCertificateInfo
 #include <hblabel.h>                            // HbLabel
 #include <hbtextedit.h>                         // HbTextEdit
+#include <hbscrollbar.h>                        // HbScrollBar
 #include <hblistwidget.h>                       // HbListWidget
 #include <hblistwidgetitem.h>                   // HbListWidgetItem
 #include <hbaction.h>                           // HbAction
@@ -107,17 +108,21 @@ void SifUiDialogCertificateDetails::showList()
     HbLabel *title = new HbLabel(tr("Select certificate"));
     setHeadingWidget(title);
 
-    HbListWidget *content = new HbListWidget;
+    HbListWidget *listWidget = new HbListWidget;
     for (int index = 0; index < count; ++index ) {
         HbListWidgetItem *item = new HbListWidgetItem();
         item->setData(QVariant(mCertificates.at(index)->subjectName()));
-        content->addItem(item);
+        listWidget->addItem(item);
     }
-    setContentWidget(content);
-    connect(content, SIGNAL(activated(HbListWidgetItem*)),
+    listWidget->setScrollDirections(Qt::Vertical);
+    listWidget->setFrictionEnabled(true);
+    listWidget->setScrollingStyle(HbScrollArea::PanWithFollowOn);
+    listWidget->verticalScrollBar()->setInteractive(true);
+    connect(listWidget, SIGNAL(activated(HbListWidgetItem*)),
         this, SLOT(certificateSelected()));
+    setContentWidget(listWidget);
 
-    setPrimaryAction(new HbAction(hbTrId("txt_common_button_close")));
+    addAction(new HbAction(hbTrId("txt_common_button_close"), this));
 }
 
 // ----------------------------------------------------------------------------
@@ -146,12 +151,16 @@ void SifUiDialogCertificateDetails::showCertificate(int index)
     HbLabel *title = new HbLabel(tr("Certificate details"));
     setHeadingWidget(title);
 
-    HbTextEdit *content = new HbTextEdit;
+    HbTextEdit *textEdit = new HbTextEdit;
     Q_ASSERT(index >= 0 && index < mCertificates.count());
     QString details = certificateDetails(*mCertificates[index]);
-    content->setPlainText(details);
-    content->setReadOnly(true);
-    setContentWidget(content);
+    textEdit->setPlainText(details);
+    textEdit->setReadOnly(true);
+    textEdit->setCursorVisibility(Hb::TextCursorHidden);
+    // TODO: how to display scroll bar and not to show blue border(focus)?
+    setContentWidget(textEdit);
 
-    setPrimaryAction(new HbAction(hbTrId("txt_common_button_close")));
+    //: Closes the dialog. Control returns back to where the installation was started.
+    addAction(new HbAction(hbTrId("txt_common_button_close"), this));
 }
+

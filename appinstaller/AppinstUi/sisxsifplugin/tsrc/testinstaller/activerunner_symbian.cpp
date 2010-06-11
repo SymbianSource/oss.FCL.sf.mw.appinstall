@@ -19,10 +19,10 @@
 #include "activerunner.h"
 
 
-ActiveRunnerPrivate::ActiveRunnerPrivate(ActiveRunner *aRunner) :
+ActiveRunnerPrivate::ActiveRunnerPrivate( ActiveRunner *aRunner ) :
         CActive( CActive::EPriorityStandard ), q_ptr( aRunner )
     {
-    CActiveScheduler::Add(this);
+    CActiveScheduler::Add( this );
     }
 
 ActiveRunnerPrivate::~ActiveRunnerPrivate()
@@ -36,6 +36,7 @@ ActiveRunnerPrivate::~ActiveRunnerPrivate()
         {
         iSWInstLauncher.Close();
         }
+    iFs.Close();
     delete iFileName;
     delete iArguments;
     delete iResults;
@@ -43,22 +44,13 @@ ActiveRunnerPrivate::~ActiveRunnerPrivate()
 
 TInt ActiveRunnerPrivate::Initialize( bool aUseSif )
     {
-    iUseSif = aUseSif;
-    TInt ret = KErrNone;
-    if( iUseSif )
-        {
-        ret = iSoftwareInstall.Connect();
-        }
-    else
-        {
-        ret = iSWInstLauncher.Connect();
-        }
-    return ret;
+    TRAPD( err, DoInitializeL( aUseSif ) );
+    return err;
     }
 
-TInt ActiveRunnerPrivate::Install( const QString& aFileName, bool aSilent )
+TInt ActiveRunnerPrivate::Install( const QString& aFileName, bool aSilent, bool aOpenFile )
     {
-    TRAPD( err, DoInstallL( aFileName, aSilent ) );
+    TRAPD( err, DoInstallL( aFileName, aSilent, aOpenFile ) );
     return err;
     }
 
@@ -107,7 +99,22 @@ TInt ActiveRunnerPrivate::RunError( TInt aError )
     return KErrNone;
     }
 
-void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent )
+void ActiveRunnerPrivate::DoInitializeL( bool aUseSif )
+    {
+    iUseSif = aUseSif;
+    User::LeaveIfError( iFs.Connect() );
+    User::LeaveIfError( iFs.ShareProtected() );
+    if( iUseSif )
+        {
+        User::LeaveIfError( iSoftwareInstall.Connect() );
+        }
+    else
+        {
+        User::LeaveIfError( iSWInstLauncher.Connect() );
+        }
+    }
+
+void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bool aOpenFile )
     {
     if( iFileName )
         {
@@ -129,6 +136,13 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent )
             }
         }
 
+    RFile fileHandle;
+    if( aOpenFile )
+        {
+        User::LeaveIfError( fileHandle.Open( iFs, fileName, EFileRead ) );
+        CleanupClosePushL( fileHandle );
+        }
+
     if( iUseSif )
         {
         if( aSilent )
@@ -142,11 +156,25 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent )
             iResults = NULL;
             iResults = Usif::COpaqueNamedParams::NewL();
 
-            iSoftwareInstall.Install( fileName, *iArguments, *iResults, iStatus );
+            if( aOpenFile )
+                {
+                iSoftwareInstall.Install( fileHandle, *iArguments, *iResults, iStatus );
+                }
+            else
+                {
+                iSoftwareInstall.Install( fileName, *iArguments, *iResults, iStatus );
+                }
             }
         else
             {
-            iSoftwareInstall.Install( fileName, iStatus );
+            if( aOpenFile )
+                {
+                iSoftwareInstall.Install( fileHandle, iStatus );
+                }
+            else
+                {
+                iSoftwareInstall.Install( fileName, iStatus );
+                }
             }
         }
     else
@@ -155,13 +183,34 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent )
             {
             SwiUI::TInstallOptions defaultOptions;
             SwiUI::TInstallOptionsPckg optPckg( defaultOptions );
-            iSWInstLauncher.SilentInstall( iStatus, fileName, optPckg );
+
+            if( aOpenFile )
+                {
+                iSWInstLauncher.SilentInstall( iStatus, fileHandle, optPckg );
+                }
+            else
+                {
+                iSWInstLauncher.SilentInstall( iStatus, fileName, optPckg );
+                }
             }
         else
             {
-            iSWInstLauncher.Install( iStatus, fileName );
+            if( aOpenFile )
+                {
+                iSWInstLauncher.Install( iStatus, fileHandle );
+                }
+            else
+                {
+                iSWInstLauncher.Install( iStatus, fileName );
+                }
             }
         }
+
+    if( aOpenFile )
+        {
+        CleanupStack::PopAndDestroy( &fileHandle );
+        }
+
     SetActive();
     }
 

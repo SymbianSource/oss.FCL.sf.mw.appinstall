@@ -46,3 +46,5 @@ RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
 RUN_TEST_STEP 100 tscr SCRCopyDbFile z:\tusif\tscr\tscr.ini scr_restore_db
 RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini backup_file 
 
+// Run scr performance with app registration info
+RUN_SCRIPT z:\tusif\tscr\tscr_app_performance_cases.script

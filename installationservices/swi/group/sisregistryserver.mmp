@@ -28,6 +28,8 @@ CAPABILITY TCB AllFiles ProtServ WriteDeviceData ReadUserData
 // minimum 4KB maximum 2MB (twice the maximum default)
 EPOCHEAPSIZE	0x1000 0x200000
 
+epocprocesspriority low
+
 target sisregistryserver.exe
 targettype exe
 

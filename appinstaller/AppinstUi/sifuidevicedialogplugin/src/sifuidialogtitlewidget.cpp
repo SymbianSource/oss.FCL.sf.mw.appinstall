@@ -23,7 +23,6 @@
 #include <hbpushbutton.h>
 #include <hbmessagebox.h>
 
-// TODO: change these to mono icons when available, see graphics request TLIS-855ECE
 const char KSifUiCertTrusted[]    = "qtg_small_secure";
 const char KSifUiCertNotTrusted[] = "qtg_small_untrusted";
 
@@ -81,31 +80,23 @@ QString SifUiDialogTitleWidget::defaultTitle(SifUiDeviceDialogType type)
     QString title;
     switch (type) {
         case SifUiConfirmationQuery:
-            //: Install confirmation query title. Installation starts if
-            //: the user accepts the query.
-            // TODO: enable when translations ready
-            //title = hbTrId("txt_sisxui_install_conf_head");
-            title = tr("Install?");
+            //: Custom layout ID parent. Install confirmation query title.
+            //: Installation of an application starts if the user accepts the query.
+            title = hbTrId("txt_installer_title_install");
             break;
         case SifUiProgressNote:
-            //: Progress note title. Installation is going on and progress
-            //: bar shows how it proceeds.
-            // TODO: enable when translations ready
-            //title = hbTrId("txt_sisxui_installing_progress_head");
-            title = tr("Installing");
+            //: Progress note title. Installation is going on and progress bar
+            //: shows how it proceeds.
+            title = hbTrId("txt_installer_title_installing");
             break;
         case SifUiCompleteNote:
             //: Installation complete note title. Indicates that installation
-            //: was succesfully completed. User has option to launch AppLib
-            // TODO: enable when translations ready
-            //title = hbTrId("txt_sisxui_install_complete_head");
-            title = tr("Installed");
+            //: was succesfully completed. User has option to launch AppLib.
+            title = hbTrId("txt_installer_title_installed");
             break;
         case SifUiErrorNote:
             //: Installation failed note title. Indicates that installation failed.
-            // TODO: enable when translations ready
-            //title = hbTrId("txt_sisxui_install_failed_head");
-            title = tr("Install failed");
+            title = hbTrId("txt_installer_info_installation_failed");
             break;
         case SifUiUnspecifiedDialog:
         default:
@@ -181,6 +172,7 @@ void SifUiDialogTitleWidget::certificatesClicked()
         mDetailsDialog = new SifUiDialogCertificateDetails(*mCertificates);
         mDetailsDialog->showDetails();
     } else {
+        // TODO: localize
         HbMessageBox::warning(tr("Application is not certified. It's origin and authenticity cannot be proved."));
     }
 }

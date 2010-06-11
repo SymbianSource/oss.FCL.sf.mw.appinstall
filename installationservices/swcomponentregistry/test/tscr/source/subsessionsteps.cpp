@@ -388,6 +388,8 @@ void CAppInfoView::TestSessionL(TInt aNoOfEntries, const RApplicationInfoView& a
     // Check if we need to verify the returned components
     // Performance tests don't need verification.
     TBool isVerification = EFalse;
+    TInt noOfEntriesMatched = 0;
+    TInt totalExpectedEntriesCount = aExpectedEntries.Count();
     GetBoolFromConfig(ConfigSection(), _L("IsVerification"), isVerification);
     while (1)
             {
@@ -396,7 +398,7 @@ void CAppInfoView::TestSessionL(TInt aNoOfEntries, const RApplicationInfoView& a
             TInt returnedAppRegInfoCount = appRegInfoSet.Count(); 
             if (returnedAppRegInfoCount <= 0)
                 {
-                INFO_PRINTF2(_L("May be negative case... no entries found ...Entries count read is %d "),returnedAppRegInfoCount);
+                INFO_PRINTF2(_L("May be negative case... no entries found ...Entries count read is %d "),returnedAppRegInfoCount);                
 				appRegInfoSet.Close();
                 break;
                 }
@@ -418,28 +420,20 @@ void CAppInfoView::TestSessionL(TInt aNoOfEntries, const RApplicationInfoView& a
                     
             for (TInt i = 0; i < returnedAppRegInfoCount; ++i)
                 {
-                if (!VerifyMatchingL(appRegInfoSet[i], aExpectedEntries))
-                   {
-                   
-                   SetTestStepResult(EFail);
-                   ERR_PRINTF2(_L("The API returned an unexpected entry with id 0x%x "), appRegInfoSet[i]->Uid());
-                   TAppRegInfo* tp=NULL;
-                   for (TInt i = 0; i<returnedAppRegInfoCount; i++ )
-                       {
-                       tp=appRegInfoSet[i];
-                       delete tp;
-                       }
-                   appRegInfoSet.Close();
-                   return;
-                   }
-                }
-                                TAppRegInfo* tp=NULL;
-                               for (TInt i = 0; i<returnedAppRegInfoCount; i++ )
-                                   {
-                               tp=appRegInfoSet[i];
-                               delete tp;
-                                   }
-            appRegInfoSet.Close();
+                if (VerifyMatchingL(appRegInfoSet[i], aExpectedEntries))                    
+                    {                                          
+                    ++noOfEntriesMatched;
+                    }
+                }            
+            TAppRegInfo* tp=NULL;
+            for(TInt i = 0; i<returnedAppRegInfoCount; ++i)
+               {
+               tp=appRegInfoSet[i];
+               delete tp;
+               }
+            appRegInfoSet.Close();     
+            if(noOfEntriesMatched == totalExpectedEntriesCount)
+                break;
             }
         
     VerifyNonReturnedEntriesL(aExpectedEntries); 
@@ -490,8 +484,8 @@ void CAppInfoView::ImplTestStepL()
 	if(appinfoFilter)
 	    delete appinfoFilter;
 
-	TRAPD(err1,TestSessionL(noOfEntries, subSession, expectedAppRegEntries));
-	
+    TRAPD(err1,TestSessionL(noOfEntries, subSession, expectedAppRegEntries));
+
 	TInt count = expectedAppRegEntries.Count();
 	TAppRegInfo* tp=NULL;
 	for (TInt i = 0; i<count; i++ )

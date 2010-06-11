@@ -138,10 +138,9 @@ TVerdict CEmbeddingPackageStep::doTestStepL()
 	    return TestStepResult();
 	    }
 	CleanupClosePushL(entry);
-	
-	entry.EmbeddingPackagesL(packages);
+
 	CleanupResetAndDestroyPushL(packages);
-	
+	entry.EmbeddingPackagesL(packages);
 	
 	if(packages.Count() != embeddingPkgCount)
 		{

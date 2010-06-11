@@ -19,7 +19,6 @@
 
 //INCLUDES
 #include <hbaction.h>
-#include <hbdialog.h>
 #include <hbtextitem.h>
 #include <centralrepository.h>
 
@@ -102,22 +101,11 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
         User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, 
                                          autoUpdateCheckValue ) );
         CleanupStack::PopAndDestroy( cenrep );
-        autoUpdateCheckValue = EIAUpdateSettingValueDisable; //temp to test dialog
         if ( autoUpdateCheckValue == EIAUpdateSettingValueDisableWhenRoaming ||
              autoUpdateCheckValue ==  EIAUpdateSettingValueEnable  ) 
             {
             accepted = ETrue;
             firstTimeInfo->SetAgreementAcceptedL();
-            }
-        else  
-            {
-     	    HbAction *primaryAction = new HbAction("Accept");
-     	    HbAction *secondaryAction = new HbAction("Decline");
-     	    if ( ShowDialogL( primaryAction, secondaryAction ) == primaryAction)
-     	        {
-     	        accepted = ETrue;
-     	        firstTimeInfo->SetAgreementAcceptedL();
-                }
             }
         }
     CleanupStack::PopAndDestroy( firstTimeInfo );
@@ -138,20 +126,6 @@ void CIAUpdateAgreement::SetAgreementAcceptedL()
 
 
 
-
-
-// ---------------------------------------------------------------------------
-// CIAUpdateAgreement::ShowAgreementL
-// 
-// ---------------------------------------------------------------------------
-//
-void CIAUpdateAgreement::ShowAgreementL()
-    {
-    HbAction *primaryAction = new HbAction("OK");
-    ShowDialogL( primaryAction, NULL );	
-    delete primaryAction;
-    }
-
 // ---------------------------------------------------------------------------
 // CIAUpdateAgreement::AgreementAcceptedL
 // 
@@ -165,36 +139,7 @@ TBool CIAUpdateAgreement::AgreementAcceptedL()
 	return ret;
     }
     
-// ---------------------------------------------------------------------------
-// CIAUpdateAgreement::ShowDialogL
-// 
-// ---------------------------------------------------------------------------
-//
-HbAction* CIAUpdateAgreement::ShowDialogL( HbAction *primaryAction, HbAction *secondaryAction )
-    {
-    HbDialog agreementDialog;
-    HbTextItem *headingText = new HbTextItem(&agreementDialog);
-    headingText->setFontSpec(HbFontSpec(HbFontSpec::Title));
-    headingText->setText("Disclaimer");
-    agreementDialog.setHeadingWidget(headingText);
-    
-   
-    HbTextItem *text = new HbTextItem(&agreementDialog);
-    text->setFontSpec(HbFontSpec(HbFontSpec::PrimarySmall));
-    text->setText("This application allows you to download and use applications and services provided by Nokia or third parties. Service Terms and Privacy Policy will apply. Nokia will not assume any liability or responsibility for the availability or third party applications or services. Before using the third party application or service, read the applicable terms of use.\n\nUse of this application involves transmission of data. Contact your network service provider for information about data transmission charges.\n\n(c) 2007-2010 Nokia. All rights reserved.");
-    agreementDialog.setContentWidget(text);
-    
-    agreementDialog.setPrimaryAction(primaryAction);
-    
-    if ( secondaryAction )
-        {
-        agreementDialog.setSecondaryAction(secondaryAction);
-        }
-    agreementDialog.setTimeout(HbPopup::NoTimeout);
-    agreementDialog.show();
-    //return agreementDialog.exec(); 
-    return primaryAction;
-    }        
+
     
     /*HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );
     HBufC* text_2 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_2 );

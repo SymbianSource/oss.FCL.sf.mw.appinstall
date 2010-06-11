@@ -526,9 +526,10 @@ void CAppRegInfoReader::ReadOpaqueDataL(TUint aResourceId, const CResourceFile* 
                 CResourceFile* currLocalizableFile = iLocalizableRscArray[i]->iRscFile;                
                 currLocalizableFile->ConfirmSignatureL();
                 HBufC8* data = NULL;
-                TRAPD(err, data = currLocalizableFile->AllocReadL(aResourceId));                
+                TRAPD(err, data = currLocalizableFile->AllocReadL(aResourceId));                  
                 if(err == KErrNone)
                     {
+                    DEBUG_PRINTF3(_L8("Opaque Data read (length %d) from the localizable resouce file : %S"), data->Length(), data);
                     CleanupStack::PushL(data);
                     Usif::COpaqueData* opaqueData = Usif::COpaqueData::NewL(*data, iLocalizableRscArray[i]->iLanguage);
                     aOpaqueDataArray.AppendL(opaqueData);
@@ -541,6 +542,7 @@ void CAppRegInfoReader::ReadOpaqueDataL(TUint aResourceId, const CResourceFile* 
             // Expecting opaque data to be in the registration file
             __ASSERT_ALWAYS(aRegistrationFile, Panic(EPanicNullPointer));
             HBufC8* data = aRegistrationFile->AllocReadLC(aResourceId);
+            DEBUG_PRINTF3(_L8("Opaque Data read (length %d) from the registration resouce file : %S"), data->Length(), data);
             Usif::COpaqueData* opaqueData = Usif::COpaqueData::NewL(*data, TLanguage(0));
             aOpaqueDataArray.AppendL(opaqueData);
             CleanupStack::PopAndDestroy(data);

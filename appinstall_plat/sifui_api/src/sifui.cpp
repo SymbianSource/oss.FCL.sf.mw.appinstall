@@ -18,10 +18,6 @@
 #include "sifui.h"                              // CSifUi
 #include "sifuiprivate.h"                       // CSifUiPrivate
 
-// TODO: remove
-#include <swi/msisuihandlers.h>                 // Swi::CAppInfo
-#include "sifuiappinfo.h"                       // CSifUiAppInfo
-
 
 // ======== MEMBER FUNCTIONS ========
 
@@ -114,6 +110,24 @@ EXPORT_C void CSifUi::IncreaseProgressBarValueL( TInt aNewValue )
     }
 
 // ---------------------------------------------------------------------------
+// CSifUi::IsCancelled()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::IsCancelled()
+    {
+    return iPrivate->IsCancelled();
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::SetButtonVisible()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C void CSifUi::SetButtonVisible( TOptionalButton aButton, TBool aIsVisible )
+    {
+    iPrivate->SetButtonVisible( aButton, aIsVisible );
+    }
+
+// ---------------------------------------------------------------------------
 // CSifUi::ShowCompleteL()
 // ---------------------------------------------------------------------------
 //
@@ -150,48 +164,4 @@ void CSifUi::ConstructL()
     }
 
 
-
-
-// DEPRECATED FUNCTIONS -- TO BE REMOVED
-
-EXPORT_C void CSifUi::SetMode( TMode /*aMode*/ )
-    {
-    User::Invariant();
-    }
-
-EXPORT_C CSifUi::TMode CSifUi::Mode()
-    {
-    User::Invariant();
-    return EUnspecified;
-    }
-
-EXPORT_C void CSifUi::ShowFailedL( TInt /*aErrorCode*/ )
-    {
-    User::Invariant();
-    }
-
-EXPORT_C void CSifUi::SetCertificateInfoL(
-        const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
-    {
-    User::Invariant();
-    }
-
-EXPORT_C TBool CSifUi::ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-    TInt aAppSize, const CApaMaskedBitmap* aAppIcon )
-    {
-    CSifUiAppInfo* appInfo = CSifUiAppInfo::NewLC( aAppInfo.AppName(),
-            aAppInfo.AppVendor(), aAppInfo.AppVersion(), aAppSize, aAppIcon );
-    TBool retVal = iPrivate->ShowConfirmationL( *appInfo );
-    CleanupStack::PopAndDestroy( appInfo );
-    return retVal;
-    }
-
-EXPORT_C void CSifUi::ShowProgressL( const Swi::CAppInfo& aAppInfo,
-        TInt aAppSize, TInt aProgressBarFinalValue )
-    {
-    CSifUiAppInfo* appInfo = CSifUiAppInfo::NewLC( aAppInfo.AppName(),
-            aAppInfo.AppVendor(), aAppInfo.AppVersion(), aAppSize, NULL );
-    iPrivate->ShowProgressL( *appInfo, aProgressBarFinalValue );
-    CleanupStack::PopAndDestroy( appInfo );
-    }
 

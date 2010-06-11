@@ -21,93 +21,9 @@
 #include <sifui.h>                      // CSifUi
 #include "SifUiTest.h"
 
-
-//
-// NOTE: This cpp file contains just generic STIF module code.
-// Test case functions are defined in SifUiTestCases.cpp
-//
-
-
-_LIT( KWaitAndSendThread, "WaitAndSendKey" );
-const TInt KWaitAndSendThreadStack = 0x1000;
-
-class TDelayAndKeyEvent {
-public:
-    TTimeIntervalMicroSeconds32 iDelay;
-    TKeyEvent iKeyEvent;
-};
-
-
-// ======== LOCAL FUNCTIONS =========
-
-// -----------------------------------------------------------------------------
-// DoSendKeyEventL( const TKeyEvent& aKeyEvent )
-// -----------------------------------------------------------------------------
-//
-void DoSendKeyEventL( const TKeyEvent& aKeyEvent )
-    {
-    RWsSession wsSession;
-    User::LeaveIfError( wsSession.Connect() );
-    CleanupClosePushL( wsSession );
-    TInt focusedGroup = wsSession.GetFocusWindowGroup();
-
-    TWsEvent event;
-    TKeyEvent& keyEvent( *event.Key() );
-    TInt err;
-
-    /*
-    event.SetType( EEventKeyDown );
-    event.SetTimeNow();
-    keyEvent = aKeyEvent;
-    err = wsSession.SendEventToWindowGroup( focusedGroup, event );
-    User::LeaveIfError( err );
-    */
-
-    event.SetType( EEventKey );
-    event.SetTimeNow();
-    keyEvent = aKeyEvent;
-    err = wsSession.SendEventToWindowGroup( focusedGroup, event );
-    User::LeaveIfError( err );
-
-    /*
-    event.SetType( EEventKeyUp );
-    event.SetTimeNow();
-    keyEvent = aKeyEvent;
-    err = wsSession.SendEventToWindowGroup( focusedGroup, event );
-    User::LeaveIfError( err );
-    */
-
-    CleanupStack::PopAndDestroy( &wsSession );
-    }
-
-// -----------------------------------------------------------------------------
-// WaitAndSendThreadFunc()
-// -----------------------------------------------------------------------------
-//
-TInt WaitAndSendThreadFunc( TAny* aPtr )
-    {
-    TDelayAndKeyEvent* params = reinterpret_cast<TDelayAndKeyEvent*>( aPtr );
-    ASSERT( params );
-    TInt retVal = KErrNone;
-
-    CTrapCleanup* cleanup = CTrapCleanup::New();
-    if( !cleanup )
-        {
-        delete params;
-        retVal = KErrNoMemory;
-        }
-
-    RThread::Rendezvous( retVal );
-    if( retVal == KErrNone )
-        {
-        User::After( params->iDelay );
-        TRAP( retVal, DoSendKeyEventL( params->iKeyEvent ) );
-        }
-
-    delete cleanup;
-    delete params;
-    return retVal;
-    }
+const TInt KTestStackSize = 0x8000;     // 32K stack
+const TInt KTestMinHeap = 0x4000;       // 16K heap min
+const TInt KTestMaxHeap = 0x200000;     // 2M heap max
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -131,7 +47,6 @@ CSifUiTest* CSifUiTest::NewL()
 //
 CSifUiTest::~CSifUiTest()
     {
-    delete iSifUi;
     iLog = NULL;
     delete iStdLog;
     delete iTCLog;
@@ -415,43 +330,6 @@ void CSifUiTest::SetResult( TTestResult& aResult, const TInt aReturnCode ) const
     aResult.SetResult( aReturnCode, ErrorCodeString( aReturnCode ) );
     }
 
-// -----------------------------------------------------------------------------
-// CSifUiTest::AsyncWaitAndSendKeyEventL()
-// -----------------------------------------------------------------------------
-//
-void CSifUiTest::AsyncWaitAndSendKeyEventL( TTimeIntervalMicroSeconds32 aDelay,
-        const TKeyEvent& aKeyEvent ) const
-    {
-    if( aDelay.Int() )
-        {
-        TDelayAndKeyEvent* paramPack = new( ELeave ) TDelayAndKeyEvent;
-        paramPack->iDelay = aDelay;
-        paramPack->iKeyEvent = aKeyEvent;
-
-        RThread waitingAndSendingThread;
-        TInt err = waitingAndSendingThread.Create( KWaitAndSendThread, WaitAndSendThreadFunc,
-                KWaitAndSendThreadStack, NULL, reinterpret_cast< TAny* >( paramPack ) );
-        if( err == KErrNone )
-            {
-            TRequestStatus status;
-            waitingAndSendingThread.Rendezvous( status );
-            waitingAndSendingThread.Resume();
-            User::WaitForRequest( status );
-            waitingAndSendingThread.Close();
-            User::LeaveIfError( status.Int() );
-            }
-        else
-            {
-            delete paramPack;
-            User::Leave( err );
-            }
-        }
-    else
-        {
-        DoSendKeyEventL( aKeyEvent );
-        }
-    }
-
 
 // ==== OTHER EXPORTED FUNCTIONS ====
 
@@ -473,12 +351,16 @@ EXPORT_C TInt SetRequirements( CTestModuleParam*& aTestModuleParam,
     {
     aParameterValid = KStifTestModuleParameterChanged;
 
-    CTestModuleParamVer01* param = CTestModuleParamVer01::NewL();
-    param->iTestThreadStackSize = 16384;    // 16K stack
-    param->iTestThreadMinHeap = 4096;       // 4K heap min
-    param->iTestThreadMaxHeap = 1048576;    // 1M heap max
-    aTestModuleParam = param;
+    CTestModuleParamVer01* param = NULL;
+    TRAPD( error, param = CTestModuleParamVer01::NewL() );
+    if( !error )
+        {
+        param->iTestThreadStackSize = KTestStackSize;
+        param->iTestThreadMinHeap = KTestMinHeap;
+        param->iTestThreadMaxHeap = KTestMaxHeap;
+        aTestModuleParam = param;
+        }
 
-    return KErrNone;
+    return error;
     }
 

@@ -164,7 +164,7 @@ void CScrCreateTransactionStep::ImplTestStepL()
 		OpenSessionLC(session2);
 		OpenSubsessionLC(session1, subsession);
 		CreateTransactionL(session2);
-		CleanupStack::PopAndDestroy(3, &subsession);
+		CleanupStack::PopAndDestroy(3, &session1);
 		}
 	
 	TBool isBeginTransactionInTheSameSession(EFalse);
@@ -174,7 +174,7 @@ void CScrCreateTransactionStep::ImplTestStepL()
 		OpenSessionLC(session1);
 		OpenSubsessionLC(session1, subsession);
 		CreateTransactionL(session1);
-		CleanupStack::PopAndDestroy(2, &subsession);
+		CleanupStack::PopAndDestroy(2, &session1);
 		}
 		
 	TBool isBeginAfterAnotherBegin(EFalse);

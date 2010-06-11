@@ -18,8 +18,8 @@
 
 
 
-#ifndef IAUPDATEDIALOGS_H
-#define IAUPDATEDIALOGS_H
+#ifndef IAUPDATE_WAITDIALOG_OBSERVER_H
+#define IAUPDATE_WAITDIALOG_OBSERVER_H
 
 //  INCLUDES
 #include <e32base.h>
@@ -42,6 +42,6 @@ class MIAUpdateWaitDialogObserver
     };
 
 
-#endif // IAUPDATEDIALOGS_H
+#endif // IAUPDATE_WAITDIALOG_OBSERVER_H
             
 // End of File

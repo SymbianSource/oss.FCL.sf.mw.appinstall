@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -1147,6 +1147,7 @@ HBufC8* CSisRegistryCache::LoadControllerLC(const CSisRegistryObject& aObject, T
 void CSisRegistryCache::GenerateControllersArrayL(const CSisRegistryObject& aObject, 
 												RPointerArray<HBufC8>& aControllers)
 	{
+	CleanupResetAndDestroyPushL(aControllers);
 	aControllers.ResetAndDestroy();
 	
 	// read the controller for every member of the list	
@@ -1158,6 +1159,7 @@ void CSisRegistryCache::GenerateControllersArrayL(const CSisRegistryObject& aObj
 		aControllers.AppendL(buffer);
 		CleanupStack::Pop(buffer);
 		}
+	CleanupStack::Pop(&aControllers);
 	}	
 		
 void CSisRegistryCache::AddControllerL(const CSisRegistryObject& aObject, 

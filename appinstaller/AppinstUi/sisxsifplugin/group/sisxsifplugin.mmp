@@ -47,6 +47,7 @@ MW_LAYER_SYSTEMINCLUDE
 LIBRARY         euser.lib               // User
 LIBRARY         ecom.lib                // ECom
 LIBRARY         sif.lib                 // USIF
+LIBRARY         sifnotification.lib     // Usif::CPublishSifOperationInfo
 LIBRARY         scrclient.lib           // SCR
 LIBRARY         sifui.lib               // CSifUi
 LIBRARY         sisregistryclient.lib   // Swi::RSisRegistrySession
@@ -58,3 +59,4 @@ LIBRARY         featmgr.lib             // FeatureManager
 LIBRARY         pkixcertbase.lib        // CPKIXValidationResultBase
 LIBRARY         x509.lib                // TValidationStatus
 
+SMPSAFE

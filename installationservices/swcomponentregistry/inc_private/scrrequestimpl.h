@@ -32,6 +32,7 @@
 #include "screntries.h"
 #include "appregentries.h"
 #include "appreginfo.h"
+#include <usif/scr/screntries_platform.h>
 
 namespace Usif
 	{
@@ -122,6 +123,7 @@ namespace Usif
 		void FlushLogEntriesArrayL();
 		void GetIsComponentOnReadOnlyDriveL(const RMessage2& aMessage) const;
 		void GetIsComponentPresentL(const RMessage2& aMessage) const;
+		TBool IsComponentPresentL(TComponentId aComponentId) const;
 		void SetIsComponentPresentL(const RMessage2& aMessage);
 		
 		// SIF Requests
@@ -277,12 +279,6 @@ namespace Usif
 			EFileUnregistered
 			};
 		
-		enum TAccessMode
-            {
-            ETransactionalSid   = 0x0001,    // Sids requiring component/application transactional support, usually Installers/Execution layers
-            EMaxAccessMode      = 0xFFFF
-            };
-		
 		class TRollbackParams
 			{
 		public:
@@ -326,7 +322,8 @@ namespace Usif
 		CStatement* CreateStatementObjectWithLocaleL(const TDesC& aStatement, TLanguage aLocale, TInt aValuesNum,...) const;
 		CStatement* CreateStatementObjectWithLocaleNoDowngradeL(const TDesC& aStatement, TLanguage aLocale, TInt aValuesNum,...) const;
 		void BindStatementValuesL(CStatement& aStatement, TLanguage aLanguage, TInt aValuesNum, VA_LIST aList) const;
-		void GetComponentIdsHavingThePropertiesL(RArray<TComponentId>& aComponentIds, RPointerArray<CPropertyEntry> aProperties, TBool aDoIntersect) const;
+		void GetComponentIdsHavingThePropertiesL(RArray<TComponentId>& aComponentIds, RPointerArray<CPropertyEntry>& aProperties, RArray<CComponentFilter::TPropertyOperator>& aPropertyOperatorList, 
+                                                     TBool aDoIntersect) const;
 		CStatement* CreateStatementObjectForComponentLocalizablesLC(const TDesC& aName, const TDesC& aVendor, TUint aSetFlag, TComponentId aComponentId  = 0 ) const;
 		void GetComponentsHavingNameVendorL(RArray<TComponentId>& aComponentIds, const TDesC& aName, const TDesC& aVendor, TUint16 aSetFlag, TBool aDoIntersect) const;
 		CComponentEntry* GetNextComponentEntryL(CStatement& aStmt, CComponentFilter& aFilter, TLanguage aLocale, CCompViewSubsessionContext* aSubsessionContext) const;
@@ -348,7 +345,7 @@ namespace Usif
 		void ReadAndSetCommonComponentPropertyL(const RMessage2& aMessage, const TDesC& aPropertyColumn);
 		TBool HasFilesOnDriveL(TDriveUnit aDrive, TComponentId aComponentId);
 		CStatement* OpenFileListStatementL(TComponentId aComponentId) const;
-		TBool IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPluginUid, TUint32 aInstallerSecureId, TUint32 aExecutionLayerSecureId, const RPointerArray<HBufC>& aMimeTypesArray, const RPointerArray<CLocalizedSoftwareTypeName>& aLocalizedNamesArray);
+		TBool IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPluginUid, RArray<TCustomAccessInfo>& aSidArray, const RPointerArray<HBufC>& aMimeTypesArray, const RPointerArray<CLocalizedSoftwareTypeName>& aLocalizedNamesArray, const TDesC& aLauncherExecutable);
 		void SubsessionAddLocalizableSoftwareTypeNameL(CStatement& aStmt, CComponentEntry& aEntry, TLanguage aLocale, CCompViewSubsessionContext* aSubsessionContext) const;
 		TBool IsDriveReadOnlyL(TInt driveIndex) const;
 		TBool CheckForMediaPresenceL(TComponentId aComponentId) const;
@@ -358,6 +355,7 @@ namespace Usif
 		TBool GetAppUidForServiceIdL(const TInt ServiceId, TUid& aAppUid) const;
 		TBool GetNearestAppLanguageL(TLanguage aRequiredLocale,TUid aAppUid,TLanguage& aFinalAppLocale) const;
 		void GetNearestAppLanguageForOpaqueDataL(TLanguage aRequiredLocale,TUid aAppUid,TUid aServiceUid,TLanguage& aFinalAppLocale) const;
+		void GetOperatorStringL(CComponentFilter::TDbOperator aOperator, HBufC*& aOperatorString) const;
 
 		// DB Version management
 		void InitializeDbVersionL();

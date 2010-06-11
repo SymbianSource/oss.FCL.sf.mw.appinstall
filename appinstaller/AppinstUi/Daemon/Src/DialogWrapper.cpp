@@ -390,11 +390,12 @@ void CDialogWrapper::ActivateIndicatorL( TReal aProcessValue )
         iIsIndicator = ETrue;             
         }
     
-    TReal processValue = aProcessValue;
-        
+    TInt value = static_cast<TInt>( aProcessValue );
+    FLOG_1( _L("Daemon: ActivateIndicatorL: precent value: %d"), value );
+          
     CHbSymbianVariant* hbParam = CHbSymbianVariant::NewL( 
-                                                 &processValue,
-                                                 CHbSymbianVariant::EReal );    
+                                                 &value,
+                                                 CHbSymbianVariant::EInt );    
     CleanupStack::PushL( hbParam );
     
     FLOG( _L("Daemon: ActivateIndicatorL: Activate") );

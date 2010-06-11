@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,40 +19,43 @@
 #ifndef IAUPDATEMAINWINDOW_H_
 #define IAUPDATEMAINWINDOW_H_
 
-#include <qobject>
+#include <QObject>
 #include <hbmainwindow.h>
 
 // Forward declarations
 class IAUpdateMainView;
-class IAUpdateHistoryView;
 class HbDocumentLoader;
 class MIAUpdateNode;
 class MIAUpdateFwNode;
 class IAUpdateEngine;  
+class CIAUpdateSettingDialog;
 
 class IAUpdateMainWindow : public HbMainWindow
-    {
+{
     Q_OBJECT
     
 public:
     IAUpdateMainWindow(IAUpdateEngine *engine);
     virtual ~IAUpdateMainWindow();
+    
+    IAUpdateMainView*  GetMainView();
+    CIAUpdateSettingDialog* GetSettingView();
 
 public slots:
     void toMainView();
     void refreshMainView(const RPointerArray<MIAUpdateNode>& nodes,
                          const RPointerArray<MIAUpdateFwNode>& fwNodes,
                          int error);
-    void toHistoryView();
+    void toSettingView();
 
 private:
     void addMainView(IAUpdateEngine *engine);
-    void addHistoryView();
+    void addSettingView();
     
 private:
     IAUpdateMainView *mMainView;
-    IAUpdateHistoryView *mHistoryView;
+    CIAUpdateSettingDialog *mSettingView;
     
-    };
+};
 
 #endif /* IAUPDATEMAINWINDOW */

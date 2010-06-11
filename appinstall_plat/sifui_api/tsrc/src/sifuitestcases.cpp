@@ -15,13 +15,26 @@
 *
 */
 
-#include <badesca.h>                    // CDesCArray
+#include <badesca.h>                    // CDesCArray, StifUnitMacros.h needs this
+#include <StifUnitMacros.h>             // STIF_ASSERT_NULL, STIF_ASSERT_NOT_NULL
 #include <sifui.h>                      // CSifUi
-#include "SifUiTest.h"                  // CSifUiTest
+#include <sifuiappinfo.h>               // CSifUiAppInfo
+#include <sifuicertificateinfo.h>       // CSifUiCertificateInfo
+#include <s32file.h>                    // RFileReadStream
+#include <s32mem.h>                     // RDesReadStream
+#include <apgcli.h>                     // RApaLsSession
+#include <swi/msisuihandlers.h>         // Swi::CCertificateInfo
+#include "sifuitest.h"                  // CSifUiTest
+#include "sifuitestcleanuputils.h"      // CleanupResetAndDestroyPushL
+
+_LIT( KX509TestCertFile, "\\testing\\data\\test_x509_cert.cer" );
 
 _LIT( KEnter, "Enter" );
 _LIT( KStepFormat, "Step %d" );
 _LIT( KExit, "Exit" );
+
+const TInt KBufferGranularity = 1024;
+
 
 // Internal structure containing test case name and pointer to test function
 class TCaseInfoInternal
@@ -33,12 +46,6 @@ class TCaseInfoInternal
         TInt            iFirstMemoryAllocation;
         TInt            iLastMemoryAllocation;
     };
-
-const TInt KOneSecond = 1000000;
-const TInt KThreeSeconds = 3 * KOneSecond;
-const TInt KFiveSeconds = 5 * KOneSecond;
-const TInt KHalfSecond = KOneSecond / 2;
-const TKeyEvent KRightSoftkey = { EKeyDevice1, 0, 0, EStdKeyDevice1 };  // EKeyCBA2
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -69,13 +76,10 @@ const TCaseInfo CSifUiTest::Case ( const TInt aCaseNumber ) const
     static TCaseInfoInternal const KCases[] =
         {
         ENTRY( "CreateLowMemTest", CSifUiTest::CreateLowMemTest ),
-        ENTRY( "InformationNoteTest", CSifUiTest::InformationNoteTest ),
-        ENTRY( "WarningNoteTest", CSifUiTest::WarningNoteTest ),
-        ENTRY( "ErrorNoteTest", CSifUiTest::ErrorNoteTest ),
-        ENTRY( "PermanentNoteTest", CSifUiTest::PermanentNoteTest ),
-        ENTRY( "ProgressNoteTest", CSifUiTest::ProgressNoteTest ),
-        ENTRY( "WaitNoteTest", CSifUiTest::WaitNoteTest ),
-        ENTRY( "LaunchHelpTest", CSifUiTest::LaunchHelpTest )
+        ENTRY( "MemorySelectionTest", CSifUiTest::MemorySelectionTest ),
+        ENTRY( "CertificateInfoTest", CSifUiTest::CertificateInfoTest ),
+        ENTRY( "AppInfoTest", CSifUiTest::AppInfoTest ),
+        ENTRY( "ProgressDialogsTest", CSifUiTest::ProgressDialogsTest )
         };
 
     if( (TUint) aCaseNumber >= sizeof( KCases ) / sizeof( TCaseInfoInternal ) )
@@ -98,19 +102,30 @@ const TCaseInfo CSifUiTest::Case ( const TInt aCaseNumber ) const
     }
 
 // -----------------------------------------------------------------------------
-// CSifUiTest::CreateSifUi()
+// CSifUiTest::ReadCertificateL()
 // -----------------------------------------------------------------------------
 //
-TInt CSifUiTest::CreateSifUi()
+CX509Certificate* CSifUiTest::ReadCertificateL( const TDesC& aFileName )
     {
-    if( iSifUi )
-        {
-        delete iSifUi;
-        iSifUi = NULL;
-        }
+    TFindFile findFile( iFs );
+    User::LeaveIfError( findFile.FindByDir( aFileName, KNullDesC ) );
 
-    TRAPD( err, iSifUi = CSifUi::NewL() );
-    return err;
+    RFile file;
+    User::LeaveIfError( file.Open( iFs, findFile.File(), EFileRead ) );
+    CleanupClosePushL( file );
+
+    TInt fileSize = 0;
+    User::LeaveIfError( file.Size( fileSize ) );
+
+    HBufC8* buffer = HBufC8::NewLC( fileSize );
+    TPtr8 ptr( buffer->Des() );
+    User::LeaveIfError( file.Read( ptr ) );
+
+    CX509Certificate* x509cert = CX509Certificate::NewL( *buffer );
+
+    CleanupStack::PopAndDestroy( buffer );
+    CleanupStack::PopAndDestroy( &file );
+    return x509cert;
     }
 
 // -----------------------------------------------------------------------------
@@ -124,321 +139,494 @@ TInt CSifUiTest::CreateLowMemTest( TTestResult& aResult )
 
     TInt count = 0;
     TInt error = KErrNoMemory;
+    CSifUi* sifUi = NULL;
     while( error == KErrNoMemory )
         {
         User::__DbgSetAllocFail( EFalse, RHeap::EDeterministic, ++count );
-        __UHEAP_MARK;
-        error = CreateSifUi();
-        __UHEAP_MARKEND;
+        TRAP( error, sifUi = CSifUi::NewL() );
         User::__DbgSetAllocFail( EFalse, RHeap::ENone, count );
+        if( !error )
+            {
+            delete sifUi;
+            sifUi = NULL;
+            }
         }
     TestModuleIf().Printf( 1, KTestName, _L("count %d, last error %d"), count, error );
     SetResult( aResult, error );
-    delete iSifUi;
-    iSifUi = NULL;
 
     TestModuleIf().Printf( 0, KTestName, KExit );
     return KErrNone;
     }
 
 // -----------------------------------------------------------------------------
-// CSifUiTest::InformationNoteTest()
+// CSifUiTest::MemorySelectionTest()
 // -----------------------------------------------------------------------------
 //
-TInt CSifUiTest::InformationNoteTest( TTestResult& aResult )
+TInt CSifUiTest::MemorySelectionTest( TTestResult& aResult )
     {
-    _LIT( KTestName, "InformationNoteTest" );
+    TRAPD( result, DoMemorySelectionTestL( aResult ) );
+    SetResult( aResult, result );
+    return KErrNone;
+    }
+
+// -----------------------------------------------------------------------------
+// CSifUiTest::DoMemorySelectionTestL()
+// -----------------------------------------------------------------------------
+//
+void CSifUiTest::DoMemorySelectionTestL( TTestResult& aResult )
+    {
+    _LIT( KTestName, "MemorySelectionTest" );
     TestModuleIf().Printf( 0, KTestName, KEnter );
 
     enum TTestSteps
         {
         EFirstStep,
-        EChangeText,
-        EWaitSomeTime,
+        EGetSelectedWhenNotSet,
+        ESetNoDrivesStep,
+        ESetThreeDriveStep,
+        ESetOneDriveStep,
+        EGetSelectedWhenSetButNotAskedStep,
+        ELastStep,
         EAllDone
         };
-    _LIT( KInfoNoteText, "This is information note" );
-    _LIT( KChangedInfoNoteText, "Changed information note text" );
 
-    TInt result = CreateSifUi();
-    for( TInt step = EFirstStep; step < EAllDone && result == KErrNone; ++step )
+    CSifUi* sifUi = NULL;
+    RArray<TInt> driveNumbers;
+    CleanupClosePushL( driveNumbers );
+    TInt drive = 0;
+    TInt errorCode = KErrNone;
+
+    TInt error = KErrNone;
+    for( TInt step = EFirstStep; step < EAllDone && !error; ++step )
         {
         TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
         switch( step )
             {
             case EFirstStep:
-                TRAP( result, iSifUi->DisplayInformationNoteL( KInfoNoteText ) );
+                STIF_ASSERT_NULL( sifUi );
+                TRAP( error, sifUi = CSifUi::NewL() );
+                if( !error )
+                    {
+                    CleanupStack::PushL( sifUi );
+                    }
                 break;
-            case EChangeText:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->DisplayInformationNoteL( KChangedInfoNoteText ) );
+
+            case EGetSelectedWhenNotSet:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                TRAP( error, errorCode = sifUi->SelectedDrive( drive ) );
+                if( error == KErrNone && errorCode == KErrNotFound )
+                    {
+                    error = KErrNone;
+                    }
+                else
+                    {
+                    error = KErrGeneral;
+                    }
                 break;
-            case EWaitSomeTime:
-                User::After( KOneSecond );
+
+            case ESetNoDrivesStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                TRAP( error, sifUi->SetMemorySelectionL( driveNumbers ) );
                 break;
+
+            case ESetThreeDriveStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                driveNumbers.Append( EDriveC );
+                driveNumbers.Append( EDriveE );
+                driveNumbers.Append( EDriveF );
+                TRAP( error, sifUi->SetMemorySelectionL( driveNumbers ) );
+                break;
+
+            case ESetOneDriveStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                driveNumbers.Append( EDriveC );
+                TRAP( error, sifUi->SetMemorySelectionL( driveNumbers ) );
+                break;
+
+            case EGetSelectedWhenSetButNotAskedStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                TRAP( error, errorCode = sifUi->SelectedDrive( drive ) );
+                if( error == KErrNone && errorCode == KErrNotFound )
+                    {
+                    error = KErrNone;
+                    }
+                else
+                    {
+                    error = KErrGeneral;
+                    }
+                break;
+
+            case ELastStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CleanupStack::PopAndDestroy( sifUi );
+                sifUi = NULL;
+                break;
+
             default:
                 User::Leave( KErrGeneral );
                 break;
             }
         }
+    User::LeaveIfError( error );
 
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
-
+    CleanupStack::PopAndDestroy( &driveNumbers );
     TestModuleIf().Printf( 0, KTestName, KExit );
+    }
+
+// -----------------------------------------------------------------------------
+// CSifUiTest::CertificateInfoTest()
+// -----------------------------------------------------------------------------
+//
+TInt CSifUiTest::CertificateInfoTest( TTestResult& aResult )
+    {
+    TRAPD( result, DoCertificateInfoTestL( aResult ) );
+    SetResult( aResult, result );
     return KErrNone;
     }
 
 // -----------------------------------------------------------------------------
-// CSifUiTest::WarningNoteTest()
+// CSifUiTest::DoCertificateInfoTestL()
 // -----------------------------------------------------------------------------
 //
-TInt CSifUiTest::WarningNoteTest( TTestResult& aResult )
+void CSifUiTest::DoCertificateInfoTestL( TTestResult& aResult )
     {
-    _LIT( KTestName, "WarningNoteTest" );
+    _LIT( KTestName, "CertificateInfoTest" );
     TestModuleIf().Printf( 0, KTestName, KEnter );
 
     enum TTestSteps
         {
         EFirstStep,
-        EChangeText,
-        EWaitSomeTime,
+        ESetNoCertificates,
+        EReadAndSetCertificate,
+        ELastStep,
         EAllDone
         };
-    _LIT( KWarningNoteText, "This is warning note" );
-    _LIT( KChangedWarningNoteText, "Changed warning note text" );
 
-    TInt result = CreateSifUi();
-    for( TInt step = EFirstStep; step < EAllDone && result == KErrNone; ++step )
+    CSifUi* sifUi = NULL;
+    RPointerArray<CSifUiCertificateInfo> certificates;
+    CleanupResetAndDestroyPushL( certificates );
+
+    TInt error = KErrNone;
+    for( TInt step = EFirstStep; step < EAllDone && !error; ++step )
         {
         TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
         switch( step )
             {
             case EFirstStep:
-                TRAP( result, iSifUi->DisplayInformationNoteL( KWarningNoteText ) );
+                STIF_ASSERT_NULL( sifUi );
+                TRAP( error, sifUi = CSifUi::NewL() );
+                if( !error )
+                    {
+                    CleanupStack::PushL( sifUi );
+                    }
                 break;
-            case EChangeText:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->DisplayInformationNoteL( KChangedWarningNoteText ) );
+
+            case ESetNoCertificates:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                TRAP( error, sifUi->SetCertificateInfoL( certificates ) );
                 break;
-            case EWaitSomeTime:
-                User::After( KOneSecond );
+
+            case EReadAndSetCertificate:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CX509Certificate* x509cert = ReadCertificateL( KX509TestCertFile );
+                CleanupStack::PushL( x509cert );
+
+                Swi::CCertificateInfo* swiCert = Swi::CCertificateInfo::NewLC( *x509cert );
+                CSifUiCertificateInfo* testCert = CSifUiCertificateInfo::NewLC( *swiCert );
+
+                CBufBase* buf = CBufFlat::NewL( KBufferGranularity );
+                CleanupStack::PushL( buf );
+                RBufWriteStream writeStream( *buf );
+                CleanupClosePushL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() == 0 );
+                testCert->ExternalizeL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() > 0 );
+                CleanupStack::PopAndDestroy( 2, buf );      // writeStream, buf
+
+                CleanupStack::PopAndDestroy( testCert );
+                testCert = NULL;
+
+                testCert = CSifUiCertificateInfo::NewL( *swiCert );
+                CleanupStack::PushL( testCert );
+                certificates.AppendL( testCert );
+                CleanupStack::Pop( testCert );
+                TRAP( error, sifUi->SetCertificateInfoL( certificates ) );
+
+                CleanupStack::PopAndDestroy( 2, x509cert );     // swiCert, x509cert
+                }
                 break;
+
+            case ELastStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CleanupStack::PopAndDestroy( sifUi );
+                sifUi = NULL;
+                break;
+
             default:
                 User::Leave( KErrGeneral );
                 break;
             }
         }
+    User::LeaveIfError( error );
 
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
-
+    CleanupStack::PopAndDestroy( &certificates );
     TestModuleIf().Printf( 0, KTestName, KExit );
+    }
+
+// -----------------------------------------------------------------------------
+// CSifUiTest::AppInfoTest()
+// -----------------------------------------------------------------------------
+//
+TInt CSifUiTest::AppInfoTest( TTestResult& aResult )
+    {
+    TRAPD( result, DoAppInfoTestL( aResult ) );
+    SetResult( aResult, result );
     return KErrNone;
     }
 
 // -----------------------------------------------------------------------------
-// CSifUiTest::ErrorNoteTest()
+// CSifUiTest::DoAppInfoTestL()
 // -----------------------------------------------------------------------------
 //
-TInt CSifUiTest::ErrorNoteTest( TTestResult& aResult )
+void CSifUiTest::DoAppInfoTestL( TTestResult& aResult )
     {
-    _LIT( KTestName, "ErrorNoteTest" );
+    _LIT( KTestName, "AppInfoTest" );
     TestModuleIf().Printf( 0, KTestName, KEnter );
 
     enum TTestSteps
         {
         EFirstStep,
-        EChangeText,
+        EAppInfoTests,
+        EAppInfoIconTest,
+        EShowConfirmation,
+        EShowError,
+        ELastStep,
         EAllDone
         };
-    _LIT( KErrorNoteText, "This is error note" );
-    _LIT( KChangedErrorNoteText, "Changed error note text" );
 
-    TInt result = CreateSifUi();
-    for( TInt step = EFirstStep; step < EAllDone && result == KErrNone; ++step )
+    CSifUi* sifUi = NULL;
+
+    _LIT( KAppName, "TestApplication" );
+    _LIT( KAppVendor, "TestSupplier" );
+    const TVersion KAppVersion( 1, 2, 3 );
+    const TInt KAppSize = 0x1234;
+
+    TInt error = KErrNone;
+    for( TInt step = EFirstStep; step < EAllDone && !error; ++step )
         {
         TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
         switch( step )
             {
             case EFirstStep:
-                TRAP( result, iSifUi->DisplayErrorNoteL( KErrorNoteText ) );
+                STIF_ASSERT_NULL( sifUi );
+                TRAP( error, sifUi = CSifUi::NewL() );
+                if( !error )
+                    {
+                    CleanupStack::PushL( sifUi );
+                    }
                 break;
-            case EChangeText:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->DisplayErrorNoteL( KChangedErrorNoteText ) );
+
+            case EAppInfoTests:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CSifUiAppInfo* appInfo = NULL;
+                appInfo = CSifUiAppInfo::NewLC( KAppName, KAppVendor, KAppVersion, KAppSize, NULL );
+
+                STIF_ASSERT_TRUE( appInfo->Name().Compare( KAppName ) == 0 );
+                STIF_ASSERT_TRUE( appInfo->Vendor().Compare( KAppVendor ) == 0 );
+
+                STIF_ASSERT_TRUE( appInfo->Version().iMajor == KAppVersion.iMajor );
+                STIF_ASSERT_TRUE( appInfo->Version().iMinor == KAppVersion.iMinor );
+                STIF_ASSERT_TRUE( appInfo->Version().iBuild == KAppVersion.iBuild );
+
+                STIF_ASSERT_TRUE( appInfo->Size() == KAppSize );
+                STIF_ASSERT_TRUE( appInfo->Bitmaps() == NULL );
+
+                CBufBase* buf = CBufFlat::NewL( KBufferGranularity );
+                CleanupStack::PushL( buf );
+                RBufWriteStream writeStream( *buf );
+                CleanupClosePushL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() == 0 );
+                appInfo->ExternalizeL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() > 0 );
+                CleanupStack::PopAndDestroy( &writeStream );
+                CleanupStack::PopAndDestroy( buf );
+
+                CleanupStack::PopAndDestroy( appInfo );
+                }
                 break;
+
+            case EAppInfoIconTest:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CSifUiAppInfo* appInfo = NULL;
+
+                // TODO: proper icon test needed
+                CApaMaskedBitmap* appBitmap = NULL;
+                appInfo = CSifUiAppInfo::NewLC( KAppName, KAppVendor, KAppVersion, KAppSize, appBitmap );
+
+                CBufBase* buf = CBufFlat::NewL( KBufferGranularity );
+                CleanupStack::PushL( buf );
+                RBufWriteStream writeStream( *buf );
+                CleanupClosePushL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() == 0 );
+                appInfo->ExternalizeL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() > 0 );
+                CleanupStack::PopAndDestroy( &writeStream );
+                CleanupStack::PopAndDestroy( buf );
+
+                CleanupStack::PopAndDestroy( appInfo );
+                }
+                break;
+
+            case EShowConfirmation:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CSifUiAppInfo* appInfo = NULL;
+                appInfo = CSifUiAppInfo::NewL( KAppName, KAppVendor, KAppVersion, KAppSize, NULL );
+                CleanupStack::PushL( appInfo );
+
+                CBufBase* buf = CBufFlat::NewL( KBufferGranularity );
+                CleanupStack::PushL( buf );
+                RBufWriteStream writeStream( *buf );
+                CleanupClosePushL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() == 0 );
+                appInfo->ExternalizeL( writeStream );
+                STIF_ASSERT_TRUE( buf->Size() > 0 );
+                CleanupStack::PopAndDestroy( &writeStream );
+                CleanupStack::PopAndDestroy( buf );
+
+                TBool result = EFalse;
+                // TODO: how to close opened dialog automatically?
+                TRAP( error, result = sifUi->ShowConfirmationL( *appInfo ) );
+                if( result )
+                    {
+                    _LIT( KAccepted, "Accepted" );
+                    TestModuleIf().Printf( 1, KTestName, KAccepted );
+                    }
+                else
+                    {
+                    _LIT( KCancelled, "Cancelled" );
+                    TestModuleIf().Printf( 1, KTestName, KCancelled );
+                    }
+                CleanupStack::PopAndDestroy( appInfo );
+                }
+                break;
+
+            case EShowError:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                _LIT( KErrorMessage, "Test error" );
+                _LIT( KErrorDetails, "Test error details" );
+                // TODO: how to close opened dialog automatically?
+                TRAP( error, sifUi->ShowFailedL( KErrNotFound, KErrorMessage, KErrorDetails ) );
+                }
+                break;
+
+            case ELastStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CleanupStack::PopAndDestroy( sifUi );
+                sifUi = NULL;
+                break;
+
             default:
                 User::Leave( KErrGeneral );
                 break;
             }
         }
-
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
+    User::LeaveIfError( error );
 
     TestModuleIf().Printf( 0, KTestName, KExit );
+    }
+
+// -----------------------------------------------------------------------------
+// CSifUiTest::ProgressDialogsTest()
+// -----------------------------------------------------------------------------
+//
+TInt CSifUiTest::ProgressDialogsTest( TTestResult& aResult )
+    {
+    TRAPD( result, DoProgressDialogsTestL( aResult ) );
+    SetResult( aResult, result );
     return KErrNone;
     }
 
 // -----------------------------------------------------------------------------
-// CSifUiTest::PermanentNoteTest()
+// CSifUiTest::DoProgressDialogsTestL()
 // -----------------------------------------------------------------------------
 //
-TInt CSifUiTest::PermanentNoteTest( TTestResult& aResult )
+void CSifUiTest::DoProgressDialogsTestL( TTestResult& aResult )
     {
-    _LIT( KTestName, "PermanentNoteTest" );
+    _LIT( KTestName, "ProgressDlgsTest" );
     TestModuleIf().Printf( 0, KTestName, KEnter );
 
     enum TTestSteps
         {
         EFirstStep,
-        EDisplayNote,
-        EChangeText,
-        ECloseNote,
-        EDisplayDelayedNote,
-        EChangeDelayedNoteText,
-        ECloseSecondNote,
+        EShowProgress,
+        EUpdateProgress,
+        EShowComplete,
+        ELastStep,
         EAllDone
         };
 
-    _LIT( KPermanentNoteText, "This is permanent note" );
-    _LIT( KChangedNoteText, "Changed permanent note text" );
-    _LIT( KDelayedNoteText, "This is delayed permanent note" );
-    _LIT( KChangedDelayedNoteText, "Changed delayed permanent note text" );
+    CSifUi* sifUi = NULL;
 
-    TInt result = CreateSifUi();
-    for( TInt step = EFirstStep; step < EAllDone && result == KErrNone; ++step )
+    _LIT( KAppName, "NoitaCilppa" );
+    _LIT( KAppVendor, "Rodnev" );
+    const TVersion KAppVersion( 3, 2, 1 );
+    const TInt KAppSize = 0x4321;
+
+    const TInt KMaxProgress = 150;
+    const TInt KUpdateStarts = -10;
+    const TInt KUpdateEnds = KMaxProgress + 10;
+    const TInt KUpdateStep = 4;
+
+    TInt error = KErrNone;
+    for( TInt step = EFirstStep; step < EAllDone && !error; ++step )
         {
         TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
         switch( step )
             {
             case EFirstStep:
-                TRAP( result, iSifUi->ClosePermanentNote() );
-                break;
-            case EDisplayNote:
-                TRAP( result, iSifUi->DisplayPermanentNoteL( KPermanentNoteText ) );
-                break;
-            case EChangeText:
-                User::After( KThreeSeconds );
-                TRAP( result, iSifUi->DisplayPermanentNoteL( KChangedNoteText ) );
-                break;
-            case ECloseNote:
-                TRAP( result, iSifUi->ClosePermanentNote() );
-                break;
-            case EDisplayDelayedNote:
-                User::After( KThreeSeconds );
-                TRAP( result, iSifUi->DisplayPermanentNoteL( KDelayedNoteText ) );
-                break;
-            case EChangeDelayedNoteText:
-                User::After( KFiveSeconds );
-                TRAP( result, iSifUi->DisplayPermanentNoteL( KChangedDelayedNoteText ) );
-                break;
-            case ECloseSecondNote:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->ClosePermanentNote() );
-                break;
-            default:
-                User::Leave( KErrGeneral );
-                break;
-            }
-        }
-
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
-
-    TestModuleIf().Printf( 0, KTestName, KExit );
-    return KErrNone;
-    }
-
-// -----------------------------------------------------------------------------
-// CSifUiTest::ProgressNoteTest()
-// -----------------------------------------------------------------------------
-//
-TInt CSifUiTest::ProgressNoteTest( TTestResult& aResult )
-    {
-    _LIT( KTestName, "ProgressNoteTest" );
-    TestModuleIf().Printf( 0, KTestName, KEnter );
-
-    enum TTestSteps
-        {
-        EDisplayProgressNote,
-        EIncreaseBar1,
-        EIncreaseBar2,
-        EChangeProgressText,
-        EIncreaseBar3,
-        EIncreaseBar4,
-        EIncreaseBar5,
-        ECloseProgressNote,
-        EDelayedProgressNote,
-        EAllDone
-        };
-    _LIT( KProgressNoteText, "This is progress note" );
-    _LIT( KChangedProgressNoteText, "Changed progress note text" );
-
-    const TInt KProgressBarFinalValue = 6;
-    TInt progressBarValue = -1;
-    TRequestStatus reqStatus;       // ignored now, not monitoring if user cancels the note
-    TRequestStatus reqUpdate;
-    TInt result = CreateSifUi();
-    for( TInt step = EDisplayProgressNote; step < EAllDone && result == KErrNone; ++step )
-        {
-        TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
-        switch( step )
-            {
-            case EDisplayProgressNote:
-                TRAP( result, iSifUi->DisplayProgressNoteL( KProgressNoteText, reqStatus ) );
-                if( result == KErrNone )
+                STIF_ASSERT_NULL( sifUi );
+                TRAP( error, sifUi = CSifUi::NewL() );
+                if( !error )
                     {
-                    TRAP( result, iSifUi->SetProgressNoteFinalValueL( KProgressBarFinalValue ) );
+                    CleanupStack::PushL( sifUi );
                     }
                 break;
 
-            case EIncreaseBar1:
-            case EIncreaseBar2:
-            case EIncreaseBar3:
-            case EIncreaseBar4:
-            case EIncreaseBar5:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->UpdateProgressNoteValueL( progressBarValue ) );
-                progressBarValue += 2;
+            case EShowProgress:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CSifUiAppInfo* appInfo = NULL;
+                appInfo = CSifUiAppInfo::NewL( KAppName, KAppVendor, KAppVersion, KAppSize, NULL );
+                CleanupStack::PushL( appInfo );
+                TRAP( error, sifUi->ShowProgressL( *appInfo, KMaxProgress ) );
+                CleanupStack::PopAndDestroy( appInfo );
+                }
                 break;
 
-            case EChangeProgressText:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->DisplayProgressNoteL( KChangedProgressNoteText, reqUpdate ) );
-                if( result == KErrNone )
+            case EUpdateProgress:
+                {
+                STIF_ASSERT_NOT_NULL( sifUi );
+                for( TInt i = KUpdateStarts; i < KUpdateEnds; i += KUpdateStep )
                     {
-                    User::WaitForRequest( reqUpdate );
-                    result = reqUpdate.Int();
+                    TRAP( error, sifUi->IncreaseProgressBarValueL( KUpdateStep ) );
                     }
+                }
                 break;
 
-            case ECloseProgressNote:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->CloseProgressNoteL() );
-                if( result == KErrNone )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
+            case EShowComplete:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                TRAP( error, sifUi->ShowCompleteL() );
                 break;
 
-            case EDelayedProgressNote:
-                TRAP( result, iSifUi->DisplayProgressNoteL( KProgressNoteText, reqStatus ) );
-                if( result == KErrNone )
-                    {
-                    User::After( KHalfSecond );
-                    TRAP( result, iSifUi->CloseProgressNoteL() );
-                    }
+            case ELastStep:
+                STIF_ASSERT_NOT_NULL( sifUi );
+                CleanupStack::PopAndDestroy( sifUi );
+                sifUi = NULL;
                 break;
 
             default:
@@ -446,141 +634,8 @@ TInt CSifUiTest::ProgressNoteTest( TTestResult& aResult )
                 break;
             }
         }
-
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
+    User::LeaveIfError( error );
 
     TestModuleIf().Printf( 0, KTestName, KExit );
-    return KErrNone;
-    }
-
-// -----------------------------------------------------------------------------
-// CSifUiTest::WaitNoteTest()
-// -----------------------------------------------------------------------------
-//
-TInt CSifUiTest::WaitNoteTest( TTestResult& aResult )
-    {
-    _LIT( KTestName, "WaitNoteTest" );
-    TestModuleIf().Printf( 0, KTestName, KEnter );
-
-    enum TTestSteps
-        {
-        ECloseWaitNoteBeforeItsOpened,
-        EDisplayWaitNote,
-        EChangeDisplayedText,
-        ECloseFirstWaitNote,
-        EDisplayDelayedWaitNote,
-        EChangeDelayedWaitNoteText,
-        ECloseWaitNote,
-        EAllDone
-        };
-    _LIT( KWaitNoteText, "This is wait note" );
-    _LIT( KChangedWaitNoteText, "Changed wait note text" );
-    _LIT( KDelayedWaitNoteText, "This is delayed wait note" );
-    _LIT( KChangedDelayedWaitNoteText, "Changed delayed wait note text" );
-
-    TInt result = CreateSifUi();
-    TRequestStatus reqStatus;       // ignored now, not monitoring if user cancels the note
-    for( TInt step = EDisplayWaitNote; step < EAllDone && result == KErrNone; ++step )
-        {
-        TestModuleIf().Printf( 1, KTestName, KStepFormat, step );
-        switch( step )
-            {
-            case ECloseWaitNoteBeforeItsOpened:
-                TRAP( result, iSifUi->CloseWaitNote() );
-                break;
-            case EDisplayWaitNote:
-                TRAP( result, iSifUi->DisplayWaitNoteL( KWaitNoteText, reqStatus ) );
-                if( result == KErrNone && reqStatus != KRequestPending )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            case EChangeDisplayedText:
-                User::After( KThreeSeconds );
-                TRAP( result, iSifUi->DisplayWaitNoteL( KChangedWaitNoteText, reqStatus ) );
-                if( result == KErrNone && reqStatus != KRequestPending )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            case ECloseFirstWaitNote:
-                TRAP( result, iSifUi->CloseWaitNote() );
-                if( result == KErrNone )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            case EDisplayDelayedWaitNote:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->DisplayWaitNoteL( KDelayedWaitNoteText, reqStatus ) );
-                if( result == KErrNone && reqStatus != KRequestPending )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            case EChangeDelayedWaitNoteText:
-                User::After( KThreeSeconds );
-                TRAP( result, iSifUi->DisplayWaitNoteL( KChangedDelayedWaitNoteText, reqStatus ) );
-                if( result == KErrNone && reqStatus != KRequestPending )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            case ECloseWaitNote:
-                User::After( KOneSecond );
-                TRAP( result, iSifUi->CloseWaitNote() );
-                if( result == KErrNone )
-                    {
-                    User::WaitForRequest( reqStatus );
-                    result = reqStatus.Int();
-                    }
-                break;
-            default:
-                User::Leave( KErrGeneral );
-                break;
-            }
-        }
-
-    delete iSifUi;
-    iSifUi = NULL;
-
-    SetResult( aResult, result );
-
-    TestModuleIf().Printf( 0, KTestName, KExit );
-    return KErrNone;
-    }
-
-// -----------------------------------------------------------------------------
-// CSifUiTest::LaunchHelpTest()
-// -----------------------------------------------------------------------------
-//
-TInt CSifUiTest::LaunchHelpTest( TTestResult& aResult )
-    {
-    _LIT( KTestName, "LaunchHelpTest" );
-    TestModuleIf().Printf( 0, KTestName, KEnter );
-
-    TInt result = CreateSifUi();
-    if( result == KErrNone )
-        {
-        AsyncWaitAndSendKeyEventL( KFiveSeconds, KRightSoftkey );
-
-        _LIT( KAM_HLP_INSTALL_CAPAB, "AM_HLP_INSTALL_CAPAB" );
-        TRAP( result, iSifUi->LaunchHelpL( KAM_HLP_INSTALL_CAPAB ) );
-
-        delete iSifUi;
-        iSifUi = NULL;
-        }
-    SetResult( aResult, result );
-
-    TestModuleIf().Printf( 0, KTestName, KExit );
-    return KErrNone;
     }
 

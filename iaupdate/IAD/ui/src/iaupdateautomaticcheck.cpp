@@ -24,10 +24,9 @@
 #include "iaupdatefirsttimeinfo.h"
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
+#include "iaupdatedialogutil.h"
 
-//#include <avkon.hrh>
 #include <centralrepository.h> 
-#include <hbmessagebox.h>
 #include <hbaction.h>
 
 
@@ -81,6 +80,10 @@ CIAUpdateAutomaticCheck::CIAUpdateAutomaticCheck()
 //
 CIAUpdateAutomaticCheck::~CIAUpdateAutomaticCheck()
     {
+    if ( mDialogUtil )
+        {
+        delete mDialogUtil;
+        }
     }
 
 
@@ -89,9 +92,8 @@ CIAUpdateAutomaticCheck::~CIAUpdateAutomaticCheck()
 // 
 // ---------------------------------------------------------------------------
 //
-TBool CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
+void CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
     {
-    TBool acceptChecks = ETrue;
 	CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
 	if ( !firstTimeInfo->AutomaticUpdateChecksAskedL() )
 	    {
@@ -102,24 +104,21 @@ TBool CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
 	        }
 	    else
 	        {
-	        HbMessageBox messageBox(HbMessageBox::MessageTypeQuestion); 
-	        messageBox.setText(QString("Turn on setting for Automatic update checks?"));
-	        HbAction yesAction("Yes");
-	        HbAction noAction("No");
-	        messageBox.setPrimaryAction(&yesAction);
-	        messageBox.setSecondaryAction(&noAction);
-	        messageBox.setTimeout(HbPopup::NoTimeout);
-	        messageBox.show();
-	        //HbAction *selectedAction = messageBox.exec();
-	        firstTimeInfo->SetAutomaticUpdatesAskedL();
-	        //if ( selectedAction == messageBox.primaryAction() )
-	        //    {
-                //EnableAutoUpdateCheckL( ETrue ); // TEMP
-            //    }
-	        }
+	        if ( !mDialogUtil )
+	            {
+	        	mDialogUtil = new IAUpdateDialogUtil(NULL, this);
+	            }
+	        if ( mDialogUtil )
+	            {
+	            mPrimaryAction = NULL;
+	            mPrimaryAction = new HbAction("Yes");
+	            HbAction *secondaryAction = NULL;
+	            secondaryAction = new HbAction("No");
+	            mDialogUtil->showQuestion(QString("Turn on setting for Automatic update checks?"), mPrimaryAction, secondaryAction);
+	            }
+ 	        }
 	    }
 	CleanupStack::PopAndDestroy( firstTimeInfo ); 
-    return acceptChecks;
     }
 
 // ---------------------------------------------------------------------------
@@ -173,5 +172,19 @@ void CIAUpdateAutomaticCheck::EnableAutoUpdateCheckL( TBool aEnable )
     CleanupStack::PopAndDestroy( cenrep );
     }
 
-    
+// ---------------------------------------------------------------------------
+// CIAUpdateAutomaticCheck::dialogFinished
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateAutomaticCheck::dialogFinished(HbAction *action)
+    {
+    if ( action == mPrimaryAction )
+        {
+        EnableAutoUpdateCheckL( ETrue ); 
+        }
+    CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
+    firstTimeInfo->SetAutomaticUpdatesAskedL();
+    CleanupStack::PopAndDestroy( firstTimeInfo );
+    }
 // End of File  

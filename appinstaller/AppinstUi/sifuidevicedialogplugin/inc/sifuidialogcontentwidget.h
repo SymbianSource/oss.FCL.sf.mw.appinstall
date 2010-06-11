@@ -41,11 +41,6 @@ public:
     void updateFromParameters(const QVariantMap &parameters);
     void changeType(SifUiDeviceDialogType type);
 
-    QString applicationName() const;
-    bool isDefaultIconUsed() const;
-    void iconHandles(int &iconHandle, int &maskHandle) const;
-    void progressInfo(int &finalValue, int &currentValue) const;
-
 signals:
     void memorySelectionChanged(const QChar &driveLetter);
 

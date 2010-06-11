@@ -15,9 +15,6 @@
 *
 */
 
-#include <usif/scr/scr.h>
-#include <usif/scr/screntries.h>
-
 #include "daemoninstaller.h"
 #include "DialogWrapper.h"
 #include "swispubsubdefs.h"
@@ -45,7 +42,7 @@ using namespace Swi;
 
 const static TInt KInstallRetryWaitTime = 10000000; // 10 secs
 // For uninstaller
-const static TInt KWaitUninstallerTime = 1000000; // 1 secs  
+const static TInt KWaitUninstallerTime = 1000000; // 1 secs 
 
 _LIT(KMCSisInstaller,"Daemon-Installer"); // Minor-Component name
 
@@ -86,10 +83,11 @@ CSisInstaller::CSisInstaller( MDaemonInstallBehaviour* aDaemonBehaviour )
 //
 CSisInstaller::~CSisInstaller()
     {
+    FLOG( _L("Daemon: CSisInstaller::~CSisInstaller") );
     Cancel();
     iTimer.Close();
     iFilesToInstall.ResetAndDestroy();
-    iFilesToInstall.Close();
+    iFilesToInstall.Close();    
     delete iInstallLauncher;
     delete iDialogs;      
     delete iPreviouslyInstalledAppsCache;
@@ -127,6 +125,7 @@ void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     iProgramStatus = &aMainStatus;  
     iUpdateCache = ETrue;    
     iFileOpen = EFalse;    
+    iInstallLauncher = NULL;
     }
 		
 // -----------------------------------------------------------------------
@@ -152,7 +151,7 @@ void CSisInstaller::StartInstallingL()
     {
     FLOG( _L("Daemon: StartInstallingL") );
 
-    if(!iFilesToInstall.Count())
+    if( !iFilesToInstall.Count() )
         {
         // For uninstaller
         // Check state, if installing change it to idle.
@@ -161,7 +160,7 @@ void CSisInstaller::StartInstallingL()
             FLOG( _L("Daemon: StartInstallingL: Set EStateIdle") );
             iProgramStatus->SetProgramStatusToIdle();
             }        
-        
+        FLOG( _L("Daemon: StartInstallingL: User::Leave(KErrAbort)") );
         User::Leave(KErrAbort);
         }
     
@@ -172,12 +171,14 @@ void CSisInstaller::StartInstallingL()
         {
         FLOG( _L("Daemon: StartInstallingL: Set EStateInstalling") );
         iProgramStatus->SetProgramStatus( EStateInstalling );
-        }         
-    FLOG_1( _L("[CSisInstaller] ConstructL iGeneralProcessStatus = %d"),
-            iGeneralProcessStatus );  
+        } 
+    
+    FLOG_1( _L("Daemon: iGeneralProcessStatus: %d"), iGeneralProcessStatus );     
+    FLOG_1( _L("Daemon: iInstallLauncher: 0x%x"),iInstallLauncher );  
         
-    if ( !iInstallLauncher )
+    if ( iInstallLauncher == NULL )
         {
+        FLOG( _L("Daemon: Create iInstallLauncher") );
         iInstallLauncher = CSilentLauncher::NewL( iFs );   
         
         // Update cache so we do not try to start install for
@@ -191,8 +192,7 @@ void CSisInstaller::StartInstallingL()
     if ( iState == EDSisInstallerStateIdle )
         {                
         // Reset the error
-        iInstallErr = KErrNone; 
-          
+        iInstallErr = KErrNone;           
         CompleteSelf();
         }
     }
@@ -225,7 +225,9 @@ void CSisInstaller::CompleteSelf()
     if ( !IsActive() )
         {        
         TRequestStatus* status = &iStatus;
-        User::RequestComplete(status,KErrNone);
+        FLOG( _L("Daemon: CompleteSelf: RequestComplete") );
+        User::RequestComplete( status, KErrNone );
+        FLOG( _L("Daemon: CompleteSelf: SetActive") );
         SetActive();
         }    
     }
@@ -446,8 +448,9 @@ void CSisInstaller::RunL()
                                     iSisFile ) );                                                                                  
                             
                             // Let's continue to give all packages to plug-in. 
-                            // Note that we do not have iStatus as this is not async. call 
-                            // so we can not use EDSisInstallerStateInstalling state.                             
+                            // Note that we do not have iStatus as this is not 
+                            // async. call so we can not use 
+                            // EDSisInstallerStateInstalling state.                             
                             iState = EDSisInstallerStateIdle;                                                 
                             iInstallerState = iState;
                 
@@ -456,19 +459,19 @@ void CSisInstaller::RunL()
                             CompleteSelf(); 
                             }                            
                         else
-                            {                                                
+                            {  
+                            // Start also the universal indicator.
+                            TRAP_IGNORE( iDialogs->ActivateIndicatorL( iPercentValue ) );
+                            // Start to show progress dialog. Dialog is shown 
+                            // only 3 sec. 
+                            TRAP_IGNORE( iDialogs->ShowWaitingNoteL() );    
+                                                        
                             FLOG_1( _L("Daemon: Start install for %S"), &iSisFile );
                                                                                                                                                                                                                                                    
                             iInstallLauncher->InstallL( iSisFileHandle, 
                                                         iSisFile, 
                                                         iStatus );
-                            
-                            // Start to show progress dialog. Dialog is shown 
-                            // only 3 sec. 
-                            iDialogs->ShowWaitingNoteL();    
-                            // Start also the universal indicator.
-                            iDialogs->ActivateIndicatorL( iPercentValue );
-                            
+                                                        
                             iState = EDSisInstallerStateInstalling;                       
                             iInstallerState = iState;                                                   
                             SetActive();                               
@@ -508,8 +511,7 @@ void CSisInstaller::RunL()
                     TInt err = iSisFileHandle.Open( 
                                     iFs, 
                                     iSisFile, 
-                                    EFileRead | EFileShareReadersOnly
-                                    /*EFileShareReadersOrWriters|EFileRead*/ ); 
+                                    EFileRead | EFileShareReadersOnly ); 
                                                            
                     if ( err )
                          {
@@ -692,12 +694,17 @@ TBool CSisInstaller::NeedsInstallingL( const TDesC& aPackageName )
                             HasBeenPreviouslyInstalled(packageId);
 	FLOG_1( _L("Daemon: Has been installed (cache) = %d"), !needsInstalling );
 	
-// TODO: Onko rom stubien tarkistus tarpeen jos upgrade ei ole sallittu.
-// Ei taida kannattaa tarksitaan RU ei pitäisi mennä läpi.
-	FLOG( _L("Daemon: HUOM ROM STUBEJA EI TARKISTETA") ); 	
+	// No need to check rom stubs in here anymore. 
+	// Note 1: SWI Daemon policy has been that RU packages are not installed 
+	// from removable media.	
+	// Note 2: UpdateAllL will add all pkg uids in cache (PreviouslyInstalled),
+	// so rom upgrades are not installed since uid is found from the cache.
+	// Note 3: Install params do not allow RU to be installed. So SWI will
+	// reject RU (rom upgrade) package anyway.
+
 	/*	
-	// Huom! edellinen koodi ollut väärin koska UID on jo cachessä !
-	// Tarkistus pitää tehdä vain jos UID löytyy cachestä.
+	// Note! this code has been wrong. No need to check stubs since
+	// policy do not allow RU updates and SWI will reject the install.
 	if ( !needsInstalling )
         {
         RSisRegistrySession registry;
@@ -830,9 +837,7 @@ void CSisInstaller::CalcPercentValue()
             // index counter is updated before install starts.
             iPercentValue = 100;
             }
-        }
-        
-    //TInt tempVal = (TInt)iPercentValue;    
+        }           
     FLOG_1( _L("Daemon: CalcPercentValue value = %d"), (TInt)iPercentValue );
     }
 

@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -61,6 +61,9 @@ move c:\logs\testexecute\test_pa_sapropagated_notdelete.htm e:\testresults\test_
 REM SISREgistry performance tests
 testexecute z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.script
 move c:\logs\testexecute\tsisregistry_performance.htm e:\testresults\tsisregistry_performance.htm
+
+testexecute z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script
+move c:\logs\testexecute\tuiscriptadaptors_app_performance.htm e:\testresults\tuiscriptadaptors_app_performance.htm
 
 REM Run recognizer tests
 md c:\trecog

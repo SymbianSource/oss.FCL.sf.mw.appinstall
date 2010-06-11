@@ -582,7 +582,7 @@ EXPORT_C void RApplicationRegistryView::OpenViewL(const RSoftwareComponentRegist
         DEBUG_PRINTF2(_L("Failed to create the subsession to the SCR server for the Application Registration view (Error:%d)"), err);
         User::Leave(err);
         }                
-    DEBUG_PRINTF(_L("Sending the request to create a component view on the server side."));
+    DEBUG_PRINTF(_L("Sending the request to create an applicaiton registry view on the server side."));
     TIpcArgs args(aLocale);
     User::LeaveIfError(CallSubsessionFunction(EOpenApplicationRegistrationInfoView, args));        
     }
@@ -599,7 +599,7 @@ EXPORT_C void RApplicationRegistryView::OpenViewL(const RSoftwareComponentRegist
         DEBUG_PRINTF2(_L("Failed to create the subsession to the SCR server for the Application Registration view with specified AppUids (Error:%d)"), err);
         User::Leave(err);
         }                
-    DEBUG_PRINTF(_L("Sending the request to create a component view on the server side."));
+    DEBUG_PRINTF(_L("Sending the request to create an applicaiton registry view on the server side."));
      
     TInt32 size = aAppRegAppUids.Count();
     const TInt32 maxBufSize= sizeof(TInt32)+ size*sizeof(TInt32);   // number of entries +  number of entry * size of AppUid stored as TUid

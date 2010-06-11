@@ -2456,95 +2456,150 @@ void IntersectSortedArraysL(RArray<TComponentId>& aLhs, RArray<TComponentId> aRh
 	CleanupStack::PopAndDestroy(&tmp);
 	}
 
-void CScrRequestImpl::GetComponentIdsHavingThePropertiesL(RArray<TComponentId>& aComponentIds, RPointerArray<CPropertyEntry> aProperties, TBool aDoIntersect) const
-	{
-	// GROUP BY is added at the end to avoid fetching twice components which have the same localizable values for different locales
-	_LIT(KFindComponentsFromProperties, "SELECT ComponentId FROM ComponentProperties WHERE Name=? AND %S GROUP BY ComponentId;");
-	_LIT(KPropertyIntValue,"IntValue=?");
-	_LIT(KPropertyStrValue,"StrValue=?");
-	_LIT(KPropertyLocalizedValue,"StrValue=? AND Locale=?");
-			
-	TInt propCount = aProperties.Count();
+void CScrRequestImpl::GetOperatorStringL(CComponentFilter::TDbOperator aOperator, HBufC*& aOperatorString) const
+    {
+    _LIT(KEqualOperator, "=");
+    _LIT(KLikeOperator, "LIKE");
+    
+    switch(aOperator)
+        {
+        case CComponentFilter::EEqual:
+            aOperatorString = KEqualOperator().AllocL();
+            break;
+            
+        case CComponentFilter::ELike:
+            aOperatorString = KLikeOperator().AllocL();
+            break;   
+            
+        default:
+            User::Leave(KErrArgument);
+			        
+        }      
+    }
 
-	HBufC *statementStr(0);
-	RArray<TComponentId> propCompIds;
-	CleanupClosePushL(propCompIds);
-	
-	for(TInt i=0; i<propCount; ++i)
-		{
-		switch(aProperties[i]->PropertyType())
-			{
-			case CPropertyEntry::EIntProperty:
-				statementStr = FormatStatementLC(KFindComponentsFromProperties, KPropertyIntValue().Length(), &KPropertyIntValue());
-				break;
-			case CPropertyEntry::EBinaryProperty:
-				statementStr = FormatStatementLC(KFindComponentsFromProperties, KPropertyStrValue().Length(), &KPropertyStrValue());
-				break;
-			case CPropertyEntry::ELocalizedProperty:
-				{
-				CLocalizablePropertyEntry *localizedProp = static_cast<CLocalizablePropertyEntry *>(aProperties[i]);
-				if (localizedProp->LocaleL() == KUnspecifiedLocale) // If the locale was not specified, then we match across all locales				
-					statementStr = FormatStatementLC(KFindComponentsFromProperties, KPropertyStrValue().Length(), &KPropertyStrValue());
-				else // Otherwise we match for a specific locale
-					statementStr = FormatStatementLC(KFindComponentsFromProperties, KPropertyLocalizedValue().Length(), &KPropertyLocalizedValue());
-				}
-				break;				
-			default:
-				DEBUG_PRINTF(_L8("The property type couldn't be recognized."));
-				User::Leave(KErrAbort);	
-			}
-				
-		CStatement *stmt = iDbHandle->PrepareStatementLC(*statementStr);
-		stmt->BindStrL(1, aProperties[i]->PropertyName());
-				
-		switch(aProperties[i]->PropertyType())
-			{
-			case CPropertyEntry::EIntProperty:
-				{
-				CIntPropertyEntry *intProp = static_cast<CIntPropertyEntry *>(aProperties[i]);
-				stmt->BindInt64L(2, intProp->Int64Value());
-				break;
-				}
-			case CPropertyEntry::EBinaryProperty:
-				{
-				CBinaryPropertyEntry *binaryProp = static_cast<CBinaryPropertyEntry *>(aProperties[i]);
-				stmt->BindBinaryL(2, binaryProp->BinaryValue());
-				break;
-				}
-			case CPropertyEntry::ELocalizedProperty:
-				{
-				CLocalizablePropertyEntry *localizedProp = static_cast<CLocalizablePropertyEntry *>(aProperties[i]);
-				stmt->BindStrL(2, localizedProp->StrValue());
-				if (localizedProp->LocaleL() != KUnspecifiedLocale)
-					stmt->BindIntL(3, localizedProp->LocaleL());
-				break;
-				}
-			default:
-				DEBUG_PRINTF(_L8("The property type couldn't be recognized."));
-				User::Leave(KErrAbort);	
-			}
-		
-		while(stmt->ProcessNextRowL())
-			{
-			User::LeaveIfError(propCompIds.InsertInOrder(stmt->IntColumnL(0)));
-			}
-		
-		CleanupStack::PopAndDestroy(2, statementStr); // stmt, statementStr
-		
-		if (aDoIntersect)
-			{
-			IntersectSortedArraysL(aComponentIds, propCompIds);
-			}
-		else
-			{
-			CopyFixedLengthArrayL(aComponentIds, propCompIds);
-			aDoIntersect = ETrue; // If many properties are present in the filter, we need to intersect the component Ids on further iterations
-			}
-		
-		propCompIds.Reset();
-		}
-	CleanupStack::PopAndDestroy(&propCompIds);
-	}
+void CScrRequestImpl::GetComponentIdsHavingThePropertiesL(RArray<TComponentId>& aComponentIds, RPointerArray<CPropertyEntry>& aProperties, 
+                                                              RArray<CComponentFilter::TPropertyOperator>& aPropertyOperatorList, TBool aDoIntersect) const
+    {
+    // GROUP BY is added at the end to avoid fetching twice components which have the same localizable values for different locales
+    
+    _LIT(KFindComponentsFromProperties, "SELECT ComponentId FROM ComponentProperties WHERE NAME %S ? AND %S GROUP BY ComponentId;");
+
+    _LIT(KPropertyIntValue, "IntValue %S ?");
+    _LIT(KPropertyStrValue, "StrValue %S ?");
+    _LIT(KPropertyLocalizedValue, "StrValue %S ? AND Locale = ?");
+            
+    TInt propCount = aProperties.Count();
+
+    RArray<TComponentId> propCompIds;
+    CleanupClosePushL(propCompIds);
+    
+    for(TInt i=0; i<propCount; ++i)
+        {
+        //Retrieve the operators to be used to form this query.
+        CComponentFilter::TPropertyOperator propOperator = aPropertyOperatorList[i];
+       
+	   // Get the name operator.
+	    HBufC* nameOperator(0);
+        GetOperatorStringL(aPropertyOperatorList[i].NameOperator(), nameOperator);
+        CleanupStack::PushL(nameOperator);     
+        
+        // Get the value operator.
+        HBufC* valueOperator(0);
+        GetOperatorStringL(aPropertyOperatorList[i].ValueOperator(), valueOperator);
+        CleanupStack::PushL(valueOperator);
+        
+        // Create the value string based on the property type.
+        HBufC* valueString(0);
+        switch(aProperties[i]->PropertyType())
+            {            
+            case CPropertyEntry::EIntProperty:
+                {
+                valueString = FormatStatementLC(KPropertyIntValue, valueOperator->Length(), valueOperator);               
+                }
+
+                break;
+                
+            case CPropertyEntry::EBinaryProperty:
+                {
+                valueString = FormatStatementLC(KPropertyStrValue, valueOperator->Length(), valueOperator);            
+                }
+
+                break;
+            case CPropertyEntry::ELocalizedProperty:
+                {
+                CLocalizablePropertyEntry *localizedProp = static_cast<CLocalizablePropertyEntry *>(aProperties[i]);
+                if (localizedProp->LocaleL() == KUnspecifiedLocale) // If the locale was not specified, then we match across all locales  
+                    {
+                    valueString = FormatStatementLC(KPropertyStrValue, valueOperator->Length(), valueOperator);        
+                    }
+                else
+                    {
+                    valueString = FormatStatementLC(KPropertyLocalizedValue, valueOperator->Length(), valueOperator);                
+                    }
+                }
+                break;              
+            default:
+                DEBUG_PRINTF(_L8("The property type couldn't be recognized."));
+                User::Leave(KErrAbort); 
+            }
+        
+        // Prepare full statement using the name operator and the value string.
+        HBufC *statementStr = FormatStatementLC(KFindComponentsFromProperties, nameOperator->Length()+ valueString->Length(), 
+                                                    nameOperator, valueString); 
+        
+        // Create Sql statement.
+        CStatement *stmt = iDbHandle->PrepareStatementLC(*statementStr);
+        stmt->BindStrL(1, aProperties[i]->PropertyName());
+                
+        switch(aProperties[i]->PropertyType())
+            {
+            case CPropertyEntry::EIntProperty:
+                {
+                CIntPropertyEntry *intProp = static_cast<CIntPropertyEntry *>(aProperties[i]);
+                stmt->BindInt64L(2, intProp->Int64Value());
+                break;
+                }
+            case CPropertyEntry::EBinaryProperty:
+                {
+                CBinaryPropertyEntry *binaryProp = static_cast<CBinaryPropertyEntry *>(aProperties[i]);
+                stmt->BindBinaryL(2, binaryProp->BinaryValue());
+                break;
+                }
+            case CPropertyEntry::ELocalizedProperty:
+                {
+                CLocalizablePropertyEntry *localizedProp = static_cast<CLocalizablePropertyEntry *>(aProperties[i]);
+                stmt->BindStrL(2, localizedProp->StrValue());
+                if (localizedProp->LocaleL() != KUnspecifiedLocale)
+                    stmt->BindIntL(3, localizedProp->LocaleL());
+                break;
+                }
+            default:
+                DEBUG_PRINTF(_L8("The property type couldn't be recognized."));
+                User::Leave(KErrAbort); 
+            }
+        
+        while(stmt->ProcessNextRowL())
+            {
+            User::LeaveIfError(propCompIds.InsertInOrder(stmt->IntColumnL(0)));
+            }
+        
+        CleanupStack::PopAndDestroy(5, nameOperator);
+        
+        if (aDoIntersect)
+            {
+            IntersectSortedArraysL(aComponentIds, propCompIds);
+            }
+        else
+            {
+            CopyFixedLengthArrayL(aComponentIds, propCompIds);
+            aDoIntersect = ETrue; // If many properties are present in the filter, we need to intersect the component Ids on further iterations
+            }
+        
+        propCompIds.Reset();
+        }
+    CleanupStack::PopAndDestroy(&propCompIds);
+    }
+
 
 void ReallocStatementIfNeededL(RBuf& aStatementStr, TInt aAddedLength)
 	{
@@ -2700,7 +2755,7 @@ CStatement* CScrRequestImpl::OpenComponentViewL(CComponentFilter& aFilter, RArra
 	
 	if(aFilter.iSetFlag & CComponentFilter::EProperty)
 		{
-		GetComponentIdsHavingThePropertiesL(aComponentFilterSuperset, aFilter.iPropertyList, doIntersect);
+		GetComponentIdsHavingThePropertiesL(aComponentFilterSuperset, aFilter.iPropertyList, aFilter.iPropertyOperatorList, doIntersect);
 		// Inside the function, componentIds array is intersected with the components Ids which have the given properties.
 		doIntersect = ETrue;
 		aFilterSupersetInUse = ETrue;
@@ -2790,7 +2845,7 @@ void CScrRequestImpl::AddComponentEntryLocalizablesL(TComponentId aComponentId, 
 		  // and the provided names are retrieved from the ComponentLocalizables table.
 		CStatement *stmt = CreateStatementObjectForComponentLocalizablesLC(*aFilter.iName, *aFilter.iVendor, aFilter.iSetFlag, aComponentId);
 		TBool res = stmt->ProcessNextRowL();
-		// If the name and the vendor are not found, it means that there is a defect in this class, the filter shouldn't have returned the component in the first place		
+		// If the name and the vendor are not found, leave with KErrNotFound.
 		__ASSERT_ALWAYS(res, User::Leave(KErrNotFound)); 		
 		DeleteObjectZ(aEntry.iName);
 		aEntry.iName = stmt->StrColumnL(1).AllocL(); // Ownership is transferred to the entry object
@@ -2871,7 +2926,17 @@ void CScrRequestImpl::NextComponentSizeL(const RMessage2& aMessage, CStatement* 
 	TLanguage locale = TLanguage(aMessage.Int0());
 	
 	DeleteObjectZ(aEntry);
-	aEntry = GetNextComponentEntryL(*aStmt, *aFilter, locale, aSubsessionContext);
+	
+	TInt err(0);
+	do {
+       TRAP(err, aEntry = GetNextComponentEntryL(*aStmt, *aFilter, locale, aSubsessionContext));
+       }while(err == KErrNotFound);
+	
+	if(KErrNone != err)
+	    {
+        User::Leave(err);
+	    }
+	
 	TInt sizeSlot = 1;
 	if(!aEntry)
 		{
@@ -2898,9 +2963,19 @@ void CScrRequestImpl::NextComponentSetSizeL(const RMessage2& aMessage, CStatemen
 	TLanguage locale = TLanguage(aMessage.Int1());
 	
 	aEntryList.ResetAndDestroy();
+	CComponentEntry *entry(0);
+	TInt err(0);
 	for(TInt i=0; i<maxArraySize; ++i)
 		{
-		CComponentEntry *entry = GetNextComponentEntryL(*aStmt, *aFilter, locale, aSubsessionContext);
+        do {
+           TRAP(err, entry = GetNextComponentEntryL(*aStmt, *aFilter, locale, aSubsessionContext));
+           }while(err == KErrNotFound);
+        
+        if(KErrNone != err)
+            {
+            User::Leave(err);
+            }		
+        
 		if(!entry)
 			{
 			break;
@@ -2911,6 +2986,7 @@ void CScrRequestImpl::NextComponentSetSizeL(const RMessage2& aMessage, CStatemen
 		}
 	WriteArraySizeL(aMessage, 2, aEntryList);
 	}
+
 
 void CScrRequestImpl::NextComponentSetDataL(const RMessage2& aMessage, RPointerArray<CComponentEntry>& aEntryList) const
 	{
@@ -3121,14 +3197,16 @@ TBool CompareHBufDescs(const HBufC& aLeft, const HBufC& aRight)
 	return !aLeft.CompareF(aRight);
 	}
 
-TBool CScrRequestImpl::IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPluginUid, TUint32 aInstallerSecureId, TUint32 aExecutionLayerSecureId, const RPointerArray<HBufC>& aMimeTypesArray, const RPointerArray<CLocalizedSoftwareTypeName>& aLocalizedNamesArray)
+TBool CScrRequestImpl::IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPluginUid, RArray<TCustomAccessInfo>& aSidArray, const RPointerArray<HBufC>& aMimeTypesArray, const RPointerArray<CLocalizedSoftwareTypeName>& aLocalizedNamesArray, const TDesC& aLauncherExecutable)
 	{
+	//Check if software type id exists
     if(!IsSoftwareTypeExistingL(aSwTypeId))
         {
         DEBUG_PRINTF2(_L8("IsSoftwareTypeExistingL: Software Type Id (%d) doesn't exist in the SCR."), aSwTypeId);
         return EFalse;
         }
     
+    //Check if sif plugin uid for the software type id is the same 
     TInt pluginUid(0);
     if(!GetSifPluginUidIInternalL(aSwTypeId, pluginUid))
         {
@@ -3141,33 +3219,50 @@ TBool CScrRequestImpl::IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPl
         DEBUG_PRINTF2(_L8("IsSoftwareTypeExistingL: SIF Plugin Uid doesn't match with the one in the SCR."), pluginUid);
         return EFalse;
         }
-        
-    TBool isInstallerSidPresent = EFalse;
-    TBool isExecutionLayerSidPresent = EFalse;
+    
+    //Check if launcher executable for the software type id is the same
+    HBufC *launcherExe;
+    _LIT(KSelectLauncherExecutable, "SELECT LauncherExecutable FROM SoftwareTypes WHERE SoftwareTypeId=?;");
+    CStatement* stmt = iDbHandle->PrepareStatementLC(KSelectLauncherExecutable);
+    stmt->BindIntL(1, aSwTypeId);
+
+    if(stmt->ProcessNextRowL())
+        {
+        launcherExe = stmt->StrColumnL(0).AllocLC();
+        if(launcherExe->Compare(aLauncherExecutable) != 0)
+            {
+            DEBUG_PRINTF(_L8("IsSoftwareTypeExistingL: Launcher Executable doesn't match with the one in the SCR."));
+            CleanupStack::PopAndDestroy(2, stmt);
+            return EFalse;
+            }
+        CleanupStack::PopAndDestroy(2, stmt);
+        }
+    else
+        {
+        DEBUG_PRINTF2(_L8("IsSoftwareTypeExistingL: Launcher Executable doesn't exist in the SCR for TypeId %d."), aSwTypeId);
+        CleanupStack::PopAndDestroy(stmt);
+        return EFalse;
+        }
+            
+    //Check if associated installer sid's for the software type id is the same
+    
     RArray<TSecureId> installerSids;
     CleanupClosePushL(installerSids);
     if(GetSidsForSoftwareTypeIdL(aSwTypeId, installerSids))
         {
-        TInt count = installerSids.Count();
-        for (TInt i = 0; i < count; i++)
+        for(TInt i=0; i<aSidArray.Count(); ++i)
             {
-            if (aInstallerSecureId == installerSids[i])
-                isInstallerSidPresent = ETrue;
-            if (aExecutionLayerSecureId == installerSids[i])
-                isExecutionLayerSidPresent = ETrue;
-
-			if(isInstallerSidPresent && isExecutionLayerSidPresent)
-				break;
+            if(KErrNotFound == installerSids.Find(aSidArray[i].SecureId()))
+                {
+                DEBUG_PRINTF(_L8("IsSoftwareTypeExistingL: One of the Sid doesn't match with the one in the SCR."));
+                CleanupStack::PopAndDestroy(&installerSids);
+                return EFalse;
+                }
             }
         }
     CleanupStack::PopAndDestroy(&installerSids);
     
-	if(!isInstallerSidPresent || !isExecutionLayerSidPresent)
-		{
-		DEBUG_PRINTF(_L8("IsSoftwareTypeExistingL: One of the UIDs is different from the one in the database."));
-		return EFalse;
-		}
-	
+	//Check if localized software type name for the software type id is the same
 	_LIT(KSelectSwTypeNames, "SELECT Locale,Name FROM SoftwareTypeNames WHERE SoftwareTypeId=? AND Locale!=?;");
 	CStatement* stmtNames = iDbHandle->PrepareStatementLC(KSelectSwTypeNames);
 	stmtNames->BindIntL(1, aSwTypeId);
@@ -3194,6 +3289,7 @@ TBool CScrRequestImpl::IsSoftwareTypeExistingL(TUint32 aSwTypeId, TUint32 aSifPl
 		return EFalse;
 		}
 	
+	//Check if mime type for the software type id is the same
 	_LIT(KSelectMimeTypes, "SELECT MimeType FROM MimeTypes WHERE SoftwareTypeId=?;");
 	CStatement* stmtMimes = iDbHandle->PrepareStatementLC(KSelectMimeTypes);
 	stmtMimes->BindIntL(1, aSwTypeId);
@@ -3235,54 +3331,46 @@ void CScrRequestImpl::AddSoftwareTypeL(const RMessage2& aMessage)
 	// the software type id of an installer. If the uniqe software type name of the installer is known, its hash
 	// is simply calculated to obtain its software type id.
 	
-	// Slot-0 contains Unique Software Type Name
-	HBufC *uniqueSwTypeName = ReadDescLC(aMessage, 0);
-	TUint32 swTypeId = HashCaseSensitiveL(*uniqueSwTypeName);
+	CSoftwareTypeRegInfo *regInfo = ReadObjectFromMessageLC<CSoftwareTypeRegInfo>(aMessage, 0);
 	
-	// Slot-1 contains the concatenated values of SifPluginUid, InstallerSecureId and ExecutionLayerSecureId in turn.
-	HBufC8 *uidString = ReadDesc8LC(aMessage, 1);
+	HBufC* uniqueSwTypeName = HBufC::NewLC(regInfo->UniqueSoftwareTypeName().Length());
+	uniqueSwTypeName->Des().Copy(regInfo->UniqueSoftwareTypeName());
+
+	TUint32 swTypeId = HashCaseSensitiveL(regInfo->UniqueSoftwareTypeName());
+	    
 	TUint32 sifPluginUid (0);
-	TUint32 installerSecureId (0);
-	TUint32 executionLayerSecureId (0);
-	ParseUidHexStringL(*uidString, sifPluginUid, installerSecureId, executionLayerSecureId);
-	CleanupStack::PopAndDestroy(uidString);
+	sifPluginUid = regInfo->SifPluginUid().iUid;
 	
-	// Slot-2 contains the list of MIME types
-	RIpcReadStream mimeTypesReader;
-	CleanupClosePushL(mimeTypesReader);
-	mimeTypesReader.Open(aMessage, 2);
-				
-	RPointerArray<HBufC> mimeTypesArray;
-	CleanupResetAndDestroyPushL(mimeTypesArray);
-	InternalizePointersArrayL(mimeTypesArray, mimeTypesReader);
+	RArray<TCustomAccessInfo> sidArray;
+	sidArray = regInfo->CustomAccessList();
 	
-	// Slot-3 contains Localized Software Type Names
-	RIpcReadStream localizedNamesReader;
-	CleanupClosePushL(localizedNamesReader);
-	localizedNamesReader.Open(aMessage, 3);
-				
-	RPointerArray<CLocalizedSoftwareTypeName> localizedNamesArray;
-	CleanupResetAndDestroyPushL(localizedNamesArray);
-	InternalizePointersArrayL(localizedNamesArray, localizedNamesReader);
+	RPointerArray<HBufC> mimeTypesArray = regInfo->MimeTypes();
 	
-	if (IsSoftwareTypeExistingL(swTypeId, sifPluginUid, installerSecureId, executionLayerSecureId, mimeTypesArray, localizedNamesArray))
+	RPointerArray<CLocalizedSoftwareTypeName> localizedNamesArray = regInfo->LocalizedSoftwareTypeNames();
+	
+	HBufC* launcherExecutable = HBufC::NewLC(regInfo->LauncherExecutable().Length());
+	launcherExecutable->Des().Copy(regInfo->LauncherExecutable());
+
+	if (IsSoftwareTypeExistingL(swTypeId, sifPluginUid, sidArray, mimeTypesArray, localizedNamesArray, *launcherExecutable))
 		{ // If the software type exists, do nothing and return;	
-		CleanupStack::PopAndDestroy(5, uniqueSwTypeName); // uniqueSwTypeName, mimeTypesReader, mimeTypesArray, localizedNamesReader, localizedNamesArray
+		CleanupStack::PopAndDestroy(3, regInfo); // uniqueSwTypeName, launcherExecutable, regInfo
 		return; 
 		}
 	
 	// First, insert the main record to SoftwareTypes table
-	// TODO: Have to insert the Launcher Executable name here
-	_LIT(KInsertSwType, "INSERT INTO SoftwareTypes(SoftwareTypeId,SifPluginUid) VALUES(?,?);");
-	TInt numberOfValuesSwType = 2;
-	ExecuteStatementL(KInsertSwType(), numberOfValuesSwType, EValueInteger, swTypeId, EValueInteger, sifPluginUid);
+	_LIT(KInsertSwType, "INSERT INTO SoftwareTypes(SoftwareTypeId,SifPluginUid,LauncherExecutable) VALUES(?,?,?);");
+	TInt numberOfValuesSwType = 3;
+	ExecuteStatementL(KInsertSwType(), numberOfValuesSwType, EValueInteger, swTypeId, EValueInteger, sifPluginUid, EValueString, launcherExecutable);
 	
 	_LIT(KInsertCustomAccess, "INSERT INTO CustomAccessList(SoftwareTypeId,SecureId,AccessMode) VALUES(?,?,?);");
 	TInt numberOfValuesCustomAccess = 3;
-	// TODO: This should be modified to insert more than 2 Sids
-	ExecuteStatementL(KInsertCustomAccess(), numberOfValuesCustomAccess, EValueInteger, swTypeId, EValueInteger, installerSecureId, EValueInteger, (TInt)ETransactionalSid);
-	ExecuteStatementL(KInsertCustomAccess(), numberOfValuesCustomAccess, EValueInteger, swTypeId, EValueInteger, executionLayerSecureId, EValueInteger, (TInt)ETransactionalSid);
-	
+	for(TInt i=0; i<sidArray.Count(); ++i)
+		{
+		TUint32 sid = sidArray[i].SecureId();
+		TAccessMode accessMode = sidArray[i].AccessMode();
+		ExecuteStatementL(KInsertCustomAccess(), numberOfValuesCustomAccess, EValueInteger, swTypeId, EValueInteger, sid, EValueInteger, accessMode);
+		}
+
 	// Then, insert MIME types of this software type into MimeTypes table
 	_LIT(KInsertMimeType, "INSERT INTO MimeTypes(SoftwareTypeId,MimeType) VALUES(?,?);");
 	TInt numberOfValuesMimeType = 2;
@@ -3304,7 +3392,7 @@ void CScrRequestImpl::AddSoftwareTypeL(const RMessage2& aMessage)
 		const TDesC& name = localizedNamesArray[i]->NameL();
 		ExecuteStatementL(KInsertSwTypeName(), numberOfValuesSwTypeName, EValueInteger, swTypeId, EValueInteger, locale, EValueString, &name);
 		}	
-	CleanupStack::PopAndDestroy(5, uniqueSwTypeName); // uniqueSwTypeName, mimeTypesReader, mimeTypesArray, localizedNamesReader, localizedNamesArray
+	CleanupStack::PopAndDestroy(3, regInfo); // uniqueSwTypeName, launcherExecutable, regInfo
 	}
 
 void CScrRequestImpl::DeleteSoftwareTypeL(const RMessage2& aMessage)
@@ -3580,29 +3668,36 @@ TBool CScrRequestImpl::IsDriveReadOnlyL(TInt driveIndex) const
 void CScrRequestImpl::GetIsComponentPresentL(const RMessage2& aMessage) const
 	{
 	TComponentId componentId = GetComponentIdFromMsgL(aMessage);
-	DEBUG_PRINTF2(_L8("Checking if the component(%d) is available."), componentId);
-	
-	_LIT(KSelectCompPresent, "SELECT CompPresence FROM Components WHERE ComponentId=?;");
-	CStatement *stmt = iDbHandle->PrepareStatementLC(KSelectCompPresent);
-	stmt->BindIntL(1, componentId);
-	if(!stmt->ProcessNextRowL())
-		{
-		DEBUG_PRINTF2(_L8("Component (%d) couldn't be found in the SCR database."), componentId);
-		User::Leave(KErrNotFound);
-		}
-	TBool result = (stmt->IntColumnL(0) == 1);
-	CleanupStack::PopAndDestroy(stmt);
-	
-	// The default value for CompPresence is ETrue. So when we find that the SCR DB contains the 
-	// default property value we check if the drives registered by the component are present.   
-	if (result && !CheckForMediaPresenceL(componentId))
-		{
-		result = EFalse;
-		}
+	TBool result = IsComponentPresentL(componentId);
 				
 	TPckg<TBool> isCompPresent(result);	
 	aMessage.WriteL(1, isCompPresent);	
 	}
+
+
+TBool CScrRequestImpl::IsComponentPresentL(TComponentId componentId) const
+    {
+    DEBUG_PRINTF2(_L8("Checking if the component(%d) is available."), componentId);
+    
+    _LIT(KSelectCompPresent, "SELECT CompPresence FROM Components WHERE ComponentId=?;");
+    CStatement *stmt = iDbHandle->PrepareStatementLC(KSelectCompPresent);
+    stmt->BindIntL(1, componentId);
+    if(!stmt->ProcessNextRowL())
+        {
+        DEBUG_PRINTF2(_L8("Component (%d) couldn't be found in the SCR database."), componentId);
+        User::Leave(KErrNotFound);
+        }
+    TBool result = (stmt->IntColumnL(0) == 1);
+    CleanupStack::PopAndDestroy(stmt);
+    
+    // The default value for CompPresence is ETrue. So when we find that the SCR DB contains the 
+    // default property value we check if the drives registered by the component are present.   
+    if (result && !CheckForMediaPresenceL(componentId))
+        {
+        result = EFalse;
+        }
+    return result;
+    }
 
 void CScrRequestImpl::SetIsComponentPresentL(const RMessage2& aMessage)
 	{
@@ -3921,32 +4016,44 @@ void CScrRequestImpl::OpenAppInfoViewL(CAppInfoFilter& aFilter, CAppInfoViewSubs
 
 void CScrRequestImpl::NextAppInfoSizeL(const RMessage2& aMessage, TAppRegInfo*& aAppInfo, CAppInfoViewSubsessionContext* aSubsessionContext)
     {
-    if(aSubsessionContext->iAppInfoIndex < aSubsessionContext->iApps.Count())
+    while(1)
         {
-        TInt count1 = User::CountAllocCells();
-        aAppInfo = new(ELeave) TAppRegInfo;
-        TInt count2 = User::CountAllocCells();        
-        aAppInfo->iUid = (aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex]).iAppUid;
-
-        _LIT(KSelectAppFilename, "SELECT AppFile FROM AppRegistrationInfo WHERE AppUid=?;");
-        CStatement *stmt = iDbHandle->PrepareStatementLC(KSelectAppFilename);
-        stmt->BindIntL(1, aAppInfo->iUid.iUid);
-        stmt->ProcessNextRowL();
-        aAppInfo->iFullName = stmt->StrColumnL(0);
-        CleanupStack::PopAndDestroy(stmt);
-
-        if((aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex]).iLocale != KUnspecifiedLocale)
+        if(aSubsessionContext->iAppInfoIndex < aSubsessionContext->iApps.Count())
             {
-            GetCaptionAndShortCaptionInfoForLocaleL(aAppInfo->iUid, aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex].iLocale, aAppInfo->iShortCaption, aAppInfo->iCaption);
+            TBool isPresent = EFalse;
+            aAppInfo = new(ELeave) TAppRegInfo;               
+            aAppInfo->iUid = (aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex]).iAppUid;
+    
+            _LIT(KSelectAppFilename, "SELECT AppFile FROM AppRegistrationInfo WHERE AppUid=?;");
+            CStatement *stmt = iDbHandle->PrepareStatementLC(KSelectAppFilename);
+            stmt->BindIntL(1, aAppInfo->iUid.iUid);
+            if(stmt->ProcessNextRowL())
+                {
+                isPresent = ETrue;
+                aAppInfo->iFullName = stmt->StrColumnL(0);
+                }                   
+            CleanupStack::PopAndDestroy(stmt);
+            if(isPresent)
+                {
+                if((aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex]).iLocale != KUnspecifiedLocale)
+                    {
+                    GetCaptionAndShortCaptionInfoForLocaleL(aAppInfo->iUid, aSubsessionContext->iApps[aSubsessionContext->iAppInfoIndex].iLocale, aAppInfo->iShortCaption, aAppInfo->iCaption);
+                    }
+                aSubsessionContext->iAppInfoIndex++;
+                WriteObjectSizeL(aMessage, 1, aAppInfo);
+                break;
+                }
+            else
+                {
+                DeleteObjectZ(aAppInfo);
+                aSubsessionContext->iAppInfoIndex++;
+                }        
             }
-        aSubsessionContext->iAppInfoIndex++;
-        }
-    else
-        {
-        DEBUG_PRINTF(_L8("Reached the end of the view."));
-        }
-
-    WriteObjectSizeL(aMessage, 1, aAppInfo);
+        else
+            {
+            break;
+            }
+        }        
     }
 
 void CScrRequestImpl::NextAppInfoDataL(const RMessage2& aMessage, TAppRegInfo*& aAppInfo)
@@ -4182,7 +4289,7 @@ void CScrRequestImpl::AddPropertyL(TUid aAppUid, Usif::CPropertyEntry* aAppPrope
 void CScrRequestImpl::AddOpaqueDataL(TUid aAppUid, Usif::COpaqueData* aOpaqueDataEntry, TUid aServiceUid)
     {
 	DEBUG_PRINTF(_L8("Adding the Opaque Data details into SCR"));
-    const TInt KMaxOpaqueDataLength = 1024;
+    const TInt KMaxOpaqueDataLength = 4096;
     /* AppUid cannot be NULL since this function is invoked from AddApplicationEntryL */ 
     __ASSERT_DEBUG(aAppUid != TUid::Null(), User::Leave(KErrArgument));
     
@@ -4376,7 +4483,15 @@ void CScrRequestImpl::OpenApplicationRegistrationViewL(const RMessage2& aMessage
     aSubsessionContext->iAppUids.Close();
     while(stmt->ProcessNextRowL())
         {
-        aSubsessionContext->iAppUids.AppendL(TUid::Uid(stmt->IntColumnL(0)));                  
+        TUid appUid = TUid::Uid(stmt->IntColumnL(0));
+        TComponentId componentId(0);
+        if(GetComponentIdForAppInternalL(appUid, componentId))
+	    	{
+	    	if(!componentId || IsComponentPresentL(componentId))
+            	{
+            	aSubsessionContext->iAppUids.AppendL(appUid);    
+            	}
+	    	}
         }
     CleanupStack::PopAndDestroy(stmt);  
     }
@@ -4404,10 +4519,14 @@ void CScrRequestImpl::OpenApplicationRegistrationForAppUidsViewL(const RMessage2
     for (TInt i =0; i<size ;i++)
         {
         TUid appUid = TUid::Uid(inStream.ReadInt32L());
-        if(CheckIfAppUidExistsL(appUid)) //Append only if AppUid is present in DB.
-            {
-            aSubsessionContext->iAppUids.AppendL(appUid);
-            }
+		TComponentId componentId(0);
+        if(GetComponentIdForAppInternalL(appUid, componentId)) // Check for application presence and fetch the corresponding ComponentId
+	    	{
+	    	if(!componentId || IsComponentPresentL(componentId)) // Check if the component is present
+            	{
+            	aSubsessionContext->iAppUids.AppendL(appUid);    
+            	}
+	    	}
         }
     
     CleanupStack::PopAndDestroy(2,bufToHoldAppUids); //bufToHoldAppUids, inStream
@@ -4448,7 +4567,7 @@ TBool CScrRequestImpl::GetApplicationRegistrationInfoL(CApplicationRegistrationD
       }
     else
       {
-      DEBUG_PRINTF2(_L8("AppUid %d Not Found in th SCR"),aAppUid);       
+      DEBUG_PRINTF2(_L8("AppUid %d Not Found in the SCR"),aAppUid);       
       CleanupStack::PopAndDestroy(stmt);
       return EFalse;
       }
@@ -4569,43 +4688,54 @@ void CScrRequestImpl::GetAppRegOpaqueDataL(CApplicationRegistrationData& aApplic
 
 void CScrRequestImpl::NextApplicationRegistrationInfoSizeL(const RMessage2& aMessage, CApplicationRegistrationData*& aApplicationRegistration, CAppRegistrySubsessionContext*  aSubsessionContext)
     {
-    DeleteObjectZ(aApplicationRegistration);
-    aApplicationRegistration = CApplicationRegistrationData::NewL();
-    if((aSubsessionContext->iAppRegIndex < aSubsessionContext->iAppUids.Count()))
+    while(1)
         {
-        TUid appUid = aSubsessionContext->iAppUids[aSubsessionContext->iAppRegIndex];
-            
-        //Populate the Application Registration Info
-        if(GetApplicationRegistrationInfoL(*aApplicationRegistration,appUid))
+        TBool dataFound = EFalse;
+        DeleteObjectZ(aApplicationRegistration);
+        aApplicationRegistration = CApplicationRegistrationData::NewL();
+        if((aSubsessionContext->iAppRegIndex < aSubsessionContext->iAppUids.Count()))
             {
-            //Populate File ownership info           
-            GetFileOwnershipInfoL(*aApplicationRegistration,appUid);
-               
-            //Populate service info
-            GetServiceInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
-            
-            //Populate localizable appinfo including caption and icon info 
-            //and view data and its caption and icon info.            
-            GetLocalizableAppInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
-            
-			GetAppRegOpaqueDataL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
-
-            GetAppPropertiesInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage); 
+            TUid appUid = aSubsessionContext->iAppUids[aSubsessionContext->iAppRegIndex];
+                
+            //Populate the Application Registration Info
+            if(GetApplicationRegistrationInfoL(*aApplicationRegistration,appUid))
+                {
+                //Populate File ownership info           
+                GetFileOwnershipInfoL(*aApplicationRegistration,appUid);
+                   
+                //Populate service info
+                GetServiceInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+                
+                //Populate localizable appinfo including caption and icon info 
+                //and view data and its caption and icon info.            
+                GetLocalizableAppInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
+                
+                GetAppRegOpaqueDataL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
+    
+                GetAppPropertiesInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage); 
+                dataFound = ETrue;
+                }
+            else
+                {
+                DeleteObjectZ(aApplicationRegistration);
+                }
+                        
+            //Incrementing the index
+            aSubsessionContext->iAppRegIndex++;
+                        
+            if(dataFound)
+                {
+                WriteObjectSizeL(aMessage, 1, aApplicationRegistration);
+                break;
+                }
             }
         else
             {
+            DEBUG_PRINTF(_L8("Reached the end of the view."));
+            WriteIntValueL(aMessage, 1, 0);                
             DeleteObjectZ(aApplicationRegistration);
+            break;
             }
-        
-        //Incrementing the index
-        aSubsessionContext->iAppRegIndex++;
-        WriteObjectSizeL(aMessage, 1, aApplicationRegistration);  
-        }
-    else
-        {
-        DEBUG_PRINTF(_L8("Reached the end of the view."));
-        WriteIntValueL(aMessage, 1, 0);                
-        DeleteObjectZ(aApplicationRegistration);
         }
     }
 

@@ -28,12 +28,12 @@
 // All necessary XML DOM parser headers are included here
 #ifdef S60_3_2_WK14_OR_NEWER
 // Filenames in 3.2 from week 14 onwards
-    #include <xmlengdom.h>
-    #include <xmlengdomimplementation.h>
-    #include <xmlengdocument.h>
-    #include <xmlengserializationoptions.h>
-    #include <xmlengxestrings.h>
-    #include <xmlengutils.h>
+    #include <xml/dom/xmlengdom.h>
+    #include <xml/dom/xmlengdomimplementation.h>
+    #include <xml/dom/xmlengdocument.h>
+    #include <xml/dom/xmlengserializationoptions.h>
+    #include <xml/utils/xmlengxestrings.h>
+    #include <xml/utils/xmlengutils.h>
 #else
 
 // Filenames in 3.1

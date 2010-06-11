@@ -1093,6 +1093,10 @@ void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepL()
         isFinish = ETrue;
         }
         
+    if(isFinish)
+        {
+        break;
+        }
     
     if (count != actualAppRegDataCount)
         {
@@ -1118,7 +1122,7 @@ void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepL()
       index++;
         }
     
-    if(isFinish || isError)
+    if(isError)
         {
         break;
         }    

@@ -11,9 +11,7 @@
 ;
 ; Contributors:
 ; 
-; Description:
-;
-; 	Installation file for STIF
+; Description:  SifUi API test code installation file
 ;
 
 ; Languages
@@ -33,7 +31,7 @@
 :"Nokia"
 
 ; Install files
-"\epoc32\release\armv5\udeb\sifuitest.dll" - "c:\sys\bin\sifuitest.dll"
-"..\init\sifuitestscripter.ini" - "c:\TestFramework\sifuitestscripter.ini"
-"..\conf\sifuitestscripter.cfg" - "c:\TestFramework\sifuitestscripter.cfg"
+"\epoc32\release\armv5\udeb\sifuitest.dll"-"c:\sys\bin\sifuitest.dll"
+"..\init\sifuitestscripter.ini"-"c:\TestFramework\sifuitestscripter.ini"
+"..\data\mmc\test_x509_cert.cer"-"e:\testing\data\test_x509_cert.cer"
 

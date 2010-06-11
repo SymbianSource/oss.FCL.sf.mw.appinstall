@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -169,7 +169,7 @@ bool SisFile::HasEmbedded() const
 }
 
 void SisFile::CheckValid() const
-	{
+{
 	std::string error;
 
 	CSISInfo::TSISInstallationType installType = iContents.Controller().SISInfo().InstallationType();
@@ -198,11 +198,26 @@ void SisFile::CheckValid() const
 	failed = failed || !success;
 
 	const CSISInstallBlock& blk = iContents.Controller().InstallBlock();
+	success = ProcessInstallOptionsWarning( blk, error);
 
-	int fileCount = blk.FileCount();
+	failed = failed || !success;
+
+	if (failed)
+		{
+		std::string x;
+		throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x),
+			error, SIS_NOT_SUPPORTED);
+		}
+	}
+
+bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock, std::string& aError)
+	{
+	bool success = true;
+
+	int fileCount = aInstallBlock.FileCount();
 	for(int i = 0; i < fileCount; ++i)
 		{
-		const CSISFileDescription& fD = blk.FileDescription(i);
+		const CSISFileDescription& fD = aInstallBlock.FileDescription(i);
         const CSISFileDescription::TSISFileOperation operation = fD.Operation();
 		std::wstring target(fD.Target().GetString());
         //
@@ -257,19 +272,12 @@ void SisFile::CheckValid() const
 		//
         if (!success)
     		{
-			error += "SIS File contains install options : "+operation;
+			aError += "SIS File contains install options : "+operation;
 			break;
 	    	}
 		}
-	failed = failed || !success;
-
-	if (failed)
-		{
-		std::string x;
-		throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x),
-			error, SIS_NOT_SUPPORTED);
-		}
 	}
+
 
 std::wstring SisFile::GetVendorName() const
 	{
@@ -436,8 +444,7 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 				ProcessInstallBlock(ifElseBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive);
 				break;	// Stop processing else if blocks
 				}
-			// Process the rest of the files
-			GetInstallableFiles(aFiles, ifElseBlock.InstallBlock(), aDrivePath, aInstallingDrive);
+			
 			}
 		} 
 	}
@@ -457,6 +464,18 @@ PackageUids SisFile::GetEmbeddedPackageUids() const
 		 }
 	return pkgs;
 }
+
+void SisFile::ProcessEmbeddedFileWarning(const CSISInstallBlock& aInstallBlock) const
+	{
+	TControllerMap embeddedCtls;
+	aInstallBlock.GetEmbeddedControllers(embeddedCtls, false);
+	for (TControllerMapConstIter iter = embeddedCtls.begin(); iter != embeddedCtls.end(); ++iter)
+		{
+		const CSISController* ctrl = iter->second;
+		const CSISInfo& info = ctrl->SISInfo();			
+		LWARN(L" Embedded Package not installed: UID " << std::hex << info.UID1() );
+		}
+	}
 
 bool SisFile::IsSupportedLanguage(TUint32 aLanguage) const
 {

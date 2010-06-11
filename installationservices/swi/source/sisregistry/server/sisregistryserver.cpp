@@ -121,14 +121,14 @@ CSisRegistryServer::~CSisRegistryServer()
 	iShutdown = NULL; //required in case the server dies before the session
 	}
 
-CSession2* CSisRegistryServer::NewSessionL(const TVersion& aClientVersion, const RMessage2&) const
+CSession2* CSisRegistryServer::NewSessionL(const TVersion& aClientVersion, const RMessage2& aMessage) const
 //
 // Create a new client session. This should really check the version number.
 //
 	{
 	if (aClientVersion == TVersion(1,0,0))
 		{
-		return new(ELeave) CSisRegistrySession();	
+		return new(ELeave) CSisRegistrySession(aMessage.SecureId());
 		}
 	else
 		{

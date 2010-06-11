@@ -46,6 +46,50 @@ DbHelper::DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive)
 	else 
 		dbName = wstring2string(aDrivePath) + "\\sys\\install\\scr\\provisioned\\scr.db";
 
+	std::wstring wdbname(string2wstring(dbName));
+	//Create the SCR DB if not present in the System Drive
+	if(!FileExists(wdbname))
+		{
+		const char* epocRoot = getenv("EPOCROOT");
+		if(NULL == epocRoot)
+			{
+				std::string emsg(" EPOCROOT environment variable not specified.");
+				int retCode = ExceptionCodes::EEnvNotSpecified;
+				throw InterpretSisError(emsg,retCode);
+			}
+		std::string epocRootStr(epocRoot); 
+
+		#ifndef __TOOLS2_LINUX__
+		std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32\\tools\\create_db.xml";
+		#else
+		std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32/tools/create_db.xml";
+		#endif
+
+		if(FileExists(swEnvInfo))
+			{
+			std::string executable = "scrtool.exe";
+			std::string command;
+			
+			command = executable + " -c " + dbName + " -f " + wstring2string(swEnvInfo);
+			
+			std::cout << "Creating DB : " << command << std::endl;
+			
+			int error = system(command.c_str());
+			if(error != 0)
+				{
+					std::string err = "Scrtool failed to create the database.";
+					throw InterpretSisError(err, DATABASE_UPDATE_FAILED);
+				}
+			}
+		else
+			{
+				LERROR(L"Failed to create the database.");
+				std::string emessage(" XML file /epoc32/tools/create_db.xml which contains software environment information is not found.");
+				int returnCode = ExceptionCodes::EFileNotPresent;
+				throw InterpretSisError(emessage,returnCode);
+			}
+		}
+
 	try
 		{
 		iScrDbHandler = new CDbProcessor(dllName, dbName);		

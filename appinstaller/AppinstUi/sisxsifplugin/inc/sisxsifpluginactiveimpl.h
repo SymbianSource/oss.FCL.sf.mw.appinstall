@@ -23,6 +23,7 @@
 #include <e32base.h>                    // CActive
 #include <swi/msisuihandlers.h>         // MUiHandler
 #include <usif/sif/sifcommon.h>         // TSecurityContext, COpaqueNamedParams
+#include <usif/usiferror.h>             // TErrorCategory
 #include <f32file.h>                    // RFs, RFile
 #include <barsc.h>                      // RResourceFile
 
@@ -76,19 +77,25 @@ namespace Usif
     private:    // new functions
         CSisxSifPluginActiveImpl();
         void ConstructL();
-        void CommonRequestPreamble( TRequestStatus& aStatus );
-        void CommonRequestPreamble( const COpaqueNamedParams& aInputParams,
+        void CommonRequestPreambleL( TRequestStatus& aStatus );
+        void CommonRequestPreambleL( const COpaqueNamedParams& aInputParams,
                 COpaqueNamedParams& aOutputParams, TRequestStatus& aStatus );
+        void CompleteSelf( TInt aResult );
         void CreateUiHandlerL();
         TBool IsSilentMode();
         void CompleteClientRequest( TInt aResult );
-        void DoUninstallL( TComponentId aComponentId );
-        void DoActivateL( TComponentId aComponentId );
-        void DoDeactivateL( TComponentId aComponentId );
+        void DoGetComponentInfoL( CComponentInfo& aComponentInfo, TRequestStatus& aStatus );
+        void DoInstallL( const TSecurityContext& aSecurityContext,
+        		const COpaqueNamedParams& aInputParams, COpaqueNamedParams& aOutputParams,
+        		TRequestStatus& aStatus );
+        void DoUninstallL( TComponentId aComponentId, const COpaqueNamedParams& aInputParams,
+            COpaqueNamedParams& aOutputParams, TRequestStatus& aStatus );
+        void DoActivateL( TComponentId aComponentId, TRequestStatus& aStatus );
+        void DoDeactivateL( TComponentId aComponentId, TRequestStatus& aStatus );
         void DoHandleErrorL( TInt aError );
-        TInt ConvertToSifErrorCode( TInt aSwiErrorCode );
-        void SetInstallFileL( const TDesC& aFileName );
-        void SetInstallFile( RFile& aFileHandle );
+        TErrorCategory ErrorCategory( TInt aErrorCode );
+        void SetFileL( const TDesC& aFileName );
+        void SetFile( RFile& aFileHandle );
         TComponentId GetLastInstalledComponentIdL();
         TBool RequiresUserCapabilityL( const CComponentInfo::CNode& aRootNode );
         void StartInstallingL();
@@ -107,11 +114,12 @@ namespace Usif
         COpaqueNamedParams* iOutputParams;      // not owned
         CSisxSifPluginInstallParams* iInstallParams;
         CComponentInfo* iComponentInfo;
+        TBool iHasAllFilesCapability;
         HBufC* iFileName;
         RFile* iFileHandle;             // not owned
         enum TOperationType
             {
-            ENone,
+            ENoOperation,
             EGetComponentInfo,
             EInstall,
             EUninstall,

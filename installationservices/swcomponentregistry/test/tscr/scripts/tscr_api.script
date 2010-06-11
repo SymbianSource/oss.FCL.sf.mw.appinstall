@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -538,7 +538,7 @@ END_TESTCASE API-SEC-SCR-API-0030
 START_TESTCASE API-SEC-SCR-API-0031
 
 // First, try to create a reading sub-session while a transaction owned by another session is in progress
-RUN_TEST_STEP !Result=-10320 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_before_subsession
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_before_subsession
 // Then, try to create a reading sub-session while a transaction owned by the same session is in progress
 // Also, try creating a transaction while a sub-session is in progress (opposite order)
 RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini open_reading_in_same_session
@@ -552,9 +552,9 @@ END_TESTCASE API-SEC-SCR-API-0031
 START_TESTCASE API-SEC-SCR-API-0032
 
 // First, try to begin a transaction while a reading sub-session created in another session is in progress
-RUN_TEST_STEP !Result=-10321 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_subsession
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_subsession
 // Try doing a mutating operation while a subsession is in progress
-RUN_TEST_STEP !Result=-10321 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini mutating_operation_with_subsession
+RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini mutating_operation_with_subsession
 // Then, try to begin a transaction while a reading sub-session created in the same session is in progress
 RUN_TEST_STEP 100 tscr SCRCreateTransaction z:\tusif\tscr\tscr.ini begin_after_subsession_in_same_session
 
@@ -1161,7 +1161,8 @@ RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_s
 RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_missing_name
 RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_extra_mime
 RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_localized_software_type_with_missing_mime
-
+// Add multiple sid with launcher executable
+RUN_TEST_STEP 100 tscr SCRAddSoftwareType z:\tusif\tscr\tscr.ini add_multiple_sid_with_launcher_executable
 END_TESTCASE API-SEC-SCR-API-0063
 
 

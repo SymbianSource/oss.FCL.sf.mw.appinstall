@@ -19,20 +19,20 @@
 #include "sifuidialogtitlewidget.h"
 #include "sifuidialogcontentwidget.h"
 #include "sifuiinstallindicatorparams.h"
+#include <QFile>
 #include <hblabel.h>
 #include <hbaction.h>
 #include <hbindicator.h>
-#include <QTranslator>
-#include <QApplication>                     // qApp()
-#include <QFile>
+#include <hbtranslator.h>
 #include <hbmessagebox.h>
 #include <qvaluespacesubscriber.h>
 #include <xqappmgr.h>                       // XQApplicationManager
 
 QTM_USE_NAMESPACE
 
-const QString KTranslationsPath = "resource/qt/translations/";
-const QString KTranslationsFile = "sifuidevicedialogplugin";
+const QString KTranslationsPath = "/resource/qt/translations/";
+const QString KSifUiTranslationsFile = "sifuidevicedialogplugin";
+const QString KCommonTranslationsFile = "common";
 const QString KSwiErrorsFile = "c:\\temp\\swierrors.txt";
 const QString KSwiErrorFormat = " (%1)";
 
@@ -42,13 +42,14 @@ const QString KSwiErrorFormat = " (%1)";
 // ----------------------------------------------------------------------------
 //
 SifUiDialog::SifUiDialog(const QVariantMap &parameters) : HbDialog(),
-    mLastDialogError(KErrNone), mShowEventReceived(false),
-    mDialogType(SifUiUnspecifiedDialog),
+    mCommonTranslator(0), mSifUITranslator(0), mLastDialogError(KErrNone),
+    mShowEventReceived(false), mDialogType(SifUiUnspecifiedDialog),
     mTitle(0), mContent(0), mResultMap(),
-    mIgnoreCloseAction(0), mIndicator(0), mSubscriber(0)
+    mIgnoreCloseAction(0), mPrimaryAction(0), mSecondaryAction(0),
+    mIndicator(0), mSubscriber(0)
 {
-    // TODO: enable when translations ready
-    //installTranslator();
+    mCommonTranslator = new HbTranslator(KTranslationsPath, KCommonTranslationsFile);
+    mSifUITranslator = new HbTranslator(KTranslationsPath, KSifUiTranslationsFile);
     constructDialog(parameters);
 }
 
@@ -59,9 +60,11 @@ SifUiDialog::SifUiDialog(const QVariantMap &parameters) : HbDialog(),
 SifUiDialog::~SifUiDialog()
 {
     delete mSubscriber;
-
-    // TODO: enable when translations ready
-    //removeTranslator();
+    delete mPrimaryAction;
+    delete mSecondaryAction;
+    mIgnoreCloseAction = 0;
+    delete mSifUITranslator;
+    delete mCommonTranslator;
 }
 
 // ----------------------------------------------------------------------------
@@ -85,7 +88,8 @@ SifUiDeviceDialogType SifUiDialog::dialogType(const QVariantMap &parameters)
 //
 bool SifUiDialog::setDeviceDialogParameters(const QVariantMap &parameters)
 {
-   return updateFromParameters(parameters);
+    setVisible(!isInstallIndicatorActive());
+    return updateFromParameters(parameters);
 }
 
 // ----------------------------------------------------------------------------
@@ -160,28 +164,23 @@ void SifUiDialog::showEvent(QShowEvent *event)
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialog::installTranslator()
+// SifUiDialog::isInstallIndicatorActive()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::installTranslator()
+bool SifUiDialog::isInstallIndicatorActive()
 {
-    mTranslator = new QTranslator(this);
-    QString lang = QLocale::system().name();
-    mTranslator->load(KTranslationsFile + lang, KTranslationsPath);
-    qApp->installTranslator(mTranslator);
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialog::removeTranslator()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialog::removeTranslator()
-{
-    QApplication *app = qApp;
-    if (mTranslator && app) {
-        app->removeTranslator(mTranslator);
-        mTranslator = 0;
+    bool isActive = false;
+    if (!mSubscriber) {
+        mSubscriber = new QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber(
+            KSifUiInstallIndicatorStatusPath));
     }
+    QVariant variant = mSubscriber->value();
+    bool valueOk = false;
+    int intValue = variant.toInt(&valueOk);
+    if (valueOk && intValue) {
+        isActive = true;
+    }
+    return isActive;
 }
 
 // ----------------------------------------------------------------------------
@@ -208,7 +207,7 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
             this, SLOT(handleMemorySelectionChanged(const QChar &)));
     setContentWidget(mContent);
 
-    updateButtons();
+    updateButtons(parameters);
 
     return true;
 }
@@ -230,7 +229,7 @@ bool SifUiDialog::updateFromParameters(const QVariantMap &parameters)
         mContent->updateFromParameters(parameters);
         }
     if (prevDialogType != mDialogType) {
-        updateButtons();
+        updateButtons(parameters);
     }
     if (parameters.contains(KSifUiErrorCode)) {
         mInstallError = parameters.value(KSifUiErrorCode).toInt();
@@ -242,95 +241,89 @@ bool SifUiDialog::updateFromParameters(const QVariantMap &parameters)
 // SifUiDialog::updateButtons()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::updateButtons()
+void SifUiDialog::updateButtons(const QVariantMap &parameters)
 {
     mIgnoreCloseAction = 0;
 
-    HbAction *primaryAction = 0;
+    if (mPrimaryAction) {
+        removeAction(mPrimaryAction);
+        delete mPrimaryAction;
+        mPrimaryAction = 0;
+    }
     switch (mDialogType) {
         case SifUiConfirmationQuery:
             //: Accepts the SW install confirmation query and starts installation.
-            // TODO: enable when translations ready
-            //primaryAction = new HbAction(hbTrId("txt_sisxui_install_ok"), this);
-            primaryAction = new HbAction(tr("Ok"), this);
-            connect(primaryAction, SIGNAL(triggered()), this, SLOT(handleAccepted()));
-            mIgnoreCloseAction = primaryAction;
+            mPrimaryAction = new HbAction(hbTrId("txt_common_button_ok"));
+            connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleAccepted()));
+            mIgnoreCloseAction = mPrimaryAction;
             break;
         case SifUiProgressNote:
-            //: Hides the progress dialog. Progress note moves into universal indicator.
-            // TODO: enable when translations ready
-            //primaryAction = new HbAction(hbTrId("txt_sisxui_install_hide"), this);
-            primaryAction = new HbAction(tr("Hide"), this);
-            connect(primaryAction, SIGNAL(triggered()), this, SLOT(handleHide()));
-            mIgnoreCloseAction = primaryAction;
+            if (!parameters.contains(KSifUiProgressNoteIsHideButtonHidden)) {
+                //: Hides the progress dialog. Progress note moves into universal indicator.
+                mPrimaryAction = new HbAction(hbTrId("txt_common_button_hide"));
+                connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleHidePressed()));
+                mIgnoreCloseAction = mPrimaryAction;
+            }
             break;
         case SifUiCompleteNote:
-            //: Opens Application Library to view the installed application.
-            // TODO: enable when translations ready
-            //primaryAction = new HbAction(hbTrId("txt_sisxui_install_show"), this);
-            primaryAction = new HbAction(tr("Show"), this);
-            connect(primaryAction, SIGNAL(triggered()), this, SLOT(handleShowInstalled()));
-            mIgnoreCloseAction = primaryAction;
+            if (!parameters.contains(KSifUiCompleteNoteIsShowButtonHidden)) {
+                //: Opens Application Library to view the installed application.
+                mPrimaryAction = new HbAction(hbTrId("txt_installer_button_show"));
+                connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleShowInstalled()));
+            }
             break;
         case SifUiErrorNote:
-            //: Shows a dialog with further info about the failure (i.e. why installation failed).
-            // TODO: enable when translations ready
-            //primaryAction = new HbAction(hbTrId("txt_sisxui_install_error_details"), this);
-            primaryAction = new HbAction(tr("Details"), this);
-            connect(primaryAction, SIGNAL(triggered()), this, SLOT(handleErrorDetails()));
-            mIgnoreCloseAction = primaryAction;
+            if (!parameters.contains(KSifUiErrorNoteIsDetailsButtonHidden)) {
+                //: Shows a dialog with further info about the failure (i.e. why installation failed).
+                mPrimaryAction = new HbAction(hbTrId("txt_installer_button_details"));
+                connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleErrorDetails()));
+                mIgnoreCloseAction = mPrimaryAction;
+            }
             break;
         default:
             break;
     }
-    setPrimaryAction(primaryAction);
+    if (mPrimaryAction) {
+        addAction(mPrimaryAction);
+    }
 
-    HbAction *secondaryAction = 0;
+    if (mSecondaryAction) {
+        removeAction(mSecondaryAction);
+        delete mSecondaryAction;
+        mSecondaryAction = 0;
+    }
     switch (mDialogType) {
         case SifUiConfirmationQuery:
         case SifUiProgressNote:
-            //: Cancels the SW install confirmation query and closes the dialog.
-            // TODO: enable when translations ready
-            //secondaryAction = new HbAction(hbTrId("txt_sisxui_install_cancel"), this);
-            secondaryAction = new HbAction(tr("Cancel"), this);
-            connect(secondaryAction, SIGNAL(triggered()), this, SLOT(handleCancelled()));
+            if (!parameters.contains(KSifUiProgressNoteIsCancelButtonHidden)) {
+                //: Cancels the SW install confirmation query and closes the dialog.
+                mSecondaryAction = new HbAction(hbTrId("txt_common_button_cancel"));
+                connect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(handleCancelled()));
+            }
             break;
         case SifUiCompleteNote:
         case SifUiErrorNote:
             //: Closes the dialog. Control returns back to where the installation was started.
-            // TODO: enable when translations ready
-            //secondaryAction = new HbAction(hbTrId("txt_sisxui_install_close"), this);
-            secondaryAction = new HbAction(tr("Close"), this);
-            connect(secondaryAction, SIGNAL(triggered()), this, SLOT(close()));
+            mSecondaryAction = new HbAction(hbTrId("txt_common_button_close"));
+            connect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(close()));
             break;
         default:
             break;
     }
-    setSecondaryAction(secondaryAction);
+    if (mSecondaryAction) {
+        addAction(mSecondaryAction);
+    }
 }
 
 // ----------------------------------------------------------------------------
 // SifUiDialog::sendResult()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::sendResult(bool accepted)
+void SifUiDialog::sendResult(SifUiDeviceDialogReturnValue value)
 {
-    QVariant acceptedValue(accepted);
-    mResultMap.insert(KSifUiQueryAccepted, acceptedValue);
+    QVariant returnValue(value);
+    mResultMap.insert(KSifUiQueryReturnValue, returnValue);
     emit deviceDialogData(mResultMap);
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialog::monitorIndicatorActivity()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialog::monitorIndicatorActivity()
-{
-    if (!mSubscriber) {
-        mSubscriber = new QValueSpaceSubscriber(KSifUiInstallIndicatorStatusPath);
-        connect(mSubscriber, SIGNAL(contentsChanged()),
-            this, SLOT(handleIndicatorActivityChanged()));
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -340,7 +333,7 @@ void SifUiDialog::monitorIndicatorActivity()
 void SifUiDialog::handleAccepted()
 {
     mContent->changeType(SifUiProgressNote);
-    sendResult(true);
+    sendResult(SifUiContinue);
 }
 
 // ----------------------------------------------------------------------------
@@ -349,7 +342,7 @@ void SifUiDialog::handleAccepted()
 //
 void SifUiDialog::handleCancelled()
 {
-    sendResult(false);
+    sendResult(SifUiCancel);
 }
 
 // ----------------------------------------------------------------------------
@@ -368,33 +361,8 @@ void SifUiDialog::handleMemorySelectionChanged(const QChar &driveLetter)
 //
 void SifUiDialog::handleHidePressed()
 {
-    if (!mIndicator) {
-        mIndicator = new HbIndicator(this);
-        QVariant applicationName(mContent->applicationName());
-        if (!mContent->isDefaultIconUsed()) {
-            // TODO: send icon to indicator
-        }
-        if (mIndicator->activate(KSifUiInstallIndicatorType, applicationName)) {
-            hide();
-            monitorIndicatorActivity();
-        }
-    }
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialog::handleIndicatorActivityChanged()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialog::handleIndicatorActivityChanged()
-{
-    QVariant variant = mSubscriber->value();
-    if (variant.isValid() && (variant.type() == QVariant::Int)) {
-        bool valueOk = false;
-        int intValue = variant.toInt(&valueOk);
-        if (valueOk && intValue) {
-            show();
-        }
-    }
+    sendResult(SifUiIndicator);
+    hide();
 }
 
 // ----------------------------------------------------------------------------

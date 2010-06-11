@@ -23,19 +23,19 @@
 #include <hbicon.h>
 #include "sisxsilentinstallindicator.h" 
 
+const char KSifUiDefaultApplicationIcon[] = "qtg_large_application.svg";
 
 // ----------------------------------------------------------------------------
 // SisxSilentInstallIndicator::SisxSilentInstallIndicator
 // @see sisxsilentinstallindicator.h
 // ----------------------------------------------------------------------------
 SisxSilentInstallIndicator::SisxSilentInstallIndicator( 
-		const QString &indicatorType) :
-    		HbIndicatorInterface(
-    				indicatorType,    				
-    				HbIndicatorInterface::NotificationCategory,
-    				InteractionActivated),
-    		mUpdateValue(0),
-    		mIsInstallProcess(1) // Set installer mode as default.
+	const QString &indicatorType) :
+    	HbIndicatorInterface( indicatorType,    				
+    		HbIndicatorInterface::NotificationCategory,
+    		InteractionActivated),
+    	mUpdateValue(0),
+    	mIsInstallProcess(1) // Set installer mode as default.
     {
     }
 
@@ -98,8 +98,7 @@ switch(role)
     case MonoDecorationNameRole:
         {
         // Get icon for the indicator.
-//TODO: this needs to be fixed.
-        QString iconName("z:/resource/swidaemon/qtg_large_application.svg");
+        QString iconName(KSifUiDefaultApplicationIcon);
         return iconName;
         }
     default: 
@@ -121,7 +120,7 @@ bool SisxSilentInstallIndicator::handleClientRequest( RequestType type,
         case RequestActivate:
             {
             // Read client percent value to float.
-            mUpdateValue = parameter.toReal();
+            mUpdateValue = parameter.toInt();
             
             // If client send -1 insted of percent value (0-100) we need
             // to switch to uninstaller mode.

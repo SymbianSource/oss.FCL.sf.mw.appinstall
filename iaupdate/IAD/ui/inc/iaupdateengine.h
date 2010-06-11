@@ -30,11 +30,14 @@ class CIAUpdateUiController;
 class CIAUpdateFWUpdateHandler;
 class CIAUpdateParameters;
 class CIAUpdateGlobalLockHandler;
+class CIAUpdateAutomaticCheck;
 class MIAUpdateNode;
 class MIAUpdateFwNode;
 class CEikonEnv;
 class RCmManagerExt;
 class CIdle;
+class HbAction;
+class IAUpdateResultsDialog;
 
 class IAUpdateEngine : public QObject,
                        public MIAUpdateUiControllerObserver
@@ -45,7 +48,7 @@ public:
     IAUpdateEngine(QObject *parent = 0);
     ~IAUpdateEngine();
     
-    void StartedByLauncherL( TBool aRefreshFromNetworkDenied );
+    void StartedByLauncherL( bool aRefreshFromNetworkDenied );
      
      /**
       * When the update check operation is started through
@@ -57,7 +60,7 @@ public:
       */
      void CheckUpdatesRequestL( int wgid, 
                                 CIAUpdateParameters* aFilterParams, 
-                                TBool aForcedRefresh );
+                                bool aForcedRefresh );
 
      /**
       * When the show update operation is started through
@@ -78,31 +81,30 @@ public:
       * completed.
       * @param aUid  Uid of the caller of the request
       */
-     void ShowUpdateQueryRequestL( int wgid, TUint aUid );
+     void ShowUpdateQueryRequestL( int wgid, uint aUid );
      
      
-     void StartUpdate( TBool aFirmwareUpdate );
+     void StartUpdate( bool aFirmwareUpdate );
      /**
       * Set this application visible/unvisible
       * @param aVisible If EFalse application is put background and is hidden in FSW 
       */
-      void SetVisibleL( TBool aVisible );
+      void SetVisibleL( bool aVisible );
       
       /**
       * Set window group id of client application 
       *
       * @param aWgId Window group id
       */
-      void SetClientWgId( TInt aWgId );
+      void SetClientWgId( int aWgId );
           
       /**
       * Is client application in background
       *
       * @param True value if client application is in background
       */
-      TInt ClientInBackgroundL() const;
+      bool ClientInBackgroundL() const;
     
-      //void refresh(int error);
 signals:
     void toMainView();
     
@@ -114,10 +116,11 @@ signals:
                  const RPointerArray<MIAUpdateFwNode>& fwNodes,
                  int error);
     
-    void toHistoryView();
 
 public slots:    
     void handleAllClientsClosed();    
+
+    void dialogFinished(HbAction* action);
   
 
 private: // From MIAUpdateUiControllerObserver   
@@ -168,19 +171,16 @@ private:  //new methods
     * Show results dialog of update
     */ 
     void ShowResultsDialogL();
-        
-    /**
-    * Starts CIdle. Results dialog is shown in callback function. 
-    */ 
-    void ShowResultsDialogDeferredL();
     
     
+    void ShowRebootDialogL();
+           
     /**
     * Informs an observer that its async request is completed 
     *
     * @param aError  Error code 
     */ 
-    void InformRequestObserver( TInt aError );
+    void InformRequestObserver( int aError );
     
     /**
      * Sets the default connection method used for network access.
@@ -194,21 +194,21 @@ private:  //new methods
      * @note Leaves with KErrNotFound if connection method was not
      * set in the repocitory.
      */
-    void SetDefaultConnectionMethodL( TBool aTotalSilent );   
+    void SetDefaultConnectionMethodL( bool aTotalSilent );   
     
      /**
      * Choose a usable IAP from all SNAPs
      *
      * @param aCmManagerExt handle of connection manager
      */  
-    TUint32 GetBestIAPInAllSNAPsL( RCmManagerExt& aCmManagerExt  );
+    uint GetBestIAPInAllSNAPsL( RCmManagerExt& aCmManagerExt  );
         
      /**
      * Choose a usable IAP from Internet SNAP
      *
      * @param aCmManagerExt handle of connection manager
      */
-    TUint32 GetBestIAPInInternetSNAPL( RCmManagerExt& aCmManagerExt  );
+    uint GetBestIAPInInternetSNAPL( RCmManagerExt& aCmManagerExt  );
 
      /**
      * Choose the best IAP under the given SNAP
@@ -216,25 +216,15 @@ private:  //new methods
      * @param aCmManagerExt handle of connection manager
      * @param aSNAP SNAP ID
      */  
-     TUint32 GetBestIAPInThisSNAPL( RCmManagerExt& aCmManagerExt, TUint32 aSNAP = 0);
+     uint GetBestIAPInThisSNAPL( RCmManagerExt& aCmManagerExt, uint aSNAP = 0);
      
      /**
      * Shows update query dialog (now/later) 
      */ 
      void ShowUpdateQueryL();
 
-     void HideApplicationInFSWL( TBool aHide ) const;
-     
-     /**
-     * CIdle callback function, that shows status dialog
-     * To be used to guarantee that possible old status dialog is totally 
-     * removed by AVKON before showing new one  
-     *
-     * @param aPtr  Pointer to this instance
-     */ 
-     static TInt ShowResultsDialogCallbackL( TAny* aPtr );
-     
-     
+     void HideApplicationInFSWL( bool aHide ) const;
+               
      /**
      * CIdle callback function, that shows update query dialog
      * To be used because a client to be informed immediately that its 
@@ -250,31 +240,44 @@ private:  //new methods
      * @param aPtr  Pointer to this instance
      */
      static TInt AutomaticCheckCallbackL( TAny* aPtr );
-         
      
-    
-public: //temp
-//private:
-    IAUpdateServiceProvider *mServiceProvider;
-    
+     void DoPossibleApplicationClose();
+ 
+   
+
 private:
+     
+    enum DialogState
+        {
+        NoDialog,
+        Results,
+        RebootQuery,
+        ShowUpdateQuery
+        };
+     
+    IAUpdateServiceProvider *mServiceProvider;
+    IAUpdateResultsDialog* mResultsDialog;
+    
     CIAUpdateUiController* iController;
     CIAUpdateFWUpdateHandler* iFwUpdateHandler;
     CIAUpdateGlobalLockHandler* iGlobalLockHandler;
+    CIAUpdateAutomaticCheck* iAutomaticCheck;
     CEikonEnv* iEikEnv; //not owned
     CIdle* iIdle;
     CIdle* iIdleAutCheck;
     
-    IAUpdateUiDefines::TIAUpdateUiRequestType iRequestType;
-    TBool iUpdateNow;
-    RArray<TUint32> iDestIdArray;
-    TBool iRequestIssued;
-    TBool iStartedFromApplication;
-    TBool iUiRefreshAllowed;
-    TUint iUpdatequeryUid;
-    TInt iWgId;
-  
     
+    IAUpdateUiDefines::TIAUpdateUiRequestType mRequestType;
+    bool mUpdateNow;
+    RArray<TUint32> iDestIdArray;
+    bool mRequestIssued;
+    bool mStartedFromApplication;
+    bool mUiRefreshAllowed;
+    uint mUpdatequeryUid;
+    int mWgId;
+    DialogState mDialogState;
+    HbAction *mPrimaryAction;
+    HbAction *mSecondaryAction;
     };
 
 #endif /* IAUPDATEENGINE_H_ */

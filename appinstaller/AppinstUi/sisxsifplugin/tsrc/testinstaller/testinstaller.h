@@ -38,7 +38,11 @@ public:     // constructor and destructor
     ~TestInstaller();
 
 private slots:
-    void silentCheckChanged(int state);
+    void installViewActivated();
+    void removeViewActivated();
+    void silentInstallCheckChanged(int state);
+    void silentRemoveCheckChanged(int state);
+    void rfileCheckChanged(int state);
     void installableDirChanged(int index);
     void installableFileChanged(int index);
     void installUsingNewApi();
@@ -66,8 +70,11 @@ private:    // functions
 
 private:    // data
     HbMainWindow *mMainWindow;
-    HbView       *mMainView;
+    HbView       *mInstallView;
+    HbView       *mRemoveView;
     bool         mUseSilentInstall;
+    bool         mUseSilentUninstall;
+    bool         mUseRFileInstall;
     HbComboBox   *mInstallDirectories;
     HbComboBox   *mInstallableFiles;
     HbComboBox   *mRemovableApps;

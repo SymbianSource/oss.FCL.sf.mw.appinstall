@@ -10,8 +10,8 @@
 * Nokia Corporation - initial contribution.
 *
 * Contributors:
-* 
-* Description:
+*
+* Description:  SifUi API test code
 *
 */
 
@@ -19,7 +19,12 @@ PRJ_PLATFORMS
 DEFAULT
 
 PRJ_EXPORTS
-../init/sifuitestscripter.ini   /epoc32/winscw/c/testframework/sifuitestscripter.ini
+../init/sifuitest.ini           /epoc32/winscw/c/testframework/TestFramework.ini
+../data/mmc/test_x509_cert.cer  /epoc32/winscw/c/testing/data/test_x509_cert.cer
+../init/sifuitest.ini           /epoc32/data/z/system/data/TestFramework.ini
+
+// Note: data files may need to be copied manually from ../data/mmc to memory card e:/testing/data/
+// See sifuitest.pkg file for details (i.e. which files needs to be installed to run the tests).
 
 PRJ_TESTMMPFILES
 sifuitest.mmp

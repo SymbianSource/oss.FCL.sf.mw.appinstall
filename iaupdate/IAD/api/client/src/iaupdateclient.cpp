@@ -75,72 +75,73 @@ int IAUpdateClient::initRequest(const CIAUpdateParameters* updateParameters, con
     else if (!mServiceRequest)
     {
         mServiceRequest = new XQServiceRequest("com.nokia.services.swupdate.swupdate_interface", message, false);
-        connect(mServiceRequest, SIGNAL(requestCompleted(QVariant)), this, SLOT(requestCompleted(QVariant)));
-        connect(mServiceRequest, SIGNAL(requestError(int)), this, SLOT(requestError(int)));
+        if (mServiceRequest)
+        {    
+            connect(mServiceRequest, SIGNAL(requestCompleted(QVariant)), this, SLOT(requestCompleted(QVariant)));
+            connect(mServiceRequest, SIGNAL(requestError(int)), this, SLOT(requestError(int)));
+        }
+        else
+        {
+            error = KErrNoMemory;
+        }
     }
     else
     {
         mServiceRequest->setMessage(message);
     }
-    XQRequestInfo requestInfo;
-    requestInfo.setBackground(toBackground);
-    mServiceRequest->setInfo(requestInfo);
+    
     
     if (error == KErrNone)
     {    
-        if (!mServiceRequest)
+        XQRequestInfo requestInfo;
+        requestInfo.setBackground(toBackground);
+        mServiceRequest->setInfo(requestInfo); 
+        int wgId = 0;
+        CEikonEnv* eikEnv = CEikonEnv::Static();
+        if ( eikEnv )
         {
-            error = KErrNoMemory;    
+            RWindowGroup owngroup;
+            wgId = eikEnv->RootWin().Identifier();
         }
-        else
+        IAUPDATE_TRACE_1("IAUpdateClient::initRequest() wgId: %d", wgId);
+        QString stringWgid;
+        stringWgid.setNum(wgId);
+        *mServiceRequest << stringWgid;  
+        if (updateParameters)
         {    
-            int wgId = 0;
-            CEikonEnv* eikEnv = CEikonEnv::Static();
-            if ( eikEnv )
-            {
-                RWindowGroup owngroup;
-                wgId = eikEnv->RootWin().Identifier();
-            }
-            IAUPDATE_TRACE_1("IAUpdateClient::initRequest() wgId: %d", wgId);
-            QString stringWgid;
-            stringWgid.setNum(wgId);
-            *mServiceRequest << stringWgid;  
-            if (updateParameters)
-            {    
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() UID: %d", updateParameters->Uid().iUid);
-                QString stringUid; 
-                stringUid.setNum(updateParameters->Uid().iUid);
-                *mServiceRequest << stringUid;
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() UID: %d", updateParameters->Uid().iUid);
+            QString stringUid; 
+            stringUid.setNum(updateParameters->Uid().iUid);
+            *mServiceRequest << stringUid;
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() searchcriteria: %S", &updateParameters->SearchCriteria());
-                *mServiceRequest << qStringFromTDesC(updateParameters->SearchCriteria());
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() searchcriteria: %S", &updateParameters->SearchCriteria());
+            *mServiceRequest << qStringFromTDesC(updateParameters->SearchCriteria());
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() executable: %S", &updateParameters->CommandLineExecutable());
-                *mServiceRequest << qStringFromTDesC(updateParameters->CommandLineExecutable());
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() executable: %S", &updateParameters->CommandLineExecutable());
+            *mServiceRequest << qStringFromTDesC(updateParameters->CommandLineExecutable());
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() arguments: %S8", &updateParameters->CommandLineArguments());
-                *mServiceRequest << qStringFromTDesC8(updateParameters->CommandLineArguments());
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() arguments: %S8", &updateParameters->CommandLineArguments());
+            *mServiceRequest << qStringFromTDesC8(updateParameters->CommandLineArguments());
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() show progress: %d", updateParameters->ShowProgress());
-                QString stringShowProgress;
-                stringShowProgress.setNum(updateParameters->ShowProgress());
-                *mServiceRequest << stringShowProgress;
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() show progress: %d", updateParameters->ShowProgress());
+            QString stringShowProgress;
+            stringShowProgress.setNum(updateParameters->ShowProgress());
+            *mServiceRequest << stringShowProgress;
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() importance: %d", updateParameters->Importance());
-                QString stringImportance;
-                stringImportance.setNum(updateParameters->Importance());
-                *mServiceRequest << stringImportance;
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() importance: %d", updateParameters->Importance());
+            QString stringImportance;
+            stringImportance.setNum(updateParameters->Importance());
+            *mServiceRequest << stringImportance;
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() type: %d", updateParameters->Type());
-                QString stringType;
-                stringType.setNum(updateParameters->Type());
-                *mServiceRequest << stringType;
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() type: %d", updateParameters->Type());
+            QString stringType;
+            stringType.setNum(updateParameters->Type());
+            *mServiceRequest << stringType;
                 
-                IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() refresh: %d", updateParameters->Refresh());
-                QString stringRefresh;
-                stringRefresh.setNum(updateParameters->Refresh());
-                *mServiceRequest << stringRefresh;
-            }
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() refresh: %d", updateParameters->Refresh());
+            QString stringRefresh;
+            stringRefresh.setNum(updateParameters->Refresh());
+            *mServiceRequest << stringRefresh;
         }
     }                 
      

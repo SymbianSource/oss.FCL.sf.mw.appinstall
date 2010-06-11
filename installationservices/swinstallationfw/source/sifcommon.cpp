@@ -19,6 +19,9 @@
 #include <f32file.h>
 #include <usif/sif/sifcommon.h>
 #include <s32mem.h>
+#include <scs/cleanuputils.h>
+#include <scs/streamingarray.h>
+#include "sifcommon_internal.h"
 
 using namespace Usif;
 
@@ -558,7 +561,7 @@ EXPORT_C void CComponentInfo::PrepareForIpcL(TIpcArgs& aIpcArgs, TInt aIndex)
 // ##########################################################################################
 
 COpaqueNamedParams::COpaqueNamedParams()
-	: iExternalBuffer(NULL), iExternalBufferPtr(NULL, 0, 0), iDeferredInternalization(EFalse), iExternalizedSize(sizeof(TInt))
+	: iExternalBuffer(NULL), iExternalBufferPtr(NULL, 0, 0), iDeferredInternalization(EFalse), iExternalizedSize(2*sizeof(TInt))
 	{
 	}
 
@@ -581,22 +584,20 @@ EXPORT_C COpaqueNamedParams* COpaqueNamedParams::NewLC()
 	return self;
 	}
 
-void COpaqueNamedParams::VerifyExternalizedSizeForNewParamL(TInt aNameSize, TInt aValueSize) const
+void COpaqueNamedParams::VerifyExternalizedSizeForNewParamArrayL(TInt aNameSize, TInt aValueSize) const
 	{
 	const TInt load = 2*sizeof(TInt) + aNameSize + aValueSize;
-	if (aNameSize > KMaxDescriptorLength || aValueSize > KMaxDescriptorLength ||
-		iExternalizedSize + load > KMaxExternalizedSize)
+	if (aNameSize > KMaxOpaqueParamsDescriptorSize || iExternalizedSize + load > KMaxOpaqueParamsExternalizedSize)
 		{
 		User::Leave(KErrOverflow);
 		}
 	iExternalizedSize += load;
 	}
 
-void COpaqueNamedParams::VerifyExternalizedSizeForExistingParamL(TInt aOldValueSize, TInt aNewValueSize) const
+void COpaqueNamedParams::VerifyExternalizedSizeForExistingParamArrayL(TInt aOldValueSize, TInt aNewValueSize) const
 	{
 	const TInt diff = aNewValueSize - aOldValueSize;
-	if (aNewValueSize > KMaxDescriptorLength ||
-		iExternalizedSize + diff > KMaxExternalizedSize)
+	if (iExternalizedSize + diff > KMaxOpaqueParamsExternalizedSize)
 		{
 		User::Leave(KErrOverflow);
 		}
@@ -605,42 +606,59 @@ void COpaqueNamedParams::VerifyExternalizedSizeForExistingParamL(TInt aOldValueS
 
 EXPORT_C void COpaqueNamedParams::AddStringL(const TDesC& aName, const TDesC& aValue)
 	{
-	HBufC* value = HBufC::NewLC(aValue.Length());
-	TPtr bufValue(value->Des());
-	bufValue.Copy(aValue);
-
-	const TInt len = iParams.Count();
-	for (TInt i=0; i<len; ++i)
-		{
-		if (iParams[i].iName->CompareF(aName) == 0)
-			{
-			VerifyExternalizedSizeForExistingParamL(iParams[i].iValue->Size(), value->Size());
-			delete iParams[i].iValue;
-			iParams[i].iValue = value;
-			CleanupStack::Pop(value);
-			return;
-			}
-		}
-
-	VerifyExternalizedSizeForNewParamL(aName.Size(), aValue.Size());
-
-	HBufC* name = HBufC::NewLC(aName.Length());
-	TPtr bufName(name->Des());
-	bufName.Copy(aName);
-
-	TItem item = {name, value};
-	iParams.AppendL(item);
-
-	CleanupStack::Pop(2, value);
+	CStringItem* stringItem = CStringItem::NewL(aName, aValue);
+	CleanupStack::PushL(stringItem);
+	
+	AddOpaqueParamL(stringItem);
+    CleanupStack::Pop(stringItem);
 	}
+
+EXPORT_C void COpaqueNamedParams::AddStringArrayL(const TDesC& aName, const RPointerArray<HBufC>& aValueArray)
+    {
+    CStringArrayItem* stringArray = CStringArrayItem::NewL(aName, aValueArray);
+    CleanupStack::PushL(stringArray);
+    
+    AddOpaqueParamL(stringArray);
+    CleanupStack::Pop(stringArray);
+    }
 
 EXPORT_C void COpaqueNamedParams::AddIntL(const TDesC& aName, TInt aValue)
 	{
-  	// Assumption: the code below won't be compiled in __KERNEL_MODE__ so HBufC is always defined as HBufC16
-  	TBuf<sizeof(TInt)/2> buf;
-  	buf.Copy(reinterpret_cast<TUint16*>(&aValue), sizeof(TInt)/2);
-	AddStringL(aName, buf);
+	CIntegerItem* integer = CIntegerItem::NewL(aName, aValue);
+    CleanupStack::PushL(integer);
+    
+    AddOpaqueParamL(integer);
+    CleanupStack::Pop(integer);	
 	}
+
+EXPORT_C void COpaqueNamedParams::AddIntArrayL(const TDesC& aName, const RArray<TInt>& aValueArray)
+    {
+    CIntegerArrayItem* integerArray = CIntegerArrayItem::NewL(aName, aValueArray);
+    CleanupStack::PushL(integerArray);
+    
+    AddOpaqueParamL(integerArray);
+    CleanupStack::Pop(integerArray);     
+    }
+
+void COpaqueNamedParams::AddOpaqueParamL(MOpaqueParam* aItemBase)
+    {
+    const TInt count = iParams.Count();
+        
+    for (TInt i=0; i<count; ++i)
+        {
+        if (iParams[i]->Name().CompareF(aItemBase->Name()) == 0)
+            {
+            VerifyExternalizedSizeForExistingParamArrayL(iParams[i]->ValueSize(), aItemBase->ValueSize());
+            
+            delete iParams[i];
+            iParams[i] = aItemBase;
+            return;
+            }
+        }
+
+    VerifyExternalizedSizeForNewParamArrayL(aItemBase->Name().Size(), aItemBase->ValueSize());
+    iParams.AppendL(aItemBase); 
+    }
 
 EXPORT_C void COpaqueNamedParams::GetNamesL(RPointerArray<HBufC>& aNames) const
 	{
@@ -649,10 +667,7 @@ EXPORT_C void COpaqueNamedParams::GetNamesL(RPointerArray<HBufC>& aNames) const
 	const TInt len = iParams.Count();
 	for (TInt i=0; i<len; ++i)
 		{
-		const TDesC& ref = *iParams[i].iName;
-		HBufC* name = HBufC::NewLC(ref.Length());
-		TPtr bufName(name->Des());
-		bufName.Copy(ref);
+		HBufC* name = iParams[i]->Name().AllocLC();
 		aNames.AppendL(name);
 		CleanupStack::Pop(name);
 		}
@@ -662,39 +677,59 @@ EXPORT_C void COpaqueNamedParams::ExternalizeL(RWriteStream& aStream) const
 	{
 	InternalizeFromExternalBufferL();
 
-	TInt len = iParams.Count();
-	aStream.WriteInt32L(len);
-	for (TInt i=0; i<len; ++i)
+	TInt count = iParams.Count();
+	aStream.WriteInt32L(count);
+	for (TInt i=0; i<count; ++i)
 		{
-		aStream << *iParams[i].iName;
-		aStream << *iParams[i].iValue;
+		aStream.WriteInt32L(iParams[i]->Type());
+		iParams[i]->ExternalizeL(aStream);
 		}
+	
+	aStream.WriteInt32L(iExternalizedSize);
 	}
 
 EXPORT_C void COpaqueNamedParams::InternalizeL(RReadStream& aStream)
 	{
-	Cleanup();
 	ConstInternalizeL(aStream);
 	}
 
 void COpaqueNamedParams::ConstInternalizeL(RReadStream& aStream) const
 	{
-	RArray<TItem>& refParams = const_cast<RArray<TItem>&>(iParams);
+    ConstCleanup();
+	RPointerArray<MOpaqueParam>& refParams = const_cast<RPointerArray<MOpaqueParam>& >(iParams);
 	
-	TInt len = aStream.ReadInt32L();
-	for (TInt i=0; i<len; ++i)
+	TInt count = aStream.ReadInt32L();
+	for (TInt i=0; i<count; ++i)
 		{
-		HBufC* name = HBufC::NewLC(aStream, KMaxDescriptorLength);
-		HBufC* value = HBufC::NewLC(aStream, KMaxDescriptorLength);
-
-		// We need to update iExternalizedSize here because its value must correspond to the params beind added from aStream
-		VerifyExternalizedSizeForNewParamL(name->Size(), value->Size());
-
-		TItem item = {name, value};
-		refParams.AppendL(item);
-
-		CleanupStack::Pop(2, name);
+		MOpaqueParam::TType type = static_cast<MOpaqueParam::TType>(aStream.ReadInt32L());
+	    MOpaqueParam* param(0);
+		switch(type)
+		    {
+		    case MOpaqueParam::EString:
+		        param = CStringItem::NewL(aStream);
+		        break;
+		        
+            case MOpaqueParam::EStringArray:
+                param = CStringArrayItem::NewL(aStream);
+                break;
+                
+            case MOpaqueParam::EInteger:
+                param = CIntegerItem::NewL(aStream);
+                break;     
+                
+            case MOpaqueParam::EIntegerArray:
+                param = CIntegerArrayItem::NewL(aStream);
+                break;     
+                
+            default:
+                User::Leave(KErrCorrupt);
+		    }
+		CleanupStack::PushL(param);
+		refParams.AppendL(param);
+		CleanupStack::Pop(param);
 		}
+		
+	iExternalizedSize = aStream.ReadInt32L();
 	}
 
 EXPORT_C void COpaqueNamedParams::PrepareArgumentsForIpcL(TIpcArgs& aIpcArgs, TInt aIndex) const
@@ -717,7 +752,7 @@ EXPORT_C void COpaqueNamedParams::PrepareResultsForIpcL(TIpcArgs& aIpcArgs, TInt
 	{
 	delete iExternalBuffer;
 	iExternalBuffer = NULL;
-	iExternalBuffer = HBufC8::NewL(KMaxExternalizedSize);
+	iExternalBuffer = HBufC8::NewL(KMaxOpaqueParamsExternalizedSize);
 	iExternalBufferPtr.Set(iExternalBuffer->Des());
 	
 	RDesWriteStream ws(iExternalBufferPtr);
@@ -735,8 +770,6 @@ void COpaqueNamedParams::InternalizeFromExternalBufferL() const
 	if (iDeferredInternalization)
 		{
 		iDeferredInternalization = EFalse;
-
-		ConstCleanup();
 		
 		RDesReadStream rs(*iExternalBuffer);
 		CleanupClosePushL(rs);
@@ -751,28 +784,57 @@ EXPORT_C const TDesC& COpaqueNamedParams::StringByNameL(const TDesC& aName) cons
 	{
 	InternalizeFromExternalBufferL();
 	
-	const TInt len = iParams.Count();
-	for (TInt i=0; i<len; ++i)
+	const TInt count = iParams.Count();
+	for (TInt i=0; i<count; ++i)
 		{
-		if (iParams[i].iName->CompareF(aName) == 0)
+		if (iParams[i]->Type() == MOpaqueParam::EString && iParams[i]->Name().CompareF(aName) == 0)
 			{
-			return *iParams[i].iValue;
+			CStringItem* string = static_cast<CStringItem*>(iParams[i]);
+			return string->StringValue();
 			}
 		}
+	
 	return KNullDesC;    
 	}
+
+EXPORT_C const RPointerArray<HBufC>& COpaqueNamedParams::StringArrayByNameL(const TDesC& aName) const
+    {
+    InternalizeFromExternalBufferL();
+  
+    const TInt count = iParams.Count();
+    TInt i;
+    for (i=0; i<count; ++i)
+        {
+        if (iParams[i]->Type() == MOpaqueParam::EStringArray && iParams[i]->Name().CompareF(aName) == 0)
+            {
+            break;
+            }
+        }
+    
+    if(i == count)
+        {
+        User::Leave(KErrNotFound); 
+        }
+    CStringArrayItem* stringArray = static_cast<CStringArrayItem*>(iParams[i]);  
+    return stringArray->StringArrayValue();
+    }
 
 EXPORT_C TBool COpaqueNamedParams::GetIntByNameL(const TDesC& aName, TInt& aValue) const
 	{
 	InternalizeFromExternalBufferL();
-
-	const TDesC& value = StringByNameL(aName);
-	if (value == KNullDesC)
-		{
-		return EFalse;
-		}
-	aValue = *(reinterpret_cast<const TUint*>(value.Ptr()));
-	return ETrue;
+	
+    const TInt count = iParams.Count();
+    for (TInt i=0; i<count; ++i)
+        {
+        if (iParams[i]->Type() == MOpaqueParam::EInteger && iParams[i]->Name().CompareF(aName) == 0)
+            {
+            CIntegerItem* integer = static_cast<CIntegerItem*>(iParams[i]); 
+            aValue = integer->IntegerValue();
+            return ETrue;
+            }
+        }
+    
+    return EFalse;
 	}
 
 EXPORT_C TInt COpaqueNamedParams::IntByNameL(const TDesC& aName) const
@@ -786,6 +848,28 @@ EXPORT_C TInt COpaqueNamedParams::IntByNameL(const TDesC& aName) const
 		}
 	return val;
 	}
+
+EXPORT_C  const RArray<TInt>& COpaqueNamedParams::IntArrayByNameL(const TDesC& aName) const
+    {  
+    InternalizeFromExternalBufferL();
+  
+    const TInt count = iParams.Count();
+    TInt i;
+    for (i=0; i<count; ++i)
+        {
+        if (iParams[i]->Type() == MOpaqueParam::EIntegerArray && iParams[i]->Name().CompareF(aName) == 0)
+            {
+            break;
+            }
+        }
+    
+    if(i == count)
+        {
+        User::Leave(KErrNotFound); 
+        }
+    CIntegerArrayItem* integerArray = static_cast<CIntegerArrayItem*>(iParams[i]);      
+    return integerArray->IntegerArrayValue();
+    }
 
 EXPORT_C TInt COpaqueNamedParams::CountL() const
 	{
@@ -801,16 +885,10 @@ EXPORT_C void COpaqueNamedParams::Cleanup()
 void COpaqueNamedParams::ConstCleanup() const
 	{
 	// Cleanup internal params
-	iExternalizedSize = sizeof(TInt);
-
-	const TInt len = iParams.Count();
-	for (TInt i=0; i<len; ++i)
-		{
-		delete iParams[i].iName;
-		delete iParams[i].iValue;
-		}
-	RArray<TItem>& refParams = const_cast<RArray<TItem>&>(iParams);
-	refParams.Reset();
+	iExternalizedSize = 2*sizeof(TInt);
+	
+	RPointerArray<MOpaqueParam>& refParams = const_cast<RPointerArray<MOpaqueParam>&>(iParams);
+	refParams.ResetAndDestroy();
 	}
 
 	void COpaqueNamedParams::CleanupExternalBuffer() const
@@ -819,3 +897,367 @@ void COpaqueNamedParams::ConstCleanup() const
 	iExternalBuffer = NULL;
 	iDeferredInternalization = EFalse;
 	}
+	
+
+/*
+ * SifCommon internal classes
+ */
+
+
+CItemBase::CItemBase(TType aType):
+    iType(aType)
+    {
+    
+    }
+
+CItemBase::TType CItemBase::Type() const
+    {
+    return iType;
+    }
+
+void CItemBase::SetNameL(const TDesC& aName)
+    {
+    delete iName;
+    iName = aName.AllocL();
+    }
+
+
+CItemBase::~CItemBase()
+    {
+    delete iName;
+    }
+
+const HBufC& CItemBase::Name() const
+    {
+    return *iName;
+    }
+
+void CItemBase::SetValueSize(TInt aSize)
+    {
+    iSize = aSize;
+    }
+
+TInt CItemBase::ValueSize() const
+    {
+    return iSize;
+    }
+
+void CItemBase::VerifyExternalizedSizeForParamL(TUint aValueSize) const
+    {
+    if(aValueSize > KMaxOpaqueParamsDescriptorSize)
+        {
+        User::Leave(KErrOverflow);
+        }
+    }
+
+void CItemBase::ExternalizeL(RWriteStream& aStream) const
+    {
+    aStream << Name();
+    aStream.WriteInt32L(iSize);
+    }
+
+void CItemBase::InternalizeL (RReadStream& aStream)
+    {
+    delete iName;
+    iName = HBufC::NewL(aStream, KMaxOpaqueParamsDescriptorSize);
+    iSize = aStream.ReadInt32L();
+    }
+    
+/*
+ * CStringItem
+ */
+CStringItem::CStringItem():
+    CItemBase(EString)
+    {
+    
+    }
+
+CStringItem* CStringItem::NewL(const TDesC& aName, const TDesC& aValue)
+    {
+    CStringItem* self = new(ELeave)CStringItem();
+    CleanupStack::PushL(self);
+    self->ConstructL(aName, aValue);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+CStringItem* CStringItem::NewL(RReadStream& aStream)
+    {   
+    CStringItem *self = new(ELeave)CStringItem();
+    CleanupStack::PushL(self);
+    self->InternalizeL(aStream);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+void CStringItem::ConstructL(const TDesC& aName, const TDesC& aValue)
+    {
+    VerifyExternalizedSizeForParamL(aValue.Size());
+    SetNameL(aName);
+    iString = aValue.AllocL();
+    SetValueSize(iString->Size());
+    }
+
+CStringItem::~CStringItem()
+    {
+    delete iString;
+    }
+
+void CStringItem::ExternalizeL(RWriteStream& aStream) const
+    {
+    aStream << *iString;
+    }
+
+void CStringItem::InternalizeL(RReadStream& aStream)
+    {
+    CItemBase::InternalizeL(aStream);
+    delete iString;
+    iString = HBufC::NewL(aStream, KMaxOpaqueParamsDescriptorSize);
+    }
+
+const TDesC& CStringItem::StringValue() const
+    {
+    return *iString;
+    }
+
+const HBufC& CStringItem::Name() const
+    {
+    return CItemBase::Name(); 
+    }
+
+MOpaqueParam::TType CStringItem::Type() const
+    {
+    return CItemBase::Type();
+    }
+
+TInt CStringItem::ValueSize() const
+    {
+    return CItemBase::ValueSize();
+    }
+/*
+ * CStringArrayItem
+ */
+
+CStringArrayItem::CStringArrayItem():
+    CItemBase(EStringArray)
+    {
+    
+    }
+
+CStringArrayItem* CStringArrayItem::NewL(const TDesC& aName, const RPointerArray<HBufC>& aValueArray)
+    {
+    CStringArrayItem* self = new(ELeave)CStringArrayItem();
+    CleanupStack::PushL(self);
+    self->ConstructL(aName, aValueArray);
+    CleanupStack::Pop(self);    
+    return self;
+    }
+
+CStringArrayItem* CStringArrayItem::NewL(RReadStream& aStream)
+    {   
+    CStringArrayItem *self = new(ELeave)CStringArrayItem();
+    CleanupStack::PushL(self);    
+    self->InternalizeL(aStream);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+void CStringArrayItem::ConstructL(const TDesC& aName, const RPointerArray<HBufC>& aValueArray)
+    {
+    SetNameL(aName);
+    for(TInt i=0; i< aValueArray.Count(); ++i)
+        {
+        VerifyExternalizedSizeForParamL(aValueArray[i]->Size());
+        HBufC* value = aValueArray[i]->AllocLC();
+        iStringArray.AppendL(value);
+        SetValueSize(ValueSize()+ value->Size());
+        CleanupStack::Pop();
+        }
+    }
+
+void CStringArrayItem::ExternalizeL(RWriteStream& aStream) const
+    {
+    CItemBase::ExternalizeL(aStream);
+    ExternalizePointersArrayL(iStringArray, aStream);
+    }
+
+void CStringArrayItem::InternalizeL(RReadStream& aStream)
+    {
+    CItemBase::InternalizeL(aStream);
+    iStringArray.ResetAndDestroy();
+    InternalizePointersArrayL(iStringArray, aStream);
+    }
+
+const RPointerArray<HBufC>& CStringArrayItem:: StringArrayValue() const
+    {
+    return iStringArray;
+    }
+
+const HBufC& CStringArrayItem::Name() const
+    {
+    return CItemBase::Name(); 
+    }
+
+MOpaqueParam::TType CStringArrayItem::Type() const
+    {
+    return CItemBase::Type();
+    }
+
+TInt CStringArrayItem::ValueSize() const
+    {
+    return CItemBase::ValueSize();
+    }
+
+CStringArrayItem::~CStringArrayItem()
+    {
+    iStringArray.ResetAndDestroy();
+    }
+
+/*
+ * CIntegerItem
+ */
+
+CIntegerItem::CIntegerItem(TInt aValue):
+    CItemBase(EInteger),
+    iInteger(aValue)
+    {
+    
+    }
+
+CIntegerItem* CIntegerItem::NewL(const TDesC& aName, TInt aValue)
+    {
+    CIntegerItem* self = new(ELeave)CIntegerItem(aValue);
+    CleanupStack::PushL(self);
+    self->ConstructL(aName);
+    CleanupStack::Pop(self);  
+    return self;
+    }
+
+CIntegerItem* CIntegerItem::NewL(RReadStream& aStream)
+    {   
+    CIntegerItem *self = new(ELeave)CIntegerItem(0);
+    CleanupStack::PushL(self);
+    self->InternalizeL(aStream);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+void CIntegerItem::ConstructL(const TDesC& aName)
+    {
+    SetNameL(aName);
+    SetValueSize(sizeof(TInt));
+    }
+
+void CIntegerItem::ExternalizeL(RWriteStream& aStream) const
+    {
+    CItemBase::ExternalizeL(aStream);
+    aStream.WriteInt32L(iInteger);
+    }
+
+void CIntegerItem::InternalizeL(RReadStream& aStream)
+    {
+    CItemBase::InternalizeL(aStream);
+    iInteger = aStream.ReadInt32L();
+    }
+
+TInt CIntegerItem::IntegerValue() const
+    {
+    return iInteger;
+    }
+
+const HBufC& CIntegerItem::Name() const
+    {
+    return CItemBase::Name(); 
+    }
+
+MOpaqueParam::TType CIntegerItem::Type() const
+    {
+    return CItemBase::Type();
+    }
+
+TInt CIntegerItem::ValueSize() const
+    {
+    return CItemBase::ValueSize();
+    }
+
+CIntegerItem::~CIntegerItem()
+    {
+    }
+
+/*
+ * CIntegerArrayItem
+ */
+
+CIntegerArrayItem::CIntegerArrayItem():
+    CItemBase(EIntegerArray)
+    {
+    
+    }
+
+CIntegerArrayItem* CIntegerArrayItem::NewL(const TDesC& aName, const RArray<TInt>& aValueArray)
+    {
+    CIntegerArrayItem* self = new(ELeave)CIntegerArrayItem();
+    CleanupStack::PushL(self);
+    self->ConstructL(aName, aValueArray);
+    CleanupStack::Pop(self);    
+    return self;
+    }
+
+CIntegerArrayItem* CIntegerArrayItem::NewL(RReadStream& aStream)
+    {   
+    CIntegerArrayItem *self = new(ELeave)CIntegerArrayItem();
+    CleanupStack::PushL(self);    
+    self->InternalizeL(aStream);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+
+void CIntegerArrayItem::ConstructL(const TDesC& aName, const RArray<TInt>& aValueArray)
+    {
+    SetNameL(aName);
+    
+    for(TInt i=0; i<aValueArray.Count(); ++i)
+        {
+        iIntegerArray.AppendL(aValueArray[i]);
+        SetValueSize(ValueSize()+sizeof(TInt));
+        }
+    }
+
+void CIntegerArrayItem::ExternalizeL(RWriteStream& aStream) const
+    {
+    CItemBase::ExternalizeL(aStream);
+    ExternalizeFixedLengthArrayL(iIntegerArray, aStream);
+    }
+
+void CIntegerArrayItem::InternalizeL(RReadStream& aStream)
+    {
+    CItemBase::InternalizeL(aStream);
+    iIntegerArray.Reset();
+    InternalizeFixedLengthArrayL(iIntegerArray, aStream);
+    }
+
+const RArray<TInt>& CIntegerArrayItem::IntegerArrayValue() const
+    {
+    return iIntegerArray;
+    }
+
+const HBufC& CIntegerArrayItem::Name() const
+    {
+    return CItemBase::Name(); 
+    }
+
+MOpaqueParam::TType CIntegerArrayItem::Type() const
+    {
+    return CItemBase::Type();
+    }
+
+TInt CIntegerArrayItem::ValueSize() const
+    {
+    return CItemBase::ValueSize();
+    }
+
+CIntegerArrayItem::~CIntegerArrayItem()
+    {
+    iIntegerArray.Close();
+    }

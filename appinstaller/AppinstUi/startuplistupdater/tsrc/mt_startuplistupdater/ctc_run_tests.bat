@@ -26,7 +26,7 @@ echo test cases listed in conf\mt_startuplistupdater.cfg file. Use ctcpost
 echo and ctc2html commands to process the CTC output file (MON.dat).
 echo.
 pushd ..\..\group
-call \epoc32\release\winscw\udeb\ATSInterface.exe –testmodule testscripter –config c:\testframework\mt_startuplistupdater.cfg
+call \epoc32\release\winscw\udeb\ATSInterface.exe -testmodule testscripter -config c:\testframework\mt_startuplistupdater.cfg
 
 echo.
 echo.

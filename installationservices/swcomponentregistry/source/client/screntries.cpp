@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,6 +30,7 @@
 #include "usiflog.h"
 #include <scs/streamingarray.h>
 #include <scs/cleanuputils.h>
+#include <usif/scr/screntries_platform.h>
 
 using namespace Usif;
 
@@ -841,6 +842,158 @@ EXPORT_C const TDesC& CLocalizableComponentInfo::VendorL() const
 	return *iVendor;
 	}
 			
+/////////////////////////////
+// TCustomAccessInfo
+/////////////////////////////
+
+EXPORT_C TCustomAccessInfo::TCustomAccessInfo(TSecureId aSecureId, TAccessMode aAccessMode)
+    {
+    iSecureId = aSecureId;
+    iAccessMode = aAccessMode;
+    }
+
+EXPORT_C TSecureId TCustomAccessInfo::SecureId() const
+    {
+    return iSecureId;
+    }
+
+EXPORT_C TAccessMode TCustomAccessInfo::AccessMode() const
+    {
+    return iAccessMode;
+    }
+
+/////////////////////////////
+// CSoftwareTypeRegInfo
+/////////////////////////////
+
+EXPORT_C CSoftwareTypeRegInfo* CSoftwareTypeRegInfo::NewL(const TDesC& aUniqueSoftwareTypeName)
+	{
+	CSoftwareTypeRegInfo* self = new (ELeave) CSoftwareTypeRegInfo();
+	CleanupStack::PushL(self);
+	self->iUniqueSoftwareTypeName = HBufC::NewL(aUniqueSoftwareTypeName.Length());
+	self->iUniqueSoftwareTypeName->Des().Copy(aUniqueSoftwareTypeName);
+	CleanupStack::Pop(self);
+	return self;
+	}
+
+EXPORT_C CSoftwareTypeRegInfo* CSoftwareTypeRegInfo::NewL(RReadStream& aStream)
+	{
+	CSoftwareTypeRegInfo* self = new (ELeave) CSoftwareTypeRegInfo();
+	CleanupStack::PushL(self);
+	self->InternalizeL(aStream);
+	CleanupStack::Pop(self);
+	return self;
+	}
+
+CSoftwareTypeRegInfo::CSoftwareTypeRegInfo()
+	{
+	}
+
+EXPORT_C CSoftwareTypeRegInfo::~CSoftwareTypeRegInfo()
+	{
+	delete iUniqueSoftwareTypeName;
+	iCustomAccessList.Close();
+	iMimeTypes.Close();
+	iLocalizedSoftwareTypeNames.Close();
+	delete iLauncherExecutable;
+	}
+
+EXPORT_C void CSoftwareTypeRegInfo::ExternalizeL(RWriteStream& aStream) const
+	{
+	aStream << *iUniqueSoftwareTypeName;
+	aStream << iSifPluginUid.iUid;
+	
+	//Sids
+	const TInt numSids = iCustomAccessList.Count();
+	aStream.WriteInt32L(numSids);
+	for (TInt i=0; i< numSids; ++i)
+	    {
+	    TUid sid = iCustomAccessList[i].SecureId();
+	    aStream << sid.iUid;
+	    aStream.WriteInt32L(iCustomAccessList[i].AccessMode());
+	    }
+	
+	// MIME types
+	const TInt numMimeTypes = iMimeTypes.Count();
+	aStream.WriteInt32L(numMimeTypes);
+	for (TInt i=0; i<numMimeTypes; ++i)
+		{
+		aStream << *iMimeTypes[i];
+		}
+	 
+	// Localized names
+	const TInt numLocalizedNames = iLocalizedSoftwareTypeNames.Count();
+	aStream.WriteInt32L(numLocalizedNames);
+	for (TInt i=0; i<numLocalizedNames; ++i)
+		{
+		aStream << *iLocalizedSoftwareTypeNames[i];
+		}
+
+	// Launcher executable
+	aStream << *iLauncherExecutable;
+	}
+
+void CSoftwareTypeRegInfo::InternalizeL(RReadStream& aStream)
+	{
+	ASSERT(iUniqueSoftwareTypeName == NULL);
+	
+	iUniqueSoftwareTypeName = HBufC::NewL(aStream, EUniqueSwTypeNameMaxLength);
+	
+	iSifPluginUid = TUid::Uid(aStream.ReadInt32L());
+	
+	// Sids
+	const TInt numSids = aStream.ReadInt32L();
+	for (TInt i=0; i<numSids; ++i)
+	    {
+	    TSecureId secId(TUid::Uid(aStream.ReadInt32L()));
+	    TCustomAccessInfo customAccessInfo(secId, static_cast<TAccessMode>(aStream.ReadInt32L()));
+	    iCustomAccessList.AppendL(customAccessInfo);
+	    }
+	        
+	// MIME types
+	const TInt numMimeTypes = aStream.ReadInt32L();
+	for (TInt i=0; i<numMimeTypes; ++i)
+		{
+		HBufC* mimeType = HBufC::NewLC(aStream, EUniqueSwTypeNameMaxLength);
+		iMimeTypes.AppendL(mimeType);
+		CleanupStack::Pop(mimeType);
+		}
+	
+	// Localized names
+	const TInt numLocalizedNames = aStream.ReadInt32L();
+	for (TInt i=0; i<numLocalizedNames; ++i)
+		{
+		CLocalizedSoftwareTypeName* name = CLocalizedSoftwareTypeName::NewL(aStream);
+		CleanupStack::PushL(name);
+		iLocalizedSoftwareTypeNames.AppendL(name);
+		CleanupStack::Pop(name);
+		}
+
+	iLauncherExecutable = HBufC::NewL(aStream, ELauncherExecutableMaxLength);
+	}
+
+EXPORT_C void CSoftwareTypeRegInfo::SetMimeTypeL(const TDesC& aMimeType)
+	{
+	HBufC* mimeType = HBufC::NewLC(aMimeType.Length());
+	mimeType->Des().Copy(aMimeType);
+	iMimeTypes.AppendL(mimeType);
+	CleanupStack::Pop(mimeType);
+	}
+
+EXPORT_C void CSoftwareTypeRegInfo::SetLocalizedSoftwareTypeNameL(TLanguage aLanguage, const TDesC& aName)
+	{
+	CLocalizedSoftwareTypeName* name = CLocalizedSoftwareTypeName::NewLC(aName, aLanguage);
+	iLocalizedSoftwareTypeNames.AppendL(name);
+	CleanupStack::Pop(name);
+	}
+
+EXPORT_C void CSoftwareTypeRegInfo::SetLauncherExecutableL(const TDesC& aLauncherExecutable)
+    {
+    HBufC* launcherExecutable = HBufC::NewLC(aLauncherExecutable.Length());
+    launcherExecutable->Des().Copy(aLauncherExecutable);
+    iLauncherExecutable = launcherExecutable;
+    CleanupStack::Pop(launcherExecutable);
+    }
 
 /////////////////////////////
 // CComponentFilter
@@ -858,6 +1011,7 @@ CComponentFilter::~CComponentFilter()
 	delete iSwType;
 	delete iFile;
 	iPropertyList.ResetAndDestroy();
+	iPropertyOperatorList.Reset();
 	}
 
 EXPORT_C CComponentFilter* CComponentFilter::NewL()
@@ -954,27 +1108,33 @@ EXPORT_C void CComponentFilter::SetInstalledDrivesL(const TDriveList& aDrives)
 	iSetFlag |= EInstalledDrive;
 	}
 					
-EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, const TDesC& aValue, TLanguage aLocale)
+EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, const TDesC& aValue, TLanguage aLocale,
+        TDbOperator aNameOperator, TDbOperator aValueOperator)
 	{
 	CPropertyEntry *prop = CLocalizablePropertyEntry::NewLC(aName, aValue, aLocale);
 	iPropertyList.AppendL(prop);
 	CleanupStack::Pop(prop);
+	iPropertyOperatorList.AppendL(TPropertyOperator(aNameOperator, aValueOperator));
 	iSetFlag |= EProperty;
 	}
 
-EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, TInt64 aValue)
+EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, TInt64 aValue, TDbOperator aNameOperator, 
+        TDbOperator aValueOperator)
 	{
 	CPropertyEntry *prop = CIntPropertyEntry::NewLC(aName, aValue);
 	iPropertyList.AppendL(prop);
 	CleanupStack::Pop(prop);
+	iPropertyOperatorList.AppendL(TPropertyOperator(aNameOperator, aValueOperator));
 	iSetFlag |= EProperty;
 	}
 
-EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, const TDesC8& aValue)
+EXPORT_C void CComponentFilter::AddPropertyL(const TDesC& aName, const TDesC8& aValue, TDbOperator aNameOperator, 
+        TDbOperator aValueOperator)
 	{
 	CPropertyEntry *prop = CBinaryPropertyEntry::NewLC(aName, aValue);
 	iPropertyList.AppendL(prop);
 	CleanupStack::Pop(prop);
+	iPropertyOperatorList.AppendL(TPropertyOperator(aNameOperator, aValueOperator));
 	iSetFlag |= EProperty;	
 	}
 
@@ -995,6 +1155,7 @@ EXPORT_C void CComponentFilter::ExternalizeL(RWriteStream& aStream) const
 	aStream << iInstalledDrives;
 	aStream << TCardinality(iRemovable);
 	ExternalizePointersArrayL(iPropertyList, aStream);
+	ExternalizeFixedLengthArrayL(iPropertyOperatorList, aStream);
 	aStream << *iFile;
 	aStream << TCardinality(iDrmProtected);
 	aStream << TCardinality(iHidden);
@@ -1019,6 +1180,8 @@ void CComponentFilter::InternalizeL(RReadStream& aStream)
 	iRemovable = c;
 	iPropertyList.Reset();
 	InternalizePointersArrayL(iPropertyList, aStream);
+	iPropertyOperatorList.Reset();
+	InternalizeFixedLengthArrayL(iPropertyOperatorList, aStream);
 	DeleteObjectZ(iFile);
 	iFile = HBufC::NewL(aStream, KMaxTInt); // No restriction on length
 	// Read if it is DRM protected
@@ -1217,3 +1380,31 @@ EXPORT_C TComponentId CScrLogEntry::ComponentId() const
 	{
 	return iComponentId;
 	}
+
+EXPORT_C CComponentFilter::TPropertyOperator::TPropertyOperator(TDbOperator aNameOperator, TDbOperator aValueOperator):
+        iNameOperator(aNameOperator),
+        iValueOperator(aValueOperator)
+    {
+    }
+
+void CComponentFilter::TPropertyOperator::ExternalizeL(RWriteStream& aStream) const
+    {
+    aStream.WriteInt32L(iNameOperator);
+    aStream.WriteInt32L(iValueOperator);
+    }
+
+EXPORT_C void CComponentFilter::TPropertyOperator::InternalizeL(RReadStream& aStream)
+    {
+    iNameOperator = static_cast<TDbOperator>(aStream.ReadInt32L());
+    iValueOperator = static_cast<TDbOperator>(aStream.ReadInt32L());
+    }
+
+EXPORT_C CComponentFilter::TDbOperator CComponentFilter::TPropertyOperator::NameOperator() const
+    {
+    return iNameOperator;
+    }
+
+EXPORT_C CComponentFilter::TDbOperator CComponentFilter::TPropertyOperator::ValueOperator() const
+    {
+    return iValueOperator;
+    }

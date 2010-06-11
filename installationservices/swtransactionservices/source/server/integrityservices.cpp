@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -131,43 +131,6 @@ const TInt KIntegrityServicesSimulatedBatteryFailure=-10205;
 		}			
 }
 
-void CIntegrityServices::CopyToBackupL(const TDesC& aSource, const TDesC& aBackup)
-{
-	// Copying a file isn't atomic so we create a temporary backup file first
-	RBuf backupTmpName;
-	backupTmpName.Create(aBackup.Length() + 4);
-	CleanupClosePushL(backupTmpName);
-	backupTmpName.Copy(aBackup);
-	_LIT(KTmpExt, ".tmp");
-	backupTmpName.Append(KTmpExt);
-	
-	// Copying a file is not an atomic operation so add the temporary
-	// file to the journal to enable cleanup if a power failure occurs before
-	// the rename
-	SimulatePowerFailureL(EFailAddingTempFile, EBeforeJournal, backupTmpName);
-	RegisterTemporaryL(backupTmpName);
-	SimulatePowerFailureL(EFailAddingTempFile, EAfterJournal, backupTmpName);	
-		
-	CFileMan* fileMan = CFileMan::NewL(iFs);
-	CleanupStack::PushL(fileMan);
-		
-	TInt err = fileMan->Copy(aSource, backupTmpName);
-	DEBUG_PRINTF4(_L("CIntegrityServices::CopyToBackupL() - Copying %S to %S, err %d"), &aSource, &backupTmpName, err);
-	User::LeaveIfError(err);
-	
-	// Backup is complete, use RFs::Rename as atomic 'commit' of backup
-	err = iFs.Rename(backupTmpName, aBackup);			
-	DEBUG_PRINTF2(_L("CIntegrityServices::CopyToBackupL() - Commit backup returned error %d"), err);	
-	User::LeaveIfError(err);	
-	CleanupStack::PopAndDestroy(2, &backupTmpName); // backupTmpName, fileMan 
-	
-	//  Now the backup is safe the original can be deleted
-	err = iLoader.Delete(aSource);
-	DEBUG_PRINTF3(_L("CIntegrityServices::CopyToBackupL() - RLoader::Delete %S returned error %d"), &aSource, err);
-	User::LeaveIfError(err);
-}
-
-
  void CIntegrityServices::RegisterNewL(const TDesC& aFileName)
 	{
 	DEBUG_PRINTF3(_L("CIntegrityServices::RegisterNewL() - Session %X, File: %S."),	iTransactionID, &aFileName);
@@ -253,19 +216,9 @@ void CIntegrityServices::CopyToBackupL(const TDesC& aSource, const TDesC& aBacku
 		VerifyMkDirErrorL(err);
 
 		SimulatePowerFailureL(EFailRemovingFile, EBeforeAction, aFileName);
-		_LIT(KSysBinMatch, "?:\\sys\\bin\\*");
-		if (localFilename.MatchF(KSysBinMatch) == 0)
-		{
-			// A copy is slower than a rename to only use the 
-			// demand paging safe API for files in sys\bin
-			CopyToBackupL(localFilename, backupFileName);			
-		}
-		else
-		{
 			err = iFs.Rename(localFilename, backupFileName);
 			DEBUG_PRINTF4(_L("CIntegrityServices::RemoveL() - Renamed %S as %S error %d"), &localFilename, &backupFileName, err);
 			User::LeaveIfError(err);
-		}				
 		SimulatePowerFailureL(EFailRemovingFile, EAfterAction, aFileName);
 		}
 	else

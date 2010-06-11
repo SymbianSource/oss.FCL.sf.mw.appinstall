@@ -64,7 +64,7 @@ class CSifUi : public CBase
         /**
          * Destructor.
          */
-        CSifUi::~CSifUi();
+        ~CSifUi();
 
     public:     // new functions
         /**
@@ -119,10 +119,38 @@ class CSifUi : public CBase
          * Updates the progress bar value displayed in progress note. Initially progress bar
          * shows 0%. Each aIncrement increases the value displayed in progress bar. When all
          * increments reach the final value defined in ShowProgressNoteL() method, then the
-         * progress bar shows full 100%.
+         * progress bar shows full 100%. Caller should check using IsCancelled() method if
+         * the user has cancelled the progress note before updating the progress bar value.
          * @param aIncrement - progress bar value increment
          */
         IMPORT_C void IncreaseProgressBarValueL( TInt aIncrement );
+
+        /**
+         * Returns ETrue if the user has cancelled the progress dialog.
+         * @return TBool - ETrue if the progress dialog has been cancelled
+         */
+        IMPORT_C TBool IsCancelled();
+
+        /**
+         * Toolbar buttons in progress and complete notes that can be disabled/hidden.
+         */
+        enum TOptionalButton
+            {
+            EHideProgressButton,
+            ECancelProgressButton,
+            EShowInAppLibButton,
+            EErrorDetailsButton
+            };
+
+        /**
+         * Hides or shows optional toolbar buttons from installation progress note
+         * or installation complete note. All optional buttos are visible by default.
+         * Buttons visibility becomes effective in the next ShowProgressL(),
+         * ShowCompleteL(), or IncreseProgressBarValueL() method calls.
+         * @param aButton - button which visibility is changed
+         * @param aIsVisible - EFalse if button needs to be hidden
+         */
+        IMPORT_C void SetButtonVisible( TOptionalButton aButton, TBool aIsVisible );
 
         /**
          * Displays main installation complete note. Installation complete note contains
@@ -139,24 +167,6 @@ class CSifUi : public CBase
          */
         IMPORT_C void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
             const TDesC& aErrorDetails = KNullDesC );
-
-
-
-        /** DEPRECATED -- DO NOT USE -- WILL BE REMOVED */
-        enum TMode {
-            EUnspecified = 0,
-            EInstalling = 1,
-            EUninstalling = 2
-        };
-        IMPORT_C void SetMode( TMode aMode );
-        IMPORT_C TMode Mode();
-        IMPORT_C void ShowFailedL( TInt aErrorCode );
-        IMPORT_C void SetCertificateInfoL(
-                const RPointerArray<Swi::CCertificateInfo>& aCertificates );
-        IMPORT_C TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo,
-                TInt aAppSize = 0, const CApaMaskedBitmap* aAppIcon = NULL );
-        IMPORT_C void ShowProgressL( const Swi::CAppInfo& aAppInfo,
-                 TInt aAppSize, TInt aProgressBarFinalValue );
 
     private:    // new functions
         CSifUi();

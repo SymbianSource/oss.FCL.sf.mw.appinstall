@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -255,6 +255,56 @@ void Installer::SanitiseSISFileAttributes(const InstallSISFile& aInstallSISFile)
 	}
 }
 
+void Installer::ProcessConditionalBlockWarnings(const CSISInstallBlock& aInstallBlock, 
+											  ExpressionEvaluator& aEvaluator,
+											  const SisFile& aFile
+											  ) 
+	{
+	const CSISArray<CSISIf, CSISFieldRoot::ESISIf>& ifs = aInstallBlock.Ifs();
+	for (int i = 0; i < ifs.size(); ++i)
+		{
+		const CSISIf& ifBlock = ifs[i];
+
+		if (ifBlock.WasteOfSpace())
+			{
+			return;
+			}
+
+		// Main expression
+		if ( aEvaluator.Evaluate(ifBlock.Expression(),false).BoolValue() )
+			{
+			ProcessInstallBlockWarnings(ifBlock.InstallBlock(), aFile);
+			ProcessConditionalBlockWarnings(ifBlock.InstallBlock(), aEvaluator, aFile);
+			continue;
+			}
+		
+		int elseCount = ifBlock.ElseIfCount();
+		for (int i = 0; i < elseCount; ++i)
+			{
+			const CSISElseIf& elseIfBlock = ifBlock.ElseIf(i) ;
+			if ( aEvaluator.Evaluate(elseIfBlock.Expression(),false).BoolValue())
+				{
+				ProcessInstallBlockWarnings(elseIfBlock.InstallBlock(), aFile);
+				ProcessConditionalBlockWarnings(elseIfBlock.InstallBlock(), aEvaluator, aFile);
+				break;	// Stop processing else if blocks
+				}
+			}
+		} 
+	}
+
+void Installer::ProcessInstallBlockWarnings(const CSISInstallBlock& aInstallBlock, const SisFile& aFile)
+	{
+	aFile.ProcessEmbeddedFileWarning(aInstallBlock);
+	
+	std::string error;
+	bool result = aFile.ProcessInstallOptionsWarning(aInstallBlock,error);	
+	if(result == false)
+		{
+		std::string x;
+		throw InvalidSis(Ucs2ToUtf8(aFile.GetPackageName(),x),
+			error, SIS_NOT_SUPPORTED);
+		}
+	}
 
 TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 {
@@ -273,6 +323,9 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 	// check file is acceptable
 	file.CheckValid();
 
+	const CSISController& ctrl = file.GetController();	
+	ProcessConditionalBlockWarnings(ctrl.InstallBlock(), *iExpressionEvaluator, file);
+	
 	if (!DependenciesOk(file))
 	{
 		return MISSING_DEPENDENCY;

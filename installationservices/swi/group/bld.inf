@@ -124,7 +124,9 @@ sislauncherserver.mmp
 installserver.mmp
 uiss.mmp
 backuprestore.mmp
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 swisidchecker.mmp
+#endif
 pkgremover.mmp
 #ifndef __WINS__
 sishelper_tshell.mmp
@@ -462,6 +464,9 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/testwritableswicertstore.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testwritableswicertstore.script
 ../test/tuiscriptadaptors/scripts/tuiscriptadaptors.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tuiscriptadaptors.ini
 ../test/tuiscriptadaptors/scripts/tuiscriptadaptors.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tuiscriptadaptors.script
+../test/tuiscriptadaptors/scripts/nonusiftuiscriptadaptors.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/nonusiftuiscriptadaptors.script
+../test/tuiscriptadaptors/scripts/tuiscriptadaptors_app_performance.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tuiscriptadaptors_app_performance.ini
+../test/tuiscriptadaptors/scripts/tuiscriptadaptors_app_performance.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tuiscriptadaptors_app_performance.script
 ../test/tuiscriptadaptors/scripts/tuiscriptadaptors_winscw.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tuiscriptadaptors_winscw.script
 ../test/tuiscriptadaptors/scripts/testvids.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testvids.script
 ../test/tuiscriptadaptors/scripts/testvids.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testvids.ini

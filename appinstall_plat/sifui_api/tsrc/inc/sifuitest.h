@@ -38,6 +38,7 @@ _LIT( KSifUiTestLogFileWithTitle, "SifUiTest_[%S].txt" );
 #define OOM_ENTRY(str,func,a,b,c) {_S(str), GETPTR func,a,b,c}
 #define OOM_FUNCENTRY(func,a,b,c) {_S(#func), GETPTR func,a,b,c}
 
+class CX509Certificate;
 class CSifUiTest;
 class CSifUi;
 
@@ -143,10 +144,9 @@ NONSHARABLE_CLASS(CSifUiTest) : public CTestModuleBase
                 const TKeyEvent& aKeyEvent ) const;
 
         /**
-         * Helper function to create new CSifUi object in iSifUi member.
-         * @return TInt - result code for creating new CSifUi
+         * Helper function to create Swi::CCertificateInfo objects.
          */
-        TInt CreateSifUi();
+        CX509Certificate* ReadCertificateL( const TDesC& aFileName );
 
 
         // --- TEST CASE FUNCTIONS ---
@@ -159,53 +159,52 @@ NONSHARABLE_CLASS(CSifUiTest) : public CTestModuleBase
         TInt CreateLowMemTest( TTestResult& aResult );
 
         /**
-         * Run information note test case.
+         * Run drive selection test case.
          * @param aResult - test case result (PASS/FAIL)
          * @return Symbian OS error code (other than test result)
          */
-        TInt InformationNoteTest( TTestResult& aResult );
+        TInt MemorySelectionTest( TTestResult& aResult );
 
         /**
-         * Run warning note test case.
-         * @param aResult - test case result (PASS/FAIL)
-         * @return Symbian OS error code (other than test result)
+         * Helper function for MemorySelectionTest()
          */
-        TInt WarningNoteTest( TTestResult& aResult );
+        void DoMemorySelectionTestL( TTestResult& aResult );
 
         /**
-         * Run error note test case.
+         * Run certificate info test case.
          * @param aResult - test case result (PASS/FAIL)
          * @return Symbian OS error code (other than test result)
          */
-        TInt ErrorNoteTest( TTestResult& aResult );
+        TInt CertificateInfoTest( TTestResult& aResult );
 
         /**
-         * Run permanent note test case.
-         * @param aResult - test case result (PASS/FAIL)
-         * @return Symbian OS error code (other than test result)
+         * Helper function for CertificateInfoTest()
          */
-        TInt PermanentNoteTest( TTestResult& aResult );
+        void DoCertificateInfoTestL( TTestResult& aResult );
 
         /**
-         * Run progress note test case.
+         * Run application info test case.
          * @param aResult - test case result (PASS/FAIL)
          * @return Symbian OS error code (other than test result)
          */
-        TInt ProgressNoteTest( TTestResult& aResult );
+        TInt AppInfoTest( TTestResult& aResult );
 
         /**
-         * Run wait note test case.
+         * Helper function for AppInfoTest()
+         */
+        void DoAppInfoTestL( TTestResult& aResult );
+        
+        /**
+         * Run progress dialogs test case.
          * @param aResult - test case result (PASS/FAIL)
          * @return Symbian OS error code (other than test result)
          */
-        TInt WaitNoteTest( TTestResult& aResult );
+        TInt ProgressDialogsTest( TTestResult& aResult );
 
         /**
-         * Run launch help test case.
-         * @param aResult - test case result (PASS/FAIL)
-         * @return Symbian OS error code (other than test result)
+         * Helper function for ProgressDialogsTest()
          */
-        TInt LaunchHelpTest( TTestResult& aResult );
+        void DoProgressDialogsTestL( TTestResult& aResult );
 
     private:        // data
         TestFunction iMethod;
@@ -216,8 +215,6 @@ NONSHARABLE_CLASS(CSifUiTest) : public CTestModuleBase
         TBool iVersionLogged;
         RFs iFs;
         CActiveScheduler* iScheduler;
-
-        CSifUi* iSifUi;
     };
 
 #endif      // SIFUITEST_H

@@ -88,8 +88,8 @@ switch(role)
         if ( mNrOfUpdates == 0 )
             {
             // First time case
-            // loc: text.append(hbTrId("txt_software_update_list_software_update"));
-            text.append(QString("Check for updates?"));
+            // loc: text.append(hbTrId("txt_software_dblist_update_checking"));
+            text.append(QString("Update checking"));
             }
         else if ( mNrOfUpdates == 1 )
             {
@@ -111,20 +111,20 @@ switch(role)
         if ( mNrOfUpdates == 0 )
             {
             // First time case
-            // loc: QString text(hbTrId("txt_software_update_list_software_update"));
-            text.append(QString("Tap to view"));
+            // loc: QString text(hbTrId("txt_software_dblist_val_not_activated"));
+            text.append(QString("Not activated"));
             }
         else if ( mNrOfUpdates == 1 )
             {
             // one update available
-            // loc: QString text(hbTrId("txt_software_dblist_val_1_new"));
-            text.append(QString("%1 new").arg(mNrOfUpdates));
+            // loc: QString text(hbTrId("txt_software_dblist_1_val_ln_update"));
+            text.append(QString("%Ln updates").arg(mNrOfUpdates));
             }
         else
             {
             // several updates available
-            // loc: QString text(hbTrId("txt_software_dblist_val_ln_new"));
-            text.append(QString("%1 new").arg(mNrOfUpdates));
+            // loc: QString text(hbTrId("txt_software_dblist_1_val_ln_update"));
+            text.append(QString("%%Ln updates").arg(mNrOfUpdates));
             }
         return text; 
         }

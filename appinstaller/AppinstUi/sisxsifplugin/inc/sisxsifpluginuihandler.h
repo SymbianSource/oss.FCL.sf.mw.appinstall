@@ -22,6 +22,7 @@
 #include "sisxsifpluginuihandlerbase.h" // CSisxSifPluginUiHandlerBase
 
 class CSifUi;
+class CSifUiAppInfo;
 class CSisxSifUiSelectionCache;
 
 
@@ -87,7 +88,8 @@ namespace Usif
     public:     // from CSisxSifPluginUiHandlerBase
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
-        void DisplayFailedL( TInt aErrorCode );
+        void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
+                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
 
     public:     // new functions
         void SetDriveSelectionRequired( TBool aIsRequired );
@@ -98,6 +100,7 @@ namespace Usif
         void AddMemorySelectionL();
         void AddCertificatesL( RPointerArray<Swi::CCertificateInfo>& aCertificates,
                 RPointerArray<CPKIXValidationResultBase>& aPkixResults );
+        CSifUiAppInfo* GetAppInfoLC( const Swi::CAppInfo& aAppInfo );
 
     private:    // data
         enum TMode
@@ -110,8 +113,8 @@ namespace Usif
         CSisxSifUiSelectionCache* iSelectionCache;
         CApaMaskedBitmap* iLogo;
         TBool iQuestionIncompatibleDisplayed;
-        TBool iDriveSelectionRequired;
         RArray<TInt> iSelectableDrives;
+        TInt iProgressBarFinalValue;
         };
 
 }   // namespace Usif

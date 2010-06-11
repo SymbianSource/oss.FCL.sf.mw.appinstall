@@ -47,6 +47,7 @@
 #include "apprscparser.h"
 #include "ipcutil.h"
 #include <usif/scr/appregentries.h>
+#include <usif/scr/screntries_platform.h>
 #include "sislauncherclient.h" 
 #endif
 
@@ -343,7 +344,7 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
             if (Server().BootUpMode() == KTextShell) 
                 {
                 // emulator tests running in textshell or in textshell ROM (#def SWI_TEXTSHELL_ROM)
-                DEBUG_PRINTF(_L8("Sis Launcher Server - textshell - skipping notification of new applications."));
+                DEBUG_PRINTF(_L8("Sis Launcher Server - TextShell - skipping notification of new applications (ENotifyNewApps)."));
                 }
             else
                 {
@@ -417,14 +418,14 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
             if (Server().BootUpMode() == KTextShell) 
                 {
                 // emulator tests running in textshell or in textshell ROM (#def SWI_TEXTSHELL_ROM)
-                DEBUG_PRINTF(_L8("Sis Launcher Server - textshell - skipping notification of new applications."));
+                DEBUG_PRINTF(_L8("Sis Launcher Server - TextShell - Skipping notification of force registered applications."));
                 }
             else
                 {
                 // emulatore running with GUI
                 #ifndef SWI_TEXTSHELL_ROM
                 Server().NotifyNewAppsL(appRegInfo);
-            #endif // SWI_TEXTSHELL_ROM
+                #endif // SWI_TEXTSHELL_ROM
                 }
             appRegInfo.ResetAndDestroy();
             CleanupStack::PopAndDestroy(2);
@@ -433,9 +434,17 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
             }
         case ENotifyApparcForApps:
             {
-            #ifndef SWI_TEXTSHELL_ROM
-            NotifyApparcForAppsL(aMessage);  
-            #endif
+            if (Server().BootUpMode() == KTextShell) 
+                {
+                DEBUG_PRINTF(_L8("Sis Launcher Server - TextShell - Skipping notification of applications (ENotifyApparcForApps)."));
+                }
+            else
+                {
+                #ifndef SWI_TEXTSHELL_ROM
+                NotifyApparcForAppsL(aMessage);  
+                #endif
+                }
+            aMessage.Complete(KErrNone);
             break;
             }
 #endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
@@ -583,7 +592,7 @@ void CSisLauncherSession::ParseSwTypeRegFileL(const RMessage2& aMessage)
     User::LeaveIfError(file.Read(bufPtr));
 
     // Parse the registration file
-    RCPointerArray<CSoftwareTypeRegInfo> regInfoArray;
+	RCPointerArray<Usif::CSoftwareTypeRegInfo> regInfoArray;
     CleanupClosePushL(regInfoArray);
     
     CSoftwareTypeRegInfoParser* parser = CSoftwareTypeRegInfoParser::NewL();
@@ -602,16 +611,24 @@ void CSisLauncherSession::ParseSwTypeRegFileL(const RMessage2& aMessage)
 #ifndef SWI_TEXTSHELL_ROM
 void CSisLauncherSession::NotifyApparcForAppsL(const RMessage2& aMessage)
     {
+    DEBUG_PRINTF(_L8("Sending the notification to AppArc."));
     RIpcReadStream readStream;
     readStream.Open(aMessage, 0);
     CleanupClosePushL(readStream);    
     RArray<TApaAppUpdateInfo> apparcAppInfoArray;
-    CleanupClosePushL(apparcAppInfoArray);        
+    CleanupClosePushL(apparcAppInfoArray);
+    
     RApaLsSession apaSession;
-    User::LeaveIfError(apaSession.Connect());
+    TInt err = apaSession.Connect();
+    if(KErrNone != err)
+        {
+        DEBUG_PRINTF2(_L8("RApaLsSession::Connect failed with %d. Notification to AppArc failed."), err);
+        User::LeaveIfError(err);
+        }
     CleanupClosePushL(apaSession);
     TApaAppUpdateInfo::TApaAppAction appaction = TApaAppUpdateInfo::EAppNotPresent;
     const TInt numElems = readStream.ReadInt32L();
+    DEBUG_PRINTF2(_L8("Number of applications to be notified is %d."), numElems);
     //Convert the local structure into the structure required by apparc
     for (TInt i=0; i<numElems; ++i)
         {
@@ -631,14 +648,15 @@ void CSisLauncherSession::NotifyApparcForAppsL(const RMessage2& aMessage)
         DEBUG_PRINTF2(_L("Action is %d"), appInfo.iAction);         
         }    
     
-    if(numElems > 0)
+    err = 0;
+    TRAP(err, err = apaSession.UpdateAppListL(apparcAppInfoArray));
+    if(KErrNone != err)
         {
-        apaSession.UpdateAppListL(apparcAppInfoArray);
+        DEBUG_PRINTF2(_L8("RApaLsSession::UpdateAppListL failed with %d. Notification to AppArc failed."), err);
+        User::LeaveIfError(err);
         }
-        
-    CleanupStack::PopAndDestroy(3, &readStream);
-    aMessage.Complete(KErrNone);
-       
+
+    CleanupStack::PopAndDestroy(3, &readStream);       
     }
 
 void CSisLauncherSession::RegisterSifLauncherMimeTypesL(const RMessage2& aMessage)

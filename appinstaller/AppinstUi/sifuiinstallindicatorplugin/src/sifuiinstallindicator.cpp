@@ -20,9 +20,28 @@
 #include <QVariant>
 #include <qvaluespacepublisher.h>
 
-const char KSifUiDefaultApplicationIcon[] = "qtg_large_application.svg";
+const char KSifUiDefaultApplicationIcon[] = "qtg_large_application";
+const char KSifUiErrorIcon[] = "qtg_large_warning";
 const QString KSifUiPathSeparator = "/";
 
+
+// ======== LOCAL FUNCTIONS =========
+
+// ---------------------------------------------------------------------------
+// getIntValue()
+// ---------------------------------------------------------------------------
+//
+void getIntValue(const QVariant &variant, int &value)
+{
+    bool ok = false;
+    int temp = variant.toInt(&ok);
+    if (ok) {
+        value = temp;
+    }
+}
+
+
+// ======== MEMBER FUNCTIONS ========
 
 // ---------------------------------------------------------------------------
 // SifUiInstallIndicator::SifUiInstallIndicator()
@@ -30,7 +49,8 @@ const QString KSifUiPathSeparator = "/";
 //
 SifUiInstallIndicator::SifUiInstallIndicator(const QString &indicatorType) :
     HbIndicatorInterface(indicatorType, HbIndicatorInterface::ProgressCategory,
-            InteractionActivated), mAppName(), mPublisher(0), mIsActive(false)
+            InteractionActivated), mAppName(), mProgress(0), mPublisher(0),
+            mIsActive(false), mPhase(Installing), mIsComplete(false), mErrorCode(0)
 {
     mPublisher = new QTM_PREPEND_NAMESPACE(QValueSpacePublisher(KSifUiInstallIndicatorPath));
 }
@@ -74,20 +94,60 @@ QVariant SifUiInstallIndicator::indicatorData(int role) const
 
     switch(role) {
         case DecorationNameRole:
-            data = QString(KSifUiDefaultApplicationIcon);
-            break;
-        case PrimaryTextRole:
-            //: Primary text for application installation progress displayed in
-            //: universal indicator menu. Secondary text is the application name.
-            // TODO: use localised UI string when available
-            data = tr("Installing");
-            // TODO: text must indicate installation phase, need to support also
-            // tr("Downloading") and tr("Doing OCSP checks")
-            break;
-        case SecondaryTextRole:
-            if (!mAppName.isEmpty()) {
-                data = tr("%1 (%L2 %)").arg(mAppName).arg(mProgress);
+            if (mIsComplete && mErrorCode) {
+                data = QString(KSifUiErrorIcon);
+            } else {
+                // TODO: how to set application specific icon if defined?
+                data = QString(KSifUiDefaultApplicationIcon);
             }
+            break;
+
+        case PrimaryTextRole:
+            if (mIsComplete) {
+                if (mErrorCode) {
+                    //: Indicates that application installation failed.
+                    // TODO: localized UI string needed
+                    data = tr("Installation failed");
+                } else {
+                    //: Indicates that application installation is completed.
+                    // TODO: localized UI string needed
+                    data = tr("Installed");
+                }
+            } else {
+                switch(mPhase) {
+                    case Installing:
+                        //: Indicates that application installation is ongoing.
+                        // TODO: localized UI string needed
+                        data = tr("Installing");
+                        break;
+                    case Downloading:
+                        //: Indicates that download is ongoing.
+                        // TODO: localized UI string needed
+                        data = tr("Downloading");
+                        break;
+                    case CheckingCerts:
+                        //: Indicates that OCSP check is ongoing.
+                        // TODO: localized UI string needed
+                        data = tr("Checking certificates");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            break;
+
+        case SecondaryTextRole:
+            if (mIsComplete) {
+                data = mAppName;
+            } else {
+                if (!mAppName.isEmpty()) {
+                    //: Application name %1 followed by installation progress %L2
+                    // TODO: localized UI string needed
+                    data = tr("%1 (%L2 %)").arg(mAppName).arg(mProgress);
+                }
+            }
+            break;
+
         default:
             break;
     }
@@ -125,12 +185,37 @@ bool SifUiInstallIndicator::handleClientRequest(RequestType type, const QVariant
 //
 void SifUiInstallIndicator::processParameters(const QVariant &parameter)
 {
-    if (parameter.isValid() && (parameter.type() == QVariant::String)) {
-        mAppName = parameter.toString();
-        mProgress = 0;
-
-        // TODO: get icon if standard icon needs to be replaced
-        // TODO: start listening USIF installation progress
+    if (parameter.isValid()) {
+        if (parameter.type() == QVariant::String) {
+            mAppName = parameter.toString();
+        } else if (parameter.type() == QVariant::Int) {
+            getIntValue(parameter, mProgress);
+        } else if (parameter.type() == QVariant::Map) {
+            QVariantMap map = parameter.toMap();
+            QMapIterator<QString,QVariant> iter(map);
+            while (iter.hasNext()) {
+                iter.next();
+                if (iter.key() == KSifUiInstallIndicatorAppNameKey) {
+                    mAppName = iter.value().toString();
+                } else if (iter.key() == KSifUiInstallIndicatorPhaseKey) {
+                    int value = Installing;
+                    getIntValue(iter.value(), value);
+                    mPhase = static_cast<Phase>(value);
+                } else if (iter.key() == KSifUiInstallIndicatorProgressKey) {
+                    getIntValue(iter.value(), mProgress);
+                } else if (iter.key() == KSifUiInstallIndicatorCompleteKey) {
+                    mIsComplete = true;
+                    mErrorCode = KErrNone;
+                    getIntValue(iter.value(), mErrorCode);
+                } else if (iter.key() == KSifUiInstallIndicatorIconKey) {
+                    // TODO: icon?
+                } else {
+                    // ignore other types
+                }
+            }
+        } else {
+            // ignore other types
+        }
     }
 }
 

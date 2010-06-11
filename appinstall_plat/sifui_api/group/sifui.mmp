@@ -38,9 +38,12 @@ MW_LAYER_SYSTEMINCLUDE
 
 LIBRARY         euser.lib       // User
 LIBRARY         HbCore.lib      // CHbDeviceDialog
+LIBRARY         HbWidgets.lib   // CHbDeviceNotificationDialogSymbian 
 LIBRARY         apgrfx.lib      // CApaMaskedBitmap
 LIBRARY         fbscli.lib      // CFbsBitmap
 LIBRARY         bafl.lib        // CDesC16ArrayFlat
 LIBRARY         efsrv.lib       // RFs
 LIBRARY         estor.lib       // RBufWriteStream
+
+SMPSAFE
 

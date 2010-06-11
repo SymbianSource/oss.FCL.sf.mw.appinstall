@@ -23,4 +23,5 @@ echo ----------------------------------------------------------------------
 echo.
 call qmake
 call make debug-winscw
+call make release-armv5
 

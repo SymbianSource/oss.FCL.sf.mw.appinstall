@@ -17,8 +17,8 @@
 */
 
 #include <hbaction.h>
-#include <qgraphicswidget>
-//#include <hblistview.h>
+#include <QgraphicsWidget>
+
 #include <hblistwidget.h>
 #include <hblistviewitem.h>
 #include <hblistwidgetitem.h>
@@ -27,13 +27,18 @@
 #include <hbdocumentloader.h>
 #include <xqconversions.h>
 #include <hbmessagebox.h>
+#include <hbtextitem.h>
 
 #include "iaupdatemainview.h"
 #include "iaupdateengine.h"
 #include "iaupdateagreement.h"
 #include "iaupdatedeputils.h"
+#include "iaupdatedialogutil.h"
+#include "iaupdateversion.h"
 
 #include "iaupdatedebug.h"
+
+
 
 const int KKiloByte = 1024;
 const int KMegaByte = 1024 * 1024;
@@ -41,8 +46,14 @@ const int KMaxShownInKiloBytes = 10 * KMegaByte;
 
 
 IAUpdateMainView::IAUpdateMainView(IAUpdateEngine *engine):
-mEngine( engine )        
+mEngine(engine)        
 {
+    mDialogUtil = NULL;
+    mDialogState = NoDialog;
+    mPrimaryAction = NULL;
+    mNode = NULL;
+    mSelectionUpdate = false;
+    
     HbDocumentLoader loader;
     bool ok = false;
     loader.load(":/xml/iaupdate_mainview.docml", &ok);
@@ -51,7 +62,6 @@ mEngine( engine )
     Q_ASSERT_X(ok, "Software update", "Invalid docml file");
     // Create the view from DocML
     
-    //QGraphicsWidget* widget = loader.findWidget("view");
     HbView* widget = qobject_cast<HbView*>(loader.findWidget("view"));
     Q_ASSERT_X(widget != 0, "Software update", "View not found");
     QString viewTitle(widget->title());
@@ -74,24 +84,16 @@ mEngine( engine )
     connect(action_1, SIGNAL(triggered()), this, SLOT(handleSettings()));
     connect(action_2, SIGNAL(triggered()), this, SLOT(handleDisclaimer()));
 
-    //mListView = qobject_cast<HbListView*>( loader.findWidget("listView") ); 
     mListView = qobject_cast<HbListWidget*>( loader.findWidget("listWidget") );
-    //mListView = loader.findWidget("listWidget");
     mListView->setSelectionMode( HbAbstractItemView::MultiSelection );
+    
+    connect( mListView, SIGNAL( longPressed( HbAbstractViewItem *, const QPointF & ) ),
+            this, SLOT( handleDetails( HbAbstractViewItem *, const QPointF & ) ) ); 
     
     HbListViewItem *prototype = mListView->listItemPrototype();
 
     prototype->setGraphicsSize(HbListViewItem::LargeIcon);
-    //prototype->setStretchingStyle(HbListViewItem::StretchLandscape);
-    //prototype->setSecondaryTextRowCount(1,1);
 
-    
-        
-    /*HbListWidgetItem* item = new HbListWidgetItem();
-    QStringList data;
-    data << "Test application" << "Critical";
-    item->setData(QVariant(data), Qt::DisplayRole);
-    mListWidget->addItem(item);*/
 }
     
 IAUpdateMainView::~IAUpdateMainView()
@@ -329,7 +331,7 @@ void IAUpdateMainView::refresh( const RPointerArray<MIAUpdateNode> &nodes,
         //iListBox->HandleItemAdditionL();
         }
      connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                    this, SLOT(handleSelectionChanged(QItemSelection)));     
+                    this, SLOT(handleSelectionChanged(QItemSelection,QItemSelection)));     
     
      IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh end");
      }
@@ -360,40 +362,81 @@ void IAUpdateMainView::handleStartUpdate()
 
 void IAUpdateMainView::handleSettings()
 {
+    emit toSettingView();
 }
 
 void IAUpdateMainView::handleDisclaimer()
 {
-    CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
-    agreement->ShowAgreementL();
-    CleanupStack::PopAndDestroy( agreement);
+    if (!mDialogUtil)
+    {
+        mDialogUtil = new IAUpdateDialogUtil(this);
+    }
+    if (mDialogUtil)
+    {
+        HbAction *primaryAction = new HbAction("OK");
+        mDialogUtil->showAgreement(primaryAction);
+    }
 }
 
-void IAUpdateMainView::handleSelectionChanged(QItemSelection itemSelection)
+void IAUpdateMainView::handleDetails( HbAbstractViewItem * item, const QPointF & )
 {
-    QModelIndexList indexList = itemSelection.indexes(); 
-    bool changedItemFound = false; 
-    for (int i = 0; !changedItemFound && i < mAllNodes.Count(); ++i)
+ 
+    
+    int ind = item->modelIndex().row();
+    if (getNode(ind) != NULL)
+    {    
+        showDetails(*getNode(ind));
+    }
+}
+
+
+void IAUpdateMainView::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if (!mSelectionUpdate)
     {
-        bool currentlySelected = false; 
-        for (int j = 0; !currentlySelected && j < indexList.count(); ++j)
+        bool changedItemFound = false; 
+        QModelIndexList indexList = selected.indexes();
+        for (int i = 0; !changedItemFound && i < indexList.count(); ++i)
+        {    
+            changedItemFound = true;
+            markListItem(true, indexList.at(i).row());
+        }
+        if (!changedItemFound)
         {
-            //QModelIndex modelIndex = indexList.at(j);
-            //modelIndex.row();
-            if (i == indexList.at(j).row())
-            {
-                currentlySelected = true;
+            indexList = deselected.indexes();
+            for (int i = 0; !changedItemFound && i < indexList.count(); ++i)
+            {    
+                changedItemFound = true;
+                markListItem(false, indexList.at(i).row());
             }
         }
-        if (currentlySelected !=  mAllNodes[i]->Base().IsSelected())
-        {
-            changedItemFound = true;
-            markListItem(currentlySelected,i);
-            updateSelectionsToList();
-        }
     }
-
 }
+
+
+void IAUpdateMainView::dialogFinished(HbAction *action)
+{
+    DialogState dialogState = mDialogState;
+    mDialogState = NoDialog;
+    
+    switch ( dialogState )
+    {
+        case Dependencies:
+            if (action == mPrimaryAction)
+            {
+                updateSelectionsToNodeArray(*mNode,mMark);
+            }
+            updateSelectionsToList();
+            break;
+        case CannotOmit:    
+            break;
+        case Details:
+            break; 
+        default: 
+            break;
+    }
+}
+
 
 void IAUpdateMainView::getSelectedNodes(RPointerArray<MIAUpdateAnyNode> &selectedNodes) const
 {
@@ -432,7 +475,8 @@ void IAUpdateMainView::markListItem(bool mark, int index)
     
     if (mAllNodes[index]->NodeType() == MIAUpdateAnyNode::ENodeTypeFw )
     {
-        mAllNodes[index]->Base().SetSelected(mark);       
+        mAllNodes[index]->Base().SetSelected(mark);   
+        updateSelectionsToList();
         return;
     }
     
@@ -454,12 +498,14 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                 if (err != KErrNone)
                 {
                     deps.Close();
+                    updateSelectionsToList();
                     return;
                 }
                 if (!getMandatoryNodes(mands))
                 {
                     // error when creating mandatory node list
                     mands.Close();
+                    updateSelectionsToList();
                     return;
                 }
             }
@@ -470,6 +516,7 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                 {
                     //show dialog  
                     showUpdateCannotOmitDialog();
+                    updateSelectionsToList();
                     return;
                 }
                 
@@ -478,6 +525,7 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                 if (err != KErrNone)
                 {
                     deps.Close();
+                    updateSelectionsToList();
                     return;
                 }
                 // item is not allowed to be unmarked if its dependant is mandatory
@@ -493,6 +541,7 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                 {
                     showUpdateCannotOmitDialog();
                     deps.Close();
+                    updateSelectionsToList();
                     return;
                 }
             }
@@ -560,39 +609,59 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                 }
                 else
                 {
-                    accepted = showDependenciesFoundDialog(text);
+                    mNode = node;
+                    mMark = mark;
+                    showDependenciesFoundDialog(text);
+                    return;
                 }
             }
-            
             if (accepted)
-            {
-                for(int j = 0; j < depCount; j++)
-                {
-                    int depNodeInd = mAllNodes.Find(deps[j]);
-                    mAllNodes[depNodeInd]->Base().SetSelected(mark);
-                }
-                deps.Close();
-                int nodeInd = mAllNodes.Find(node);
-                mAllNodes[nodeInd]->Base().SetSelected(mark);
+            {    
+                updateSelectionsToNodeArray(*node, mark);   
             }
-            else
-            {
-                //user rejects the dependency dialog
-                deps.Close();
-                if (mark)
-                {
-                    mands.Close();
-                }
-                return;
-            }
-                
-            //mark all of the mandatory items
+        }
+        
+    }
+    updateSelectionsToList();
+}       
+    
+void IAUpdateMainView::updateSelectionsToNodeArray(MIAUpdateNode &node, bool mark)   
+{    
+    RPointerArray<MIAUpdateNode> deps;  
+    TInt err = KErrNone;
+    if (mark)
+    {
+        TRAP(err,IAUpdateDepUtils::GetDependenciesL(node, mAllNodes, deps));
+    }
+    else
+    {
+        TRAP(err,IAUpdateDepUtils::GetDependantsL(node, mAllNodes, deps)); 
+    }
+    if (err  == KErrNone )
+    {    
+        int depCount = deps.Count(); 
+        for(int i = 0; i < depCount; i++)
+        {
+            int depNodeInd = mAllNodes.Find(deps[i]);
+            mAllNodes[depNodeInd]->Base().SetSelected(mark);
+        }
+        deps.Close();
+        int nodeInd = mAllNodes.Find(&node);
+        mAllNodes[nodeInd]->Base().SetSelected(mark);
+    }                
+    
+    //mark all of the mandatory items
+    if ( mark )
+    {    
+        RPointerArray<MIAUpdateAnyNode> mands;    
+        if (getMandatoryNodes(mands))
+        {
             int mandCount = mands.Count();
-            if (mandCount > 0 && mark)
+            if (mandCount > 0)
             {
-                for(int j = 0; j < mandCount; j++)
+                for(int i = 0; i < mandCount; i++)
                 {
-                    int mandNodeInd = mAllNodes.Find(mands[j]);
+                    int mandNodeInd = mAllNodes.Find(mands[i]);
                     mAllNodes[mandNodeInd]->Base().SetSelected(mark);
                     if (mAllNodes[mandNodeInd]->NodeType() == MIAUpdateAnyNode::ENodeTypeNormal)
                     {
@@ -603,30 +672,22 @@ void IAUpdateMainView::markListItem(bool mark, int index)
                         if (err)
                         {
                             dependencies.Close(); 
-                            if (mark)
-                            {
-                                mands.Close();
-                            }
+                            mands.Close();
                             return;
                         }
-                        for(int k = 0; k < dependencies.Count(); k++)
+                        for(int j = 0; j < dependencies.Count(); j++)
                         {
-                            int depNodeInd = mAllNodes.Find(dependencies[k]);
+                            int depNodeInd = mAllNodes.Find(dependencies[j]);
                             mAllNodes[depNodeInd]->Base().SetSelected(true);
                         }
                         dependencies.Close();
                     }
                 }
             }
-            if (mark)
-            {
-                mands.Close();
-            }
-        }  
-        return;
         }
-    return;
-    }
+        mands.Close();
+    }  
+}
 
 
 bool IAUpdateMainView::getMandatoryNodes(RPointerArray<MIAUpdateAnyNode> &mandNodes) const
@@ -645,38 +706,48 @@ bool IAUpdateMainView::getMandatoryNodes(RPointerArray<MIAUpdateAnyNode> &mandNo
     return ret;
 }
 
-void IAUpdateMainView::showUpdateCannotOmitDialog() const
+void IAUpdateMainView::showUpdateCannotOmitDialog()
 {
-    HbMessageBox messageBox(HbMessageBox::MessageTypeInformation); 
-    messageBox.setText(QString("This required update cannot be omitted"));
-    HbAction okAction("Ok");
-    messageBox.setPrimaryAction(&okAction);
-    messageBox.setTimeout(HbPopup::StandardTimeout);
-    messageBox.show();
-    //messageBox.exec();
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
+    messageBox->setText(QString("This required update cannot be omitted"));
+    int actionCount = messageBox->actions().count();
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        messageBox->removeAction(messageBox->actions().at(i));
+    }
+    HbAction *okAction = NULL;
+    okAction = new HbAction("Ok");
+    messageBox->addAction(okAction);
+    messageBox->setTimeout(HbPopup::StandardTimeout);
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    mDialogState = CannotOmit;
+    messageBox->open(this, SLOT(dialogFinished(HbAction*)));
 }
 
-bool IAUpdateMainView::showDependenciesFoundDialog(QString &text) const
+void IAUpdateMainView::showDependenciesFoundDialog(QString &text)
 {
-    bool accepted = false;
-    HbMessageBox messageBox(HbMessageBox::MessageTypeQuestion);
-    messageBox.setText(text);
-    HbAction continueAction("Continue");
-    messageBox.setPrimaryAction(&continueAction);
-    HbAction cancelAction("Cancel");
-    messageBox.setSecondaryAction(&cancelAction);
-    messageBox.setTimeout(HbPopup::NoTimeout);
-    messageBox.show();
-    //HbAction *selectedAction = messageBox.exec();
-    //if (selectedAction == messageBox.primaryAction())
-    {
-        accepted = true;
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeQuestion);
+    messageBox->setText(text);
+    int actionCount = messageBox->actions().count();
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        messageBox->removeAction(messageBox->actions().at(i));
     }
-    return accepted;
+    mPrimaryAction = NULL;
+    mPrimaryAction = new HbAction("Continue");
+    HbAction *secondaryAction = NULL;
+    secondaryAction = new HbAction("Cancel");
+    messageBox->addAction(mPrimaryAction);
+    messageBox->addAction(secondaryAction);
+    messageBox->setTimeout(HbPopup::NoTimeout);
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    mDialogState = Dependencies;
+    messageBox->open(this, SLOT(dialogFinished(HbAction*)));
 }
 
 void IAUpdateMainView::updateSelectionsToList()
 {
+    mSelectionUpdate = true;
     for(int i = 0; i < mAllNodes.Count(); ++i)
     {
         if ( mAllNodes[i]->Base().IsSelected() != mListView->selectionModel()->isSelected(mListView->model()->index(i,0)))
@@ -693,11 +764,151 @@ void IAUpdateMainView::updateSelectionsToList()
             mListView->selectionModel()->select(mListView->model()->index(i,0),selectionFlag);   
         }
     }
+    mSelectionUpdate = false;
 }
 
 
+MIAUpdateAnyNode* IAUpdateMainView::getNode(int index) const
+{
+    MIAUpdateAnyNode *currentNode = NULL;
+     
+    if (index >= 0 && index < mAllNodes.Count())
+    {
+        currentNode = mAllNodes[index];
+    }
+    return currentNode;
+}
                 
-                
-                
-                
-                
+void IAUpdateMainView::showDetails(MIAUpdateAnyNode& node)
+{  
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
+    messageBox->setIconVisible(false);
+            
+    QString text;
+    constructDetailsText(node,text); 
+    messageBox->setText(text);
+    int actionCount = messageBox->actions().count();
+    
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        messageBox->removeAction(messageBox->actions().at(i));
+    }
+    HbAction *okAction = NULL;
+    okAction = new HbAction("Ok");
+    messageBox->addAction(okAction);
+    messageBox->setTimeout(HbPopup::NoTimeout);
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    mDialogState = Details;
+    messageBox->open(this, SLOT(dialogFinished(HbAction*)));                
+}                
+        
+
+void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &text)
+{
+    
+    text.append(QString("Name:"));
+    text.append(QString("<br />"));
+    QString name = XQConversions::s60DescToQString(node.Base().Name());
+    text.append(name);
+    if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
+    {    
+        name.append(QString(" Device software"));
+    }
+        
+    text.append(QString("<br />"));
+    text.append(QString("<br />"));
+    
+    text.append(QString("Description:"));
+    text.append(QString("<br />"));
+    QString description;
+    if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
+    {
+        description = QString("This update improves your device performance and brings you latest features.");
+    }
+    else
+    {    
+        description = XQConversions::s60DescToQString(node.Base().Description());
+    }    
+    text.append(description);
+    text.append(QString("<br />"));
+    text.append(QString("<br />"));
+    
+    
+    if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeNormal)
+    {
+        MIAUpdateNode *iaupdateNode = static_cast<MIAUpdateNode*> (&node);
+        if (iaupdateNode->Type()!= MIAUpdateNode::EPackageTypeServicePack)
+        {
+            text.append(QString("Version:"));
+            text.append(QString("<br />"));
+            QString textVersion;
+            versionText(node.Base().Version(), textVersion);
+            text.append(textVersion);
+            text.append(QString("<br />"));
+            text.append(QString("<br />"));
+        }
+    }
+    if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
+    {    
+        MIAUpdateFwNode *fwNode = static_cast<MIAUpdateFwNode*> (&node);
+        text.append(QString("Version:"));
+        text.append(QString("<br />"));
+        QString textVersion = XQConversions::s60DescToQString(fwNode->FwVersion1());
+        text.append(textVersion);
+        text.append(QString("<br />"));
+        text.append(QString("<br />"));
+    }
+    
+    int contentSize = node.Base().ContentSizeL();
+    if (contentSize > 0)
+    {
+        text.append(QString("Size:"));
+        text.append(QString("<br />"));
+        QString textFileSize;
+        fileSizeText(contentSize, textFileSize);
+        text.append(textFileSize);
+    }
+}
+
+void IAUpdateMainView::versionText(const TIAUpdateVersion &version, QString &versionText)
+{
+    QString stringMajor;
+    stringMajor.setNum(version.iMajor);
+    versionText.append(stringMajor);
+    versionText.append(QString("."));
+    QString stringMinor;
+    stringMinor.setNum(version.iMinor);
+    versionText.append(stringMinor);
+    versionText.append(QString("("));
+    QString stringBuild;
+    stringBuild.setNum(version.iBuild);
+    versionText.append(stringBuild);
+    versionText.append(QString(")"));
+}
+
+void IAUpdateMainView::fileSizeText(int fileSize, QString &text)
+{
+    int size = 0;
+    QString stringUnit;
+    
+    if (fileSize >= KMaxShownInKiloBytes )
+        {
+        stringUnit.append(" MB");
+        size = fileSize / KMegaByte;
+        if ( fileSize % KMegaByte != 0 )
+            {
+            size++;
+            }
+        }
+    else
+        {
+        stringUnit.append(" kB");
+        size = fileSize / KKiloByte;
+        if ( fileSize % KKiloByte != 0 )
+            {
+            size++;
+            }   
+        }
+    text.setNum(size);
+    text.append(stringUnit); 
+}

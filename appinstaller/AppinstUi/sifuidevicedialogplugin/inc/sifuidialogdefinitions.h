@@ -27,12 +27,19 @@ enum SifUiDeviceDialogType
     SifUiErrorNote = 4
     };
 
+enum SifUiDeviceDialogReturnValue
+    {
+    SifUiContinue = 0,
+    SifUiCancel = 1,
+    SifUiIndicator = 3
+    };
+
 // Variant map keys for dialog type and title (common to all dialog types)
 const QString KSifUiDialogType = "type";                // enum SifUiDeviceDialogType
 const QString KSifUiDialogTitle = "title";              // string
 
 // Variant map keys for device dialog return values
-const QString KSifUiQueryAccepted = "accept";           // boolean
+const QString KSifUiQueryReturnValue = "ret";           // enum SifUiDeviceDialogReturnValue
 const QString KSifUiSelectedMemory = "drv";             // drive letter
 
 // Variant map keys for "confirmation query" dialog parameters
@@ -49,6 +56,12 @@ const QString KSifUiCertificates = "cert";              // binary
 const QString KSifUiProgressNoteText = "txt";           // string
 const QString KSifUiProgressNoteFinalValue = "fin";     // integer
 const QString KSifUiProgressNoteValue = "val";          // integer
+
+// Variant map keys for "progress note" and "installation complete note" buttons
+const QString KSifUiProgressNoteIsHideButtonHidden = "hidebtn";     // boolean
+const QString KSifUiProgressNoteIsCancelButtonHidden = "cancelbtn"; // boolean
+const QString KSifUiCompleteNoteIsShowButtonHidden = "showbtn";     // boolean
+const QString KSifUiErrorNoteIsDetailsButtonHidden = "errdtlbtn";   // boolean
 
 // Variant map keys for "error" dialog parameters
 const QString KSifUiErrorCode = "err";                  // integer

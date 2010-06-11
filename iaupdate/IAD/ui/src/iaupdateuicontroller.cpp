@@ -24,7 +24,6 @@
 #include <featurecontrol.h>
 #include <cmmanager.h>
 #include <qapplication.h>
-#include <hbmessagebox.h>
 #include <hbaction.h>
 #include <hbprogressdialog.h>
 #include <iaupdateparameters.h>
@@ -59,6 +58,7 @@
 #include "iaupdaterefreshhandler.h"
 #include "iaupdatenodeid.h"
 #include "iaupdatewaitdialog.h"
+#include "iaupdatedialogutil.h"
 #include "iaupdatedebug.h"
 
 
@@ -262,6 +262,7 @@ CIAUpdateUiController::~CIAUpdateUiController()
     delete iRoamingHandler;
     delete iParams;
     delete iRefreshHandler;
+    delete mDialogUtil;
 
     // If dialogs have not been released yet, release them now.
     // ProcessFinishedL() should normally be used for dialogs but
@@ -309,7 +310,7 @@ void CIAUpdateUiController::SetDefaultConnectionMethodL( const TIAUpdateConnecti
 void CIAUpdateUiController::CheckUpdatesL()
     {
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::CheckUpdatesL() begin");
-
+    
     iCountOfAvailableUpdates = 0;
     
     if ( iParams )
@@ -318,7 +319,7 @@ void CIAUpdateUiController::CheckUpdatesL()
     	iParams = NULL;
         }
      
-    TBool agreementAccepted( EFalse ); 
+    TBool agreementAccepted( EFalse );
     if ( !ForcedRefresh() )
         {
         CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
@@ -330,10 +331,45 @@ void CIAUpdateUiController::CheckUpdatesL()
             // Refresh from network is allowed when first time case 
             iRefreshFromNetworkDenied = EFalse;
             agreementAccepted = agreement->AcceptAgreementL();  
+            if (!agreementAccepted)
+                {
+                if ( !mDialogUtil )
+                    {
+                    mDialogUtil = new IAUpdateDialogUtil(NULL, this);
+                    }
+                if ( mDialogUtil )
+                    {
+                    mPrimaryAction = NULL;
+                    mPrimaryAction = new HbAction("Accept");
+                    HbAction *secondaryAction = NULL;
+                    secondaryAction = new HbAction("Decline");
+                    mDialogUtil->showAgreement(mPrimaryAction,secondaryAction);
+                    iDialogState = EAgreement;
+                    }
+                }
             }
         CleanupStack::PopAndDestroy( agreement );
         }
-  	             
+    if ( iDialogState != EAgreement )
+        {
+        AgreementHandledL();
+        }
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::CheckUpdatesL() end");
+    return;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateUiController:: AgreementHandledL
+// Updates the update item list.
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateUiController::AgreementHandledL()
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::AgreementHandledL() begin");
+    TBool agreementAccepted( EFalse );
+    CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
+    agreementAccepted = agreement->AgreementAcceptedL();
+    CleanupStack::PopAndDestroy( agreement );        
     if ( !agreementAccepted && !ForcedRefresh() )
         {
         if ( iRequestType == IAUpdateUiDefines::ECheckUpdates )
@@ -395,7 +431,7 @@ void CIAUpdateUiController::CheckUpdatesL()
             }	
         }
 
-    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::CheckUpdatesL() end");
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::AgreementHandledL() end");
     }
 
 
@@ -417,13 +453,17 @@ void CIAUpdateUiController::StartUpdateL()
                 
     if ( !IAUpdateUtils::SpaceAvailableInInternalDrivesL( iSelectedNodesArray ) )
         {
-            HbMessageBox messageBox(HbMessageBox::MessageTypeInformation); 
-            messageBox.setText(QString("Insufficient memory. Free some memory and try again."));
-            HbAction action("OK");
-            messageBox.setPrimaryAction(&action);
-            messageBox.setTimeout(HbPopup::NoTimeout);
-            messageBox.show();
-            //messageBox.exec();
+        if ( !mDialogUtil )
+            {
+            mDialogUtil = new IAUpdateDialogUtil(NULL, this);
+            }
+        if ( mDialogUtil )
+            {
+            mPrimaryAction = NULL;
+            mPrimaryAction = new HbAction("OK");
+            mDialogUtil->showInformation(QString("Insufficient memory. Free some memory and try again."), mPrimaryAction);
+            iDialogState = EInsufficientMemory;
+            }
         }
     else
         {
@@ -1549,6 +1589,35 @@ void CIAUpdateUiController::HandleWaitDialogCancel()
     }
 
 // -----------------------------------------------------------------------------
+// CIAUpdateUiController::dialogFinished
+// Called when dialog is finished.
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateUiController::dialogFinished(HbAction *action)
+    {
+    TDialogState dialogState = iDialogState;
+    iDialogState = ENoDialog;
+    
+    switch ( dialogState )
+        {
+        case EAgreement:
+            if ( action == mPrimaryAction )
+                 {
+                CIAUpdateAgreement* agreement = CIAUpdateAgreement::NewLC();
+                agreement->SetAgreementAcceptedL();
+
+                CleanupStack::PopAndDestroy(agreement);
+                }
+            AgreementHandledL();        
+            break;
+        case EInsufficientMemory:    
+            break;
+        default: 
+            break;
+        }
+    }
+
+// -----------------------------------------------------------------------------
 // CIAUpdateUiController::HandleUiRefreshL
 // 
 // -----------------------------------------------------------------------------
@@ -2085,7 +2154,8 @@ TInt CIAUpdateUiController::CheckUpdatesDeferredCallbackL( TAny* aPtr )
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateUiController::ShowUpdatingDialogL( TInt /*aTextResourceId*/,
+/*
+void CIAUpdateUiController::ShowUpdatingDialogL( TInt aTextResourceId,
                                                  const TDesC& aName,
                                                  TInt aNumber,
                                                  TInt aTotalCount )   
@@ -2124,7 +2194,7 @@ void CIAUpdateUiController::ShowUpdatingDialogL( TInt /*aTextResourceId*/,
     CleanupStack::PopAndDestroy( stringArray );
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::ShowUpdatingDialogL() end");
-    }
+    }*/
  
 
 // ---------------------------------------------------------------------------

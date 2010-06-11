@@ -32,10 +32,13 @@
 #include <swi/sistruststatus.h>
 
 #include <e32base.h>
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifndef SWI_TEXTSHELL_ROM		
 #include <apsidchecker.h>
 #else
 class CAppSidChecker;
+#endif
 #endif
 
 namespace Swi
@@ -221,7 +224,7 @@ protected:
 class CSwisInstallStep : public CSwisTestStep
 	{
 public:
-	enum TInstallType { EUseFileHandle, EUseMemory, EUseFileName, EUseCAF, EUseOpenFileName, ECheckExitValue};
+	enum TInstallType { EUseFileHandle, EUseMemory, EUseFileName, EUseCAF, EUseOpenFileName, ECheckExitValue, ECheckInstallPerformance};
 
 	CSwisInstallStep(TInstallType aInstallType, TBool aDoCancelTest = EFalse);
 	~CSwisInstallStep();
@@ -231,6 +234,7 @@ public:
 private:
 	TInt DoInstallL(Swi::CInstallPrefs& aInstallPrefs);
 	void GetFilesToHoldOpenL();
+	void PrintPerformanceLog(TTime aTime);
 
 private:
 	TFileName iSisFileName; // name of the file to install
@@ -332,6 +336,7 @@ public:
 #endif
 
 _LIT(KSwisInstallStep, "InstallStep");
+_LIT(KSwisInstallPerformanceStep, "InstallPerformanceStep");
 _LIT(KSwisInstallFHStep, "InstallFHStep"); // install using file handles
 _LIT(KSwisInstallMemStep, "InstallMemStep"); // install from memory
 _LIT(KSwisInstallCAFStep, "InstallCAFStep"); // install from CAF
@@ -370,6 +375,7 @@ _LIT(KSwisListUninstallPkgsStep, "ListUninstallPkgsStep");
 _LIT(KSwisRemoveUninstallPkgsStep, "RemoveUninstallPkgsStep");
 _LIT(KSwisGetPackageDetails, "GetPackageDetails");
 _LIT(KSwisGetPublishedUidArrayStep, "GetPublishedUidArrayStep");
+_LIT(KSwisRemoveWithLastDependent, "RemoveWithLastDependent");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KCheckSCRFieldStep, "CheckSCRFieldStep");
 _LIT(KCheckSCRCompPropertyStep, "CheckSCRCompPropertyStep");
@@ -486,9 +492,13 @@ private:
 	TInt iDrive;
 	TInt iBootMode;
 	TChar iDriveChar;
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifndef SWI_TEXTSHELL_ROM
 	CAppSidChecker *iSwiSidChecker;
 #endif
+#endif
+
 	};
 	
 /**
@@ -513,4 +523,11 @@ TUid iExpectedUidList[KTestMaxUidCount];    //An array whose first element holds
 TBool iJustDefineProperty;
 	};
 
+class CSwisSetRemoveWithLastDependent : public CSwisTestStep
+    {
+public:    
+    CSwisSetRemoveWithLastDependent();
+    ~CSwisSetRemoveWithLastDependent();
+    virtual TVerdict doTestStepL();
+    };
 #endif // __TSWISSTEP_H__

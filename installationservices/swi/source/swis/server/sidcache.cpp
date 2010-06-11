@@ -22,6 +22,7 @@
 #include <s32file.h>
 #include <e32uid.h>
 #include <f32file.h>
+#include <e32ldr_private.h>
 #include "securityinfo.h"
 
 namespace Swi 

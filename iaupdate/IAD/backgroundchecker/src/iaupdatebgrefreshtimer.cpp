@@ -1795,7 +1795,7 @@ void CIAUpdateBGTimer::ReminderTimerCallBack()
 void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
     {
    
-    _LIT( KFirstTimeText, "Check for updates ?" );
+    _LIT( KFirstTimeText, "Update checking" );
     _LIT( KNormalText, "Updates available" );
     _LIT( KSecondText, "Tap to view" );
 
@@ -1805,14 +1805,14 @@ void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
     _LIT(KLocFile, "Text_Map_Swupdate_");
     _LIT(KLocFilePath, "z:\\resource\\iaupdate\\");
     
-    _LIT(KTitleFirstTime, "txt_software_update_list_software_update");
+    _LIT(KTitleFirstTime, "txt_software_dpophead_update_checking");
     _LIT(KTitleOneUpdate, "txt_software_dpophead_update_available");
     _LIT(KTitleSeveralUpdates, "txt_software_dpophead_updates_available");
     
     
-    _LIT(KSecondFirstTime, "txt_software_update_list_software_update");
-    _LIT(KSecondOneUpdate, "txt_software_dpopinfo_val_1_new");
-    _LIT(KSecondSeveralUpdates, "txt_software_dpopinfo_ln_new");
+    _LIT(KSecondFirstTime, "txt_software_dpopinfo_tap_to_view");
+    _LIT(KSecondOneUpdate, "txt_software_dpopinfo_tap_to_view");
+    _LIT(KSecondSeveralUpdates, "txt_software_dpopinfo_tap_to_view");
    */
     
     FLOG("[bgchecker] LaunchNotificationL ");

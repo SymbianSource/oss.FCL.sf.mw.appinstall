@@ -491,7 +491,8 @@ void CSisxSifPluginUiHandlerSilent::DisplayCompleteL()
 // CSisxSifPluginUiHandlerSilent::DisplayFailedL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerSilent::DisplayFailedL( TInt /*aErrorCode*/ )
+void CSisxSifPluginUiHandlerSilent::DisplayFailedL( TErrorCategory /*aCategory*/,
+        TInt /*aErrorCode*/, const TDesC& /*aErrorMessage*/, const TDesC& /*aErrorDetails*/ )
     {
     // nothing displayed in silent mode
     }

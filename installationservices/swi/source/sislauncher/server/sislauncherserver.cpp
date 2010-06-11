@@ -561,7 +561,7 @@ void CSisLauncherServer::NotifyNewAppsL(const RPointerArray<Usif::CApplicationRe
     CleanupClosePushL(apaSession);
 
     // UI frameworks advise ignoring the return code
-    // Proceeding even if force registration fails so that installtion is not aborted
+    // Proceeding even if force registration fails so that installation is not aborted
     apaSession.ForceRegistration(aApplicationRegistrationData);
     CleanupStack::PopAndDestroy();
     }

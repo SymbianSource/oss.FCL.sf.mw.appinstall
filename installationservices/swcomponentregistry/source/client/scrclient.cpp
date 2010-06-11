@@ -436,49 +436,22 @@ EXPORT_C TUid RSoftwareComponentRegistry::GetPluginUidL(TComponentId aComponentI
 	return pluginUid;
 	}
 
-EXPORT_C void RSoftwareComponentRegistry::AddSoftwareTypeL(const TDesC& aUniqueSwTypeName, TUid aSifPluginUid, TSecureId aInstallerSecureId, TSecureId aExecutionLayerSecureId, const RPointerArray<HBufC>& aMimeTypes, const RPointerArray<CLocalizedSoftwareTypeName>* aLocalizedSwTypeNames)
+EXPORT_C void RSoftwareComponentRegistry::AddSoftwareTypeL(const CSoftwareTypeRegInfo& aSwTypeRegInfo)
 	{
-	DEBUG_PRINTF2(_L("Sending add a new software type (%S) request."), &aUniqueSwTypeName);
+	if(!aSwTypeRegInfo.MimeTypes().Count())
+	    {
+	    DEBUG_PRINTF(_L("MIME types list cannot be empty!"));
+	    User::Leave(KErrArgument);
+	    }
 	
-	if(!aMimeTypes.Count())
-		{
-		DEBUG_PRINTF(_L("MIME types list cannot be empty!"));
-		User::Leave(KErrArgument);
-		}
-	
-	// Concatenate aSifPluginUid, aInstallerSecureId, and aExecutionLayerSecureId in order to gain spare slots to send other data
-	RBuf8 uidString;
-	uidString.CreateL(3*KUidStringLen); // 3 UIDs will be concatenated
-	uidString.CleanupClosePushL();
-	uidString.AppendNumFixedWidth(aSifPluginUid.iUid, EHex, KUidStringLen);
-	uidString.AppendNumFixedWidth(aInstallerSecureId.iId, EHex, KUidStringLen);
-	uidString.AppendNumFixedWidth(aExecutionLayerSecureId.iId, EHex, KUidStringLen);
-	
-	// Externalize the MIME types of the newly added software type
-	HBufC8* mimeTypesBuf = ExternalizePointersArrayLC(aMimeTypes);
-	
-	// Externalize the unique and localizable names for the newly added software type
-	const RPointerArray<CLocalizedSoftwareTypeName> *localCopyOfSwTypeNames(0);
-	if(!aLocalizedSwTypeNames)
-		{// if aLocalizedSwTypeNames is not supplied, then create an empty one.
-		localCopyOfSwTypeNames = new(ELeave) RPointerArray<CLocalizedSoftwareTypeName>;
-		CleanupStack::PushL(const_cast<RPointerArray<CLocalizedSoftwareTypeName>* >(localCopyOfSwTypeNames));
-		}
-	else
-		{
-		localCopyOfSwTypeNames = aLocalizedSwTypeNames;
-		}
-	HBufC8* localizedNamesBuf = ExternalizePointersArrayLC(*localCopyOfSwTypeNames);		
-
-	TIpcArgs swTypeArgs(&aUniqueSwTypeName, &uidString, mimeTypesBuf, localizedNamesBuf);
+	RBuf8 buf;
+	buf.CleanupClosePushL();
+	ExternalizeRefObjectL(aSwTypeRegInfo, buf);
+	      
+	TIpcArgs swTypeArgs(&buf);
 	User::LeaveIfError(CallSessionFunction(EAddSoftwareType, swTypeArgs));
-	
-	CleanupStack::PopAndDestroy(localizedNamesBuf);
-	if(!aLocalizedSwTypeNames)
-		{// destroy the localCopyOfSwTypeNames if created locally
-		CleanupStack::PopAndDestroy(const_cast<RPointerArray<CLocalizedSoftwareTypeName>* >(localCopyOfSwTypeNames));
-		}
-	CleanupStack::PopAndDestroy(2, &uidString); // uidString, mimeTypesBuf
+ 
+	CleanupStack::PopAndDestroy();//buf, reginfo
 	}
 
 EXPORT_C void RSoftwareComponentRegistry::DeleteSoftwareTypeL(const TDesC& aUniqueSwTypeName, RPointerArray<HBufC>& aDeletedMimeTypes)

@@ -173,8 +173,8 @@ TVerdict CEmbeddingPackageStep::doTestStepL()
 	RPointerArray<Swi::CSisRegistryPackage> packages;
 	//StartTimer again to ignore time taken to read from config file
 	StartTimer();
-	iRegistryEntry.EmbeddingPackagesL(packages);
 	CleanupResetAndDestroyPushL(packages);
+	iRegistryEntry.EmbeddingPackagesL(packages);
 	
 	if(packages.Count() != embeddingPkgCount)
 		{

@@ -231,6 +231,11 @@ void CPlanner::CreateUninstallationTreeL(CUninstallationNode& aRootNode)
 	// tree.
 	RPointerArray<CSisRegistryPackage> plannedPackages;
 	CleanupResetAndDestroy<RPointerArray<CSisRegistryPackage> >::PushL(plannedPackages);
+
+	// Add the root node in the planned packages, so that it is not added again (as a node in the tree)
+	// in case of a cyclic dependency.	
+	CSisRegistryPackage* rootPackage = CSisRegistryPackage::NewL(currentNode->PackageL());
+	plannedPackages.AppendL(rootPackage);
 	
 	while(ETrue)
 		{

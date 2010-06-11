@@ -25,6 +25,13 @@ QTM_BEGIN_NAMESPACE
 class QValueSpacePublisher;
 QTM_END_NAMESPACE
 
+// Variant map keys for parameters
+const QString KSifUiInstallIndicatorAppNameKey = "name";    // QString
+const QString KSifUiInstallIndicatorPhaseKey = "phase";     // int (enum Phase)
+const QString KSifUiInstallIndicatorProgressKey = "prog";   // int (0..100)
+const QString KSifUiInstallIndicatorCompleteKey = "done";   // int (KErrNone or error code)
+const QString KSifUiInstallIndicatorIconKey = "icon";       // TBD
+
 
 /**
  * Software install progress indicator for the status indicator area
@@ -45,6 +52,11 @@ public:     // from HbIndicatorInterface
 protected:  // from HbIndicatorInterface
     bool handleClientRequest(RequestType type, const QVariant &parameter);
 
+private:    // new Symbian functions, TODO: move to symbian-specific code
+    void CreateNotifierL();
+    void StartListeningOperationsL();
+    void StopListeningOperationsL();
+
 private:    // new functions
     void processParameters(const QVariant &parameter);
     void publishActivityStatus(bool status);
@@ -54,6 +66,13 @@ private:    // data
     int mProgress;
     QTM_PREPEND_NAMESPACE(QValueSpacePublisher) *mPublisher;
     bool mIsActive;
+    enum Phase {
+        Installing,
+        Downloading,
+        CheckingCerts
+    } mPhase;
+    bool mIsComplete;
+    int mErrorCode;
 };
 
 #endif  // SIFUIINSTALLINDICATOR_H

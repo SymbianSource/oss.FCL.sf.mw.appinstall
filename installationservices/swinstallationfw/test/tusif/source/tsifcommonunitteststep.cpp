@@ -25,6 +25,7 @@
 #include "tsifsuitedefs.h"
 #include <usif/sif/sifcommon.h>
 #include <ct/rcpointerarray.h>
+#include <scs/cleanuputils.h>
 
 using namespace Usif;
 
@@ -297,11 +298,35 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 	
 	_LIT(KStringValue1, "value 1");
 	_LIT(KStringValue2, "value 2");
+	_LIT(KStringValue3, "value 3");
 
 	const TInt KIntValue1 = 111;
 	const TInt KIntValue2 = 222;
 	const TInt KIntValue3 = 333;
 	
+	//String Array
+	RPointerArray<HBufC> stringArray;
+	CleanupResetAndDestroyPushL(stringArray);
+	
+	HBufC* stringPtr = KStringValue1().AllocLC();
+	stringArray.AppendL(stringPtr);
+	CleanupStack::Pop();
+	
+    stringPtr = KStringValue2().AllocLC();
+    stringArray.AppendL(stringPtr);
+    CleanupStack::Pop();
+    
+    stringPtr = KStringValue3().AllocLC();
+    stringArray.AppendL(stringPtr);
+    CleanupStack::Pop(); 
+    
+    //Int Array
+    RArray<TInt> intArray;
+    CleanupClosePushL(intArray);
+    intArray.AppendL(KIntValue1);
+    intArray.AppendL(KIntValue2);
+    intArray.AppendL(KIntValue3);
+    
 	/*  NewL */
 	COpaqueNamedParams* params1 = COpaqueNamedParams::NewL();
 	CleanupStack::PushL(params1);
@@ -330,6 +355,13 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 		INFO_PRINTF1(_L("TestOpaqueNamedParamsL: 'StringByNameL for an existing param' failed"));
 		User::Leave(KErrGeneral);
 		}
+	//Added as string , trying to retrieve as int.
+    TRAPD(err, params1->IntByNameL(KParamName1));
+    if(err != KErrNotFound)
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: 'IntByNameL for an existing param' failed"));
+        User::Leave(KErrGeneral);
+        }	
 	// StringByNameL for a non-existing param
 	if (params1->StringByNameL(KParamName2) != KNullDesC)
 		{
@@ -368,7 +400,7 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 		User::Leave(KErrGeneral);
 		}
 	// IntByNameL for a non-existing param
-	TRAPD(err, params2->IntByNameL(KParamName2));
+	TRAP(err, params2->IntByNameL(KParamName2));
 	if (err != KErrNotFound)
 		{
 		INFO_PRINTF1(_L("TestOpaqueNamedParamsL: 'IntByNameL for a non-existing param' failed"));
@@ -435,4 +467,81 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 		}
 
 	CleanupStack::PopAndDestroy(4, params2);
+
+	COpaqueNamedParams* params4 = COpaqueNamedParams::NewLC();
+	
+	params4->AddStringArrayL(KParamName1, stringArray);
+	
+	const RPointerArray<HBufC>& strArray = params4->StringArrayByNameL(KParamName1);
+	if(*strArray[0] != KStringValue1 || *strArray[1] != KStringValue2 || *strArray[2] != KStringValue3)
+	    {
+	    INFO_PRINTF1(_L("TestOpaqueNamedParamsL: StringArrayByNameL failed"));
+	    User::Leave(err);
+	    }
+
+	TRAP(err, const RArray<TInt>& intArray1 = params4->IntArrayByNameL(KParamName1));
+    if(err != KErrNotFound)
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: IntArrayByNameL failed"));
+        User::Leave(err);  
+        }	
+	//Append a big string ( greater than 128 bytes)
+	HBufC* largeString = HBufC::NewLC(150);
+	largeString->Des().FillZ(150);
+	stringArray.AppendL(largeString);
+	CleanupStack::Pop();
+	
+	TRAP(err, params4->AddStringArrayL(KParamName1, stringArray));
+	  
+	if(err != KErrOverflow)
+	    {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: AddStringArrayL overflow check failed"));
+        User::Leave(err);	    
+	    }
+	
+	stringArray.ResetAndDestroy();
+	// Few large strings
+    HBufC* bigString2 = HBufC::NewLC(64);
+    bigString2->Des().FillZ(64);
+    stringArray.AppendL(bigString2);
+    CleanupStack::Pop();
+    
+    HBufC* bigString3 = HBufC::NewLC(64);
+    bigString3->Des().FillZ(64);
+    stringArray.AppendL(bigString3);
+    CleanupStack::Pop();
+
+    HBufC* bigString4 = HBufC::NewLC(64);
+    bigString4->Des().FillZ(64);
+    stringArray.AppendL(bigString4);
+    CleanupStack::Pop();
+    
+     HBufC* bigString5 = HBufC::NewLC(64);
+     bigString5->Des().FillZ(64);
+     stringArray.AppendL(bigString5);
+     CleanupStack::Pop();
+     
+     TRAP(err, params4->AddStringArrayL(KParamName1, stringArray));
+      
+      if(err != KErrOverflow)
+          {
+          INFO_PRINTF1(_L("TestOpaqueNamedParamsL: AddStringArrayL overflow check failed"));
+          User::Leave(err);       
+          }    
+	params4->AddIntArrayL(KParamName1, intArray);
+    const RArray<TInt>& RefIntArray = params4->IntArrayByNameL(KParamName1);
+    if(RefIntArray[0] != KIntValue1 || RefIntArray[1] != KIntValue2 || RefIntArray[2] != KIntValue3)
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: IntArrayByNameL failed"));
+        User::Leave(err);
+        }	
+    
+    TRAP(err, const RPointerArray<HBufC>& strArray1 = params4->StringArrayByNameL(KParamName1));
+	if(err != KErrNotFound)
+	    {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: StringArrayByNameL failed"));
+        User::Leave(err);  
+	    }
+
+	CleanupStack::PopAndDestroy(3, &stringArray);
 	}

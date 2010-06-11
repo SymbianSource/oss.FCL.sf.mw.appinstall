@@ -38,20 +38,20 @@ IAUpdateResultsDialog::~IAUpdateResultsDialog()
 {
 }
 
-void IAUpdateResultsDialog::showResults(const TIAUpdateResultsInfo &param)
+void IAUpdateResultsDialog::showResults(const TIAUpdateResultsInfo &param, QObject* receiver, const char* member )
 {
     QString buf;
     constructText(param,buf);
-    HbDialog dialog;
-    HbTextItem *text = new HbTextItem(&dialog);
+    HbDialog *dialog = new HbDialog;
+    HbTextItem *text = new HbTextItem(dialog);
     text->setFontSpec(HbFontSpec(HbFontSpec::Primary));
     text->setText(buf);
-    dialog.setContentWidget(text);
+    dialog->setContentWidget(text);
     HbAction *primaryAction = new HbAction("Ok");    
-    dialog.setPrimaryAction(primaryAction);
-    dialog.setTimeout(HbPopup::NoTimeout);
-    dialog.show();
-    //dialog.exec();    
+    dialog->addAction(primaryAction);
+    dialog->setTimeout(HbPopup::NoTimeout);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->open(receiver, member);
     return;  
 }
 

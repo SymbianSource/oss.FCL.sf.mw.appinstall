@@ -211,23 +211,24 @@ CSisxSifPluginInstallParams::CSisxSifPluginInstallParams() : iAllowUntrusted( EN
 //
 void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams )
     {
-    iUseSilentMode = GetIntParamL( aParams, KSifInParam_InstallSilently, EFalse );
-    iIsInstallInactive = GetIntParamL( aParams, KSifInParam_InstallInactive, EFalse );
-    iDrive = static_cast<TUint>( GetIntParamL( aParams, KSifInParam_Drive, EDriveC ) );
-    iLanguage = static_cast<TLanguage>( GetIntParamL( aParams, KSifInParam_Languages,
+    iUseSilentMode = GetIntParam( aParams, KSifInParam_InstallSilently, EFalse );
+    iIsInstallInactive = GetIntParam( aParams, KSifInParam_InstallInactive, EFalse );
+    // TODO: change drive and language params as arrays when available
+    iDrive = static_cast<TUint>( GetIntParam( aParams, KSifInParam_Drive, EDriveC ) );
+    iLanguage = static_cast<TLanguage>( GetIntParam( aParams, KSifInParam_Languages,
             ELangNone ) );
     GetStringParamL( aParams, KSifInParam_OCSPUrl, iOCSPUrl );
-    GetPolicyParamL( aParams, KSifInParam_PerformOCSP, iPerformOCSP, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_IgnoreOCSPWarnings, iIgnoreOCSPWarnings, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_AllowUpgrade, iAllowUpgrade, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_InstallOptionalItems, iInstallOptionalItems, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_AllowUntrusted, iAllowUntrusted, ENotAllowed );
-    GetPolicyParamL( aParams, KSifInParam_GrantCapabilities, iGrantCapabilities, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_AllowAppShutdown, iAllowAppShutdown, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_AllowAppBreakDependency, iAllowAppBreakDependency,
+    GetPolicyParam( aParams, KSifInParam_PerformOCSP, iPerformOCSP, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_IgnoreOCSPWarnings, iIgnoreOCSPWarnings, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowUpgrade, iAllowUpgrade, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_InstallOptionalItems, iInstallOptionalItems, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowUntrusted, iAllowUntrusted, ENotAllowed );
+    GetPolicyParam( aParams, KSifInParam_GrantCapabilities, iGrantCapabilities, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowAppShutdown, iAllowAppShutdown, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowAppBreakDependency, iAllowAppBreakDependency,
             EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_AllowOverwrite, iAllowOverwrite, EAllowed );
-    GetPolicyParamL( aParams, KSifInParam_PackageInfo, iPackageInfo, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowOverwrite, iAllowOverwrite, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_PackageInfo, iPackageInfo, EAllowed );
     }
 
 // ---------------------------------------------------------------------------
@@ -257,10 +258,10 @@ void CSisxSifPluginInstallParams::ConstructL( const CSisxSifPluginInstallParams&
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginInstallParams::GetIntParamL()
+// CSisxSifPluginInstallParams::GetIntParam()
 // ---------------------------------------------------------------------------
 //
-TInt CSisxSifPluginInstallParams::GetIntParamL( const COpaqueNamedParams& aParams,
+TInt CSisxSifPluginInstallParams::GetIntParam( const COpaqueNamedParams& aParams,
         const TDesC& aParamName, TInt aDefaultValue )
     {
     TInt value = aDefaultValue;
@@ -270,14 +271,14 @@ TInt CSisxSifPluginInstallParams::GetIntParamL( const COpaqueNamedParams& aParam
         {
         return value;
         }
-    return aDefaultValue;
+	return aDefaultValue;
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginInstallParams::GetPolicyParamL()
+// CSisxSifPluginInstallParams::GetPolicyParam()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginInstallParams::GetPolicyParamL( const COpaqueNamedParams& aParams,
+void CSisxSifPluginInstallParams::GetPolicyParam( const COpaqueNamedParams& aParams,
         const TDesC& aParamName, TSifPolicy& aPolicy, const TSifPolicy& aDefault )
     {
     TInt value = aDefault;

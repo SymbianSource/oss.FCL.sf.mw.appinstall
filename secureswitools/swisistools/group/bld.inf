@@ -1732,6 +1732,7 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/interpretsism0010_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism0010_db.bat
 ../test/tinterpretsisinteg/interpretsism0011_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism0011_db.bat
 ../test/tinterpretsisinteg/interpretsism0016c_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism0016c_db.bat
+../test/tinterpretsisinteg/interpretsism001a_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism001a_db.bat
 ../test/tinterpretsisinteg/interpretsism001_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism001_db.bat
 ../test/tinterpretsisinteg/interpretsism002_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism002_db.bat
 ../test/tinterpretsisinteg/interpretsism003_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/interpretsism003_db.bat
@@ -1812,6 +1813,7 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/makesism0010_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism0010_db.bat
 ../test/tinterpretsisinteg/makesism0011_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism0011_db.bat
 ../test/tinterpretsisinteg/makesism0016c_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism0016c_db.bat
+../test/tinterpretsisinteg/makesism001a_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism001a_db.bat 
 ../test/tinterpretsisinteg/makesism001_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism001_db.bat 
 ../test/tinterpretsisinteg/makesism002_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism002_db.bat 
 ../test/tinterpretsisinteg/makesism003_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/makesism003_db.bat 
@@ -1904,6 +1906,9 @@ PRJ_TESTEXPORTS
 
 ../test/tinterpretsisinteg/testdatascr/base_r.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatascr/base_r.pkg
 ../test/tinterpretsisinteg/testdatascr/hiddensa.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatascr/hiddensa.pkg
+
+../test/tinterpretsisinteg/TestElseIfData/TestElseIf.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/TestElseIfData/TestElseIf.pkg
+../test/tinterpretsisinteg/TestElseIfData/file0 /epoc32/winscw/c/tswi/tinterpretsisinteg/TestElseIfData/file0
 
 // exports for scrtool
 ../test/tscrtool/tscrtool.ini				/epoc32/winscw/c/tswi/tscrtool/tscrtool.ini

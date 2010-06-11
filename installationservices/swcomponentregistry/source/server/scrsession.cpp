@@ -400,12 +400,7 @@ void CScrSession::MutatingOperationsPreambleL(CScrServer& aServer, TScrSessionFu
 			if(aServer.IsTransactionInProgress())
 				{// A new transaction cannot be started if there is another in progress
 				User::Leave(KErrScrWriteOperationInProgress);
-				}
-			if(aServer.SubsessionCount() && !aServer.IsTheOnlySubsessionOwner(this))
-				{// If there is a subsession owned by another session, it is not allowed to start a new transaction.
-				 // Beacuse it is also not allowed to create a subsession if a transaction owned by another session is in progress.
-				User::Leave(KErrScrReadOperationInProgress);
-				}
+				}			
 			break;
 			}
 		case ERollbackTransaction:
@@ -437,8 +432,7 @@ void CScrSession::MutatingOperationsPreambleL(CScrServer& aServer, TScrSessionFu
 		case EAddComponentDependency:
 		case EDeleteComponentDependency:
 		case ESetIsComponentPresent:
-			{ 
-			ApplySubsessionConstraintL(aServer);
+			{ 			
 			// These mutating operations consist of a single mutating database statement.
 			// So, no need to create an implicit transaction
 			TBool createImplicitTransaction = EFalse; 
@@ -455,8 +449,7 @@ void CScrSession::MutatingOperationsPreambleL(CScrServer& aServer, TScrSessionFu
 		case EAddApplicationEntry:
 		case EDeleteApplicationEntries:
 		case EDeleteApplicationEntry:
-			{
-			ApplySubsessionConstraintL(aServer);
+			{			
 			// These mutating operations consist of two or more mutating database statements.
 			// Therefore, an implicit transaction is begun if an explicit one doesn't exist.
 			TBool createImplicitTransaction = ETrue; 
@@ -486,19 +479,29 @@ CScsSubsession* CScrSession::DoCreateSubsessionL(TInt aFunction, const RMessage2
 	@return					New, initialized instance of CScrSubsession, ownership is transferred.
  */
 	{
+
 	TScrSessionFunction f = static_cast<TScrSessionFunction>(aFunction);
-	CScrServer *server = static_cast<CScrServer*>(&iServer);
-	
-	if(server->IsTransactionInProgress() && !server->IsTransactionOwner(this)) 
-		{
-		DEBUG_PRINTF(_L8("Transaction from another session is in progress. Subsession cannot be created!"));
-		User::Leave(KErrScrWriteOperationInProgress);
-		}
-	
+    CScrServer *server = static_cast<CScrServer*>(&iServer);
+    
 	switch(f)
 		{
+	    // Allow read operation even if another transaction is in progress for these views.
 		case ESubSessCreateComponentsView:
 			return CComponentViewSubsession::NewL(*this);
+        case ESubSessCreateAppRegistryView:
+            return CAppRegistrySubsession::NewL(*this);
+		}
+		
+	 // A read operation is disallowed for the following views incase a transaction from another session 
+	 // is already in progress. 
+    if(server->IsTransactionInProgress() && !server->IsTransactionOwner(this)) 
+        {
+        DEBUG_PRINTF(_L8("Transaction from another session is in progress. Subsession cannot be created!"));
+        User::Leave(KErrScrWriteOperationInProgress);
+        }   
+    
+	switch(f)
+	    {  
 		case ESubSessCreateFileList:
 			return CFileListSubsession::NewL(*this);
 		case ESubSessCreateAppInfoView:
@@ -507,8 +510,6 @@ CScsSubsession* CScrSession::DoCreateSubsessionL(TInt aFunction, const RMessage2
 			return CApplicationRegInfoSubsession::NewL(*this);
 		case ESubSessCreateRegInfoForApp:
 		    return CRegInfoForApplicationSubsession::NewL(*this);
-		case ESubSessCreateAppRegistryView:
-		    return CAppRegistrySubsession::NewL(*this);
 		default:
 			User::Leave(KErrNotSupported);
 			/*lint -unreachable */

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -315,6 +315,8 @@ EXPORT_C TInt RSisRegistryEntry::PropertyL(TInt aKey)
 
 EXPORT_C void RSisRegistryEntry::AugmentationsL(RPointerArray<HBufC>& aPackageNames, RPointerArray<HBufC>& aVendorNames)
 	{
+	CleanupResetAndDestroyPushL(aPackageNames);
+    CleanupResetAndDestroyPushL(aVendorNames);
 	HBufC8* buffer = RSisRegistryEntry::SendReceiveBufferLC(EPackageAugmentations);
 	
 	// create a stream based on the buffer
@@ -340,6 +342,7 @@ EXPORT_C void RSisRegistryEntry::AugmentationsL(RPointerArray<HBufC>& aPackageNa
 		CleanupStack::Pop(2, vendor);	//vendor package, 
 		}
 	CleanupStack::PopAndDestroy(3, buffer);// buffer, stream, packages
+	CleanupStack::Pop(2, &aPackageNames);
 	}
 
 EXPORT_C void RSisRegistryEntry::AugmentationsL(RPointerArray<CSisRegistryPackage>& aPackages)
@@ -392,6 +395,7 @@ EXPORT_C TInt64 RSisRegistryEntry::SizeL()
 
 EXPORT_C void RSisRegistryEntry::ControllersL(RPointerArray<HBufC8>& aControllers)
 	{
+	CleanupResetAndDestroyPushL(aControllers);
 	HBufC8* buffer = SendReceiveBufferLC(EControllers);
 	
 	// this call returns pure data, so we don't incur the overheads of the streamstore
@@ -413,6 +417,7 @@ EXPORT_C void RSisRegistryEntry::ControllersL(RPointerArray<HBufC8>& aController
 		}
 	
 	CleanupStack::PopAndDestroy(buffer);
+	CleanupStack::Pop(&aControllers);
 	}
 
 EXPORT_C TChar RSisRegistryEntry::SelectedDriveL()

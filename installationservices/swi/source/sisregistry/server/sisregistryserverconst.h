@@ -49,8 +49,8 @@ _LIT(KUninstallLogPathFormat, "%c:\\sys\\uninstall\\%08x_%08x\\%c\\uninstall.log
 _LIT(KLogDir, "\\sys\\install\\log.txt");
 
 //Location of application registration resource files
-_LIT(KApparcRegFilePath, "\\private\\10003a3f\\apps\\");
-_LIT(KApparcRegFileImportPath, "\\private\\10003a3f\\import\\apps\\");
+_LIT(KApparcRegFilePath, "\\private\\10003a3f\\apps\\*.rsc");
+_LIT(KApparcRegFileImportPath, "\\private\\10003a3f\\import\\apps\\*.rsc");
 }
 
 #endif // __SISREGISTRYSERVERCONST_H__

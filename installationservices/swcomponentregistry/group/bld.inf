@@ -35,6 +35,7 @@ PRJ_EXPORTS
 ../inc/appreginfo.h			SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/appreginfo.h)
 ../inc/scr.h 				SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/scr/scr.h)
 ../inc/scrcommon.h 			SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(usif/scr/scrcommon.h)
+../inc/screntries_platform.h 			SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(usif/scr/screntries_platform.h)
 ../inc/scrcommon.inl 		SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(usif/scr/scrcommon.inl)
 
 // USIF common includes

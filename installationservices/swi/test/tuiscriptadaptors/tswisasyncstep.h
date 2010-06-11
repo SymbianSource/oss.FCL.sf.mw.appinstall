@@ -119,7 +119,9 @@ private:
  * @test
  * @internalComponent
  */
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 class CAppSidChecker;
+#endif
 class CAsyncManager : public CActive
 	{
 public:
@@ -189,9 +191,9 @@ private:
 	CWatchdog* iWatchdog;
 
 	Swi::CAsyncLauncher* iAsyncLauncher;
-
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	CAppSidChecker *iSwiSidChecker;
-
+#endif
 	TInt iNotificationCount;
 	TInt iBootMode;
 	};

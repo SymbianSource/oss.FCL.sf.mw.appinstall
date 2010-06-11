@@ -359,7 +359,7 @@ private:
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/** The list of the software types to be registered read from the XML registration file. */
-	RCPointerArray<CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
+	RCPointerArray<Usif::CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
 	RPointerArray<Usif::CApplicationRegistrationData> iApparcRegFileData;
    /**
      * The list of Apparc registration files to parse to populate SCR

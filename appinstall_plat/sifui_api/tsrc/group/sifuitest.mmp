@@ -11,7 +11,7 @@
 *
 * Contributors:
 * 
-* Description: MMP file for RSifUi STIF test module.
+* Description:  SifUi API test code
 *
 */
 
@@ -38,4 +38,10 @@ LIBRARY         bafl.lib                            // CDesC16ArrayFlat
 LIBRARY         stiftestinterface.lib               // STIF Framework
 LIBRARY         stiftestengine.lib                  // STIF Framework
 LIBRARY         sifui.lib                           // CSifUi
+LIBRARY         estor.lib                           // RBufWriteStream
+LIBRARY         uissclient.lib                      // Swi::CCertificateInfo
+LIBRARY         x509.lib                            // CX509Certificate
+LIBRARY         apgrfx.lib                          // RApaLsSession 
+
+SMPSAFE
 

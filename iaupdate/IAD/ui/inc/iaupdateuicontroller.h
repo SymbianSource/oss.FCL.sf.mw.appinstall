@@ -28,6 +28,7 @@
 #include "iaupdatecontrollerobserver.h"
 #include "iaupdatenodeobserver.h"
 #include "iaupdatewaitdialogobserver.h"
+#include "iaupdatedialogobserver.h"
 #include "iaupdatestarterobserver.h"
 #include "iaupdateroaminghandlerobserver.h"
 #include "iaupdaterefreshobserver.h"
@@ -48,10 +49,12 @@ class MIAUpdateUiControllerObserver;
 class MIAUpdateHistory;
 class MIAUpdateFwNode;
 class IAUpdateWaitDialog;
+class IAUpdateDialogUtil;
 
 class QString;
 class CIAUpdateNodeId;
 class CEikonEnv;
+class HbAction;
 
 
 // CLASS DECLARATION
@@ -66,7 +69,8 @@ class CIAUpdateUiController :
     public MIAUpdateWaitDialogObserver,
     public MIAUpdateStarterObserver,
     public MIAUpdateRoamingHandlerObserver,
-    public MIAUpdateRefreshObserver
+    public MIAUpdateRefreshObserver,
+    public IAUpdateDialogObserver
     {
            
 public: //new functions
@@ -330,6 +334,10 @@ private: // From MIAUpdateWaitDialogObserver
      * This is called when the dialog is  closed.
      */
      void HandleWaitDialogCancel();   
+     
+private: // From IAUpdateDialogObserver     
+         
+     void dialogFinished(HbAction *action);   
     
 
 private: // From MIAUpdateRefreshObserver   
@@ -354,6 +362,8 @@ private: // construction
 
 
 private: // new functions
+    
+    void AgreementHandledL();
 
     /**
      * Called when refreshing updates list is completed.
@@ -546,6 +556,14 @@ private: // data
         ESelfUpdating
         };
 
+    enum TDialogState
+        {
+        ENoDialog,
+        EAgreement,
+        EInsufficientMemory  
+        };
+    
+    
     MIAUpdateUiControllerObserver& iObserver;
 
     MIAUpdateController* iController;
@@ -559,6 +577,8 @@ private: // data
     RPointerArray<CIAUpdateNodeId> iPreviousSelections;
     
     RPointerArray<MIAUpdateNode> iServicePackNodes;
+    
+    IAUpdateDialogUtil *mDialogUtil;  
  
     IAUpdateWaitDialog *mWaitDialog;
     
@@ -586,6 +606,8 @@ private: // data
     
     TState iState;
     
+    TDialogState iDialogState;
+    
     TBool iClosingAllowedByClient;
     
     CIAUpdateUiConfigData* iConfigData;
@@ -605,6 +627,8 @@ private: // data
     TBool iForcedRefresh;
         
     TBool iTestRole;
+    
+    HbAction *mPrimaryAction;
 
     };
 

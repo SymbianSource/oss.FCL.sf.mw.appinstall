@@ -6,7 +6,8 @@
 		<localizedName language="31">testSwTypeLoc31</localizedName>
 		<mimeType>text/sif-testpkg</mimeType>
 		<sifPluginUid>102866EF</sifPluginUid>
-		<installerSecureId>10285BCC</installerSecureId>
-		<executionLayerSecureId>80285DE0</executionLayerSecureId>
+		<CustomAcess SecureId="10285BCC" AccessMode="1"/>
+		<CustomAcess SecureId="80285DE0" AccessMode="1"/>
+		<launcherExecutable>testExeinvalidupgrade</launcherExecutable>
 	</softwareType>
 </LayeredExecutionEnvironments>

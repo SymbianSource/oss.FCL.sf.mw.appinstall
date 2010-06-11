@@ -34,6 +34,7 @@
 #include <usif/scr/appregentries.h>
 #include <scs/scsclient.h>
 #include <usif/scr/appreginfo.h>
+#include <usif/scr/screntries_platform.h>
 
 namespace Usif
 	{	 
@@ -766,7 +767,8 @@ namespace Usif
 			Add a new software type name to the SCR database.
 			
 			N.B. This is a mutating function. Please see @see Usif::RSoftwareComponentRegistry.
-			
+			This can be called only by sisregistry.
+
 			@param aUniqueSwTypeName Non-localized unique software type name.
 			@param aSifPluginUid The SIF plug-in UID of the installer which is responsible for installing components with this software type
 			@param aInstallerSecureId The secure id of the installer which is responsible for installing components with this software type
@@ -778,7 +780,7 @@ namespace Usif
             @leave A system-wide error code.
 			@internalTechnology
 		 */
-		IMPORT_C void AddSoftwareTypeL(const TDesC& aUniqueSwTypeName, TUid aSifPluginUid, TSecureId aInstallerSecureId, TSecureId aExecutionLayerSecureId, const RPointerArray<HBufC>& aMimeTypes, const RPointerArray<CLocalizedSoftwareTypeName>* aLocalizedSwTypeNames = NULL);
+		IMPORT_C void AddSoftwareTypeL(const Usif::CSoftwareTypeRegInfo& aSwTypeRegInfo);
 		
 		/**
 			Deletes a sofware type name entry and all its mime types from the registry.

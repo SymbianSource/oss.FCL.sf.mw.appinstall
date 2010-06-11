@@ -106,7 +106,7 @@ EXPORT_C void RSisRegistryWritableSession::AddEntryL(const CApplication& aApplic
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisRegistryWritableSession::AddEntryL(const CApplication& aApplication,
 													 const TDesC8& aController,
-													 const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
+													 const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
 													 TInt64 aTransactionID)
 	{
 	RBuf8 serializedArray;
@@ -223,7 +223,7 @@ EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApp
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApplication, 
 														const TDesC8& aController,
-														const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
+														const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
 														TInt64 aTransactionID)
 	{
 	RBuf8 serializedArray;

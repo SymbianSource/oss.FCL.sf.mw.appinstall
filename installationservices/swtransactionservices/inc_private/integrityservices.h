@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -28,6 +28,7 @@
 
 #include <e32base.h>
 #include <f32file.h>
+#include <e32ldr_private.h>
 #include <usif/sts/stsdefs.h>
 #include "integrityservicesevent.h"
 
@@ -198,15 +199,6 @@ class CIntegrityServices : public CBase
 		 *                 will leave with the latest error encountered. (After it has tried to roll back all!)    
 		 */
 		static void RollbackAllL();
-
-
-		/**
-		 * Creates a backup file by copying the source to a defined backup name. This MUST be used for executables.
-		 * The source files will then be deleted by invoking RLoader::Delete
-		 * @param aSource	the file to backup
-		 * @param aBackup	the name of the backup file
-		*/
-		void CopyToBackupL(const TDesC& aSource, const TDesC& aBackup);
 
 		/**
 		 * Failure types - indicate when to simulate power failure during

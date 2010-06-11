@@ -20,15 +20,14 @@
 
 #include <e32base.h>                            // CActive
 #include <hb/hbcore/hbdevicedialogsymbian.h>    // MHbDeviceDialogObserver
+#include <hb/hbcore/hbindicatorsymbian.h>       // MHbIndicatorSymbianObserver
 #include <bamdesca.h>                           // MDesCArray
+#include <sifui.h>                              // CSifUi::TOptionalButtons
+#include <sifuidefs.h>                          // TSifUiDeviceDialogType
 
-class CHbDeviceDialog;
 class CHbSymbianVariantMap;
 class CHbSymbianVariant;
 class CActiveSchedulerWait;
-class CApaMaskedBitmap;
-class CSifUiCertificateInfo;
-class CSifUiAppInfo;
 
 namespace Swi {
     class CAppInfo;
@@ -39,11 +38,12 @@ namespace Swi {
  * Private part of the SIF UI API.
  * Only CSifUi class should use CSifUiPrivate class.
  */
-class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
+class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
+        public MHbIndicatorSymbianObserver
     {
     public:     // constructor and destructor
         static CSifUiPrivate* NewL();
-        CSifUiPrivate::~CSifUiPrivate();
+        ~CSifUiPrivate();
 
     public:     // new functions
         TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
@@ -52,6 +52,8 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         void SetCertificateInfoL( const RPointerArray<CSifUiCertificateInfo>& aCertificates );
         void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue );
         void IncreaseProgressBarValueL( TInt aIncrement );
+        TBool IsCancelled();
+        void SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible );
         void ShowCompleteL();
         void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
                 const TDesC& aErrorDetails );
@@ -64,6 +66,9 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         void DataReceived( CHbSymbianVariantMap& aData );
         void DeviceDialogClosed( TInt aCompletionCode );
 
+    private:    // from MHbIndicatorSymbianObserver
+        void IndicatorUserActivated( const TDesC& aType, CHbSymbianVariantMap& aData );
+
     private:    // new functions
         CSifUiPrivate();
         void ConstructL();
@@ -74,23 +79,42 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver
         void AddParamL( const TDesC& aKey, const TDesC& aValue );
         void AddParamListL( const TDesC& aKey, const MDesCArray& aList );
         void AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo );
-        void AddParamsIconL( const CApaMaskedBitmap* aIcon );
+        void AddParamsCertificatesL();
+        void AddParamsHiddenButtonsL();
+        void ResendAllInstallationDetailsL();
+        void ActivateInstallIndicatorL();
+        void UpdateInstallIndicatorProgressL();
+        void CloseInstallIndicator();
+        TBool IsIndicatorActive();
+        void ShowInstallIndicatorCompleteL( TInt aErrorCode );
+        void UpdateDialogAndWaitForResponseL();
+        void UpdateDialogOrIndicatorWithoutWaitingL();
+        void CompleteDialogOrIndicatorAndWaitForResponseL( TInt aErrorCode );
         void DisplayDeviceDialogL();
-        TInt WaitForResponse();
-        void ResponseReceived( TInt aCompletionCode );
+        void WaitForResponseL();
+        void WaitedResponseReceived( TInt aCompletionCode );
 
     private:    // data
         CHbDeviceDialogSymbian* iDeviceDialog;
+        CHbIndicatorSymbian* iIndicator;
         CHbSymbianVariantMap* iVariantMap;
         CActiveSchedulerWait* iWait;
         TBool iIsDisplayingDialog;
-        TInt iCompletionCode;
-        TInt iReturnValue;
-        CApaMaskedBitmap* iBitmap;
+        TBool iIsFirstTimeToDisplay;
+        TInt iWaitCompletionCode;
+        TInt iDialogReturnValue;
+        TSifUiDeviceDialogType iDialogType;
+        CSifUiAppInfo* iAppInfo;
+        CBufBase* iCertificateBuffer;
         HBufC* iSelectableDrives;
         TBool iSelectedDriveSet;
         TChar iSelectedDrive;
-        CHbSymbianVariant* iCertificateInfo;
+        TInt iProgressBarFinalValue;
+        TInt iProgressBarCurrentValue;
+        TBool iNoHideProgressButton;
+        TBool iNoCancelProgressButton;
+        TBool iNoShowInAppLibButton;
+        TBool iNoErrorDetailsButton;
     };
 
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,9 +31,11 @@
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <usif/usifcommon.h>
 #include <usif/scr/appregentries.h>
+#include <usif/scr/screntries_platform.h>
 #endif
 namespace Swi
 {
+
 class CApplication;
 class CSisRegistryPackage;
 
@@ -188,7 +190,7 @@ public:
 	 * @param aTransactionID The TransactionID for IntegrityServices provided by Swis of TInt64 type
 	 *
 	 */
-	IMPORT_C void AddEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
+	IMPORT_C void AddEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
 
 	/**
 	 * Updates the registry entry representing a package containing a Layered Execution Environment.
@@ -202,7 +204,7 @@ public:
 	 * @param aTransactionID The TransactionID for IntegrityServices provided by Swis of TInt64 type
 	 *
 	 */
-	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
+	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
 
 	IMPORT_C void AddEntryL(const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);
 	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);

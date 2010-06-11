@@ -103,7 +103,7 @@ TInt CApaSecurityUtils::GetInfo(std::string& aFilename)
  * @param aIsSidProtected returns ETrue if application SID is in the protected range
  * @return KErrNone if succesful, error code otherwise
  */
-TInt CApaSecurityUtils::CheckAppSecurity( const Ptr16 aAppFilename, 
+TInt CApaSecurityUtils::CheckAppSecurity( const Ptr16& aAppFilename, 
                                            TBool& aHasWriteDeviceDataCap, 
                                            TBool& aIsSidProtected,
                                            const std::string& aDerivedPath)

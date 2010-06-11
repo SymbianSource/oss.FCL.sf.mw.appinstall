@@ -20,11 +20,11 @@
 
 // SifUi plugin literal and variant map key names defined as _LIT macros.
 // Note that _LIT macros defined in this file must match to the definitions
-// in sifuidevicedialogdefinitions.h file. This header is used in Symbian
-// code since Symbian code requires 16-bit descriptors, and definitions in
-// Qt side (in sifuidevicedialogdefinitions.h) are 8-bit wide.
+// in sifuidevicedialogdefinitions.h and sifuiinstallindicatorparams.h files.
+// Symbian code needs descriptor constants, as Qt code uses QString constants.
 
 _LIT( KSifUiDeviceDialog, "com.nokia.sifui/1.0" );
+_LIT( KSifUiInstallIndicatorType, "com.nokia.sifui.indi/1.0" );
 
 enum TSifUiDeviceDialogType
     {
@@ -34,11 +34,18 @@ enum TSifUiDeviceDialogType
     ESifUiErrorNote = 4
     };
 
+enum TSifUiDeviceDialogReturnValue
+    {
+    ESifUiContinue = 0,
+    ESifUiCancel = 1,
+    ESifUiIndicator = 3
+    };
+
 // Variant map keys for dialog type and title (common to all dialog types)
 _LIT( KSifUiDialogType, "type" );                   // enum TSifUiDeviceDialogType
 
 // Variant map keys for device dialog return values
-_LIT( KSifUiQueryAccepted, "accept" );              // boolean
+_LIT( KSifUiQueryReturnValue, "ret" );              // enum TSifUiDeviceDialogReturnValue
 _LIT( KSifUiSelectedMemory, "drv" );                // drive letter
 
 // Variant map keys for "confirmation query" dialog parameters
@@ -55,6 +62,12 @@ _LIT( KSifUiCertificates, "cert" );                 // binary
 _LIT( KSifUiProgressNoteText, "txt" );              // string
 _LIT( KSifUiProgressNoteFinalValue, "fin" );        // integer
 _LIT( KSifUiProgressNoteValue, "val" );             // integer
+
+// Variant map keys for "progress note" and "installation complete note" buttons
+_LIT( KSifUiProgressNoteIsHideButtonHidden, "hidebtn" );        // boolean
+_LIT( KSifUiProgressNoteIsCancelButtonHidden, "cancelbtn" );    // boolean
+_LIT( KSifUiCompleteNoteIsShowButtonHidden, "showbtn" );        // boolean
+_LIT( KSifUiErrorNoteIsDetailsButtonHidden, "errdtlbtn" );      // boolean
 
 // Variant map keys for "error" dialog parameters
 _LIT( KSifUiErrorCode, "err" );                     // integer

@@ -31,6 +31,7 @@
 #include "sislauncherdefs.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  
 #include <usif/scr/appregentries.h>
+#include <usif/scr/screntries_platform.h>
 #endif
 const TInt KDefaultShutdownTimeout = 10000000;
 
@@ -142,7 +143,7 @@ public:
     IMPORT_C void RunAfterEcomNotificationL(const RPointerArray<CSisRegistryFileDescription>& aFileList);
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-    IMPORT_C void ParseSwTypeRegFileL(RFile& aFile, RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray);
+    IMPORT_C void ParseSwTypeRegFileL(RFile& aFile, RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray);
 
     IMPORT_C void RegisterSifLauncherMimeTypesL(const RPointerArray<HBufC8>& aMimeTypes);
 

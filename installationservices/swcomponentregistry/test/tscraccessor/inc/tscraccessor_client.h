@@ -43,6 +43,7 @@ public:
 		EAddLocalizedSoftwareTypeWithMissingName,
 		EAddLocalizedSoftwareTypeWithExtraMime,
 		EAddLocalizedSoftwareTypeWithMissingMime,
+		EAddMultipleSidWithLauncherExecutable
 		};
 	
 	enum TAccessorOperationResult

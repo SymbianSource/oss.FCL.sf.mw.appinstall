@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,7 +31,7 @@
 #endif //SYMBIAN_ENABLE_SPLIT_HEADERS
 #include <scs/cleanuputils.h>
 #include <usif/usiferror.h>
-
+#include <usif/scr/screntries_platform.h>
 using namespace Usif;
 
 /////////////////////// Utility functions //////////////////////////////
@@ -167,7 +167,7 @@ void GenerateTestDataL(RPointerArray<HBufC>& aMimeTypes, const TDesC& aBaseMimeT
 	CleanupStack::PopAndDestroy(&buf);
 	}
 
-TInt AddSoftwareTypeL(RSoftwareComponentRegistry& aScrSession, const TDesC& aUniqueSwTypeName, TUid aSifPluginUid, TSecureId aInstallerSid, TSecureId aExecutionLayerSid, const TDesC& aBaseMimeTypeName, TInt aMimeTypeNum, const TDesC& aBaseSwTypeName, TInt aSwTypesNum, RScrAccessor::TAccessorOperationResult& aOpResult)
+TInt AddSoftwareTypeL(RSoftwareComponentRegistry& aScrSession, const TDesC& aUniqueSwTypeName, TUid aSifPluginUid, RArray<TCustomAccessInfo> aInstallerSids, const TDesC& aBaseMimeTypeName, TInt aMimeTypeNum, const TDesC& aBaseSwTypeName, TInt aSwTypesNum, const TDesC& aLauncherExecutable, RScrAccessor::TAccessorOperationResult& aOpResult)
 	{
 	RPointerArray<HBufC> mimeTypesArray;
 	CleanupResetAndDestroyPushL(mimeTypesArray);
@@ -186,9 +186,33 @@ TInt AddSoftwareTypeL(RSoftwareComponentRegistry& aScrSession, const TDesC& aUni
 	else
 		mimeType2BChecked = KNullDesC().AllocLC();
 	
-	TRAPD(err, aScrSession.AddSoftwareTypeL(aUniqueSwTypeName, aSifPluginUid, aInstallerSid, aExecutionLayerSid, mimeTypesArray, plocalizedSwNames));
+	Usif::CSoftwareTypeRegInfo* swType = Usif::CSoftwareTypeRegInfo::NewL(aUniqueSwTypeName);
+	CleanupStack::PushL(swType);
+	swType->SetSifPluginUid(aSifPluginUid);
+	for(TInt i=0;i<aInstallerSids.Count(); ++i)
+		{
+		swType->SetCustomAccessL(aInstallerSids[i]);
+		}
+	if(aMimeTypeNum)
+	    {
+	    for(TInt i=0;i<mimeTypesArray.Count(); ++i)
+	        {
+	        swType->SetMimeTypeL(mimeTypesArray[i]->Des());
+	        }
+        }
+	
+	swType->SetLauncherExecutableL(aLauncherExecutable);
+	if(plocalizedSwNames)
+	    {
+	    for(TInt i=0;i<plocalizedSwNames->Count(); ++i)
+	        {
+	        swType->SetLocalizedSoftwareTypeNameL(plocalizedSwNames->operator [](i)->Locale(), plocalizedSwNames->operator [](i)->NameL());
+	        }
+	    }
+	
+	TRAPD(err, aScrSession.AddSoftwareTypeL(*swType));
 	VerifySoftwareTypeAdditionL(err, aOpResult, aScrSession, *mimeType2BChecked, aSifPluginUid);
-	CleanupStack::PopAndDestroy(3, &mimeTypesArray); // mimeTypesArray, localizedSwNames, mimeType2BChecked
+	CleanupStack::PopAndDestroy(4, &mimeTypesArray); // mimeTypesArray, localizedSwNames, mimeType2BChecked
 	return err;
 	}
 
@@ -217,7 +241,12 @@ void CScrAccessSession::ServiceL(const RMessage2& aMessage)
 			RScrAccessor::TAccessorOperationType opType = static_cast<RScrAccessor::TAccessorOperationType>(aMessage.Int0());
 			
 			TUid localizedSifPluginUid = {0xA01B7222};
-			_LIT_SECURE_ID(localizedInstallerSid, 0x10285BC9);					
+			RArray<TCustomAccessInfo> locSidArray;
+			CleanupClosePushL(locSidArray);
+			               
+			TCustomAccessInfo id1(TSecureId(0x10285BC9), static_cast<TAccessMode>(1));
+			locSidArray.AppendL(id1);
+			                    
 			_LIT(KMimeTypeBaseNameLocalized, "test_mimetype_localizedinstaller");
 			_LIT(KSwTypeBaseLocalizableName, "test_localizedinstaller_name");
 			_LIT(KSwTypeUniqueNameLocalized, "test_localizedinstaller_uniquename");
@@ -227,67 +256,100 @@ void CScrAccessSession::ServiceL(const RMessage2& aMessage)
 				case RScrAccessor::EAddNonLocalizedSoftwareType:
 					{	
 					TUid sifPluginUid = {0xA01B7211};
-					_LIT_SECURE_ID(installerSid, 0x10285BC9);
-					_LIT_SECURE_ID(executionLayerSid, 0xAAEEDD11);
-					
+			
+					RArray<TCustomAccessInfo> sidArray;
+					CleanupClosePushL(sidArray);
+					    
+					TCustomAccessInfo id1(TSecureId(0x10285BC9), static_cast<TAccessMode>(1));
+					TCustomAccessInfo id2(TSecureId(0xAAEEDD11), static_cast<TAccessMode>(1));
+					sidArray.AppendL(id1);
+					sidArray.AppendL(id2);
+					    
 					_LIT(KMimeTypeBaseName, "test_mimetype_nonlocalizedinstaller");
 					_LIT(KSwTypeUniqueName, "test_nonlocalizedinstaller_uniquename");
 										
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueName, sifPluginUid, installerSid, executionLayerSid, KMimeTypeBaseName, 2, KNullDesC, 0, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueName, sifPluginUid, sidArray,  KMimeTypeBaseName, 2, KNullDesC, 0, KNullDesC, opResult);
+					CleanupStack::PopAndDestroy(&sidArray);
 					break;
 					}
 				case RScrAccessor::EAddLocalizedSoftwareType:
 					{
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 2, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 2, KNullDesC, opResult);
 					break;
 					}
 				case RScrAccessor::EAddSofwtareTypeWithoutMimeTypes:
 					{
 					TUid sifPluginUid = {0xA01B7333};
-					_LIT_SECURE_ID(installerSid, 0x10285BC9);
-										
+					RArray<TCustomAccessInfo> sidArray;
+					CleanupClosePushL(sidArray);
+					                    
+					TCustomAccessInfo id1(TSecureId(0x10285BC9), static_cast<TAccessMode>(1));
+					sidArray.AppendL(id1);	
 					_LIT(KSwTypeUniqueName, "test_nomimeinstaller_uniquename");
 					
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueName, sifPluginUid, installerSid, installerSid, KNullDesC, 0, KNullDesC, 0, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueName, sifPluginUid, sidArray, KNullDesC, 0, KNullDesC, 0, KNullDesC, opResult);
+					CleanupStack::PopAndDestroy(&sidArray);
 					break;
 					} 
 				case RScrAccessor::EAddLocalizedSoftwareTypeWithDifferentPluginUid:
 					{
 					TUid localizedDifferentSifPluginUid = {0xCC1B7333};
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedDifferentSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 2, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedDifferentSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 2, KNullDesC, opResult);
 					if(KErrAlreadyExists == err)
 						err = KErrNone; // The expected result is KErrAlreadyExists. So return no error to the test client.
 					break;
 					}
 				case RScrAccessor::EAddLocalizedSoftwareTypeWithExtraName:
 					{
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 3, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 3, KNullDesC, opResult);
 					if(KErrAlreadyExists == err)
 						err = KErrNone; // The expected result is KErrAlreadyExists. So return no error to the test client.
 					break;
 					}
 				case RScrAccessor::EAddLocalizedSoftwareTypeWithMissingName:
 					{
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 1, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 2, KSwTypeBaseLocalizableName, 1, KNullDesC, opResult);
 					if(KErrAlreadyExists == err)
 						err = KErrNone; // The expected result is KErrAlreadyExists. So return no error to the test client.
 					break;
 					}
 				case RScrAccessor::EAddLocalizedSoftwareTypeWithExtraMime:
 					{
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 3, KSwTypeBaseLocalizableName, 2, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 3, KSwTypeBaseLocalizableName, 2, KNullDesC, opResult);
 					if(KErrAlreadyExists == err)
 						err = KErrNone; // The expected result is KErrAlreadyExists. So return no error to the test client.
 					break;
 					}
 				case RScrAccessor::EAddLocalizedSoftwareTypeWithMissingMime:
 					{
-					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, localizedInstallerSid, localizedInstallerSid, KMimeTypeBaseNameLocalized, 1, KSwTypeBaseLocalizableName, 2, opResult);
+					err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueNameLocalized, localizedSifPluginUid, locSidArray, KMimeTypeBaseNameLocalized, 1, KSwTypeBaseLocalizableName, 2, KNullDesC, opResult);
 					if(KErrAlreadyExists == err)
 						err = KErrNone; // The expected result is KErrAlreadyExists. So return no error to the test client.
 					break;
-					}				
+					}
+				case RScrAccessor::EAddMultipleSidWithLauncherExecutable:
+				    {
+				    TUid sifPluginUid = {0xA01B7212};
+				    _LIT(KSwTypeUniqueName, "test_uniquename");
+				    _LIT(KMimeTypeBaseName, "test_mimetype");
+				    _LIT(KLauncherExecutable, "LauncherExecutable");
+				    RArray<TCustomAccessInfo> sidArray;
+				    CleanupClosePushL(sidArray);
+				                            
+				    TCustomAccessInfo id1(TSecureId(0x10285BC9), static_cast<TAccessMode>(1));
+				    TCustomAccessInfo id2(TSecureId(0xAAEEDD11), static_cast<TAccessMode>(1));
+				    TCustomAccessInfo id3(TSecureId(0xAAEEEE11), static_cast<TAccessMode>(1));
+
+				    sidArray.AppendL(id1);
+				    sidArray.AppendL(id2);
+				    sidArray.AppendL(id3);
+				    
+				    err = AddSoftwareTypeL(Server().ScrSession(), KSwTypeUniqueName, sifPluginUid, sidArray, KMimeTypeBaseName, 1, KNullDesC, 0, KLauncherExecutable, opResult);
+				    CleanupStack::PopAndDestroy(&sidArray);
+				    break;
+				    }
 				} // switch(opType)
+			CleanupStack::PopAndDestroy(&locSidArray);
 			actualTestDuration = StopTimer(timer);
 			break;
 			}

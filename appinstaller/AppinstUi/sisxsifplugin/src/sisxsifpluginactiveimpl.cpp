@@ -52,8 +52,6 @@ _LIT( KCompUid, "CompUid" );
 _LIT( KStartupListUpdaterExecutable, "z:\\sys\\bin\\startuplistupdater.exe" );
 _LIT( KStartupListUpdaterName, "StartupListUpdater" );
 
-const TInt KSystemWideErrorsBoundary = -100;
-
 
 // ======== MEMBER FUNCTIONS ========
 
@@ -118,13 +116,17 @@ void CSisxSifPluginActiveImpl::DoCancel()
 //
 void CSisxSifPluginActiveImpl::RunL()
     {
-    TInt result = iStatus.Int();
     FLOG_3( _L("CSisxSifPluginActiveImpl::RunL(), operation %d, phase %d, result %d"),
-            iOperation, iPhase, result );
-    User::LeaveIfError( result );
+            iOperation, iPhase, iStatus.Int() );
 
+    User::LeaveIfError( iStatus.Int() );
     switch( iOperation )
         {
+        case EGetComponentInfo:
+            __ASSERT_DEBUG( iPhase == ERunningOperation, Panic( ESisxSifInternalError ) );
+            CompleteClientRequest( KErrNone );
+            break;
+
         case EInstall:
             switch( iPhase )
                 {
@@ -137,14 +139,11 @@ void CSisxSifPluginActiveImpl::RunL()
                         {
                         StartInstallingL();
                         }
-                    iPhase = ERunningOperation;
-                    SetActive();
                     break;
 
                 case ERunningOperation:
                     FinalizeInstallationL();
                     CompleteClientRequest( KErrNone );
-                    iPhase = ENotActive;
                     break;
 
 				// TODO: KSifInParam_InstallInactive
@@ -159,14 +158,12 @@ void CSisxSifPluginActiveImpl::RunL()
             __ASSERT_DEBUG( iPhase == ERunningOperation, Panic( ESisxSifInternalError ) );
             UpdateStartupListL();
             CompleteClientRequest( KErrNone );
-            iPhase = ENotActive;
             break;
 
         case EActivate:
         case EDeactivate:
             __ASSERT_DEBUG( iPhase == ERunningOperation, Panic( ESisxSifInternalError ) );
             CompleteClientRequest( KErrNone );
-            iPhase = ENotActive;
             break;
 
         default:
@@ -182,9 +179,9 @@ void CSisxSifPluginActiveImpl::RunL()
 TInt CSisxSifPluginActiveImpl::RunError( TInt aError )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::RunError(), aError %d"), aError );
+
     TRAP_IGNORE( DoHandleErrorL( aError ) );
     CompleteClientRequest( aError );
-    iPhase = ENotActive;
     return KErrNone;
     }
 
@@ -199,28 +196,28 @@ void CSisxSifPluginActiveImpl::GetComponentInfo(
         TRequestStatus& aStatus )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo: %S"), &aFileName );
-    if( !IsActive() )
-        {
-		CommonRequestPreamble( aStatus );
 
-		TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileName,
-                *iInstallPrefs, aComponentInfo, iStatus ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
-
-        iOperation = EGetComponentInfo;
-        iPhase = ERunningOperation;
-        SetActive();
-        }
-    else
+    if( IsActive() )
         {
-        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo KErrInUse") );
+        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo, KErrInUse") );
         CompleteClientRequest( KErrInUse );
+        return;
         }
+
+    TRAPD( error, SetFileL( aFileName ) );
+    if( error )
+        {
+        FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo, set file error %d"), error );
+        CompleteClientRequest( error );
+        return;
+        }
+
+    TRAP( error, DoGetComponentInfoL( aComponentInfo, aStatus ) );
+	if( error )
+		{
+		FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo ERROR %d"), error );
+		CompleteClientRequest( error );
+		}
     }
 
 // ---------------------------------------------------------------------------
@@ -234,28 +231,22 @@ void CSisxSifPluginActiveImpl::GetComponentInfo(
         TRequestStatus& aStatus )
     {
     FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo(RFile)") );
-    if( !IsActive() )
-        {
-		CommonRequestPreamble( aStatus );
 
-		TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileHandle,
-                *iInstallPrefs, aComponentInfo, iStatus ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
-
-        iOperation = EGetComponentInfo;
-        iPhase = ERunningOperation;
-        SetActive();
-        }
-    else
+    if( IsActive() )
         {
-        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo KErrInUse") );
+        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo, KErrInUse") );
         CompleteClientRequest( KErrInUse );
+        return;
         }
+
+    SetFile( aFileHandle );
+
+	TRAPD( error, DoGetComponentInfoL( aComponentInfo, aStatus ) );
+	if( error )
+		{
+		FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentInfo ERROR %d"), error );
+		CompleteClientRequest( error );
+		}
     }
 
 // ---------------------------------------------------------------------------
@@ -270,44 +261,30 @@ void CSisxSifPluginActiveImpl::Install(
         TRequestStatus& aStatus )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::Install: %S"), &aFileName );
-    if( !IsActive() )
+
+    if( IsActive() )
         {
-        CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
-        FLOG_1( _L("CSisxSifPluginActiveImpl::Install, IsSilentMode=%d"), IsSilentMode() );
+		FLOG( _L("CSisxSifPluginActiveImpl::Install, KErrInUse") );
+		CompleteClientRequest( KErrInUse );
+		return;
+		}
 
-        if( IsSilentMode() )
-            {
-            if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
-                {
-                FLOG( _L("CSisxSifPluginActiveImpl::Install, missing ECapabilityTrustedUI") );
-                CompleteClientRequest( KErrPermissionDenied );
-                return;
-                }
-            }
-        else
-            {
-            iUiHandler->DisplayPreparingInstallL( aFileName );
-            }
-        SetInstallFileL( aFileName );
+    iHasAllFilesCapability = aSecurityContext.HasCapability( ECapabilityAllFiles );
 
-        TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileName,
-        		*iInstallPrefs, *iComponentInfo, iStatus ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::Install, GetComponentInfoL ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
+	TRAPD( error, SetFileL( aFileName ) );
+	if( error )
+		{
+		FLOG_1( _L("CSisxSifPluginActiveImpl::Install, set file error %d"), error );
+		CompleteClientRequest( error );
+		return;
+		}
 
-        iOperation = EInstall;
-        iPhase = EPreprocessing;
-        SetActive();
-        }
-    else
-        {
-        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentInfo, KErrInUse") );
-        CompleteClientRequest( KErrInUse );
-        }
+	TRAP( error, DoInstallL( aSecurityContext, aInputParams, aOutputParams, aStatus ) );
+	if( error )
+		{
+		FLOG_1( _L("CSisxSifPluginActiveImpl::Install, DoInstallL error %d"), error );
+		CompleteClientRequest( error );
+		}
     }
 
 // ---------------------------------------------------------------------------
@@ -321,46 +298,24 @@ void CSisxSifPluginActiveImpl::Install(
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
     {
-    TFileName fileName;
-    aFileHandle.Name( fileName );
-    FLOG_1( _L("CSisxSifPluginActiveImpl::Install(RFile): %S"), &fileName );
-    if( !IsActive() )
+    FLOG( _L("CSisxSifPluginActiveImpl::Install(RFile)") );
+
+    if( IsActive() )
         {
-        CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
-        FLOG_1( _L("CSisxSifPluginActiveImpl::Install, IsSilentMode=%d"), IsSilentMode() );
+		FLOG( _L("CSisxSifPluginActiveImpl::Install KErrInUse") );
+		CompleteClientRequest( KErrInUse );
+		return;
+		}
 
-        if( IsSilentMode() )
-            {
-            if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
-                {
-                FLOG( _L("CSisxSifPluginActiveImpl::Install, missing ECapabilityTrustedUI") );
-                CompleteClientRequest( KErrPermissionDenied );
-                return;
-                }
-            }
-        else
-            {
-            iUiHandler->DisplayPreparingInstallL( fileName );
-            }
-        SetInstallFile( aFileHandle );
+    iHasAllFilesCapability = aSecurityContext.HasCapability( ECapabilityAllFiles );
 
-        TRAPD( err, iAsyncLauncher->GetComponentInfoL( *iUiHandler, aFileHandle,
-        		*iInstallPrefs, *iComponentInfo, iStatus ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::Install, GetComponentInfoL ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
+    SetFile( aFileHandle );
 
-        iOperation = EInstall;
-        iPhase = EPreprocessing;
-        SetActive();
-        }
-    else
+    TRAPD( error, DoInstallL( aSecurityContext, aInputParams, aOutputParams, aStatus ) );
+    if( error )
         {
-        FLOG( _L("CSisxSifPluginActiveImpl::Install KErrInUse") );
-        CompleteClientRequest( KErrInUse );
+        FLOG_1( _L("CSisxSifPluginActiveImpl::Install, DoInstallL error %d"), error );
+        CompleteClientRequest( error );
         }
     }
 
@@ -376,35 +331,30 @@ void CSisxSifPluginActiveImpl::Uninstall(
         TRequestStatus& aStatus )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::Uninstall, aComponentId %d"), aComponentId );
-    if( !IsActive() )
-        {
-        CommonRequestPreamble( aInputParams, aOutputParams, aStatus );
 
-        // Uninstall is always silent. TrustedUI capability is required.
-        if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
-            {
-            FLOG( _L( "CSisxSifPluginActiveImpl::Uninstall, missing ECapabilityTrustedUI") );
-            CompleteClientRequest( KErrPermissionDenied );
-            return;
-            }
-
-        TRAPD( err, DoUninstallL( aComponentId ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::Uninstall, DoUninstallL ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
-
-        iOperation = EUninstall;
-        iPhase = ERunningOperation;
-        SetActive();
-        }
-    else
+    if( IsActive() )
         {
         FLOG( _L("CSisxSifPluginActiveImpl::Uninstall KErrInUse") );
         CompleteClientRequest( KErrInUse );
+        return;
         }
+
+    iHasAllFilesCapability = aSecurityContext.HasCapability( ECapabilityAllFiles );
+
+    // Uninstall is always silent. TrustedUI capability is required.
+	if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
+		{
+		FLOG( _L( "CSisxSifPluginActiveImpl::Uninstall, missing ECapabilityTrustedUI") );
+		CompleteClientRequest( KErrPermissionDenied );
+		return;
+		}
+
+	TRAPD( error, DoUninstallL( aComponentId, aInputParams, aOutputParams, aStatus ) );
+	if( error )
+		{
+		FLOG_1( _L("CSisxSifPluginActiveImpl::Uninstall, DoUninstallL ERROR %d"), error );
+		CompleteClientRequest( error );
+		}
     }
 
 // ---------------------------------------------------------------------------
@@ -413,35 +363,26 @@ void CSisxSifPluginActiveImpl::Uninstall(
 //
 void CSisxSifPluginActiveImpl::Activate(
         TComponentId aComponentId,
-        const TSecurityContext& /*aSecurityContext*/,
+        const TSecurityContext& aSecurityContext,
         TRequestStatus& aStatus )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::Activate, aComponentId %d"), aComponentId );
-    if( !IsActive() )
-        {
-        aStatus = KRequestPending;
-        iClientStatus = &aStatus;
 
-        TRAPD( err, DoActivateL( aComponentId ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::Activate, DoActivateL ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
-
-        iStatus = KRequestPending;
-        TRequestStatus* status = &iStatus;
-        User::RequestComplete( status, KErrNone );
-
-        iOperation = EActivate;
-        iPhase = ERunningOperation;
-        SetActive();
-        }
-    else
+    if( IsActive() )
         {
         FLOG( _L("CSisxSifPluginActiveImpl::Activate KErrInUse") );
         CompleteClientRequest( KErrInUse );
+        return;
+        }
+
+    iHasAllFilesCapability = aSecurityContext.HasCapability( ECapabilityAllFiles );
+
+    TRAPD( error, DoActivateL( aComponentId, aStatus ) );
+    if( error )
+        {
+        FLOG_1( _L("CSisxSifPluginActiveImpl::Activate, DoActivateL ERROR %d"), error );
+        CompleteClientRequest( error );
+        return;
         }
     }
 
@@ -451,35 +392,26 @@ void CSisxSifPluginActiveImpl::Activate(
 //
 void CSisxSifPluginActiveImpl::Deactivate(
         TComponentId aComponentId,
-        const TSecurityContext& /*aSecurityContext*/,
+        const TSecurityContext& aSecurityContext,
         TRequestStatus& aStatus )
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::Deactivate, aComponentId %d"), aComponentId );
-    if( !IsActive() )
-        {
-        aStatus = KRequestPending;
-        iClientStatus = &aStatus;
 
-        TRAPD( err, DoDeactivateL( aComponentId ) );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginActiveImpl::Deactivate, DoDeactivateL ERROR %d"), err );
-            CompleteClientRequest( err );
-            return;
-            }
-
-        iStatus = KRequestPending;
-        TRequestStatus* status = &iStatus;
-        User::RequestComplete( status, KErrNone );
-
-        iOperation = EDeactivate;
-        iPhase = ERunningOperation;
-        SetActive();
-        }
-    else
+    if( IsActive() )
         {
         FLOG( _L("CSisxSifPluginActiveImpl::Deactivate KErrInUse") );
         CompleteClientRequest( KErrInUse );
+        return;
+        }
+
+    iHasAllFilesCapability = aSecurityContext.HasCapability( ECapabilityAllFiles );
+
+    TRAPD( error, DoDeactivateL( aComponentId, aStatus ) );
+    if( error )
+        {
+        FLOG_1( _L("CSisxSifPluginActiveImpl::Deactivate, DoDeactivateL ERROR %d"), error );
+        CompleteClientRequest( error );
+        return;
         }
     }
 
@@ -507,10 +439,10 @@ void CSisxSifPluginActiveImpl::ConstructL()
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::CommonRequestPreamble()
+// CSisxSifPluginActiveImpl::CommonRequestPreambleL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::CommonRequestPreamble( TRequestStatus& aStatus )
+void CSisxSifPluginActiveImpl::CommonRequestPreambleL( TRequestStatus& aStatus )
     {
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
@@ -527,10 +459,10 @@ void CSisxSifPluginActiveImpl::CommonRequestPreamble( TRequestStatus& aStatus )
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::CommonRequestPreamble()
+// CSisxSifPluginActiveImpl::CommonRequestPreambleL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::CommonRequestPreamble(
+void CSisxSifPluginActiveImpl::CommonRequestPreambleL(
         const COpaqueNamedParams& aInputParams,
         COpaqueNamedParams& aOutputParams,
         TRequestStatus& aStatus )
@@ -548,6 +480,17 @@ void CSisxSifPluginActiveImpl::CommonRequestPreamble(
 
     iInputParams = &aInputParams;
     iOutputParams = &aOutputParams;
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::CompleteSelf()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::CompleteSelf( TInt aResult )
+    {
+    iStatus = KRequestPending;
+    TRequestStatus* status = &iStatus;
+    User::RequestComplete( status, aResult );
     }
 
 // ---------------------------------------------------------------------------
@@ -595,14 +538,95 @@ void CSisxSifPluginActiveImpl::CompleteClientRequest( TInt aResult )
         User::RequestComplete( iClientStatus, aResult );
         iClientStatus = NULL;
         }
+    __ASSERT_DEBUG( !IsActive(), Panic( ESisxSifInternalError ) );
+    iOperation = ENoOperation;
+    iPhase = ENotActive;
     }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::DoGetComponentInfoL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::DoGetComponentInfoL( CComponentInfo& aComponentInfo,
+		TRequestStatus& aStatus )
+	{
+	CommonRequestPreambleL( aStatus );
+
+	if( iFileName )
+		{
+		iAsyncLauncher->GetComponentInfoL( *iUiHandler, *iFileName, *iInstallPrefs,
+				aComponentInfo, iStatus );
+		}
+	else if( iFileHandle )
+		{
+		iAsyncLauncher->GetComponentInfoL( *iUiHandler, *iFileHandle, *iInstallPrefs,
+				aComponentInfo, iStatus );
+		}
+	else
+		{
+		User::Leave( KErrGeneral );
+		}
+
+    iOperation = EGetComponentInfo;
+    iPhase = ERunningOperation;
+    SetActive();
+	}
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::DoInstallL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::DoInstallL( const TSecurityContext& aSecurityContext,
+		const COpaqueNamedParams& aInputParams, COpaqueNamedParams& aOutputParams,
+		TRequestStatus& aStatus )
+	{
+    CommonRequestPreambleL( aInputParams, aOutputParams, aStatus );
+    FLOG_1( _L("CSisxSifPluginActiveImpl::DoInstall, IsSilentMode=%d"), IsSilentMode() );
+
+    if( IsSilentMode() )
+        {
+        if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
+            {
+            FLOG( _L("CSisxSifPluginActiveImpl::Install, missing ECapabilityTrustedUI") );
+            CompleteClientRequest( KErrPermissionDenied );
+            return;
+            }
+        }
+
+    if( iFileName )
+        {
+        iUiHandler->DisplayPreparingInstallL( *iFileName );
+        iAsyncLauncher->GetComponentInfoL( *iUiHandler, *iFileName, *iInstallPrefs,
+                *iComponentInfo, iStatus );
+        }
+    else if( iFileHandle )
+        {
+        TFileName fileName;
+        iFileHandle->Name( fileName );
+        iUiHandler->DisplayPreparingInstallL( fileName );
+        iAsyncLauncher->GetComponentInfoL( *iUiHandler, *iFileHandle, *iInstallPrefs,
+                *iComponentInfo, iStatus );
+        }
+    else
+        {
+        User::Leave( KErrGeneral );
+        }
+
+    iOperation = EInstall;
+    iPhase = EPreprocessing;
+    SetActive();
+	}
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginActiveImpl::DoUninstallL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId )
+void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId,
+		const COpaqueNamedParams& aInputParams, COpaqueNamedParams& aOutputParams,
+		TRequestStatus& aStatus )
     {
+    CommonRequestPreambleL( aInputParams, aOutputParams, aStatus );
+
     RSoftwareComponentRegistry scrSession;
     User::LeaveIfError( scrSession.Connect() );
     CleanupClosePushL( scrSession );
@@ -622,32 +646,54 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId )
     CleanupStack::PopAndDestroy( 2, &scrSession );      // propertyEntry, scrSession
 
     iAsyncLauncher->UninstallL( *iUiHandler, objectId, iStatus );
+
+    iOperation = EUninstall;
+    iPhase = ERunningOperation;
+    SetActive();
     }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginActiveImpl::DoActivateL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::DoActivateL( TComponentId aComponentId )
+void CSisxSifPluginActiveImpl::DoActivateL( TComponentId aComponentId,
+        TRequestStatus& aStatus )
     {
+    CommonRequestPreambleL( aStatus );
+
     Swi::RSisRegistryWritableSession sisRegSession;
     User::LeaveIfError( sisRegSession.Connect() );
     CleanupClosePushL( sisRegSession );
     sisRegSession.ActivateComponentL( aComponentId );
     CleanupStack::PopAndDestroy( &sisRegSession );
+
+    CompleteSelf( KErrNone );
+
+    iOperation = EActivate;
+    iPhase = ERunningOperation;
+    SetActive();
     }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginActiveImpl::DoDeactivateL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::DoDeactivateL( TComponentId aComponentId )
+void CSisxSifPluginActiveImpl::DoDeactivateL( TComponentId aComponentId,
+        TRequestStatus& aStatus )
     {
+    CommonRequestPreambleL( aStatus );
+
     Swi::RSisRegistryWritableSession sisRegSession;
     User::LeaveIfError( sisRegSession.Connect() );
     CleanupClosePushL( sisRegSession );
     sisRegSession.DeactivateComponentL( aComponentId );
     CleanupStack::PopAndDestroy( &sisRegSession );
+
+    CompleteSelf( KErrNone );
+
+    iOperation = EDeactivate;
+    iPhase = ERunningOperation;
+    SetActive();
     }
 
 // ---------------------------------------------------------------------------
@@ -656,42 +702,104 @@ void CSisxSifPluginActiveImpl::DoDeactivateL( TComponentId aComponentId )
 //
 void CSisxSifPluginActiveImpl::DoHandleErrorL( TInt aError )
     {
-    // TODO: add support for:
-    // KSifOutParam_ErrCategory
-    // KSifOutParam_ErrCode
-    // KSifOutParam_ExtendedErrCode
-    // KSifOutParam_ErrMessage
-    // KSifOutParam_ErrMessageDetails
+    FLOG_1( _L("CSisxSifPluginActiveImpl::DoHandleErrorL(), aError=%d"), aError );
 
+    TErrorCategory category = ErrorCategory( aError );
     if( iOutputParams )
         {
+        iOutputParams->AddIntL( KSifOutParam_ErrCode, aError );
         iOutputParams->AddIntL( KSifOutParam_ExtendedErrCode, aError );
+        iOutputParams->AddIntL( KSifOutParam_ErrCategory, category );
+        // TODO: how to get error message and detailed error message?
+        // iOutputParams->AddStringL( KSifOutParam_ErrMessage, TBD );
+        // iOutputParams->AddStringL( KSifOutParam_ErrMessageDetails, TBD );
         }
-    TInt errorCode = ConvertToSifErrorCode( aError );
-    if( errorCode != KErrCancel )
+
+    if( aError != KErrNone && aError != KErrCancel )
         {
-        iUiHandler->DisplayFailedL( errorCode );
+        // TODO: proper error messages
+        iUiHandler->DisplayFailedL( category, aError, KNullDesC, KNullDesC );
         }
+
+    // TODO: proper error messages
+    iUiHandler->PublishCompletionL( category, aError, KNullDesC, KNullDesC  );
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::ConvertToSifErrorCode()
+// CSisxSifPluginActiveImpl::ErrorCategory()
 // ---------------------------------------------------------------------------
 //
-TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
+TErrorCategory CSisxSifPluginActiveImpl::ErrorCategory( TInt aErrorCode )
     {
-    FLOG_1( _L("CSisxSifPluginActiveImpl::ConvertToSifErrorCode(), aSwiErrorCode=%d"),
-            aSwiErrorCode );
-
-    // TODO: need to show also SWI error code in UI somehow when necessary
-
-    if( aSwiErrorCode > KSystemWideErrorsBoundary )
+    switch( aErrorCode )
         {
-        return aSwiErrorCode;
-        }
+        // System-wide error codes
+        case KErrNone:
+            return ENone;
+        case KErrNotFound:
+        case KErrGeneral:
+            return EUnexpectedError;
+        case KErrCancel:
+            return EUserCancelled;
+        case KErrNoMemory:
+            return ELowMemory;
+        case KErrNotSupported:
+        case KErrArgument:
+        case KErrTotalLossOfPrecision:
+        case KErrBadHandle:
+        case KErrOverflow:
+        case KErrUnderflow:
+        case KErrAlreadyExists:
+        case KErrPathNotFound:
+        case KErrDied:
+            return EUnexpectedError;
+        case KErrInUse:
+            return EInstallerBusy;
+        case KErrServerTerminated:
+        case KErrServerBusy:
+        case KErrCompletion:
+        case KErrNotReady:
+        case KErrUnknown:
+            return EUnexpectedError;
+        case KErrCorrupt:
+            return ECorruptedPackage;
+        case KErrAccessDenied:
+            return ESecurityError;
+        case KErrLocked:
+        case KErrWrite:
+        case KErrDisMounted:
+        case KErrEof:
+            return EUnexpectedError;
+        case KErrDiskFull:
+            return ELowDiskSpace;
+        case KErrBadDriver:
+        case KErrBadName:
+        case KErrCommsLineFail:
+        case KErrCommsFrame:
+        case KErrCommsOverrun:
+        case KErrCommsParity:
+        case KErrTimedOut:
+        case KErrCouldNotConnect:
+        case KErrCouldNotDisconnect:
+        case KErrDisconnected:
+        case KErrBadLibraryEntryPoint:
+        case KErrBadDescriptor:
+        case KErrAbort:
+        case KErrTooBig:
+        case KErrDivideByZero:
+        case KErrBadPower:
+        case KErrDirFull:
+        case KErrHardwareNotAvailable:
+        case KErrSessionClosed:
+            return EUnexpectedError;
+        case KErrPermissionDenied:
+            return ESecurityError;
+        case KErrExtensionNotSupported:
+        case KErrCommsBreak:
+        case KErrNoSecureTime:
+            return EUnexpectedError;
 
-    switch( aSwiErrorCode )
-        {
+        // Native SW Installer error codes
         case KErrSISFieldIdMissing:
         case KErrSISFieldLengthMissing:
         case KErrSISFieldLengthInvalid:
@@ -700,7 +808,9 @@ TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
         case KErrSISControllerSISInfoMissing:
         case KErrSISInfoSISUidMissing:
         case KErrSISInfoSISNamesMissing:
+            return ECorruptedPackage;
         case KErrSISFieldBufferTooShort:
+            return EUnexpectedError;
         case KErrSISStringArrayInvalidElement:
         case KErrSISInfoSISVendorNamesMissing:
         case KErrSISInfoSISVersionMissing:
@@ -728,6 +838,7 @@ TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
         case KErrSISDependencyMissingUid:
         case KErrSISDependencyMissingVersion:
         case KErrSISDependencyMissingNames:
+        case KErrSISPrerequisitesMissingDependency:
         case KErrSISControllerMissingPrerequisites:
         case KErrSISUpgradeRangeMissingVersion:
         case KErrSISUnexpectedFieldType:
@@ -737,52 +848,54 @@ TInt CSisxSifPluginActiveImpl::ConvertToSifErrorCode( TInt aSwiErrorCode )
         case KErrSISInvalidStringLength:
         case KErrSISCompressionNotSupported:
         case KErrSISTooDeeplyEmbedded:
-        case KErrWrongHeaderFormat:
-        case KErrExpressionToComplex:
-        case KErrInvalidExpression:
-        case KErrInvalidType:
-            return KErrSifCorruptedPackage;
-
-        case KErrBadUsage:
-        case KErrInstallerLeave:
-            return KErrSifUnknown;
-
-        case KErrSISPrerequisitesMissingDependency:
-            return KErrSifMissingDependencies;
-
-        case KErrMissingBasePackage:
-            return KErrSifMissingBasePackage;
-
-        case KErrCapabilitiesMismatch:
-        case KErrInvalidEclipsing:
-        case KErrSecurityError:
-        case KErrBadHash:
-        case KErrDigestNotSupported:
-        case KErrSignatureSchemeNotSupported:
-        case KErrSISWouldOverWrite:
+            return ECorruptedPackage;
         case KErrSISInvalidTargetFile:
-            return KErrPermissionDenied;
-
-        case KErrPolicyFileCorrupt:
-            return KErrSifBadInstallerConfiguration;
-
-        case KErrInvalidUpgrade:
-        case KErrLegacySisFile:
-            return KErrSifPackageCannotBeInstalledOnThisDevice;
-
+        case KErrSISWouldOverWrite:
+            return ESecurityError;
+        case KErrSISInfoMissingRemoveDirectories:
+            return ECorruptedPackage;
         case KErrSISNotEnoughSpaceToInstall:
-            return KErrSifNotEnoughSpace;
+            return ELowDiskSpace;
+        case KErrInstallerLeave:
+        case KErrPolicyFileCorrupt:
+            return EUnexpectedError;
+        case KErrSignatureSchemeNotSupported:
+        case KErrDigestNotSupported:
+            return EApplicationNotCompatible;
+        case KErrBadHash:
+            return ECorruptedPackage;
+        case KErrSecurityError:
+            return ESecurityError;
+        case KErrBadUsage:
+        case KErrInvalidType:
+        case KErrInvalidExpression:
+        case KErrExpressionToComplex:
+            return EUnexpectedError;
+        case KErrMissingBasePackage:
+        case KErrInvalidUpgrade:
+            return EApplicationNotCompatible;
+        case KErrInvalidEclipsing:
+            return ESecurityError;
+        case KErrWrongHeaderFormat:
+            return EUnexpectedError;
+        case KErrCapabilitiesMismatch:
+            return ESecurityError;
+        case KErrLegacySisFile:
+        case KErrInvalidSoftwareTypeRegistrationFile:
+            return EApplicationNotCompatible;
 
+        // Other error codes
         default:
-            return KErrSifUnknown;
+            __ASSERT_DEBUG( EFalse, Panic( ESisxSifUnknownErrorCode ) );
+            return EUnexpectedError;
         }
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::SetInstallFileL()
+// CSisxSifPluginActiveImpl::SetFileL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::SetInstallFileL( const TDesC& aFileName )
+void CSisxSifPluginActiveImpl::SetFileL( const TDesC& aFileName )
     {
     if( iFileName )
         {
@@ -794,10 +907,10 @@ void CSisxSifPluginActiveImpl::SetInstallFileL( const TDesC& aFileName )
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginActiveImpl::SetInstallFile()
+// CSisxSifPluginActiveImpl::SetFile()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginActiveImpl::SetInstallFile( RFile& aFileHandle )
+void CSisxSifPluginActiveImpl::SetFile( RFile& aFileHandle )
     {
     if( iFileName )
         {
@@ -813,7 +926,7 @@ void CSisxSifPluginActiveImpl::SetInstallFile( RFile& aFileHandle )
 //
 TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     {
-    ASSERT( iOperation == EInstall );
+    __ASSERT_DEBUG( iOperation == EInstall, Panic( ESisxSifInternalError ) );
 
     // Find the id of the last installed component and return it
     TInt uid;
@@ -864,6 +977,8 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 	TInt maxInstalledSize = rootNode.MaxInstalledSize();
 	iUiHandler->SetMaxInstalledSize( maxInstalledSize );
 
+	iUiHandler->PublishStartL( rootNode );
+
     if( iFileHandle )
         {
         iAsyncLauncher->InstallL( *iUiHandler, *iFileHandle, *iInstallPrefs, iStatus );
@@ -876,6 +991,9 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
         {
         Panic( ESisxSifInternalError );
         }
+
+    iPhase = ERunningOperation;
+    SetActive();
     }
 
 // ---------------------------------------------------------------------------
@@ -885,17 +1003,24 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 void CSisxSifPluginActiveImpl::StartSilentInstallingL()
     {
     const CComponentInfo::CNode& rootNode( iComponentInfo->RootNodeL() );
-    TBool hasExecutable = rootNode.HasExecutable();
     TBool isAuthenticated = ( rootNode.Authenticity() == EAuthenticated );
-    TBool requiresUserCapability = RequiresUserCapabilityL( rootNode );
-    if( hasExecutable && !isAuthenticated )
+
+    // AllowUntrusted option is needed to install untrusted packages.
+    if( !isAuthenticated && !iInstallParams->AllowUntrusted() )
         {
-        FLOG( _L("Silent install is not allowed on unsigned packages containing executables") );
+        FLOG( _L("Attempt to install unsigned package silently without AllowUntrusted option") );
         CompleteClientRequest( KErrPermissionDenied );
         }
-    else if( requiresUserCapability )
+    // GrantCapabilities option is needed to install packages that require user capabilities
+    else if( RequiresUserCapabilityL( rootNode ) && !iInstallParams->GrantCapabilities() )
         {
-        FLOG( _L("Silent install is not allowed when user capabilities are required") );
+        FLOG( _L("Attempt to grant user capabilities silently without GrantCapabilities option") );
+        CompleteClientRequest( KErrPermissionDenied );
+        }
+    // AllFiles capability is needed to install untrusted packages that contains exe/dll binaries
+    else if( !isAuthenticated && rootNode.HasExecutable() && !iHasAllFilesCapability )
+        {
+        FLOG( _L("Attempt to install untrusted binaries silently without AllFiles capability") );
         CompleteClientRequest( KErrPermissionDenied );
         }
     else
@@ -917,7 +1042,9 @@ void CSisxSifPluginActiveImpl::FinalizeInstallationL()
         TComponentId componentId = GetLastInstalledComponentIdL();
         iOutputParams->AddIntL( KSifOutParam_ComponentId, componentId );
         }
+
 	iUiHandler->DisplayCompleteL();
+    iUiHandler->PublishCompletionL( ENone, KErrNone, KNullDesC, KNullDesC );
     }
 
 // ---------------------------------------------------------------------------

@@ -66,7 +66,9 @@ ECOM_PLUGIN(upsobserver.dll, upsobserver.rsc)
 
 ECOM_PLUGIN(recsisx.dll, 0x10202DD0.rsc)
 
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 ECOM_PLUGIN(swisidchecker.dll, 10281FBC.rsc)
+#endif
 
 #include "swiconfig.iby"
 #include "swidaemon.iby"

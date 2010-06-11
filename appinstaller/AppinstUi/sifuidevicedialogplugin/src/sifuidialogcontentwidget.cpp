@@ -31,6 +31,7 @@ QTM_USE_NAMESPACE
 #endif  // Q_OS_SYMBIAN
 
 const char KSifUiDefaultApplicationIcon[] = "qtg_large_application";
+const char KSifUiErrorIcon[] = "qtg_large_warning";
 
 const int KSifUiKilo = 1024;
 const int KSifUiMega = 1024*1024;
@@ -252,57 +253,13 @@ void SifUiDialogContentWidget::changeType(SifUiDeviceDialogType type)
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialogContentWidget::applicationName()
-// ----------------------------------------------------------------------------
-//
-QString SifUiDialogContentWidget::applicationName() const
-{
-    if (mAppName) {
-        return mAppName->plainText();
-    }
-    return QString();
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialogContentWidget::isDefaultIconUsed()
-// ----------------------------------------------------------------------------
-//
-bool SifUiDialogContentWidget::isDefaultIconUsed() const
-{
-    return (mBitmap != 0 && mMask != 0);
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialogContentWidget::iconHandles()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialogContentWidget::iconHandles(int &iconHandle, int &maskHandle) const
-{
-    if (mBitmap && mMask) {
-        iconHandle = mBitmap->Handle();
-        maskHandle = mMask->Handle();
-    }
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialogContentWidget::progressInfo()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialogContentWidget::progressInfo(int &finalValue, int &currentValue) const
-{
-    if (mProgressBar) {
-        finalValue = mProgressBar->maximum();
-        currentValue = mProgressBar->progressValue();
-    }
-}
-
-// ----------------------------------------------------------------------------
 // SifUiDialogContentWidget::handleMemorySelectionChange()
 // ----------------------------------------------------------------------------
 //
 void SifUiDialogContentWidget::handleMemorySelectionChange(int selectedIndex)
 {
     QChar selectedDrive = mDriveLetterList[selectedIndex][0];
+
     // TODO: save selected drive to cenrep
 
     emit memorySelectionChanged( selectedDrive );
@@ -319,13 +276,11 @@ QString SifUiDialogContentWidget::applicationName(const QVariantMap &parameters)
         QString nameParam = parameters.value(KSifUiApplicationName).toString();
         if (parameters.contains(KSifUiApplicationVersion)) {
             QString versionParam = parameters.value(KSifUiApplicationVersion).toString();
-            //: Template for application name and version in SW install confirmation query.
-            //: %1 is the application name and %2 is the version number.
+            //: Custom layout ID parent. Template for application name and version in SW install
+            //: confirmation query. %1 is the application name and %2 is the version number.
             //: Version number consist of major, minor, and build numbers.
             //: For example: "Chess (v 1.01(123))".
-            // TODO: enable when translations ready
-            //appName = hbTrId("txt_sisxui_install_appname_version").arg(nameParam, versionParam);
-            appName = tr("%1 (v %2)").arg(nameParam, versionParam);
+            appName = hbTrId("txt_installer_list_appname_version").arg(nameParam, versionParam);
         } else {
             appName = nameParam;
         }
@@ -345,19 +300,13 @@ QString SifUiDialogContentWidget::applicationSize(const QVariantMap &parameters)
         if (size > 0) {
             if (size > KSifUiMega) {
                 //: Application size in SW install confirmation query, %1 is in megabytes
-                // TODO: enable when translations ready
-                //appSize = hbTrId("txt_sisxui_install_appsize_mb").arg(size/KSifUiMega);
-                appSize = tr("%1 MB").arg(size/KSifUiMega);
+                appSize = hbTrId("txt_installer_list_appsize_mb").arg(size/KSifUiMega);
             } else if(size > KSifUiKilo) {
                 //: Application size in SW install confirmation query, %1 is in kilobytes
-                // TODO: enable when translations ready
-                //appSize = hbTrId("txt_sisxui_install_appsize_kb").arg(size/KSifUiKilo);
-                appSize = tr("%1 kB").arg(size/KSifUiKilo);
+                appSize = hbTrId("txt_installer_list_appsize_kb").arg(size/KSifUiKilo);
             } else {
                 //: Application size in SW install confirmation query, %1 is in bytes
-                // TODO: enable when translations ready
-                //appSize = hbTrId("txt_sisxui_install_appsize_b").arg(size);
-                appSize = tr("%1 B").arg(size);
+                appSize = hbTrId("txt_installer_list_appsize_b").arg(size);
             }
         }
     }
@@ -413,7 +362,11 @@ void SifUiDialogContentWidget::addDetail(const QString &detailText)
 void SifUiDialogContentWidget::updateAppIcon(const QVariantMap &parameters)
 {
     Q_ASSERT(mAppIcon != 0);
-    if (parameters.contains(KSifUiApplicationIconHandle) &&
+
+    if (parameters.contains(KSifUiDialogType) &&
+        (parameters.value(KSifUiDialogType).toInt() == SifUiErrorNote)) {
+        mAppIcon->setIcon(HbIcon(KSifUiErrorIcon));
+    } else if (parameters.contains(KSifUiApplicationIconHandle) &&
         parameters.contains(KSifUiApplicationIconMaskHandle)) {
         int iconHandle = parameters.value(KSifUiApplicationIconHandle).toInt();
         int maskHandle = parameters.value(KSifUiApplicationIconMaskHandle).toInt();
@@ -571,7 +524,14 @@ bool SifUiDialogContentWidget::updateErrorText(const QVariantMap &parameters)
 {
     if (parameters.contains(KSifUiErrorCode)) {
         // TODO: proper error texts
-        QString errorText = tr("Error %1").arg(parameters.value(KSifUiErrorCode).toInt());
+        bool ok = false;
+        int errorCode = parameters.value(KSifUiErrorCode).toInt(&ok);
+        QString errorText;
+        if (ok) {
+            errorText = tr("Error %1").arg(errorCode);
+        } else {
+            errorText = tr("No error code.");
+        }
         mErrorText->setPlainText(errorText);
         mStackedWidget->setCurrentWidget(mErrorText);
         return true;

@@ -411,7 +411,7 @@ void CPrivateRegistryCapTest::RunTestL()
 		CheckFailL(err, _L("UpdateEntryL"));
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-		RCPointerArray<CSoftwareTypeRegInfo> regInfoArray;
+		RCPointerArray<Usif::CSoftwareTypeRegInfo> regInfoArray;
 		CleanupClosePushL(regInfoArray);
 		
 		TRAP(err, session.AddEntryL(*app, *buffer, regInfoArray, id));

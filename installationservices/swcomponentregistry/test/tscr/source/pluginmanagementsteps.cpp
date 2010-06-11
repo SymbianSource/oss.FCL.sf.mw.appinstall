@@ -47,6 +47,7 @@ void CScrAddSoftwareTypeStep::ImplTestStepL()
 	_LIT(KLocalizedSwTypeMissingName, "LocalizedWithMissingName");
 	_LIT(KLocalizedSwTypeExtraMime, "LocalizedExtraMime");
 	_LIT(KLocalizedSwTypeMissingMime, "LocalizedMissingMime");
+	_LIT(KMultipleSidAndLauncherExecutable, "MultipleSidAndLauncherExecutable");
 	
 	RScrAccessor::TAccessorOperationResult opResult = RScrAccessor::EOpSucessful;
 	
@@ -87,6 +88,10 @@ void CScrAddSoftwareTypeStep::ImplTestStepL()
 		{
 		iScrAccessor.AddSoftwareTypeL(RScrAccessor::EAddLocalizedSoftwareTypeWithMissingMime, opResult, iTimeMeasuredExternally);
 		}
+	else if(KMultipleSidAndLauncherExecutable() == operationType)
+	    {
+	    iScrAccessor.AddSoftwareTypeL(RScrAccessor::EAddMultipleSidWithLauncherExecutable, opResult, iTimeMeasuredExternally);
+	    }
 	else
 		{
 		ERR_PRINTF2(_L("The operation type (%S) couldn't be recognised!"), &operationType);

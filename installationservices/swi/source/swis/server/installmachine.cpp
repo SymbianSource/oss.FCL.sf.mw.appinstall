@@ -81,7 +81,7 @@ void DeRegisterForceRegisteredAppsL()
 	RSisLauncherSession launcher;
 	CleanupClosePushL(launcher);
 	User::LeaveIfError(launcher.Connect());
-	RPointerArray<Usif::CApplicationRegistrationData> emptyAppRegDataArray;
+	RArray<TAppUpdateInfo> emptyAppRegDataArray;
 	launcher.NotifyNewAppsL(emptyAppRegDataArray);
 	CleanupStack::PopAndDestroy(&launcher);
 	}
@@ -540,25 +540,23 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 	             
             // Read-in the values of the settings - KAllowSelfSignedInstallKey. 
             // These will retain the default values if any error occurs.
-
 	        TRAPD(err, (allowSelfSigned = secSettingsSession.SettingValueL(KUidInstallationRepository , KAllowSelfSignedInstallKey)));
-
-	        if( err == KErrNone || err == KErrSettingNotFound || err == KErrNotFound || err == KErrCorrupt)
-				{
-                 if (err == KErrCorrupt)
-	                {
-                         DEBUG_PRINTF(_L8("Install Machine - CenRep file 2002cff6.txt is corrupt. Using Default Value to Install."));
-	                }
-				                  
-	             if (!allowSelfSigned || !SecurityAlertL(ETrue))
-					{
-	                 User::Leave(KErrCancel);
-					}
-				}
-	        else
-				{
-	              User::Leave(err);
-				}
+            if (err == KErrNone || err == KErrSettingNotFound || err == KErrNotFound || err == KErrCorrupt)
+                {
+                if (err == KErrCorrupt)
+                    {
+                    DEBUG_PRINTF(_L8("Install Machine - CenRep file 2002cff6.txt is corrupt. Using Default Value to Install."));
+                    }
+                
+                if (!allowSelfSigned || !SecurityAlertL(ETrue))
+                    {
+                    User::Leave(KErrCancel);
+                    }
+                }
+            else
+                {
+                User::Leave(err);
+                }
             CleanupStack::PopAndDestroy(&secSettingsSession);    	         			
 			break;
 		    }		   
@@ -632,11 +630,12 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 		}		
 		
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	// Forcibly skip the OCSP check and directly go to the prerequisites checking state when the 
-	// machine runs in component information collection mode. OCSP would introduce latency which is not expected when retrieving component info
+	// Forcibly skip the OCSP & prerequisites checking and directly go to the plan installation state when the 
+	// machine runs in component information collection mode. OCSP would introduce latency which is not expected 
+	// when retrieving component info.
 	if(iInstallMachine.IsInInfoMode())
 		{	
-		return static_cast<TState*>(&iInstallMachine.iCheckPrerequisitesState);
+		return static_cast<TState*>(&iInstallMachine.iPlanInstallationState);
 		}
 	#endif
 
@@ -1428,10 +1427,6 @@ void CInstallMachine::PostJournalFinalizationL(TInt aError)
 			}
 		}
 	
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	DeRegisterForceRegisteredAppsL();
-#endif
-
     iInstallMachine.CompleteSelf();
 	iInstallMachine.SetActive();
 	}

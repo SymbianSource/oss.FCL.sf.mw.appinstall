@@ -32,7 +32,7 @@ void WriteVersionToStreamL( RWriteStream& aStream, const TVersion& aVersion )
     aStream.WriteL( buffer );
     }
 
-void WriteBitmapsToStreamL( RWriteStream& /*aStream*/, const CApaMaskedBitmap& /*aIcon*/ )
+void WriteBitmapsToStreamL( RWriteStream& /*aStream*/, const CApaMaskedBitmap* /*aIcon*/ )
     {
     // TODO: implement
     }
@@ -64,6 +64,19 @@ EXPORT_C CSifUiAppInfo* CSifUiAppInfo::NewL( const TDesC& aAppName,
     {
     CSifUiAppInfo* self = CSifUiAppInfo::NewLC( aAppName, aAppVendor,
             aAppVersion, aAppSize, aAppIcon );
+    CleanupStack::Pop( self );
+    return self;
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiAppInfo::NewL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C CSifUiAppInfo* CSifUiAppInfo::NewL( const CSifUiAppInfo& aAppInfo )
+    {
+    CSifUiAppInfo* self = new ( ELeave ) CSifUiAppInfo;
+    CleanupStack::PushL( self );
+    self->ConstructL( aAppInfo );
     CleanupStack::Pop( self );
     return self;
     }
@@ -142,10 +155,7 @@ EXPORT_C void CSifUiAppInfo::ExternalizeL( RWriteStream& aStream ) const
     WriteBufToStreamL( aStream, *iAppVendor );
     WriteVersionToStreamL( aStream, iAppVersion );
     aStream.WriteInt32L( iAppSize );
-    if( iAppIcon )
-        {
-        WriteBitmapsToStreamL( aStream, *iAppIcon );
-        }
+    WriteBitmapsToStreamL( aStream, iAppIcon );
     }
 
 // ---------------------------------------------------------------------------
@@ -170,6 +180,22 @@ void CSifUiAppInfo::ConstructL( const TDesC& aAppName, const TDesC& aAppVendor,
     if( aAppIcon )
         {
         iAppIcon = CApaMaskedBitmap::NewL( aAppIcon );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiAppInfo::ConstructL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiAppInfo::ConstructL( const CSifUiAppInfo& aAppInfo )
+    {
+    iAppName = aAppInfo.Name().AllocL();
+    iAppVendor = aAppInfo.Vendor().AllocL();
+    iAppVersion = aAppInfo.iAppVersion;
+    iAppSize = aAppInfo.iAppSize;
+    if( aAppInfo.iAppIcon )
+        {
+        iAppIcon = CApaMaskedBitmap::NewL( aAppInfo.iAppIcon );
         }
     }
 
