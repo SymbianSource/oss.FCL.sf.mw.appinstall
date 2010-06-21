@@ -605,7 +605,7 @@ RESOURCE AVKON_TOOLBAR r_iaupdate_main_toolbar
 // ---------------------------------------------------------
 RESOURCE LISTBOX r_iaupdate_updates_list
     {
-    flags = EAknListBoxMultiselectionList;
+    flags = EAknListBoxMultiselectionList|EAknListBoxItemSpecificMenuAlwaysShown;
     }
 
 	    

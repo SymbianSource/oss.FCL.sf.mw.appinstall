@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -216,7 +216,7 @@ namespace Swi
 
 			// Appending ELangNone at the end as marker for the end of the language IDs
 			// as we also append the language ID's from other Augmentations
-			matchingSupportedLanguagesArray.Append(ELangNone);
+			matchingSupportedLanguagesArray.AppendL(ELangNone);
 
 			CleanupStack::PopAndDestroy(2, &augmentation);
 			}
