@@ -1236,7 +1236,7 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	//if there are reg files in the package or if its an upgrade (in case of SA (with app) over SA(with no app))
 	if(iApparcRegFilesForParsing.Count() != 0 || application.IsUpgrade())
 	    {
-	    //Create the list of Application Uids which are affected by the Restore                           
+	    //Create the list of Application Uids which are affected by the Installation                           
         RArray<Usif::TComponentId> componentIds;
         CleanupClosePushL(componentIds);
         RArray<TUid> newAppUids;    
@@ -1276,11 +1276,33 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
            {
            DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
            DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
-           }   
-        //const_cast<CPlan&>(Plan()).ResetAffectedApps();
-        const_cast<CPlan&>(Plan()).SetAffectedApps(affectedApps);
+           }
         
-        CleanupStack::PopAndDestroy(2, &componentIds);
+        //Updating apps to be notified
+        RArray<TAppUpdateInfo> currentNotifiableApps;
+        CleanupClosePushL(currentNotifiableApps);
+        const_cast<CPlan&>(Plan()).GetAffectedApps(currentNotifiableApps);
+        TInt appCount = affectedApps.Count();
+        for(TInt k = 0; k < appCount ; ++k)
+            {
+            TInt count = currentNotifiableApps.Count();
+            TUid appUid = affectedApps[k].iAppUid;
+            //compare the apps present in the package currently being processed with the existing set of affected apps,
+            //if alredy exists then update else add it to the list
+            for(TInt index = 0; index < count ; ++index)
+               {
+               if(appUid == currentNotifiableApps[index].iAppUid)
+                   {           
+                   currentNotifiableApps.Remove(index);                                    
+                   }
+               }
+            currentNotifiableApps.AppendL(affectedApps[k]);
+            }
+        
+        const_cast<CPlan&>(Plan()).ResetAffectedApps();
+        const_cast<CPlan&>(Plan()).SetAffectedApps(currentNotifiableApps);
+        
+        CleanupStack::PopAndDestroy(3, &componentIds);
 	    }
 	CleanupStack::PopAndDestroy(&affectedApps);
 #endif

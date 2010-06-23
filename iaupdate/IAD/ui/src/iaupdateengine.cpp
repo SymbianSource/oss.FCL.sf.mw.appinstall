@@ -390,7 +390,11 @@ void IAUpdateEngine::dialogFinished(HbAction *action)
                 }
             else
                 {
-                DoPossibleApplicationClose();
+                if (!DoPossibleApplicationClose())
+                    {
+                    iController->RefreshNodeList();
+                    RefreshUI();
+                    }
                 }
             break;
         case RebootQuery:    
@@ -405,7 +409,11 @@ void IAUpdateEngine::dialogFinished(HbAction *action)
                 }
             else
                 {
-                DoPossibleApplicationClose();
+                if (!DoPossibleApplicationClose())
+                    {
+                    iController->RefreshNodeList();
+                    RefreshUI();
+                    }
                 }
             break;
         case ShowUpdateQuery:    
@@ -550,6 +558,17 @@ void IAUpdateEngine::HandleLeaveErrorWithoutLeave( TInt aError )
 
 
 // -----------------------------------------------------------------------------
+// IAUpdateEngine::RefreshUI
+// 
+// -----------------------------------------------------------------------------
+// 
+void IAUpdateEngine::RefreshUI()
+    {
+    emit refresh( iController->Nodes(), iController->FwNodes(), KErrNone );
+    }
+
+
+// -----------------------------------------------------------------------------
 // IAUpdateEngine::RefreshCompleteL
 // 
 // -----------------------------------------------------------------------------
@@ -614,9 +633,7 @@ void IAUpdateEngine::UpdateCompleteL( TInt aError )
         {
         InformRequestObserver( aError );
         }
-    
-    emit refresh( iController->Nodes(), iController->FwNodes(), KErrNone );
-         
+             
     ShowResultsDialogL();
                 
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::UpdateCompleteL end");
@@ -776,195 +793,182 @@ void IAUpdateEngine::SetDefaultConnectionMethodL( bool aTotalSilent )
         // from back ground checker, choose the IAP to make the internet access silent
         IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() begin");
 
-           uint connectionMethodId( 0 );
-           int connMethodId( 0 );
+        uint connectionMethodId( 0 );
+        int connMethodId( 0 );
 
-           // Let's first check whether cenrep contains SNAP id other than zero
-           CRepository* cenrep( CRepository::NewLC( KCRUidIAUpdateSettings ) );
-           User::LeaveIfError(  
+        // Let's first check whether cenrep contains SNAP id other than zero
+        CRepository* cenrep( CRepository::NewLC( KCRUidIAUpdateSettings ) );
+        User::LeaveIfError(  
                cenrep->Get( KIAUpdateAccessPoint, connMethodId ) );
-           CleanupStack::PopAndDestroy( cenrep ); 
-           cenrep = NULL;
+        CleanupStack::PopAndDestroy( cenrep ); 
+        cenrep = NULL;
 
-           RCmManagerExt cmManagerExt;
-           cmManagerExt.OpenL();
-           CleanupClosePushL( cmManagerExt );
+        RCmManagerExt cmManagerExt;
+        cmManagerExt.OpenL();
+        CleanupClosePushL( cmManagerExt );
            
-           if ( connMethodId == -1 )
-               {
-               IAUPDATE_TRACE("[IAUPDATE] user chooses default connection, use IAP logic");
+        if ( connMethodId == -1 )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] user chooses default connection, use IAP logic");
                
-               //check what is the default connection by users     
+            //check what is the default connection by users     
                
-               TCmDefConnValue DCSetting;
-               cmManagerExt.ReadDefConnL( DCSetting );
-              
+            TCmDefConnValue DCSetting;
+            cmManagerExt.ReadDefConnL( DCSetting );
                
-               switch ( DCSetting.iType )
-                   {
-                   case ECmDefConnAlwaysAsk:
-                   case ECmDefConnAskOnce:
-                       {
-                       //go with the best IAP under internet snap
-                       connectionMethodId = GetBestIAPInAllSNAPsL( cmManagerExt );
-                       break;
-                       }
-                   case ECmDefConnDestination:
-                       {
-                       //go with the best IAP under this snap
-                       connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, DCSetting.iId );
-                       break;
-                       }
-                   case ECmDefConnConnectionMethod:
-                       {
-                       //go with the best IAP under this snap
-                       connectionMethodId = DCSetting.iId;
-                       break;
-                       }
-                   }
-               }
-           else if ( connMethodId == 0 )
-               {
-               //no choice from user, we go with the best IAP under Internent SNAP
-               connectionMethodId = GetBestIAPInAllSNAPsL( cmManagerExt );
-               }
-           else
-               {
-               IAUPDATE_TRACE("[IAUPDATE] use chooses a snap");
-               // It was some SNAP value
-               connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, connMethodId );
-               }
+            switch ( DCSetting.iType )
+                {
+                case ECmDefConnAlwaysAsk:
+                case ECmDefConnAskOnce:
+                    {
+                    //go with the best IAP under internet snap
+                    connectionMethodId = GetBestIAPInAllSNAPsL( cmManagerExt );
+                    break;
+                    }
+                case ECmDefConnDestination:
+                    {
+                    //go with the best IAP under this snap
+                    connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, DCSetting.iId );
+                    break;
+                    }
+                case ECmDefConnConnectionMethod:
+                    {
+                    //go with the best IAP under this snap
+                    connectionMethodId = DCSetting.iId;
+                    break;
+                    }
+                }
+            }
+        else if ( connMethodId == 0 )
+            {
+            //no choice from user, we go with the best IAP under Internent SNAP
+            connectionMethodId = GetBestIAPInAllSNAPsL( cmManagerExt );
+            }
+        else
+            {
+            IAUPDATE_TRACE("[IAUPDATE] use chooses a snap");
+            // It was some SNAP value
+            connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, connMethodId );
+            }
 
-           CleanupStack::PopAndDestroy( &cmManagerExt ); 
+        CleanupStack::PopAndDestroy( &cmManagerExt ); 
            
-           if ( connectionMethodId != 0 )
-               {
-               TIAUpdateConnectionMethod connectionMethod( 
+        if ( connectionMethodId != 0 )
+            {
+            TIAUpdateConnectionMethod connectionMethod( 
                    connectionMethodId, 
                    TIAUpdateConnectionMethod::EConnectionMethodTypeAccessPoint );
 
-               iController->SetDefaultConnectionMethodL( connectionMethod );
-               }
-           else
-               {
-               //In the totally silent case, if no usable IAP, we complete the check update with 0 updates.
-               //the bgchecker will try again later after 1 month. 
-               //The LEAVE will be catched up later and complete the request from background checker.
-               User::LeaveIfError( KErrNotFound );
-               
-               //the following code will pop up dialog to ask from user, just for proto
-              /* connectionMethodId = 0;               
-               TIAUpdateConnectionMethod connectionMethod( 
-                   connectionMethodId, TIAUpdateConnectionMethod::EConnectionMethodTypeDefault );
-
-               iController->SetDefaultConnectionMethodL( connectionMethod );*/
-               }
-           
-
-
-           IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() end");
+            iController->SetDefaultConnectionMethodL( connectionMethod );
+            }
+        else
+            {
+            //In the totally silent case, if no usable IAP, we complete the check update with 0 updates.
+            //the bgchecker will try again later after 1 month. 
+            //The LEAVE will be catched up later and complete the request from background checker.
+            User::LeaveIfError( KErrNotFound );
+            }
+        IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() end");
         }
     else
         {
         // from grid, use the old logic
         IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() begin");
-                  uint connectionMethodId( 0 );
-                  int connMethodId( 0 );
+        uint connectionMethodId( 0 );
+        int connMethodId( 0 );
 
-                  // Set initial value to always ask
-                  int connectionMethodType( TIAUpdateConnectionMethod::EConnectionMethodTypeAlwaysAsk );
-                  bool needSaving(false);
+        // Set initial value to always ask
+        int connectionMethodType( TIAUpdateConnectionMethod::EConnectionMethodTypeAlwaysAsk );
+        bool needSaving(false);
 
-                  // Let's first check whether cenrep contains SNAP id other than zero
-                  CRepository* cenrep( CRepository::NewLC( KCRUidIAUpdateSettings ) );
-                  User::LeaveIfError(  
+        // Let's first check whether cenrep contains SNAP id other than zero
+        CRepository* cenrep( CRepository::NewLC( KCRUidIAUpdateSettings ) );
+        User::LeaveIfError(  
                       cenrep->Get( KIAUpdateAccessPoint, connMethodId ) );
-                  CleanupStack::PopAndDestroy( cenrep ); 
-                  cenrep = NULL;
+        CleanupStack::PopAndDestroy( cenrep ); 
+        cenrep = NULL;
                     
-                  if ( connMethodId == -1 )
-                      {
-                      IAUPDATE_TRACE("[IAUPDATE] user chooses default connection, use IAP logic");
+        if ( connMethodId == -1 )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] user chooses default connection, use IAP logic");
                                             
-                      connectionMethodId = 0;
-                      connectionMethodType = TIAUpdateConnectionMethod::EConnectionMethodTypeDefault;
-                      }
-                  else if ( connMethodId == 0 )
-                      {
-                      
-                      IAUPDATE_TRACE("[IAUPDATE] use chooses nothing, use internal IAP logic");
-                      //if nothing is set by user, use our new logic
-                      //SetDefaultConnectionMethod2L();
-                      //return;
-                      // CenRep didn't contain any SNAP id. Let's try Internet SNAP then.
+            connectionMethodId = 0;
+            connectionMethodType = TIAUpdateConnectionMethod::EConnectionMethodTypeDefault;
+            }
+        else if ( connMethodId == 0 )
+            {
+            IAUPDATE_TRACE("[IAUPDATE] use chooses nothing, use internal IAP logic");
+            //if nothing is set by user, use our new logic
+            //SetDefaultConnectionMethod2L();
+            //return;
+            // CenRep didn't contain any SNAP id. Let's try Internet SNAP then.
                           
-                      RCmManagerExt cmManagerExt;
-                      cmManagerExt.OpenL();
-                      CleanupClosePushL( cmManagerExt );
-                      iDestIdArray.Reset();
-                      cmManagerExt.AllDestinationsL( iDestIdArray );
+            RCmManagerExt cmManagerExt;
+            cmManagerExt.OpenL();
+            CleanupClosePushL( cmManagerExt );
+            iDestIdArray.Reset();
+            cmManagerExt.AllDestinationsL( iDestIdArray );
 
-                      for ( int i = 0; i< iDestIdArray.Count(); i++ )
-                          {
-                          RCmDestinationExt dest = cmManagerExt.DestinationL( iDestIdArray[i] );
-                          CleanupClosePushL( dest );
+            for ( int i = 0; i< iDestIdArray.Count(); i++ )
+                {
+                RCmDestinationExt dest = cmManagerExt.DestinationL( iDestIdArray[i] );
+                CleanupClosePushL( dest );
                            
-                          if ( dest.MetadataL( CMManager::ESnapMetadataInternet ) )
-                              {
-                              // Check whether Internet SNAP contains any IAP.
-                              if ( dest.ConnectionMethodCount() > 0 )
-                                  {
-                                  connectionMethodId = iDestIdArray[i];
-                                  needSaving = true;
-                                  IAUPDATE_TRACE_1("[IAUPDATE] connectionMethodId: %d", connectionMethodId );
-                                  }
-                              CleanupStack::PopAndDestroy( &dest ); 
-                              break;
-                              }
-                               
-                          CleanupStack::PopAndDestroy( &dest ); 
-                          }
-                      iDestIdArray.Reset();
-                      CleanupStack::PopAndDestroy( &cmManagerExt ); 
-                      }
-                  else
-                      {
-                      IAUPDATE_TRACE("[IAUPDATE] use chooses a snap");
-                      // It was some SNAP value
-                      connectionMethodId = connMethodId;
-                      }
+                if ( dest.MetadataL( CMManager::ESnapMetadataInternet ) )
+                    {
+                    // Check whether Internet SNAP contains any IAP.
+                    if ( dest.ConnectionMethodCount() > 0 )
+                        {
+                        connectionMethodId = iDestIdArray[i];
+                        needSaving = true;
+                        IAUPDATE_TRACE_1("[IAUPDATE] connectionMethodId: %d", connectionMethodId );
+                        }
+                    CleanupStack::PopAndDestroy( &dest ); 
+                    break;
+                    }
+                             
+                CleanupStack::PopAndDestroy( &dest ); 
+                }
+            iDestIdArray.Reset();
+            CleanupStack::PopAndDestroy( &cmManagerExt ); 
+            }
+        else
+            {
+            IAUPDATE_TRACE("[IAUPDATE] use chooses a snap");
+            // It was some SNAP value
+            connectionMethodId = connMethodId;
+            }
                   
-                  if ( connectionMethodId > 0)
-                      {
-                      // We have now some valid SNAP id, either from CenRep or Internet SNAP
-                      connectionMethodType = TIAUpdateConnectionMethod::EConnectionMethodTypeDestination;
-                      // Save to cenrep if needed
-                      if ( needSaving )
-                          {
-                          cenrep = CRepository::NewLC( KCRUidIAUpdateSettings );
-                          int err = cenrep->StartTransaction( CRepository::EReadWriteTransaction );
-                          User::LeaveIfError( err );
-                          cenrep->CleanupCancelTransactionPushL();
+        if ( connectionMethodId > 0)
+            {
+            // We have now some valid SNAP id, either from CenRep or Internet SNAP
+            connectionMethodType = TIAUpdateConnectionMethod::EConnectionMethodTypeDestination;
+            // Save to cenrep if needed
+            if ( needSaving )
+                {
+                cenrep = CRepository::NewLC( KCRUidIAUpdateSettings );
+                int err = cenrep->StartTransaction( CRepository::EReadWriteTransaction );
+                User::LeaveIfError( err );
+                cenrep->CleanupCancelTransactionPushL();
                           
-                          connMethodId = connectionMethodId;
-                          err = cenrep->Set( KIAUpdateAccessPoint, connMethodId );
-                          User::LeaveIfError( err );
-                          TUint32 ignore = KErrNone;
-                          User::LeaveIfError( cenrep->CommitTransaction( ignore ) );
-                          CleanupStack::PopAndDestroy(); // CleanupCancelTransactionPushL()
-                          CleanupStack::PopAndDestroy( cenrep );            
-                          }
-                      }
+                 connMethodId = connectionMethodId;
+                 err = cenrep->Set( KIAUpdateAccessPoint, connMethodId );
+                 User::LeaveIfError( err );
+                 TUint32 ignore = KErrNone;
+                 User::LeaveIfError( cenrep->CommitTransaction( ignore ) );
+                 CleanupStack::PopAndDestroy(); // CleanupCancelTransactionPushL()
+                 CleanupStack::PopAndDestroy( cenrep );            
+                 }
+            }
 
-                  TIAUpdateConnectionMethod connectionMethod( 
+        TIAUpdateConnectionMethod connectionMethod( 
                       connectionMethodId, 
                       static_cast< TIAUpdateConnectionMethod::TConnectionMethodType >( connectionMethodType ) );
 
-                  iController->SetDefaultConnectionMethodL( connectionMethod );
+        iController->SetDefaultConnectionMethodL( connectionMethod );
 
-                  IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() end");
+        IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::SetDefaultConnectionMethodL() end");
         }
-
     }
 
 
@@ -1210,18 +1214,24 @@ TInt IAUpdateEngine::AutomaticCheckCallbackL( TAny* aPtr )
 // IAUpdateEngine::DoPossibleApplicationClose()
 // ---------------------------------------------------------------------------
 //  
-void IAUpdateEngine::DoPossibleApplicationClose()
+bool IAUpdateEngine::DoPossibleApplicationClose()
     {
     //exit from result view if there are no update left
+    bool toBeClosed = false;
     if ( iController->Nodes().Count() == 0 && iController->FwNodes().Count() == 0 )
         {
-        qApp->quit();
+        toBeClosed = true; 
         }
     else if ( mStartedFromApplication && 
         iController->ResultsInfo().iCountCancelled == 0 &&
         iController->ResultsInfo().iCountFailed == 0 )
         {
+        toBeClosed = true;
+        }
+    if ( toBeClosed )
+        {
         qApp->quit();
         }
+    return toBeClosed;
     }
             

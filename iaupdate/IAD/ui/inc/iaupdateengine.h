@@ -150,6 +150,13 @@ private: // From MIAUpdateUiControllerObserver
     * @param aError Error code
     */      
     void HandleLeaveErrorWithoutLeave( TInt aError );
+    
+    /**
+    Called when UI to be redrawn during update process
+    *
+    * @param aError Error code
+    */
+    void RefreshUI();
             
     /**
     * Called when async update list refresh is completed
@@ -241,7 +248,7 @@ private:  //new methods
      */
      static TInt AutomaticCheckCallbackL( TAny* aPtr );
      
-     void DoPossibleApplicationClose();
+     bool DoPossibleApplicationClose();
  
    
 

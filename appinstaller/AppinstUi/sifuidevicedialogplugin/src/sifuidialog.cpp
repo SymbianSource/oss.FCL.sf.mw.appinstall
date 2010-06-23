@@ -44,9 +44,8 @@ const QString KSwiErrorFormat = " (%1)";
 SifUiDialog::SifUiDialog(const QVariantMap &parameters) : HbDialog(),
     mCommonTranslator(0), mSifUITranslator(0), mLastDialogError(KErrNone),
     mShowEventReceived(false), mDialogType(SifUiUnspecifiedDialog),
-    mTitle(0), mContent(0), mResultMap(),
-    mIgnoreCloseAction(0), mPrimaryAction(0), mSecondaryAction(0),
-    mIndicator(0), mSubscriber(0)
+    mTitle(0), mContent(0), mResultMap(), mPrimaryAction(0),
+    mSecondaryAction(0), mIndicator(0), mSubscriber(0)
 {
     mCommonTranslator = new HbTranslator(KTranslationsPath, KCommonTranslationsFile);
     mSifUITranslator = new HbTranslator(KTranslationsPath, KSifUiTranslationsFile);
@@ -62,7 +61,6 @@ SifUiDialog::~SifUiDialog()
     delete mSubscriber;
     delete mPrimaryAction;
     delete mSecondaryAction;
-    mIgnoreCloseAction = 0;
     delete mSifUITranslator;
     delete mCommonTranslator;
 }
@@ -124,23 +122,6 @@ void SifUiDialog::closeDeviceDialog(bool byClient)
 HbDialog *SifUiDialog::deviceDialogWidget() const
 {
     return const_cast<SifUiDialog*>(this);
-}
-
-// ----------------------------------------------------------------------------
-// SifUiDialog::closeEvent()
-// ----------------------------------------------------------------------------
-//
-void SifUiDialog::closeEvent(QCloseEvent *event)
-{
-    if (mIgnoreCloseAction) {
-        HbAction *closingAction = qobject_cast<HbAction *>(sender());
-        if (closingAction == mIgnoreCloseAction) {
-            // Prevents the dialog from begin closed when "Ok" pressed
-            event->ignore();
-            return;
-        }
-    }
-    HbDialog::closeEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -232,7 +213,11 @@ bool SifUiDialog::updateFromParameters(const QVariantMap &parameters)
         updateButtons(parameters);
     }
     if (parameters.contains(KSifUiErrorCode)) {
-        mInstallError = parameters.value(KSifUiErrorCode).toInt();
+        bool ok = false;
+        int errorCode = parameters.value(KSifUiErrorCode).toInt(&ok);
+        if (ok) {
+            mInstallError = errorCode;
+        }
     }
     return true;
 }
@@ -243,8 +228,6 @@ bool SifUiDialog::updateFromParameters(const QVariantMap &parameters)
 //
 void SifUiDialog::updateButtons(const QVariantMap &parameters)
 {
-    mIgnoreCloseAction = 0;
-
     if (mPrimaryAction) {
         removeAction(mPrimaryAction);
         delete mPrimaryAction;
@@ -254,21 +237,25 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
         case SifUiConfirmationQuery:
             //: Accepts the SW install confirmation query and starts installation.
             mPrimaryAction = new HbAction(hbTrId("txt_common_button_ok"));
+            addAction(mPrimaryAction);
+            disconnect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(close()));
             connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleAccepted()));
-            mIgnoreCloseAction = mPrimaryAction;
             break;
         case SifUiProgressNote:
             if (!parameters.contains(KSifUiProgressNoteIsHideButtonHidden)) {
                 //: Hides the progress dialog. Progress note moves into universal indicator.
                 mPrimaryAction = new HbAction(hbTrId("txt_common_button_hide"));
+                addAction(mPrimaryAction);
+                disconnect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(close()));
                 connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleHidePressed()));
-                mIgnoreCloseAction = mPrimaryAction;
             }
             break;
         case SifUiCompleteNote:
             if (!parameters.contains(KSifUiCompleteNoteIsShowButtonHidden)) {
                 //: Opens Application Library to view the installed application.
                 mPrimaryAction = new HbAction(hbTrId("txt_installer_button_show"));
+                addAction(mPrimaryAction);
+                disconnect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(close()));
                 connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleShowInstalled()));
             }
             break;
@@ -276,15 +263,13 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
             if (!parameters.contains(KSifUiErrorNoteIsDetailsButtonHidden)) {
                 //: Shows a dialog with further info about the failure (i.e. why installation failed).
                 mPrimaryAction = new HbAction(hbTrId("txt_installer_button_details"));
+                addAction(mPrimaryAction);
+                disconnect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(close()));
                 connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleErrorDetails()));
-                mIgnoreCloseAction = mPrimaryAction;
             }
             break;
         default:
             break;
-    }
-    if (mPrimaryAction) {
-        addAction(mPrimaryAction);
     }
 
     if (mSecondaryAction) {
@@ -298,6 +283,8 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
             if (!parameters.contains(KSifUiProgressNoteIsCancelButtonHidden)) {
                 //: Cancels the SW install confirmation query and closes the dialog.
                 mSecondaryAction = new HbAction(hbTrId("txt_common_button_cancel"));
+                addAction(mSecondaryAction);
+                disconnect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(close()));
                 connect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(handleCancelled()));
             }
             break;
@@ -305,13 +292,10 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
         case SifUiErrorNote:
             //: Closes the dialog. Control returns back to where the installation was started.
             mSecondaryAction = new HbAction(hbTrId("txt_common_button_close"));
-            connect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(close()));
+            addAction(mSecondaryAction);
             break;
         default:
             break;
-    }
-    if (mSecondaryAction) {
-        addAction(mSecondaryAction);
     }
 }
 
@@ -343,6 +327,7 @@ void SifUiDialog::handleAccepted()
 void SifUiDialog::handleCancelled()
 {
     sendResult(SifUiCancel);
+    close();
 }
 
 // ----------------------------------------------------------------------------
@@ -387,6 +372,8 @@ void SifUiDialog::handleShowInstalled()
         }
         delete request;
     }
+
+    close();
 }
 
 // ----------------------------------------------------------------------------
@@ -397,7 +384,7 @@ void SifUiDialog::handleErrorDetails()
 {
     // TODO: show proper error details dialog
     QString messageText;
-    messageText = tr("Not implemented yet.\n\nError code %1").arg(mInstallError);
+    messageText = tr("Error code %1").arg(mInstallError);
 
     if (QFile::exists(KSwiErrorsFile)) {
         messageText.append(KSwiErrorFormat.arg(mInstallError));

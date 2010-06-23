@@ -19,9 +19,8 @@
 
 // INCLUDE FILES
 
-#include <hbaction.h>
-#include <hbdialog.h>
-#include <hbtextitem.h>
+#include <hbmessagebox.h>
+#include <hblabel.h>
 
 #include "iaupdateresultsdialog.h"
 #include "iaupdateresultsinfo.h"
@@ -38,20 +37,22 @@ IAUpdateResultsDialog::~IAUpdateResultsDialog()
 {
 }
 
-void IAUpdateResultsDialog::showResults(const TIAUpdateResultsInfo &param, QObject* receiver, const char* member )
+void IAUpdateResultsDialog::showResults(const TIAUpdateResultsInfo &param, QObject *receiver, const char *member)
 {
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
+    
+    HbLabel *label = new HbLabel(messageBox);
+    label->setHtml(QString("Update results"));
+    messageBox->setHeadingWidget(label);
+    
+    messageBox->setIconVisible(false);
+            
     QString buf;
     constructText(param,buf);
-    HbDialog *dialog = new HbDialog;
-    HbTextItem *text = new HbTextItem(dialog);
-    text->setFontSpec(HbFontSpec(HbFontSpec::Primary));
-    text->setText(buf);
-    dialog->setContentWidget(text);
-    HbAction *primaryAction = new HbAction("Ok");    
-    dialog->addAction(primaryAction);
-    dialog->setTimeout(HbPopup::NoTimeout);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->open(receiver, member);
+    messageBox->setText(buf);
+    messageBox->setTimeout(HbPopup::NoTimeout);
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    messageBox->open(receiver, member);
     return;  
 }
 
@@ -69,7 +70,7 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
         stringCount.setNum(param.iCountSuccessfull);    
         buf.append(stringCount);
         buf.append(" updates successful");
-        buf.append("\n");
+        buf.append("<br />");
         return;
     } 
   
@@ -86,7 +87,7 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
         {
             buf.append(" applications updated"); 
         }
-        buf.append("\n");
+        buf.append("<br />");
     }
     
     if (param.iCountCancelled != 0)
@@ -102,7 +103,7 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
         {
             buf.append(" updates cancelled");
         }
-        buf.append("\n");
+        buf.append("<br />");
     }
 
     if (param.iCountFailed != 0)
@@ -118,13 +119,13 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
         {
             buf.append(" updates failed");
         }
-        buf.append("\n");
+        buf.append("<br />");
     }
     
     if (param.iFileInUseError)
     {
     	buf.append("Close all applications and try again.");
-    	buf.append("\n");
+    	buf.append("<br />");
     }
 } 
 

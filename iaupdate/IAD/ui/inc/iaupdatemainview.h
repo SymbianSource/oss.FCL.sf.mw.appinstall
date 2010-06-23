@@ -76,6 +76,7 @@ private:
     void constructDetailsText(MIAUpdateAnyNode &node, QString &text);
     void versionText(const TIAUpdateVersion &version, QString &versionText);
     void fileSizeText(int fileSize, QString &text);
+    void setImportance(MIAUpdateAnyNode *node, QString &importanceDescription);
     
 private:
     enum DialogState

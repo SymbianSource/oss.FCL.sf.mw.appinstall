@@ -27,7 +27,7 @@
 #include <hbdocumentloader.h>
 #include <xqconversions.h>
 #include <hbmessagebox.h>
-#include <hbtextitem.h>
+#include <hblabel.h>
 
 #include "iaupdatemainview.h"
 #include "iaupdateengine.h"
@@ -108,233 +108,128 @@ IAUpdateMainView::~IAUpdateMainView()
 void IAUpdateMainView::refresh( const RPointerArray<MIAUpdateNode> &nodes,
                                 const RPointerArray<MIAUpdateFwNode> &fwNodes,
                                 int /*error*/ )
-    {   
+{   
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh begin");
        
     mAllNodes.Reset();
         
-    if ( fwNodes.Count() > 0 )
-        {
+    if (fwNodes.Count() > 0)
+    {
         IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh hard code importance");
         //hardcode the importance of firmware as Critical
-        for ( TInt i = 0; i < fwNodes.Count(); i++ )
-             {
-             fwNodes[i]->Base().SetImportance( MIAUpdateBaseNode::ECritical );
-             }
+        for (int i = 0; i < fwNodes.Count(); i++)
+        {
+            fwNodes[i]->Base().SetImportance(MIAUpdateBaseNode::ECritical);
+        }
          
         //either NSU or FOTA available
-        if ( fwNodes.Count() == 1 )
-            {
+        if (fwNodes.Count() == 1)
+        {
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh either NSU or FOTA available");
-            MIAUpdateAnyNode* node = fwNodes[0];
-            mAllNodes.Append( node );
-            }
+            MIAUpdateAnyNode *node = fwNodes[0];
+            mAllNodes.Append(node);
+        }
         
         //both NSU and FOTA available, show only FOTA node
-        if ( fwNodes.Count() == 2 )
-            {
+        if (fwNodes.Count() == 2)
+        {
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh both NSU and FOTA available");
-            MIAUpdateAnyNode* node1 = fwNodes[0];
-            MIAUpdateFwNode* fwnode = static_cast<MIAUpdateFwNode*>( node1 );
-            if ( fwnode->FwType() == MIAUpdateFwNode::EFotaDp2  )
-                {
-                mAllNodes.Append( node1 );
-                }
+            MIAUpdateAnyNode *node1 = fwNodes[0];
+            MIAUpdateFwNode *fwnode = static_cast<MIAUpdateFwNode*>(node1);
+            if (fwnode->FwType() == MIAUpdateFwNode::EFotaDp2)
+            {
+                mAllNodes.Append(node1);
+            }
             else
-                {
+            {
                 MIAUpdateAnyNode* node2 = fwNodes[1];
-                mAllNodes.Append( node2 );
-                }
+                mAllNodes.Append(node2);
             }
         }
+    }
     
    
-    for( int i = 0; i < nodes.Count(); ++i ) 
-        {
-        MIAUpdateAnyNode* node = nodes[i];
-        mAllNodes.Append( node );
-        }
+    for(int i = 0; i < nodes.Count(); ++i) 
+    {
+        MIAUpdateAnyNode *node = nodes[i];
+        mAllNodes.Append(node);
+    }
         
     mListView->clear();
     QItemSelectionModel *selectionModel = mListView->selectionModel();  
     selectionModel->clear();
     HbIcon icon(QString(":/icons/qgn_menu_swupdate"));
     
-    for( int j = 0; j < mAllNodes.Count(); ++j ) 
-        {
-        MIAUpdateAnyNode* node = mAllNodes[j];
-        int sizeInBytes = node->Base().ContentSizeL();
-
-        int size = 0;
-        TBool shownInMegabytes = EFalse;        
-        if ( sizeInBytes >= KMaxShownInKiloBytes )
-            {
-            shownInMegabytes = ETrue;
-            size = sizeInBytes / KMegaByte;
-            if ( sizeInBytes % KMegaByte != 0 )
-                {
-                size++;
-                }
-            }
-        else 
-            {
-            size = sizeInBytes / KKiloByte;
-            if ( sizeInBytes % KKiloByte != 0 )
-                {
-                size++;
-                }  
-            }
-        QString sizeString;
-        sizeString.setNum(size);        
+    for(int j = 0; j < mAllNodes.Count(); ++j) 
+    {
+        MIAUpdateAnyNode *node = mAllNodes[j];
+           
         QString importanceDescription;
-        switch( node->Base().Importance() )
-            {        
-            case MIAUpdateBaseNode::EMandatory:
-                {
-                importanceDescription = "Required ";
-                importanceDescription.append(sizeString);
-                if ( shownInMegabytes )
-                    {
-                    importanceDescription.append(" MB" );
-                    }
-                else 
-                    {
-                    importanceDescription.append(" kB" );
-                    }  
-                break;
-                }
-            
-            
-            case MIAUpdateBaseNode::ECritical:
-                {
-                bool isNSU = false;
-                if( node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw )
-                    {
-                    MIAUpdateFwNode* fwnode = static_cast<MIAUpdateFwNode*>( node );          
-                    if ( fwnode->FwType() == MIAUpdateFwNode::EFotiNsu )
-                        {
-                        isNSU = true;
-                        }
-                    }
-                
-                importanceDescription = "Important ";
-                if ( !size || isNSU )
-                    {
-                    //for firmware when size info is not provided by server
-                    }
-                else
-                    {
-                    importanceDescription.append(sizeString);
-                    if ( shownInMegabytes )
-                        {
-                        importanceDescription.append(" MB" );
-                        }
-                    else 
-                        {
-                        importanceDescription.append(" kB" );
-                        } 
-                    }
-     
-                break;
-                }
-        
-            case MIAUpdateBaseNode::ERecommended:
-                {
-                importanceDescription = "Recommended ";
-                importanceDescription.append(sizeString);
-                if ( shownInMegabytes )
-                    {
-                    importanceDescription.append(" MB" );
-                    }
-                else 
-                    {
-                    importanceDescription.append(" kB" );
-                    }  
-                break;
-                }
-        
-            case MIAUpdateBaseNode::ENormal:
-                {
-                importanceDescription = "Optional ";
-                importanceDescription.append(sizeString);
-                if ( shownInMegabytes )
-                    {
-                     importanceDescription.append(" MB" );
-                    }
-                else 
-                    {
-                    importanceDescription.append(" kB" );
-                    }  
-                break;
-                }
-
-            default:
-                {
-                break;
-                }
-            }
-            
-            //AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr );    
-            
-            HbListWidgetItem *item = new HbListWidgetItem();    
-            QString name = XQConversions::s60DescToQString(node->Base().Name());
-            if ( node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw ) 
-                {
-                name.append(" DEVICE SOFTWARE");
-                }
-            item->setText(name);
-            item->setSecondaryText(importanceDescription);
-            item->setIcon(icon);
-             mListView->addItem(item); 
- 
-            if ( node->Base().IsSelected() )
-                {
-                int count = mListView->count();
-                QModelIndex modelIndex = mListView->model()->index(count-1,0);
-                selectionModel->select(modelIndex, QItemSelectionModel::Select);
-                }
-
-               
-            
-        /*if ( nodes.Count() == 0 )
-            {
-            HBufC* emptyText = NULL;
-            if ( aError )
-                {
-                if ( aError == KErrCancel || aError == KErrAbort )
-                    {
-                    emptyText = KNullDesC().AllocLC();
-                    }
-                else
-                    {
-                    emptyText = StringLoader::LoadLC( R_IAUPDATE_REFRESH_FAILED );  
-                    }
-                }
-            else
-                {
-                emptyText = StringLoader::LoadLC( R_IAUPDATE_TEXT_NO_UPDATES ); 
-                }
-            
-            iListBox->View()->SetListEmptyTextL( *emptyText );
-            CleanupStack::PopAndDestroy( emptyText );
-            iListBox->ScrollBarFrame()->SetScrollBarVisibilityL( 
-                    CEikScrollBarFrame::EOff, CEikScrollBarFrame::EOff );  
-            }
-        else
-            {
-            if ( iListBox->CurrentItemIndex() == KErrNotFound )
-                {
-                iListBox->SetCurrentItemIndex( aNodes.Count() - 1 );
-                }
-            }*/
-            
-        //iListBox->HandleItemAdditionL();
+        MIAUpdateNode::TUIUpdateState uiState = MIAUpdateNode::ENormal;
+        if (node->NodeType() == MIAUpdateAnyNode::ENodeTypeNormal)
+        {
+            MIAUpdateNode *updateNode = static_cast<MIAUpdateNode*>(node);
+            uiState = updateNode->UiState();
         }
-     connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+        if (uiState == MIAUpdateNode::ENormal)
+        {
+            setImportance(node, importanceDescription);
+        }
+        else
+        {
+            if(uiState == MIAUpdateNode::EUpdated)
+            {
+                importanceDescription = "Updated";
+            }
+            else if(uiState == MIAUpdateNode::EFailed)
+            {
+                importanceDescription = "Failed";
+            }
+            else if(uiState == MIAUpdateNode::EDownloaded)
+            {
+                importanceDescription = "Downloaded";
+            }
+        }
+        
+        
+             
+        HbListWidgetItem *item = new HbListWidgetItem();    
+        QString name;
+        if (node->NodeType() == MIAUpdateAnyNode::ENodeTypeNormal)
+        {  
+            MIAUpdateNode *updateNode = static_cast<MIAUpdateNode*>(node);
+            if (updateNode->UiState() == MIAUpdateNode::EDownloading)
+            {
+                name = QString("Downloading ");
+            }
+            else if (updateNode->UiState() == MIAUpdateNode::EInstalling)
+            {
+                name = QString("Installing ");
+            }
+        }
+        name.append(XQConversions::s60DescToQString(node->Base().Name()));
+        if (node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw) 
+        {
+            name.append(" DEVICE SOFTWARE");
+        }
+        item->setText(name);
+        item->setSecondaryText(importanceDescription);
+        item->setIcon(icon);
+        mListView->addItem(item); 
+ 
+        if (node->Base().IsSelected())
+        {
+            int count = mListView->count();
+            QModelIndex modelIndex = mListView->model()->index(count-1,0);
+            selectionModel->select(modelIndex, QItemSelectionModel::Select);
+        }
+
+    }
+    connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                     this, SLOT(handleSelectionChanged(QItemSelection,QItemSelection)));     
     
-     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh end");
-     }
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh end");
+}
 
 
 
@@ -355,7 +250,7 @@ void IAUpdateMainView::handleStartUpdate()
             }
         }
     selectedNodes.Close();
-    //mEngine->StartUpdate(firmwareUpdate);
+    mEngine->StartUpdate(firmwareUpdate);
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleStartUpdate() end");
 }
 
@@ -727,6 +622,11 @@ void IAUpdateMainView::showUpdateCannotOmitDialog()
 void IAUpdateMainView::showDependenciesFoundDialog(QString &text)
 {
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeQuestion);
+    HbLabel *label = new HbLabel(messageBox);
+    label->setHtml(QString("Depencencies"));
+    messageBox->setHeadingWidget(label);
+    //messageBox->setIconVisible(false);
+        
     messageBox->setText(text);
     int actionCount = messageBox->actions().count();
     for (int i=actionCount-1; i >= 0; i--)
@@ -782,20 +682,15 @@ MIAUpdateAnyNode* IAUpdateMainView::getNode(int index) const
 void IAUpdateMainView::showDetails(MIAUpdateAnyNode& node)
 {  
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
+    HbLabel *label = new HbLabel(messageBox);
+    label->setHtml(QString("Details"));
+    messageBox->setHeadingWidget(label);
+       
     messageBox->setIconVisible(false);
             
     QString text;
     constructDetailsText(node,text); 
     messageBox->setText(text);
-    int actionCount = messageBox->actions().count();
-    
-    for (int i=actionCount-1; i >= 0; i--)
-    { 
-        messageBox->removeAction(messageBox->actions().at(i));
-    }
-    HbAction *okAction = NULL;
-    okAction = new HbAction("Ok");
-    messageBox->addAction(okAction);
     messageBox->setTimeout(HbPopup::NoTimeout);
     messageBox->setAttribute(Qt::WA_DeleteOnClose);
     mDialogState = Details;
@@ -912,3 +807,113 @@ void IAUpdateMainView::fileSizeText(int fileSize, QString &text)
     text.setNum(size);
     text.append(stringUnit); 
 }
+
+void IAUpdateMainView::setImportance(MIAUpdateAnyNode *node, QString &importanceDescription)
+{
+    int sizeInBytes = node->Base().ContentSizeL();
+    int size = 0;
+    bool shownInMegabytes = false;        
+    if (sizeInBytes >= KMaxShownInKiloBytes)
+    {
+        shownInMegabytes = true;
+        size = sizeInBytes / KMegaByte;
+        if (sizeInBytes % KMegaByte != 0)
+        {
+           size++;
+        }
+    }
+    else 
+    {
+        size = sizeInBytes / KKiloByte;
+        if (sizeInBytes % KKiloByte != 0)
+        {
+            size++;
+        }  
+    }
+    QString sizeString;
+    sizeString.setNum(size);     
+    switch(node->Base().Importance())
+    {        
+        case MIAUpdateBaseNode::EMandatory:
+        {
+            importanceDescription = "Required ";
+            importanceDescription.append(sizeString);
+            if (shownInMegabytes)
+            {
+                importanceDescription.append(" MB" );
+            }
+            else 
+            {
+                importanceDescription.append(" kB" );
+            }  
+            break;
+        }
+                
+        case MIAUpdateBaseNode::ECritical:
+        {
+            bool isNSU = false;
+            if(node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
+            {
+                MIAUpdateFwNode *fwnode = static_cast<MIAUpdateFwNode*>(node);          
+                if (fwnode->FwType() == MIAUpdateFwNode::EFotiNsu)
+                {
+                   isNSU = true;
+                }
+            }
+            importanceDescription = "Important ";
+            if (!size || isNSU)
+            {
+                //for firmware when size info is not provided by server
+            }
+            else
+            {
+                importanceDescription.append(sizeString);
+                if (shownInMegabytes)
+                {
+                    importanceDescription.append(" MB" );
+                }
+                else 
+                {
+                    importanceDescription.append(" kB" );
+                } 
+            }
+            break;
+        }
+            
+        case MIAUpdateBaseNode::ERecommended:
+        {
+            importanceDescription = "Recommended ";
+            importanceDescription.append(sizeString);
+            if (shownInMegabytes)
+            {
+                importanceDescription.append(" MB" );
+            }
+            else 
+            {
+                importanceDescription.append(" kB" );
+            }  
+            break;
+        }
+            
+        case MIAUpdateBaseNode::ENormal:
+        {
+            importanceDescription = "Optional ";
+            importanceDescription.append(sizeString);
+            if (shownInMegabytes)
+            {
+                importanceDescription.append(" MB" );
+            }
+            else 
+            {
+                importanceDescription.append(" kB" );
+            }  
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+}    
+

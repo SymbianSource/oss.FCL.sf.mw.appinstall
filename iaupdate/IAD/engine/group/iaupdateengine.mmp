@@ -125,7 +125,9 @@ LIBRARY         etelmm.lib          // RMobilePhone
 LIBRARY         iaupdaterfiles.lib
 
 // widget registry API library
-LIBRARY         widgetregistryclient.lib
+LIBRARY         sif.lib // SIF installer
+LIBRARY         scrclient.lib  //Registry client
+//LIBRARY         widgetregistryclient.lib
 
 // NCD Engine
 LIBRARY         ncdengine_20019119.lib

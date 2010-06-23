@@ -48,5 +48,5 @@ symbian {
 
 BLD_INF_RULES.prj_exports += \
     "$${LITERAL_HASH}include <platform_paths.hrh>" \
-    "rom/sifuiinstallindicatorplugin.iby CORE_APP_LAYER_IBY_EXPORT_PATH(sifuiinstallindicatorplugin.iby)"
+    "rom/sifuiinstallindicatorplugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH(sifuiinstallindicatorplugin.iby)"
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -835,7 +835,7 @@ inline const TVersion& TAppInfo::AppVersion() const
 		IMPORT_C void SetFinalProgressBarValue(TInt aValue);
 		
 		/** Updates the value of the progress bar value property by adding the given value to the current value. */
-		IMPORT_C void UpdateProgressBarValueL(TInt aValue);
+		IMPORT_C TInt UpdateProgressBarValueL(TInt aValue);
 	
 	private:
 		CProgressBarValuePublisher();
@@ -844,6 +844,8 @@ inline const TVersion& TAppInfo::AppVersion() const
 	private:
 		TInt iCurrentProgressValue;
 		TInt iFinalProgressValue;
+		TInt iLastPercentCompletion;
+		TInt iLastProgressValue;
 		};
 #endif
 

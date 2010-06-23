@@ -217,31 +217,27 @@ TBool CUninstallationProcessor::DoStateUpdateRegistryL()
     TAppUpdateInfo existingAppInfo, newAppInfo;     
     TUid packageUid = application.PackageL().Uid();
     
-    Plan().GetAffectedApps(affectedApps);
-    if(affectedApps.Count() == 0)
+    // Get all existing componentsIds for the package to to be uninstalled
+    TRAPD(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
+    TInt count = componentIds.Count();
+    if(0 == count)
         {
-        // Get all existing componentsIds for the package to to be uninstalled
-        TRAPD(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
-        TInt count = componentIds.Count();
-        if(0 == count)
-            {
-            DEBUG_PRINTF(_L("ComponentIDs not found for the base package"));
-            User::Leave(KErrNotFound);
-            }
-        
-        //Get the apps for CompIds and mark them as to be upgraded      
-        for(TInt i = 0 ; i < count; i++)
-            {
-            existingAppUids.Reset();                    
-            TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids)); 
-          
-            for(TInt i = 0 ; i < existingAppUids.Count(); i++)
-                {
-                existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);
-                affectedApps.Append(existingAppInfo);                   
-                }
-            }
+        DEBUG_PRINTF(_L("ComponentIDs not found for the base package"));
+        User::Leave(KErrNotFound);
         }
+    
+    //Get the apps for CompIds and mark them as to be uninstalled     
+    for(TInt i = 0 ; i < count; i++)
+        {
+        existingAppUids.Reset();                    
+        TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids)); 
+      
+        for(TInt i = 0 ; i < existingAppUids.Count(); i++)
+            {
+            existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);
+            affectedApps.Append(existingAppInfo);                   
+            }
+        }        
     
 	// Now that we are ready to make changes to the registry so we start a transaction
 	// Note that the commit/rollback action is subsequently taken by the later steps of the state machine	
@@ -249,28 +245,46 @@ TBool CUninstallationProcessor::DoStateUpdateRegistryL()
 	iRegistryWrapper.RegistrySession().DeleteEntryL(ApplicationL().PackageL(), TransactionSession().TransactionIdL()); 
     
     componentIds.Reset();
-    TRAPD(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
+    TRAP(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
     TInt currentComponentCount = componentIds.Count();        
     
     //If there is no component assosiated with this app in the scr and there are affected apps then mark all of them as deleted. 
     RArray<TAppUpdateInfo> apps;  
     CleanupClosePushL(apps);
     Plan().GetAffectedApps(apps);
-    TInt appCount = apps.Count();
-    CleanupStack::PopAndDestroy();
+    TInt appCount = apps.Count();    
     
+    //If the there is no component assosiated with the package uid(ie it has been completely deleted) and we have affected apps 
+    //then compare the apps of the package currently being processed with the existing affected apps if alredy exists then
+    //update else add it to the list.
     if(currentComponentCount == 0 && appCount)
         {            
-        for(TInt i = 0 ; i < appCount; i++)
-           {          
-           existingAppInfo = TAppUpdateInfo(affectedApps[0].iAppUid, EAppUninstalled);
-           affectedApps.Remove(0);
-           affectedApps.Append(existingAppInfo);    
-           }
+        TInt count = affectedApps.Count();        
+        for(TInt i = 0 ; i < appCount; ++i)
+           {    
+           TUid appUid = apps[i].iAppUid;
+           TBool found = EFalse;
+           for(TInt index = 0; index < count ; ++index)
+             {
+             if(appUid == affectedApps[index].iAppUid)
+                 {                       
+                 existingAppInfo = TAppUpdateInfo(appUid, EAppUninstalled);
+                 affectedApps.Remove(index);
+                 affectedApps.Append(existingAppInfo); 
+                 found = ETrue;     
+                 break;
+                 }               
+             }
+          if(!found)
+             {
+             existingAppInfo = TAppUpdateInfo(appUid,EAppUninstalled);
+             affectedApps.Append(existingAppInfo);
+             }   
+           } 
         }
     else
         {
-        // mark the apps in the sffected list as upgraded if they are still in scr
+        // mark the apps in the affected list as upgraded if they are still in scr
         for(TInt i = 0 ; i < currentComponentCount; i++)
            {
            newAppUids.Reset();                    
@@ -289,12 +303,13 @@ TBool CUninstallationProcessor::DoStateUpdateRegistryL()
                }        
            } 
         }
-    
+    CleanupStack::PopAndDestroy(&apps);
     for(TInt i = 0; i < affectedApps.Count(); i++)
         {
         DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
         DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
         }   
+            
     const_cast<CPlan&>(Plan()).ResetAffectedApps();
     const_cast<CPlan&>(Plan()).SetAffectedApps(affectedApps);
     

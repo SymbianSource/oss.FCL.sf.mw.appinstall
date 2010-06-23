@@ -138,8 +138,7 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
     // Application name and version
     Q_ASSERT(mAppDetailsLayout == 0);
     mAppDetailsLayout = new QGraphicsLinearLayout(Qt::Vertical);
-    Q_ASSERT(mAppName == 0);
-    mAppName = new HbLabel(applicationName(parameters));
+    createAppName(applicationName(parameters));
     mAppDetailsLayout->addItem(mAppName);
 
     // Application size
@@ -199,9 +198,8 @@ void SifUiDialogContentWidget::updateFromParameters(const QVariantMap &parameter
                 mAppName->setPlainText(appNameStr);
             }
         } else {
-            HbLabel *appName = new HbLabel(appNameStr);
-            mAppDetailsLayout->insertItem(KAppNameIndex, appName);
-            mAppName = appName;
+            createAppName(appNameStr);
+            mAppDetailsLayout->insertItem(KAppNameIndex, mAppName);
         }
     }
 
@@ -352,7 +350,21 @@ void SifUiDialogContentWidget::addDetail(const QString &detailText)
 {
     Q_ASSERT(mAppDetailsLayout != 0);
     HbLabel *detailItem = new HbLabel(detailText);
+    detailItem->setTextWrapping(Hb::TextWordWrap);
+    detailItem->setFontSpec(HbFontSpec(HbFontSpec::Secondary));
     mAppDetailsLayout->addItem(detailItem);
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialogContentWidget::createAppName()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialogContentWidget::createAppName(const QString &appName)
+{
+    Q_ASSERT(mAppName == 0);
+    mAppName = new HbLabel(appName);
+    mAppName->setTextWrapping(Hb::TextWordWrap);
+    mAppName->setFontSpec(HbFontSpec(HbFontSpec::Secondary));
 }
 
 // ----------------------------------------------------------------------------
@@ -402,6 +414,8 @@ void SifUiDialogContentWidget::updateAppSize(const QVariantMap &parameters)
                 }
             } else {
                 HbLabel *appSize = new HbLabel(appSizeStr);
+                appSize->setTextWrapping(Hb::TextWordWrap);
+                appSize->setFontSpec(HbFontSpec(HbFontSpec::Secondary));
                 mAppDetailsLayout->insertItem(KAppSizeIndex, appSize);
                 mAppSize = appSize;
             }
@@ -431,14 +445,18 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         //: Drive name for internal phone memory with megabytes of free space.
                         //: %1 is replaced with drive letter (usually 'C')
                         //: %2 is replaced with available free space (in megabytes, MB)
-                        //TODO: use hbTrId("txt_sisxui_device_memory_mb") when available
+                        //TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_device_memory_mb")
+                        //    .arg(volume).arg(size/KSifUiMega));
                         driveList.append(tr("%1: Device (%L2 MB free)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for internal phone memory with kilobytes of free space.
                         //: %1 is replaced with drive letter (usually 'C')
                         //: %2 is replaced with available free space (in kilobytes, kB)
-                        //TODO: use hbTrId("txt_sisxui_device_memory_kb") when available
+                        //TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_device_memory_kb")
+                        //    .arg(volume).arg(size/KSifUiKilo));
                         driveList.append(tr("%1: Device (%L2 kB free)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
@@ -448,14 +466,18 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         //: Drive name for mass storage with megabytes of free space.
                         //: %1 is replaced with drive letter (usually 'E')
                         //: %2 is replaced with available free space (in megabytes, MB)
-                        // TODO: use hbTrId("txt_sisxui_mass_storage_mb") when available
+                        // TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_mass_storage_mb")
+                        //    .arg(volume).arg(size/KSifUiMega));
                         driveList.append(tr("%1: Mass.mem (%L2 MB free)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for mass storage with kilobytes of free space.
                         //: %1 is replaced with drive letter (usually 'E')
                         //: %2 is replaced with available free space (in kilobytes, kB)
-                        // TODO: use hbTrId("txt_sisxui_mass_storage_kb") when available
+                        // TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_mass_storage_kb")
+                        //    .arg(volume).arg(size/KSifUiKilo));
                         driveList.append(tr("%1: Mass.mem (%L2 kB free)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
@@ -465,14 +487,18 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         //: Drive name for memory card with megabytes of free space.
                         //: %1 is replaced with drive letter (usually 'F')
                         //: %2 is replaced with available free space (in megabytes, MB)
-                        // TODO: use hbTrId("txt_sisxui_memory_card_mb") when available
+                        // TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_memory_card_mb")
+                        //    .arg(volume).arg(size/KSifUiMega));
                         driveList.append(tr("%1: Mem.card (%L2 MB free)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for memory card with kilobytes of free space.
                         //: %1 is replaced with drive letter (usually 'F')
                         //: %2 is replaced with available free space (in kilobytes, kB)
-                        // TODO: use hbTrId("txt_sisxui_memory_card_kb") when available
+                        // TODO: enable when available
+                        //driveList.append(hbTrId("txt_installer_memory_card_kb")
+                        //    .arg(volume).arg(size/KSifUiKilo));
                         driveList.append(tr("%1: Mem.card (%L2 kB free)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
