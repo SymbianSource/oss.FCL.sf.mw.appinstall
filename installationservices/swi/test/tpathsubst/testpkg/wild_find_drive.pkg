@@ -1,0 +1,41 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"PathSub wild find drive case"},(0x8150535f),1,0,0
+
+%{"Symbian"}
+
+:"Symbian"
+
+; simple wild drive replacement
+"textfile.txt"-"c:\FIND_WILD\tf_fw_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD\tf_fw_e.txt",FF
+
+; more specific replacement drive for e
+"textfile.txt"-"c:\FIND_WILD_E\tf_fwd_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD_E\tf_fwd_e.txt",FF
+
+; as above, but more specific find path specified after wild find path
+"textfile.txt"-"c:\FIND_WILD_E_AFT\tf_fwda_c.txt",FF
+"textfile.txt"-"e:\FIND_WILD_E_AFT\tf_fwda_e.txt",FF
+
+; user-selected drive, special case not matched
+"textfile.txt"-"!:\FIND_WILD_E\tf_fwd_us.txt",FF
+
+; user-selected drive, special case matched
+"textfile.txt"-"!:\FIND_WILD_C\tf_fwc_us.txt",FF
+
+

@@ -1,0 +1,75 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Verify that the SIS launcher API can cope with large numbers of AppArc reg files
+&EN
+
+;Header
+#{"Test Notify Apps"}, (0x81000012), 1, 0, 1, TYPE=SA
+
+%{"Symbian Software Ltd"}
+:"Symbian Software Ltd"
+
+; Create lots of dummy AppArc reg files
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_00_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_01_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_02_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_03_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_04_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_05_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_06_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_07_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_08_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_09_reg.rsc"
+
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_10_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_11_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_12_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_13_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_14_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_15_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_16_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_17_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_18_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_19_reg.rsc"
+
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_20_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_21_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_22_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_23_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_24_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_25_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_26_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_27_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_28_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_29_reg.rsc"
+
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_30_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_31_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_32_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_33_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_34_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_35_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_36_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_37_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_38_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_39_reg.rsc"
+"text\file1.txt"-"!:\private\10003a3f\import\apps\test_notifyapps_40_reg.rsc"
+
+; The AppArc ForceRegistration API is only invoked if the SIS file contains a file that is launched by mime-type or run on install.
+"text\englishfile.txt"-"!:\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\012345678\longfilename",FILEMIME,"x-epoc/x-dummymime-app"
+
+"text\file1.txt"-"!:\longmime",FILEMIME,"x-epoc/x-dummymime-app-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-012345678-1"
+

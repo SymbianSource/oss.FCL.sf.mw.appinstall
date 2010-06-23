@@ -1,0 +1,67 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-DEF075099-HW-0001
+//! @SYMTestCaseDesc 		Ensure filenull files are registered correctly on restore in the absense of drive
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Backup, Restore and then remove a data only package w/ FileNull
+//! @SYMTestExpectedResults 	FNed files is deleted on uninstall after restore
+//! @SYMDEF 			DEF075099ARM 
+ 
+START_TESTCASE API-SEC-DEF075099-HW-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini filenullrestore_armv5
+
+// Copy a file which has FN flag 
+RUN_UTILS MkDir E:\restore\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm E:\restore\filenull.txt
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+ 
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Copy a file which has FN flag 
+RUN_UTILS MkDir E:\restore\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm E:\restore\filenull.txt
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+ 
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore_armv5
+
+END_TESTCASE API-SEC-DEF075099-HW-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

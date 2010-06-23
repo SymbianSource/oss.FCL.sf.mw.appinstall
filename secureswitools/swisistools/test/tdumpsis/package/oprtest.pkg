@@ -1,0 +1,52 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+
+#{"testexpressions_operators"}, (0x811111f8), 1, 2, 3, TYPE=SA
+%{"Vendor"}
+:"Unique Vendor Name"
+
+!({"Option1"}, {"Option2"}, {"Option3"})
+
+IF ((option1)=(1))AND((option2)=(1))
+
+"data\OprTest\file0"-"!:\Documents\InstTest\option_1a2.txt", FF
+ENDIF
+IF ((option1)=(1))AND(((option2)=(1))AND((option3)=(1)))
+
+"data\OprTest\file1"-"!:\Documents\InstTest\option_1a2a3.txt", FF
+ENDIF
+IF ((option1)=(1))OR(((option2)=(1))OR((option3)=(1)))
+
+"data\OprTest\file2"-"!:\Documents\InstTest\option_1o2o3.txt", FF
+ENDIF
+IF ((option1)=(1))AND(NOT((option2)=(1)))
+
+"data\OprTest\file3"-"!:\Documents\InstTest\option_1an2.txt", FF
+ENDIF
+IF ((option1)<(option2))AND((option3)>=(option2))
+
+"data\OprTest\file4"-"!:\Documents\InstTest\option_test1.txt", FF
+ENDIF
+IF ((option2)>=(option2))AND((option3)<=(option3))
+
+"data\OprTest\file5"-"!:\Documents\InstTest\option_test2.txt", FF
+ENDIF
+IF ((option1)=(option2))AND((option3)=(option3))
+
+"data\OprTest\file6"-"!:\Documents\InstTest\option_test3.txt", FF
+ENDIF

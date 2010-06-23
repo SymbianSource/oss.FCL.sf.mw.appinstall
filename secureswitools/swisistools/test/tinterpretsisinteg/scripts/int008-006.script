@@ -1,0 +1,46 @@
+//
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// @file tintsis.script
+// interpretsis Integration Test Script
+// Integration Test
+// Component  : SWI
+// Tests      : 
+// The scope of this script is to compare the SWI and Interpretsis installation
+//
+
+
+PRINT Run test for installation of sis file 
+LOAD_SUITE tuiscriptadaptors
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//! @SYMTestCaseID 		API-SEC-sistools-InterpretSIS-INT008-0006
+//! @SYMTestCaseDesc 		Compare installation of SWI and Interpretsis 
+//! @SYMPREQ  			PREQ2114
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Install a sis file.
+//! @SYMTestExpectedResults 	Installation is successful
+//! @SYMTestType		CIT
+//////////////////////////////////////////////////////////////////////////////////////////////
+RUN_UTILS DeleteDirectory c:\sys\bin
+RUN_UTILS DeleteDirectory c:\sys\hash
+RUN_UTILS DeleteDirectory c:\sys\install
+
+START_TESTCASE API-SEC-sistools-InterpretSIS-INT008-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep c:\tswi\tinterpretsisinteg\scripts\ini.ini INT008-004
+
+END_TESTCASE API-SEC-sistools-InterpretSIS-INT008-0006

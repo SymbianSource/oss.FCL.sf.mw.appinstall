@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SystemDefinition schema="3.0.0">
+  <package id="appinstall" name="Application Installation" levels="tool framework generic api">
+    <collection id="installationservices" name="Installation Services" level="generic">
+      <component id="swi" name="Secure Software Install" purpose="optional">
+        <unit bldFile="installationservices/swi/group" mrp="installationservices/swi/group/security_swi.mrp"/>
+      </component>
+      <component id="swidevicetools" name="Secure Software Install Device Tools" introduced="8.1" purpose="development">
+        <unit bldFile="installationservices/swidevicetools/group" mrp="installationservices/swidevicetools/group/security_switools_device.mrp"/>
+      </component>
+      <component id="swcomponentregistry" name="Software Component Registry" introduced="^4" purpose="mandatory">
+        <unit bldFile="installationservices/swcomponentregistry/group" mrp="installationservices/swcomponentregistry/group/security_softwarecomponentregistry.mrp"/>
+      </component>
+      <component id="swinstallationfw" name="Software Installation Framework" introduced="^4" purpose="optional">
+        <unit bldFile="installationservices/swinstallationfw/group" mrp="installationservices/swinstallationfw/group/security_softwareinstallframework.mrp"/>
+      </component>
+      <component id="swtransactionservices" name="Software Transaction Services" introduced="^4" purpose="optional">
+        <unit bldFile="installationservices/swtransactionservices/group" mrp="installationservices/swtransactionservices/group/security_softwaretransactionservices.mrp"/>
+      </component>
+      <component id="refswinstallationplugin" name="Reference Software Installation Plugin" introduced="^4" purpose="development" class="plugin">
+        <unit bldFile="installationservices/refswinstallationplugin/group" mrp="installationservices/refswinstallationplugin/group/security_sifrefplugin.mrp"/>
+      </component>
+      <component id="refsoftwareappmgr" name="Reference Software Application Manager" introduced="^4" purpose="development">
+        <unit bldFile="installationservices/refsoftwareappmgr/group" mrp="installationservices/refsoftwareappmgr/group/security_referenceapplicationmanager.mrp"/>
+      </component>
+      <component id="switestfw" name="Software Install Test Framework" deprecated="^3" introduced="7.0" purpose="development" filter="test">
+        <unit mrp="installationservices/switestfw/group/install_testframework.mrp" bldFile="installationservices/switestfw/group"/>
+      </component>
+      <component id="swiconfig" name="Software Install Config" introduced="9.1" purpose="optional" class="config">
+        <unit bldFile="installationservices/swiconfig/group" mrp="installationservices/swiconfig/group/install_config.mrp"/>
+      </component>
+    </collection>
+    <collection id="secureswitools" name="Secure Software Install Tools" level="tool">
+      <component id="makekeys" name="MakeKeys" filter="gt" introduced="6.0" purpose="optional" target="desktop">
+        <unit bldFile="secureswitools/makekeys/group" mrp="secureswitools/makekeys/group/security_makekeys.mrp"/>
+      </component>
+      <component id="swianalysistoolkit" name="SWI Analysis Toolkit" purpose="development" target="desktop">
+        <unit bldFile="secureswitools/swianalysistoolkit/group" mrp="secureswitools/swianalysistoolkit/group/security_switools.mrp"/>
+      </component>
+      <component id="openssllib" name="OpenSSL Library" purpose="optional" target="desktop">
+        <unit mrp="secureswitools/openssllib/security_openssl.mrp"/>
+      </component>
+      <component id="swisistools" name="Secure Software Install SIS Tools" purpose="optional" target="desktop">
+        <unit bldFile="secureswitools/swisistools/group" mrp="secureswitools/swisistools/group/security_sistools.mrp"/>
+      </component>
+    </collection>
+  </package>
+</SystemDefinition>

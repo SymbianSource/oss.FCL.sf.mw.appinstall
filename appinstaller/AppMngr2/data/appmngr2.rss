@@ -1,0 +1,227 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Resource definitions for project AppMngr2
+*
+*/
+
+
+NAME    APM2
+
+#include "appmngr2.hrh"                 // Command IDs
+#include <eikon.hrh>                    // EEikMenuItemDimmed
+#include <data_caging_paths_strings.hrh> // APP_BITMAP_DIR
+#include <eikon.rh>                     // Resource structs
+#include <avkon.rh>                     // Resource structs
+#include <appinfo.rh>                   // Resource structs
+#include <avkon.rsg>                    // Avkon resources
+#include <avkon.loc>                    // UI strings
+#include <appmngr2.loc>                 // UI strings
+
+
+// ---------------------------------------------------------------------------
+// RSS_SIGNATURE, TBUF, and EIK_APP_INFO
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE RSS_SIGNATURE { }
+RESOURCE TBUF { buf = ""; }
+
+RESOURCE EIK_APP_INFO
+    {
+    status_pane = r_appmngr2_status_pane;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_STATUS_PANE
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE STATUS_PANE_APP_MODEL r_appmngr2_status_pane
+    {
+    layout = R_AVKON_STATUS_PANE_LAYOUT_USUAL;
+    panes =
+        {
+        SPANE_PANE
+            {
+            id = EEikStatusPaneUidTitle;
+            type = EAknCtTitlePane;
+            resource = r_appmngr2_title_pane_text;
+            }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_TITLE_PANE_TEXT
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE TITLE_PANE r_appmngr2_title_pane_text
+    {
+    txt = qtn_am_title;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_INSTALLED_VIEW
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_appmngr2_installed_view
+    {
+    menubar = r_appmngr2_menubar_installed_view;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_MENUBAR_INSTALLED_VIEW
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_BAR r_appmngr2_menubar_installed_view
+    {
+    titles =
+        {
+        MENU_TITLE { menu_pane = r_appmngr2_installed_menu; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_INSTALLED_MENU
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_PANE r_appmngr2_installed_menu
+    {
+    items =
+        {
+        MENU_ITEM { command = EAppMngr2CmdViewDetails;  txt = qtn_swins_om_comp_details;
+            flags = EEikMenuItemSpecific; },
+        MENU_ITEM { command = EAppMngr2CmdUninstall;    txt = qtn_swins_om_uninstall;
+            flags = EEikMenuItemSpecific; },
+        MENU_ITEM { command = EAppMngr2PlaceForPluginSpecificCmds; flags = EEikMenuItemDimmed; },
+        MENU_ITEM { command = EAppMngr2CmdLog;          txt = qtn_swins_om_view_inst_log; },
+        MENU_ITEM { command = EAknCmdHelp;              txt = qtn_options_help; },
+        MENU_ITEM { command = EAknCmdExit;              txt = qtn_options_exit; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_PACKAGES_VIEW
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_appmngr2_packages_view
+    {
+    menubar = r_appmngr2_menubar_packages_view;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_MENUBAR_PACKAGES_VIEW
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_BAR r_appmngr2_menubar_packages_view
+    {
+    titles =
+        {
+        MENU_TITLE { menu_pane = r_appmngr2_packages_menu; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_PACKAGES_MENU
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE MENU_PANE r_appmngr2_packages_menu
+    {
+    items =
+        {
+        MENU_ITEM { command = EAppMngr2CmdInstall;      txt = qtn_swins_om_install;
+            flags = EEikMenuItemSpecific; },
+        MENU_ITEM { command = EAppMngr2CmdViewDetails;  txt = qtn_swins_om_comp_details;
+            flags = EEikMenuItemSpecific; },
+        MENU_ITEM { command = EAppMngr2PlaceForPluginSpecificCmds; flags = EEikMenuItemDimmed; },
+        MENU_ITEM { command = EAppMngr2CmdRemove;       txt = qtn_am_opt_remove;
+            flags = EEikMenuItemSpecific; },
+        MENU_ITEM { command = EAppMngr2CmdLog;          txt = qtn_swins_om_view_inst_log; },
+        MENU_ITEM { command = EAknCmdHelp;              txt = qtn_options_help; },
+        MENU_ITEM { command = EAknCmdExit;              txt = qtn_options_exit; }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR2_YES_NO_CONFIRMATION_QUERY
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_appmngr2_yes_no_confirmation_query
+    {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO__YES;
+    items =
+        {
+        DLG_LINE
+            {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_CONFIRMATION_QUERY
+                {
+                layout = EConfirmationQueryLayout;
+                };
+            }
+        };
+    }
+
+// ---------------------------------------------------------------------------
+// UI Strings
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE TBUF r_swins_unit_byte         { buf = qtn_swins_lsh2_byte; }
+RESOURCE TBUF r_swins_unit_kilobyte     { buf = qtn_swins_lsh2_kilobyte; }
+RESOURCE TBUF r_swins_unit_megabyte     { buf = qtn_swins_lsh2_megabyte; }
+RESOURCE TBUF r_swins_unit_gigabyte     { buf = qtn_swins_lsh2_gigabyte; }
+RESOURCE TBUF r_swins_unit_untrusted    { buf = qtn_swins_lsh2_untrusted; }
+RESOURCE TBUF r_am_installed_view_empty { buf = qtn_am_empty_installed; }
+RESOURCE TBUF r_am_packages_view_empty  { buf = qtn_am_empty_not_installed; }
+RESOURCE TBUF r_am_deletequery          { buf = qtn_query_common_conf_delete; }
+RESOURCE TBUF r_am_msk_view_log         { buf = qtn_msk_view_log; }
+RESOURCE TBUF r_am_msk_view_details     { buf = qtn_msk_view_details; }
+RESOURCE TBUF r_am_msk_install          { buf = qtn_msk_install; }
+RESOURCE TBUF r_inst_log_header         { buf = qtn_swins_lsh2_log_header; }
+RESOURCE TBUF r_inst_install_event      { buf = qtn_swins_logstatus1; }
+RESOURCE TBUF r_inst_partial_install_event { buf = qtn_swins_logstatus2; }   // not used
+RESOURCE TBUF r_inst_remove_event       { buf = qtn_swins_logstatus3; }
+RESOURCE TBUF r_am_title_installed      { buf = qtn_am_title_installed; }
+RESOURCE TBUF r_am_title_not_installed  { buf = qtn_am_title_not_installed; }
+RESOURCE TBUF r_qtn_swins_log_empty     { buf = qtn_swins_log_empty; }
+RESOURCE TBUF r_qtn_am_scanning_memory { buf = qtn_am_scanning_memory; }
+
+// ---------------------------------------------------------------------------
+// R_APPMNGR_LOCALISABLE_APP_INFO
+//
+// ---------------------------------------------------------------------------
+//
+RESOURCE LOCALISABLE_APP_INFO r_appmngr_localisable_app_info
+    {
+    short_caption = qtn_apps_appmngr_grid;
+    caption_and_icon = CAPTION_AND_ICON_INFO
+        {
+        caption = qtn_apps_appmngr_list;
+        number_of_icons = 1;
+        icon_file = APP_BITMAP_DIR"\\appmngr2_aif.mif";
+        };
+    }
+

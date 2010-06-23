@@ -1,0 +1,31 @@
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// localise01strings
+// Strings localised for UK
+//
+
+rls_string STRING_r_example_short_caption "HW"
+rls_string STRING_r_example_caption "helloworld"
+rls_string STRING_r_example_iconfile "z:\\tusif\\tsif\\data\\sifgetcompapparcinfotestmultilang\\sifgetcompapparcinfotestmultilang_01.mbm"
+rls_string STRING_r_example_iconfile1 "z:\\tusif\\tsif\\data\\sifgetcompapparcinfotestmultilang\\sifgetcompapparcinfotestmultilang_01.mbm"
+rls_string STRING_r_example_iconfile2 "z:\\tusif\\tsif\\data\\sifgetcompapparcinfotest\\sifgetcompapparcinfotest_01.mbm"
+rls_string STRING_r_view_268123123_caption "view_268123121_caption_eng"
+rls_string STRING_r_view_268123124_caption "view_268123122_caption_eng"
+rls_long Long_NumberOfIcon1 2
+rls_long Long_NumberOfIcon2 1
+rls_long Long_NumberOfIcon3 2
+rls_long Long_uid1 268123121
+rls_long Long_uid2 268123122
+rls_long Long_screenmode1 0x00
+rls_long Long_screenmode2 0x01

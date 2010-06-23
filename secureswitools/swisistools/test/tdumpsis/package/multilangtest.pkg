@@ -1,0 +1,51 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN, FR
+
+#{"MultiLanguageOption-EN","MultiLanguageOption-FR"}, (0x81111107), 1, 2, 3, TYPE=SA
+%{"Vendor","Vendor"}
+:"Vendor"
+
+!({"ENOption1", "FROption1"}, {"ENOption2", "FROption2"}, {"ENOption3", "FROption3"})
+
+IF (option1)=(1)
+IF (4096)=(1)
+
+"data\MultiLangTest\file0"-"!:\Documents\InstTest\file1.txt"
+ELSEIF (4096)=(2)
+
+"data\MultiLangTest\file1"-"!:\Documents\InstTest\file1.txt"
+ENDIF
+ENDIF
+IF (option2)=(1)
+IF (4096)=(1)
+
+"data\MultiLangTest\file2"-"!:\Documents\InstTest\file2.txt"
+ELSEIF (4096)=(2)
+
+"data\MultiLangTest\file3"-"!:\Documents\InstTest\file2.txt"
+ENDIF
+ENDIF
+IF (option3)=(1)
+IF (4096)=(1)
+
+"data\MultiLangTest\file4"-"!:\Documents\InstTest\file3.txt"
+ELSEIF (4096)=(2)
+
+"data\MultiLangTest\file5"-"!:\Documents\InstTest\file3.txt"
+ENDIF
+ENDIF

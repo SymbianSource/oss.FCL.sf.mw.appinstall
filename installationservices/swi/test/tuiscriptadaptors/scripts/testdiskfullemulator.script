@@ -1,0 +1,42 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-InsufficientSpace-0001
+//! @SYMTestCaseDesc 		Tries to install a SIS file containing a greater total size of data files than is available onto drive x
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions		Consume most of the disk space on drive x, then attempt to install a SIS file containing more data than
+//! 				can fit in the remaining space.
+//! @SYMTestExpectedResults 	Installation fails
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-InsufficientSpace-0001
+
+// Create temporary file to leave very little space free on drive X.
+RUN_TEST_STEP 100 tuiscriptadaptors FillDrive z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini almostfilldrive
+RUN_TEST_STEP_RESULT -26 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini diskfull
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptorsFH.ini u_diskfull
+
+// Delete space hogging file from drive X
+RUN_UTILS DeleteFile x:\BigTempFile
+
+END_TESTCASE API-SEC-UISA-InsufficientSpace-0001
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

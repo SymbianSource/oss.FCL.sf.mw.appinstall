@@ -1,0 +1,150 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// Developer Certificate unit (integration) tests
+PRINT Run Developer Certificates aggregate test
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0001
+//! @SYMTestCaseDesc 		If the device id constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_dev1 and bad_single_dev, then SWI should interpret this as "no valid devices."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0001
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_01
+
+END_TESTCASE API-SEC-aggregate-0001
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0002
+//! @SYMTestCaseDesc 		If the sid constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_sid1 and bad_single_sid, then SWI should interpret this as "no valid sid."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0002
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_02
+
+END_TESTCASE API-SEC-aggregate-0002
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0003
+//! @SYMTestCaseDesc 		If the vid constraint is present, but two constraints contained in the certificate chain
+//!		     		are single_vid1,bad_single_vid, then SWI should interpret this as "no valid vid."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0003
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_03
+
+END_TESTCASE API-SEC-aggregate-0003
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0004
+//! @SYMTestCaseDesc 		If the capability constraint is present, but two constraints contained in the certificate chain
+//!		     		are user_caps and empty_caps, then SWI should interpret this as "no valid capability."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0004
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_04
+
+END_TESTCASE API-SEC-aggregate-0004
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0005
+//! @SYMTestCaseDesc 		If the device id constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_dev and empty_devs, then SWI should interpret this as "no valid device."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0005
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_05
+
+END_TESTCASE API-SEC-aggregate-0005
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0006
+//! @SYMTestCaseDesc 		If the sid constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_sid and empty_sids, then SWI should interpret this as "no valid sid."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0006
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_06
+
+END_TESTCASE API-SEC-aggregate-0006
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0007
+//! @SYMTestCaseDesc 		If the vid constraint is present, but two constraints contained in the two certificate chains
+//!		     		are multi_vid and empty_vids, then SWI should interpret this as "no valid vid."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0007
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_07
+
+END_TESTCASE API-SEC-aggregate-0007
+
+
+//! @SYMTestCaseID 		API-SEC-aggregate-0008
+//! @SYMTestCaseDesc 		If the capability constraint is present, but two constraints contained in the two certificate chains
+//!		     		are user_caps and empty_caps, then SWI should interpret this as "no valid capability."
+//! @SYMREQ 			REQ4052
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Attempts to install a single executable from a signed SIS file.
+//! @SYMTestExpectedResults 	Installation is aborted.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-aggregate-0008
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tdevcerts\scripts\aggregate.ini aggregate_08
+
+END_TESTCASE API-SEC-aggregate-0008
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

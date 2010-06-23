@@ -1,0 +1,69 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification file for AppMngr2 GS Settings plugin
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+#include <bldvariant.hrh>
+
+TARGET                  appmngr2gssettingsplugin.dll
+TARGETTYPE              PLUGIN
+UID                     0x10009D8D 0x101F9A10
+
+CAPABILITY              CAP_ECOM_PLUGIN
+VENDORID                VID_DEFAULT
+
+SOURCEPATH              ../GSSettingsPlugin/src
+SOURCE                  appmngr2gssettingsplugin.cpp
+SOURCE                  appmngr2gssettingscontainer.cpp
+SOURCE                  appmngr2gssettingspluginmain.cpp
+
+START RESOURCE          ../data/101f9a10.rss
+TARGET                  appmngr2gssettingsplugin.rsc
+TARGETPATH              ECOM_RESOURCE_DIR
+END
+
+START RESOURCE          ../data/appmngr2gssettingspluginrsc.rss
+HEADER
+TARGETPATH              RESOURCE_FILES_DIR
+LANGUAGE_IDS
+END
+
+USERINCLUDE             ../inc
+USERINCLUDE             ../GSSettingsPlugin/inc
+
+APP_LAYER_SYSTEMINCLUDE   // For \epoc32\include\app\hlplch.h
+
+LIBRARY                 euser.lib                   // Base
+LIBRARY                 ecom.lib                    // ECom
+LIBRARY                 gsecomplugin.lib            // CGSPluginInterface
+LIBRARY                 cone.lib                    // App Framework
+LIBRARY                 avkon.lib                   // S60 UI Framework
+LIBRARY                 eikcoctl.lib                // S60 UI Framework
+LIBRARY                 eikcore.lib                 // S60 UI Framework
+LIBRARY                 bafl.lib                    // CDesC16Array
+LIBRARY                 commonengine.lib            // RConeResourceLoader
+LIBRARY                 aknskins.lib                // AknsUtils
+LIBRARY                 featmgr.lib                 // FeatureManager
+LIBRARY                 hlplch.lib                  // HlpLauncher
+LIBRARY                 centralrepository.lib       // CRepository
+LIBRARY                 appmngr2pluginapi.lib       // TAppMngr2DriveUtils
+
+DEBUGLIBRARY            flogger.lib                 // RFileLogger
+
+SMPSAFE
+

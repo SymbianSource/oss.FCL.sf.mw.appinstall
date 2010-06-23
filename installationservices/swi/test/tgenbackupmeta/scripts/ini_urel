@@ -1,0 +1,239 @@
+
+[basic]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\filebase.sis
+UID1=A0000A93
+INSTALLDRIVE1 = ÿ
+
+[partialupgrade]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\filepu.sis
+UID1=A0000A93
+FILE1.1=c:\files\overwriteme.txt
+INSTALLDRIVE1 = C
+
+[patch]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\filesp.sis
+UID1=A0000A93
+FILE1.1=c:\files\overwriteme.txt
+INSTALLDRIVE1 = C
+
+[unsigned]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\1-2unsignedexenocap.sis
+UID1=8000A002
+FILE1.1= c:\sys\bin\exe-nocap.exe
+INSTALLDRIVE1 = ÿ
+
+[devidcons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_01.sis
+UID1=E1112228
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_02]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_05.sis
+UID1=E111222C
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_03]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\corrupt_01.sis
+UID1=E1112230
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_04]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_01.sis
+UID1=E1112242
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[devidcons_05]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_05.sis
+UID1=E1112246
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_02.sis
+UID1=E1112229
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_02]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\corrupt_02.sis
+UID1=E1112231
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[sidcons_03]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_06.sis
+UID1=E111222D
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_03.sis
+UID1=E111222A
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_02]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_07.sis
+UID1=E111222E
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_03]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\corrupt_03.sis
+UID1=E1112232
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_04]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_03.sis
+UID1=E1112244
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[vidcons_05]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_07.sis
+UID1=E1112248
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\aggregate_04.sis
+UID1=E111222B
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_02]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\corrupt_04.sis
+UID1=E1112233
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_03]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\devcertwarn.sis
+UID1=E1112234
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_04]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_04.sis
+UID1=E1112245
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[capcons_05]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_08.sis
+UID1=E1112249
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[seccons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_02.sis
+UID1=E1112243
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[seccons_02]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_06.sis
+UID1=E1112247
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[certcons_01]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\mismatch_10.sis
+UID1=E111224B
+FILE1.1=c:\sys\bin\tswisystemcapability_protected.exe
+INSTALLDRIVE1 = C
+
+[protected_vid_mismatch]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\02_protected_vid_mismatch.sis
+UID1=E1112223
+FILE1.1=c:\sys\bin\tswidllnocapabilityprotectedvid.dll
+INSTALLDRIVE1 = C
+
+[ocsp_expired]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\ocsp_03.sis
+UID1=E111224E
+FILE1.1=c:\sys\bin\tswiusergrantable_all_protected.exe
+INSTALLDRIVE1 = C
+
+[signedcap]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiallcapabilities.sis
+UID1=81113000
+FILE1.1=c:\sys\bin\tswiallcapabilities.exe
+INSTALLDRIVE1 = C
+
+[syscaps]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisystemcapability.sis
+UID1=81113006
+FILE1.1=c:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE1 = C
+
+[syscaps_DSA]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisystemcapability_DSACA.sis
+UID1=81113006
+FILE1.1=c:\sys\bin\tswisystemcapability.exe
+INSTALLDRIVE1 = C
+
+[syscaps_RSA]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswiallcapabilities_RSACA.sis
+UID1=81113000
+FILE1.1=c:\sys\bin\tswiallcapabilities.exe
+INSTALLDRIVE1 = C
+
+[cap8]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedcap_8.sis
+UID1=81113004
+FILE1.1=c:\sys\bin\tswisignedCap_8.exe
+INSTALLDRIVE1 = C
+
+[cap8_Root5]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedcap_8_Root5.sis
+UID1=81113004
+FILE1.1=c:\sys\bin\tswisignedCap_8.exe
+INSTALLDRIVE1 = C
+
+[cap8_Root5_RSA]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswisignedcap_8_Root5_RSACA.sis
+UID1=81113004
+FILE1.1=c:\sys\bin\tswisignedCap_8.exe
+INSTALLDRIVE1 = C
+
+[nocapsRSA]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\tswinocapability_RSA.sis
+UID1=81113001
+FILE1.1=c:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C
+
+[capsfail]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\capabilities.sis
+UID1=80172A37
+FILE1.1=c:\sys\bin\wsc_exe.exe
+INSTALLDRIVE1 = C
+
+[doublesignedfail]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\doublesigned.sis
+UID1=80172A38
+FILE1.1=c:\sys\bin\wsc_exe.exe
+INSTALLDRIVE1 = C
+
+[untrustedVid]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\testuntrustedVid.sis
+UID1=81113020
+FILE1.1=c:\sys\bin\testUntrustedVid.exe
+INSTALLDRIVE1 = C
+
+[untrustedSid]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\testuntrustedSid.sis
+UID1=81113019
+FILE1.1=c:\sys\bin\testUntrustedSid.exe
+INSTALLDRIVE1 = C
+
+[untrustedPkg]
+SIS1=c:\tswi\tgenbackupmeta\scripts\data\winscw_urel\testuntrustedPackage.sis
+UID1=11113001
+FILE1.1=c:\sys\bin\tswinocapability.exe
+INSTALLDRIVE1 = C

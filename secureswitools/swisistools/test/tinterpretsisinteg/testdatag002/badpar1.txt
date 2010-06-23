@@ -1,0 +1,1 @@
+-c d:\cdrive -d d:\ /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/testfile1.sis

@@ -1,0 +1,54 @@
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+/**
+ @file swiappregintegration_case06_loc.rss
+ @internalComponent - Internal Symbian test code
+*/
+
+#include <techview/eikon.rh>
+#include <uiklafgt/eikcore.rsg>
+#include <appinfo.rh>
+
+
+RESOURCE RSS_SIGNATURE { }
+
+#ifdef LANGUAGE_01
+ #include "01-strings.rls"
+#elif defined LANGUAGE_02
+ #include "02-strings.rls"
+#elif defined LANGUAGE_03
+ #include "03-strings.rls"
+#elif defined LANGUAGE_04
+ #include "04-strings.rls"
+#else
+ #include "rsc-strings.rls"
+#endif      
+
+RESOURCE LOCALISABLE_APP_INFO r_lai
+	{
+	short_caption = Localized_Short_Caption;
+	caption_and_icon =
+		{
+		CAPTION_AND_ICON_INFO
+			{
+			caption = Localized_Caption;
+			number_of_icons = Localized_NumberOfIcon;
+			icon_file = Localized_Iconfile;
+			}
+		};
+
+	group_name = Localized_GroupName;		
+	}

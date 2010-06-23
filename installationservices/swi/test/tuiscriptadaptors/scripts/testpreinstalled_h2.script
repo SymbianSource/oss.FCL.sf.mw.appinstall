@@ -1,0 +1,526 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests for upgrades
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UISA-PreInstalledTest-I-B-0001
+//! @SYMTestCaseDesc 		Test pre-installed media
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Perform various tests on pre-installed media applications
+//! @SYMTestExpectedResults 	Files installed/uninstalled.
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0001
+
+// Copy files into place on the pre-installed drives
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_install_dsa_l1.sis e:\testpreinstalled_install_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_install_dsa_l1.sis
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_patch2_dsa_l1.sis e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_patch_dsa_l1.sis e:\testpreinstalled_patch_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_patch_dsa_l1.sis
+
+// pre-installed normal application
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install
+// pre-installed patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_install
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_patch
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base
+
+// test a normal install with a preinstalled patch
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base2
+
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_patch2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base2
+
+// Install Helloworld application suite; this includes an exe which can be used to launch the preinstalled exe
+// and leave it running while proceeding to the next step.  Note that this is needed because the RUN_PROGRAM command
+// in test execute does not allow an expected error result to be specified, and if we attempt to run the preinstalled
+// directly when expecting it to fail, we can't avoid a failed step being counted.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini helloworld
+
+// Test correct install and uninstall of a pre-installed package with an exe.
+// First copy exes into sys\bin on the e: drive.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini setup_preinstalled_exe
+
+// Attempt to run exes; this should not work since the e: drive is removable, and the hashes aren't present in c:\sys\hash.
+// Note that runtestexe (and preinstalled_runtestexe2) runs the command provided as an argument and exits, leaving the
+// child process running. The other exe, preinstalled_console_app, will keep running for 185s unless killed.
+RUN_PROGRAM -1 runtestexe preinstalled_runtestexe2 preinstalled_console_app 
+
+// The console app shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Install the preinstalled package; this will add the exe's hash to c:\sys\hash
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_exe
+
+// Make sure that preinstalled_runtestexe2 (which is in a patch yet processed by software install) can't be run, but
+// that the exe in the base preinstalled package can.
+
+RUN_PROGRAM -1 runtestexe preinstalled_runtestexe2 preinstalled_console_app 
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Override the default 185s timeout to use 4s, so this test run can complete more quickly.
+RUN_PROGRAM -1 runtestexe preinstalled_console_app -s 4000000 
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Let the run complete.
+DELAY 4000
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini setup_preinstalled_exe_patch
+
+// Install a pre-installed patch with an additional exe (a duplicate of runtestexe with a different UID3.)
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_exe_patch
+
+// Run base executable using the launcher supplied in the patch.
+RUN_PROGRAM -1 preinstalled_runtestexe2 preinstalled_console_app -s 4000000 
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Uninstall the patch; this won't kill the base exe.
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_exe_patch
+
+//RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Let the console app run complete.
+DELAY 4000
+
+// Make sure that preinstalled_runtestexe2 can't be run anymore, but that the exe in the base preinstalled package still can.
+RUN_PROGRAM -1 runtestexe preinstalled_runtestexe2 preinstalled_console_app 
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+RUN_PROGRAM -1 runtestexe preinstalled_console_app -s 4000000 
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Uninstall the base package.  This should kill the console app if it's still running, and remove only the hash.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_exe
+
+// The console app shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Attempt to run the base exe again; it should fail to run.
+RUN_PROGRAM -1 runtestexe preinstalled_console_app 
+
+// The console app shouldn't be running now.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini consoleapp_running
+
+// Check that we can successfully install and uninstall the preinstalled package and patch again
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_exe
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_exe_patch
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_exe
+
+// Delete pre-installed files
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_preinstalled_exe
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_preinstalled_exe_patch
+
+// Uninstall the helloworld package.
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testappinuse.ini u_helloworld
+
+END_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-PreInstalledTest-I-B-0002
+//! @SYMTestCaseDesc 		Checks that sis registry correctly indicates preinstalled apps are present based on
+//! 				presence of installed drives.
+//! @SYMDEF 			INC080064
+//! @SYMTestPriority 		High
+//! @SYMTestActions  		Installs app, checks sisregistry indicated presence of app through unmounts and remounts of MMC card, and
+//! 				after uninstall.
+//! @SYMTestExpectedResults 	Registry does not indicate app is present unless drive it is installed on is present.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0002
+
+// Copy preinstalled sis stub to E drive.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini setup_preinstalled_install
+
+// Install preinstalled app on MMC.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install_present
+
+// Check that sisregistry indicates the app is not present when the drive is removed
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install_absent
+
+// Check that sisregistry indicates the app is present when the drive is re-inserted.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install_present
+
+// Uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_install
+DELAY 2000
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_preinstalled_install
+
+END_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0002
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-PreInstalledTest-I-B-0003
+//! @SYMTestCaseDesc 		Checks that sis registry correctly indicates preinstalled patches are present based on
+//! 				presence of installed drives.
+//! @SYMDEF 			INC080064
+//! @SYMTestPriority 		High
+//! @SYMTestActions  		Installs app, checks sisregistry indicated presence of app through unmounts and remounts of MMC card, and
+//! 				after uninstall.
+//! @SYMTestExpectedResults 	Registry does not indicate app is present unless drive it is installed on is present.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0003
+
+// Install base app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini base
+
+// Copy preinstalled patch to X drive.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini setup_preinstalled_patch
+// Install preinstalled patch on MMC.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch_present
+
+// Check that sisregistry indicates the app is not present when the drive is removed
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch_absent
+
+// Check that sisregistry indicates the app is present when the drive is re-inserted.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_patch_present
+
+// Remove patch
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_patch
+DELAY 2000
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_preinstalled_patch
+
+// Remove base app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_base
+
+RUN_UTILS DeleteFile e:\testpreinstalled_install.sis
+RUN_UTILS DeleteFile e:\testpreinstalled_patch.sis
+RUN_UTILS DeleteFile e:\testpreinstalled_patch2.sis
+
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledpatch2.txt
+RUN_UTILS DELETEFILE e:\testpreinstalled_install_dsa_l1.sis
+RUN_UTILS DELETEFILE e:\testpreinstalled_patch2_dsa_l1.sis
+RUN_UTILS DELETEFILE e:\testpreinstalled_patch_dsa_l1.sis
+
+END_TESTCASE API-SEC-UISA-PreInstalledTest-I-B-0003
+
+
+//! @SYMTestCaseID 		API-SEC-testPA-drive-rewrite-B-0001
+//! @SYMTestCaseDesc 		Test that PA SIS files can be installed on any drive.
+//! @SYMDevelopedForRelease 	Naiad
+
+// Check that all stub references (e.g. e:\foo) are re-written
+// to the drive letter where the SIS file resides. In this test
+// case use a SIS which references e:\tswi\preinstalled\preinstalledinstall.txt
+// Copy this file from the ROM to k:, and check that this SIS
+// file installs on k: instead of e: successfully
+
+START_TESTCASE API-SEC-testPA-drive-rewrite-B-0001
+
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_install.sis k:\testPA.sis
+RUN_UTILS MakeReadWrite k:\testPA.sis
+RUN_UTILS MKDIR k:\tswi\
+RUN_UTILS MKDIR k:\tswi\preinstalled\
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt k:\tswi\preinstalled\preinstalledinstall.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini testPA_driverewrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_testPA_driverewrite
+
+RUN_UTILS DELETEFILE k:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS DELETEFILE k:\testPA.sis
+
+END_TESTCASE API-SEC-testPA-drive-rewrite-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-testPP-drive-rewrite-B-0001	
+//! @SYMTestCaseDesc 		Test that PP SIS files can be installed on any drive.
+//! @SYMDevelopedForRelease 	Naiad
+
+// Check that all stub references (e.g. e:\foo) are re-written
+// to the drive letter where the SIS file resides. In this test
+// case use a SIS which references e:\tswi\preinstalled\preinstalledinstall.txt
+// Copy this file from the ROM to k:, and check that this SIS
+// file installs on k: instead of e: successfully
+
+START_TESTCASE API-SEC-testPP-drive-rewrite-B-0001
+
+RUN_UTILS DELETEFILE c:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS DELETEFILE k:\tswi\preinstalled\preinstalledpatch.txt
+
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_patch.sis k:\testPP.sis
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_base.sis  k:\testPPbase.sis
+RUN_UTILS MakeReadWrite k:\testPP.sis
+RUN_UTILS MakeReadWrite k:\testPPbase.sis
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt k:\tswi\preinstalled\preinstalledpatch.txt
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini testPPbase_driverewrite
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini testPP_driverewrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_testPP_driverewrite
+
+RUN_UTILS DELETEFILE k:\tswi\preinstalled\preinstalledpatch.txt
+RUN_UTILS DELETEFILE k:\Documents\InstTest\preinstalledbase.txt
+RUN_UTILS DELETEFILE k:\testPPbase.sis
+RUN_UTILS DELETEFILE k:\testPP.sis
+
+END_TESTCASE API-SEC-testPP-drive-rewrite-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-testPA-multiple-drive-B-0001
+//! @SYMTestCaseDesc 		Test that PA SIS file referencing more than one drive cannot be installed
+//! @SYMDevelopedForRelease 	Naiad
+
+// Check that a PA SIS file referencing files in e: and c:
+// doesn't install, and fails with KErrSISInvalidTargetFile.
+// See INC109356 for more information.
+
+START_TESTCASE API-SEC-testPA-multiple-drive-B-0001
+
+RUN_UTILS CopyFile z:\tswi\tsis\data\testpreinstalled_multiple.sis e:\testpreinstalled_multiple.sis
+RUN_UTILS MakeReadWrite e:\testpreinstalled_multiple.sis
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS CopyFile z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt c:\tswi\preinstalled\preinstalledinstall.txt
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini testPA_multiple
+
+RUN_UTILS DELETEFILE e:\testpreinstalled_multiple.sis
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS DELETEFILE c:\tswi\preinstalled\preinstalledinstall.txt
+
+END_TESTCASE API-SEC-testPA-multiple-drive-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-propagatedStub-B-0001
+//! @SYMTestCaseDesc 		Test that propagated SIS stub files cannot reference files on a different drive letter to where the SIS stub file is located
+//! @SYMTestPriority 		High
+//! @SYMTestExpectedResults 	No installation
+//! @SYMDevelopedForRelease 	Mike
+
+// Test SIS stub files for propagations; check that propagated
+// stub SIS files cannot reference files on other drive letters
+// from the drive they're being installed from.
+
+// This script requires the SWIPolicy AllowPackagePropagate to be true in order to pass
+
+PRINT Run Removable media SIS stub installation test
+PRINT SWIPolicy AllowPackagePropagate must be set to true for these tests to pass
+
+START_TESTCASE API-SEC-propagatedStub-B-0001
+
+// make sure any previous installation of simple.sis is removed
+// e: is the default removable drive on Symbian OS
+RUN_UTILS DeleteFile e:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile e:\private\10202dce\80000001_0.sis
+RUN_UTILS DeleteFile e:\80000001_0.sis
+RUN_UTILS DeleteFile e:\file1.txt
+
+/// Simple file installation from a compressed SIS file
+// Install the full SIMPLE.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini simple
+
+// Copy the stub that was created and the file1.txt installed by SIMPLE.SIS
+RUN_UTILS CopyFile e:\private\10202dce\80000001_0.sis e:\80000001_0.sis
+RUN_UTILS CopyFile e:\Documents\InstTest\file1.txt e:\file1.txt
+
+// Uninstall SIMPLE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_simple
+
+// Now put the file1.txt back in place and install the copy of the stub that was created earlier
+// Need to install the copy of the stub from e:\ because tuiscriptadaptors cant access the \private\10202dce\ directroy
+RUN_UTILS MkDir e:\Documents\
+RUN_UTILS MkDir e:\Documents\InstTest\
+RUN_UTILS CopyFile e:\file1.txt e:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile e:\file1.txt
+
+// Copy the stub back into position on the C: drive
+// This should now fail to install, as has been moved
+// from the e: drive, where the files are located
+
+RUN_UTILS MkDir c:\private\
+RUN_UTILS MkDir c:\private\10202dce\
+RUN_UTILS CopyFile e:\80000001_0.sis c:\private\10202dce\80000001_0.sis
+
+// Install propagated stub and check this now fails to install
+// This actually fails with KErrInvalidEclipsing, as for a propagated stub
+// the drive references are converted to ! at installation time, and then
+// an eclipse of the data file on e: is detected as we're installing
+// the propagated SIS stub file from c:
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini simplestub
+
+// Remove the copies of files that we created
+RUN_UTILS DeleteFile e:\80000001.sis
+RUN_UTILS DeleteFile e:\Documents\InstTest\file1.txt
+RUN_UTILS DeleteFile c:\private\10202dce\80000001_0.sis
+
+END_TESTCASE API-SEC-propagatedStub-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-PuForPaNotAllowed-B-0001
+//! @SYMTestCaseDesc 		Test that a Partial Upgrade of a Preinstalled Application is not allowed.
+//! @SYMDEF 			PDEF082521
+//! @SYMTestPriority 		High
+//! @SYMTestExpectedResults 	No installation
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-PuForPaNotAllowed-B-0001
+
+// Copy files into place on the pre-installed drives
+RUN_UTILS MKDIR e:\tswi\
+RUN_UTILS MKDIR e:\tswi\preinstalled\
+RUN_UTILS COPYFILE z:\tswi\tuiscriptadaptors\data\preinstalledinstall.txt e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS MAKEREADWRITE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS COPYFILE z:\tswi\tsis\data\Root5CA\dsa_len1\testpreinstalled_install_dsa_l1.sis e:\testpreinstalled_install_dsa_l1.sis
+RUN_UTILS MAKEREADWRITE e:\testpreinstalled_install_dsa_l1.sis
+
+// pre-installed normal application
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini preinstalled_install
+
+// Try to install a partial upgrade (PU) to a preinstalled app (PA)
+// This should fail with a KErrInvalidUpgrade -10256
+RUN_TEST_STEP_RESULT -10256 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testpuforpanotallowed
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_preinstalled_install
+
+RUN_UTILS DELETEFILE e:\tswi\preinstalled\preinstalledinstall.txt
+RUN_UTILS DELETEFILE e:\testpreinstalled_install_dsa_l1.sis
+
+END_TESTCASE API-SEC-PuForPaNotAllowed-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-Controller-B-0001
+//! @SYMTestCaseDesc 		Test that when a MMC card is mount, if the .ctl file does not have the same hash as in the sisregistry
+//				the sisregistry would not be present
+//! @SYMREQ 			PDEF114615
+//! @SYMTestPriority 		High
+//! @SYMTestExpectedResults 	No installation
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-Controller-B-0001
+
+// Install the full TEXTFILE.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile
+
+// Check that the registry is present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_present
+
+// Save the .ctl file
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl e:\00000000_0000.ctl
+
+// Delete the e:\sys\install\sisregistry\80000001\00000000_0000.ctl file
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini delete_textfile_ctlfile
+
+// Copy another package .ctl file to e:\sys\install\sisregistry\80000001\00000000_0000.ctl
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini copy_textfile_ctlfile
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Check that the registry is not present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_absent
+
+// Restore the original .ctl file to e:\sys\install\sisregistry\80000001\00000000_0000.ctl
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini delete_textfile_ctlfile
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini copy_textfile_ctlfile2
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Check that the registry is okay now.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_present
+
+// Uninstall TEXTFILE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_textfile
+
+RUN_UTILS DeleteFile e:\00000000_0000.ctl
+
+END_TESTCASE API-SEC-Controller-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-Controller-B-0002
+//! @SYMTestCaseDesc 		Test that when a MMC card is mount, as long as the .ctl file comes from the same sisfile,
+//				the trust status of the .ctl does not matter
+//! @SYMDEF 			PDEF114615
+//! @SYMTestPriority 		High
+//! @SYMTestExpectedResults 	No installation
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-Controller-B-0002
+
+/// Simple file installation from a compressed SIS file
+// Install the full TEXTFILE_ROOT5CA.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_root5ca
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_present
+
+// Save the .ctl file
+RUN_UTILS CopyFile e:\sys\install\sisregistry\80000001\00000000_0000.ctl e:\00000000_0000.ctl
+
+// Uninstall TEXTFILE_ROOT5CA.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_textfile
+
+// Install the TEXTFILE.SIS file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile
+
+// Check that the registry is present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_present
+
+// Delete the e:\sys\install\sisregistry\80000001\00000000_0000.ctl file
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini delete_textfile_ctlfile
+
+// Copy the .ctl file from the previous root5ca version to e:\sys\install\sisregistry\80000001\00000000_0000.ctl
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini copy_textfile_ctlfile2
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+// Check that the registry is okay
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini textfile_present
+
+// Uninstall TEXTFILE.SIS
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini u_textfile
+
+RUN_UTILS DeleteFile e:\00000000_0000.ctl
+
+END_TESTCASE API-SEC-Controller-B-0002
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

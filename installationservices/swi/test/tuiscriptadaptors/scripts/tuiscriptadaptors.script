@@ -1,0 +1,1323 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID		API-SEC-UISA-Hugecontroller-I-0001
+//! @SYMTestCaseDesc		Installs a file with a very large controller
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a very large controller
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Hugecontroller-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini hugecontroller
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hugecontroller
+
+END_TESTCASE API-SEC-UISA-Hugecontroller-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-DEF057688-0001
+//! @SYMTestCaseDesc		sidmismatch
+//! @SYMDEF 			DEF057688
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DEF057688-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini sidmismatch
+
+END_TESTCASE API-SEC-DEF057688-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DriveNotReady-I-0001
+//! @SYMTestCaseDesc		Tries to install a SISX file onto drive q, which is not present
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a SISX file onto drive q, which is not present
+//! @SYMTestExpectedResults	Installation fails with -10146
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DriveNotReady-I-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini drivenotready
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_drivenotready
+
+END_TESTCASE API-SEC-UISA-DriveNotReady-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-InvalidSisxFile-I-0001
+//! @SYMTestCaseDesc		Tries to install a script file as a SISX file
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a script file as a SISX file
+//! @SYMTestExpectedResults	Installation fails, appropriate dialog displayed, and error returned.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-InvalidSisxFile-I-0001
+
+RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidsisxfile
+
+END_TESTCASE API-SEC-UISA-InvalidSisxFile-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-InvalidFileName-I-0001
+//! @SYMTestCaseDesc		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a sis file containing a filename destination which is invalid
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-InvalidFileName-I-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidfilename
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_invalidfilename
+
+END_TESTCASE API-SEC-UISA-InvalidFileName-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DisplayText-I-0001
+//! @SYMTestCaseDesc		Display a text file and install/uninstall it
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Display text file and install/uninstall it
+//! @SYMTestExpectedResults	Display text file dialog called, file [un]installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DisplayText-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayinstall
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayinstall
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testdisplayonly
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testdisplayonly
+
+END_TESTCASE API-SEC-UISA-DisplayText-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-SimpleTest-I-0001
+//! @SYMTestCaseDesc		Install text file in a simple unsigned SISX package
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Install a simple unsigned package
+//! @SYMTestExpectedResults	Text file is installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-SimpleTest-I-0001
+
+/// Simple file installation from a compressed SIS file
+// Be sure that the registry entries are deleted because they may have been left
+// from previous failed test cases
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+/// Simple file installation from a non-compressed SIS file
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simplenc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simplenc
+/// Bad language selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini badlangsel
+/// Bad drive selection, installation aborted
+RUN_UTILS DeleteFile C:\Documents\InstTest\file1.txt
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddrivesel
+
+END_TESTCASE API-SEC-UISA-SimpleTest-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-LOGOTEST-0004
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-LOGOTEST-0004
+
+// Installation of a SIS file that contains a logo.
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini logo
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_logo
+
+END_TESTCASE API-SEC-LOGOTEST-0004
+
+
+// embeded tests
+
+//! @SYMTestCaseID		API-SEC-UISA-EmbeddedSISFiles-I-0001
+//! @SYMTestCaseDesc		Install package with embedded packages
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Install package and embedded packages
+//! @SYMTestExpectedResults	Package and embedded packages installed
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed1nc
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed1nc
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embed2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embed2
+
+END_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-EmbeddedSISFiles-I-0002
+//! @SYMTestCaseDesc		Upgrade SA package having embedded SIS file over Base SA package having same embedded SIS file
+//! @SYMDEF			DEF111220
+//! @SYMTestPriority		High
+//! @SYMTestActions 		Install SA package having embedded SIS file with IF NOT PACKAGE option and then upgrade SA over 
+//  				it with same embedded SIS file with IF NOT PACKAGE
+//! @SYMTestExpectedResults	Package should upgrade sucessfully with embedded registry entry present.
+//! @SYMDevelopedForRelease	Naiad
+
+START_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embedifnot_BaseSA1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embedifnot_UpgradeSA1
+DELAY 2000
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled z:\tswi\tuiscriptadaptors\scripts\testembedded.ini InstalledUid
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embedifnot_BaseSA2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini embedifnot_UpgradeSA2
+DELAY 2000
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled z:\tswi\tuiscriptadaptors\scripts\testembedded.ini InstalledUid
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embedifnotSA1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_embedifnotSA2
+
+END_TESTCASE API-SEC-UISA-EmbeddedSISFiles-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-SignedTest-I-0001
+//! @SYMTestCaseDesc		Install simple SIS file with 1 signature
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+// Signed SIS tests
+
+START_TESTCASE API-SEC-UISA-SignedTest-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+
+END_TESTCASE API-SEC-UISA-SignedTest-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-MissingDepTest-I-0001
+//! @SYMTestCaseDesc		Install SIS file with missing dependency
+//! @SYMTestPriority		High 
+//! @SYMTestActions 		Missing dependency prevents SIS package installation 
+//! @SYMTestExpectedResults	Files are not installed
+//! @SYMDevelopedForRelease	Yankee
+// Missing dependency tests
+
+START_TESTCASE API-SEC-UISA-MissingDepTest-I-0001
+
+RUN_TEST_STEP_RESULT -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini baddepend
+
+END_TESTCASE API-SEC-UISA-MissingDepTest-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Sids-I-0001
+//! @SYMTestCaseDesc		Test installation of two executables with the same SID
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Tries to install various combinations of executables with the same SID
+//! @SYMTestExpectedResults	Only one executable with a certain SID will be allowed on the device at once
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Sids-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_A
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_B
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testsidcheck_A_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testsidcheck_B
+
+END_TESTCASE API-SEC-UISA-Sids-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF054047-I-0001
+//! @SYMTestCaseDesc		Installs a file, with the same sis file embedded twice inside it
+//! @SYMDEF 			DEF054047
+//! @SYMTestPriority		Medium
+//! @SYMTestActions 		Installation should fail successfully and rollback registry
+//! @SYMTestExpectedResults	Fails successfully
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF054047-I-0001
+
+// Should install ok both times and not mess up the registry, likei t used to
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini embed2nc
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_embed2nc
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini embed2nc
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_embed2nc
+
+END_TESTCASE API-SEC-UISA-DEF054047-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF051697-I-0001
+//! @SYMTestCaseDesc		Installs a file, with the same sis file embedded twice inside it
+//! @SYMDEF 			DEF051697
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF051697-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def051697a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def051697a
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def051697b
+
+END_TESTCASE API-SEC-UISA-DEF051697-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-TestDef052175-I-0001
+//! @SYMTestCaseDesc		Fix for Def052175
+//! @SYMDEF 			DEF052175
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-TestDef052175-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def052175
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def052175
+
+END_TESTCASE API-SEC-UISA-TestDef052175-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-INC051995-I-0001
+//! @SYMTestCaseDesc		Fix for INC051995 - request to use EFileShareReadersOnly instead of EFileShareExclusive
+//! @SYMDEF 			INC051995
+//! @SYMTestPriority		Critical
+//! @SYMTestActions 		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled properly
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-INC051995-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallOpenFileStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def051697a
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def051697a
+
+END_TESTCASE API-SEC-UISA-INC051995-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-TestDef053177-I-0001
+//! @SYMTestCaseDesc		Install package with no embedded packages.
+//! @SYMDEF 			DEF053177
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package.
+//! @SYMTestExpectedResults	Package is installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-TestDef053177-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_noEmbed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_noEmbed
+
+END_TESTCASE API-SEC-UISA-TestDef053177-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-TestDef053177-I-0002
+//! @SYMTestCaseDesc		Install package with one level of embedded packages.
+//! @SYMDEF 			DEF053177
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package and embedded packages.
+//! @SYMTestExpectedResults	Package and embedded packages are installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-TestDef053177-I-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_1LevelEmbed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_1LevelEmbed
+
+END_TESTCASE API-SEC-UISA-TestDef053177-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Def0531772LevelsEmbed-I-0001
+//! @SYMTestCaseDesc		Install package with two levels of embedded packages.
+//! @SYMDEF 			DEF0531772
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package and embedded packages.
+//! @SYMTestExpectedResults	Package and embedded packages are installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Def0531772LevelsEmbed-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_2LevelsEmbed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_2LevelsEmbed
+
+END_TESTCASE API-SEC-UISA-Def0531772LevelsEmbed-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Def053177-I-0002
+//! @SYMTestCaseDesc		Install package with eight levels of embedded packages.
+//! @SYMDEF 			DEF053177
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package and embedded packages.
+//! @SYMTestExpectedResults	Package and embedded packages are installed/uninstalled.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Def053177-I-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_8LevelsEmbed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_8LevelsEmbed
+
+END_TESTCASE API-SEC-UISA-Def053177-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-Def053177-I-0003
+//! @SYMTestCaseDesc		Tries to install a SIX file with 9 levels of SISX file embedding,
+//!                         	which exceeds the maximum.
+//! @SYMDEF 			DEF053177
+//! @SYMTestPriority		High
+//! @SYMTestActions		Tries to install a SIX file with 9 levels of SISX file embedding.
+//! @SYMTestExpectedResults	Installation fails with SIS install error code KErrSISTooDeeplyEmbedded (= -10145).
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-Def053177-I-0003
+
+RUN_TEST_STEP_RESULT -10145 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_9LevelsEmbed
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_9LevelsEmbed
+
+END_TESTCASE API-SEC-UISA-Def053177-I-0003
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF053165-I-0001
+//! @SYMTestCaseDesc		Tries to install a package which overwrites an orphaned file, with different repsonses to the overwrite file question
+//! @SYMDEF			DEF053165
+//! @SYMTestPriority		Medium
+//! @SYMTestExpectedResults	SWI behaves as appropriate.
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF053165-I-0001
+
+// With xml file saying displayquestion returning false, so should install
+RUN_UTILS mkdir c:\tswi
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\tswi\DEF053165.temp
+RUN_UTILS MakeReadWrite c:\tswi\DEF053165.temp
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini OrphanedOverwrite_qt
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_OrphanedOverwrite_qt
+
+// With xml file saying displayquestion returning false, so should fail install
+RUN_UTILS mkdir c:\tswi
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\tswi\DEF053165.temp
+RUN_UTILS MakeReadWrite c:\tswi\DEF053165.temp
+
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini OrphanedOverwrite_qf
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_OrphanedOverwrite_qf
+
+RUN_UTILS deletefile c:\tswi\DEF053165.temp
+
+END_TESTCASE API-SEC-UISA-DEF053165-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-DEF053285-0001
+//! @SYMTestCaseDesc		Check that the capabilities defined the exe header match those defined in the SIS controller
+//! @SYMDEF			DEF053285
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DEF053285-0001
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053285
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053285
+
+END_TESTCASE API-SEC-DEF053285-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF053088-I-0001
+//! @SYMTestCaseDesc		Install an untrusted SIS file containing an EXE with a non-zero VID
+//! @SYMREQ 			REQ3470.2
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install an untrusted SIS file containing an EXE with a non-zero VID
+//! @SYMTestExpectedResults	File install fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-DEF053088-I-0001
+
+// Ensure that installation of an untrusted exe with a non-zero vid fails
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini untrustedVid
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_untrustedVid
+
+END_TESTCASE API-SEC-UISA-DEF053088-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF053088-I-0002
+//! @SYMTestCaseDesc		Install an SIS file containing an EXE with the same SID as an EXE in ROM
+//! @SYMREQ 			REQ3470.1
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install an SIS file containing an EXE with the same SID as an EXE in ROM
+//! @SYMTestExpectedResults	File install fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-DEF053088-I-0002
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini ROMSid
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_ROMSid
+
+END_TESTCASE API-SEC-UISA-DEF053088-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-TestOverwrites-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TestOverwrites-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini overwriteA
+RUN_TEST_STEP_RESULT -10147 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini overwriteB
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_overwriteB
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_overwriteA
+
+END_TESTCASE API-SEC-TestOverwrites-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF061635-I-0001
+//! @SYMTestCaseDesc		Test installation when duplicated root certificate in the swi certstore
+//! @SYMREQ 			REQ3470.2
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install the sis file signed by RSA chain2 certificate.
+//! @SYMTestExpectedResults	File install fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-DEF061635-I-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def061635
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def061635
+
+END_TESTCASE API-SEC-UISA-DEF061635-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF053092-I-0001
+//! @SYMTestCaseDesc		Install an untrusted SIS file containing an EXE with a protected SID
+//! @SYMREQ 			REQ3470.2
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install an untrusted SIS file containing an EXE with a protected SID
+//! @SYMTestExpectedResults	File install fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-DEF053092-I-0001
+
+// Ensure that installation of an untrusted exe with a protected SID fails
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini untrustedSid
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_untrustedSid
+
+END_TESTCASE API-SEC-UISA-DEF053092-I-0001
+
+
+//! @SYMTestCaseID		API-SEC-UISA-DEF053092-I-0002
+//! @SYMTestCaseDesc		Install an untrusted SIS file with a protected package UID
+//! @SYMREQ 			REQ3470.2
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install an untrusted SIS file with a protected package UID
+//! @SYMTestExpectedResults	File install fails
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-DEF053092-I-0002
+
+// Ensure that installation of an untrusted SIS with a protected package UID fails
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini untrustedPkg
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_untrustedPkg
+
+END_TESTCASE API-SEC-UISA-DEF053092-I-0002
+
+
+//! @SYMTestCaseID		API-SEC-DEF058580-0002
+//! @SYMTestCaseDesc		SWI must take loader grantable capabilities into account.
+//! @SYMTestActions		Attempt to install a SIS file with a loader grantable capability that is not matched by the root certs
+//! @SYMTestExpectedResults	Should install
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DEF058580-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def058580
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def058580
+
+END_TESTCASE API-SEC-DEF058580-0002
+
+
+//! @SYMTestCaseID		API-SEC-EC029-0001
+//! @SYMEC			EC029
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-EC029-0001
+
+RUN_TEST_STEP_RESULT -10270 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini legacysis
+
+END_TESTCASE API-SEC-EC029-0001
+
+
+//! @SYMTestCaseID		API-SEC-INC065244-0001
+//! @SYMTestCaseDesc		SWI displays wrong error message while installing a file to c drive when the file is in the E drive.
+//! @SYMDEF			INC065244
+//! @SYMTestActions		Attempt to install a SIS file which contains an invalid eclipsing file in any of the drives other than the Z drive.
+//! @SYMTestExpectedResults	Should Fail , DisplayErrorL() returns  EUiBlockingEclipsingFile.  error code : -10257 
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-INC065244-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini inc065244A
+RUN_TEST_STEP_RESULT -10257 100  tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini inc065244B
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini  u_inc065244A
+
+END_TESTCASE API-SEC-INC065244-0001
+
+
+//! @SYMTestCaseID		API-SEC-NODRIVEPRESENT-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-NODRIVEPRESENT-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini nodrive
+RUN_TEST_STEP_RESULT -1     100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_nodrive
+
+END_TESTCASE API-SEC-NODRIVEPRESENT-0001
+
+
+//! @SYMTestCaseID		API-SEC-DEF061111-0001
+//! @SYMDEF			DEF061111
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DEF061111-0001
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini installdialog
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini securitydialog
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini optionsdialog
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini displaytextdialog
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini ocspdialog
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini upgradedialog
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini uninstalldialog
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+END_TESTCASE API-SEC-DEF061111-0001
+
+ 
+ //! @SYMTestCaseID 		API-SEC-DEF069533-0001
+ //! @SYMTestCaseDesc		Verify that the DisplayDrives dialog is not displayed unecessarily.
+ //! @SYMDEF			DEF069533
+ //! @SYMTestPriority		Medium
+ //! @SYMTestType		CIT
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions		Install a SIS file that contains no files but displays a text file that is not installed to the device
+ //! @SYMTestExpectedResults	The text file is displayed and the user is NOT prompted to select where the application should be installed.
+ //! @SYMDevelopedForRelease	Mike
+ 
+ START_TESTCASE API-SEC-DEF069533-0001
+ 
+ RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   def069533_1
+ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def069533_1
+ 
+ END_TESTCASE API-SEC-DEF069533-0001
+ 
+ 
+ //! @SYMTestCaseID 		API-SEC-DEF069533-0002
+ //! @SYMTestCaseDesc		Verify that the DisplayDrives dialog is not displayed unecessarily.
+ //! @SYMDEF			DEF069533
+ //! @SYMTestPriority		Medium
+ //! @SYMTestType		CIT
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions		Install a SIS file that contains a single file where the destination drive is specified.
+ //! 				This SIS file also contains a text file that is displayed but not installed.
+ //! @SYMTestExpectedResults	The text file is displayed and the user is NOT prompted to select where the 
+ //! 				application should be installed. The test data file is installed onto the C drive.
+ //! @SYMDevelopedForRelease	Mike
+ 
+ START_TESTCASE API-SEC-DEF069533-0002
+ 
+ RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   def069533_2
+ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def069533_2
+ 
+ END_TESTCASE API-SEC-DEF069533-0002
+ 
+ 
+ //! @SYMTestCaseID 		API-SEC-DEF069533-0003
+ //! @SYMTestCaseDesc		Verify that the DisplayDrives dialog is displayed 
+ //! @SYMDEF			DEF069533
+ //! @SYMTestPriority		Medium
+ //! @SYMTestType		CIT
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions		Install a SIS file that contains a single file where the destination drive is not specified. 
+ //! 				This SIS file also contains a text file that is displayed but not installed.
+ //! @SYMTestExpectedResults	The text file is displayed and the user is prompted to select where the 
+ //! 				application should be installed. The test data file is installed onto the specified drive.
+ //! @SYMDevelopedForRelease	Mike
+ 
+ START_TESTCASE API-SEC-DEF069533-0003
+ 
+ RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   def069533_3
+ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def069533_3
+ 
+ END_TESTCASE API-SEC-DEF069533-0003
+
+
+//! @SYMTestCaseID 		API-SEC-DEF070572-0001
+//! @SYMTestCaseDesc		Verify that OCSP outcomes are one per chain passing initial signing validation
+//! @SYMDEF			DEF070572
+//! @SYMTestPriority		Medium
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file that has been signed by multiple chains, one of which has an expired cert.
+//! @SYMTestExpectedResults	There should be one OCSP outcome for each chain except the one with an expired cert, and the
+//! 				install should succeed. 
+//! @SYMDevelopedForRelease	Mike
+
+ START_TESTCASE API-SEC-DEF070572-0001
+ 
+ RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testocspresultdialog_a
+ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testocspresultdialog_a
+ 
+ END_TESTCASE API-SEC-DEF070572-0001
+ 
+
+//! @SYMTestCaseID 		API-SEC-DEF070572-0002
+//! @SYMTestCaseDesc		Verify that OCSP outcomes are one per chain passing initial signing validation, and one revoked
+//! 				cert in one chain will cause the installation to fail.
+//! @SYMDEF			DEF070572
+//! @SYMTestPriority		Medium
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file that has been signed by multiple chains, one of which has an expired cert, and
+//! 				one of which has a revoked cert.
+//! @SYMTestExpectedResults	There should be one OCSP outcome for each chain except the one with an expired cert, and the
+//! 				install should fail.
+//! @SYMDevelopedForRelease	Mike
+
+ START_TESTCASE API-SEC-DEF070572-0002
+ 
+ RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   testocspresultdialog_b
+ RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testocspresultdialog_a
+ 
+ END_TESTCASE API-SEC-DEF070572-0002
+ 
+
+//! @SYMTestCaseID 		API-SEC-INC110222-0001
+//! @SYMTestCaseDesc		Verify that OCSP outcomes are one per chain passing initial signing validation, and one revoked
+//! 				cert in one chain will cause the installation to fail.
+//! @SYMDEF			INC110222
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file that has been signed by a revoked cert then an unknown cert
+//! @SYMTestExpectedResults	There should be one OCSP outcome for each chain, and the install should fail.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-INC110222-0001
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   tswinocapability_revoked
+
+END_TESTCASE API-SEC-INC110222-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC074928-0001
+//! @SYMTestCaseDesc		Install a package with two executables sharing the same SID, exect this to fail
+//! @SYMDEF			INC074928
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file with two executables sharing a SID
+//! @SYMTestExpectedResults	Install failed with KErrAlreadyExists
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-INC074928-0001
+
+RUN_TEST_STEP_RESULT -11 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini testexe2copies
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_testexe2copies
+
+END_TESTCASE API-SEC-INC074928-0001
+
+
+//! @SYMTestCaseID 		API-SEC-untrustedroot-0001
+//! @SYMTestCaseDesc		Install a SIS file where the root certificate is absent from the swicertstore
+//! @SYMDEF			DEF074807
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file where the root certificate is absent from the swicertstore
+//! 				and ensure that a security warning is raised.
+//! @SYMTestExpectedResults	Install succeeds but with security warning
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-untrustedroot-0001
+
+RUN_TEST_STEP_RESULT -3 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini rootcanotinstore_abort
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini rootcanotinstore
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_rootcanotinstore
+
+END_TESTCASE API-SEC-untrustedroot-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF074431-0001
+//! @SYMTestCaseDesc		Check If file associated with the SID has a different name
+//! @SYMDEF			DEF074431
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a SIS file with exe 
+//! 				Install PU of the above SIS file, with the same SID but Different Target name
+//! @SYMTestExpectedResults	Base Package should install properly. 
+//! 				And PU should fail with KErrAlreadyExists(-11)
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DEF074431-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   def074431
+RUN_TEST_STEP_RESULT -11 100  tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   def074431_pu
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   u_def074431
+
+END_TESTCASE API-SEC-DEF074431-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF076366-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-DEF076366-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   bigexe
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_bigexe
+
+END_TESTCASE API-SEC-DEF076366-0001
+
+
+//! @SYMTestCaseID 		API-SEC-BOGUS_LOGO-0001
+//! @SYMTestCaseDesc		Installs a SIS file with a bogus logo
+//! @SYMDEF			DEF087165 
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Installs a SIS file with a bogus logo
+//! @SYMTestExpectedResults	Install should work, as should uninstall
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-BOGUS_LOGO-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini boguslogo
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_boguslogo
+
+END_TESTCASE API-SEC-BOGUS_LOGO-0001
+
+
+//! @SYMTestCaseID   		API-SEC-DEF082527-0001
+//! @SYMTestCaseDesc		Tries to install a sis file containing a package UID specified 
+//!				larger than the valid for a TInt.
+//! @SYMDEF			DEF082527
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Tries to install a sis file containing a package UID specified 
+//!				larger than the valid for a TInt.
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF082527-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini private_overflow
+
+END_TESTCASE API-SEC-DEF082527-0001
+
+
+//! @SYMTestCaseID 		API-SEC-OCSP_DEADTRANSPORT-0001
+//! @SYMTestCaseDesc		Attempts to validate a certificate using a borked internet connection
+//! @SYMDEF			DEF087755 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Installs a broken commdb, then attemps an OCSP validation
+//! @SYMTestExpectedResults	Install should complete, despite OCSP failure
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-OCSP_DEADTRANSPORT-0001
+
+RUN_PROGRAM netcontrol
+RUN_PROGRAM ced -i c:\auto_broken.cfg
+
+// Add delay for ced, to avoid DP rom crash
+DELAY 5000
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini logo_badtransport
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_logo
+
+RUN_PROGRAM ced -i c:\auto.cfg
+
+// Add delay for ced, to avoid DP rom crash
+DELAY 5000
+
+END_TESTCASE API-SEC-OCSP_DEADTRANSPORT-0001
+
+
+//! @SYMTestCaseID 		API-SEC-FAILEDUPGRADE_NODIALOG-0001
+//! @SYMTestCaseDesc		Attempts to install an invalid upgrade, ensuring the upgrade dialog isn't shown
+//! @SYMDEF			DEF086788 
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Installs a base package, and an invalid SA upgrade to it
+//! @SYMTestExpectedResults	Expect error before the upgrade dialog
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-FAILEDUPGRADE_NODIALOG-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP_RESULT -3 100  tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini nodrive_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+END_TESTCASE API-SEC-FAILEDUPGRADE_NODIALOG-0001
+
+
+//! @SYMTestCaseID   		API-SEC-OrphanSurvivesRollback-0001
+//! @SYMTestCaseDesc		Make sure that an orphaned file removed in an install (after user confirmation) is replaced if the install
+//! 				rolls back.
+//! @SYMDEF			DEF083624
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus   		3. Released
+//! @SYMTestActions		Installs an embedded sis file which overwrites an orphaned file, with an embedding sis file that fails
+//! 				during processing due to a bad private directory so that rollback happens after the orphan is overwritten.  The orphan
+//! 				is "watched" to ensure that it is modified, and it must match the original file after the test.
+//! @SYMTestExpectedResults	FS reports orphaned file is changed, but it still exists and matches the original.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-OrphanSurvivesRollback-0001
+
+// Create orphaned file for install test.
+RUN_UTILS mkdir c:\Documents\
+RUN_UTILS mkdir c:\Documents\InstTest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\Documents\InstTest\zeros
+RUN_UTILS MakeReadWrite c:\Documents\InstTest\zeros
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini orphansurvivesrollback
+
+// Delete orphan.
+RUN_UTILS deletefile c:\Documents\InstTest\zeros
+
+END_TESTCASE API-SEC-OrphanSurvivesRollback-0001
+
+
+//! @SYMTestCaseID		API-SEC-CODEBASE-InvalidSisxFile-0001
+//! @SYMTestCaseDesc		Tries to install a sis file containing a filename destination which is invalid(has non ascii characters)
+//! @SYMDEF			DEF90251
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a sis file containing a filename destination which is invalid(has non ascii characters)
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-CODEBASE-InvalidSisxFile-0001
+
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalidfilename1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_invalidfilename1
+
+END_TESTCASE API-SEC-CODEBASE-InvalidSisxFile-0001
+
+
+//! @SYMTestCaseID		API-SEC-CODEBASE-ShortTarget-0001
+//! @SYMTestCaseDesc		Tries to install a sis file containing a filename destination which is only 4 chars long
+//! @SYMDEF			DEF94010
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a sis file containing a filename destination which is only 4 chars long
+//! @SYMTestExpectedResults	SISX file installs and uninstalls correctly
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-CODEBASE-ShortTarget-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini shorttarget1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_shorttarget1
+
+END_TESTCASE API-SEC-CODEBASE-ShortTarget-0001
+
+
+//! @SYMTestCaseID 		API-SEC-LicenseText_UCS2LE-0001
+//! @SYMTestCaseDesc		Verify that the UCS2-LE encoded license agreement text file is parsed properly for display
+//! @SYMDEF			DEF093323
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file that contains a single license agreement text file (encoded in UCS2 LE).
+//! @SYMTestExpectedResults	The text is parsed properly (converted to UCS2 LE) for display 
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-LicenseText_UCS2LE-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   licensetext_ucs2le
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_licensetext_ucs2le
+
+END_TESTCASE API-SEC-LicenseText_UCS2LE-0001
+
+
+//! @SYMTestCaseID 		API-SEC-LicenseText_UCS2BE-0002
+//! @SYMTestCaseDesc		Verify that the UCS2-BE encoded license agreement text file is parsed properly for display
+//! @SYMDEF			DEF093323
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file that contains a single license agreement text file (encoded in UCS2 BE).
+//! @SYMTestExpectedResults	The text is parsed properly (converted to UCS2 LE) for display 
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-LicenseText_UCS2BE-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   licensetext_ucs2be
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_licensetext_ucs2be
+
+END_TESTCASE API-SEC-LicenseText_UCS2BE-0002
+
+
+//! @SYMTestCaseID 		API-SEC-LicenseText_UTF8-0003
+//! @SYMTestCaseDesc		Verify that the UTF8 encoded license agreement text file is parsed properly for display
+//! @SYMDEF			DEF093323
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file that contains a single license agreement text file (encoded in UTF8).
+//! @SYMTestExpectedResults	The text is parsed properly (converted to UCS2 LE) for display 
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-LicenseText_UTF8-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep   z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini   licensetext_utf8
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_licensetext_utf8
+
+END_TESTCASE API-SEC-LicenseText_UTF8-0003
+
+
+//! @SYMTestCaseID 		API-SEC-DEF094747-B-0001
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file with vendor name greater than KMaxInputDescriptorLength returns KErrArgument.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file with vendor name greater than KMaxInputDescriptorLength.
+//! @SYMTestExpectedResults	The SIS file install will fail with -6 in case of scr (field length restricted to 256 char in scr) and succeed with 0 in case of sisregistry.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-B-0001
+
+RUN_TEST_STEP  100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow
+
+
+END_TESTCASE API-SEC-DEF094747-B-0001
+
+
+//! @SYMTestCaseID 		API-SEC-Verify_System_Drive-0001
+//! @SYMTestActions		Verify successful installation a SIS file which has new system drive parameter '$'.
+//! @SYMTestExpectedResults	The SIS file to install successfully.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-Verify_System_Drive-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini verify_sysdrive_parameter
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_verify_sysdrive_parameter
+
+END_TESTCASE API-SEC-Verify_System_Drive-0001
+
+
+//! @SYMTestCaseID		API-SEC-Embedded_Unsigned_protectedSid-0001
+//! @SYMTestCaseDesc		Tries to install a trusted sis file containing an embedded unsigned sis with protected sid
+//! @SYMDEF			PDEF111296
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Tries to install a trusted sis file containing an embedded unsigned sis with protected sid
+//! @SYMTestExpectedResults	SISX file fails to install, appropriate dialog displayed.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-Embedded_Unsigned_protectedSid-0001
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini EmbeddedProtectedSid
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_EmbeddedProtectedSid
+
+END_TESTCASE API-SEC-Embedded_Unsigned_protectedSid-0001
+
+
+//! @SYMTestCaseID		API-SEC-Upgrade-PDEF112966-0001
+//! @SYMTestCaseDesc		Install SA Base pkg and do the SA upgrade over it with different pkg name.
+//! @SYMDEF			PDEF112966
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install SA Base pkg and do the SA upgrade over it with different pkg name
+//! @SYMTestExpectedResults	The SIS file to install successfully with different pkg name.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-Upgrade-PDEF112966-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini BaseSA
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini UpgradeSA_diffpkgname
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_UpgradeSA_diffpkgname
+
+END_TESTCASE API-SEC-Upgrade-PDEF112966-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF112656-0001
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file panic23.sis never panics.
+//! @SYMDEF			DEF112652
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install a SIS file , which would otherwise throw !InstallServer::23 panic 
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF112656-0001
+
+RUN_TEST_STEP_RESULT -20 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalid_padding
+
+END_TESTCASE API-SEC-DEF112656-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF113116-0001
+//! @SYMTestCaseDesc		Verify that installation aborts when the text continue dialog returns ,when FA text option is used.
+//! @SYMDEF			DEF113116
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install SA pkg with FT ,FA option.
+//! @SYMTestExpectedResults	A TextContinue dialog will be raised and the installation will be aborted.
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF113116-0001
+
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini forceabort_textoption
+
+END_TESTCASE API-SEC-DEF113116-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF115870-0001
+//! @SYMTestCaseDesc		Tries to install a embedded package without installing the base package
+//! @SYMDEF			DEF115870
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install embedded pkg without installing the base package
+//! @SYMTestExpectedResults	Install failed with with KErrMissingBasePackage
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF115870-0001
+
+RUN_TEST_STEP_RESULT -10255  tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini DEF115870_embed
+
+END_TESTCASE API-SEC-DEF115870-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF115870-0002
+//! @SYMTestCaseDesc		Tries to install a embedded package after installing the base package
+//! @SYMDEF			DEF115870
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install embedded pkg after installing the base package
+//! @SYMTestExpectedResults	File installs sucessfully.
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF115870-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini DEF115870_base
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini DEF115870_embed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_DEF115870
+
+END_TESTCASE API-SEC-DEF115870-0002
+
+
+//! @SYMTestCaseID 		API-SEC-DEF120465-0001
+//! @SYMTestCaseDesc		Installs a file with a textskip option
+//! @SYMDEF			DEF120465
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a textskip option. Use Yes and No buttons in the text file dialog. If Yes is pressed, 
+//! 				the dialog is cancelled and the installation continues. If No is pressed, the dialog is cancelled, and the installation will 
+//! 				continue, but the next file or component specified in the pkg file will not be installed.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF120465-0001
+
+RUN_TEST_STEP 1000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini textskip
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_textskip
+
+END_TESTCASE API-SEC-DEF120465-0001
+
+
+//! @SYMTestCaseID 		API-SEC-DEF120465-0002
+//! @SYMTestCaseDesc		Installs a file with a textskip option where textskip option given before IF condition
+//! @SYMDEF			DEF120465
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a textskip option. Use Yes and No buttons in the text file dialog. If Yes is pressed, 
+//! 				the dialog is cancelled and the installation continues. If No is pressed, the dialog is cancelled, and the installation will 
+//! 				continue, but the next file or component specified in the pkg file will not be installed.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF120465-0002
+
+RUN_TEST_STEP 1000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini textskip_beforeif
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_textskip_options
+
+END_TESTCASE API-SEC-DEF120465-0002
+
+
+//! @SYMTestCaseID 		API-SEC-DEF120465-0003
+//! @SYMTestCaseDesc		Installs a file with a textskip option where textskip option given after IF condition
+//! @SYMDEF			DEF120465
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a textskip option. Use Yes and No buttons in the text file dialog. If Yes is pressed, 
+//! 				the dialog is cancelled and the installation continues. If No is pressed, the dialog is cancelled, and the installation will 
+//! 				continue, but the next file or component specified in the pkg file will not be installed.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF120465-0003
+
+RUN_TEST_STEP 1000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini textskip_afterif
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_textskip_options
+
+END_TESTCASE API-SEC-DEF120465-0003
+
+
+//! @SYMTestCaseID 		API-SEC-DEF120465-0004
+//! @SYMTestCaseDesc		Installs a file with a textskip option where textskip option given inside IF condition
+//! @SYMDEF			DEF120465
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a textskip option. Use Yes and No buttons in the text file dialog. If Yes is pressed, 
+//! 				the dialog is cancelled and the installation continues. If No is pressed, the dialog is cancelled, and the installation will 
+//! 				continue, but the next file or component specified in the pkg file will not be installed.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF120465-0004
+
+RUN_TEST_STEP 1000 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini textskip_insideif
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_textskip_options
+
+END_TESTCASE API-SEC-DEF120465-0004
+
+
+//! @SYMTestCaseID 		API-SEC-DEF120465-0005
+//! @SYMTestCaseDesc		Installs a file with a textskip option with filenull
+//! @SYMDEF			DEF120465
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a textskip option. Use Yes and No buttons in the text file dialog. If Yes is pressed, 
+//!	 			the dialog is cancelled and the installation continues. If No is pressed, the dialog is cancelled, and the installation will 
+//! 				continue, but the next file or component specified in the pkg file will not be installed.
+//! @SYMTestExpectedResults	File installs sucessfully
+//! @SYMDevelopedForRelease	Sphinx
+
+START_TESTCASE API-SEC-DEF120465-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_textskip
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_copyfiles
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_checkfiles
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_textskip
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filenullmmc_checkfiles
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini u_filenullmmc
+
+END_TESTCASE API-SEC-DEF120465-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0001
+//! @SYMTestCaseDesc		Proof of that "MD2 with RSA" signature scheme (1.2.840.113549.1.1.2) is not supported any more
+//! @SYMDEF			DEF116847 Vulnerability of code signing applications to chosen-prefix collisions for MD5
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installation package is signed with "SHA1 with RSA" scheme, however signature
+//!                  		scheme id string says it is MD2 with RSA (1.2.840.113549.1.1.2) in binary SIS file
+//! @SYMTestExpectedResults 	Installation fails in the signature verification phase as we don't support MD2 signature scheme any more;
+
+START_TESTCASE API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0001
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini DEF116847_md2_install
+
+END_TESTCASE API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0002
+//! @SYMTestCaseDesc		Proof of that "MD5 with RSA" signature scheme (1.2.840.113549.1.1.4) is not supported any more
+//! @SYMDEF			DEF116847 Vulnerability of code signing applications to chosen-prefix collisions for MD5
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installation package is signed with "SHA1 with RSA" scheme, however signature
+//!                  		scheme id string says it is "MD5 with RSA" (1.2.840.113549.1.1.4) in binary SIS file
+//! @SYMTestExpectedResults 	Installation fails in the signature verification phase as we don't support MD5 signature scheme any more;
+
+START_TESTCASE API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0002
+
+RUN_TEST_STEP_RESULT -10254 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini DEF116847_md5_install
+
+END_TESTCASE API-SEC-SWI-UNSUPPORTEDSIGNATURESCHEME-0002
+
+
+//! @SYMTestCaseID 		API-SEC-ocspcheck-PDEF130289-0001
+//! @SYMTestCaseDesc 		User installs an application. Application certificate does not have OCSP URI in AIA field. Application Manager setting Default OCSP URL is empty.
+//! @SYMTestPriority 		High
+//! @SYMTestActions  		Install SA Base pkg and and the certificate does not have OCSP URI in AIA field.
+//! @SYMTestExpectedResults 	The SIS file to install successfully without checking the ocsp request.
+//! @SYMDevelopedForRelease 	Sphinx
+
+START_TESTCASE API-SEC-ocspcheck-PDEF130289-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini noAia
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_noAia
+
+END_TESTCASE API-SEC-ocspcheck-PDEF130289-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-TrustedEmbeddedPackages-0001
+//! @SYMTestCaseDesc 		Verify that security warning dialog is not invoked on trusted, embedded packages
+//! @SYMREQ			REQ10879
+//! @SYMPREQ 			PREQ1269
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Install an embedded, signed by trusted root, package
+//! @SYMTestExpectedResults 	Verify that the security dialog is invoked only for the embedding package. Test applies to 9.6 and later only
+
+START_TESTCASE API-SEC-SWI-TrustedEmbeddedPackages-0001
+
+RUN_TEST_STEP tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini verify_trusted_embedded_package
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_verify_trusted_embedded_package
+
+END_TESTCASE API-SEC-SWI-TrustedEmbeddedPackages-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-TrustedEmbeddedPackages-0002
+//! @SYMTestCaseDesc 		Verify that security warning dialog is invoked on non-trusted, embedded packages
+//! @SYMREQ			REQ10879
+//! @SYMPREQ 			PREQ1269
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions  		Install an embedded, self-signed package
+//! @SYMTestExpectedResults 	Verify that the security dialog is invoked only for both the embedding and the embedded package. Test applies to 9.6 and later only
+
+START_TESTCASE API-SEC-SWI-TrustedEmbeddedPackages-0002
+
+RUN_TEST_STEP tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini verify_non_trusted_embedded_package
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testembedded.ini u_verify_non_trusted_embedded_package
+
+END_TESTCASE API-SEC-SWI-TrustedEmbeddedPackages-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SWIREG-Hidden-0004
+//! @SYMTestCaseDesc 		Install simple SIS file with instalaltion flag 'hidden' enabled and check this flag doesn't have any impact on installtion 
+//! 				with the older versions of Diran (Applies for OS V9.5 (and below)).
+//! @SYMREQ 			REQ10867
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install the package with 'hidden' flag enabled
+//! @SYMTestExpectedResults 	Installation and un installation should be successful
+
+START_TESTCASE API-SEC-SWIREG-Hidden-0004
+
+RUN_TEST_STEP_RESULT 0  100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini i_hiddensa
+RUN_TEST_STEP_RESULT 0  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_hiddensa
+
+END_TESTCASE API-SEC-SWIREG-Hidden-0004
+
+//! @SYMTestCaseID SEC-cyclicDependency-PDEF145405
+//! @SYMTestCaseDesc User installs a package(A) with dependency on package (B), then installs package B with dependency on A, then unistalls pkg B
+//! @SYMDEF  INC
+//! @SYMTestPriority High
+//! @SYMTestActions  Install SA pkg and then Install another SA package, Uninstall second SA
+//! @SYMTestExpectedResults The SIS gets installed and uninstalled successfully
+
+
+START_TESTCASE cyclicDependency
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_A
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_B
+RUN_TEST_STEP 100 tuiscriptadaptors RemoveWithLastDependent z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_Uid
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_U_B
+END_TESTCASE cyclicDependency
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

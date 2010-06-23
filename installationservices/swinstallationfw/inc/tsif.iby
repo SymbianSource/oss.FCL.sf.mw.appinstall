@@ -1,0 +1,99 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef TSIF_IBY
+#define TSIF_IBY
+
+REM Software Install Framework
+
+define ZDRIVE \epoc32\data\Z
+define DATADRIVE \tusif\tsif\data
+
+ECOM_PLUGIN(refnativeplugin.dll,10285BC3.rsc)
+ECOM_PLUGIN(testnonnativeplugin.dll,10285BD1.rsc)
+
+file=ABI_DIR\BUILD_DIR\tusifsuite.exe							\sys\bin\tusifsuite.exe
+
+data=ZDRIVE\tusif\tsif\tsif.ini									\tusif\tsif\tsif.ini
+data=ZDRIVE\tusif\tsif\tsif.script								\tusif\tsif\tsif.script
+data=ZDRIVE\tusif\tsif\tsif_appuidgen.ini							\tusif\tsif\tsif_appuidgen.ini
+data=ZDRIVE\tusif\tsif\tsif_appuidgen.script							\tusif\tsif\tsif_appuidgen.script
+data=ZDRIVE\tusif\tsif\tnotifier.ini							\tusif\tsif\tnotifier.ini
+data=ZDRIVE\tusif\tsif\tnotifier.script							\tusif\tsif\tnotifier.script
+data=ZDRIVE\tusif\tsifintegration\tsifintegration.ini			\tusif\tsifintegration\tsifintegration.ini
+data=ZDRIVE\tusif\tsifintegration\tsifintegration.script		\tusif\tsifintegration\tsifintegration.script
+data=ZDRIVE\tusif\tsifintegration\data\compound.sifrefbinpkg	\tusif\tsifintegration\data\compound.sifrefbinpkg
+data=ZDRIVE\tusif\tswtype\tsifswtypeintegration.ini				\tusif\tswtype\tsifswtypeintegration.ini
+data=ZDRIVE\tusif\tswtype\tsifswtypeintegration.script			\tusif\tswtype\tsifswtypeintegration.script
+data=ZDRIVE\tusif\tswtype\data\test.siftestpkg					\tusif\tswtype\data\test.siftestpkg
+data=ZDRIVE\tusif\tsif\data\test.nonnativepackage.txt			DATADRIVE\test.nonnativepackage.txt
+data=ZDRIVE\tusif\tsif\data\test.overflow.txt					DATADRIVE\test.overflow.txt
+data=ZDRIVE\tusif\tsif\data\noninstallable.gif					DATADRIVE\noninstallable.gif
+
+data=ABI_DIR\BUILD_DIR\sifintegrationtestbase.sis				DATADRIVE\sifintegrationtestbase.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestupgrade.sis			DATADRIVE\sifintegrationtestupgrade.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestinvalidupgrade.sis		DATADRIVE\sifintegrationtestinvalidupgrade.sis
+data=ABI_DIR\BUILD_DIR\sifselfsignedwithprotecteduid.sis		DATADRIVE\sifselfsignedwithprotecteduid.sis
+data=ABI_DIR\BUILD_DIR\sifcomponentinfointegration.sis			DATADRIVE\sifcomponentinfointegration.sis
+data=ABI_DIR\BUILD_DIR\sifcomponentinfointegpu.sis				DATADRIVE\sifcomponentinfointegpu.sis
+data=ABI_DIR\BUILD_DIR\sifcomponentinfointegsp.sis				DATADRIVE\sifcomponentinfointegsp.sis
+data=ABI_DIR\BUILD_DIR\embeddingouterbase.sis					DATADRIVE\embeddingouterbase.sis
+data=ABI_DIR\BUILD_DIR\emptynameandvendor.sis					DATADRIVE\emptynameandvendor.sis
+data=ABI_DIR\BUILD_DIR\embeddingbasewithexe.sis					DATADRIVE\embeddingbasewithexe.sis
+data=ABI_DIR\BUILD_DIR\sifintegusercapsbase.sis					DATADRIVE\sifintegusercapsbase.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestnocaps.sis				DATADRIVE\sifintegrationtestnocaps.sis
+data=ABI_DIR\BUILD_DIR\embeddingbasewithtextandinnerwithexe.sis			DATADRIVE\embeddingbasewithtextandinnerwithexe.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestmultiplefiles.sis			DATADRIVE\sifintegrationtestmultiplefiles.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestextensionindifferentcase.sis		DATADRIVE\sifintegrationtestextensionindifferentcase.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestwithonlydll.sis			DATADRIVE\sifintegrationtestwithonlydll.sis
+data=ABI_DIR\BUILD_DIR\sifintegsufficientusercaps.sis				DATADRIVE\sifintegsufficientusercaps.sis
+
+data=ABI_DIR\BUILD_DIR\sifintegrationtestbasewithdrivedialog.sis				DATADRIVE\sifintegrationtestbasewithdrivedialog.sis
+data=ABI_DIR\BUILD_DIR\sifintegrationtestupgradewithdrivedialog.sis				DATADRIVE\sifintegrationtestupgradewithdrivedialog.sis
+data=ABI_DIR\BUILD_DIR\embeddedinnerwithupgrade.sis						DATADRIVE\embeddedinnerwithupgrade.sis
+data=ABI_DIR\BUILD_DIR\embeddedinnerwithupgradeouterasbasewithdrivedialog.sis			DATADRIVE\embeddedinnerwithupgradeouterasbasewithdrivedialog.sis
+
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotest.sis					DATADRIVE\sifgetcompapparcinfotest.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultilang.sis				DATADRIVE\sifgetcompapparcinfotestmultilang.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultifiles.sis				DATADRIVE\sifgetcompapparcinfotestmultifiles.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestnonapparcrsc.sis				DATADRIVE\sifgetcompapparcinfotestnonapparcrsc.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestnonapparcpath.sis				DATADRIVE\sifgetcompapparcinfotestnonapparcpath.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultiapp.sis				DATADRIVE\sifgetcompapparcinfotestmultiapp.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultiapp_OneAppWithNonApparcRsc.sis 	DATADRIVE\sifgetcompapparcinfotestmultiapp_OneAppWithNonApparcRsc.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotest_corruptrsc.sis				DATADRIVE\sifgetcompapparcinfotest_corruptrsc.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestembedded_innerwithdifficon.sis		DATADRIVE\sifgetcompapparcinfotestembedded_innerwithdifficon.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotest_nolocale.sis				DATADRIVE\sifgetcompapparcinfotest_nolocale.sis
+data=ZDRIVE\tusif\tsif\data\sifgetcompapparcinfotestmultifiles_largeandsmallextn.sis		DATADRIVE\sifgetcompapparcinfotestmultifiles_largeandsmallextn.sis
+
+data=ZDRIVE\tusif\tswtype\data\sifswtypebase.sis				\tusif\tswtype\data\sifswtypebase.sis
+data=ZDRIVE\tusif\tswtype\data\sifswtypeupgrade.sis				\tusif\tswtype\data\sifswtypeupgrade.sis
+
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case05.sis		DATADRIVE\swiappregintegration_case05.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case05_SU.sis		DATADRIVE\swiappregintegration_case05_SU.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case06_base.sis	DATADRIVE\swiappregintegration_case06_base.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case06_sa.sis		DATADRIVE\swiappregintegration_case06_sa.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case08_sa1.sis		DATADRIVE\swiappregintegration_case08_sa1.sis
+data=ZDRIVE\tusif\tsif\data\swiappregintegration_case08_sa2.sis		DATADRIVE\swiappregintegration_case08_sa2.sis
+
+REM security tests
+file=ABI_DIR\BUILD_DIR\usifsecuritytests.dll					\sys\bin\usifsecuritytests.dll
+
+data=ZDRIVE\tusif\securitytests\usifsecuritytests.ini			\tusif\securitytests\usifsecuritytests.ini
+data=ZDRIVE\tusif\securitytests\usifsecuritytests.script		\tusif\securitytests\usifsecuritytests.script
+
+#endif

@@ -1,0 +1,84 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#define CATALOGS_COMPONENT_NCDUTILSDLL
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+// ECOM plugin ncdproxy_20019119.dll requires this lib and therefore big caps.
+#ifdef USE_BUILD_SCRIPT
+    TARGET      ncdutils_APP_NAME_POSTFIX.dll
+    CAPABILITY  CATALOGS_MINIMUM_CAPABILITIES
+#else
+    TARGET      ncdutils_20019119.dll
+    CAPABILITY  CATALOGS_DLL_CAPABILITIES
+#endif // USE_BUILD_SCRIPT
+
+TARGETTYPE    dll
+UID           0x1000008d
+
+SOURCEPATH    ../src
+SOURCE        catalogsutils.cpp
+
+SOURCEPATH    ../../provider/src
+SOURCE        ncdkeyvaluepair.cpp
+SOURCE        ncdpurchasedownloadinfo.cpp
+SOURCE        ncdpurchaseinstallinfo.cpp
+SOURCE        ncdpurchasehistoryfilter.cpp
+SOURCE        ncdpurchasedetails.cpp
+SOURCE        ncdsearchfilter.cpp
+SOURCE        ncdprogress.cpp
+SOURCE        ncdattributes.cpp
+SOURCE        ncdconnectionmethod.cpp
+
+USERINCLUDE   ../inc
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../provider/inc
+USERINCLUDE   ../../provider/server/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY euser.lib estor.lib 
+LIBRARY bafl.lib charconv.lib efsrv.lib  // needed for ARMV5 building
+LIBRARY sysutil.lib
+LIBRARY platformenv.lib // catalogsutils.cpp needs this
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif
+
+#ifdef USE_BUILD_SCRIPT
+EXPORTUNFROZEN
+#endif
+
+SMPSAFE
+

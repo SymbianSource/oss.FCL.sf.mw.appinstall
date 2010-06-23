@@ -1,0 +1,40 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Languages
+&EN,FR
+
+;Header - 0x80000134=UID of zoom app
+#{"TestRun-EN", "TestRun-FR"}, (0x80000134), 1, 2, 3, IU, SH
+
+%{"Vendor", "Vendor"}
+:"Vendor"
+
+; "\epoc32\release\wins\urel\z\system\apps\zoom\zoom.rsc"-"!:\System\Apps\Zoom\zoom.rsc"
+; if CpuABI=0
+;  "\epoc32\release\arm4\urel\zoom.app"-"!:\System\Apps\Zoom\zoom.app", FILERUN, RUNINSTALL
+; elseif CpuABI=1
+;  "\epoc32\release\armi\urel\zoom.app"-"!:\System\Apps\Zoom\zoom.app", FILERUN, RUNINSTALL
+; elseif CpuABI=2
+;  "\epoc32\release\thumb\urel\zoom.app"-"!:\System\Apps\Zoom\zoom.app", FILERUN, RUNINSTALL
+; elseif CpuABI=4
+;  "\epoc32\release\wins\urel\z\system\apps\zoom\zoom.app"-"!:\System\Apps\Zoom\zoom.app", FILERUN, RUNINSTALL
+; endif
+
+;Programs run when install
+;"files\tbit.gif"-"!:\Documents\InstTest\tbit.gif", FR, RB, RW
+;"text\file1.txt"-"!:\Documents\InstTest\runfile.txt", FR, RB, RW
+;"files\P5Manual"-"!:\Documents\InstTest\P5Manual", FR, RB, RS
+

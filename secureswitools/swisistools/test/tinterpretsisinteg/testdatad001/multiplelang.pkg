@@ -1,0 +1,39 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Test package for testing ; Test package for testing multiple language option
+
+
+; Languages
+&EN,FR,PO
+
+; Installation header
+; Only one component name as we only support English
+
+%{"Vendorname-EN","Vendorname-FR","Vendorname-PO"}
+:"Unique Vendor Name"
+
+#{"Multiple language-EN","Multiple language-FR","Multiple language-PO"},(0x89334546),1,0,0
+
+; for the PREQ1230
+
+{"\epoc32\winscw\c\tswi\tinterpretsisinteg\data\english.txt""\epoc32\winscw\c\tswi\tinterpretsisinteg\data\french.txt""\epoc32\winscw\c\tswi\tinterpretsisinteg\data\portuguese.txt" } - "C:\multilangfile.txt"
+
+
+; Required files
+; None
+
+; Component .sis files
+; None

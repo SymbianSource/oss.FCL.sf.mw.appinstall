@@ -1,0 +1,10 @@
+component	install_testframework
+source	\sf\mw\appinstall\installationservices\switestfw\bwins
+source	\sf\mw\appinstall\installationservices\switestfw\eabi
+source	\sf\mw\appinstall\installationservices\switestfw\group
+source	\sf\mw\appinstall\installationservices\switestfw\inc
+source	\sf\mw\appinstall\installationservices\switestfw\test
+
+notes_source	\component_defs\release.src
+
+ipr T

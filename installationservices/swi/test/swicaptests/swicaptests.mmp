@@ -1,0 +1,96 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* captestframeworkhelper.exe Test harness for capability testing
+*
+*/
+
+
+/**
+ @file
+*/
+
+//         Capability is set as needed
+CAPABILITY All
+
+TARGET			swicaptests.dll
+TARGETTYPE		dll
+UID			0x101F7295 0x101F7244 
+VENDORID		0x70000001
+
+// launcher cap testing
+SOURCEPATH		.
+SOURCE			swicaptests.cpp
+SOURCE			swilaunchercaptest.cpp // launcher cap testing
+
+// ocsp cap testing
+SOURCE			swiocspcaptest.cpp 
+SOURCE 			../../source/ocspsupport/client/ocspsupportclient.cpp // have to include directly since functions needed are not exported
+USERINCLUDE		../../source/ocspsupport/common\
+
+// swis cap testing
+SOURCE			swiscaptest.cpp
+SOURCE 			../../source/uiss/server/installclientserver.cpp // have to include directly since functions needed are not exported
+SOURCE			../../source/sishelper/installprefs.cpp
+
+// registry
+SOURCE			registrycaptest.cpp
+
+// uiss
+SOURCE			uisscaptest.cpp
+
+// sishelper
+SOURCE			sishelpercaptest.cpp
+SOURCE		../../source/sishelper/sishelperclient.cpp
+
+
+USERINCLUDE		.
+USERINCLUDE		../..
+USERINCLUDE		../../inc
+USERINCLUDE		../../inc/swi
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+USERINCLUDE 	../../source/sisregistry/server
+#else
+USERINCLUDE 	../../source/sisregistry/server_legacy
+#endif
+
+USERINCLUDE 	../../source/sisregistry/common
+USERINCLUDE 	../../source/plan
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+DEFFILE		swicaptests_usif.def
+#else
+DEFFILE		swicaptests.def
+#endif
+
+
+LIBRARY			euser.lib
+LIBRARY			efsrv.lib
+LIBRARY			estor.lib
+LIBRARY			sislauncherclient.lib
+LIBRARY			uiss.lib
+LIBRARY			uissclient.lib
+LIBRARY			sisregistryclient.lib
+LIBRARY			plan.lib
+LIBRARY			swidataprovider.lib
+LIBRARY			siscontroller.lib 
+LIBRARY			aprcaptestframeworkutil.lib
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+LIBRARY scrclient.lib
+#endif
+SMPSAFE

@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Widget Runtime plugin for AppMngr2
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET                  appmngr2widgetplugin.dll
+TARGETTYPE              PLUGIN
+UID                     0x10009d8d 0x20016BF9
+
+CAPABILITY              CAP_GENERAL_DLL
+VENDORID                VID_DEFAULT
+
+SOURCEPATH              ../src
+SOURCE                  appmngr2widgetmain.cpp
+SOURCE                  appmngr2widgetruntime.cpp
+SOURCE                  appmngr2widgetappinfo.cpp
+SOURCE                  appmngr2widgetpackageinfo.cpp
+SOURCE                  appmngr2widgetinfoiterator.cpp
+
+START RESOURCE          ../data/20016bf9.rss
+TARGET                  appmngr2widgetplugin.rss
+END
+
+USERINCLUDE             ../inc
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY                 euser.lib                   // Base
+LIBRARY                 appmngr2pluginapi.lib       // CAppMngr2Runtime
+LIBRARY                 widgetregistryclient.lib    // RWidgetRegistryClientSession
+LIBRARY                 swinstcli.lib               // SwiUI::RSWInstLauncher
+LIBRARY                 swinstcommonui.lib          // CUIDetailsDialog
+LIBRARY                 cone.lib                    // CCoeEnv
+LIBRARY                 eikcore.lib                 // CEikonEnv
+LIBRARY                 aknskins.lib                // AknsUtils
+LIBRARY                 efsrv.lib                   // RFs
+LIBRARY                 apmime.lib                  // TDataType
+LIBRARY                 commonengine.lib            // StringLoader
+
+DEBUGLIBRARY            flogger.lib                 // RFileLogger
+
+SMPSAFE
+

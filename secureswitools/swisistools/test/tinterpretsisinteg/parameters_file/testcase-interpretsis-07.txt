@@ -1,0 +1,5 @@
+interpretsis_testcase_09_reg.rsc
+interpretsis_testcase_09.r01
+interpretsis_testcase_09.r03
+interpretsis_testcase01_09.mbm
+interpretsis_testcase03_09.mbm

@@ -1,0 +1,85 @@
+/*
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Security configuration
+*
+*/
+
+
+
+
+/**
+ @file
+*/
+
+PRJ_PLATFORMS
+DEFAULT
+
+
+PRJ_EXPORTS
+#ifndef __S60_
+../swi/swipolicy.ini /epoc32/release/winscw/udeb/z/system/data/swipolicy.ini
+../swi/swipolicy.ini /epoc32/release/winscw/urel/z/system/data/swipolicy.ini
+../swi/swipolicy.ini /epoc32/data/z/system/data/swipolicy.ini
+../swi/2002cff6.txt /epoc32/release/winscw/udeb/z/private/10202be9/2002cff6.txt
+../swi/2002cff6.txt /epoc32/release/winscw/urel/z/private/10202be9/2002cff6.txt
+../swi/2002cff6.txt /epoc32/data/z/system/data/2002cff6.txt
+
+// ConfML Files
+../conf/appinstallconfig.confml            OS_LAYER_EXPORTS_CONFML(appinstallconfig.confml)
+../conf/appinstallconfig_2002cff6.crml	 OS_LAYER_EXPORTS_CRML(appinstallconfig_2002cff6.crml)
+#endif
+
+../swi/swiconfig.iby /epoc32/rom/include/swiconfig.iby
+
+#ifndef SYMBIAN_JAVA_NOT_INCLUDED
+../JavaMIDletInstaller/midleticonsizes.rh SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(midleticonsizes.rh)
+../JavaMIDletInstaller/JavaMIDletInstallerconfig.hby /epoc32/rom/include/javamidletinstallerconfig.hby
+
+// Export the JMI's CenRep configuration file to EPOC.
+../JavaMIDletInstaller/20010c68.txt /epoc32/release/winscw/udeb/z/private/10202be9/20010c68.txt
+../JavaMIDletInstaller/20010c68.txt /epoc32/release/winscw/urel/z/private/10202be9/20010c68.txt
+#endif //SYMBIAN_JAVA_NOT_INCLUDED
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+// Export the SCR Database CenRep configuration file to EPOC.
+../usif/scr/scr.db /epoc32/release/winscw/udeb/z/sys/install/scr/provisioned/scr.db
+../usif/scr/scr.db /epoc32/release/winscw/urel/z/sys/install/scr/provisioned/scr.db
+// Export iby file for SifLauncher configuration
+../usif/siflauncher/siflauncherconfig.iby /epoc32/rom/include/siflauncherconfig.iby
+
+//Exporting SCR's Cenrep configuration file to EPOC.
+../usif/scr/10285bc0.txt /epoc32/release/winscw/udeb/z/private/10202be9/10285bc0.txt
+../usif/scr/10285bc0.txt /epoc32/release/winscw/urel/z/private/10202be9/10285bc0.txt
+
+#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+PRJ_TESTEXPORTS
+#ifndef SYMBIAN_JAVA_NOT_INCLUDED
+../JavaMIDletInstaller/20010c68.txt	/epoc32/winscw/c/tjavahelper/data/20010c68.txt
+#endif // SYMBIAN_JAVA_NOT_INCLUDED
+
+../tswi/swipolicy.ini /epoc32/winscw/c/tswi/policies/swipolicy.ini
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+// Export SCR production DB population data file
+../usif/scr/update_db_production.xml	/epoc32/winscw/c/tswi/tscrtool/data/update_db_production.xml
+#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+PRJ_MMPFILES
+#ifndef TOOLS
+#ifndef TOOLS2
+installconfig.mmp
+#endif // TOOLS2
+#endif // TOOLS

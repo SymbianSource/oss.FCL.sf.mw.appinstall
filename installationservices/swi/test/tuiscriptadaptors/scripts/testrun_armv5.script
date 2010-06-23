@@ -1,0 +1,367 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+// give emulator time to start up so APPARC can initialize
+DELAY 5000
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0005
+//! @SYMTestCaseDesc		Install SIS file that runs a file by mime type
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini mime
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_mime
+// Delete file created to confirm execution of mimehandler
+RUN_UTILS DeleteFile c:\tswi\mime1.txt
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0005
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0002
+//! @SYMTestCaseDesc		Install SIS file that runs a document asynchronously on install / uninstall
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0002
+
+// Since it is an asynchronous run on installation, the file which will be created 
+// does not exist when installation finishes. It will be installed by mimehandler.
+// Note that this test does involve a race condition.  If tmimehandler finishes execution
+// before the file presence check, the test can fail.  A 1 second delay in tmimehandler
+// should prevent this - in fact losing the race may flag an unexpected performance degradation.
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini mimefileRBRS
+
+// Give tmimehandler time to run.
+DELAY 2000
+
+// Check that the file created by tmimehandler exists now.
+RUN_TEST_STEP 30 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_mimefileRBRS
+
+// Delete file created to confirm execution of mimeRecog & mimehandler
+RUN_UTILS DeleteFile c:\tswi\testmimedoc.txt
+
+// run synchronously on uninstall, so the file which will be created exists
+RUN_TEST_STEP 30 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_mimefileRBRS
+
+// Delete file created to confirm execution of mimeRecog & mimehandler
+RUN_UTILS DeleteFile c:\tswi\testmimedoc.txt
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0002
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0013
+//! @SYMTestCaseDesc		Install SIS file that runs a document in a priavte directory asynchronously on install / uninstall
+//! @SYMDEF 			DEF072840    
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0013
+
+// Since it is an asynchronous run on installation, the file which will be 
+// created does not exist when installation finishes. It will be installed by mimehandler. 
+RUN_TEST_STEP 27 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini privatemimefileRBRS
+
+DELAY 2000
+
+// Delete file created to confirm execution of mimeRecog & mimehandler
+RUN_UTILS DeleteFile c:\tswi\testmimedoc.txt
+
+// run synchronously on uninstall, so the file which will be created exists
+RUN_TEST_STEP 190 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_privatemimefileRBRS
+
+// Delete file created to confirm execution of mimeRecog & mimehandler
+RUN_UTILS DeleteFile c:\tswi\testmimedoc.txt
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0013
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0003
+//! @SYMTestCaseDesc		Install SIS file that runs an app synchronously on install
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0003
+
+// The exe used in the next test step will run for 5 seconds before exiting.
+RUN_TEST_STEP 30 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW
+
+// If the exe was correctly run synchronously, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Ensure that SWIS shuts down after the install
+RUN_TEST_STEP 100 tuiscriptadaptors SwisNotRunning
+
+// Check that the sislauncherserver is not running either.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini sislauncherserverRunning
+
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIRW
+
+// again, check SWIS shuts down after the uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors SwisNotRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0003
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0007
+//! @SYMTestCaseDesc		Install SIS file that runs an app asynchronously on install
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0007
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRI
+
+// If the exe was correctly run asynchronously, it should be found running now.
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Let the exe complete its run.
+DELAY 5000
+
+RUN_TEST_STEP 30 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRI
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0007
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0004
+//! @SYMTestCaseDesc		Install SIS file that runs an app synchronously on removal
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Yankee
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0004
+
+RUN_TEST_STEP 30 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe
+RUN_TEST_STEP 30 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe
+
+// If the exe was correctly shut down at the end of the runwait timeout during the uninstall, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0004
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0006
+//! @SYMTestCaseDesc		Install SIS file that tries to run a file with an unknown mime type; should not fail install.
+//! @SYMDEF 			DEF066099    
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini mimenoapp
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_mimenoapp
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0006
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0008
+//! @SYMTestCaseDesc		Install SIS file that runs an app synchronously on removal, but which runs for longer than the timeout
+//! @SYMDEF 			INC067849    
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0008
+
+RUN_TEST_STEP 30 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexe
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_longrunexe
+
+// If the exe was correctly shut down synchronously during the uninstall, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0008
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0009
+//! @SYMTestCaseDesc		Install SIS file to removable media that runs an app synchronously on removal, testing the app really ran
+//! @SYMDEF 			INC080469
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0009
+
+RUN_TEST_STEP 30 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe_removable
+
+// Delete the flagging file that shows the exe has run, just to make sure the test is "honest"
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+RUN_TEST_STEP 40 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe_removable
+
+// If the exe was correctly shut down at the end of the runwait timeout during the uninstall, it should not be found running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0009
+
+
+// Clean up the test flagging file
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0010
+//! @SYMTestCaseDesc		Install SIS file that runs an app synchronously on removal, but finds the file missing
+//! @SYMDEF 			DEF080693
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs and uninstalls a run-on-remove package
+//! @SYMTestExpectedResults	uninstall completes sucessfully
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0010
+
+RUN_TEST_STEP 30 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exe
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini delete_testrun
+
+RUN_TEST_STEP 30 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exe
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0010
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0011
+//! @SYMTestCaseDesc		Install SIS file that runs an app synchronously on install
+//! @SYMDEF 			DEF085447    
+//! @SYMTestPriority		Critical
+//! @SYMTestActions		Files from a package are installed/uninstalled 
+//! @SYMTestExpectedResults	Files are installed/uninstalled
+//! @SYMDevelopedForRelease	Mike
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0011
+
+// The exe2 used in the next test step will run asynch.
+RUN_TEST_STEP 50 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini appRI
+
+// If the exes were run asynchronously, it should be found running.
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini helloWorldRunning
+
+// If the exes were run asynchronously, it should be found running.
+RUN_TEST_STEP 10 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini helloWorld2Running
+
+// Ensure that SWIS shuts down after the install
+RUN_TEST_STEP 100 tuiscriptadaptors SwisNotRunning
+
+// Check that the sislauncherserver is not running either.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini sislauncherserverRunning
+
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_appRI
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0011
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-0012
+//! @SYMTestCaseDesc		App should run for preinstalled applications.
+//! @SYMDEF 			DEF122219    
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install PA sis file with RI flag option on media card, exe should run after install,
+//! @SYMTestExpectedResults	App should run.
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-0012
+
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini setup_preinstalled_exe
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini install_pa
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleapp_running
+
+// Let the run complete.
+DELAY 5000
+
+RUN_TEST_STEP 15 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_preinstalled_exe
+RUN_TEST_STEP 5 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini cleanupfiles
+
+// again, check SWIS shuts down after the uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors SwisNotRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-0012
+
+
+//! @SYMTestCaseID		API-SEC-UISA-RunTest-I-HW-B-0013
+//! @SYMTestCaseDesc		App should run for SA stub applications.
+//! @SYMDEF 			DEF122219    
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install SA sis file with RI flag option on media card, exe should run after install,
+//  				Eject media card, Reformat phone, insert the media card , application should run.  
+//! @SYMTestExpectedResults	App should run.
+//! @SYMDevelopedForRelease	Oghma
+
+START_TESTCASE API-SEC-UISA-RunTest-I-HW-B-0013
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini install_sa
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleapp_running1
+
+// Let the run complete.
+DELAY 5000
+
+// copy stub and app because Unmount-Mount step deletes the files.
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini savedata
+// Uninstall the app because hash should also get deleted incase executables.
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_install_sa
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+// Cleanup previous installations
+DELAY 5000
+RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
+DELAY 5000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini setup_sastub
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini deletetmpfiles
+RUN_TEST_STEP 30 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini install_sastub
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleapp_running1
+// Let the run complete.
+DELAY 5000
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_install_sa
+RUN_TEST_STEP 5 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini cleanupfiles1
+// again, check SWIS shuts down after the uninstall
+RUN_TEST_STEP 100 tuiscriptadaptors SwisNotRunning
+
+END_TESTCASE API-SEC-UISA-RunTest-I-HW-B-0013
+
+
+//! @SYMTestCaseID		API-SEC-sislauncher-overflow-HW-0001
+//! @SYMTestCaseDesc		Check for overflows in sislauncher IPC processing.
+//! @SYMDEF 			DEF126208    
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install and uninstall a SIS file containing many apparc registration files and a very large mime-type.
+//! @SYMTestExpectedResults	Application should install and uninstall without error.
+
+START_TESTCASE API-SEC-sislauncher-overflow-HW-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini test_notifyapps
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_test_notifyapps
+
+END_TESTCASE API-SEC-sislauncher-overflow-HW-0001
+
+

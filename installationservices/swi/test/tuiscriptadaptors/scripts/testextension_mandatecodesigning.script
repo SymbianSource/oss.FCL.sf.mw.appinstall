@@ -1,0 +1,73 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run tests for testing installation of SIS files with the EKU field.
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0001
+//! @SYMTestCaseDesc		Installs a file with a code signing present in the EKU field
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a code signing present in the EKU field
+//! @SYMTestExpectedResults	File installs sucessfully
+
+START_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini swi_stdcodesigningeku
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini u_swi_eku
+
+END_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0001
+
+
+//! @SYMTestCaseID		API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0002
+//! @SYMTestCaseDesc		Installs a file with EKU field absent
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with EKU field absent
+//! @SYMTestExpectedResults	File installation fails
+
+START_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0002
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini swi_nocodesigningekufail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini u_swi_eku
+
+END_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0002
+
+
+//! @SYMTestCaseID		API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0003
+//! @SYMTestCaseDesc		Installs a file with a code signing not present but some other extension present in the EKU field
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a code signing not present but some other extension present in the EKU field
+//! @SYMTestExpectedResults	File installation fails
+
+START_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0003
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini swi_serverautheku
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini u_swi_eku
+
+END_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0003
+
+
+//! @SYMTestCaseID		API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0004
+//! @SYMTestCaseDesc		Installs a file with a code signing not present but alternative code signing Oid present in the EKU field
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a file with a code signing not present but alternative code signing Oid in the EKU field
+//! @SYMTestExpectedResults	File installation fails
+
+START_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0004
+
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini swi_altcodesigningekufail
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testextension.ini u_swi_eku
+
+END_TESTCASE API-SEC-INSTALL_EXTENDEDKEYUSAGE-C-0004

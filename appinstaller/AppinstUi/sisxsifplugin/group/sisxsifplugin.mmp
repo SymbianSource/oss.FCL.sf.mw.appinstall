@@ -1,0 +1,63 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: Native SISX SIF (Software Install Framework) plugin.
+*
+*/
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET          sisxsifplugin.dll
+TARGETTYPE      PLUGIN
+UID             0x10009D8D 0x20022FC1
+
+CAPABILITY      CAP_ECOM_PLUGIN
+VENDORID        VID_DEFAULT
+
+START RESOURCE  ../data/20022FC1.rss
+TARGET          sisxsifplugin.rsc
+END
+
+SOURCEPATH      ../src
+SOURCE          sisxsifpluginmain.cpp
+SOURCE          sisxsifplugin.cpp
+SOURCE          sisxsifpluginactiveimpl.cpp
+SOURCE          sisxsifpluginuihandlerbase.cpp
+SOURCE          sisxsifpluginuihandler.cpp
+SOURCE          sisxsifpluginuihandlersilent.cpp
+SOURCE          sisxsifplugininstallparams.cpp
+SOURCE          sisxsifpluginerrorhandler.cpp
+SOURCE          sisxsifuiselectioncache.cpp
+
+USERINCLUDE     ../inc
+USERINCLUDE     ../../../../installationservices/swi/inc
+USERINCLUDE     ../../../../installationservices/swi/inc/swi
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib               // User
+LIBRARY         ecom.lib                // ECom
+LIBRARY         sif.lib                 // USIF
+LIBRARY         sifnotification.lib     // Usif::CPublishSifOperationInfo
+LIBRARY         scrclient.lib           // SCR
+LIBRARY         sifui.lib               // CSifUi
+LIBRARY         sisregistryclient.lib   // Swi::RSisRegistrySession
+LIBRARY         sishelper.lib           // Swi::CAsyncLauncher
+LIBRARY         bafl.lib                // TResourceReader
+LIBRARY         efsrv.lib               // RFs
+LIBRARY         PlatformEnv.lib         // TDriveInfo
+LIBRARY         featmgr.lib             // FeatureManager
+LIBRARY         pkixcertbase.lib        // CPKIXValidationResultBase
+LIBRARY         x509.lib                // TValidationStatus
+
+SMPSAFE

@@ -1,0 +1,13 @@
+EXPORTS
+	_ZN24CIAUpdateFWUpdateHandler21FirmWareUpdatewithNSUEv @ 1 NONAME
+	_ZN24CIAUpdateFWUpdateHandler21IsDMSupportAvailableLEv @ 2 NONAME
+	_ZN24CIAUpdateFWUpdateHandler22FirmWareUpdatewithFOTAEv @ 3 NONAME
+	_ZN24CIAUpdateFWUpdateHandler4NewLEv @ 4 NONAME
+	_ZN24CIAUpdateFWUpdateHandler5NewLCEv @ 5 NONAME
+	_ZTI20CIAUpdateFWFotaModel @ 6 NONAME ; #<TI>#
+	_ZTI24CIAUpdateFWSyncAppEngine @ 7 NONAME ; #<TI>#
+	_ZTI24CIAUpdateFWUpdateHandler @ 8 NONAME ; #<TI>#
+	_ZTV20CIAUpdateFWFotaModel @ 9 NONAME ; #<VT>#
+	_ZTV24CIAUpdateFWSyncAppEngine @ 10 NONAME ; #<VT>#
+	_ZTV24CIAUpdateFWUpdateHandler @ 11 NONAME ; #<VT>#
+

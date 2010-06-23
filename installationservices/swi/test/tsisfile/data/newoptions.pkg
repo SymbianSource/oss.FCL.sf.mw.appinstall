@@ -1,0 +1,43 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file
+
+;Languages
+&EN
+
+;Header
+#{"SWICT-option"}, (0xA000000A), 1, 0, 1, TYPE=SA
+%{"SWICT-option-L"}
+:"SWICT-option-U"
+
+!({"Intel"},{"ARM"},{"Motorola"},{"AMD"})
+
+IF OPTION1
+"text\option1.txt"-"C:\system\data\option1.txt"
+endif
+
+IF OPTION2
+"text\option2.txt"-"C:\system\data\option2.txt"
+endif
+
+IF OPTION3
+"text\cpu.txt"-"C:\system\data\option3.txt"
+endif
+
+IF OPTION4
+"text\options.txt"-"C:\system\data\option4.txt"
+endif
+

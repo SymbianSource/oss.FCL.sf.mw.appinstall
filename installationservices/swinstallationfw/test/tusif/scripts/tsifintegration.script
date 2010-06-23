@@ -1,0 +1,712 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run all USIF integration tests
+
+// Delete the SCR Database file
+LOAD_SUITE tscr
+LOAD_SUITE tSisRegistryTest
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+
+LOAD_SUITE tUsifSuite
+
+// ************************ Integration test cases ************************
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0001
+//! @SYMTestCaseDesc 		Getting information about a component
+//! @SYMTestStatus 		3. Released
+ 
+START_TESTCASE API-SEC-USIF-tsifintegration-0001
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoByFileHandle
+RUN_TEST_STEP !Result=-9 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoOverflowByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoByFileNameForUninstalledCompoundComponent
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoByFileHandleForUninstalledCompoundComponent
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0001
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0002
+//! @SYMTestCaseDesc 		Installation/uninstallation of a native component through SIF by file name/handle
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0002
+
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+// compound package by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootPkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild1PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild2PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0Child0PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallCompoundComponentByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootPkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild1PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild2PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0Child0PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootPkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild0PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild1PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild2PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild0Child0PkgByNameAndVendor
+// compound package by file handle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootPkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild1PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild2PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0Child0PkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallCompoundComponentByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootPkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild1PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild2PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRootChild0Child0PkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootPkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild0PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild1PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild2PkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRootChild0Child0PkgByNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0002
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0003
+//! @SYMTestCaseDesc 		Generic browser installation by file name/handle
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0003
+
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRefPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifGenericBrowserInstallStep z:\tusif\tsifintegration\tsifintegration.ini GenericBrowserInstallRefPkgByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRefBasePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRefPkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRefPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifGenericBrowserInstallStep z:\tusif\tsifintegration\tsifintegration.ini GenericBrowserInstallRefPkgByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRefUpgradePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallRefPkgByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyRefPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0003
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0004
+//! @SYMTestCaseDesc 		SCOMO install inactivate
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0004
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallInactiveByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyInactivePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0004
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0007
+//! @SYMTestCaseDesc 		Upgrade of a native component through SIF
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0007
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini UpgradeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyUpgradePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0007
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0008
+//! @SYMTestCaseDesc		Incorrect Upgrade of a native component through SIF
+//! @SYMTestStatus		3. Released
+START_TESTCASE API-SEC-USIF-tsifintegration-0008
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageExistence
+RUN_TEST_STEP !Result=-10301 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InvalidUpgradeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+END_TESTCASE API-SEC-USIF-tsifintegration-0008
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0009
+//! @SYMTestCaseDesc 		Asynchronous cancellation of native installation
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0009
+
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini AsynchronousCancelInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini AsynchronousCancelInstallByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0009
+
+
+// Ensure clean database before the following tests (0011 - 0020), as they rely on component ids starting from 1
+// Get the component information for a new base(SA type) component when it wasn't installed on the device and check that
+// the information retrieved is as expected.
+
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0010
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0010
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForNewNativeBaseCompByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForNewNativeBaseCompByFileHandle
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0010
+
+
+// Get the base(SA type) component information when the same component was already installed on the device and check that 
+// the information retrieved is as expected.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0011
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0011
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForInstalledNativeBaseByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForInstalledNativeBaseByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep          z:\tusif\tsifintegration\tsifintegration.ini UninstallComponentInfoInteg
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0011
+
+
+// Get the Upgrading(PU type) component information when the base(SA type) component was already installed on the device
+// and check that the information retrieved is matching with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0012
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0012
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForUpgradeByFNWhenBaseInstalled
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep 	       z:\tusif\tsifintegration\tsifintegration.ini UninstallComponentInfoInteg
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0012
+
+
+// Get the Upgrading(PU type) component information when the base(SA type) component was not installed on the device and 
+// check that the install status in retrieved info results in base package missing.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0013
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0013
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForUpgradeByFNWhenBaseMissing
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0013
+
+
+// Get the Patch(SP type) component information when the base(SA type) component was already installed on the device
+// and check that the information retrieved is matching with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0014
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0014
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForPatchByFNWhenBaseInstalled
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep 	       z:\tusif\tsifintegration\tsifintegration.ini UninstallComponentInfoInteg
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0014
+
+
+// Get the Patch(SP type) component information when the base(SA type) component was not installed on the device and
+// check that the install status in retrieved info results in base package missing.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0015
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0015
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForPatchByFNWhenBaseMissing
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0015
+
+
+// Get component information when the base component has a higher version
+// and check that the install status in retrieved info results in ENewerVersionAlreadyInstalled.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0016
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0016
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegByFileName
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegUpgradeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForUpgradeByFNWhenHigherInstalled
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep 	       z:\tusif\tsifintegration\tsifintegration.ini UninstallComponentInfoInteg
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0016
+
+
+// Get the component information for the new base(SA type) package with User Grantable capabilities, signed by a trusted CA
+// and check that the authenticity and userGrantableCapsBitMask in the retrieved info is equal to  EValidatedToAnchor(50) 
+// and 98304 (ReadUserData & WriteUserData) respectively.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0017
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0017
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForBaseWithUserCapsByFileName
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0017
+
+
+// Get the component information for the base(SA) component with an exe which doesn't have any cpability and 
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0018
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0018
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForNoCapabilityBaseByFileName
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0018
+
+
+// Check whether the get component info request is cancelable.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0019
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0019
+
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini CancelAsyncGetCompInfoRequestByFileName
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0019
+
+
+// Get the component information for the base (SA type) package with the package name and vendor name are empty and 
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0020
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0020
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForEmptyNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0020
+
+
+// Get the component information for the set of embedded components in the order of EmbeddingBaseWithEXE->EmbeddedBaseWithUserCapsEXE and 
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0021
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0021
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForEmbeddedWithExes
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0021
+
+
+// Get the component information for the set of embedded components in the order of EmbeddingBase->Embedded1->Embedded2 and 
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0022
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0022
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForEmbededNativePackages
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0022
+
+
+// Get the component information for the set of embedded components in the order of EmbeddingBaseWithText->EmbeddedWithExe and
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0023
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0023
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForEmbeddedWithTextAndInnerWithExe
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0023
+
+
+// Get the component information for multiple files in a sis file, first file is text file and second is executable 
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0024
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0024
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoWithMultipleFiles
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0024
+
+
+// Get the component information for multiple files with extension in different case
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0025
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0025
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoWithExtensionInDifferentCase
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0025
+
+
+// Get the component information for sis file containing only one dll
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0026
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0026
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoWithOnlyDll
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0026
+
+
+// Slient installation : Self-signed package
+START_TESTCASE API-SEC-USIF-tsifintegration-00027
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+RUN_TEST_STEP !Result=-5 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SilentInstallSelfSignedByName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+RUN_TEST_STEP !Result=-5 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SilentInstallSelfSignedByHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini VerifyPackageNonExistence
+END_TESTCASE API-SEC-USIF-tsifintegration-00027
+
+// Slient installation : Signed package
+START_TESTCASE API-SEC-USIF-tsifintegration-00028
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedPkgNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SilentInstallSignedByName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedPkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallSignedPkg
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedPkgNonExistence
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SilentInstallSignedByHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedPkgExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallSignedPkg
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedPkgNonExistence
+END_TESTCASE API-SEC-USIF-tsifintegration-00028
+
+// Slient installation : Signed package with less capabilities (Package needs some capabilities additional to the ones 
+// granted by the certificate used to sign it)
+START_TESTCASE API-SEC-USIF-tsifintegration-00029
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedLessCapsNonExistence
+RUN_TEST_STEP !Result=-5 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini SignedLessCapsPkg
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifintegration\tsifintegration.ini SignedLessCapsNonExistence
+END_TESTCASE API-SEC-USIF-tsifintegration-00029
+
+
+// Get the component information for a PU Upgrade, first base SA package with drive hard coded is installed
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0030
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0030
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifintegration\tsifintegration.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForPuUpgradeWithDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0030
+
+
+// Get the component information for a sis file where drive is not hard coded
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0031
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0031
+
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForBaseWithDriveDialog
+
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0031
+
+// Get the component information for a pu upgrade sis file without drive dialog,base package with drive dialog
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0032
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0032
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep  z:\tusif\tsifintegration\tsifintegration.ini InstallByFileWithDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForPuUpgradeWithioutDriveDialog
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifintegration\tsifintegration.ini UninstallByNameAndVendor
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0032
+
+// Get the component information for a sis file(pu upgrade) embedded within another sis file, outer sis(with drive info) is the base package for this pu upgrade
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0033
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0033
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForEmbeddedInnnerWithUpgrade
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0033
+
+// Get the component information for a sis file(pu upgrade) embedded within another sis file, outer sis(without drive info) is the base package for this pu upgrade
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0034
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0034
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentInfoForEmbeddedInnnerWithUpgradeOuterAsBaseWithDriveDialog
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0034
+
+// Get the component information inclusing application info for a sis file having onle locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0035
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0035
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0035
+
+
+// Get the component information inclusing application info for a sis file having multiple locales
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0036
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0036
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0036
+
+
+
+// Get the component information(for the current locale) including application info for a sis file having multiple locales
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0037
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0037
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_German
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_ge
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0037
+
+
+// Get the component information inclusing application info for a sis file having an app with non apparc files in addtion to appac files
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0038
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0038
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultiplefiles
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0038
+
+
+// Get the component information inclusing application info for a sis file having one locale, it will give the default loacle info
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0039
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0039
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0039
+
+
+// Get the component information inclusing application info for a sis file having one locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0040
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0040
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NonApparcRegRsc
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0040
+
+
+// Get the component information inclusing application info for a sis file having multiple application with one app with non apparc reg rsc
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0041
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0041
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_MultiApp_OneAppWithNonApparcRsc
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0041
+
+
+// Get the component information including application info for a sis file having an application where target of reg rsc in not apparc's pvt folder
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0042
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0042
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NonApparcPath
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0042
+
+// Get the component information including application info for a sis file having multiple applications
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0043
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0043
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_MultiApp
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0043
+
+// Get the component information including application info for a sis file having multiple applications,where we have an equivalent match
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0044
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0044
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_EquivalentMatch
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_fr
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0044
+
+// Get the component information including application info for a sis file having an application with corrupt reg rsc
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0045
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0045
+
+RUN_TEST_STEP_Result 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_CorruptRsc
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0045
+
+
+// Get the component information including application info for an embedded sis file both ineer and ourt having different icon file
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0012
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0046
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoEmbedded_InnerWithDiffIcon
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0046
+
+
+// Get the component information including application info for two sis file both having same icon file
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0047
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0047
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_WithSameIcon
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_edited
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0047
+
+
+// Get the component information including application info for a sis file not having any locale
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0048
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0048
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_NoLocale
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0048
+
+// Get the component information including application info for a sis file having lagre and small extns
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0049
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0049
+
+RUN_TEST_STEP tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfo_largeandsmallextn
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0049
+
+// Get the component information inclusing application info for a sis file having multiple locales, first check for german then for english
+// check that the retrieved info matches with the expected values.
+//! @SYMTestCaseID		API-SEC-USIF-tsifintegration-0050
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0050
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs_German
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetComponentAppInfoMultipleLangs
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_ge
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.ini delete_iconfile_multilang
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0050
+
+// Wait 3 seconds in order to let the SIF server shutdown itself
+DELAY 3000
+
+PRINT Complate_te_Sif_Tests

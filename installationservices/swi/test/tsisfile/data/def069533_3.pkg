@@ -1,0 +1,32 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; DEF0695033
+; This will display a dialog with a continue button during installation.
+; The user should be prompted to choose the installation drive.
+
+;Header
+#{"DEF069533_1"}, (0x81000003), 3, 0, 0, TYPE=SA
+
+;Vendor
+%{"Symbian"}
+:"Symbian"
+
+; will display a textdialog with a continue button
+; the location is not specified because it should not be installed
+"text\textfilec.txt"-"", FT, TC
+
+; Ordindary file installed onto user selected drive
+"text\file1.txt"-"!:\Documents\InstTest\file1.txt"

@@ -1,0 +1,124 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* @ Software Install Framework
+*
+*/
+
+
+/**
+ @file
+*/
+
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+
+// SIF includes
+../inc/sif.h												SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sif.h)
+../inc/sifcommon.h											SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifcommon.h)
+../inc/sifplugin.h											SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifplugin.h)
+../inc/sifutils.h											SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifutils.h)
+../inc/siftransportclient.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransportclient.h)
+../inc/siftransportserverstartup.h							SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransportserverstartup.h)
+../inc/siftransporttask.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/siftransporttask.h)
+../inc/sifnotification.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifnotification.h)
+
+// ROMKIT includes
+../inc/sif.iby												/epoc32/rom/include/sif.iby
+
+PRJ_TESTEXPORTS
+
+// TEF test scripts
+../test/tusif/scripts/tsifintegration.ini				z:/tusif/tsifintegration/tsifintegration.ini
+../test/tusif/scripts/tsifintegration.script				z:/tusif/tsifintegration/tsifintegration.script
+../test/tusif/scripts/tnotifier.ini					z:/tusif/tsif/tnotifier.ini
+../test/tusif/scripts/tnotifier.script					z:/tusif/tsif/tnotifier.script
+
+../test/scripts/tsif.ini									z:/tusif/tsif/tsif.ini
+../test/scripts/tsif.script									z:/tusif/tsif/tsif.script
+../test/scripts/tsifoom.script								z:/tusif/tsif/tsifoom.script
+
+../test/scripts/data/test.nonnativepackage.txt				z:/tusif/tsif/data/test.nonnativepackage.txt
+../test/scripts/data/test.overflow.txt						z:/tusif/tsif/data/test.overflow.txt
+../test/scripts/data/noninstallable.gif						z:/tusif/tsif/data/noninstallable.gif
+
+../test/securitytests/scripts/usifsecuritytests.script	z:/tusif/securitytests/usifsecuritytests.script
+../test/securitytests/scripts/usifsecuritytests.ini		z:/tusif/securitytests/usifsecuritytests.ini
+
+../test/tusif/scripts/tsifswtypeintegration.ini			z:/tusif/tswtype/tsifswtypeintegration.ini
+../test/tusif/scripts/tsifswtypeintegration.script		z:/tusif/tswtype/tsifswtypeintegration.script
+
+../test/tusif/scripts/tsif_appuidgen.script			z:/tusif/tsif/tsif_appuidgen.script
+../test/tusif/scripts/tsif_appuidgen.ini			z:/tusif/tsif/tsif_appuidgen.ini
+
+../test/tusif/scripts/data/test.siftestpkg			z:/tusif/tswtype/data/test.siftestpkg
+../test/tusif/scripts/data/swtypereginfo.xml			z:/tusif/tswtype/data/swtypereginfo.xml
+../test/tusif/scripts/data/Corrupt_reg.rsc			z:/tusif/tsif/data/corrupt_reg.rsc
+
+// ROMKIT includes
+../inc/tsif.iby							/epoc32/rom/include/tsif.iby
+
+PRJ_MMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+
+// SIF API implementation
+../group/siftransport.mmp
+../group/sif.mmp
+../group/sifutils.mmp
+../group/sifserver.mmp
+../group/siflauncher.mmp
+../group/sifnotification.mmp
+
+#endif // TOOLS2
+#endif // TOOLS
+
+PRJ_TESTMMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+
+// Test version of the SIF Launcher
+makefile ../test/group/cleansiflauncher.makefile
+../test/group/tsiflauncher.mmp
+// Test package file recognizer
+../test/tusif/group/tsifpkgrec.mmp
+// Reference SWI plugin for USIF
+../examples/refnativeplugin/group/refnativeplugin.mmp
+// Non-native test plug-in
+../test/plugins/nonnativeplugin/group/testnonnativeplugin.mmp
+../test/plugins/nonnativeplugin/group/testnonnativeplugin2.mmp
+// TEF suite for SIF
+../test/tusif/group/tsif.mmp
+// Test executables for SIF tests
+../test/tusif/group/sifintegrationtestbasepackage.mmp
+../test/tusif/group/sifintegrationtestupgradepackage.mmp
+../test/tusif/group/sifintegusercapsbasepackage.mmp
+../test/tusif/group/siftestintegrationlockfile.mmp
+../test/tusif/group/sifintegsufficientusercaps.mmp
+../test/tusif/group/sifgetcompapparcinfotest.mmp
+../test/tusif/group/sifgetcompapparcinfotestmultilang.mmp
+// Creation of SIS files for SIF tests
+makefile ../test/tusif/group/siftest.makefile
+
+// Security tests
+../test/securitytests/group/usifsecuritytests.mmp
+../test/securitytests/group/usifsecuritytests-tcb.mmp
+
+#endif // TOOLS2
+#endif // TOOLS

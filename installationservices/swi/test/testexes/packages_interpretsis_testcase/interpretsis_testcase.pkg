@@ -1,0 +1,61 @@
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN,GE
+
+; List of localised vendor names.
+%{"Symbian Software Ltd", "Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English and German
+#{"interpretsis_eng_testcase", "interpretsis_german_testcase"}, (0xE8000097), 1,0,0
+
+; Language-neutral files to be installed
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_01.exe"-"!:\sys\bin\interpretsis_testcase_01.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_02.exe"-"!:\sys\bin\interpretsis_testcase_02.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_03.exe"-"!:\sys\bin\interpretsis_testcase_03.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_04.exe"-"!:\sys\bin\interpretsis_testcase_04.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_01_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_01_reg.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_dup_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_dup_reg.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_02_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_02_reg.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_03_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_03_reg.rsc"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_04_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_04_reg.rsc"
+
+; Lists of language-specific resource files, of which only those files will be installed
+; which are supported by the device. 
+
+if supported_language=01 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_01.r01"		-"!:\resource\apps\interpretsis_testcase_01.r01"
+endif	
+if supported_language=03
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_01.r03"		-"!:\resource\apps\interpretsis_testcase_01.r03"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_02.r03"		-"!:\resource\apps\interpretsis_testcase_02.r03"
+endif
+if supported_language=04
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_01.r04"		-"!:\resource\apps\interpretsis_testcase_01.r04"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_03.r04"		-"!:\resource\apps\interpretsis_testcase_03.r04"
+endif
+if supported_language=24
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_01.r24"		-"!:\resource\apps\interpretsis_testcase_01.r24"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_04.r24"		-"!:\resource\apps\interpretsis_testcase_04.r24"
+endif
+
+
+if supported_language=01 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase01.mbm"		-"!:\resource\apps\interpretsis_testcase01.mbm"
+endif
+if supported_language=03
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase03.mbm"		-"!:\resource\apps\interpretsis_testcase03.mbm"
+endif
+if supported_language=04
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase04.mbm"		-"!:\resource\apps\interpretsis_testcase04.mbm"
+endif
+if supported_language=24
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase24.mbm"		-"!:\resource\apps\interpretsis_testcase24.mbm"
+endif

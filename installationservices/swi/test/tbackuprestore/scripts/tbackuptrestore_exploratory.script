@@ -1,0 +1,303 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+ 
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tbackuprestore
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0001
+//! @SYMTestCaseDesc 		Sets up the environment for the remaining tests
+//! @SYMTestPriority 		Low
+//! @SYMTestActions 		Installs test certificates, uninstalls applications
+//! @SYMTestExpectedResults 	Clean environment.
+//! @SYMREQ 			REQ3469
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0001
+
+ //Setup Certstore
+RUN_UTILS MkDir c:\tmp\
+RUN_UTILS MkDir c:\tmp\tsis\
+RUN_UTILS MkDir c:\private\101f72a6\
+RUN_UTILS CopyFile c:\private\101f72a6\cacerts.dat c:\tmp\tsis\cacerts.dat
+RUN_UTILS CopyFile c:\private\101f72a6\certclients.dat c:\tmp\tsis\certclients.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\certclients.dat c:\private\101f72a6\certclients.dat
+ //Make sure the test directory exists
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0002
+//! @SYMTestCaseDesc 		Check install when the sisregistry folder having package uid name is deleted. DEF099689-This defect has been fixed and found to be working fine.
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)delete the sis registry folder having the package uid
+//!		    		3)Install Again
+//!		    		4)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Install again should pass.
+//! @SYMDEF 			DEF099689
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0003
+//! @SYMTestCaseDesc 		Check install and uinstall when the sisregistry folder having packageuid name and backup.lst file is deleted
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)delete the sis registry folder having the package uid name and the backuplst file
+//!		    		3)Install Again
+//!		    		4)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry and the backup.lst.Install again should pass.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0003
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini      removebackuplstfile
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0003
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0004
+//! @SYMTestCaseDesc 		Check install and uinstall when the backup.lst file is deleted
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)delete the backuplst file
+//!		    		3)Install Again
+//!		    		4)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Install again should pass.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0004
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini      removebackuplstfile
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0004
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0005
+//! @SYMTestCaseDesc 		Check install and uinstall when the sisregistry is corrupted.
+//! 				Defect DEF099688-This test case is failing and a defect has been raised on the same.It has got rejected as a Not a Defect.
+//!				Reject Report-We wanted to reject as "Not going to fix" but the process did not allow this (no MCL DRB at this time).
+//!		       		WE decided not to fix as this is a fairly remote use case and we have integrity services to protect the registry. 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)copy a corrupted sis registry(adding characters to the middle of the file) to the c:\sys\install\sisregistry\81113001 folder
+//!		    		3)Install Again
+//!		    		4)Uninstall
+//!		    		5)Delete the sisregistry folder and the backup.lst file	
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Install again should pass.
+//! @SYMDEF			DEF099688
+//! @SYMTestType 		CIT
+
+//!START_TESTCASE API-SEC-SWI-NQPET-BR-0005
+//!RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A	  
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//!RUN_TEST_STEP   100     tuiscriptadaptors MmcCopyFilesStep	z:\tswi\tbackuprestore\scripts\ini      copycorruptreg
+//!RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//!RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+//!RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini	A
+//!END_TESTCASE API-SEC-SWI-NQPET-BR-0005
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0006
+//! @SYMTestCaseDesc 		Check install and uinstall when the sisregistry is corrupted
+//! 				Defect DEF099688-This test case is failing and a defect has been raised on the same.It has got rejected as a Not a Defect.
+//!				Reject Report-We wanted to reject as "Not going to fix" but the process did not allow this (no MCL DRB at this time).
+//!		       		WE decided not to fix as this is a fairly remote use case and we have integrity services to protect the registry. 
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)Backup a sis file
+//!		    		3)copy a corrupted sis registry (adding characters to the middle of the file) to the c:\sys\install\sisregistry\81113001 folder
+//!		    		4)Restore the sis file
+//!		    		5)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Restore should pass.
+//! @SYMDEF 			DEF099688
+//! @SYMTestType 		CIT
+
+//START_TESTCASE API-SEC-SWI-NQPET-BR-0006
+//RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A	  
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	BACKUP			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP   100     tuiscriptadaptors MmcCopyFilesStep	z:\tswi\tbackuprestore\scripts\ini      copycorruptreg
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini	A
+//END_TESTCASE API-SEC-SWI-NQPET-BR-0006
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0007
+//! @SYMTestCaseDesc 		Check install and uinstall when the sisregistry is deleted.
+//! 				Defect DEF099689-This test case has been fixed and submitted abd found to be working fine.
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)Backup a sis file
+//!		    		3)Delete the sisregistry folder having the package uid name
+//!		    		4)Restore the sis file
+//!		    		5)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Restore should pass.
+//! @SYMDEF 			DEF099689
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0007
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	BACKUP			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP	100	tbackuprestore	RESTORE			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0007
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0008
+//! @SYMTestCaseDesc 		Check restore and uninstall when the sisregsitry and the backup.lst files are removed
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)Backup a sis file
+//!		    		3)Delete the sisregistry folder having the package uid name	and the backup.lst file
+//!		    		4)Restore the sis file
+//!		    		5)Uninstall
+//!		    		6)Delete the sisregistry folder and the backup.lst file	
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry.Install again should pass.
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0008
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A	  
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	BACKUP			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removebackuplstfile
+RUN_TEST_STEP	100	tbackuprestore	RESTORE			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removeregistryfolder
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removebackuplstfile
+RUN_TEST_STEP  !Error=-1 	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini	A	
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0008
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0009
+//! @SYMTestCaseDesc 		Check restore when only the contents of the sisregistry are removed
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file
+//!		    		2)Backup a sis file
+//!		    		3)Delete the sisregistry folder files
+//!		    		4)Restore the sis file
+//!		    		5)Uninstall
+//! @SYMTestExpectedResults 	Successful install, successful Backup, delete the sis registry folder files.Restore should pass.
+//! 				A similar defect has been raised..And a decision was taken that all defects under sisregistry are going to be rejected as NGTF..As aresult this is failing
+//! @SYMTestType 		CIT
+
+//START_TESTCASE API-SEC-SWI-NQPET-BR-0009
+//RUN_TEST_STEP	100	tbackuprestore	INSTALL			z:\tswi\tbackuprestore\scripts\ini	A	  
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	BACKUP			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove		z:\tswi\tbackuprestore\scripts\ini      removeregistryfolderfiles
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT			z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	UNINSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+//RUN_TEST_STEP	100	tbackuprestore	ABSENT			z:\tswi\tbackuprestore\scripts\ini	A
+//END_TESTCASE API-SEC-SWI-NQPET-BR-0009
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-SWI-NQPET-BR-0010
+//! @SYMTestCaseDesc 		Check restore when an application is running
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		1)Install a sis file(having an exe)
+//!		    		2)Backup a sis file
+//!		    		3)Run the exe
+//!		    		4)check whether the exe is running		
+//!		    		5)Remove the registry folder	
+//!		    		6)Restore the sis file
+//!	        		7)check whether the exe is running
+//!			    	8)Uninstall
+//! @SYMTestExpectedResults 	Restore should pass even when the application is running
+//! @SYMTestType 		CIT
+
+START_TESTCASE API-SEC-SWI-NQPET-BR-0010
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini appusingdll
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini large_array_dll
+RUN_TEST_STEP 100 tbackuprestore BACKUP z:\tswi\tbackuprestore\scripts\ini appusingdll
+RUN_PROGRAM 5 AppUsingDLL.exe
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tbackuprestore\scripts\ini appusingdll_running
+RUN_TEST_STEP   100     tuiscriptadaptors ForceRemove   z:\tswi\tbackuprestore\scripts\ini  removeappregistryfolder
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tbackuprestore\scripts\ini appusingdll_running
+RUN_TEST_STEP	100	tbackuprestore	RESTORE z:\tswi\tbackuprestore\scripts\ini	appusingdll
+RUN_TEST_STEP 5 tuiscriptadaptors FindRunningExe z:\tswi\tbackuprestore\scripts\ini appusingdll_running
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tbackuprestore\scripts\ini u_large_array_dll
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tbackuprestore\scripts\ini u_appusingdll
+// Cleanup
+RUN_UTILS DeleteDirectory c:\preq1110
+
+END_TESTCASE API-SEC-SWI-NQPET-BR-0010
+
+
+// Reinstate certstore
+RUN_UTILS CopyFile c:\tmp\tsis\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile c:\tmp\tsis\certclients.dat c:\private\101f72a6\certclients.dat
+
+RUN_UTILS DeleteFile c:\tmp\tsis\cacerts.dat
+RUN_UTILS DeleteFile c:\tmp\tsis\certclients.dat

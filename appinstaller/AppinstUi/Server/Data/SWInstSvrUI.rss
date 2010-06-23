@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2002-2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   
+*
+*/
+
+
+//  RESOURCE IDENTIFIER
+NAME SWUI
+
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <avkon.mbg>
+#include <avkon.loc>
+#include <appinfo.rh>
+#include <data_caging_paths_strings.hrh>
+
+#include <appinstui.loc>
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE TBUF { buf = ""; }
+
+RESOURCE LOCALISABLE_APP_INFO r_swinstsvrui_localisable_app_info
+    {
+    short_caption = qtn_installer_short_title;
+    caption_and_icon = 
+    CAPTION_AND_ICON_INFO
+        {
+        caption = qtn_installer_title;
+#ifdef __SCALABLE_ICONS
+        number_of_icons = 1;
+        icon_file = APP_BITMAP_DIR"\\SWInstSvrUI_aif.mif";
+#else
+        number_of_icons = 2;
+        icon_file = APP_BITMAP_DIR"\\SWInstSvrUI_aif.mbm";
+#endif
+        };
+    }
+
+
+RESOURCE TBUF r_swinstsvrui_not_supp { buf = qtn_swins_note_not_supp; }
+RESOURCE TBUF r_swinstsvrui_busy_install { buf = qtn_inst_err_installer_active; }
+RESOURCE TBUF r_swinstsvrui_no_rights { buf = qtn_am_note_drm_notrecieved; }
+
+// End of File
+

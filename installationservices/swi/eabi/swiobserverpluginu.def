@@ -1,0 +1,11 @@
+EXPORTS
+	_ZN3Swi18CSwiObserverPlugin12GetExtensionEjRPvS1_ @ 1 NONAME
+	_ZN3Swi18CSwiObserverPlugin4NewLERK4TUid @ 2 NONAME
+	_ZN3Swi18CSwiObserverPluginC2Ev @ 3 NONAME
+	_ZN3Swi18CSwiObserverPluginD0Ev @ 4 NONAME
+	_ZN3Swi18CSwiObserverPluginD1Ev @ 5 NONAME
+	_ZN3Swi18CSwiObserverPluginD2Ev @ 6 NONAME
+	_ZTIN3Swi18CSwiObserverPluginE @ 7 NONAME
+	_ZTVN3Swi18CSwiObserverPluginE @ 8 NONAME
+	_ZN3Swi18CSwiObserverPlugin10Extension_EjRPvS1_ @ 9 NONAME
+

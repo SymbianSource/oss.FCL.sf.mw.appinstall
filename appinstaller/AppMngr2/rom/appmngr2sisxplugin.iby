@@ -1,0 +1,26 @@
+/*
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Image description file for AppMngr2 SISX plugin
+*
+*/
+
+
+#ifndef APPMNGR2SISXPLUGIN_IBY
+#define APPMNGR2SISXPLUGIN_IBY
+
+ECOM_PLUGIN( appmngr2sisxplugin.dll, appmngr2sisxplugin.rsc )
+SCALABLE_IMAGE( BITMAP_DIR, BITMAP_DIR, appmngr2sisx )
+
+#endif // APPMNGR2SISXPLUGIN_IBY
+

@@ -1,0 +1,5 @@
+EXPORTS
+	?Connect@RConsoleServerSession@Test@Swi@@QAEHXZ @ 1 NONAME ; int Swi::Test::RConsoleServerSession::Connect(void)
+	?Getch@RConsoleServerSession@Test@Swi@@QAEHXZ @ 2 NONAME ; int Swi::Test::RConsoleServerSession::Getch(void)
+	?Printf@RConsoleServerSession@Test@Swi@@QAEHABVTDesC16@@@Z @ 3 NONAME ; int Swi::Test::RConsoleServerSession::Printf(class TDesC16 const &)
+

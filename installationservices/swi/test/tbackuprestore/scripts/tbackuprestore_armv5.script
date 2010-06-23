@@ -1,0 +1,2135 @@
+//
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+LOAD_SUITE tscr
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0001
+//! @SYMTestCaseDesc		Sets up the environment for the remaining tests
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs test certificates, uninstalls applications
+//! @SYMTestExpectedResults	Clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0001
+
+// Setup Certstore
+RUN_UTILS MkDir c:\tmp\
+RUN_UTILS MkDir c:\tmp\tsis\
+RUN_UTILS MkDir c:\private\101f72a6\
+RUN_UTILS CopyFile c:\private\101f72a6\cacerts.dat c:\tmp\tsis\cacerts.dat
+RUN_UTILS CopyFile c:\private\101f72a6\certclients.dat c:\tmp\tsis\certclients.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile z:\tswi\tsis\data\certstore\certclients.dat c:\private\101f72a6\certclients.dat
+// Make sure the test directory exists
+RUN_UTILS MkDir c:\tswi\
+RUN_UTILS MkDir c:\tswi\tbackuprestore\
+
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tbackuprestore\scripts\ini	ABCD
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABCD
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0001
+
+//! @SYMTestCaseID API-inst-PREQ2344-SWI-16
+//! @SYMTestCaseDesc Checks backup and restore of a embedded sis file having supported language option
+//! @SYMTestPriority High
+//! @SYMTestActions Installs , backs up, uninstalls, restores and uninstalls both outer and embadded sis files
+//! @SYMTestExpectedResults Success, clean environment.
+//! @SYMREQ PREQ2344
+//! @SYMTestType IT
+START_TESTCASE API-inst-PREQ2344-SWI-16
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_emb
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_base
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+RUN_TEST_STEP	100	tSisRegistryTest IsPackageInstalled 	z:\tswi\tbackuprestore\scripts\ini	package_info_english
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_emb
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale		z:\tswi\tbackuprestore\scripts\ini	langauge_to_german
+RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini defineProperty
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_emb
+RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini API-INST-PAS-SWI-0001
+RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini defineProperty
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_base
+RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini API-INST-PAS-SWI-0001-A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+
+RUN_TEST_STEP	100	tSisRegistryTest IsPackageInstalled 	z:\tswi\tbackuprestore\scripts\ini	package_info_german
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale		z:\tswi\tbackuprestore\scripts\ini	langauge_to_english
+RUN_TEST_STEP	100 	tSisRegistryTest IsPackageInstalled 	z:\tswi\tbackuprestore\scripts\ini	package_info_english
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_emb
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_base
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr
+END_TESTCASE API-inst-PREQ2344-SWI-16
+
+//! @SYMTestCaseID API-inst-PREQ2344-SWI-20
+//! @SYMTestCaseDesc Checks backup and restore of an upgraded package having supported language option
+//! @SYMTestPriority High
+//! @SYMTestActions Installs , backs up, uninstalls, restores and uninstalls both base and patch files
+//! @SYMTestExpectedResults Success, clean environment.
+//! @SYMREQ PREQ2344
+//! @SYMTestType IT
+START_TESTCASE API-inst-PREQ2344-SWI-20
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_base
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_base
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_sp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_sp
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_pu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_pu
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tSisRegistryTest IsPackageInstalled 	z:\tswi\tbackuprestore\scripts\ini	package_emb_info_english
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale		z:\tswi\tbackuprestore\scripts\ini	langauge_to_german
+RUN_TEST_STEP	100	tSisRegistryTest IsPackageInstalled 	z:\tswi\tbackuprestore\scripts\ini	package_upgrade_info_german
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale		z:\tswi\tbackuprestore\scripts\ini	langauge_to_english
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+END_TESTCASE API-inst-PREQ2344-SWI-20
+
+
+
+//! @SYMTestCaseID API-inst-PREQ2344-SWI-21
+//! @SYMTestCaseDesc Checks backup a sis package and restore after changing the device language to one not supported by package.
+//! @SYMTestPriority High
+//! @SYMTestActions Installs , backs up, uninstalls, restores and uninstalls the package
+//! @SYMTestExpectedResults Success, clean environment.
+//! @SYMREQ PREQ2344
+//! @SYMTestType IT
+START_TESTCASE API-inst-PREQ2344-SWI-21
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_base
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_base
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_sp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg_sp
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale	z:\tswi\tbackuprestore\scripts\ini		langauge_to_spanish
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+
+RUN_TEST_STEP	100	tSisRegistryTest ChangeLocale	z:\tswi\tbackuprestore\scripts\ini		langauge_to_english
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		install_en_fr_upg
+END_TESTCASE API-inst-PREQ2344-SWI-21
+
+
+ //! @SYMTestCaseID API-SEC-SWI-BR-OVERWRITE-HW-0001
+ //! @SYMDEF INC127981 
+ //! @SYMTestCaseDesc Overwrite an SA application during a restore
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install App, Create Backup, Restore / Overwrite, Uninstall
+ //! @SYMTestExpectedResults All actions should succeed without error
+ //! @SYMTestType CIT
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0001
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+ RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini defineProperty 
+ RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		A
+ RUN_TEST_STEP	100	tuiscriptadaptors	GetPublishedUidArrayStep	z:\tswi\tbackuprestore\scripts\ini API-INST-PAS-SWI-0002
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0001
+ 
+ //! @SYMTestCaseID API-SEC-SWI-BR-OVERWRITE-HW-0002
+ //! @SYMDEF INC127981 
+ //! @SYMTestCaseDesc Overwrite an SA application that has been upgraded with an SP during a restore
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install App Sa, Upgrade with SP, Create Backup, Restore / Overwrite, Uninstall
+ //! @SYMTestExpectedResults All actions should succeed without error
+ //! @SYMTestType CIT
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0002
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0002
+ 
+ //! @ SYMTestCaseID  API-SEC-SWI-BR-OVERWRITE-HW-0003
+ //! @SYMTestCaseDesc Verify that it is possible to overwrite a partial upgrade to a ROM stub
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install PU, Backup, Restore PU, Install SA RU, Remove
+ //! @SYMTestExpectedResults All packages should install, backup and restore correctly.
+ //! @SYMDEF  INC127981 
+ 
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0003
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ 
+ RUN_TEST_STEP_RESULT -5 100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ 
+ //RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ //RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	romstubsaru_clean
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+ RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	romstubsaru_clean
+ 
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0003
+ 
+ //! @SYMTestCaseID API-SEC-SWI-BR-OVERWRITE-HW-0004
+ //! @SYMDEF INC127981 
+ //! @SYMTestCaseDesc Overwrite an SA+SP application with the same SA but a different SP.
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install App SA, Upgrade with SP, Create Backup, Uinstall, 
+ //!                 Install SA, Install diffent SP, Restore / Overwrite, Uninstall
+ //! @SYMTestExpectedResults All actions should succeed without error. Both SPs present after restore.
+ //! @SYMTestType CIT
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0004
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp2
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp2
+ 
+ RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0004
+ 
+ //! @SYMTestCaseID API-SEC-SWI-BR-OVERWRITE-HW-0005
+ //! @SYMDEF INC127981 
+ //! @SYMTestCaseDesc Verify that restoring just the  base package doesn't remove installed SPs for that package
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install Base, Backup Base, Uninstall Base, Install Base, Install SP1, Restore Base, Uninstall
+ //!                 
+ //! @SYMTestExpectedResults All actions should succeed without error
+ //! @SYMTestType CIT
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0005
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigsp1
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0005
+ 
+ /! @ SYMTestCaseID  INC127981-6
+ //! @SYMTestCaseDesc Verify that it is possible to overwrite an augmentation to a ROM stub
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install SP, Backup, Restore SP, Uninstall
+ //! @SYMTestExpectedResults All packages should install, backup and restore correctly.
+ //! @SYMDEF  INC127981 
+ START_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0006
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ 
+ RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+ 
+ RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+ END_TESTCASE API-SEC-SWI-BR-OVERWRITE-HW-0006
+ 
+ //! @SYMTestCaseID API-SEC-BACKUP-FROM-RESTORE-HW-0001
+ //! @SYMDEF INC127981 
+ //! @SYMTestCaseDesc Verify that it is possible to backup and restore an application with upgrades
+ //!                  twice in a row. i.e ensure that the restored application is close enough to the
+ //!                  original.
+ //! @SYMTestPriority High
+ //! @SYMTestStatus		3. Released
+ //! @SYMTestActions Install base + pu, backup, uninstall, restore, backup restored app, uninstall, restore, uninstall.
+ //! @SYMTestExpectedResults All operations should complete without error
+ 
+ START_TESTCASE API-SEC-BACKUP-FROM-RESTORE-HW-0001
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+ 
+ RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100 tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini  	br1_base_plus_bigpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100 tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini  	br1_base_plus_bigpu
+ RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+ RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_base_plus_bigpu
+ 
+ END_TESTCASE API-SEC-BACKUP-FROM-RESTORE-HW-0001
+
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0002
+//! @SYMTestCaseDesc		Checks basic s/w install and uninstall
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs and uninstalls a single application
+//! @SYMTestExpectedResults	Successful install, successful uninstall, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0002
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0003
+//! @SYMTestCaseDesc		Checks multiple s/w install and uninstall in a single session
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs and uninstalls multiple applications
+//! @SYMTestExpectedResults	Successful install, successful uninstall, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0003
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0003
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0004
+//! @SYMTestCaseDesc		Checks s/w install and uninstall of a signed executable
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs and uninstalls a single signed application
+//! @SYMTestExpectedResults	Successful install, successful uninstall, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0004
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	C
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	C
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	C
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	C
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0004
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0005
+//! @SYMTestCaseDesc		Checks backup and restore of a simple application
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls a single application
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0005
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0005
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0006
+//! @SYMTestCaseDesc		Checks backup and restore of a multiple applications within a single session
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls multiple applications
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0006
+
+// Multi-restore
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	AB
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0006
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0007
+//! @SYMTestCaseDesc		Checks backup and restore of a multiple applications within a single session including a signed application
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls multiple applications
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0007
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0007
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0008
+//! @SYMTestCaseDesc		Checks backup and restore of a multiple applications in multiple orders within a single session including a signed application
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls multiple applications
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0008
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	BC
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	B
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	AB
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	C
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	B
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	AC
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	AC
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	ABC
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABC
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0008
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0009
+//! @SYMTestCaseDesc		Checks backup and restore of a more complex application
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls an embedded application
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0009
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	D
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	D
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	E2
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	E
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	D
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	D
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	D
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	E2
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	E
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	D
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	D
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	D
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0009
+
+
+// Test that we can backup and restore things on alternate drives
+
+//! @SYMTestCaseID		API-SEC-TESTEDRIVE-HW-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TESTEDRIVE-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+END_TESTCASE API-SEC-TESTEDRIVE-HW-0001
+
+
+// test we can backup and restore augmentations
+
+//! @SYMTestCaseID		API-SEC-TESTAUGMENTATION-HW-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TESTAUGMENTATION-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	G
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FG
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	FG
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FG
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	FG
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	FG
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FG
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	FG
+
+END_TESTCASE API-SEC-TESTAUGMENTATION-HW-0001
+
+
+// test we can backup and restore partial upgrades
+
+//! @SYMTestCaseID		API-SEC-TESTPARTIAL-HW-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-TESTPARTIAL-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	H
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FH
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	FH
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FH
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	FH
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	FH
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	FH
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	FH
+
+END_TESTCASE API-SEC-TESTPARTIAL-HW-0001
+
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-HW-0010
+//! @SYMTestCaseDesc		Reinstate the environment
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Uninstalls test certificates, uninstalls applications
+//! @SYMTestExpectedResults	Clean environment.
+//! @SYMREQ			REQ3469
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE-HW-0010
+
+// Clean up
+RUN_TEST_STEP	100	tbackuprestore	CLEAN		z:\tswi\tbackuprestore\scripts\ini	ABCD
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	ABCD
+
+// Reinstate certstore
+RUN_UTILS CopyFile c:\tmp\tsis\cacerts.dat c:\private\101f72a6\cacerts.dat
+RUN_UTILS CopyFile c:\tmp\tsis\certclients.dat c:\private\101f72a6\certclients.dat
+
+END_TESTCASE API-SEC-BACKUPRESTORE-HW-0010
+
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M_08-HW-0001
+//! @SYMTestCaseDesc		Allow the restoration of protected VIDs on libraries for trusted SIS files. Change Request EGUO-6G9J6M. 
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls a signed trusted SIS file containing a dll with a protected VID.
+//! @SYMTestExpectedResults	Success, clean environment.
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M_08-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini  TRUSTED_PROTECTED_VID
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	TRUSTED_PROTECTED_VID
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M_08-HW-0001
+
+ 
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M_08-HW-0002
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M_08-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	datarestore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	datarestore
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	datarestore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	datarestore
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	datarestore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	datarestore
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	datarestore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	datarestore
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	datarestore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	datarestore
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M_08-HW-0002
+
+
+
+//! @SYMTestCaseID 		API-SEC-INC072846-HW-0002
+//! @SYMTestCaseDesc		Ensure filenull files are registered correctly on restore.
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Backup, Restore and then remove a data only package w/ FileNull
+//! @SYMTestExpectedResults	Data files should exist after restore, and then not after removal
+//! @SYMDEF 			INC072846 
+ 
+START_TESTCASE API-SEC-INC072846-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+
+// Copy a file which has FN flag 
+RUN_UTILS MkDir c:\restore\
+RUN_UTILS CopyFile z:\tswi\DEF053165.perm c:\restore\filenull.txt
+ 
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+ 
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+ 
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+ 
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullrestore
+
+END_TESTCASE API-SEC-INC072846-HW-0002
+
+
+//! @SYMTestCaseID 		API-SEC-INC074618-HW-0001
+//! @SYMTestCaseDesc		Ensure that FN cannot be used to delete protected files.
+//! @SYMDEF 			INC074618
+//! @SYMTestPriority		Critical
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install, backup, uninstall, restore, uninstall a sis file with a FN directive that
+//! 				deletes a file in its own private directory.
+//! 				This test should be extended to cover the case where the restore contains a FN directive that attempts
+//! 				to remove a file that is in another application's private directory. However, at the moment there
+//! 				is no mechanism for generating backup files where the installation would have been rejected.
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC074618-HW-0001
+
+// Valid attempt to use FN with a private directory
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filenullprivategood
+
+END_TESTCASE API-SEC-INC074618-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-LongFileNames-HW-0001
+//! @SYMTestCaseDesc		Ensure that a package with filenames as long as permitted by Makesis can install, backup, restore and uninstall.
+//! @SYMDEF 			INC077908
+//! @SYMTestPriority		Critical
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install, backup, uninstall, restore, uninstall a sis file with 254 char target filenames.
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-LongFileNames-HW-0001
+
+// Valid attempt to use FN with a private directory
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	longdestfilenames
+
+END_TESTCASE API-SEC-LongFileNames-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC075827_NonRemovableMedia-HW-0001 
+//! @SYMTestCaseDesc		Ensure that restore in the special case where the c: drive has been destroyed works
+//! @SYMDEF 			INC075827 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install and backup a SIS file, rip out the registry entry then restore it.
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC075827_NonRemovableMedia-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	A
+
+// Use tuiscriptadaptors to rip the registry entry out, without uninstall.
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tbackuprestore\scripts\ini removea
+
+// Now ensure it restores and uninstalls sucessfully
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	A
+
+END_TESTCASE API-SEC-INC075827_NonRemovableMedia-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC075827_DriveE-HW-0001
+//! @SYMTestCaseDesc		Ensure that restore for an app on a removable drive works in the special case where the c: drive has been destroyed.
+//! @SYMDEF 			INC075827 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install and backup a SIS file, rip out the registry entry then restore it.
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC075827_DriveE-HW-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	F
+
+// Use tuiscriptadaptors to rip the registry entry out, without uninstall.
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tbackuprestore\scripts\ini removefwithhash
+
+// Now ensure it restores and uninstalls sucessfully
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+END_TESTCASE API-SEC-INC075827_DriveE-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC075827_DriveERemoved-HW-0001
+//! @SYMTestCaseDesc		Ensure that restore for an app on a removable drive works in the special case where the c: drive has been destroyed, and the e: drive has been removed and re-inserted.
+//! @SYMDEF 			INC075827 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install and backup a SIS file, rip out the registry entry then restore it.
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-INC075827_DriveERemoved-HW-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	F
+
+// Use tuiscriptadaptors to rip the registry entry out, without uninstall.
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tbackuprestore\scripts\ini removef
+
+// Simulate removal and re-insertion of the drive.
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
+DELAY 5000
+
+// Now ensure it restores and uninstalls sucessfully
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	F
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	F
+
+END_TESTCASE API-SEC-INC075827_DriveERemoved-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RomPatchRestore-HW-0001
+//! @SYMTestCaseDesc		Ensures backing up and restoring patches to ROM files works
+//! @SYMDEF 			INC084130
+//! @SYMTestPriority		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Intall a patch to a ROM package, back it up, remove it and restore
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-RomPatchRestore-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+
+// Tuiscriptadaptors combines the uninstall and absent steps all in one
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+// Try restore with metadata format preceding the fix for DEF087124
+// This is simulated by ignoring the last part of the metadata which contains the SP drive selections
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp_mimic_oldmetaformat
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradesp
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+// Repeat using SP with wildcard for drive letter.
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+// The restore fails because a valid hash for the exe cannot be found
+
+RUN_TEST_STEP_RESULT -10254 tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsingupgradewildcardsp_mimic_oldmetaformat
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingupgradesp
+
+END_TESTCASE API-SEC-RomPatchRestore-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RomPatchRestorePrivate-HW-0001
+//! @SYMTestCaseDesc		Ensures backing up and restoring patches to ROM files works
+//! @SYMDEF 			DEF084513
+//! @SYMTestPriority		Critical
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Intall a patch to a ROM package with private directory access, back it up, remove it and restore
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-RomPatchRestorePrivate-HW-0001
+
+RUN_UTILS DeleteFile C:\tswi\tbackuprestore\backup802730a1.1
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+
+// Tuiscriptadaptors combines the uninstall and absent steps all in one
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade_mimic_oldmetaformat
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgrade
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+RUN_UTILS DeleteFile C:\tswi\tbackuprestore\backup802730a1.1
+
+RUN_TEST_STEP	100	tuiscriptadaptors InstallStep	z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+RUN_TEST_STEP_RESULT -1	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	privatesidupgradewildcard_mimic_oldmetaformat
+RUN_TEST_STEP_RESULT -1	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_privatesidupgrade
+
+END_TESTCASE API-SEC-RomPatchRestorePrivate-HW-0001
+
+
+
+//! @SYMTestCaseID 		API-SEC-RestoreResource_Modr-HW-0001
+//! @SYMTestCaseDesc		Install files to \resource and \import dirs, modify the \resource file on backup.
+//! @SYMDEF 			INC086703 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Expect restore to fail
+//! @SYMTestExpectedResults	Expect restore to fail.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-RestoreResource_Modr-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	resource_modr
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+
+// It is a security error to attempt to restore a modified TCB protected file in the backup image
+
+RUN_TEST_STEP_RESULT	-10254	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	resource_modr
+
+END_TESTCASE API-SEC-RestoreResource_Modr-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RestoreResource_Modi-HW-0001
+//! @SYMTestCaseDesc		Install files to \resource and \import dirs, modify the \import file on backup.
+//! @SYMDEF 			INC086703 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Expect restore to suceed
+//! @SYMTestExpectedResults	Expect restore to suceed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-RestoreResource_Modi-HW-0001
+
+RUN_UTILS DeleteFile C:\tswi\tbackuprestore\backup81036421.1
+RUN_UTILS DeleteFile C:\tswi\tbackuprestore\backup81036421.2
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	resource_modi
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	resource_modi
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	resource_modi
+
+END_TESTCASE API-SEC-RestoreResource_Modi-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RestoreBaseAndTwoSPs-HW-0001
+//! @SYMTestCaseDesc		Back up and restore of a package with 2 SPs, with one SP on a different selected drive.
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, and restores a base package installed to E, one SP installed to C and one SP installed to E.
+//! @SYMTestExpectedResults	Successful install, backup and restore.
+//! @SYMDevelopedForRelease 	Bravo
+//! @SYMDEF 			DEF087124
+
+START_TESTCASE API-SEC-RestoreBaseAndTwoSPs-HW-0001
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini augmentation_base
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini augmentation_A
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tbackuprestore\scripts\ini augmentation_D
+
+RUN_TEST_STEP 10 tbackuprestore BACKUP z:\tswi\tbackuprestore\scripts\ini augmentedpackagebackup
+
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tbackuprestore\scripts\ini u_augmentedpackage
+
+RUN_TEST_STEP 20 tbackuprestore RESTORE z:\tswi\tbackuprestore\scripts\ini augmentedpackagebackup
+
+// Make sure that augmentations can be removed individually and take out the right files
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini u_augmentation_A
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini u_augmentation_D
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tbackuprestore\scripts\ini u_augmentedpackage
+
+// Test that restore with old style metadata fails with KErrNotFound
+RUN_TEST_STEP_RESULT -1 tbackuprestore RESTORE z:\tswi\tbackuprestore\scripts\ini augmentedpackagebackup_mimic_oldmetaformat
+
+// Test that restore with metadata missing one of 2 SP drives fails with KErrEof
+RUN_TEST_STEP_RESULT -25 tbackuprestore RESTORE z:\tswi\tbackuprestore\scripts\ini augmentedpackagebackup_missingonespdrive
+
+// Restore again and uninstall in one go.
+RUN_TEST_STEP 20 tbackuprestore RESTORE z:\tswi\tbackuprestore\scripts\ini augmentedpackagebackup
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tbackuprestore\scripts\ini u_augmentedpackage
+
+END_TESTCASE API-SEC-RestoreBaseAndTwoSPs-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-FILETEXT_RESTORE-HW-0001
+//! @SYMTestCaseDesc		Ensure we can backup and restore files with FT blan entries
+//! @SYMDEF 			INC086769
+//! @SYMTestPriority		High
+//! @SYMTestType		CIT
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install, backup, uninstall, restore, uninstall a sis file with a FT blank entry
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-FILETEXT_RESTORE-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	filetext_restore
+
+END_TESTCASE API-SEC-FILETEXT_RESTORE-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RestoreUpgradedPatch-HW-0001
+//! @SYMTestCaseDesc		Install base package and patch, upgrade the patch, backup and restore.
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install base package and patch, upgrade the patch, backup and restore.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMDevelopedForRelease 	Argus
+//! @SYMDEF 			DEF085448 
+
+START_TESTCASE API-SEC-RestoreUpgradedPatch-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+
+// install the packages to be backed up, and upgrade the patch
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filebase
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testupgrades.ini filesp2
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	patchupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	patchupgrade
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	patchupgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	patchupgrade
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini patchupgrade
+
+END_TESTCASE API-SEC-RestoreUpgradedPatch-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-RomPatchRestoreMulti-HW-0001
+//! @SYMTestCaseDesc		Ensures backing up and restoring patches to ROM files works
+//! @SYMDEF 			INC087943 
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install a patch to a rom package that installs several files, backup and restore the patch
+//! @SYMTestExpectedResults	All operations should succeed.
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-RomPatchRestoreMulti-HW-0001
+
+RUN_UTILS DeleteFile C:\tswi\tbackuprestore\backup802730a1.1
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+
+// Tuiscriptadaptors combines the uninstall and absent steps all in one
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingmultifiles
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	eclipsemutlifiles
+
+RUN_TEST_STEP	100	tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini	u_eclipsingmultifiles
+
+END_TESTCASE API-SEC-RomPatchRestoreMulti-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SA_PU_multiple_backup_restore-HW-0007
+//! @SYMTestCaseDesc 		Backs up and restores a SA pkg with a PU upgrade multiple times
+//! @SYMDEF 			INC128848
+//! @SYMTestPriority 		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions 		Installs a SA pkg then a PU upgrade, backs up, uninstalls, restores, backs up, uninstalls and finally restores again. It unsistalls the pkg at the end as a cleanup
+//! @SYMTestExpectedResults 	Success, clean environment.
+
+START_TESTCASE API-SEC-SA_PU_multiple_backup_restore-HW-0007
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	INC128848_install_non_rom_sa_base_package
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini	INC128848_install_non_rom_pu_upgrade
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+//final cleanup of package at the end of the testcase
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini	INC128848_non_rom_package
+
+END_TESTCASE API-SEC-SA_PU_multiple_backup_restore-HW-0007
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0001
+//! @SYMTestCaseDesc		Attempt to restore while both the backup and metadata files (at C:\tswi\tbackuprestore\) have been deleted. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, deletes the backup file and tehe metadata file  and restores a single application
+//! @SYMTestExpectedResults	Restore to fail with Error code -1.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_UTILS DeleteFile c:\tswi\tbackuprestore\backup81113001.1
+RUN_UTILS DeleteFile c:\tswi\tbackuprestore\metadata81113001
+
+RUN_TEST_STEP_RESULT  -1 100	tbackuprestore	RESTORE	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0001
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0002
+//! @SYMTestCaseDesc		Attempt to restore while the backup file (at C:\tswi\tbackuprestore\) has been deleted. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, deletes the backup file and restores a single application
+//! @SYMTestExpectedResults	Restore to fail with Error code -11.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_UTILS DeleteFile c:\tswi\tbackuprestore\backup81113001.1
+
+RUN_TEST_STEP_RESULT	-1 100	tbackuprestore	RESTORE	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0002
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0003
+//! @SYMTestCaseDesc		Attempt to restore while the metadata file (at C:\tswi\tbackuprestore\) has been deleted. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, deletes the metadata file and restores a single application
+//! @SYMTestExpectedResults	Restore to fail with Error code -1.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0003
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		A
+
+RUN_UTILS DeleteFile c:\tswi\tbackuprestore\metadata81113001
+
+RUN_TEST_STEP_RESULT	-1 100	tbackuprestore	RESTORE	z:\tswi\tbackuprestore\scripts\ini		A
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini			A
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0003
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0006
+//! @SYMTestCaseDesc		Attempt to restore after the plain data file produced by the SIS file is deleted manually without uninstalling. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, deletes the plain data file produced as a result of SIS file installation and restores a single application
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0006
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_UTILS DeleteFile c:\restore\pic1.bmp
+RUN_UTILS DeleteFile c:\restore\pic2.bmp
+RUN_UTILS DeleteFile c:\restore\pic3.gif
+
+//Restore will not succeed in this case. Hence we have to uninstall and install again to use the application. 
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0006
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0009
+//! @SYMTestCaseDesc		Attempt to continue the process of installing, taking backup, uninstalling, restoreing and uninstalling the same SIS file for 3 times. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls and restores a single application for 3 times
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0009
+
+START_REPEAT z:\tswi\tbackuprestore\scripts\ini cyclicinstall repeatValue
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+
+RUN_TEST_STEP	100     tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		cyclicinstall
+END_REPEAT
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0009
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0014
+//! @SYMTestCaseDesc		Restore the SIS file where the simple data files produced by the SIS file is placed at some other folder than c:\Documents folder. Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls and restores a single application.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0014
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		deleteplaindatafile
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0014
+
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0025
+//! @SYMTestCaseDesc		Backup and restore for many controllers.(E.g. Install 500 sis files back them up, uninstall, and then restore them.) Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls and restores 500 applications.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0025
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		manycontrollers
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0025
+
+
+
+//! @SYMTestCaseID		API-SEC-SWI-NQP-BR-HW-0026
+//! @SYMTestCaseDesc		Backup and restore the SIS file with if else blocks. (E.g. If-else block are specified in the .pkg file). Requirement NQP.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls and restores the applications.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-SWI-NQP-BR-HW-0026
+
+RUN_TEST_STEP	100 	tuiscriptadaptors InstallStep	z:\tswi\tbackuprestore\scripts\ini		elseif1
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+
+RUN_TEST_STEP	100   tuiscriptadaptors UninstallStep	z:\tswi\tbackuprestore\scripts\ini		u_elseif
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif1
+
+
+RUN_TEST_STEP	100   tuiscriptadaptors InstallStep	z:\tswi\tbackuprestore\scripts\ini		elseif2
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+
+RUN_TEST_STEP	100   tuiscriptadaptors UninstallStep	z:\tswi\tbackuprestore\scripts\ini		u_elseif
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+
+RUN_TEST_STEP	100   tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+
+RUN_TEST_STEP	100   tuiscriptadaptors UninstallStep	z:\tswi\tbackuprestore\scripts\ini		u_elseif
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		backupelseif2
+
+END_TESTCASE API-SEC-SWI-NQP-BR-HW-0026
+
+ 
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE-datacagingcheck-HW-0001
+//! @SYMTestCaseDesc		Checks backup and restore of a modified file under folder staring  as \resourses\ or \resoure.....
+//! @SYMTestPriority		Medium
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls a single application
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMDEF 			DEF124070 
+
+START_TESTCASE API-SEC-BACKUPRESTORE-datacagingcheck-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+// Modify the  file under \resourses
+RUN_UTILS CopyFile c:\tpropagationfile3.txt c:\resources\tpropagationfile2.txt 
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		datacagingcheck_armv5
+
+END_TESTCASE API-SEC-BACKUPRESTORE-datacagingcheck-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC126755-HW-0001
+//! @SYMTestCaseDesc		Verify that large partial upgrades and SPs restore correctly.
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install base, pu, sp1, upgrade to sp1, sp2
+//! @SYMTestExpectedResults	All packages should install backup and restore correctly.
+//! @SYMDEF 			INC126755
+
+START_TESTCASE API-SEC-INC126755-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_base
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_base
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_bigpu
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1_1
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp1_1
+
+// Check that the SP1 files have been removed
+RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	br1_bigsp1_1_checkoverwrite
+
+// Install second SP
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp2
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_bigsp2
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		br1_all_files
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_all_files
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_all_files
+
+RUN_TEST_STEP	100 tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini  	br1_all_files
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		br1_all_files
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		br1_base
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		br1_all_files
+
+END_TESTCASE API-SEC-INC126755-HW-0001
+
+
+//! @SYMTestCaseID 		API-SEC-INC126755-HW-0002
+//! @SYMTestCaseDesc		Verify that partial upgrades to ROM stubs work with backup & restore.
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Install PU, Backup, Uninstall, Restore, Install SARU for same ROM stub and Uninstall
+//! @SYMTestExpectedResults	All packages should install, backup and restore correctly.
+//! @SYMDEF 			INC126755 
+
+START_TESTCASE API-SEC-INC126755-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	romstubsaru_clean
+
+//RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+//RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubpu
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		romstubsaru
+RUN_TEST_STEP	100	tuiscriptadaptors	MmcCheckFilesStep	z:\tswi\tbackuprestore\scripts\ini	romstubsaru_clean
+
+END_TESTCASE API-SEC-INC126755-HW-0002
+
+//! @SYMTestCaseID API-SEC-SWI-DEF140527_HUGE_CTL_PU-HW-0001
+//! @SYMTestCaseDesc Trying to take back up and restore a package and a PU upgrade with a large controller
+//! @SYMTestPriority High
+//! @SYMTestActions Installs, backs up, uninstalls and restores a single application and an upgrade.
+//! @SYMTestExpectedResults Success, clean environment
+
+START_TESTCASE API-SEC-SWI-DEF140527_HUGE_CTL_PU-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largecontroller_base
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tbackuprestore\scripts\ini		largecontroller_withpu
+
+END_TESTCASE API-SEC-SWI-DEF140527_HUGE_CTL_PU-HW-0001
+
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-HW-0001
+//! @SYMTestCaseDesc		Checks backup of NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, 
+//! @SYMTestExpectedResults	Install Success, Backup and Uninstall Fails.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0001
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A1_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A1_NR
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0001
+
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-HW-0002
+//! @SYMTestCaseDesc		Checks backup of SP Over NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0002
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP   100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP 	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0002
+
+//! @SYMTestCaseID		API-SEC-BACKUPNONREMOVABLE-HW-0003
+//! @SYMTestCaseDesc		Checks backup of SP Over NR SP Over NR SA
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			REQ405-4255
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0003
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP_RESULT -5	100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		A_NR
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_NR
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP_RESULT -5 100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP_RESULT -5	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U_NR
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		NR_SP
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP   100	tbackuprestore	BACKUP		z:\tswi\tbackuprestore\scripts\ini		A_SP
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tbackuprestore\scripts\ini		A_SP
+
+RUN_TEST_STEP 	100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini  A_SP_U
+
+END_TESTCASE API-SEC-BACKUPNONREMOVABLE-HW-0003
+
+RUN_UTILS DeleteFile C:\Documents\abc*.txt
+
+// Delete the SCR Database file
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr_appreginfo.ini db_file
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+//! @SYMTestCaseDesc		Checks restore of a package containg an applicaion
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs, backs up, uninstalls, restores and uninstalls a single package containg an applicaion
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		AppRegData_Install
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_IF
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_spanish
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case01_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0001
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+//! @SYMTestCaseDesc		Upgrades an existing SA pacakge with an SA having new application and new details for FR and GE through Restore
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data then do backup, uninstall, restore. Now install an upgrade
+//				then do backup, uninstall, restore
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_No_Eclipsing_RSC
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base02
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_WithUpgrade
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0002
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+//! @SYMTestCaseDesc		Tests the installation of an SIS file which delivers no files followed by a SA upgrade that delivers an app.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having no appplication then do backup, uninstall and restore. Now install an upgrade with application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_sa_app
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0003
+
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+//! @SYMTestCaseDesc		Tests the installation of an SIS file which delivers some files followed by a SA upgrade that delivers no files.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs a SIS file having with appplication then do backup, uninstall and restore. Now install an upgrade with no application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Upgrade through Restore happens successfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_sa_app
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_sa_app
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		swiappregintegration_no_app
+
+
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini no_app
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_no_app
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0004
+
+//! @SYMTestCaseID		API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+//! @SYMTestCaseDesc		Checks restore of a package containg an applicaion
+//! @SYMTestPriority		High
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Installs a NR SIS file without an appplication then do backup, uninstall and restore. Now install an SP upgrade(Non NR) with application
+//				then do backup, uninstall and restore.
+//! @SYMTestExpectedResults	Success, clean environment.
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		Install_NonRemovableBase
+
+RUN_TEST_STEP	100	tuiscriptadaptors 	InstallStep	z:\tswi\tbackuprestore\scripts\ini		Upgrade_SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		SP_Over_SA-NR
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tbackuprestore\scripts\ini uninstall_SP_Over_SA-NR
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0005
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SP having new application and new details for GE,backup the  package,
+//			Uninstall the package , restore and verify the data.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0006
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an SP having new application and new details for GE,backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_SP_Upgrade
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0007
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an PU having new application and new details for FR and GE, backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_pu
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0008
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+//! @SYMTestCaseDesc	Upgrades an existing SA pacakge with an PU having new application and new details for FR and GE, backup the  package,
+//			Uninstall the package , restore and verify the data
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE 	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+RUN_TEST_STEP   100 	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP 	100 	tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_pu
+
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		Restore_PU_Upgrade
+
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_french
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_FR
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE 	API-SEC-BACKUPRESTORE_AppRegData-HW-0009
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//! @SYMTestCaseDesc	Install an  SA pacakge with app, take backup , upgrade it with an SP having new application and new loc(Ge) for SA,
+//!			restore Base SA and verify the data.
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Installs a SIS file having complete appregistration data
+//! @SYMTestExpectedResults	Restore done  sucessfully
+//! @SYMREQ			PREQ 1835 Phase II
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+
+RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_german
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_GE
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_Base
+
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case02_EN
+
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+
+
+//! @SYMTestCaseID	API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//! @SYMTestCaseDesc	Tests the installation of an SIS file embeds an SP, which embeds a PU, which in turn embeds another SP, that embeds another SP. (SA->SP->PU->SP->SP)
+//! @SYMTestPriority	Medium
+//! @SYMTestActions		Install a SIS file that embeds recursively other SIS files with various upgrade combinations.
+//! @SYMTestExpectedResults	File installs sucessfully
+
+//START_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_base
+//RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_base
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_case06_sa
+//RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini verify_case06_sa
+
+//RUN_TEST_STEP	100	tbackuprestore		BACKUP		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP	100	tbackuprestore		UNINSTALL	z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		ABSENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP	100	tbackuprestore		RESTORE		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+//RUN_TEST_STEP	100	tbackuprestore		PRESENT		z:\tswi\tbackuprestore\scripts\ini		AppRegData_embedded
+
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_case06
+//END_TESTCASE API-SEC-BACKUPRESTORE_AppRegData-HW-0010
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+

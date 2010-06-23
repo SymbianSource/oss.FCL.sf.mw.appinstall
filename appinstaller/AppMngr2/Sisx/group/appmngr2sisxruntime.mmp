@@ -1,0 +1,67 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Sisx Runtime plugin for AppMngr2
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET                  appmngr2sisxplugin.dll
+TARGETTYPE              PLUGIN
+UID                     0x10009d8d 0x20016BF5
+
+CAPABILITY              CAP_GENERAL_DLL
+VENDORID                VID_DEFAULT
+
+SOURCEPATH              ../src
+SOURCE                  appmngr2sisxmain.cpp
+SOURCE                  appmngr2sisxruntime.cpp
+SOURCE                  appmngr2sisxappinfo.cpp
+SOURCE                  appmngr2sisxpackageinfo.cpp
+SOURCE                  appmngr2sisxinfoiterator.cpp
+SOURCE                  appmngr2sisxunknownlist.cpp
+SOURCE                  appmngr2sisxswimonitor.cpp
+
+START RESOURCE          ../data/20016bf5.rss
+TARGET                  appmngr2sisxplugin.rsc
+END
+
+USERINCLUDE             ../inc
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY                 euser.lib                   // Base
+LIBRARY                 appmngr2pluginapi.lib       // CAppMngr2Runtime
+LIBRARY                 sisregistryclient.lib       // RSisRegistryEntry
+LIBRARY                 swinstcli.lib               // SwiUI::RSWInstLauncher
+LIBRARY                 pkgremover.lib              // Swi::UninstalledSisPackages
+LIBRARY                 swinstcommonui.lib          // CUIDetailsDialog
+LIBRARY                 aknskins.lib                // AknsUtils
+LIBRARY                 cone.lib                    // CCoeEnv
+LIBRARY                 eikcore.lib                 // CEikonEnv
+LIBRARY                 bafl.lib                    // CDesCArray
+LIBRARY                 commonengine.lib            // StringLoader
+LIBRARY                 efsrv.lib                   // RFs
+LIBRARY                 platformenv.lib             // DriveInfo
+LIBRARY                 apmime.lib                  // TDataType
+LIBRARY                 avkon.lib                   // AknTextUtils
+LIBRARY                 x509.lib                    // CX509Certificate
+LIBRARY                 egul.lib                    // CGulIcon
+
+DEBUGLIBRARY            flogger.lib                 // RFileLogger
+
+SMPSAFE
+

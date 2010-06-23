@@ -1,0 +1,26 @@
+#
+# Package containing SIDs which are constrained and which has a
+# protected pUID should not be installed.
+#
+
+[main]
+name=05_protpuid_nonconstr_sid_match
+template=setpuid.txt
+inifile=match.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,unconstrained
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiswevent.exe"-"!:\sys\bin\tswiswevent.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numexist=1
+exist0=c:\sys\bin\tswiswevent.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiswevent.exe
+

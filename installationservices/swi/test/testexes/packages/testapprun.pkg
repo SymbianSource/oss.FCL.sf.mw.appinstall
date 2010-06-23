@@ -1,0 +1,48 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;
+; Test package for INC058929, testing upgrades and uninstallation
+; of an application that is running.
+;
+
+; Languages
+; none -  English only by default
+
+; Installation header
+; Only one component name as we only support English
+
+#{"TestAppInUse Suite"},(0x81231235),1,0,0
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+; Four files for the Helloworld GUI app, install to E:
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld.rsc"-"E:\resource\apps\HelloWorld.rsc"
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld.mbm"-"E:\resource\apps\HelloWorld.mbm"
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld_reg.rsc"-"E:\private\10003a3f\import\apps\HelloWorld_reg.RSC"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\HelloWorld_forpackage.exe"-"E:\sys\bin\HelloWorld.exe", FR,RI
+
+; new HelloWorld2 shares the resource files of HelloWorld, install to either drive
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld2.rsc"-"!:\resource\apps\HelloWorld2.rsc"
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld2.mbm"-"!:\resource\apps\HelloWorld2.mbm"
+"\epoc32\DATA\Z\tswi\testexes\testappinuse\HelloWorld2_reg.rsc"-"!:\private\10003a3f\import\apps\HelloWorld2_reg.RSC"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\HelloWorld2_forpackage.exe"-"!:\sys\bin\HelloWorld2.exe", FR,RI
+
+; Required files
+; None
+
+; Component .sis files
+; None

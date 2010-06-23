@@ -1,0 +1,7 @@
+EXPORTS
+	?UnserializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABVTDesC16@@AAV?$RArray@VTPtrC16@@@@@Z @ 1 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeUniqueSwTypeNamesL(class TDesC16 const &, class RArray<class TPtrC16> &)
+	?SerializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAVRBuf8@@@Z @ 2 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeArrayL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RBuf8 &)
+	?ExtractMimeTypesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAV?$RPointerArray@VHBufC8@@@@@Z @ 3 NONAME ; void Swi::SoftwareTypeRegInfoUtils::ExtractMimeTypesL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RPointerArray<class HBufC8> &)
+	?SerializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAVRBuf16@@@Z @ 4 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeUniqueSwTypeNamesL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RBuf16 &)
+	?UnserializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXAAVRReadStream@@AAV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@@Z @ 5 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeArrayL(class RReadStream &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> &)
+

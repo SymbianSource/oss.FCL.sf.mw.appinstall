@@ -1,0 +1,20 @@
+# Device Id constraint contains a single id and bad single id
+[main]
+name=aggregate_01
+template=simple.txt
+inifile=aggregate.ini
+
+[chains]
+chain1=SymbianTestRootCARSA,single_dev1,bad_single_dev
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+exist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe

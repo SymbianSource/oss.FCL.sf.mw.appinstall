@@ -1,0 +1,46 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run SWIS tests for SIS incompatible when no target devices
+LOAD_SUITE tuiscriptadaptors
+
+//Swi certstore: (Root5CA is mandatory)
+//Swi policy: SISCompatibleIfNoTargetDevices = false
+
+//Root5CA		ReadDeviceData	WriteDeviceData	DRM	AllFiles
+
+//! @SYMTestCaseID 		API-SEC-UISA-DEF053088-I-B-0005
+//! @SYMTestCaseDesc 		Install SIS file considered incompatible due to no target devices listed
+//! @SYMREQ 			REQ3468
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Install success only if response to incompatible question dialog is true.
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-UISA-DEF053088-I-B-0005
+
+//tswinocaps	signed with mandatory Root5CA, should not install if response to incompatible question dialog is false
+
+RUN_TEST_STEP_RESULT  -10136 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnotargetdevices.ini nocapsRoot5_false_on_incompatible
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testnotargetdevices.ini nocapsRoot5_true_on_incompatible
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testnotargetdevices.ini u_nocapsRoot5
+
+END_TESTCASE API-SEC-UISA-DEF053088-I-B-0005
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

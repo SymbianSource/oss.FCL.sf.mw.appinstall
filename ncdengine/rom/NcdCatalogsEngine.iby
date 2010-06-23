@@ -1,0 +1,57 @@
+/*
+* Copyright (c) 2005-2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Ncd Catalogs engine iby
+*
+*/
+ 
+
+/**
+ * Catalogs v4.00 Engine (Altair)
+ */
+#ifndef __PREMINET_NCD_ALTAIR_ENGINE_IBY__
+#define __PREMINET_NCD_ALTAIR_ENGINE_IBY__
+
+#ifdef FF_NCD_ENGINE
+
+//**************************************************************************************************
+//
+// Stub SIS for updating ROM based installation
+//
+//**************************************************************************************************
+
+data=ZSYSTEM\Install\altair-engine-stub.sis             System\Install\altair-engine-stub.sis
+
+
+//**************************************************************************************************
+//
+// Server
+//
+//**************************************************************************************************
+
+file=ABI_DIR\BUILD_DIR\ncdengine_20019119.dll                  sys\bin\ncdengine_20019119.dll
+file=ABI_DIR\BUILD_DIR\ncdserver_20019119.exe                  sys\bin\ncdserver_20019119.exe
+file=ABI_DIR\BUILD_DIR\ncdutils_20019119.dll                   sys\bin\ncdutils_20019119.dll
+file=ABI_DIR\BUILD_DIR\ncddevicemgmt_20019119.dll              sys\bin\ncddevicemgmt_20019119.dll
+//file=ABI_DIR\BUILD_DIR\ncddebug_20019119.dll                   sys\bin\ncddebug_20019119.dll
+//file=ABI_DIR\BUILD_DIR\ncdundertaker_20019119.exe              sys\bin\ncdundertaker_20019119.exe
+
+ECOM_PLUGIN(ncdproxy_20019119.dll,ncdproxy_20019119.rsc)
+
+// Backup & restore file for the engine side
+data=ZPRIVATE\20019119\backup_registration.xml  PRIVATE\20019119\backup_registration.xml
+
+
+#endif
+
+#endif

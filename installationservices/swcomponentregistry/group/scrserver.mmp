@@ -1,0 +1,55 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software Component Registry Server
+*
+*/
+
+
+TARGET        scrserver.exe
+TARGETTYPE    exe
+UID           0x0 0x10285BC0
+
+CAPABILITY    ProtServ
+VENDORID 	  0x70000001
+
+SOURCEPATH    ../source/server
+SOURCE 		  startup.cpp
+SOURCE 		  scrserver.cpp
+SOURCE		  scrsession.cpp
+SOURCE        scrsubsession.cpp
+SOURCE		  scrrequestimpl.cpp
+SOURCE		  scrrepository.cpp
+
+USERINCLUDE   ../inc
+USERINCLUDE   ../inc_private
+USERINCLUDE	  ../../swinstallationfw/common/inc
+USERINCLUDE	  ../scrhelper/inc  
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_LIBC_SYSTEMINCLUDE
+
+LIBRARY		  bafl.lib
+LIBRARY 	  euser.lib 
+LIBRARY       estlib.lib 
+LIBRARY       efsrv.lib
+LIBRARY       estor.lib
+LIBRARY       ipcstream.lib 
+LIBRARY		  sqlite3.lib 
+LIBRARY		  scrdatabase.lib 
+LIBRARY		  scsserver.lib  
+LIBRARY		  scrclient.lib securityutils.lib
+LIBRARY		  scrhelperclient.lib stsclient.lib
+LIBRARY		  centralrepository.lib 
+SMPSAFE

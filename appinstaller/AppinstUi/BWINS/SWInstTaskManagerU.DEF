@@ -1,0 +1,10 @@
+EXPORTS
+	??1CTaskManager@SwiUI@@UAE@XZ @ 1 NONAME ; SwiUI::CTaskManager::~CTaskManager(void)
+	?AddTaskL@CTaskManager@SwiUI@@QAEXPAVCTask@2@@Z @ 2 NONAME ; void SwiUI::CTaskManager::AddTaskL(class SwiUI::CTask *)
+	?CommitL@CTaskManager@SwiUI@@QAEXXZ @ 3 NONAME ; void SwiUI::CTaskManager::CommitL(void)
+	?ExecutePendingTasksL@CTaskManager@SwiUI@@QAEXXZ @ 4 NONAME ; void SwiUI::CTaskManager::ExecutePendingTasksL(void)
+	?ExecuteRecoveryTasksL@CTaskManager@SwiUI@@QAEXXZ @ 5 NONAME ; void SwiUI::CTaskManager::ExecuteRecoveryTasksL(void)
+	?FlushTasks@CTaskManager@SwiUI@@QAEXXZ @ 6 NONAME ; void SwiUI::CTaskManager::FlushTasks(void)
+	?NewL@CTaskManager@SwiUI@@SAPAV12@XZ @ 7 NONAME ; class SwiUI::CTaskManager * SwiUI::CTaskManager::NewL(void)
+	?RemoveTaskL@CTaskManager@SwiUI@@QAEXPAVCTask@2@@Z @ 8 NONAME ; void SwiUI::CTaskManager::RemoveTaskL(class SwiUI::CTask *)
+

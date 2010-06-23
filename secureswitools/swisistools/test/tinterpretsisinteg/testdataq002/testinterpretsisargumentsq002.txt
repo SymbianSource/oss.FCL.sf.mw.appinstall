@@ -1,0 +1,1 @@
+-z .\romdrive -c .\cdrive -n 1

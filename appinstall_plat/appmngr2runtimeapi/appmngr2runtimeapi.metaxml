@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<api id="135055a83b1e44a634518d85a5a878be" dataversion="1.0">
+<name>AppMngr2 Runtime Plugin API</name>
+<description>Application Manager uses plug-ins for run-time specific services, such as installing and uninstalling. Runtime Plugin implements these services for particular run-time type, like SISX, Java or Widget. AppMngr2 Runtime Plugin API is ECOM interface that defines Application Manager run-time plug-ins.</description>
+<type>c++</type>
+<subsystem>AppMngr2</subsystem>
+<libs><lib name="appmngr2pluginapi.lib"/>
+</libs>
+<release category="domain" sinceversion="5.1"/>
+<attributes>
+<htmldocprovided>no</htmldocprovided>
+<adaptation>no</adaptation>
+</attributes>
+</api>

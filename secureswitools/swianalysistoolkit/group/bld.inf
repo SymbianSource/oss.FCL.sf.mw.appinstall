@@ -1,0 +1,224 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software Install implementation 
+*
+*/
+
+
+/**
+ @file
+*/
+
+PRJ_PLATFORMS
+DEFAULT TOOLS
+TOOLS2
+
+PRJ_MMPFILES
+
+#ifdef TOOLS 
+#ifndef TOOLS2
+#ifdef SYMBIAN_OLD_EXPORT_LOCATION
+makefile ../source/chainvalidityandinstallfilestatustools/dumpchainvaliditytool/dumpchainvaliditytool.fil
+#else
+makefile ../source/chainvalidityandinstallfilestatustools/dumpchainvaliditytool/dumpchainvaliditytool2.fil
+#endif
+
+makefile ../source/chainvalidityandinstallfilestatustools/dumpinstallfilestatustool/dumpinstallfilestatustool.fil
+makefile ../source/dumpswicertstoretool/dumpswicertstoretool.fil
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
+makefile ../source/dumpswiregistrytool/dumpswiregistrytool.fil
+#endif
+
+#endif
+#endif
+
+
+PRJ_TESTEXPORTS
+
+// tchainvalidity
+../test/tchainvalidity/chainvalidity-output/allvalidchain.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/allvalidchain.out
+../test/tchainvalidity/chainvalidity-output/corrupteddat.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/corrupteddat.out
+../test/tchainvalidity/chainvalidity-output/corruptedsis.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/corruptedsis.out
+../test/tchainvalidity/chainvalidity-output/devcert2.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/devcert2.out
+../test/tchainvalidity/chainvalidity-output/mandatory.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/mandatory.out
+../test/tchainvalidity/chainvalidity-output/missing_mandatory.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/missing_mandatory.out
+../test/tchainvalidity/chainvalidity-output/onechain.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/onechain.out
+../test/tchainvalidity/chainvalidity-output/selfsigned.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/selfsigned.out
+../test/tchainvalidity/chainvalidity-output/somevalidchain.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/somevalidchain.out
+../test/tchainvalidity/chainvalidity-output/unsigned.out /epoc32/winscw/c/tswi/tchainvalidity/chainvalidity-output/unsigned.out
+../test/tchainvalidity/data/allmandatory.dat /epoc32/winscw/c/tswi/tchainvalidity/data/allmandatory.dat
+../test/tchainvalidity/data/corrupted.dat /epoc32/winscw/c/tswi/tchainvalidity/data/corrupted.dat
+../test/tchainvalidity/data/corrupted.sis /epoc32/winscw/c/tswi/tchainvalidity/data/corrupted.sis
+../test/tchainvalidity/data/expired_brokenchain.sis /epoc32/winscw/c/tswi/tchainvalidity/data/expired_brokenchain.sis
+../test/tchainvalidity/data/mandatory.dat /epoc32/winscw/c/tswi/tchainvalidity/data/mandatory.dat
+../test/tchainvalidity/data/multichain.sis /epoc32/winscw/c/tswi/tchainvalidity/data/multichain.sis
+../test/tchainvalidity/data/multichain_allvalid.sis /epoc32/winscw/c/tswi/tchainvalidity/data/multichain_allvalid.sis
+../test/tchainvalidity/data/onechain.sis /epoc32/winscw/c/tswi/tchainvalidity/data/onechain.sis
+../test/tchainvalidity/data/onemandatory.dat /epoc32/winscw/c/tswi/tchainvalidity/data/onemandatory.dat
+../test/tchainvalidity/data/selfsigned.sis /epoc32/winscw/c/tswi/tchainvalidity/data/selfsigned.sis
+../test/tchainvalidity/data/simple_devallsigned.sis /epoc32/winscw/c/tswi/tchainvalidity/data/simple_devallsigned.sis
+../test/tchainvalidity/data/simple_devsimplesigned.sis /epoc32/winscw/c/tswi/tchainvalidity/data/simple_devsimplesigned.sis
+../test/tchainvalidity/data/simple_emptydev_signed.sis /epoc32/winscw/c/tswi/tchainvalidity/data/simple_emptydev_signed.sis
+../test/tchainvalidity/data/simple_testdev_signed.sis /epoc32/winscw/c/tswi/tchainvalidity/data/simple_testdev_signed.sis
+../test/tchainvalidity/data/somecapabilities.dat /epoc32/winscw/c/tswi/tchainvalidity/data/somecapabilities.dat
+../test/tchainvalidity/data/somevalidchain.sis /epoc32/winscw/c/tswi/tchainvalidity/data/somevalidchain.sis
+../test/tchainvalidity/data/swicertstore.dat /epoc32/winscw/c/tswi/tchainvalidity/data/swicertstore.dat
+../test/tchainvalidity/data/unsigned.sis /epoc32/winscw/c/tswi/tchainvalidity/data/unsigned.sis
+../test/tchainvalidity/testchainvalidity.pl /epoc32/winscw/c/tswi/tchainvalidity/testchainvalidity.pl
+
+// tinstallfilestatus
+../test/tinstallfilestatus/data/allmandatory.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/allmandatory.dat
+../test/tinstallfilestatus/data/corrupted.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/corrupted.dat
+../test/tinstallfilestatus/data/corrupted.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/corrupted.sis
+../test/tinstallfilestatus/data/mandatory.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/mandatory.dat
+../test/tinstallfilestatus/data/nomandatory.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/nomandatory.dat
+../test/tinstallfilestatus/data/onemandatory.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/onemandatory.dat
+../test/tinstallfilestatus/data/simple_devallsigned.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/simple_devallsigned.sis
+../test/tinstallfilestatus/data/simple_emptydev_signed.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/simple_emptydev_signed.sis
+../test/tinstallfilestatus/data/somecapabilities.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/somecapabilities.dat
+../test/tinstallfilestatus/data/swicertstore.dat /epoc32/winscw/c/tswi/tinstallfilestatus/data/swicertstore.dat
+../test/tinstallfilestatus/data/testfor2exes_allvaidchain.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_allvaidchain.sis
+../test/tinstallfilestatus/data/testfor2exes_allvaidchainwithdevcertalso.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_allvaidchainwithdevcertalso.sis
+../test/tinstallfilestatus/data/testfor2exes_brokenchainvalidated.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_brokenchainvalidated.sis
+../test/tinstallfilestatus/data/testfor2exes_devcert.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_devcert.sis
+../test/tinstallfilestatus/data/testfor2exes_devcertvalidated.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_devcertvalidated.sis
+../test/tinstallfilestatus/data/testfor2exes_invaid.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_invaid.sis
+../test/tinstallfilestatus/data/testfor2exes_invaidallchain.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_invaidallchain.sis
+../test/tinstallfilestatus/data/testfor2exes_invaidsumchain.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_invaidsumchain.sis
+../test/tinstallfilestatus/data/testfor2exes_multichain.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_multichain.sis
+../test/tinstallfilestatus/data/testfor2exes_selfsigned.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_selfsigned.sis
+../test/tinstallfilestatus/data/testfor2exes_signed1chainnotvalidatedbycertstore.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_signed1chainnotvalidatedbycertstore.sis
+../test/tinstallfilestatus/data/testfor2exes_signed1chainvalidted.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_signed1chainvalidted.sis
+../test/tinstallfilestatus/data/testfor2exes_unsigned.sis /epoc32/winscw/c/tswi/tinstallfilestatus/data/testfor2exes_unsigned.sis
+../test/tinstallfilestatus/installstatus-output/corrupteddat.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/corrupteddat.out
+../test/tinstallfilestatus/installstatus-output/corruptedsis.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/corruptedsis.out
+../test/tinstallfilestatus/installstatus-output/devcerts.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/devcerts.out
+../test/tinstallfilestatus/installstatus-output/multichain_missingcaps.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/multichain_missingcaps.out
+../test/tinstallfilestatus/installstatus-output/multichain_nomissingcaps.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/multichain_nomissingcaps.out
+../test/tinstallfilestatus/installstatus-output/multichain_usercaps1.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/multichain_usercaps1.out
+../test/tinstallfilestatus/installstatus-output/unsignedsis.out /epoc32/winscw/c/tswi/tinstallfilestatus/installstatus-output/unsignedsis.out
+../test/tinstallfilestatus/testinstallstatus.pl /epoc32/winscw/c/tswi/tinstallfilestatus/testinstallstatus.pl
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
+// tdumpregistry
+../test/tdumpregistry/data/1000000d/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/1000000d/00000000.reg
+../test/tdumpregistry/data/1000000d/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/1000000d/00000000_0000.ctl
+../test/tdumpregistry/data/1020383e/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/1020383e/00000000.reg
+../test/tdumpregistry/data/1020383e/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/1020383e/00000000_0000.ctl
+../test/tdumpregistry/data/80000003/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/80000003/00000000.reg
+../test/tdumpregistry/data/80000010/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/80000010/00000000.reg
+../test/tdumpregistry/data/80000010/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/80000010/00000000_0000.ctl
+../test/tdumpregistry/data/80000134/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/80000134/00000000.reg
+../test/tdumpregistry/data/80000134/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/80000134/00000000_0000.ctl
+../test/tdumpregistry/data/80212345/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/80212345/00000000.reg
+../test/tdumpregistry/data/80212345/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/80212345/00000000_0000.ctl
+../test/tdumpregistry/data/81000008/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81000008/00000000.reg
+../test/tdumpregistry/data/81000008/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81000008/00000000_0000.ctl
+../test/tdumpregistry/data/8100000b/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/8100000b/00000000.reg
+../test/tdumpregistry/data/8100000b/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/8100000b/00000000_0000.ctl
+../test/tdumpregistry/data/81111107/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81111107/00000000.reg
+../test/tdumpregistry/data/81111107/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81111107/00000000_0000.ctl
+../test/tdumpregistry/data/811111f8/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/811111f8/00000000.reg
+../test/tdumpregistry/data/811111f8/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/811111f8/00000000_0000.ctl
+../test/tdumpregistry/data/811111f9/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/811111f9/00000000.reg
+../test/tdumpregistry/data/811111f9/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/811111f9/00000000_0000.ctl
+../test/tdumpregistry/data/811111fb/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/811111fb/00000000.reg
+../test/tdumpregistry/data/811111fb/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/811111fb/00000000_0000.ctl
+../test/tdumpregistry/data/811111fc/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/811111fc/00000000.reg
+../test/tdumpregistry/data/811111fc/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/811111fc/00000000_0000.ctl
+../test/tdumpregistry/data/81115000/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81115000/00000000.reg
+../test/tdumpregistry/data/81115000/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81115000/00000000_0000.ctl
+../test/tdumpregistry/data/81115011/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81115011/00000000.reg
+../test/tdumpregistry/data/81115011/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81115011/00000000_0000.ctl
+../test/tdumpregistry/data/81115012/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81115012/00000000.reg
+../test/tdumpregistry/data/81115012/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81115012/00000000_0000.ctl
+../test/tdumpregistry/data/81115013/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81115013/00000000.reg
+../test/tdumpregistry/data/81115013/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81115013/00000000_0000.ctl
+../test/tdumpregistry/data/81231235/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81231235/00000000.reg
+../test/tdumpregistry/data/81231235/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81231235/00000000_0000.ctl
+../test/tdumpregistry/data/81231235/00000000_0001.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81231235/00000000_0001.ctl
+../test/tdumpregistry/data/81231235/00000001.reg /epoc32/winscw/c/tswi/tdumpregistry/data/81231235/00000001.reg
+../test/tdumpregistry/data/81231235/00000001_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/81231235/00000001_0000.ctl
+../test/tdumpregistry/data/a0000206/00000000.reg /epoc32/winscw/c/tswi/tdumpregistry/data/a0000206/00000000.reg
+../test/tdumpregistry/data/a0000206/00000000_0000.ctl /epoc32/winscw/c/tswi/tdumpregistry/data/a0000206/00000000_0000.ctl
+../test/tdumpregistry/dumpregistry-output/1000000d.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/1000000d.out
+../test/tdumpregistry/dumpregistry-output/1000000d.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/1000000d.tmp
+../test/tdumpregistry/dumpregistry-output/80000003.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80000003.out
+../test/tdumpregistry/dumpregistry-output/80000003.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80000003.tmp
+../test/tdumpregistry/dumpregistry-output/80000010.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80000010.out
+../test/tdumpregistry/dumpregistry-output/80000010.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80000010.tmp
+../test/tdumpregistry/dumpregistry-output/80212345.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80212345.out
+../test/tdumpregistry/dumpregistry-output/80212345.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/80212345.tmp
+../test/tdumpregistry/dumpregistry-output/81000008.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81000008.out
+../test/tdumpregistry/dumpregistry-output/81000008.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81000008.tmp
+../test/tdumpregistry/dumpregistry-output/8100000b.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/8100000b.out
+../test/tdumpregistry/dumpregistry-output/8100000b.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/8100000b.tmp
+../test/tdumpregistry/dumpregistry-output/81111107.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81111107.out
+../test/tdumpregistry/dumpregistry-output/81111107.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81111107.tmp
+../test/tdumpregistry/dumpregistry-output/811111f8.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111f8.out
+../test/tdumpregistry/dumpregistry-output/811111f8.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111f8.tmp
+../test/tdumpregistry/dumpregistry-output/811111fb.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111fb.out
+../test/tdumpregistry/dumpregistry-output/811111fb.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111fb.tmp
+../test/tdumpregistry/dumpregistry-output/811111fc.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111fc.out
+../test/tdumpregistry/dumpregistry-output/811111fc.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/811111fc.tmp
+../test/tdumpregistry/dumpregistry-output/81115000.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115000.out
+../test/tdumpregistry/dumpregistry-output/81115000.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115000.tmp
+../test/tdumpregistry/dumpregistry-output/81115011.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115011.out
+../test/tdumpregistry/dumpregistry-output/81115011.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115011.tmp
+../test/tdumpregistry/dumpregistry-output/81115013.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115013.out
+../test/tdumpregistry/dumpregistry-output/81115013.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81115013.tmp
+../test/tdumpregistry/dumpregistry-output/81231235.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81231235.out
+../test/tdumpregistry/dumpregistry-output/81231235.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81231235.tmp
+../test/tdumpregistry/dumpregistry-output/81231235.tmp.old /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/81231235.tmp.old
+../test/tdumpregistry/dumpregistry-output/a0000206.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/a0000206.out
+../test/tdumpregistry/dumpregistry-output/a0000206.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/a0000206.tmp
+../test/tdumpregistry/testregistry.pl /epoc32/winscw/c/tswi/tdumpregistry/testregistry.pl
+
+
+// tdumpcertstore
+../test/tdumpcertstore/certstore.bat /epoc32/winscw/c/tswi/tdumpcertstore/certstore.bat
+../test/tdumpcertstore/data/00000000 /epoc32/winscw/c/tswi/tdumpcertstore/data/00000000
+../test/tdumpcertstore/data/00000001 /epoc32/winscw/c/tswi/tdumpcertstore/data/00000001
+../test/tdumpcertstore/data/allcapabilities.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/allcapabilities.dat
+../test/tdumpcertstore/data/allcapabilities.str /epoc32/winscw/c/tswi/tdumpcertstore/data/allcapabilities.str
+../test/tdumpcertstore/data/allmandatory.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/allmandatory.dat
+../test/tdumpcertstore/data/allmandatory.str /epoc32/winscw/c/tswi/tdumpcertstore/data/allmandatory.str
+../test/tdumpcertstore/data/suflagsupport.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/suflagsupport.dat
+../test/tdumpcertstore/data/suflagsupport.str /epoc32/winscw/c/tswi/tdumpcertstore/data/suflagsupport.str
+../test/tdumpcertstore/data/nomandatory.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/nomandatory.dat
+../test/tdumpcertstore/data/nomandatory.str /epoc32/winscw/c/tswi/tdumpcertstore/data/nomandatory.str
+../test/tdumpcertstore/data/somecapabilities.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/somecapabilities.dat
+../test/tdumpcertstore/data/somecapabilities.str /epoc32/winscw/c/tswi/tdumpcertstore/data/somecapabilities.str
+../test/tdumpcertstore/data/unicodecertificatename.dat /epoc32/winscw/c/tswi/tdumpcertstore/data/unicodecertificatename.dat
+../test/tdumpcertstore/data/unicodecertificatename.str /epoc32/winscw/c/tswi/tdumpcertstore/data/unicodecertificatename.str
+../test/tdumpcertstore/dumpcertstore-output/allcapabilities.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/allcapabilities.out
+../test/tdumpcertstore/dumpcertstore-output/allmandatory.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/allmandatory.out
+../test/tdumpcertstore/dumpcertstore-output/both.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/both.out
+../test/tdumpcertstore/dumpcertstore-output/both1.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/both1.out
+../test/tdumpcertstore/dumpcertstore-output/both2.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/both2.out
+../test/tdumpcertstore/dumpcertstore-output/corrupted.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/corrupted.out
+../test/tdumpcertstore/dumpcertstore-output/nomandatory.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/nomandatory.out
+../test/tdumpcertstore/dumpcertstore-output/somecapabilities.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/somecapabilities.out
+../test/tdumpcertstore/dumpcertstore-output/writable.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/writable.out
+../test/tdumpcertstore/dumpcertstore-output/suflagsupport.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/suflagsupport.out
+../test/tdumpcertstore/dumpcertstore-output/unicodecertificatename.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/unicodecertificatename.out
+../test/tdumpcertstore/dumpcertstore-output/capdisplay_yoption.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/capdisplay_yoption.out
+../test/tdumpcertstore/dumpcertstore-output/capdisplay_doption.out /epoc32/winscw/c/tswi/tdumpcertstore/dumpcertstore-output/capdisplay_doption.out
+../test/tdumpcertstore/predumpcertstoretest.bat /epoc32/winscw/c/tswi/tdumpcertstore/predumpcertstoretest.bat
+../test/tdumpcertstore/postdumpcertstoretest.bat /epoc32/winscw/c/tswi/tdumpcertstore/postdumpcertstoretest.bat
+../test/tdumpcertstore/testswicertstore.pl /epoc32/winscw/c/tswi/tdumpcertstore/testswicertstore.pl
+#endif
+// End of file

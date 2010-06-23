@@ -1,0 +1,41 @@
+Registry Controller Information:
+
+Registry Entry :.\data\81115013\00000000.reg
+
+Package UID :0x81115013
+Package Name :053177c_3
+Vendor :Unique Vendor Name
+Package Index :0
+
+Controller1 Version :1.2.3
+Controller1 Algorithm :SHA1
+
+Number of Dependencies : 0
+
+Number of Embedded Packages : 2
+
+List Of Embedded  Packages:
+
+Embedded Package UID : 0x81115012
+Embedded Package Name : 053177c_2
+Embedded Package Vendor Name :Unique Vendor Name
+Embedded Package Index : -1
+
+Embedded Package UID : 0x81115011
+Embedded Package Name : 053177c_1
+Embedded Package Vendor Name :Unique Vendor Name
+Embedded Package Index : -1
+
+SISProperty Count:0
+
+Number Of File Descriptions :1
+
+SIS File Description:
+
+Target1:c:\Documents\def053177\charsetbu.txt
+File Operation Type :Install
+Algorithm :SHA1
+SID :0x0
+
+Validation Status : ValidatedToAnchor
+Revocation Status : OcspNotPerformed

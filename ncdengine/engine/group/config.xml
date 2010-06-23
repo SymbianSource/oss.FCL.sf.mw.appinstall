@@ -1,0 +1,49 @@
+<!-- Preminet provider configuration -->
+<preminet-provider-config>
+
+	<!-- Provider type: vanilla/variant -->
+	<type>vanilla</type>
+	
+	<!-- Provider version -->
+	<version>5.1.920</version>
+	
+	<!-- Provider provisioning -->
+	<!-- <provisioning>PoronVisio</provisioning> -->
+
+<!-- Fixed access point settings
+
+	<network mcc="222" mnc="111" fixed-access-point="2"/>
+	<network mcc="235" mnc="212" fixed-access-point="1"/>
+	<network mcc="245" mnc="212" fixed-access-point="3"/>
+
+	<access-point-settings id="1">
+                <detail id="name" value="saunalahti test"/>
+		<detail id="EApGprsAccessPointName" value="internet.saunalahti"/>
+		<detail id="EApIapName" value="testisauna"/>
+		<detail id="EApIspName" value="testisauna"/>
+		<detail id="EApWapAccessPointName" value="testisauna"/>
+		<detail id="EApWapCurrentBearer" value="WAPIPBearer"/>
+	</access-point-settings>
+
+	<access-point-settings id="2">
+                <detail id="name" value="saunalahti test"/>
+		<detail id="EApGprsAccessPointName" value="internet.saunalahti"/>
+		<detail id="EApIapName" value="testisauna"/>
+		<detail id="EApIspName" value="testisauna"/>
+		<detail id="EApWapAccessPointName" value="testisauna"/>
+		<detail id="EApWapCurrentBearer" value="WAPIPBearer"/>
+		<detail id="EApGprsIfName" value="huuhaa"/>
+	</access-point-settings>
+
+	<access-point-settings id="3">
+                <detail id="name" value="saunalahti test"/>
+		<detail id="EApGprsAccessPointName" value="internet.saunalahti"/>
+		<detail id="EApIapName" value="testisauna"/>
+		<detail id="EApIspName" value="testisauna"/>
+		<detail id="EApWapAccessPointName" value="testisauna"/>
+		<detail id="EApWapCurrentBearer" value="WAPIPBearer"/>
+	</access-point-settings>
+
+-->
+	
+</preminet-provider-config>

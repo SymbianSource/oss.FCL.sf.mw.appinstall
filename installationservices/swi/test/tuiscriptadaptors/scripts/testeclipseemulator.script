@@ -1,0 +1,98 @@
+//
+// Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+//
+
+PRINT Run all eclipsing tests
+LOAD_SUITE tuiscriptadaptors
+RUN_UTILS deletefile C:\private\101f7295\sidcache.cache
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-0002
+//! @SYMTestCaseDesc 		Test excliping a file in the rom on e drive , and two orphaned file with the same name also on c and d drive
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Try to eclipse the file. the orphaned files should be overwritten and not be overwritten in different cases
+//! @SYMTestExpectedResults 	Overwrite sucessfully if it is overwritable, otherwise fails to overwrite
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-0002
+
+// Copy a file with the same name to c drive as orphaned file
+RUN_UTILS MkDir c:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\eclipsetest\file1.txt
+RUN_UTILS MakeReadWrite c:\eclipsetest\file1.txt
+RUN_UTILS MkDir d:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm d:\eclipsetest\file1.txt
+RUN_UTILS MakeReadWrite d:\eclipsetest\file1.txt
+
+// Eclipse the file should fail
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_NoOverwrite
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+// Eclipse the file should overwrite the orphan file if overwrite is allowed
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_Overwrite
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-0002
+
+
+//! @SYMTestCaseID 		API-SEC-UISA-ECLIPSE-I-B-0003
+//! @SYMTestCaseDesc 		Test double excliping a file in rom when there is also a orphaned file with same name on one of the drives
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		The orphaned file should not be asked for overwrite. 
+//! @SYMTestExpectedResults 	KErrSISInvalidTargetFile
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-UISA-ECLIPSE-I-B-0003
+
+// First time eclipsing
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses1
+
+// Copy the orphaned file to d drive
+RUN_UTILS MkDir d:\eclipsetest\
+RUN_UTILS copyfile z:\tswi\DEF053165.perm d:\eclipsetest\file1.txt
+RUN_UTILS MakeReadWrite d:\eclipsetest\file1.txt
+
+RUN_TEST_STEP_RESULT -10257 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini twoeclipses2_fail
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses1
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_twoeclipses2
+
+// delete the orphaned file
+RUN_UTILS deletefile d:\eclipsetest\file1.txt
+
+END_TESTCASE API-SEC-UISA-ECLIPSE-I-B-0003
+
+
+//! @SYMTestCaseID 		API-SEC-testLargeStubFile-0001
+//! @SYMTestCaseDesc 		Verify that testeclipse6.SIS can be installed and hence that 2000stub.sis which
+//   				contains 2000 files was processed correctly. 
+//! @SYMDEF 			INC106568: ROM eclipsing not working always 
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		Installs testclipse6.dll which contains c:\areallylong\pathtonowhere\longfilename1959.txt
+//! @SYMTestExpectedResults 	Installation passes
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC-testLargeStubFile-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini testeclipse6
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testeclipse.ini u_testeclipse6
+
+END_TESTCASE API-SEC-testLargeStubFile-0001
+
+ 
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+
+

@@ -1,0 +1,12 @@
+EXPORTS
+	?Generate@CAppArcFilesGenerator@@QAEXAAVTRequestStatus@@@Z @ 1 NONAME ; public: void __thiscall CAppArcFilesGenerator::Generate(class TRequestStatus &)
+	?NewL@CAppArcFilesGenerator@@SAPAV1@AAVRFs@@ABVCMIDletSuiteAttributes@@VTUid@@ABV?$RArray@VTUid@@@@KABVTDesC16@@VTChar@@@Z @ 2 NONAME ; public: static class CAppArcFilesGenerator * __cdecl CAppArcFilesGenerator::NewL(class RFs &,class CMIDletSuiteAttributes const &,class TUid,class RArray<class TUid> const &,unsigned long,class TDesC16 const &,class TChar)
+	?AddAifDataTypeL@CAppArcFilesGenerator@@QAEXHABVTDataTypeWithPriority@@@Z @ 3 NONAME ; void CAppArcFilesGenerator::AddAifDataTypeL(int, class TDataTypeWithPriority const &)
+	?SetAifCapabilityL@CAppArcFilesGenerator@@QAEXHABVTApaAppCapability@@@Z @ 4 NONAME ; void CAppArcFilesGenerator::SetAifCapabilityL(int, class TApaAppCapability const &)
+	?DataTypeCount@CAppArcMidletAttributes@@QAEHXZ @ 5 NONAME ; public: int __thiscall CAppArcMidletAttributes::DataTypeCount(void)
+	?GetCapability@CAppArcMidletAttributes@@QAEPAVTApaAppCapability@@XZ @ 6 NONAME ; public: class TApaAppCapability * __thiscall CAppArcMidletAttributes::GetCapability(void)
+	?GetDataType@CAppArcMidletAttributes@@QAEAAVTDataTypeWithPriority@@H@Z @ 7 NONAME ; public: class TDataTypeWithPriority & __thiscall CAppArcMidletAttributes::GetDataType(int)
+	?SetDataTypeWithPriorityL@CAppArcMidletAttributes@@QAEXVTDataTypeWithPriority@@@Z @ 8 NONAME ; public: void __thiscall CAppArcMidletAttributes::SetDataTypeWithPriorityL(class TDataTypeWithPriority)
+	?SetCapabilityL@CAppArcMidletAttributes@@QAEXVTApaAppCapability@@@Z @ 9 NONAME ; public: void __thiscall CAppArcMidletAttributes::SetCapabilityL(class TApaAppCapability)
+	?NewL@CAppArcMidletAttributes@@SAPAV1@XZ @ 10 NONAME ; public: static class CAppArcMidletAttributes * __cdecl CAppArcMidletAttributes::NewL(void)
+

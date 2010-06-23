@@ -1,0 +1,40 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* commonutilstest.iby
+*
+*/
+
+
+#ifndef __COMMONUTILSTEST_IBY__
+#define __COMMONUTILSTEST_IBY__
+
+REM Common test code
+
+file=ABI_DIR\BUILD_DIR\tsecurityutils.exe			sys\bin\tsecurityutils.exe
+file=ABI_DIR\BUILD_DIR\oomtestbase.dll				sys\bin\oomtestbase.dll
+
+REM tsecurityutils tests
+
+define ZDRIVE \epoc32\data\Z
+
+data=ZDRIVE\tsecurityutils\tsecurityutils.ini			\tsecurityutils\tsecurityutils.ini
+data=ZDRIVE\tsecurityutils\tsecurityutils.script			\tsecurityutils\tsecurityutils.script
+
+file=ABI_DIR\BUILD_DIR\aprcaptestframework.exe	sys\bin\aprcaptestframework.exe
+data=ABI_DIR\BUILD_DIR\aprcaptestframeworkhelper.exe	sys\bin\aprcaptestframeworkhelper.exe
+file=ABI_DIR\BUILD_DIR\aprcaptestframeworkutil.dll sys\bin\aprcaptestframeworkutil.dll
+
+#endif
+

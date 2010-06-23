@@ -1,0 +1,16 @@
+EXPORTS
+	??1CDesDataProvider@Swi@@UAE@XZ @ 1 NONAME ; Swi::CDesDataProvider::~CDesDataProvider(void)
+	??1CFileSisDataProvider@Swi@@UAE@XZ @ 2 NONAME ; Swi::CFileSisDataProvider::~CFileSisDataProvider(void)
+	?NewL@CDesDataProvider@Swi@@SAPAV12@ABVTDesC8@@@Z @ 3 NONAME ; class Swi::CDesDataProvider * Swi::CDesDataProvider::NewL(class TDesC8 const &)
+	?NewL@CFileSisDataProvider@Swi@@SAPAV12@AAVRFile@@@Z @ 4 NONAME ; class Swi::CFileSisDataProvider * Swi::CFileSisDataProvider::NewL(class RFile &)
+	?NewL@CFileSisDataProvider@Swi@@SAPAV12@AAVRFs@@ABV?$TBuf@$0BAA@@@H@Z @ 5 NONAME ; class Swi::CFileSisDataProvider * Swi::CFileSisDataProvider::NewL(class RFs &, class TBuf<256> const &, int)
+	?NewLC@CDesDataProvider@Swi@@SAPAV12@ABVTDesC8@@@Z @ 6 NONAME ; class Swi::CDesDataProvider * Swi::CDesDataProvider::NewLC(class TDesC8 const &)
+	?NewLC@CFileSisDataProvider@Swi@@SAPAV12@AAVRFile@@@Z @ 7 NONAME ; class Swi::CFileSisDataProvider * Swi::CFileSisDataProvider::NewLC(class RFile &)
+	?NewLC@CFileSisDataProvider@Swi@@SAPAV12@AAVRFs@@ABV?$TBuf@$0BAA@@@H@Z @ 8 NONAME ; class Swi::CFileSisDataProvider * Swi::CFileSisDataProvider::NewLC(class RFs &, class TBuf<256> const &, int)
+	?Read@CDesDataProvider@Swi@@UAEHAAVTDes8@@@Z @ 9 NONAME ; int Swi::CDesDataProvider::Read(class TDes8 &)
+	?Read@CDesDataProvider@Swi@@UAEHAAVTDes8@@H@Z @ 10 NONAME ; int Swi::CDesDataProvider::Read(class TDes8 &, int)
+	?Read@CFileSisDataProvider@Swi@@UAEHAAVTDes8@@@Z @ 11 NONAME ; int Swi::CFileSisDataProvider::Read(class TDes8 &)
+	?Read@CFileSisDataProvider@Swi@@UAEHAAVTDes8@@H@Z @ 12 NONAME ; int Swi::CFileSisDataProvider::Read(class TDes8 &, int)
+	?Seek@CDesDataProvider@Swi@@UAEHW4TSeek@@AA_J@Z @ 13 NONAME ; int Swi::CDesDataProvider::Seek(enum TSeek, long long &)
+	?Seek@CFileSisDataProvider@Swi@@UAEHW4TSeek@@AA_J@Z @ 14 NONAME ; int Swi::CFileSisDataProvider::Seek(enum TSeek, long long &)
+

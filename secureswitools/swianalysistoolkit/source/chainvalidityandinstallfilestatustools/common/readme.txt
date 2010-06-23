@@ -1,0 +1,1 @@
+This folder contains the files which are common to dumpchainvaliditytool and dumpinstallfilestatustool.

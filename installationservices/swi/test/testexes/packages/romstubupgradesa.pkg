@@ -1,0 +1,26 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;This package try to upgrade ROM stub where in rom stub list
+;no files actually present in the ROM
+
+&EN
+
+#{"Empty ROM Stub"},(0x802730A0), 1, 2, 3, TYPE=SA
+
+%{"Crypto Services"}
+:"Crypto Services"
+
+"osver.txt"-"!:\Documents\InstTest\romupgrade.txt"

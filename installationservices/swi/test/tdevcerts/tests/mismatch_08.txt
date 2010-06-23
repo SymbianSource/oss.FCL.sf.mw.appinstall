@@ -1,0 +1,22 @@
+# Verify that user grantable capabilities don't override certificate constraints. 
+# I.e. the user is considered to be a trust anchor that can grant user capabilities 
+# but certificate constraints take precedence.
+
+[main]
+name=mismatch_08
+template=simple.txt
+inifile=mismatch.ini
+
+[chains]
+chain1=root5CA,all_caps,system_caps
+
+[files]
+file1="\epoc32\release\<PLATFORM>\<CONFIGURATION>\tswiusergrantable_all_protected.exe"-"!:\sys\bin\tswiusergrantable_all_protected.exe";
+
+[install]
+script=<SCRIPT_DIR>\simple.xml
+numnonexist=1
+nonexist0=c:\sys\bin\tswiusergrantable_all_protected.exe
+
+[uninstall]
+script=<SCRIPT_DIR>\uninstall.xml

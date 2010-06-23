@@ -1,0 +1,37 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#include "../refswiobsplugin/group/bld.inf"
+#include "../unittests/group/bld.inf"
+#include "../propertychanger/group/bld.inf"
+
+PRJ_TESTEXPORTS
+../scripts/testswiobserver.ini 		z:/tswi/tswiobserver/scripts/testswiobserver.ini
+../scripts/testswiobserver.script 	z:/tswi/tswiobserver/scripts/testswiobserver.script
+
+../scripts/data/installexes.log 			 z:/tswi/tswiobserver/scripts/data/installexes.log
+../scripts/data/uninstallexes.log 			 z:/tswi/tswiobserver/scripts/data/uninstallexes.log
+../scripts/data/uninstallupgrade.log 		 z:/tswi/tswiobserver/scripts/data/uninstallupgrade.log
+../scripts/data/uninstallupgradedpackage.log z:/tswi/tswiobserver/scripts/data/uninstallupgradedpackage.log
+../scripts/data/upgradeaugmentation.log 	 z:/tswi/tswiobserver/scripts/data/upgradeaugmentation.log
+../scripts/data/upgradepackage.log 			 z:/tswi/tswiobserver/scripts/data/upgradepackage.log
+../scripts/data/upgradepartial.log 			 z:/tswi/tswiobserver/scripts/data/upgradepartial.log
+../scripts/data/log_resume_notification		 z:/tswi/tswiobserver/scripts/data/log_resume_notification
+../scripts/data/restore.log					 z:/tswi/tswiobserver/scripts/data/restore.log
+../scripts/data/corrupted					 z:/tswi/tswiobserver/scripts/data/corrupted
+../scripts/data/corrupted_2					 z:/tswi/tswiobserver/scripts/data/corrupted_2

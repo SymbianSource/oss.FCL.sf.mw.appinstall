@@ -1,0 +1,68 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+&EN
+
+#{"testexpressions_else"}, (0x811111fb), 1, 2, 3, TYPE=SA
+%{"Vendor"}
+:"Unique Vendor Name"
+
+!({"Option1"}, {"Option2"}, {"Option3"})
+
+IF (option1)=(1)
+
+"data\CondTest\file0"-"!:\Documents\InstTest\option1.txt", FF
+ELSEIF NOT(0)
+
+"data\CondTest\file1"-"!:\Documents\InstTest\elseoption1.txt", FF
+ENDIF
+IF (option3)=(1)
+IF (option2)=(1)
+IF (option1)=(1)
+
+"data\CondTest\file2"-"!:\Documents\InstTest\option321.txt", FF
+ELSEIF NOT(0)
+
+"data\CondTest\file3"-"!:\Documents\InstTest\option32-.txt", FF
+ENDIF
+ELSEIF NOT(0)
+IF (option1)=(1)
+
+"data\CondTest\file4"-"!:\Documents\InstTest\option3-1.txt", FF
+ELSEIF NOT(0)
+
+"data\CondTest\file5"-"!:\Documents\InstTest\option3--.txt", FF
+ENDIF
+ENDIF
+ELSEIF NOT(0)
+IF (option2)=(1)
+IF (option1)=(1)
+
+"data\CondTest\file6"-"!:\Documents\InstTest\option-21.txt", FF
+ELSEIF NOT(0)
+
+"data\CondTest\file7"-"!:\Documents\InstTest\option-2-.txt", FF
+ENDIF
+ELSEIF NOT(0)
+IF (option1)=(1)
+
+"data\CondTest\file8"-"!:\Documents\InstTest\option--1.txt", FF
+ELSEIF NOT(0)
+
+"data\CondTest\file9"-"!:\Documents\InstTest\option---.txt", FF
+ENDIF
+ENDIF
+ENDIF

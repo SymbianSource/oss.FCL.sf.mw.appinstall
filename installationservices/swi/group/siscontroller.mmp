@@ -1,0 +1,82 @@
+/*
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* siscontroller.dll SISX Controller parser
+*
+*/
+
+
+/**
+ @file
+*/
+
+TARGET siscontroller.dll
+TARGETTYPE dll
+
+// UID is KUidSisxController = 0x10202DC7
+UID			0x1000008d 0x10202DC7
+VENDORID	0x70000001
+
+USERINCLUDE ../source/sisfile
+USERINCLUDE ../inc/swi
+SYSTEMINCLUDE  ../inc 
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+SOURCEPATH ../source/sisfile
+
+SOURCE sisfield.cpp
+SOURCE sisstring.cpp
+SOURCE sisuid.cpp
+SOURCE sisinfo.cpp
+SOURCE sisproperty.cpp
+SOURCE sisproperties.cpp
+SOURCE sislogo.cpp
+SOURCE sissupportedlanguages.cpp
+SOURCE siscontroller.cpp
+SOURCE sisversion.cpp
+SOURCE sisdatetime.cpp
+SOURCE sisdate.cpp
+SOURCE sistime.cpp
+SOURCE sissupportedoptions.cpp
+SOURCE sissupportedoption.cpp
+SOURCE sislanguage.cpp
+SOURCE sisprerequisites.cpp
+SOURCE sisdependency.cpp
+SOURCE sisversionrange.cpp
+SOURCE sisinstallblock.cpp
+SOURCE sishash.cpp
+SOURCE sisif.cpp
+SOURCE siselseif.cpp
+SOURCE sisexpression.cpp
+SOURCE sisfiledescription.cpp
+SOURCE sisblob.cpp
+SOURCE sisdataindex.cpp
+SOURCE sissignaturecertificatechain.cpp
+SOURCE sissignature.cpp
+SOURCE siscertificatechain.cpp
+SOURCE sissignaturealgorithm.cpp
+SOURCE siscapabilities.cpp
+SOURCE sistruststatus.cpp
+
+LIBRARY euser.lib
+LIBRARY efsrv.lib
+LIBRARY estor.lib
+LIBRARY securitymanager.lib
+LIBRARY hash.lib
+
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY All
+SMPSAFE

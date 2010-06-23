@@ -1,0 +1,30 @@
+MAKEDATA :
+!IF "$(PLATFORM)" != "GCCXML"
+	cd
+	echo ---------------------------
+	echo Building test data files...
+	echo ---------------------------
+	perl data\preparesisx.pl
+!ENDIF
+
+DO_NOTHING:
+	rem do nothing
+
+#
+# The targets invoked by abld...
+#
+
+MAKMAKE : DO_NOTHING
+FREEZE : DO_NOTHING
+LIB : DO_NOTHING
+RESOURCE : DO_NOTHING
+CLEANLIB : DO_NOTHING
+FINAL : DO_NOTHING
+RELEASABLES : DO_NOTHING
+
+SAVESPACE : BLD
+
+BLD : MAKEDATA
+
+CLEAN : 
+	del data\*.sis

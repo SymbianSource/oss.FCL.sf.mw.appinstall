@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<api id="e904588b8ad7eb29b950a49026f98b19" dataversion="1.0">
+  <name>IAUpdate API</name>
+  <description>Services to discover, download and install updates for applications.</description>
+  <type>c++</type>
+  <subsystem>iaupdate</subsystem>
+  <libs>
+    <lib name="iaupdateapi.lib" />
+  </libs>
+  <release category="domain"/>
+  <attributes>
+     <!-- This indicates wether the api provedes separate html documentation -->
+     <!-- or is the additional documentation generated from headers. -->
+     <!-- If you are unsuere then the value is "no" -->
+     <htmldocprovided>no</htmldocprovided>
+     <adaptation>no</adaptation>
+  </attributes>
+</api>

@@ -1,0 +1,67 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#define CATALOGS_COMPONENT_CATALOGSENGINEDLL
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+#ifdef USE_BUILD_SCRIPT
+    TARGET        ncdengine_APP_NAME_POSTFIX.dll
+    CAPABILITY    CATALOGS_MINIMUM_CAPABILITIES
+#else
+    TARGET        ncdengine_20019119.dll
+    CAPABILITY    CATALOGS_DLL_CAPABILITIES
+#endif // USE_BUILD_SCRIPT
+
+TARGETTYPE    dll
+UID           0x1000008d
+
+
+SOURCEPATH    ../../engine/src
+SOURCE	      catalogsengine.cpp
+
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../engine/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY euser.lib flogger.lib ecom.lib estor.lib
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif
+
+#ifdef USE_BUILD_SCRIPT
+EXPORTUNFROZEN
+#endif
+
+SMPSAFE

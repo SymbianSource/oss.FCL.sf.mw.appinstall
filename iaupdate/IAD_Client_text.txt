@@ -1,0 +1,13 @@
+
+IMPORTANT!
+
+THIS APPLICATION IS FOR R&D USAGE ONLY
+The Primary function of 'Software Update' application is to locate available updates and provide the user with an easy way of downloading and installing the updates. This feature can be used to get updates for core applications, middleware, missing codecs and plug-ins.
+Actions handled by 'Software Update' are: 
+• Search for all the available updates that are relevant to the user 
+• Download and install the updates selected by the user (Installation in done using the Installer application’s services, but the interface is provided by Software Update)
+• View update details 
+• Check update history  
+
+- 'Software Update' application requires backend service (server infrastructure with link to manufcturer business systems) in order to work and thus it is offered to terminal vendors only for R&D Usage purposes.
+The server infrastructure is manufacturer specific solution.

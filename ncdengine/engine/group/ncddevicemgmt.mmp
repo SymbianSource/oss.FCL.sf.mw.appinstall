@@ -1,0 +1,118 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#define CATALOGS_COMPONENT_NCDDEVICEMANAGEMENTDLL
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../../engine/inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+// ECOM plugin ncdproxy_20019119.dll requires this lib and therefore big caps.
+#ifdef USE_BUILD_SCRIPT
+    TARGET      ncddevicemgmt_APP_NAME_POSTFIX.dll
+    CAPABILITY  CATALOGS_MINIMUM_CAPABILITIES
+#else
+    TARGET      ncddevicemgmt_20019119.dll
+    CAPABILITY  CATALOGS_DLL_CAPABILITIES
+#endif // USE_BUILD_SCRIPT
+
+TARGETTYPE    dll
+UID           0x1000008d
+
+
+SOURCEPATH    ../src
+SOURCE        catalogsutils.cpp
+
+// Device interaction
+SOURCEPATH    ../../provider/deviceinteraction/src
+SOURCE        ncddeviceserviceimpl.cpp
+SOURCE        ncddeviceinteractionfactory.cpp
+SOURCE        ncdinstallationserviceimpl.cpp
+SOURCE        ncdactiveoperationobserver.cpp
+SOURCE        ncdsilentinstallactiveobserver.cpp
+
+USERINCLUDE   ../inc
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../provider/inc
+USERINCLUDE   ../../provider/server/inc
+USERINCLUDE   ../../provider/deviceinteraction/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY euser.lib estor.lib 
+LIBRARY bafl.lib charconv.lib efsrv.lib  // needed for ARMV5 building
+LIBRARY platformenv.lib // catalogsutils.cpp needs this
+
+// For DeviceInteraction
+
+LIBRARY         aknskinsrv.lib          // Set as Theme
+LIBRARY         ProfileEngine.lib       // Set as Ringing Tone
+LIBRARY         aknswallpaperutils.lib  // Wallpaper utility
+LIBRARY         etel.lib                // MCC and MNC
+LIBRARY         etelmm.lib              // MCC and MNC
+LIBRARY         caf.lib                 // Rights object
+LIBRARY         cafutils.lib            // Rights object
+LIBRARY         sisregistryclient.lib   // SIS Registry
+LIBRARY         cone.lib
+LIBRARY         apmime.lib
+LIBRARY         commonui.lib
+LIBRARY         centralrepository.lib
+LIBRARY         webutils.lib            // CUserAgent
+LIBRARY         sysutil.lib
+LIBRARY         apparc.lib
+LIBRARY         avkon.lib
+LIBRARY         etel3rdparty.lib 
+LIBRARY         apgrfx.lib
+LIBRARY         swinstcli.lib           // Silent install
+LIBRARY         sif.lib // SIF installer
+LIBRARY         scrclient.lib  //Registry client
+//LIBRARY         widgetregistryclient.lib // Widget Registry
+
+// HLa - temporary java remove
+//#if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined( __S60_32__ )
+//LIBRARY         javaregistry.lib        // Java Registry
+//#else
+//LIBRARY         javaregistryclient.lib
+//#endif
+
+#ifndef __SERIES60_31__
+LIBRARY         sysversioninfo.lib      // SysVersionInfo
+#endif
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif
+
+
+#ifdef USE_BUILD_SCRIPT
+EXPORTUNFROZEN
+#endif
+
+SMPSAFE

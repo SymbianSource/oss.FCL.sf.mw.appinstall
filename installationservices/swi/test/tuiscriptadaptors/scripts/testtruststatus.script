@@ -1,0 +1,78 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run truststatus SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+// give emulator time to start up so APPARC can initialize
+DELAY 5000
+
+
+//! @SYMTestCaseID 		API-SEC_UISA_SignedTest-0001
+//! @SYMTestCaseDesc 		Install simple SIS file with 1 signature
+//! @SYMFssID 			Security/Software Install/188.001.137,188.001.166,188.001.167    
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Yankee
+// Signed SIS tests
+
+START_TESTCASE API-SEC_UISA_SignedTest-0001
+
+//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini optionsnc_rsa_l2
+
+END_TESTCASE API-SEC_UISA_SignedTest-0001
+
+
+//! @SYMTestCaseID          	API-SEC-TestDef053177_2LevelsEmbed-0001
+//! @SYMTestCaseDesc		Install package with two levels of embedded packages.
+//! @SYMDEF			DEF053177
+//! @SYMTestPriority        	High
+//! @SYMTestActions         	Install package and embedded packages.
+//! @SYMTestExpectedResults 	Package and embedded packages are installed/uninstalled.
+//! @SYMDevelopedForRelease 	Yankee
+
+START_TESTCASE API-SEC-TestDef053177_2LevelsEmbed-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini def053177_2LevelsEmbed
+
+END_TESTCASE DEF053177_2LevelsEmbed
+
+
+//! @SYMTestCaseID 		API-SEC_UISA_TrustStatus-0004
+//! @SYMTestCaseDesc 		Check the trust status of the installed packages
+//! @SYMFssID 			Security/Software Install/188.001.137    
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Packages trust statuses are reported 
+//! @SYMTestExpectedResults 	No error
+//! @SYMDevelopedForRelease 	Bravo
+
+START_TESTCASE API-SEC_UISA_TrustStatus-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini shutdown
+RUN_TEST_STEP 100 tuiscriptadaptors TrustStatus z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini trust_shutdown
+//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_longname_rsa_l1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\signed.ini u_optionsnc_rsa_l2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_def053177_2LevelsEmbed
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testshutdown.ini u_shutdown
+
+END_TESTCASE API-SEC_UISA_TrustStatus-0004
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

@@ -1,0 +1,81 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;Languages
+&EN
+
+;Header
+#{"largenoofuids"}, (0x81111234), 1, 2, 3,TYPE=SA
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+ 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test1.exe"-"!:\sys\bin\dummy_test1.exe" 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test2.exe"-"!:\sys\bin\dummy_test2.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test3.exe"-"!:\ss\bin\dummy_test3.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test4.exe"-"!:\sys\bin\dummy_test4.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test5.exe"-"!:\sys\bin\dummy_test5.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test6.exe"-"!:\sys\bin\dummy_test6.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test7.exe"-"!:\sys\bin\dummy_test7.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test8.exe"-"!:\sys\bin\dummy_test8.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test9.exe"-"!:\sys\bin\dummy_test9.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test10.exe"-"!:\sys\bin\dummy_test10.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test11.exe"-"!:\sys\bin\dummy_test11.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test12.exe"-"!:\sys\bin\dummy_test12.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test13.exe"-"!:\sys\bin\dummy_test13.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test14.exe"-"!:\sys\bin\dummy_test14.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test15.exe"-"!:\sys\bin\dummy_test15.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test16.exe"-"!:\sys\bin\dummy_test16.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test17.exe"-"!:\sys\bin\dummy_test17.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test18.exe"-"!:\sys\bin\dummy_test18.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test19.exe"-"!:\sys\bin\dummy_test19.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test20.exe"-"!:\sys\bin\dummy_test20.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test21.exe"-"!:\sys\bin\dummy_test21.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test22.exe"-"!:\sys\bin\dummy_test22.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test23.exe"-"!:\sys\bin\dummy_test23.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test24.exe"-"!:\sys\bin\dummy_test24.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test25.exe"-"!:\sys\bin\dummy_test25.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test26.exe"-"!:\sys\bin\dummy_test26.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test27.exe"-"!:\sys\bin\dummy_test27.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test28.exe"-"!:\sys\bin\dummy_test28.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test29.exe"-"!:\sys\bin\dummy_test29.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test30.exe"-"!:\sys\bin\dummy_test30.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test31.exe"-"!:\sys\bin\dummy_test31.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test32.exe"-"!:\sys\bin\dummy_test32.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test33.exe"-"!:\sys\bin\dummy_test33.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test34.exe"-"!:\sys\bin\dummy_test34.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test35.exe"-"!:\sys\bin\dummy_test35.exe"
+
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\test36_console_app.exe"-"!:\sys\bin\test36_console_app.exe"
+ 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test37.exe"-"!:\sys\bin\dummy_test37.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test38.exe"-"!:\sys\bin\dummy_test38.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test39.exe"-"!:\sys\bin\dummy_test39.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\dummy_test40.exe"-"!:\sys\bin\dummy_test40.exe"
+
+
+;Empty text files (used to double-check success of installation/un-installation)
+"packages\simpletextfile.txt"-"!:\Documents\Insttest\simplefile1.txt"
+"packages\simpletextfile.txt"-"!:\Documents\Insttest\simplefile2.txt"
+"packages\simpletextfile.txt"-"!:\Documents\Insttest\simplefile3.txt"
+
+
+ 
+  
+ 
+ 
+ 
+ 

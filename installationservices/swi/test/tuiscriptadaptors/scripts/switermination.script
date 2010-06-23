@@ -1,0 +1,271 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-LaunchingThreadTerminated-0001
+//! @SYMTestCaseDesc 		Abort installation and uninstallation by killing launching thread, make sure swi recovers
+//! @SYMDEF 			DEF086668
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Use short testexecute step timeouts for various package install/uninstall operations to abort
+//! 				prematurely,test that SWI shuts down and can be used again.
+//! @SYMTestExpectedResults 	Recovery after failure is as expected.  Note that no panics are expected; if these occur during 
+//! 				the emulator test run they will be caught by the panicscan perl script.
+
+START_TESTCASE API-SEC-LaunchingThreadTerminated-0001
+
+// Abort install in progress after delays from 4 down to 1 second into the install, making sure that
+// swis shuts down after each step.
+
+RUN_TEST_STEP_RESULT -39 4 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+RUN_TEST_STEP_RESULT -39 3 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+RUN_TEST_STEP_RESULT -39 2 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+RUN_TEST_STEP_RESULT -39 1 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+// Make sure install can actually complete now (and set up for further tests)
+RUN_TEST_STEP 600 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage
+
+// Abort install which runs exe to completion
+RUN_TEST_STEP_RESULT -39 3 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini exeRIRW
+
+// Make sure swis shuts down.  It shouldn't happen until the synchronous file run completes
+run_program killrunningprocess 89334567 2000000  
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+// Check exe is no longer running.
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+RUN_TEST_STEP_RESULT -1 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testrun.ini u_exeRIRW
+
+// Abort uninstall in progress - note package is left installed for next test case to save the long install being repeated.
+RUN_TEST_STEP_RESULT -39 1 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_cancelpackage_delay
+
+// Make sure SWIS shuts down
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+// Install package with run-on-uninstall exe and abort uninstall
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  testrun_exe
+RUN_TEST_STEP_RESULT -39 3 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_testrun_exe
+// Exe should still be running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Make sure SWIS shuts down and that subsequent completed uninstall works.
+run_program killrunningprocess 89334567 2000000
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+// Exe should have stopped running
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+RUN_TEST_STEP 50 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_testrun_exe
+
+END_TESTCASE API-SEC-LaunchingThreadTerminated-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SwisTerminated-0001
+//! @SYMTestCaseDesc 		Abort installation and uninstallation by killing installserver, make sure swi recovers and can be used again
+//! @SYMDEF 			DEF086668
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Use exe with PowerMgmt capability to kill the installserver during various package install/uninstall
+//! 				operations to abort prematurely, test that SWI subsequent installs work.
+//! @SYMTestExpectedResults 	Recovery after failure is as expected.  Note that no panics are expected; if these occur during 
+//! 				the emulator test run they will be caught by the panicscan perl script.  Depending on the precise timing of the failure,
+//! 				the aborted install/uninstall can complete with KErrDied, KErrServerTerminated or KErrNotFound.
+
+START_TESTCASE API-SEC-SwisTerminated-0001
+
+// Run install that takes a while and kill installserver part of the way through
+CONCURRENT
+run_program killrunningprocess 101f7295 3000000
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage_swiskilled
+CONSECUTIVE
+
+// Check that a subsequent install succeeds
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+CONCURRENT
+run_program killrunningprocess 101f7295 2500000
+RUN_TEST_STEP 10 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage_swiskilled
+CONSECUTIVE
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+CONCURRENT
+run_program killrunningprocess 101f7295 2000000
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini cancelpackage_swiskilled
+CONSECUTIVE
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini simple
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_simple
+
+CONCURRENT
+run_program killrunningprocess 101f7295 1500000
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  cancelpackage_swiskilled
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 400000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini def052175_swiskilled
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 500000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallFHStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longname_rsa_l1_swiskilled
+CONSECUTIVE
+
+// Short delay before Killing SWIS above can mean it dies before connecting to sishelperserver,
+// which may then take 2 seconds to shut down.  Delay just in case.
+DELAY 2000
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini exeRIRW_swiskilled
+CONSECUTIVE
+
+// Exe will still be running.
+//RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+RUN_TEST_STEP_RESULT -1 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini u_exeRIRW
+
+// Install package containing longrun exe.
+RUN_TEST_STEP 80 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrun_base
+DELAY 2000
+// Install PU which replaces the exe with a run-on-install version and make sure the exe is running
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+// Repeatedly re-install the same PU, with ocsp checks and a 1 second delay at each dialog, in order to kill the installserver
+// with a variety of dialogs raised.
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest0
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest1
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest2
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest3
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest4
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest5
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest6
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest7
+CONSECUTIVE
+
+CONCURRENT
+run_program killrunningprocess 101f7295 4000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest8
+CONSECUTIVE
+
+// Make sure the exe is running for the next test
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+CONCURRENT
+run_program killrunningprocess 101f7295 5000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest9
+CONSECUTIVE
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+CONCURRENT
+run_program killrunningprocess 101f7295 5000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest10
+CONSECUTIVE
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+CONCURRENT
+run_program killrunningprocess 101f7295 5000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest11
+CONSECUTIVE
+
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+CONCURRENT
+run_program killrunningprocess 101f7295 5000000
+RUN_TEST_STEP 20 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini longrunRI_pu_dialogtest12
+CONSECUTIVE
+
+// Uninstall package.
+RUN_TEST_STEP 50 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini u_longrun_base
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini longrunexeRunning
+
+// Install package with run-on-uninstall exe and abort uninstall
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini testrun_exe
+CONCURRENT
+run_program killrunningprocess 101f7295 2500000
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini u_testrun_exe_swiskilled
+CONSECUTIVE
+// Exe should still be running
+RUN_TEST_STEP 50 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Complete uninstall which will shut down the exe.
+RUN_TEST_STEP 50 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini u_testrun_exe
+RUN_TEST_STEP_RESULT 106 tuiscriptadaptors FindRunningExe z:\tswi\tuiscriptadaptors\scripts\testrun.ini consoleappRunning
+
+// Delete flagging file left behind by testrun exe
+RUN_UTILS DeleteFile c:\testrun_flag_file.out
+
+// Abort uninstall of cancelpackage with delays on dialogs
+CONCURRENT
+run_program killrunningprocess 101f7295 2000000
+RUN_TEST_STEP 20 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_cancelpackage_swiskilled
+CONSECUTIVE
+
+DELAY 4000
+// Complete uninstall of cancelpackage.
+RUN_TEST_STEP 35 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\switermination.ini  u_cancelpackage
+
+END_TESTCASE API-SEC-SwisTerminated-0001
+
+
+// Ensure Swis shuts down at end of all tests
+RUN_TEST_STEP 50 tuiscriptadaptors SwisNotRunning
+
+
+

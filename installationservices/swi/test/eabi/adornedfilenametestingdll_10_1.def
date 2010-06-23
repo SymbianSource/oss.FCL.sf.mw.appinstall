@@ -1,0 +1,13 @@
+EXPORTS
+	_ZN26Cadornedfilenametestingdll19ExampleFuncAddCharLERK5TChar @ 1 NONAME
+	_ZN26Cadornedfilenametestingdll21ExampleFuncRemoveLastEv @ 2 NONAME
+	_ZN26Cadornedfilenametestingdll4NewLEv @ 3 NONAME
+	_ZN26Cadornedfilenametestingdll5NewLCEv @ 4 NONAME
+	_ZN26CadornedfilenametestingdllD0Ev @ 5 NONAME
+	_ZN26CadornedfilenametestingdllD1Ev @ 6 NONAME
+	_ZN26CadornedfilenametestingdllD2Ev @ 7 NONAME
+	_ZNK26Cadornedfilenametestingdll17ExampleFuncStringEv @ 8 NONAME
+	_ZNK26Cadornedfilenametestingdll7VersionEv @ 9 NONAME
+	_ZTI26Cadornedfilenametestingdll @ 10 NONAME
+	_ZTV26Cadornedfilenametestingdll @ 11 NONAME
+

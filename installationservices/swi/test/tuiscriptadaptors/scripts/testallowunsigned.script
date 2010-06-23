@@ -1,0 +1,57 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Run tests which install unsigned SIS files when AllowUnsigned == True in swipolicy.ini
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID 		API-SEC-UNSIGNED-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-UNSIGNED-0001
+
+// Install followed by uninstall of unsigned sis file containing data only
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 1-1unsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 1-1unsigneddata
+
+// Install followed by uninstall of unsigned sis file containing an exe with no capabilities
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini tswinocapability
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini u_tswinocapability
+
+// Install followed by uninstall of unsigned sis file containing an exe with user grantable capabilities
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini tswiusergrantable
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini u_tswiusergrantable
+
+// Install of unsigned sis file with an exe requiring a system capability (should fail)
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini tswisystemcapability
+
+END_TESTCASE API-SEC-UNSIGNED-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CIT_EGUO-6G9J6M_03-0001
+//! @SYMTestCaseDesc		A Reject the installation of libraries with protected VIDs in an unsigned SIS file.
+//! @SYMCR 			EGUO-6G9J6M
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Attempts to install an unsigned SIS file that contains a DLL with a protected VID.
+//! @SYMTestExpectedResults 	Files not installed.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-CIT_EGUO-6G9J6M_03-0001
+RUN_TEST_STEP_RESULT -10254 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testallowunsigned.ini tswidllnocapabilityprotectedvid_unsigned
+
+END_TESTCASE API-SEC-CIT_EGUO-6G9J6M_03-0001
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

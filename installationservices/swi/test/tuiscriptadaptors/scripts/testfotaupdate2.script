@@ -1,0 +1,53 @@
+//
+// Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS FOTA upgrade test
+PRINT Run SWI FOTA Update tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
+
+//! @SYMTestCaseID INST-REG-FOTA-0002
+//! @SYMTestCaseDesc Tests F/W update scenario
+//! @SYMREQ REQ0000
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario
+//! @SYMTestExpectedResults Registry is updated with latest stub info
+START_TESTCASE FotaTest2
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini package_info_fota_v2
+END_TESTCASE FotaTest2
+
+
+//! @SYMTestCaseID INST-REG-FOTA-0005
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files
+//! @SYMTestExpectedResults SCR db is updated with latest app info
+START_TESTCASE FotaTest5
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini app_info_fota_v2
+END_TESTCASE FotaTest5
+
+//! @SYMTestCaseID INST-REG-FOTA-0006
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files in stub
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files in stub
+//! @SYMTestExpectedResults Registry is updated with latest stub info
+START_TESTCASE FotaTest6
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini stubapp_info_fota_v2
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini stubapp_scr_info_fota_v2
+END_TESTCASE FotaTest6

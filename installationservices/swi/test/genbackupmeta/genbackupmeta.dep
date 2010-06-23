@@ -1,0 +1,87 @@
+# Microsoft Developer Studio Generated Dependency File, included by genbackupmeta.mak
+
+.\source\cmdparser.cpp : \
+	".\inc\cmdparser.h"\
+	".\inc\details.h"\
+	".\inc\exceptionhandler.h"\
+	".\inc\utils.h"\
+	
+
+.\source\details.cpp : \
+	".\inc\details.h"\
+	
+
+.\source\exceptionhandler.cpp : \
+	".\inc\exceptionhandler.h"\
+	
+
+.\source\filecontents.cpp : \
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\exceptionhandler.h"\
+	".\inc\filecontents.h"\
+	
+
+.\source\main.cpp : \
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\cmdparser.h"\
+	".\inc\details.h"\
+	".\inc\exceptionhandler.h"\
+	".\inc\metagenerator.h"\
+	
+
+.\source\metagenerator.cpp : \
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\cmdparser.h"\
+	".\inc\exceptionhandler.h"\
+	".\inc\filecontents.h"\
+	".\inc\metagenerator.h"\
+	".\inc\preamble.h"\
+	".\inc\siscompressed.h"\
+	".\inc\streamwriter.h"\
+	".\inc\tlv.h"\
+	".\inc\utils.h"\
+	
+
+.\source\preamble.cpp : \
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\filecontents.h"\
+	".\inc\preamble.h"\
+	
+
+.\source\siscompressed.cpp : \
+	"\epoc32\include\zconf.h"\
+	"\epoc32\include\zlib.h"\
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\exceptionhandler.h"\
+	".\inc\filecontents.h"\
+	".\inc\siscompressed.h"\
+	".\inc\tlv.h"\
+	
+
+.\source\streamwriter.cpp : \
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\streamwriter.h"\
+	
+
+.\source\tlv.cpp : \
+	"..\..\inc\swi\installtypes.h"\
+	"..\..\inc\swi\sisfieldtypes.h"\
+	"..\..\..\..\secureswitools\swianalysistoolkit\source\common\symbiantypes.h"\
+	".\inc\filecontents.h"\
+	".\inc\tlv.h"\
+	
+
+.\source\utils.cpp : \
+	".\inc\exceptionhandler.h"\
+	".\inc\utils.h"\
+	

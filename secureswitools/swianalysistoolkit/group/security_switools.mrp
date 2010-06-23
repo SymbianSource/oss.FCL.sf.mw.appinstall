@@ -1,0 +1,15 @@
+component	security_switools
+source	\sf\mw\appinstall\secureswitools\swianalysistoolkit
+binary	\sf\mw\appinstall\secureswitools\swianalysistoolkit\group	all
+exports	\sf\mw\appinstall\secureswitools\swianalysistoolkit\group
+
+# Compensate for not building "tools deb"
+-binary \epoc32\release\winc\deb\dumpswicertstoretool.exe
+-binary \epoc32\release\winc\deb\dumpchainvaliditytool.exe
+-binary \epoc32\release\winc\deb\dumpinstallfilestatustool.exe
+-binary \epoc32\release\winc\deb\dumpswiregistrytool.exe
+
+notes_source	\component_defs\release.src
+
+ipr T 
+

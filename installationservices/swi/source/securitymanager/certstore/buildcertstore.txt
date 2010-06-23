@@ -1,0 +1,173 @@
+//4.1 Test cases for single file-based writable certificate store
+
+//4.1.1 Successfull addition, listing and retrieval of certificates (X.509)
+
+<action>
+	<actionname>4.1.1.1,Opening a certificate store manager</actionname>
+	<actiontype>init</actiontype>
+	<actionbody>
+		<mode>write</mode>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>No Test, Deleting all certs ***NEW***</actionname>
+	<actiontype>deletecert</actiontype>
+	<actionbody>
+		<label>*.*</label>
+		<deleteallcerts>1</deleteallcerts>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Add certificate</actionname>
+	<actiontype>addcert</actiontype>
+	<actionbody>
+		<format>X509</format>
+		<label>Root5CA</label>
+		<issuerkey></issuerkey>
+		<subjectkey></subjectkey>
+		<certstore>0</certstore>
+		<certfile>c:\system\TOCSP\Certs\newopenssl\Root5-RSA.der</certfile>
+		<certowner>CA</certowner>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Add certificate</actionname>
+	<actiontype>addcert</actiontype>
+	<actionbody>
+		<format>X509</format>
+		<label>SymbianTestDSACA</label>
+		<issuerkey></issuerkey>
+		<subjectkey></subjectkey>
+		<certstore>0</certstore>
+		<certfile>c:\tappinst\certs\Symbian-Test-DSA.der</certfile>
+		<certowner>CA</certowner>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Add certificate</actionname>
+	<actiontype>addcert</actiontype>
+	<actionbody>
+		<format>X509</format>
+		<label>SymbianTestRSACA</label>
+		<issuerkey></issuerkey>
+		<subjectkey></subjectkey>
+		<certstore>0</certstore>
+		<certfile>c:\tappinst\certs\Symbian-Test-RSA.der</certfile>
+		<certowner>CA</certowner>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set applications</actionname>
+	<actiontype>setapplications</actiontype>
+	<actionbody>
+		<label>Root5CA</label>
+		<uid>268452523</uid>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set applications</actionname>
+	<actiontype>setapplications</actiontype>
+	<actionbody>
+		<label>SymbianTestDSACA</label>
+		<uid>268452523 268478646</uid>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set applications</actionname>
+	<actiontype>setapplications</actiontype>
+	<actionbody>
+		<label>SymbianTestRSACA</label>
+		<uid>268452523 268478646</uid>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set trust</actionname>
+	<actiontype>settrust</actiontype> 
+	<actionbody>
+		<label>Root5CA</label>
+		<trust>1</trust>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set trust</actionname>
+	<actiontype>settrust</actiontype> 
+	<actionbody>
+		<label>SymbianTestDSACA</label>
+		<trust>1</trust>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Set trust</actionname>
+	<actiontype>settrust</actiontype> 
+	<actionbody>
+		<label>SymbianTestRSACA</label>
+		<trust>1</trust>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>Get the list of certificates</actionname>
+	<actiontype>listcacert</actiontype>
+	<actionbody>
+		<uid></uid>
+		<formatflags></formatflags>
+	</actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+		<CCTCertInfo><label>Root5CA</label></CCTCertInfo>
+		<CCTCertInfo><label>SymbianTestDSACA</label></CCTCertInfo>
+		<CCTCertInfo><label>SymbianTestRSACA</label></CCTCertInfo>
+	</actionresult>
+</action>
+
+<action>
+	<actionname>No Test,Deleting the writable certificate store manager</actionname>
+	<actiontype>delete</actiontype>
+	<actionbody></actionbody>
+	<actionresult>
+		<return>KErrNone</return>
+	</actionresult>
+</action>

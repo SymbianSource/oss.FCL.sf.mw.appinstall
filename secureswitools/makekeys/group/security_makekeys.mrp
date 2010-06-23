@@ -1,0 +1,11 @@
+component	security_makekeys
+source	\sf\mw\appinstall\secureswitools\makekeys
+#binary	\security\makekeys\group tools
+#MattD: it doesn't like 'tools rel'...
+binary	\epoc32\tools\makekeys.exe
+exports	\sf\mw\appinstall\secureswitools\makekeys\group
+notes_source	\component_defs\release.src
+
+ipr E 
+ipr T \sf\mw\appinstall\secureswitools\makekeys\tdata
+

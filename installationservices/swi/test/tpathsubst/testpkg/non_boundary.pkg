@@ -1,0 +1,37 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+
+#{"PathSub non dir boundary case"},(0x81505357),1,0,0
+
+%{"Symbian"}
+
+:"Symbian"
+
+; match find path but don't end on a boundary
+"textfile.txt"-"c:\FIND_C_ONLYEXTRA\tf_fco_extra.txt",FF
+
+; match first part of replace path
+"textfile.txt"-"c:\FIND_C_ONL\tf_fco_trunc.txt",FF
+
+; match find path, but not at start of find path
+"textfile.txt"-"c:\IND_C_ONLY\tf_fco_non_start.txt",FF
+
+; match find path, but not at start of target
+"textfile.txt"-"c:\PRE_DIR\FIND_C_ONLY\tf_pre_dir.txt",FF
+
+; an actual match, just to check FIND_C_ONLY works
+"textfile.txt"-"c:\FIND_C_ONLY\tf_fco_works.txt",FF
+

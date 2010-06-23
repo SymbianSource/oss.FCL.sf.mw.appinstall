@@ -1,0 +1,79 @@
+# Microsoft Developer Studio Generated Dependency File, included by dumpinstallfilestatustool.mak
+
+..\common\certificatechain.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"\
+	
+
+..\common\dumpchainvaliditytool.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	
+
+.\DumpInstallFileStatusTool.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\DumpInstallFileStatusTool.h"\
+	".\options.h"\
+	".\sisfiledata.h"\
+	
+
+..\common\launchprocess.cpp : \
+	"..\common\launchprocess.h"\
+	".\options.h"\
+	
+
+.\options.cpp : \
+	"..\common\capabilities.h"\
+	".\options.h"\
+	
+
+..\..\common\osinterface.cpp : \
+	"..\..\common\osinterface.h"\
+	
+
+..\common\siscertificatechain.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"\
+	
+
+.\sisfiledata.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\launchprocess.h"\
+	".\options.h"\
+	".\sisfiledata.h"\
+	
+
+..\common\swicertstore.cpp : \
+	"..\..\common\osinterface.h"\
+	"..\common\capabilities.h"\
+	"..\common\certificatechain.h"\
+	"..\common\dumpchainvaliditytool.h"\
+	"..\common\launchprocess.h"\
+	"..\common\siscertificatechain.h"\
+	"..\common\swicertstore.h"\
+	".\options.h"\
+
+	

@@ -1,0 +1,116 @@
+EXPORTS
+	??0CUissCmd@Swi@@IAE@H@Z @ 1 NONAME ; Swi::CUissCmd::CUissCmd(int)
+	??0CUissCmdHandler@Swi@@IAE@AAVMUiHandler@1@@Z @ 2 NONAME ; Swi::CUissCmdHandler::CUissCmdHandler(class Swi::MUiHandler &)
+	??0TAppInfo@Swi@@QAE@ABV01@@Z @ 3 NONAME ; Swi::TAppInfo::TAppInfo(class Swi::TAppInfo const &)
+	??0TAppInfo@Swi@@QAE@ABVTDesC16@@0ABVTVersion@@@Z @ 4 NONAME ; Swi::TAppInfo::TAppInfo(class TDesC16 const &, class TDesC16 const &, class TVersion const &)
+	??0TAppInfo@Swi@@QAE@XZ @ 5 NONAME ; Swi::TAppInfo::TAppInfo(void)
+	??1CUissCmd@Swi@@UAE@XZ @ 6 NONAME ; Swi::CUissCmd::~CUissCmd(void)
+	??BCWriteStream@Swi@@QAEAAVRBufWriteStream@@XZ @ 7 NONAME ; Swi::CWriteStream::operator class RBufWriteStream &(void)
+	?Cancel@RUissSession@Swi@@QAEHXZ @ 8 NONAME ; int Swi::RUissSession::Cancel(void)
+	?Close@RUiHandler@Swi@@QAEXXZ @ 9 NONAME ; void Swi::RUiHandler::Close(void)
+	?CompleteDialog@RUissSession@Swi@@QAEXHAAVTDes8@@AAVTRequestStatus@@@Z @ 10 NONAME ; void Swi::RUissSession::CompleteDialog(int, class TDes8 &, class TRequestStatus &)
+	?Connect@RUiHandler@Swi@@QAEHXZ @ 11 NONAME ; int Swi::RUiHandler::Connect(void)
+	?Connect@RUissSession@Swi@@QAEHXZ @ 12 NONAME ; int Swi::RUissSession::Connect(void)
+	?ExecuteL@RUiHandler@Swi@@QAEXAAVCUissCmd@2@@Z @ 13 NONAME ; void Swi::RUiHandler::ExecuteL(class Swi::CUissCmd &)
+	?ExternalizeL@CAppInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 14 NONAME ; void Swi::CAppInfo::ExternalizeL(class RWriteStream &) const
+	?ExternalizeL@TAppInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 15 NONAME ; void Swi::TAppInfo::ExternalizeL(class RWriteStream &) const
+	?Install@RUissSession@Swi@@QAEXABVTDesC8@@AAVTDes8@@AAVTRequestStatus@@@Z @ 16 NONAME ; void Swi::RUissSession::Install(class TDesC8 const &, class TDes8 &, class TRequestStatus &)
+	?InternalizeL@CAppInfo@Swi@@QAEXAAVRReadStream@@@Z @ 17 NONAME ; void Swi::CAppInfo::InternalizeL(class RReadStream &)
+	?NewL@CAppInfo@Swi@@SAPAV12@AAVRReadStream@@@Z @ 18 NONAME ; class Swi::CAppInfo * Swi::CAppInfo::NewL(class RReadStream &)
+	?NewL@CAppInfo@Swi@@SAPAV12@ABVTDesC16@@0ABVTVersion@@@Z @ 19 NONAME ; class Swi::CAppInfo * Swi::CAppInfo::NewL(class TDesC16 const &, class TDesC16 const &, class TVersion const &)
+	?NewL@CCertificateInfo@Swi@@SAPAV12@AAVRReadStream@@@Z @ 20 NONAME ; class Swi::CCertificateInfo * Swi::CCertificateInfo::NewL(class RReadStream &)
+	?NewL@CCertificateInfo@Swi@@SAPAV12@ABVCX509Certificate@@@Z @ 21 NONAME ; class Swi::CCertificateInfo * Swi::CCertificateInfo::NewL(class CX509Certificate const &)
+	?NewL@CDisplayApplicationsInUse@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@@Z @ 22 NONAME ; class Swi::CDisplayApplicationsInUse * Swi::CDisplayApplicationsInUse::NewL(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &)
+	?NewL@CDisplayCannotOverwriteFile@Swi@@SAPAV12@ABVTAppInfo@2@0ABVTDesC16@@@Z @ 23 NONAME ; class Swi::CDisplayCannotOverwriteFile * Swi::CDisplayCannotOverwriteFile::NewL(class Swi::TAppInfo const &, class Swi::TAppInfo const &, class TDesC16 const &)
+	?NewL@CDisplayDependencyBreak@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@@Z @ 24 NONAME ; class Swi::CDisplayDependencyBreak * Swi::CDisplayDependencyBreak::NewL(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &)
+	?NewL@CDisplayDependencyWarning@Swi@@SAPAV12@ABVTAppInfo@2@ABVTDesC16@@HABVTVersion@@H2H2@Z @ 25 NONAME ; class Swi::CDisplayDependencyWarning * Swi::CDisplayDependencyWarning::NewL(class Swi::TAppInfo const &, class TDesC16 const &, int, class TVersion const &, int, class TVersion const &, int, class TVersion const &)
+	?NewL@CDisplayDeviceIncompatibility@Swi@@SAPAV12@ABVTAppInfo@2@@Z @ 26 NONAME ; class Swi::CDisplayDeviceIncompatibility * Swi::CDisplayDeviceIncompatibility::NewL(class Swi::TAppInfo const &)
+	?NewL@CDisplayDrive@Swi@@SAPAV12@ABVTAppInfo@2@_JABV?$RArray@VTChar@@@@ABV?$RArray@_J@@@Z @ 27 NONAME ; class Swi::CDisplayDrive * Swi::CDisplayDrive::NewL(class Swi::TAppInfo const &, long long, class RArray<class TChar> const &, class RArray<long long> const &)
+	?NewL@CDisplayError@Swi@@SAPAV12@ABVTAppInfo@2@W4TErrorDialog@2@ABVTDesC16@@@Z @ 28 NONAME ; class Swi::CDisplayError * Swi::CDisplayError::NewL(class Swi::TAppInfo const &, enum Swi::TErrorDialog, class TDesC16 const &)
+	?NewL@CDisplayGrantCapabilities@Swi@@SAPAV12@ABVTAppInfo@2@ABVTCapabilitySet@@@Z @ 29 NONAME ; class Swi::CDisplayGrantCapabilities * Swi::CDisplayGrantCapabilities::NewL(class Swi::TAppInfo const &, class TCapabilitySet const &)
+	?NewL@CDisplayInstall@Swi@@SAPAV12@ABVTAppInfo@2@AAVRFs@@PAVRFile@@ABV?$RPointerArray@VCCertificateInfo@Swi@@@@@Z @ 30 NONAME ; class Swi::CDisplayInstall * Swi::CDisplayInstall::NewL(class Swi::TAppInfo const &, class RFs &, class RFile *, class RPointerArray<class Swi::CCertificateInfo> const &)
+	?NewL@CDisplayLanguage@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RArray@W4TLanguage@@@@@Z @ 31 NONAME ; class Swi::CDisplayLanguage * Swi::CDisplayLanguage::NewL(class Swi::TAppInfo const &, class RArray<enum TLanguage> const &)
+	?NewL@CDisplayOcspResult@Swi@@SAPAV12@ABVTAppInfo@2@W4TRevocationDialogMessage@2@AAV?$RPointerArray@VTOCSPOutcome@@@@AAV?$RPointerArray@VCCertificateInfo@Swi@@@@H@Z @ 32 NONAME ; class Swi::CDisplayOcspResult * Swi::CDisplayOcspResult::NewL(class Swi::TAppInfo const &, enum Swi::TRevocationDialogMessage, class RPointerArray<class TOCSPOutcome> &, class RPointerArray<class Swi::CCertificateInfo> &, int)
+	?NewL@CDisplayOptions@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@AAV?$RArray@H@@@Z @ 33 NONAME ; class Swi::CDisplayOptions * Swi::CDisplayOptions::NewL(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &, class RArray<int> &)
+	?NewL@CDisplayQuestion@Swi@@SAPAV12@ABVTAppInfo@2@W4TQuestionDialog@2@ABVTDesC16@@@Z @ 34 NONAME ; class Swi::CDisplayQuestion * Swi::CDisplayQuestion::NewL(class Swi::TAppInfo const &, enum Swi::TQuestionDialog, class TDesC16 const &)
+	?NewL@CDisplaySecurityWarning@Swi@@SAPAV12@ABVTAppInfo@2@W4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCCertificateInfo@Swi@@@@H@Z @ 35 NONAME ; class Swi::CDisplaySecurityWarning * Swi::CDisplaySecurityWarning::NewL(class Swi::TAppInfo const &, enum Swi::TSignatureValidationResult, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class Swi::CCertificateInfo> &, int)
+	?NewL@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC16@@@Z @ 36 NONAME ABSENT ; class Swi::CDisplayText * Swi::CDisplayText::NewL(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC16 const &)
+	?NewL@CDisplayUninstall@Swi@@SAPAV12@ABVTAppInfo@2@@Z @ 37 NONAME ; class Swi::CDisplayUninstall * Swi::CDisplayUninstall::NewL(class Swi::TAppInfo const &)
+	?NewL@CDisplayUpgrade@Swi@@SAPAV12@ABVTAppInfo@2@0@Z @ 38 NONAME ; class Swi::CDisplayUpgrade * Swi::CDisplayUpgrade::NewL(class Swi::TAppInfo const &, class Swi::TAppInfo const &)
+	?NewL@CHandleCancellableInstallEvent@Swi@@SAPAV12@ABVTAppInfo@2@W4TInstallCancellableEvent@2@HABVTDesC16@@@Z @ 39 NONAME ; class Swi::CHandleCancellableInstallEvent * Swi::CHandleCancellableInstallEvent::NewL(class Swi::TAppInfo const &, enum Swi::TInstallCancellableEvent, int, class TDesC16 const &)
+	?NewL@CHandleInstallEvent@Swi@@SAPAV12@ABVTAppInfo@2@W4TInstallEvent@2@HABVTDesC16@@@Z @ 40 NONAME ; class Swi::CHandleInstallEvent * Swi::CHandleInstallEvent::NewL(class Swi::TAppInfo const &, enum Swi::TInstallEvent, int, class TDesC16 const &)
+	?NewL@CWriteStream@Swi@@SAPAV12@XZ @ 41 NONAME ; class Swi::CWriteStream * Swi::CWriteStream::NewL(void)
+	?NewLC@CAppInfo@Swi@@SAPAV12@AAVRReadStream@@@Z @ 42 NONAME ; class Swi::CAppInfo * Swi::CAppInfo::NewLC(class RReadStream &)
+	?NewLC@CAppInfo@Swi@@SAPAV12@ABVTDesC16@@0ABVTVersion@@@Z @ 43 NONAME ; class Swi::CAppInfo * Swi::CAppInfo::NewLC(class TDesC16 const &, class TDesC16 const &, class TVersion const &)
+	?NewLC@CCertificateInfo@Swi@@SAPAV12@AAVRReadStream@@@Z @ 44 NONAME ; class Swi::CCertificateInfo * Swi::CCertificateInfo::NewLC(class RReadStream &)
+	?NewLC@CCertificateInfo@Swi@@SAPAV12@ABVCX509Certificate@@@Z @ 45 NONAME ; class Swi::CCertificateInfo * Swi::CCertificateInfo::NewLC(class CX509Certificate const &)
+	?NewLC@CDisplayApplicationsInUse@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@@Z @ 46 NONAME ; class Swi::CDisplayApplicationsInUse * Swi::CDisplayApplicationsInUse::NewLC(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &)
+	?NewLC@CDisplayCannotOverwriteFile@Swi@@SAPAV12@ABVTAppInfo@2@0ABVTDesC16@@@Z @ 47 NONAME ; class Swi::CDisplayCannotOverwriteFile * Swi::CDisplayCannotOverwriteFile::NewLC(class Swi::TAppInfo const &, class Swi::TAppInfo const &, class TDesC16 const &)
+	?NewLC@CDisplayDependencyBreak@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@@Z @ 48 NONAME ; class Swi::CDisplayDependencyBreak * Swi::CDisplayDependencyBreak::NewLC(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &)
+	?NewLC@CDisplayDependencyWarning@Swi@@SAPAV12@ABVTAppInfo@2@ABVTDesC16@@HABVTVersion@@H2H2@Z @ 49 NONAME ; class Swi::CDisplayDependencyWarning * Swi::CDisplayDependencyWarning::NewLC(class Swi::TAppInfo const &, class TDesC16 const &, int, class TVersion const &, int, class TVersion const &, int, class TVersion const &)
+	?NewLC@CDisplayDeviceIncompatibility@Swi@@SAPAV12@ABVTAppInfo@2@@Z @ 50 NONAME ; class Swi::CDisplayDeviceIncompatibility * Swi::CDisplayDeviceIncompatibility::NewLC(class Swi::TAppInfo const &)
+	?NewLC@CDisplayDrive@Swi@@SAPAV12@ABVTAppInfo@2@_JABV?$RArray@VTChar@@@@ABV?$RArray@_J@@@Z @ 51 NONAME ; class Swi::CDisplayDrive * Swi::CDisplayDrive::NewLC(class Swi::TAppInfo const &, long long, class RArray<class TChar> const &, class RArray<long long> const &)
+	?NewLC@CDisplayError@Swi@@SAPAV12@ABVTAppInfo@2@W4TErrorDialog@2@ABVTDesC16@@@Z @ 52 NONAME ; class Swi::CDisplayError * Swi::CDisplayError::NewLC(class Swi::TAppInfo const &, enum Swi::TErrorDialog, class TDesC16 const &)
+	?NewLC@CDisplayGrantCapabilities@Swi@@SAPAV12@ABVTAppInfo@2@ABVTCapabilitySet@@@Z @ 53 NONAME ; class Swi::CDisplayGrantCapabilities * Swi::CDisplayGrantCapabilities::NewLC(class Swi::TAppInfo const &, class TCapabilitySet const &)
+	?NewLC@CDisplayInstall@Swi@@SAPAV12@ABVTAppInfo@2@AAVRFs@@PAVRFile@@ABV?$RPointerArray@VCCertificateInfo@Swi@@@@@Z @ 54 NONAME ; class Swi::CDisplayInstall * Swi::CDisplayInstall::NewLC(class Swi::TAppInfo const &, class RFs &, class RFile *, class RPointerArray<class Swi::CCertificateInfo> const &)
+	?NewLC@CDisplayLanguage@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RArray@W4TLanguage@@@@@Z @ 55 NONAME ; class Swi::CDisplayLanguage * Swi::CDisplayLanguage::NewLC(class Swi::TAppInfo const &, class RArray<enum TLanguage> const &)
+	?NewLC@CDisplayOcspResult@Swi@@SAPAV12@ABVTAppInfo@2@W4TRevocationDialogMessage@2@AAV?$RPointerArray@VTOCSPOutcome@@@@AAV?$RPointerArray@VCCertificateInfo@Swi@@@@H@Z @ 56 NONAME ; class Swi::CDisplayOcspResult * Swi::CDisplayOcspResult::NewLC(class Swi::TAppInfo const &, enum Swi::TRevocationDialogMessage, class RPointerArray<class TOCSPOutcome> &, class RPointerArray<class Swi::CCertificateInfo> &, int)
+	?NewLC@CDisplayOptions@Swi@@SAPAV12@ABVTAppInfo@2@ABV?$RPointerArray@VTDesC16@@@@AAV?$RArray@H@@@Z @ 57 NONAME ; class Swi::CDisplayOptions * Swi::CDisplayOptions::NewLC(class Swi::TAppInfo const &, class RPointerArray<class TDesC16> const &, class RArray<int> &)
+	?NewLC@CDisplayQuestion@Swi@@SAPAV12@ABVTAppInfo@2@W4TQuestionDialog@2@ABVTDesC16@@@Z @ 58 NONAME ; class Swi::CDisplayQuestion * Swi::CDisplayQuestion::NewLC(class Swi::TAppInfo const &, enum Swi::TQuestionDialog, class TDesC16 const &)
+	?NewLC@CDisplaySecurityWarning@Swi@@SAPAV12@ABVTAppInfo@2@W4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCCertificateInfo@Swi@@@@H@Z @ 59 NONAME ; class Swi::CDisplaySecurityWarning * Swi::CDisplaySecurityWarning::NewLC(class Swi::TAppInfo const &, enum Swi::TSignatureValidationResult, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class Swi::CCertificateInfo> &, int)
+	?NewLC@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC16@@@Z @ 60 NONAME ABSENT ; class Swi::CDisplayText * Swi::CDisplayText::NewLC(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC16 const &)
+	?NewLC@CDisplayUninstall@Swi@@SAPAV12@ABVTAppInfo@2@@Z @ 61 NONAME ; class Swi::CDisplayUninstall * Swi::CDisplayUninstall::NewLC(class Swi::TAppInfo const &)
+	?NewLC@CDisplayUpgrade@Swi@@SAPAV12@ABVTAppInfo@2@0@Z @ 62 NONAME ; class Swi::CDisplayUpgrade * Swi::CDisplayUpgrade::NewLC(class Swi::TAppInfo const &, class Swi::TAppInfo const &)
+	?NewLC@CHandleCancellableInstallEvent@Swi@@SAPAV12@ABVTAppInfo@2@W4TInstallCancellableEvent@2@HABVTDesC16@@@Z @ 63 NONAME ; class Swi::CHandleCancellableInstallEvent * Swi::CHandleCancellableInstallEvent::NewLC(class Swi::TAppInfo const &, enum Swi::TInstallCancellableEvent, int, class TDesC16 const &)
+	?NewLC@CHandleInstallEvent@Swi@@SAPAV12@ABVTAppInfo@2@W4TInstallEvent@2@HABVTDesC16@@@Z @ 64 NONAME ; class Swi::CHandleInstallEvent * Swi::CHandleInstallEvent::NewLC(class Swi::TAppInfo const &, enum Swi::TInstallEvent, int, class TDesC16 const &)
+	?NewLC@CWriteStream@Swi@@SAPAV12@XZ @ 65 NONAME ; class Swi::CWriteStream * Swi::CWriteStream::NewLC(void)
+	?Ptr@CWriteStream@Swi@@QAE?AVTPtr8@@XZ @ 66 NONAME ; class TPtr8 Swi::CWriteStream::Ptr(void)
+	?ReAllocL@CWriteStream@Swi@@QAEXH@Z @ 67 NONAME ; void Swi::CWriteStream::ReAllocL(int)
+	?ReturnResult@CDisplayApplicationsInUse@Swi@@QBEHXZ @ 68 NONAME ; int Swi::CDisplayApplicationsInUse::ReturnResult(void) const
+	?ReturnResult@CDisplayCannotOverwriteFile@Swi@@QBEHXZ @ 69 NONAME ; int Swi::CDisplayCannotOverwriteFile::ReturnResult(void) const
+	?ReturnResult@CDisplayDependencyBreak@Swi@@QBEHXZ @ 70 NONAME ; int Swi::CDisplayDependencyBreak::ReturnResult(void) const
+	?ReturnResult@CDisplayDependencyWarning@Swi@@QBEHXZ @ 71 NONAME ; int Swi::CDisplayDependencyWarning::ReturnResult(void) const
+	?ReturnResult@CDisplayDeviceIncompatibility@Swi@@QBEHXZ @ 72 NONAME ; int Swi::CDisplayDeviceIncompatibility::ReturnResult(void) const
+	?ReturnResult@CDisplayDrive@Swi@@QBEHXZ @ 73 NONAME ; int Swi::CDisplayDrive::ReturnResult(void) const
+	?ReturnResult@CDisplayGrantCapabilities@Swi@@QBEHXZ @ 74 NONAME ; int Swi::CDisplayGrantCapabilities::ReturnResult(void) const
+	?ReturnResult@CDisplayInstall@Swi@@QBEHXZ @ 75 NONAME ; int Swi::CDisplayInstall::ReturnResult(void) const
+	?ReturnResult@CDisplayLanguage@Swi@@QBEHXZ @ 76 NONAME ; int Swi::CDisplayLanguage::ReturnResult(void) const
+	?ReturnResult@CDisplayOcspResult@Swi@@QBEHXZ @ 77 NONAME ; int Swi::CDisplayOcspResult::ReturnResult(void) const
+	?ReturnResult@CDisplayOptions@Swi@@QBEHXZ @ 78 NONAME ; int Swi::CDisplayOptions::ReturnResult(void) const
+	?ReturnResult@CDisplayQuestion@Swi@@QBEHXZ @ 79 NONAME ; int Swi::CDisplayQuestion::ReturnResult(void) const
+	?ReturnResult@CDisplaySecurityWarning@Swi@@QBEHXZ @ 80 NONAME ; int Swi::CDisplaySecurityWarning::ReturnResult(void) const
+	?ReturnResult@CDisplayText@Swi@@QBEHXZ @ 81 NONAME ; int Swi::CDisplayText::ReturnResult(void) const
+	?ReturnResult@CDisplayUninstall@Swi@@QBEHXZ @ 82 NONAME ; int Swi::CDisplayUninstall::ReturnResult(void) const
+	?ReturnResult@CDisplayUpgrade@Swi@@QBEHXZ @ 83 NONAME ; int Swi::CDisplayUpgrade::ReturnResult(void) const
+	?StreamInArrayL@Swi@@YAXAAV?$RPointerArray@VCCertificateInfo@Swi@@@@AAVRReadStream@@@Z @ 84 NONAME ; void Swi::StreamInArrayL(class RPointerArray<class Swi::CCertificateInfo> &, class RReadStream &)
+	?StreamInArrayL@Swi@@YAXAAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAVRReadStream@@@Z @ 85 NONAME ; void Swi::StreamInArrayL(class RPointerArray<class CPKIXValidationResultBase> &, class RReadStream &)
+	?StreamInArrayL@Swi@@YAXAAV?$RPointerArray@VTDesC16@@@@AAVRReadStream@@@Z @ 86 NONAME ; void Swi::StreamInArrayL(class RPointerArray<class TDesC16> &, class RReadStream &)
+	?StreamInArrayL@Swi@@YAXAAV?$RPointerArray@VTOCSPOutcome@@@@AAVRReadStream@@@Z @ 87 NONAME ; void Swi::StreamInArrayL(class RPointerArray<class TOCSPOutcome> &, class RReadStream &)
+	?StreamOutArrayL@Swi@@YAXABV?$RPointerArray@VCCertificateInfo@Swi@@@@AAVRWriteStream@@@Z @ 88 NONAME ; void Swi::StreamOutArrayL(class RPointerArray<class Swi::CCertificateInfo> const &, class RWriteStream &)
+	?StreamOutArrayL@Swi@@YAXABV?$RPointerArray@VCPKIXValidationResultBase@@@@AAVRWriteStream@@@Z @ 89 NONAME ; void Swi::StreamOutArrayL(class RPointerArray<class CPKIXValidationResultBase> const &, class RWriteStream &)
+	?StreamOutArrayL@Swi@@YAXABV?$RPointerArray@VTDesC16@@@@AAVRWriteStream@@@Z @ 90 NONAME ; void Swi::StreamOutArrayL(class RPointerArray<class TDesC16> const &, class RWriteStream &)
+	?StreamOutArrayL@Swi@@YAXABV?$RPointerArray@VTOCSPOutcome@@@@AAVRWriteStream@@@Z @ 91 NONAME ; void Swi::StreamOutArrayL(class RPointerArray<class TOCSPOutcome> const &, class RWriteStream &)
+	?Uninstall@RUissSession@Swi@@QAEXABVTDesC8@@AAVTDes8@@AAVTRequestStatus@@@Z @ 92 NONAME ; void Swi::RUissSession::Uninstall(class TDesC8 const &, class TDes8 &, class TRequestStatus &)
+	?UnmarshallArgumentsL@CUissCmd@Swi@@UAEXXZ @ 93 NONAME ; void Swi::CUissCmd::UnmarshallArgumentsL(void)
+	?BufferReallocated@RUissSession@Swi@@QAEXAAVTDes8@@AAVTRequestStatus@@@Z @ 94 NONAME ; void Swi::RUissSession::BufferReallocated(class TDes8 &, class TRequestStatus &)
+	?ReturnResult@CHandleInstallEvent@Swi@@QBEHXZ @ 95 NONAME ; int Swi::CHandleInstallEvent::ReturnResult(void) const
+	?UpdateProgressBarL@RUiHandler@Swi@@QAEXABVTAppInfo@2@H@Z @ 96 NONAME ; void Swi::RUiHandler::UpdateProgressBarL(class Swi::TAppInfo const &, int)
+	?NewL@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 97 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewL(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
+	?NewLC@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 98 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewLC(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
+	?UpdateProgressBarValueL@CProgressBarValuePublisher@Swi@@QAEHH@Z @ 99 NONAME ; void Swi::CProgressBarValuePublisher::UpdateProgressBarValueL(int)
+	?SetFinalProgressBarValue@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 100 NONAME ; void Swi::CProgressBarValuePublisher::SetFinalProgressBarValue(int)
+	?SetProgressBarValuePublisher@RUiHandler@Swi@@QAEXPAVCProgressBarValuePublisher@2@@Z @ 101 NONAME ; void Swi::RUiHandler::SetProgressBarValuePublisher(class Swi::CProgressBarValuePublisher *)
+	?NewL@CProgressBarValuePublisher@Swi@@SAPAV12@XZ @ 102 NONAME ; class Swi::CProgressBarValuePublisher * Swi::CProgressBarValuePublisher::NewL(void)
+	?NewLC@CNativeComponentInfo@Swi@@SAPAV12@XZ @ 103 NONAME ; class Swi::CNativeComponentInfo * Swi::CNativeComponentInfo::NewLC(void)
+	??1CNativeComponentInfo@Swi@@UAE@XZ @ 104 NONAME ; Swi::CNativeComponentInfo::~CNativeComponentInfo(void)
+	?NewL@CNativeComponentInfo@Swi@@SAPAV12@XZ @ 105 NONAME ; class Swi::CNativeComponentInfo * Swi::CNativeComponentInfo::NewL(void)
+	?ExternalizeL@CNativeComponentInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 106 NONAME ; void Swi::CNativeComponentInfo::ExternalizeL(class RWriteStream &) const
+	?InternalizeL@CNativeComponentInfo@Swi@@QAEXAAVRReadStream@@@Z @ 107 NONAME ; void Swi::CNativeComponentInfo::InternalizeL(class RReadStream &)
+	?GetComponentInfo@RUissSession@Swi@@QAEXABVTDesC8@@AAVTDes8@@AAVTRequestStatus@@@Z @ 108 NONAME ; void Swi::RUissSession::GetComponentInfo(class TDesC8 const &, class TDes8 &, class TRequestStatus &)
+	?IconFileName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 109 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::IconFileName(void) const
+	?GroupName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 110 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::GroupName(void) const
+	?AppUid@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTUid@@XZ @ 111 NONAME ; class TUid const & Swi::CNativeComponentInfo::CNativeApplicationInfo::AppUid(void) const
+	?Name@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 112 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::Name(void) const
+	??1CNativeApplicationInfo@CNativeComponentInfo@Swi@@UAE@XZ @ 113 NONAME ; Swi::CNativeComponentInfo::CNativeApplicationInfo::~CNativeApplicationInfo(void)
+	?NewLC@CNativeApplicationInfo@CNativeComponentInfo@Swi@@SAPAV123@ABVTUid@@ABVTDesC16@@11@Z @ 114 NONAME ; class Swi::CNativeComponentInfo::CNativeApplicationInfo * Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(class TUid const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
+

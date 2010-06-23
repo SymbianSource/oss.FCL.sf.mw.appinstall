@@ -1,0 +1,35 @@
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// localise01strings
+// Strings localised for RSC
+//
+
+rls_string Localized_Short_Caption "HW_RSC"
+rls_string Localized_Caption "HelloWorld_RSC"
+rls_long Localized_NumberOfIcon 20
+rls_string Localized_Iconfile "z:\\resource\\apps\\swiappregintegration01_rsc.mbm"
+
+rls_long View_Uid1 1240
+rls_long View_Screenmode1 07
+rls_string View_Caption1 "View_01_RSC"
+rls_long View_NumberOfIcon1 21
+rls_string View_Iconfile1 "z:\\resource\\apps\\swiappregintegration01_rsc.mbm"
+
+rls_long View_Uid2 1241
+rls_long View_Screenmode2 08
+rls_string View_Caption2 "View_02_RSC"
+rls_long View_NumberOfIcon2 22
+rls_string View_Iconfile2 "z:\\resource\\apps\\swiappregintegration01_rsc.mbm"
+
+rls_string Localized_GroupName "Group_RSC"

@@ -1,0 +1,147 @@
+/*
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* installserver.exe Implementation of software install server
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY TCB AllFiles ProtServ TrustedUI ReadUserData WriteDeviceData ReadDeviceData
+
+target		installserver.exe
+targettype	exe
+
+EPOCHEAPSIZE	0x2000 0x400000
+EPOCSTACKSIZE   0x3000
+
+// UID is KAppinstInstallServer (270496405 - 0x101F7295)
+UID			0x101F7295 0x101F7295
+VENDORID	0x70000001
+
+USERINCLUDE ../source/swis/server
+USERINCLUDE ../source/plan
+USERINCLUDE ../source/sisregistry/common
+USERINCLUDE ../source/sisregistry/server
+USERINCLUDE ../source/swiobserver/inc_private
+USERINCLUDE ../inc
+USERINCLUDE ../inc/swi
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+SOURCEPATH	../source/swis/server
+
+SOURCE e32main.cpp
+SOURCE installserver.cpp
+SOURCE statemachine.cpp
+SOURCE installmachine.cpp
+SOURCE uninstallmachine.cpp
+
+// New additions for planning and plan processing
+SOURCE prerequisiteschecker.cpp
+SOURCE requisiteschecker.cpp
+SOURCE postrequisiteschecker.cpp
+SOURCE checkedversion.cpp
+
+SOURCE planner.cpp
+SOURCE installationplanner.cpp
+SOURCE uninstallationplanner.cpp
+
+SOURCE siscontentprovider.cpp
+SOURCE expressionevaluator.cpp
+
+SOURCE processor.cpp
+SOURCE installationprocessor.cpp
+SOURCE uninstallationprocessor.cpp
+
+SOURCE restorecontroller.cpp
+SOURCE restoremachine.cpp
+SOURCE restoreprocessor.cpp
+
+SOURCE fileextractor.cpp
+
+SOURCE securitycheckutil.cpp
+SOURCE sidcache.cpp
+SOURCE securityinfo.cpp
+SOURCE packageremover.cpp
+SOURCE adornedutilities.cpp
+
+SOURCE uninstallationnode.cpp
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+SOURCEPATH	../source/sisregistry/common
+SOURCE globalidformat.cpp
+SOURCEPATH	../source/swis/server
+SOURCE registrywrapper.cpp
+SOURCE installswtypehelper.cpp
+SOURCE appregextractor.cpp
+#endif
+
+// The following is also included in sishelper; to avoid creating a new 
+// shared DLL it is included here directly.
+SOURCEPATH	../source/sishelper
+SOURCE sishelperclient.cpp
+SOURCE installprefs.cpp
+
+SOURCEPATH .
+
+
+
+#ifdef __SWI_LOGGING__
+LIBRARY flogger.lib    // Logging & tracing support -- To use define __SWI_LOGGING__ in the .hrh file
+#endif 
+LIBRARY euser.lib 
+LIBRARY estor.lib
+LIBRARY siscontroller.lib
+LIBRARY uissclient.lib
+LIBRARY sisresult.lib
+LIBRARY efsrv.lib 
+LIBRARY ocspsupportclient.lib
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+LIBRARY scrclient.lib
+LIBRARY stsclient.lib
+LIBRARY swtypereginfo.lib
+#else
+LIBRARY integrityservices.lib
+#endif
+
+LIBRARY securitymanager.lib
+LIBRARY hal.lib
+LIBRARY plan.lib
+LIBRARY sisregistryclient.lib
+LIBRARY swidataprovider.lib
+LIBRARY sislauncherclient.lib
+LIBRARY hash.lib
+LIBRARY sectcbutil.lib
+LIBRARY swiobserverclient.lib
+LIBRARY swiobservedinfo.lib
+LIBRARY secsettingsclient.lib
+LIBRARY x509.lib
+LIBRARY pkixcertbase.lib
+ 
+#ifdef WINS
+library			emulator.lib
+#endif
+
+start wins
+WIN32_LIBRARY		kernel32.lib
+end
+SMPSAFE
+

@@ -1,0 +1,4 @@
+EXPORTS
+	?NewL@COcspSupportServer@Swi@@SAPAV12@W4TPriority@CActive@@@Z @ 1 NONAME ; class Swi::COcspSupportServer * Swi::COcspSupportServer::NewL(enum CActive::TPriority)
+	?NewLC@COcspSupportServer@Swi@@SAPAV12@W4TPriority@CActive@@@Z @ 2 NONAME ; class Swi::COcspSupportServer * Swi::COcspSupportServer::NewLC(enum CActive::TPriority)
+

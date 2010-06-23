@@ -1,0 +1,30 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple SIS file with two files: .txt (modifiable file); .exe (non-modifiable).
+
+;Languages
+&EN
+
+;Header
+#{"DEF054596"}, (0x80123456), 1, 2, 3
+
+%{"Vendor"}
+:"Unique Vendor Name"
+
+
+;Ordinary file to selected drive
+"text\file1.txt"-"!:\Documents\InstTest\modifiableFile.txt", MF
+"text\backlight.txt"-"!:\Documents\InstTest\nonModifiableFile.txt"

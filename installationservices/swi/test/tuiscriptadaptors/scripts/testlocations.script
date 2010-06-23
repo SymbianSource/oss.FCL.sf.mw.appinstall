@@ -1,0 +1,177 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+// Tests for file location checking in swis
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-FILELOCATION-0001
+//! @SYMTestCaseDesc 		Install an executable to sys/hash directory, and the installation rejected
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install an executable to sys/hash directory
+//! @SYMTestExpectedResults 	The test completes with KAcessDenied completion code.
+//! @SYMDEF 			DEF058272
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-FILELOCATION-0001
+
+RUN_TEST_STEP_RESULT -21 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini defect058272a
+RUN_TEST_STEP_RESULT -1 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_defect058272a
+
+END_TESTCASE API-SEC-FILELOCATION-0001
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-FILELOCATION-0002
+//! @SYMTestCaseDesc 		Install an executable to non-exist sys/policy directory, and the installation rejected
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install an executable to sys/policy directory
+//! @SYMTestExpectedResults 	The test completes with KAcessDenied completion code.
+//! @SYMDEF 			DEF058272
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-FILELOCATION-0002
+
+RUN_TEST_STEP_RESULT -21 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini defect058272b
+RUN_TEST_STEP_RESULT -1 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_defect058272b
+
+END_TESTCASE API-SEC-FILELOCATION-0002
+
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-FILELOCATION-0003
+//! @SYMTestCaseDesc 		Install an executable to sys directory, and the installation rejected
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Install an executable to sys directory
+//! @SYMTestExpectedResults 	The test completes with KAcessDenied completion code.
+//! @SYMDEF 			DEF058272
+//! @SYMTestType 		UT
+
+START_TESTCASE API-SEC-FILELOCATION-0003
+
+RUN_TEST_STEP_RESULT -21 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini defect058272c
+RUN_TEST_STEP_RESULT -1 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_defect058272c
+
+; sucessful installs to import directories
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini importdir
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_importdir
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini importdir_e
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_importdir_e
+
+; fails as attempts to copy to a private dir with no matching executable
+RUN_TEST_STEP_RESULT -21 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini privatedir3
+RUN_TEST_STEP_RESULT -1 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_privatedir3
+
+; fails as attempts to copy to a private dir with no matching executable
+RUN_TEST_STEP_RESULT -21 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini privatedir4
+RUN_TEST_STEP_RESULT -1 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_privatedir4
+
+; successful installs to private directory
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini privatedir_e
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_privatedir
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini privatedir
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_privatedir
+
+RUN_TEST_STEP 200 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini privatedir2
+RUN_TEST_STEP 200 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_privatedir2
+
+END_TESTCASE API-SEC-FILELOCATION-0003
+
+
+//! @SYMTestCaseID 		API-SEC-FileNullInstall-0001
+//! @SYMTestCaseDesc 		Tests install checks which ensure that FN cannot be used to delete protected files.
+//! @SYMDEF 			INC074618
+//! @SYMTestPriority 		Critical
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions 		Attempts to install various SIS files where a FN directive that will attempt to delete files
+//! 				in protected directories upon uninstall.
+//! @SYMTestExpectedResults 	The install will fail if an FN line targets files in \sys, \resource. 
+//! 				FN files can only target a private directory if the package owns the application with the corresponding
+//! 				secure id or the file is in the import. An FN targeting a root directory or an invalid drive will not
+//! 				block install but will uninstall successfully with no deletion.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-FileNullInstall-0001
+
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullsysbin
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullresource
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullprivatebad
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullsysbin_e
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullresource_e
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullprivatebad_e
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullprivategood
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullprivategood_sp
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallAugStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullprivategood_sp
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullprivategood
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullimport
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullimport
+
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullinvaliddrive
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullinvaliddrive
+
+RUN_UTILS CopyFile c:\auto.cfg e:\auto.cfg
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullrootdir
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullrootdir
+RUN_UTILS DeleteFile e:\auto.cfg
+
+END_TESTCASE API-SEC-FileNullInstall-0001
+
+
+//! @SYMTestCaseID 		API-SEC-FileNullUninstall-0002
+//! @SYMTestCaseDesc 		Tests that FN cannot be used to block unuinstall by targetting files which cannot be deleted.
+//! @SYMDEF 			DEF079264
+//! @SYMTestPriority 		Critical
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions 		Install and uninstall a package which references a file on ROM.
+//! @SYMTestExpectedResults 	Uninstall will succeed where the FN references a rom file.
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-FileNullUninstall-0002
+
+// Make sure we can install and uninstall a package which refers to a file in ROM for FN.
+RUN_TEST_STEP 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini filenullonrom
+RUN_TEST_STEP 10 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini u_filenullonrom
+
+END_TESTCASE API-SEC-FileNullUninstall-0002
+
+
+//! @SYMTestCaseID 		API-SEC-sysbinsubdir-0001
+//! @SYMTestCaseDesc 		Verify that a SIS file with a target file in a subdirectory of sys\bin will not install
+//! @SYMDEF 			DEF074723
+//! @SYMTestPriority 		High
+//! @SYMTestType 		CIT
+//! @SYMTestStatus 		3. Released
+//! @SYMTestActions  		Attempt to install a SIS file with a target file in a subdirectory of sysbin
+//! @SYMTestExpectedResults  	Install fails with KErrAccessDenied
+//! @SYMDevelopedForRelease 	Mike
+
+START_TESTCASE API-SEC-sysbinsubdir-0001
+
+RUN_TEST_STEP_RESULT -21 10 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testlocations.ini sysbinsubdir
+
+END_TESTCASE API-SEC-sysbinsubdir-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

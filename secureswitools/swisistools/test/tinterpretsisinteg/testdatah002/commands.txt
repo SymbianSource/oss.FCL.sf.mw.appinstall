@@ -1,0 +1,5 @@
+interpretsis -z d:\romdrive -c d:\cdrive -d d:\ -s d:\testdata\testdataH002\diag2.sis -w warn -l d:\testdata\testdataH002\warning2.txt
+
+interpretsis -z d:\romdrive -c d:\cdrive -d d:\ -s d:\testdata\testdataH002\diag3.sis -w error -l d:\testdata\testdataH002\logs\error1.txt 
+
+interpretsis -z d:\romdrive -c d:\cdrive -d d:\ -s d:\testdata\testdataH002\diag1.sis -w info -l d:\testdata\testdataH002\logs\info3.txt

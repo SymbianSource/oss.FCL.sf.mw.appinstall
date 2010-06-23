@@ -1,0 +1,63 @@
+/*
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project definition file for project CataLogsClientServer
+*
+*/
+
+
+#define CATALOGS_COMPONENT_CATALOGSUNDERTAKEREXE
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../../inc/catalogsuids.h"
+#include "../inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+#ifdef USE_BUILD_SCRIPT
+TARGET        ncdundertaker_APP_NAME_POSTFIX.exe
+#else
+TARGET        ncdundertaker_20019119.exe
+#endif // USE_BUILD_SCRIPT
+TARGETTYPE    exe
+UID           0x100039CE KCatalogsUndertakerUid
+
+CAPABILITY		CAP_APPLICATION
+
+SOURCEPATH    ../src
+SOURCE      catalogsundertaker.cpp
+
+// Server side classes
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../engine/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib flogger.lib
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY         ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY         ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif // CATALOGS_DEBUG_ENABLED
+
+SMPSAFE

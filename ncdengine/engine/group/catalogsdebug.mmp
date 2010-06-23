@@ -1,0 +1,64 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#define CATALOGS_COMPONENT_CATALOGSDEBUGDLL
+
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+
+#include "../inc/build_config.mmpi"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+// ECOM plugin ncdproxy_20019119.dll requires this lib and therefore big caps.
+#ifdef USE_BUILD_SCRIPT
+    TARGET      ncddebug_APP_NAME_POSTFIX.dll
+    CAPABILITY  CATALOGS_MINIMUM_CAPABILITIES
+#else
+    TARGET      ncddebug_20019119.dll
+    CAPABILITY  CATALOGS_DLL_CAPABILITIES
+#endif // USE_BUILD_SCRIPT
+
+TARGETTYPE    dll
+UID           0x1000008d
+
+
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../engine/inc
+USERINCLUDE   ../../debuglogger/inc
+
+SOURCEPATH    ../../engine/src
+SOURCE 	      catalogsdebug.cpp
+#ifndef WINSCW
+SOURCE		  stackpointer.cia
+#endif
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY euser.lib flogger.lib hal.lib
+
+EXPORTUNFROZEN
+
+SMPSAFE

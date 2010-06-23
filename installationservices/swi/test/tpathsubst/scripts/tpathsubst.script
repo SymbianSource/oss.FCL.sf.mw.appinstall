@@ -1,0 +1,305 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT SWI Path substitution tests
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tbackuprestore
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0001
+//! @SYMTestCaseDesc		Target does not match any find path. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs target filenames with hard-coded drives where paths aren't replaced.
+//! @SYMTestExpectedResults	The files are installed to literal targets.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0001
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini no_subst_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini no_subst_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini no_subst_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0001
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0002
+//! @SYMTestCaseDesc		Target with hard-coded drive matches single find dir. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs where target filenames have hard-coded drives and a single directory is replaced.
+//! @SYMTestExpectedResults	The files are copied to the translated dir on the target drive.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0002
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini single_dir_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini single_dir_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini single_dir_find_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0002
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0003
+//! @SYMTestCaseDesc		Target filenames match find dirs on boundaries. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Installs where target filenames match find dirs but not on dir boundary.
+//! @SYMTestExpectedResults	Delivers files to literal targets.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0003
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini non_boundary_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini non_boundary_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini non_boundary_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0003
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0004
+//! @SYMTestCaseDesc		Target filename LHS matches multiple find paths. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install where LHS matches multiple find paths.
+//! @SYMTestExpectedResults	Installs to right replace dir based on drive.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_find_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_find_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0004
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0005
+//! @SYMTestCaseDesc		LHS matches multi-dir find path. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install target, translating where required.
+//! @SYMTestExpectedResults	Where entire path is matched, install to translated dir.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_dir_match_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_dir_match_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini multi_dir_match_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0005
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0006
+//! @SYMTestCaseDesc		Trailing directories after match. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install target, translating where required.
+//! @SYMTestExpectedResults	Install target to resolved filename, creating following dirs
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini trail_dirs_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini trail_dirs_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini trail_dirs_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0006
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0007
+//! @SYMTestCaseDesc		User-selected drives. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install target, translating where required.
+//! @SYMTestExpectedResults	Install target, resolving where path avail for selected drive.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini user_sel_drive_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini user_sel_drive_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini user_sel_drive_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0007
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0008
+//! @SYMTestCaseDesc		Wild drive in find path. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install to wild replacement directory.
+//! @SYMTestExpectedResults	Target is installed to wild replacement dir, or a more specific replacement dir if available
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini wild_find_drive_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini wild_find_drive_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini wild_find_drive_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0008
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0009
+//! @SYMTestCaseDesc		FN files removed. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		UnInstall package with translated FN dir and file.
+//! @SYMTestExpectedResults	FN file and directory specified in PKG/SIS are removed on uninstall
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0009
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini pathsubst_filenull_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini pathsubst_filenull_install
+PREFIX RUN_UTILS
+	MkDir c:\REPLACE_FN_DIR_1\
+	MkDir c:\REPLACE_FN_DIR_2\
+	CopyFile z:\tswi\tpathsubst\scripts\tpathsubst.script c:\REPLACE_FN_DIR_2\file_to_delete.txt
+	MakeReadWrite c:\REPLACE_FN_DIR_2\file_to_delete.txt
+REMOVE_PREFIX
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini pathsubst_filenull_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0009
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0010
+//! @SYMTestCaseDesc		Replacement overflow. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install package where target overflows after translation
+//! @SYMTestExpectedResults	Installation fails with KErrSISStringInvalidLength.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0010
+
+RUN_TEST_STEP_RESULT -10103 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini overflow_install
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini overflow_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0010
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0011
+//! @SYMTestCaseDesc		Replacement security error. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package where target is security error, e.g. \sys\hash, after replacement.
+//! @SYMTestExpectedResults	Installation fails with KErrAccessDenied (-21.)
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0011
+
+RUN_TEST_STEP_RESULT -21 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini failure_security_install
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini failure_security_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0011
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0012
+//! @SYMTestCaseDesc		Replacement validity error. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package where target is invalid after replacement.
+//! @SYMTestExpectedResults	Installation fails with KErrSISInvalidTargetFile (-10146) as it would for an untranslated target.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0012
+
+RUN_TEST_STEP_RESULT -10146 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini failure_validity_install
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini failure_validity_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0012
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-0013
+//! @SYMTestCaseDesc		Test replacing find path with longer and shorter replace paths. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install package where translated targets are longer and shorter than original targets.
+//! @SYMTestExpectedResults	Each target is translated correctly.
+
+START_TESTCASE API-SEC-CIT_IHUN-0013
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini rep_length_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini rep_length_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini rep_length_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-0013
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-0014
+//! @SYMTestCaseDesc		Test succesfully eclipsing a ROM-based file. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install package which eclipses an executable in a ROM-based package.
+//! @SYMTestExpectedResults	The file is successfully eclipsed.
+
+START_TESTCASE API-SEC-CIT_IHUN-0014
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini sp_eclipse_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep z:\tswi\tpathsubst\scripts\tpathsubst.ini sp_eclipse_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-0014
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-0015
+//! @SYMTestCaseDesc		Test unsuccessfully eclipsing a ROM-based file. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install package which attempts to override a ROM-based executable.
+//! @SYMTestExpectedResults	The installation fails with KErrInvalidEclipsing (-10257.)
+
+START_TESTCASE API-SEC-CIT_IHUN-0015
+
+RUN_TEST_STEP_RESULT -10257 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini eclipse_failure_install
+RUN_TEST_STEP_RESULT -1 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\testeclipse.ini eclipse_failure_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-0015
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-6FXHUU-0016
+//! @SYMTestCaseDesc		Restore translated files. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Restore applications to translated locations
+//! @SYMTestExpectedResults	The files are restored to the translated locations from which they were copied.
+
+START_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0016
+
+RUN_TEST_STEP	100	tbackuprestore	INSTALL		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		z:\tswi\tpathsubst\scripts\tpathsubst.ini	success_br
+
+END_TESTCASE API-SEC-CIT_IHUN-6FXHUU-0016
+
+
+//! @SYMTestCaseID		API-SEC-CIT_IHUN-0017
+//! @SYMTestCaseDesc		Test installing file which is mapped to root directory. Requirement CIT_IHUN-6FXHUU.
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install package where the swipolicy.ini maps the target dir to the root directory.
+//! @SYMTestExpectedResults	The installation succeeds and the file is mapped to the root directory.
+
+START_TESTCASE API-SEC-CIT_IHUN-0017
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini to_root_install
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini to_root_install
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini to_root_uninstall
+
+END_TESTCASE API-SEC-CIT_IHUN-0017
+
+
+//! @SYMTestCaseID 		API-SEC-Instal_Substed_Drive-0001
+//! @SYMTestCaseDesc		Test installing to substed drive
+//! @SYMDEF 			INC099535
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install package where the target drive has been substituted
+//! @SYMTestExpectedResults	The installation result is unsuccessful 
+
+START_TESTCASE API-SEC-Instal_Substed_Drive-0001
+
+RUN_PROGRAM -1 setsubst.exe f: c:\tswi\
+RUN_TEST_STEP_RESULT -3 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini substed_drive
+RUN_TEST_STEP_RESULT -10146 100 tuiscriptadaptors InstallStep z:\tswi\tpathsubst\scripts\tpathsubst.ini hard_coded_sd
+
+END_TESTCASE API-SEC-Instal_Substed_Drive-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

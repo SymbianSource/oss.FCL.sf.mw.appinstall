@@ -1,0 +1,46 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* pkgremover.dll Layer between a client (Installer UI) that is used to query about 
+* uninstalled packages present on a removable drive and remove them.
+*
+*/
+
+
+/**
+ @file
+*/
+
+MACRO __SECURE_API__
+MACRO __DATA_CAGING__
+CAPABILITY ALL -TCB
+
+TARGET pkgremover.dll
+TARGETTYPE dll
+
+UID			0x1000008d 0x2000C439
+VENDORID	0x70000001
+
+USERINCLUDE ../inc
+USERINCLUDE ../inc/swi
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+SOURCEPATH	../source/pkgremover
+SOURCE pkgremover.cpp
+
+LIBRARY euser.lib
+LIBRARY efsrv.lib
+LIBRARY estor.lib
+LIBRARY sishelper.lib
+SMPSAFE

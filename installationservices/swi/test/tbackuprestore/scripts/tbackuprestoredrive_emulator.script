@@ -1,0 +1,70 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+PRINT Backup and restore tests...
+LOAD_SUITE tbackuprestore
+LOAD_SUITE tuiscriptadaptors
+
+//! @file
+//! @SYMTestCaseID 		API-SEC-DEF075099-0001
+//! @SYMTestCaseDesc 		Ensure filenull files are registered correctly on restore in the absense of drive
+//! @SYMTestPriority 		Medium
+//! @SYMTestActions 		Backup, Restore and then remove a data only package w/ FileNull
+//! @SYMTestExpectedResults 	FNed files is deleted on uninstall after restore
+//! @SYMDEF 			DEF075099ARM 
+ 
+START_TESTCASE API-SEC-DEF075099-0001
+
+RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep c:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep C:\tswi\tbackuprestore\scripts\ini filenullrestore_emulator
+
+// Copy a file which has FN flag 
+RUN_UTILS MkDir X:\restore\
+RUN_UTILS copyfile c:\tswi\DEF053165.perm X:\restore\filenull.txt
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+
+RUN_TEST_STEP	100	tbackuprestore	BACKUP		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep c:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+RUN_TEST_STEP	100	tbackuprestore	RESTORE		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+ 
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep C:\tswi\tuiscriptadaptors\scripts\drives.ini X
+
+// Copy a file which has FN flag 
+RUN_UTILS MkDir X:\restore\
+RUN_UTILS copyfile c:\tswi\DEF053165.perm X:\restore\filenull.txt
+
+RUN_TEST_STEP	100	tbackuprestore	PRESENT		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+ 
+RUN_TEST_STEP	100	tbackuprestore	UNINSTALL	C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+RUN_TEST_STEP	100	tbackuprestore	ABSENT		C:\tswi\tbackuprestore\scripts\ini	filenullrestore_emulator
+
+// Use tuiscriptadaptors to rip the registry entry out, without uninstall.
+
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove z:\tswi\tbackuprestore\scripts\ini removedummyswiplugin
+
+END_TESTCASE API-SEC-DEF075099-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

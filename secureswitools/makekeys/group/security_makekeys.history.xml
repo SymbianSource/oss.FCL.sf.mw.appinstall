@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="MAKEKEYS">
+  <purpose>
+  </purpose>
+
+  <defect number="DEF116415" title="Some security pc-tools do not display the Open SSL copyright notice " revision="004">
+    Security pc tools displays openssl copyright notice.
+  </defect>
+
+  <defect number="PDEF107972" title="makekeys bugs" revision="003">
+    Makekeys takes cares of password length and key generation without password.
+  </defect>
+
+  <preq number="1182" title="GNU Make-based build system" revision="002">
+    TOOLS2 macro is added with TOOLS.
+  </preq>
+
+  <preq number="1182" title="GNU Make-based build system" revision="001">
+    Changed according to filename policy to support the building of Symbian OS on both Windows and Linux.
+  </preq>
+</relnotes>

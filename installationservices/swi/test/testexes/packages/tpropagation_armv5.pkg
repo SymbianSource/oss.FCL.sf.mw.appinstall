@@ -1,0 +1,33 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+;introduced by DEF112252
+
+;Languages
+&EN
+
+;Header
+#{"Non_verified_propagation"}, (0xE1116768),1, 0, 0, TYPE=SA
+
+;Vendor
+%{"Symbian"}
+:"Symbian"
+
+;Files
+"tpropagation\tpropagationfile1.txt"-"!:\system\tpropagationfile1.txt"
+"tpropagation\tpropagationfile2.txt"-"!:\resources\tpropagationfile2.txt"
+"tpropagation\tpropagationfile3.txt"-"!:\tpropagationfile3.txt", VERIFY
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\tpropagationfile4.exe"-"!:\sys\bin\tpropagationfile4.exe"
+"tpropagation\tpropagationfile5.txt"-"!:\resource\tpropagationfile5.txt"

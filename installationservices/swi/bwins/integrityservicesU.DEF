@@ -1,0 +1,12 @@
+EXPORTS
+	??0CIntegrityServices@Swi@@IAE@_J@Z @ 1 NONAME ; Swi::CIntegrityServices::CIntegrityServices(long long)
+	??1CIntegrityServices@Swi@@UAE@XZ @ 2 NONAME ; Swi::CIntegrityServices::~CIntegrityServices(void)
+	?AddL@CIntegrityServices@Swi@@QAEXABVTDesC16@@@Z @ 3 NONAME ; void Swi::CIntegrityServices::AddL(class TDesC16 const &)
+	?CommitL@CIntegrityServices@Swi@@QAEXXZ @ 4 NONAME ; void Swi::CIntegrityServices::CommitL(void)
+	?ConstructL@CIntegrityServices@Swi@@IAEXABVTDesC16@@@Z @ 5 NONAME ; void Swi::CIntegrityServices::ConstructL(class TDesC16 const &)
+	?NewL@CIntegrityServices@Swi@@SAPAV12@_JABVTDesC16@@@Z @ 6 NONAME ; class Swi::CIntegrityServices * Swi::CIntegrityServices::NewL(long long, class TDesC16 const &)
+	?NewLC@CIntegrityServices@Swi@@SAPAV12@_JABVTDesC16@@@Z @ 7 NONAME ; class Swi::CIntegrityServices * Swi::CIntegrityServices::NewLC(long long, class TDesC16 const &)
+	?RemoveL@CIntegrityServices@Swi@@QAEXABVTDesC16@@@Z @ 8 NONAME ; void Swi::CIntegrityServices::RemoveL(class TDesC16 const &)
+	?RollBackL@CIntegrityServices@Swi@@QAEXH@Z @ 9 NONAME ; void Swi::CIntegrityServices::RollBackL(int)
+	?TemporaryL@CIntegrityServices@Swi@@QAEXABVTDesC16@@@Z @ 10 NONAME ; void Swi::CIntegrityServices::TemporaryL(class TDesC16 const &)
+

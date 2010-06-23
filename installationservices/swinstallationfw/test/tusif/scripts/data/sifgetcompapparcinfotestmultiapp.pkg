@@ -1,0 +1,59 @@
+;
+; Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN,GE,SP,FR
+
+; List of localised vendor names.
+%{"Symbian Software Ltd", "Symbian Software Ltd","Symbian Software Ltd","Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English and German
+#{"sifgetcompapparcinfotestmultiapp_EN", "sifgetcompapparcinfotestmultiapp_GE", "sifgetcompapparcinfotestmultiapp_SP", "sifgetcompapparcinfotestmultiapp_FR"}, (0x88001108), 1,0,0
+
+
+; Language-neutral files to be installed for first app
+"\epoc32\<BUILDMIDPATH>\sifgetcompapparcinfotestmultilang.exe"-"!:\sys\bin\sifgetcompapparcinfotestmultilang.exe"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_reg.rsc" - "!:\private\10003a3f\import\apps\sifgetcompapparcinfotestmultilang_reg.rsc"
+
+; Lists of language-specific resource files, of which only those files will be installed
+; which are supported by the device.
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_loc.r01"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_loc.r01"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_loc.r03"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_loc.r03"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_loc.r04"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_loc.r04"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_loc.r24"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_loc.r24"
+
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_01.mbm"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_01.mbm"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_03.mbm"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_03.mbm"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_04.mbm"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_04.mbm"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotestmultilang\sifgetcompapparcinfotestmultilang_24.mbm"		-"!:\resource\apps\sifgetcompapparcinfotestmultilang_24.mbm"
+
+
+; Language-neutral files to be installed for second app
+"\epoc32\<BUILDMIDPATH>\sifgetcompapparcinfotest.exe"-"!:\sys\bin\sifgetcompapparcinfotest.exe"
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_reg.rsc" - "!:\private\10003a3f\import\apps\sifgetcompapparcinfotest_reg.rsc"
+
+; Lists of language-specific resource files, of which only those files will be installed
+; which are supported by the device.
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_loc.rsc"		-"!:\resource\apps\sifgetcompapparcinfotest_loc.rsc"
+
+"\epoc32\data\z\tusif\tsif\data\sifgetcompapparcinfotest\sifgetcompapparcinfotest_01.mbm"		-"!:\resource\apps\sifgetcompapparcinfotest_01.mbm"

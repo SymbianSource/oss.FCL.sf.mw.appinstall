@@ -1,0 +1,53 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+
+//! @SYMTestCaseID 		API-SEC-SWI-ASYNC-I-0011
+//! @SYMTestCaseDesc 		Install signed executables and check/grant their caps
+//! @SYMTestPriority 		Critical
+//! @SYMTestActions 		Files from a signed package are installed/uninstalled 
+//! @SYMTestExpectedResults 	Files are installed/uninstalled
+//! @SYMDevelopedForRelease 	Mike
+// Signed SIS tests
+
+START_TESTCASE API-SEC-SWI-ASYNC-I-0011
+
+RUN_TEST_STEP !Error=-10254 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiallcapabilities
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiallcapabilities
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswinocapability
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswinocapability
+
+RUN_TEST_STEP !Error=-10254 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswisystemcapability
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswisystemcapability
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini tswiusergrantable_all
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\usercaps.ini u_tswiusergrantable_all
+
+END_TESTCASE API-SEC-SWI-ASYNC-I-0011
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+// this file is part of testasync.script, and should be reinserted there as soon as hw capability problem is solved.

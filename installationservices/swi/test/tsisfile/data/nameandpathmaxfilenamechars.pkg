@@ -1,0 +1,36 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A SIS file with target file names which are 254 (KMaxFileName-2) chars long including the path.
+; Makesis will truncate anything longer.
+; Uses X on emulator to avoid hitting windows limit on path including \epoc32\winscw\c.
+
+;Languages
+&EN
+
+;Header
+#{"NameAndRootMaxLength"}, (0x80000006), 1, 1, 1
+
+%{"Simple-Vendor"}
+:"Unique Vendor Name"
+
+;Ordinary file to MMC drive
+IF MachineUid=0x10005f62 ; Emulator
+"text\textfiles.txt"-"X:\ThisNameIsExactly254CharactersLongWithTheRoot0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.txt"
+"text\textfiles.txt"-"X:\ThisNameWithNonRootPath\IsExactly254CharactersLongWithTheRoot012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345.txt"
+ELSE ; Reference board
+"text\textfiles.txt"-"E:\ThisNameIsExactly254CharactersLongWithTheRoot0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.txt"
+"text\textfiles.txt"-"E:\ThisNameWithNonRootPath\IsExactly254CharactersLongWithTheRoot012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345.txt"
+ENDIF

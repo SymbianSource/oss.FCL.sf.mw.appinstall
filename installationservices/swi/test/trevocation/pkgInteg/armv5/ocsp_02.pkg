@@ -1,0 +1,27 @@
+;
+; Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of the License "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+;
+; A simple package that installs one executable with no other checks
+
+;Languages
+&EN
+
+;Header
+#{"Test Package"}, (0x11112102), 1, 2, 3,TYPE=SA
+
+%{"Test Package"}
+:"Unique Vendor Name"
+
+"\epoc32\release\armv5\udeb\tswiusergrantable_all.exe"-"!:\sys\bin\tswiusergrantable_all.exe";

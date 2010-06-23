@@ -1,0 +1,83 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef __SERIES60_30__
+#include <platform_paths.hrh>
+#endif
+
+TARGET          catalogslogger.exe
+TARGETTYPE      exe
+UID             0x100039CE 0x0B5C26D8
+LANG            SC
+CAPABILITY      CAP_APPLICATION
+
+epocstacksize   0x5000
+
+SOURCEPATH      ../src
+SOURCE          catalogslogger.cpp
+SOURCE          catalogsloggerapplication.cpp 
+SOURCE          catalogsloggerappview.cpp
+SOURCE          catalogsloggerappui.cpp
+SOURCE          catalogsloggerdocument.cpp
+SOURCE          catalogsloggermsgqueueobserver.cpp 
+SOURCE          OsmDelay.cpp
+
+SOURCEPATH	    ../obex/src
+SOURCE		    btservicesearcher.cpp
+SOURCE		    objectexchangeclient.cpp
+SOURCE		    objectexchangeservicesearcher.cpp
+SOURCE		    osmobexsender.cpp
+SOURCE		    sdpattributeparser.cpp
+
+SOURCEPATH      ../data
+
+START RESOURCE  catalogslogger.rss
+TARGETPATH      /resource/apps
+HEADER
+END
+
+START RESOURCE  catalogslogger_reg.rss
+TARGETPATH      /private/10003a3f/apps
+END
+
+USERINCLUDE     ../inc ../obex/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib
+LIBRARY         apparc.lib
+LIBRARY         cone.lib 
+LIBRARY         eikcore.lib  
+LIBRARY         avkon.lib
+LIBRARY         efsrv.lib 
+LIBRARY         eikcoctl.lib
+LIBRARY         eikctl.lib 
+LIBRARY		    gdi.lib
+LIBRARY         bafl.lib
+LIBRARY		    apgrfx.lib
+
+// Obex
+LIBRARY         esock.lib
+LIBRARY         irobex.lib
+LIBRARY         bluetooth.lib
+LIBRARY         btextnotifiers.lib
+LIBRARY         sdpagent.lib
+LIBRARY         sdpdatabase.lib ws32.lib
+
+SMPSAFE

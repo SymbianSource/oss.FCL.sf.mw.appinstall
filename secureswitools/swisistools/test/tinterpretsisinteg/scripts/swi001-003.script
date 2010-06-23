@@ -1,0 +1,40 @@
+//
+// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// @file swi001-003.script
+// 
+//
+
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
+
+//! @SYMTestCaseID 		API-SEC-sistools-InterpretSIS-SWI001-0003
+//! @SYMTestCaseDesc 		Compare installation of SWI and Interpretsis 
+//! @SYMPREQ  			PREQ2114
+//! @SYMTestStatus		3. Released
+//! @SYMTestPriority 		High
+//! @SYMTestActions 		1. Check to see if the SP + RU installed successfully
+//!				2. Install another SP upgrade
+//!				3. Uninstall both SP upgrades
+//! @SYMTestExpectedResults 	SP installs successfully and both SP upgrades are removed
+//! @SYMTestType		CIT
+
+START_TESTCASE API-SEC-sistools-InterpretSIS-SWI001-0003
+
+RUN_TEST_STEP 100 tSisRegistryTest IsUidInstalled c:\tswi\tinterpretsisinteg\scripts\ini.ini 001-002_SA_RU_NR
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep c:\tswi\tinterpretsisinteg\scripts\ini.ini SWI001-003_SP
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallAugStep c:\tswi\tinterpretsisinteg\scripts\ini.ini  uSWI001-003
+RUN_TEST_STEP 100 tuiscriptadaptors ForceRemove c:\tswi\tinterpretsisinteg\scripts\ini.ini cr1027_files
+
+END_TESTCASE API-SEC-sistools-InterpretSIS-SWI001-0003

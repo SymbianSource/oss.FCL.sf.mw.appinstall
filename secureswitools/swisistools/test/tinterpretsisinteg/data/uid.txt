@@ -1,0 +1,206 @@
+0x89334549
+0x89334548
+0x89334547
+0x89334546
+capability
+0x89334545
+0x89334544
+signature
+0x89334543
+0x89334542
+0x89334541
+0x89334540
+0x89334539
+
+compress/no compress
+0x89334538
+0x89334537
+0x89334536
+Install drive destination specified 
+0x89334535
+0x89334534
+0x89334533
+0x89334532
+0x89334531
+0x89334530
+0x89334529
+0x89334528
+0x89334527
+0x89334526
+0x89334525
+0x89334524
+0x89334523
+0x89334522
+0x89334521
+0x89334520
+0x89334519
+
+Selection
+0x89334518
+
+Time-stamp
+0x89334517
+
+dependency on C:
+0x89334516
+0x89334515
+0x89334514
+0x89334513
+0x89334512
+0x89334511
+0x89334510
+0x89334509
+0x89334508
+0x89334507
+0x89334506
+0x89334505
+0x89334504
+0x89334503
+0x89334502
+
+
+dependency on z:
+
+0x89334501
+0x89334500
+0x89334499
+0x89334498
+0x89334497
+0x89334496
+0x89334495
+0x89334494
+0x89334493
+0x89334492
+0x89334491
+0x89334490
+0x89334489
+0x89334488
+0x89334487
+
+makesis new functionality
+
+0x89334486
+0x89334485
+0x89334484
+0x89334483
+0x89334482
+0x89334481
+0x89334480
+0x89334479
+
+makesis--preinstalled
+0x89334478
+0x89334477
+0x89334476
+
+Ignore non-removeable flag
+0x89334475
+0x89334474
+
+Uninstalling Non-removable packages
+
+0x89334473
+0x89334472
+
+Interpretsis usage with correct parameter
+0x89334471
+Interpretsis usage with incorrect parameter
+0x89334470
+
+Interpretsis usage with directory as input
+0x89334469
+0x89334468
+0x89334467
+0x89334466
+0x89334465
+0x89334464
+
+
+Upgrade sis--sp
+0x89334463
+
+upgrade sis--pu
+0x89334462
+upgrade sis--pa
+0x89334461
+Interpretsis command with large number of  non dependant SIS files
+0x89334460 to 0x89334411
+Interpretsis command with large number of  dependant SIS files
+0x89334410 to 0x89334386 for resmx.sis
+0x89334385 to 0x89334361 for mx.sis
+Installation of multiple SIS file with interlinked dependencies
+0x89334360 to 0x89334347
+Installation of multiple SIS file with irresolvable interlinked dependencies
+0x89334346 to 0x89334340
+SEC-SWI-INTERPRETSIS-F001	Eclipsing of data file on ROM drive
+0x89334339 
+0x89334338
+SEC-SWI-INTERPRETSIS-F003	Eclipsing of data file on C drive
+0x89334337 
+0x89334336
+SEC-SWI-INTERPRETSIS-F004	Overwrite of executable on C drive.
+0x89334335
+0x89334334
+SEC-SWI-INTERPRETSIS-F006	Writing in private folders
+0x89334333
+0x89334332
+SEC-SWI-INTERPRETSIS-F007	Writing in import folders
+0x89334331
+0x89334330
+SEC-SWI-INTERPRETSIS-F008	Write attempt in non-existent import folders 
+0x89334329 
+SEC-SWI-INTERPRETSIS-F011	Running of executable created by interpretsis on EPOC emulator
+0x89334328
+SEC-SWI-INTERPRETSIS-H002	Interpretsis usage with a diagnostic message file
+0x89334327
+0x89334326
+0x89334325
+0x89334324
+0x89334323
+0x89334322
+0x89334321
+SEC-SWI-INTERPRETSIS-G001	Parameter files with correct parameters
+0x89334320
+SEC-SWI-INTERPRETSIS-G002
+0x89334319
+SEC-SWI-INTERPRETSIS-G003
+0x89334460 to 0x89334411
+SEC-SWI-INTERPRETSIS-H003	Interpretsis returning multiple errors
+0x89334318 to 0x89334309
+SEC-SWI-INTERPRETSIS-C003	HAL value conditional
+0x89334308
+0x89334286
+0x89334285
+SEC-SWI-INTERPRETSIS-J001	SWIS Package Upgrades (Type SA)
+0x89334307
+0x89334306
+0x89334307
+0x89334305
+SEC-SWI-INTERPRETSIS-J002	SWIS Package Augmentations (Type SP)
+0x89334304
+0x89334303
+0x89334302
+0x89334301
+SEC-SWI-INTERPRETSIS-J003	SWIS Package Upgrades (Type PU)
+0x89334300
+0x89334299
+0x89334298
+0x89334297
+SEC-SWI-INTERPRETSIS-J004	SWIS Package Upgrades (Type PA)
+0x89334296
+0x89334295
+0x89334294
+0x89334293
+SEC-SWI-INTERPRETSIS-J005	SWIS Package Augmentations (Type PP)
+0x89334292
+0x89334291
+0x89334290
+SEC-SWI-INTERPRETSIS-J006	SWIS Installation of NR packages
+0x89334289
+SEC-SWI-INTERPRETSIS-J007	SIS File Backward Compatibility
+0x89334288
+SEC-SWI-INTERPRETSIS-J008	SIS File Backward Compatibility
+0x89334287
+
+
+

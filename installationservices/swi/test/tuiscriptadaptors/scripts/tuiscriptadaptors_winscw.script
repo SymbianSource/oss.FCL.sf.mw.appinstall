@@ -1,0 +1,340 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests
+PRINT Run all SWIS tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0001
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_00007__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Unique Vendor Name" exceeding descriptor's max length during AppendFormatList operation. 
+//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0001
+
+RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow1
+
+END_TESTCASE API-SEC-DEF094747-0001
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0002
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_00019__PE_00002__.sis should panic.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would throw User::11 panic due to "Package Name" exceeding descriptor's max length during AppendFormatList operation. 
+//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0002
+
+RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow2
+
+END_TESTCASE API-SEC-DEF094747-0002
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0003
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_00031__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Vendor Name" exceeding descriptor's max length during AppendFormatList operation.
+//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0003
+
+RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow3
+
+END_TESTCASE API-SEC-DEF094747-0003
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0004
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_06668__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Unique Vendor Name" exceeding descriptor's max length during AppendFormatList operation. 
+//! @SYMTestExpectedResults	The SIS file installs successfully.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0004
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow4
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow4
+
+END_TESTCASE API-SEC-DEF094747-0004
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0005
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_06816_PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Unique Vendor Name" exceeding descriptor's max length during AppendFormatList operation.
+//! @SYMTestExpectedResults	The SIS file installs successfully.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0005
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow5
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow6
+
+END_TESTCASE API-SEC-DEF094747-0005
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0006
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_06646__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Unique Vendor Name" exceeding descriptor's max length during AppendFormatList operation. 
+//! @SYMTestExpectedResults	The SIS file installs successfully.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0006
+
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow6
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow6
+
+END_TESTCASE API-SEC-DEF094747-0006
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0007
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_05463__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0007
+
+RUN_TEST_STEP_RESULT -10141 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow7
+RUN_TEST_STEP_RESULT -1  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow7
+
+END_TESTCASE API-SEC-DEF094747-0007
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0008
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_02291__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0008
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow8
+
+END_TESTCASE API-SEC-DEF094747-0008
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0009
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_02318__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0009
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow9
+
+END_TESTCASE API-SEC-DEF094747-0009
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0010
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_02348__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0010
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow10
+
+END_TESTCASE API-SEC-DEF094747-0010
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0011
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_02789__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0011
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow11
+
+END_TESTCASE API-SEC-DEF094747-0011
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0012
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_02847__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0012
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow12
+
+END_TESTCASE API-SEC-DEF094747-0012
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0013
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_03286__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0013
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow13
+
+END_TESTCASE API-SEC-DEF094747-0013
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0014
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_03342__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0014
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow14
+
+END_TESTCASE API-SEC-DEF094747-0014
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0015
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_04281__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0015
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow15
+
+END_TESTCASE API-SEC-DEF094747-0015
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0016
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_04334__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0016
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow16
+
+END_TESTCASE API-SEC-DEF094747-0016
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0017
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_10230__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0017
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow17
+
+END_TESTCASE API-SEC-DEF094747-0017
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0018
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_10288__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0018
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow18
+
+END_TESTCASE API-SEC-DEF094747-0018
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0019
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_10727__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0019
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow19
+
+END_TESTCASE API-SEC-DEF094747-0019
+
+
+//! @SYMTestCaseID		API-SEC-DEF094747-0020
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file TS_00001__TC_10785__PE_00002__.sis never panics.
+//! @SYMDEF			DEF094747
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to descriptor overflow.
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF094747-0020
+
+RUN_TEST_STEP_RESULT -25 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow20
+
+END_TESTCASE API-SEC-DEF094747-0020
+
+
+//! @SYMTestCaseID		API-SEC-DEF112652-0001
+//! @SYMTestCaseDesc		Verify that the installation of a SIS file panic47.sis never panics.
+//! @SYMDEF			DEF112652
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install a SIS file , which would otherwise throw !SISHELPER::47 panic 
+//! @SYMTestExpectedResults	The installation must fail with appropriate error code instead of panicing.
+//! @SYMDevelopedForRelease	Argus
+
+START_TESTCASE API-SEC-DEF112652-0001
+
+RUN_TEST_STEP_RESULT -10102 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini invalid_compressionlength
+
+END_TESTCASE API-SEC-DEF112652-0001
+
+
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

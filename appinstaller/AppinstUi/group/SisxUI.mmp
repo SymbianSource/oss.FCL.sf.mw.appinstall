@@ -1,0 +1,99 @@
+/*
+* Copyright (c) 2002-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification for SisxUI.
+*                This is an ECOM plugin that handles SIS installations.
+*
+*/
+
+
+//  INCLUDES
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+#include "SWInstPrivateUid.h"
+
+TARGET          SisxUI.dll
+TARGETTYPE      PLUGIN
+UID             0x10009D8D KSWInstSisxUIUid
+
+// Capability assignment.
+CAPABILITY      CAP_ECOM_PLUGIN DRM
+VENDORID        VID_DEFAULT
+
+// Resources
+
+
+START RESOURCE  ../Plugin/SisxUI/Data/SisxUI.rss
+DEPENDS swinstcommonui.rsg
+DEPENDS swinstcommonui.rsg
+HEADER
+TARGET          SisxUIData.rsc
+TARGETPATH      RESOURCE_FILES_DIR
+LANGUAGE_IDS
+END
+
+START RESOURCE  ../Plugin/SisxUI/Data/101F875D.rss
+TARGET          SisxUI.rsc
+END
+
+// Sources
+SOURCEPATH      ../Plugin/SisxUI/Src 
+SOURCE          SisxUIMain.cpp
+SOURCE          SisxUI.cpp
+SOURCE          SisxUIHandler.cpp
+SOURCE          SisxUICertificateInfo.cpp
+SOURCE          SisxUIAppInfo.cpp
+SOURCE          SisxUISelectionCache.cpp
+SOURCE          SisxUIOperationWatcher.cpp
+SOURCE          SisxUIResult.cpp
+SOURCE          SisxUIStartupFile.cpp
+SOURCE          SisxUISilentHandler.cpp
+SOURCE          SisxUILangName.cpp
+
+// Includes
+USERINCLUDE     . ../Plugin/Inc ../Plugin/CommonUI/Inc ../Plugin/SisxUI/Inc
+USERINCLUDE     ../Client/Inc
+MW_LAYER_SYSTEMINCLUDE
+
+// Libraries
+LIBRARY         euser.lib
+LIBRARY         ecom.lib
+LIBRARY         avkon.lib
+LIBRARY         SWInstCommonUI.lib
+LIBRARY         cone.lib
+LIBRARY         bafl.lib
+LIBRARY         eikcoctl.lib 
+LIBRARY         eikdlg.lib 
+LIBRARY         sishelper.lib
+LIBRARY         commonengine.lib
+LIBRARY         sisregistryclient.lib
+LIBRARY         efsrv.lib
+LIBRARY         platformenv.lib
+LIBRARY         estor.lib
+LIBRARY         centralrepository.lib
+LIBRARY         DRMLicenseManager.lib
+LIBRARY         ezip.lib
+LIBRARY         SWInstTaskManager.lib
+LIBRARY         featmgr.lib
+LIBRARY         pkixcertbase.lib
+LIBRARY         caf.lib      //CContent, CManager 
+LIBRARY         cafutils.lib //RStringAttributeSet
+LIBRARY         drmhelper.lib
+LIBRARY         apgrfx.lib
+LIBRARY         ws32.lib // for RWsSession
+LIBRARY         syslangutil.lib
+LIBRARY     	DcfRep.lib // for PIP sisx files
+
+DEBUGLIBRARY    flogger.lib
+
+SMPSAFE

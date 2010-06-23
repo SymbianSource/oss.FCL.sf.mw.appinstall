@@ -1,0 +1,70 @@
+EXPORTS
+	??1CSecurityPolicy@Swi@@UAE@XZ @ 1 NONAME ; Swi::CSecurityPolicy::~CSecurityPolicy(void)
+	?AllowGrantUserCaps@CSecurityPolicy@Swi@@QBEHXZ @ 2 NONAME ; int Swi::CSecurityPolicy::AllowGrantUserCaps(void) const
+	?AllowUnsigned@CSecurityPolicy@Swi@@QBEHXZ @ 3 NONAME ; int Swi::CSecurityPolicy::AllowUnsigned(void) const
+	?DrmEnabled@CSecurityPolicy@Swi@@QBEHXZ @ 4 NONAME ; int Swi::CSecurityPolicy::DrmEnabled(void) const
+	?DrmIntent@CSecurityPolicy@Swi@@QBEHXZ @ 5 NONAME ; int Swi::CSecurityPolicy::DrmIntent(void) const
+	?FillCertInfoArrayL@CSecurityManager@Swi@@SAXABV?$RPointerArray@VCX509Certificate@@@@AAV?$RPointerArray@VCCertificateInfo@Swi@@@@@Z @ 6 NONAME ; void Swi::CSecurityManager::FillCertInfoArrayL(class RPointerArray<class CX509Certificate> const &, class RPointerArray<class Swi::CCertificateInfo> &)
+	?GetCertificatesFromControllerL@CSecurityManager@Swi@@QAEXABVCController@Sis@2@AAV?$RPointerArray@VCX509Certificate@@@@@Z @ 7 NONAME ; void Swi::CSecurityManager::GetCertificatesFromControllerL(class Swi::Sis::CController const &, class RPointerArray<class CX509Certificate> &)
+	?IsDllL@SecUtils@Swi@@SAHABVTDesC16@@@Z @ 8 NONAME ; int Swi::SecUtils::IsDllL(class TDesC16 const &)
+	?IsExeL@SecUtils@Swi@@SAHABVTDesC16@@@Z @ 9 NONAME ; int Swi::SecUtils::IsExeL(class TDesC16 const &)
+	?MandateCertificatePolicies@CSecurityPolicy@Swi@@QBEHXZ @ 10 NONAME ; int Swi::CSecurityPolicy::MandateCertificatePolicies(void) const
+	?MandateCodesigningExtension@CSecurityPolicy@Swi@@QBEHXZ @ 11 NONAME ; int Swi::CSecurityPolicy::MandateCodesigningExtension(void) const
+	?NewL@CSecurityManager@Swi@@SAPAV12@XZ @ 12 NONAME ; class Swi::CSecurityManager * Swi::CSecurityManager::NewL(void)
+	?NewL@CSecurityPolicy@Swi@@SAPAV12@XZ @ 13 NONAME ABSENT ; class Swi::CSecurityPolicy * Swi::CSecurityPolicy::NewL(void)
+	?NewLC@CSecurityManager@Swi@@SAPAV12@XZ @ 14 NONAME ; class Swi::CSecurityManager * Swi::CSecurityManager::NewLC(void)
+	?OcspEnabled@CSecurityPolicy@Swi@@QBEHXZ @ 15 NONAME ; int Swi::CSecurityPolicy::OcspEnabled(void) const
+	?OcspMandatory@CSecurityPolicy@Swi@@QBEHXZ @ 16 NONAME ; int Swi::CSecurityPolicy::OcspMandatory(void) const
+	?Oids@CSecurityPolicy@Swi@@QBE?BV?$RPointerArray@VHBufC16@@@@XZ @ 17 NONAME ; class RPointerArray<class HBufC16> const Swi::CSecurityPolicy::Oids(void) const
+	?PerformOcspL@CSecurityManager@Swi@@QAEXABVTDesC8@@AAKPAW4TRevocationDialogMessage@2@AAV?$RPointerArray@VTOCSPOutcome@@@@AAV?$RPointerArray@VCX509Certificate@@@@AAVTRequestStatus@@@Z @ 18 NONAME ; void Swi::CSecurityManager::PerformOcspL(class TDesC8 const &, unsigned long &, enum Swi::TRevocationDialogMessage *, class RPointerArray<class TOCSPOutcome> &, class RPointerArray<class CX509Certificate> &, class TRequestStatus &)
+	?SecurityPolicy@CSecurityManager@Swi@@QBEAAVCSecurityPolicy@2@XZ @ 19 NONAME ; class Swi::CSecurityPolicy & Swi::CSecurityManager::SecurityPolicy(void) const
+	?UserCapabilities@CSecurityPolicy@Swi@@QBE?AVTCapabilitySet@@XZ @ 20 NONAME ; class TCapabilitySet Swi::CSecurityPolicy::UserCapabilities(void) const
+	?VerifyControllerL@CSecurityManager@Swi@@QAEXAAVTDesC8@@ABVCController@Sis@2@PAW4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCX509Certificate@@@@PAVTCapabilitySet@@AAH6AAVTRequestStatus@@@Z @ 21 NONAME ABSENT ; void Swi::CSecurityManager::VerifyControllerL(class TDesC8 &, class Swi::Sis::CController const &, enum Swi::TSignatureValidationResult *, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class CX509Certificate> &, class TCapabilitySet *, int &, int &, class TRequestStatus &)
+	?VerifyFileHashL@CSecurityManager@Swi@@QAEHAAVMSisDataProvider@2@ABVCHashContainer@2@@Z @ 22 NONAME ; int Swi::CSecurityManager::VerifyFileHashL(class Swi::MSisDataProvider &, class Swi::CHashContainer const &)
+	?AllowOrphanedOverwrite@CSecurityPolicy@Swi@@QBEHXZ @ 23 NONAME ; int Swi::CSecurityPolicy::AllowOrphanedOverwrite(void) const
+	?CapabilitiesAreValid@CCertChainConstraints@Swi@@QBEHAAVTCapabilitySet@@@Z @ 24 NONAME ; int Swi::CCertChainConstraints::CapabilitiesAreValid(class TCapabilitySet &) const
+	?DeviceIDIsValid@CCertChainConstraints@Swi@@QBEHPBVHBufC16@@@Z @ 25 NONAME ; int Swi::CCertChainConstraints::DeviceIDIsValid(class HBufC16 const *) const
+	?DeviceIDsAreConstrained@CCertChainConstraints@Swi@@QBEHXZ @ 26 NONAME ; int Swi::CCertChainConstraints::DeviceIDsAreConstrained(void) const
+	?DeviceIDsInfo@CSecurityManager@Swi@@QBEABV?$RPointerArray@VHBufC16@@@@XZ @ 27 NONAME ; class RPointerArray<class HBufC16> const & Swi::CSecurityManager::DeviceIDsInfo(void) const
+	?NewL@CCertChainConstraints@Swi@@SAPAV12@AAV?$RPointerArray@VCPKIXCertChainBase@@@@@Z @ 28 NONAME ; class Swi::CCertChainConstraints * Swi::CCertChainConstraints::NewL(class RPointerArray<class CPKIXCertChainBase> &)
+	?NewLC@CCertChainConstraints@Swi@@SAPAV12@AAV?$RPointerArray@VCPKIXCertChainBase@@@@@Z @ 29 NONAME ; class Swi::CCertChainConstraints * Swi::CCertChainConstraints::NewLC(class RPointerArray<class CPKIXCertChainBase> &)
+	?SIDIsValid@CCertChainConstraints@Swi@@QBEHVTSecureId@@@Z @ 30 NONAME ; int Swi::CCertChainConstraints::SIDIsValid(class TSecureId) const
+	?SIDsAreConstrained@CCertChainConstraints@Swi@@QBEHXZ @ 31 NONAME ; int Swi::CCertChainConstraints::SIDsAreConstrained(void) const
+	?SetValidCapabilities@CCertChainConstraints@Swi@@QAEXABVTCapabilitySet@@@Z @ 32 NONAME ; void Swi::CCertChainConstraints::SetValidCapabilities(class TCapabilitySet const &)
+	?VIDIsValid@CCertChainConstraints@Swi@@QBEHVTVendorId@@@Z @ 33 NONAME ; int Swi::CCertChainConstraints::VIDIsValid(class TVendorId) const
+	?VIDsAreConstrained@CCertChainConstraints@Swi@@QBEHXZ @ 34 NONAME ; int Swi::CCertChainConstraints::VIDsAreConstrained(void) const
+	?ValidCapabilities@CCertChainConstraints@Swi@@QBEABVTCapabilitySet@@XZ @ 35 NONAME ; class TCapabilitySet const & Swi::CCertChainConstraints::ValidCapabilities(void) const
+	?ResetValidCertChains@CSecurityManager@Swi@@QAEXXZ @ 36 NONAME ; void Swi::CSecurityManager::ResetValidCertChains(void)
+	?ReverifyControllerL@CSecurityManager@Swi@@QAEXAAVTDesC8@@ABVCController@Sis@2@ABV?$RArray@H@@PAW4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCX509Certificate@@@@PAVTCapabilitySet@@AAHAAVTRequestStatus@@@Z @ 37 NONAME ; void Swi::CSecurityManager::ReverifyControllerL(class TDesC8 &, class Swi::Sis::CController const &, class RArray<int> const &, enum Swi::TSignatureValidationResult *, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class CX509Certificate> &, class TCapabilitySet *, int &, class TRequestStatus &)
+	?AllowPackagePropagate@CSecurityPolicy@Swi@@QBEHXZ @ 38 NONAME ; int Swi::CSecurityPolicy::AllowPackagePropagate(void) const
+	?CalculateHashLC@CSecurityManager@Swi@@QAEPAVHBufC8@@AAVMSisDataProvider@2@W4THashId@CMessageDigest@@@Z @ 39 NONAME ; class HBufC8 * Swi::CSecurityManager::CalculateHashLC(class Swi::MSisDataProvider &, enum CMessageDigest::THashId)
+	?ApplicationShutdownTimeout@CSecurityPolicy@Swi@@QBEHXZ @ 40 NONAME ; int Swi::CSecurityPolicy::ApplicationShutdownTimeout(void) const
+	?CapabilitiesAreConstrained@CCertChainConstraints@Swi@@QBEHXZ @ 41 NONAME ; int Swi::CCertChainConstraints::CapabilitiesAreConstrained(void) const
+	?GetDevCertWarningState@CSecurityManager@Swi@@QAEHXZ @ 42 NONAME ; int Swi::CSecurityManager::GetDevCertWarningState(void)
+	?SetDevCertWarningState@CSecurityManager@Swi@@QAEXH@Z @ 43 NONAME ; void Swi::CSecurityManager::SetDevCertWarningState(int)
+	?RunWaitTimeout@CSecurityPolicy@Swi@@QBEHXZ @ 44 NONAME ; int Swi::CSecurityPolicy::RunWaitTimeout(void) const
+	?SISCompatibleIfNoTargetDevices@CSecurityPolicy@Swi@@QBEHXZ @ 45 NONAME ; int Swi::CSecurityPolicy::SISCompatibleIfNoTargetDevices(void) const
+	?AllowRunOnInstallUninstall@CSecurityPolicy@Swi@@QBEHXZ @ 46 NONAME ; int Swi::CSecurityPolicy::AllowRunOnInstallUninstall(void) const
+	?ResolveTargetFileNameL@CSecurityPolicy@Swi@@QBEPAVHBufC16@@ABVTDesC16@@G@Z @ 47 NONAME ; class HBufC16 * Swi::CSecurityPolicy::ResolveTargetFileNameL(class TDesC16 const &, unsigned short) const
+	??0RSecPolHandle@Swi@@QAE@XZ @ 48 NONAME ; Swi::RSecPolHandle::RSecPolHandle(void)
+	?Close@RSecPolHandle@Swi@@QAEXXZ @ 49 NONAME ; void Swi::RSecPolHandle::Close(void)
+	?OpenL@RSecPolHandle@Swi@@QAEXXZ @ 50 NONAME ; void Swi::RSecPolHandle::OpenL(void)
+	?OpenLC@RSecPolHandle@Swi@@QAEXXZ @ 51 NONAME ; void Swi::RSecPolHandle::OpenLC(void)
+	?NewL@CCertChainConstraints@Swi@@SAPAV12@XZ @ 52 NONAME ; class Swi::CCertChainConstraints * Swi::CCertChainConstraints::NewL(void)
+	?HexHashL@SecUtils@Swi@@SAPAVHBufC16@@ABVTDesC16@@@Z @ 53 NONAME ; class HBufC16 * Swi::SecUtils::HexHashL(class TDesC16 const &)
+	?OcspHttpHeaderFilter@CSecurityPolicy@Swi@@QBEKXZ @ 54 NONAME ; unsigned long Swi::CSecurityPolicy::OcspHttpHeaderFilter(void) const
+	?DeletePreinstalledFilesOnUninstall@CSecurityPolicy@Swi@@QBEHXZ @ 55 NONAME ; int Swi::CSecurityPolicy::DeletePreinstalledFilesOnUninstall(void) const
+	?ResolveTargetFileNameLC@CSecurityPolicy@Swi@@QBEPAVHBufC16@@ABVTDesC16@@G@Z @ 56 NONAME ; class HBufC16 * Swi::CSecurityPolicy::ResolveTargetFileNameLC(class TDesC16 const &, unsigned short) const
+	?AllowProtectedOrphanOverwrite@CSecurityPolicy@Swi@@QBEHXZ @ 57 NONAME ; int Swi::CSecurityPolicy::AllowProtectedOrphanOverwrite(void) const
+	?SetRootCerts@CSecurityManager@Swi@@QAEXPAV?$RPointerArray@VCX509Certificate@@@@@Z @ 58 NONAME ; void Swi::CSecurityManager::SetRootCerts(class RPointerArray<class CX509Certificate> *)
+	?GetSecurityPolicyL@CSecurityPolicy@Swi@@SAPAV12@XZ @ 59 NONAME ; class Swi::CSecurityPolicy * Swi::CSecurityPolicy::GetSecurityPolicyL(void)
+	?ReleaseResource@CSecurityPolicy@Swi@@SAXXZ @ 60 NONAME ; void Swi::CSecurityPolicy::ReleaseResource(void)
+	?AlternativeCodeSigningOid@CSecurityPolicy@Swi@@QBE?BV?$RPointerArray@VHBufC16@@@@XZ @ 61 NONAME ; class RPointerArray<class HBufC16> const Swi::CSecurityPolicy::AlternativeCodeSigningOid(void) const
+	?RemoveOnlyWithLastDependent@CSecurityPolicy@Swi@@QBEHXZ @ 62 NONAME ; int Swi::CSecurityPolicy::RemoveOnlyWithLastDependent(void) const
+	?PhoneTsyName@CSecurityPolicy@Swi@@QBEABVTDesC16@@XZ @ 63 NONAME ; class TDesC16 const & Swi::CSecurityPolicy::PhoneTsyName(void) const
+	?MaxNumOfLogEntries@CSecurityPolicy@Swi@@QBEHXZ @ 64 NONAME ; int Swi::CSecurityPolicy::MaxNumOfLogEntries(void) const
+	?VerifyControllerL@CSecurityManager@Swi@@QAEXAAVTDesC8@@ABVCController@Sis@2@PAW4TSignatureValidationResult@2@AAV?$RPointerArray@VCPKIXValidationResultBase@@@@AAV?$RPointerArray@VCX509Certificate@@@@PAVTCapabilitySet@@AAH6AAVTRequestStatus@@H@Z @ 65 NONAME ; void Swi::CSecurityManager::VerifyControllerL(class TDesC8 &, class Swi::Sis::CController const &, enum Swi::TSignatureValidationResult *, class RPointerArray<class CPKIXValidationResultBase> &, class RPointerArray<class CX509Certificate> &, class TCapabilitySet *, int &, int &, class TRequestStatus &, int)
+	?AllowOverwriteOnRestore@CSecurityPolicy@Swi@@QBEHXZ @ 66 NONAME ; int Swi::CSecurityPolicy::AllowOverwriteOnRestore(void) const
+	?IsPackageUidPresent@SecUtils@Swi@@SAHVTUid@@AAY0BA@V3@@Z @ 67 NONAME ; int Swi::SecUtils::IsPackageUidPresent(class TUid, class TUid [16] &)
+	?PublishPackageUid@SecUtils@Swi@@SAHVTUid@@AAY0BA@V3@@Z @ 68 NONAME ; int Swi::SecUtils::PublishPackageUid(class TUid, class TUid [16] &)
+

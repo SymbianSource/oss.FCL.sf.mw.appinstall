@@ -1,0 +1,216 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#define CATALOGS_COMPONENT_CATALOGSPROXYDLL
+#ifndef __SERIES60_30__
+#if defined( __SERIES60_31__ ) || defined( __S60_32__ )
+#include <platform_paths.hrh>
+#else
+#include <platform_paths.hrh>
+#endif
+#endif
+#include "../inc/build_config.mmpi"
+#include "../../inc/catalogsuids.h"
+
+// Replaced with USE_BUILD_SCRIPT when using build script
+#define DUMMY_DEFINE
+
+#ifdef USE_BUILD_SCRIPT
+    TARGET        CATALOGS_ENGINE_UID.dll
+    CAPABILITY    CATALOGS_MINIMUM_CAPABILITIES
+#else
+    TARGET        ncdproxy_20019119.dll
+    CAPABILITY    CATALOGS_DLL_CAPABILITIES
+#endif // USE_BUILD_SCRIPT
+
+TARGETTYPE    PLUGIN
+
+// ECom Dll recognition UID followed by the unique UID for this dll
+UID           0x10009D8D KCatalogsEngineUid
+
+
+//VERSION in DLLs by default is 10.0. Eclipsing instructions say: must have same major, bigger minor.
+//VERSION 10.1  // ECLIPSE
+
+EPOCSTACKSIZE 0x5000
+
+// Catalogs ECom compilation
+MACRO CATALOGS_ECOM
+
+SOURCEPATH    ../../engine/src
+SOURCE        ecomproxy.cpp
+SOURCE	      catalogsengineimpl.cpp
+SOURCE        catalogsclientserverasynctask.cpp
+SOURCE        catalogsclientserverclientsession.cpp
+SOURCE        catalogsclientserverallocutils.cpp
+SOURCE        catalogsutils.cpp
+SOURCE        catalogsinterfaceidentifier.cpp
+SOURCE        catalogsinterfacebase.cpp
+SOURCE        catalogsengine.cpp
+SOURCE        catalogskeyvaluepair.cpp
+SOURCE        catalogsasyncmediator.cpp
+SOURCE		  catalogsconnectionobserver.cpp
+
+SOURCEPATH    ../../provider/client/src
+SOURCE        ncdbaseproxy.cpp
+SOURCE        ncdinterfacebaseproxy.cpp
+SOURCE        ncdproviderproxy.cpp
+SOURCE        ncdnodeproxy.cpp
+SOURCE        ncdnodefolderproxy.cpp
+SOURCE        ncdbundlefolderproxy.cpp
+SOURCE        ncdnodeitemproxy.cpp
+SOURCE        ncdrootnodeproxy.cpp
+SOURCE        ncdparentoftransparentnodeproxy.cpp
+SOURCE        ncdnodemetadataproxy.cpp
+SOURCE        ncdnodedisclaimerproxy.cpp
+SOURCE        ncdnodeiconproxy.cpp
+SOURCE        ncdnodescreenshotproxy.cpp
+SOURCE        ncdnodeskinproxy.cpp
+SOURCE        ncdnodedownloadproxy.cpp
+SOURCE        ncdnodeuserdataproxy.cpp
+SOURCE        ncdnodeupgradeproxy.cpp
+SOURCE        ncdnodedependencyproxy.cpp
+SOURCE        ncdnodemanagerproxy.cpp
+SOURCE        ncdnodesearchimpl.cpp
+SOURCE        ncdnodeactivateimpl.cpp
+SOURCE        ncdpurchasehistoryproxy.cpp
+SOURCE        ncdoperationmanagerproxy.cpp
+SOURCE        ncdbaseoperationproxy.cpp
+SOURCE        ncdloadnodeoperationproxy.cpp
+SOURCE        ncddownloadoperationproxy.cpp
+SOURCE        ncdfiledownloadoperationproxy.cpp
+SOURCE        ncdpurchaseoperationproxy.cpp
+SOURCE        ncdqueryimpl.cpp
+SOURCE        ncdqueryitemimpl.cpp
+SOURCE        ncdquerytextitemimpl.cpp
+SOURCE        ncdquerynumericitemimpl.cpp
+SOURCE        ncdqueryselectionitemimpl.cpp
+SOURCE        ncdquerypincodeitemimpl.cpp
+SOURCE        ncdqueryoptionimpl.cpp
+SOURCE        ncdnodepurchaseproxy.cpp
+SOURCE        ncdclientsubscribablecontent.cpp
+SOURCE        ncdpurchaseoptionproxy.cpp
+SOURCE        ncdclientsubscription.cpp
+SOURCE        ncdclientpartofsubscription.cpp
+SOURCE        ncdclientupgrade.cpp
+SOURCE        ncdnodecontentinfoproxy.cpp
+SOURCE        ncdnodeinstallproxy.cpp
+SOURCE        ncdinstalloperationproxy.cpp
+SOURCE        ncdsilentinstalloperationproxy.cpp
+SOURCE        ncdnodeuricontentproxy.cpp
+SOURCE        ncdsubscriptionmanagerproxy.cpp
+SOURCE        ncdsubscriptiongroupproxy.cpp
+SOURCE        ncdsubscriptionproxy.cpp
+SOURCE        ncdsubscriptionmanagerlistener.cpp
+SOURCE        ncdnodepreviewproxy.cpp
+SOURCE        ncdrightsobjectoperationproxy.cpp
+SOURCE        ncdsearchnodeitemproxy.cpp
+SOURCE        ncdsearchnodefolderproxy.cpp
+SOURCE        ncdsearchrootnodeproxy.cpp
+SOURCE        ncdsearchnodebundleproxy.cpp
+SOURCE        ncdsubscriptionoperationproxy.cpp
+SOURCE        ncdinstalledcontentimpl.cpp
+SOURCE        ncdinstalledapplicationimpl.cpp
+SOURCE        ncdinstalledthemeimpl.cpp
+SOURCE        ncdinstalledfileimpl.cpp
+SOURCE        ncdexpirednode.cpp
+SOURCE        ncdnodesupplierproxy.cpp
+SOURCE        ncdlocalizerutils.cpp
+SOURCE        ncdnodedependencyinfoimpl.cpp
+SOURCE        ncdfavoritemanagerproxy.cpp
+SOURCE        ncdnodeseenproxy.cpp
+SOURCE        ncdnodeseenfolderproxy.cpp
+SOURCE        ncdcreateaccesspointoperationproxy.cpp
+SOURCE        ncdsendhttprequestoperationproxy.cpp
+SOURCE        ncdserverreportmanagerproxy.cpp
+SOURCE        ncdserverreportoperationproxy.cpp
+
+SOURCEPATH    ../../provider/server/src
+SOURCE        ncdsendableprogress.cpp
+SOURCE        ncdnodeidentifier.cpp
+SOURCE        ncdnodeidentifiereditor.cpp
+SOURCE        ncdnodeidentifierutils.cpp
+SOURCE        ncdinstallinfo.cpp
+SOURCE        ncdfileinfo.cpp
+SOURCE        ncdchildentity.cpp
+SOURCE        ncdextendedinstallinfo.cpp
+SOURCE        ncddependencyinfo.cpp
+
+SOURCEPATH    ../../provider/src
+SOURCE        ncdkeyvaluemap.cpp
+
+
+SOURCEPATH    ../../provider/protocol/src
+SOURCE        ncdstring.cpp
+
+
+USERINCLUDE   ../../inc
+USERINCLUDE   ../../engine/inc ../../provider/inc ../../provider/client/inc
+USERINCLUDE   ../../engine/transport/inc
+USERINCLUDE   ../../provider/server/inc
+USERINCLUDE   ../../provider/storage/inc
+USERINCLUDE   ../../provider/purchasehistory/inc
+USERINCLUDE   ../../provider/protocol/inc
+USERINCLUDE   ../../provider/deviceinteraction/inc
+
+// System include paths
+MW_LAYER_SYSTEMINCLUDE
+
+SYSTEMINCLUDE /epoc32/include/libc
+
+// Unnecessary systeminclude, removed:
+//SYSTEMINCLUDE   /epoc32/include/caf
+
+LIBRARY euser.lib estor.lib bafl.lib charconv.lib efsrv.lib ecom.lib
+LIBRARY platformenv.lib // catalogsutils.cpp needs this
+LIBRARY sysutil.lib // catalogsutils.cpp needs this
+
+#ifdef USE_BUILD_SCRIPT
+LIBRARY		ncdutils_APP_NAME_POSTFIX.lib
+LIBRARY     ncddevicemgmt_APP_NAME_POSTFIX.lib
+#else  
+LIBRARY		ncdutils_20019119.lib
+LIBRARY     ncddevicemgmt_20019119.lib
+#endif // USE_BUILD_SCRIPT
+
+#ifdef CATALOGS_DEBUG_ENABLED
+    #ifdef USE_BUILD_SCRIPT
+    LIBRARY ncddebug_APP_NAME_POSTFIX.lib
+    #else
+    LIBRARY ncddebug_20019119.lib
+    #endif // USE_BUILD_SCRIPT
+#endif
+
+
+EXPORTUNFROZEN
+
+SOURCEPATH .
+
+SYSTEMINCLUDE /epoc32/include/ecom
+
+
+START resource 20019116.rss
+#ifdef USE_BUILD_SCRIPT
+TARGET CATALOGS_ENGINE_UID.rsc
+#else
+TARGET ncdproxy_20019119.rsc
+#endif // USE_BUILD_SCRIPT
+END
+
+SMPSAFE
+

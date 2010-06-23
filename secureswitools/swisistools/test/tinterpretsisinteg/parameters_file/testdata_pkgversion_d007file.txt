@@ -1,0 +1,7 @@
+*version6_case_a.txt
+*version6_case_b.txt
+*version6_case_c.txt
+*version6_case_d.txt
+*version6_case_e.txt
+*version6_case_f.txt
+*version6_case_g.txt

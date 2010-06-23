@@ -1,0 +1,42 @@
+
+Executable : 
+
+!:\Documents\testarmv5\apparc.dll
+
+FILE STATUS : Capabilities are not satisfied .
+
+Missing Capabilities List :
+
+CommDD
+PowerMgmt
+MultimediaDD
+ReadDeviceData
+WriteDeviceData
+DRM
+TrustedUI
+ProtServ
+DiskAdmin
+NetworkControl
+AllFiles
+SwEvent
+NetworkServices
+LocalServices
+ReadUserData
+WriteUserData
+Location
+SurroundingsDD
+UserEnvironment
+
+Executable : 
+
+!:\sys\bin\tswiallcapabilities.exe
+
+FILE STATUS : Capabilities are not satisfied .
+
+Missing Capabilities List :
+
+ReadDeviceData
+WriteDeviceData
+ReadUserData
+WriteUserData
+

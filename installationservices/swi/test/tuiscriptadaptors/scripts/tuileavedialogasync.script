@@ -1,0 +1,599 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWIS unit (integration) tests for Leaving Dialog.Error Code is configurable through .ini file
+PRINT Run Dialog Leave Tests
+LOAD_SUITE tuiscriptadaptors
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0001
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0001
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini install_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0001
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0002
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0002
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini language_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0002
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0003
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0003
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini drive_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0003
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0004
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0004
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installfirst_for_upgrade
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini upgrade_leave
+RUN_TEST_STEP 100		 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_installfirst_for_upgrade
+
+END_TESTCASE API-SEC-DialogLeave-B-0004
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0005
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0005
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini options_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0005
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0006
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0006
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini security_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0006
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0007
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0007
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini ocsp_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0007
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0008
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0008
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini install_first_fornextsection
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini overwrite_leave
+RUN_TEST_STEP 100		 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_install_first_fornextsection
+
+END_TESTCASE API-SEC-DialogLeave-B-0008
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0009
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0009
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini install_for_nextsection
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini uninstall_leave
+RUN_TEST_STEP 100	     tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_install_for_nextsection
+
+END_TESTCASE API-SEC-DialogLeave-B-0009
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0010
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0010
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini text_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0010
+
+
+//
+// Different reasons for error leaving dialogs
+//
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0011
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0011
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_missingbase_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0011
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0012
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0012
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_alreadyinrom_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0012
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0013
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0013
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_invalidsisxfile_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0013
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0014
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0014
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_disknotpresent_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0014
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0015
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0015
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_invalidfilename_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0015
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0016
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0016
+
+RUN_TEST_STEP 100		 tuiscriptadaptors FillDrive   z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini leave1mbfree
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_insufficientspace_leave
+
+// Delete space hogging file for both drive X (used in emulator test) and drive E (used in hardware test); one will fail but this
+// isn't counted in the summary as a test failure.
+RUN_UTILS DeleteFile e:\BigTempFile
+RUN_UTILS DeleteFile x:\BigTempFile
+
+END_TESTCASE API-SEC-DialogLeave-B-0016
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0017
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0017
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_capabilitycannotgranted_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0017
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0018
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0018
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_constraintsexceeded_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0018
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0019
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0019
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_sidviolation_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0019
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0020
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0020
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_vidviolation_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0020
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0021
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0021
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_uidpackageviolation_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0021
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0022
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0022
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini error_sidmismatch_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0022
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0023
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0023
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini install_base
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini augmentation_dependency_leave
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini dependency_leave
+RUN_TEST_STEP 100	     tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_install_base
+
+END_TESTCASE API-SEC-DialogLeave-B-0023
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0024
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0024
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini install_first_appinuse
+
+// Launch the GUI application, with delay after install to make sure it can start and after execution
+// to make sure it is up and running.
+DELAY 5000
+RUN_PROGRAM -1 helloworld.exe
+DELAY 500
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini applicationinuse_leave
+
+RUN_TEST_STEP 100		 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_install_first_appinuse
+
+END_TESTCASE API-SEC-DialogLeave-B-0024
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0025
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0025
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini question_incompatible_leave
+RUN_UTILS copyfile z:\tswi\DEF053165.perm c:\DEF077486.temp
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini question_overwrite_leave
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini missingdep_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0025
+
+
+//
+//Handle Install Events
+//
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0026
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0026
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_setprogress_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0026
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0027
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0027
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_updateprogress_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0027
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0028
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0028
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_completeinstall_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0028
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0029
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0029
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_ocspcheckend_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0029
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0030
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0030
+
+RUN_TEST_STEP 100 tuiscriptadaptors		   InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_installfornextsection
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_completeduninstall_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0030
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0031
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0031
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installevent_devcert_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0031
+
+
+//
+//Handle Cancellable Events
+//
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0032
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0032
+
+RUN_TEST_STEP 100		 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini installfornextsection
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini cancelableinstallevent_removefiles_leave
+RUN_TEST_STEP 100		 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini u_install_for_nextsection
+
+END_TESTCASE API-SEC-DialogLeave-B-0032
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0033
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0033
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini cancelableinstallevent_shutdownapps_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0033
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0034
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0034
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini cancelableinstallevent_copyfiles_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0034
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0035
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+
+START_TESTCASE API-SEC-DialogLeave-B-0035
+
+RUN_TEST_STEP !Error=-27 tuiscriptadaptors InstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\leavedialog.ini cancelableinstallevent_ocspcheckstart_leave
+
+END_TESTCASE API-SEC-DialogLeave-B-0035
+
+
+//! @SYMTestCaseID		API-SEC-DialogLeave-B-0036
+//! @SYMTestCaseDesc		Leave in UI callback
+//! @SYMDEF			DEF077486
+//! @SYMTestPriority		Medium
+//! @SYMTestActions		Check action when leave occurs in dialog
+//! @SYMTestExpectedResults	Leave should happen with appropriate error code.
+//! @SYMDevelopedForRelease	Bravo
+// Ensure that SWIS shuts down after the above tests to make sure heap checks run
+
+START_TESTCASE API-SEC-DialogLeave-B-0036
+
+RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning
+
+END_TESTCASE API-SEC-DialogLeave-B-0036

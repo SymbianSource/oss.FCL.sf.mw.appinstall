@@ -1,0 +1,93 @@
+EXPORTS
+	_ZN3Swi13CInstallPrefs12InternalizeLER11RReadStream @ 1 NONAME
+	_ZN3Swi13CInstallPrefs4NewLER11RReadStream @ 2 NONAME
+	_ZN3Swi13CInstallPrefs4NewLEv @ 3 NONAME
+	_ZN3Swi13CInstallPrefs5NewLCER11RReadStream @ 4 NONAME
+	_ZN3Swi13CInstallPrefs5NewLCEv @ 5 NONAME
+	_ZN3Swi13CInstallPrefsD0Ev @ 6 NONAME
+	_ZN3Swi13CInstallPrefsD1Ev @ 7 NONAME
+	_ZN3Swi13CInstallPrefsD2Ev @ 8 NONAME
+	_ZN3Swi15CShutdownServer4NewLEv @ 9 NONAME
+	_ZN3Swi15CShutdownServer5NewLCEv @ 10 NONAME
+	_ZN3Swi16CSisHelperServer4NewLERNS_21TSisHelperStartParamsE @ 11 NONAME
+	_ZN3Swi16CSisHelperServer5NewLCERNS_21TSisHelperStartParamsE @ 12 NONAME
+	_ZN3Swi25CDisplayGrantCapabilities4NewLERKNS_8TAppInfoERK14TCapabilitySet @ 13 NONAME
+	_ZN3Swi25CDisplayGrantCapabilities5NewLCERKNS_8TAppInfoERK14TCapabilitySet @ 14 NONAME
+	_ZN3Swi8Launcher6CancelEv @ 15 NONAME
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerERK4TBufILi256EERKNS_13CInstallPrefsE @ 16 NONAME
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerERNS_16MSisDataProviderERKNS_13CInstallPrefsE @ 17 NONAME
+	_ZN3Swi8Launcher9UninstallERNS_10MUiHandlerERK4TUid @ 18 NONAME
+	_ZNK3Swi13CInstallPrefs12ExternalizeLER12RWriteStream @ 19 NONAME
+	_ZNK3Swi25CDisplayGrantCapabilities12ReturnResultEv @ 20 NONAME
+	_ZTIN3Swi13CInstallPrefsE @ 21 NONAME ; #<TI>#
+	_ZTIN3Swi15CShutdownServerE @ 22 NONAME ; #<TI>#
+	_ZTIN3Swi16CSisHelperServerE @ 23 NONAME ; #<TI>#
+	_ZTIN3Swi17CSisHelperSessionE @ 24 NONAME ; #<TI>#
+	_ZTIN3Swi18CSisHelperShutdownE @ 25 NONAME ; #<TI>#
+	_ZTIN3Swi18CUissClientHandlerE @ 26 NONAME ; #<TI>#
+	_ZTIN3Swi21CTextDialogCmdHandlerE @ 27 NONAME ; #<TI>#
+	_ZTIN3Swi21InternalCancelHandlerE @ 28 NONAME ; #<TI>#
+	_ZTIN3Swi22CDriveDialogCmdHandlerE @ 29 NONAME ; #<TI>#
+	_ZTIN3Swi22CErrorDialogCmdHandlerE @ 30 NONAME ; #<TI>#
+	_ZTIN3Swi24CInstallDialogCmdHandlerE @ 31 NONAME ; #<TI>#
+	_ZTIN3Swi24COptionsDialogCmdHandlerE @ 32 NONAME ; #<TI>#
+	_ZTIN3Swi24CUpgradeDialogCmdHandlerE @ 33 NONAME ; #<TI>#
+	_ZTIN3Swi25CDisplayGrantCapabilitiesE @ 34 NONAME ; #<TI>#
+	_ZTIN3Swi25CLanguageDialogCmdHandlerE @ 35 NONAME ; #<TI>#
+	_ZTIN3Swi25CQuestionDialogCmdHandlerE @ 36 NONAME ; #<TI>#
+	_ZTIN3Swi26CUninstallDialogCmdHandlerE @ 37 NONAME ; #<TI>#
+	_ZTIN3Swi27COcspResultDialogCmdHandlerE @ 38 NONAME ; #<TI>#
+	_ZTIN3Swi29CHandleInstallEventCmdHandlerE @ 39 NONAME ; #<TI>#
+	_ZTIN3Swi32CDependencyBreakDialogCmdHandlerE @ 40 NONAME ; #<TI>#
+	_ZTIN3Swi32CSecurityWarningDialogCmdHandlerE @ 41 NONAME ; #<TI>#
+	_ZTIN3Swi34CApplicationsInUseDialogCmdHandlerE @ 42 NONAME ; #<TI>#
+	_ZTIN3Swi34CGrantCapabilitiesDialogCmdHandlerE @ 43 NONAME ; #<TI>#
+	_ZTIN3Swi36CCannotOverwriteFileDialogCmdHandlerE @ 44 NONAME ; #<TI>#
+	_ZTIN3Swi40CHandleCancellableInstallEventCmdHandlerE @ 45 NONAME ; #<TI>#
+	_ZTVN3Swi13CInstallPrefsE @ 46 NONAME ; #<VT>#
+	_ZTVN3Swi15CShutdownServerE @ 47 NONAME ; #<VT>#
+	_ZTVN3Swi16CSisHelperServerE @ 48 NONAME ; #<VT>#
+	_ZTVN3Swi17CSisHelperSessionE @ 49 NONAME ; #<VT>#
+	_ZTVN3Swi18CSisHelperShutdownE @ 50 NONAME ; #<VT>#
+	_ZTVN3Swi18CUissClientHandlerE @ 51 NONAME ; #<VT>#
+	_ZTVN3Swi21CTextDialogCmdHandlerE @ 52 NONAME ; #<VT>#
+	_ZTVN3Swi21InternalCancelHandlerE @ 53 NONAME ; #<VT>#
+	_ZTVN3Swi22CDriveDialogCmdHandlerE @ 54 NONAME ; #<VT>#
+	_ZTVN3Swi22CErrorDialogCmdHandlerE @ 55 NONAME ; #<VT>#
+	_ZTVN3Swi24CInstallDialogCmdHandlerE @ 56 NONAME ; #<VT>#
+	_ZTVN3Swi24COptionsDialogCmdHandlerE @ 57 NONAME ; #<VT>#
+	_ZTVN3Swi24CUpgradeDialogCmdHandlerE @ 58 NONAME ; #<VT>#
+	_ZTVN3Swi25CDisplayGrantCapabilitiesE @ 59 NONAME ; #<VT>#
+	_ZTVN3Swi25CLanguageDialogCmdHandlerE @ 60 NONAME ; #<VT>#
+	_ZTVN3Swi25CQuestionDialogCmdHandlerE @ 61 NONAME ; #<VT>#
+	_ZTVN3Swi26CUninstallDialogCmdHandlerE @ 62 NONAME ; #<VT>#
+	_ZTVN3Swi27COcspResultDialogCmdHandlerE @ 63 NONAME ; #<VT>#
+	_ZTVN3Swi29CHandleInstallEventCmdHandlerE @ 64 NONAME ; #<VT>#
+	_ZTVN3Swi32CDependencyBreakDialogCmdHandlerE @ 65 NONAME ; #<VT>#
+	_ZTVN3Swi32CSecurityWarningDialogCmdHandlerE @ 66 NONAME ; #<VT>#
+	_ZTVN3Swi34CApplicationsInUseDialogCmdHandlerE @ 67 NONAME ; #<VT>#
+	_ZTVN3Swi34CGrantCapabilitiesDialogCmdHandlerE @ 68 NONAME ; #<VT>#
+	_ZTVN3Swi36CCannotOverwriteFileDialogCmdHandlerE @ 69 NONAME ; #<VT>#
+	_ZTVN3Swi40CHandleCancellableInstallEventCmdHandlerE @ 70 NONAME ; #<VT>#
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerER5RFileRKNS_13CInstallPrefsE @ 71 NONAME
+	_ZN3Swi8Launcher9UninstallERNS_10MUiHandlerERKNS_19CSisRegistryPackageE @ 72 NONAME
+	_ZN3Swi14CAsyncLauncher10UninstallLERNS_10MUiHandlerERK4TUidR14TRequestStatus @ 73 NONAME
+	_ZN3Swi14CAsyncLauncher10UninstallLERNS_10MUiHandlerERKNS_19CSisRegistryPackageER14TRequestStatus @ 74 NONAME
+	_ZN3Swi14CAsyncLauncher4NewLEv @ 75 NONAME
+	_ZN3Swi14CAsyncLauncher5NewLCEv @ 76 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerER5RFileRKNS_13CInstallPrefsER14TRequestStatus @ 77 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerERK4TBufILi256EERKNS_13CInstallPrefsER14TRequestStatus @ 78 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerERNS_16MSisDataProviderERKNS_13CInstallPrefsER14TRequestStatus @ 79 NONAME
+	_ZN3Swi14CAsyncLauncherD0Ev @ 80 NONAME
+	_ZN3Swi14CAsyncLauncherD1Ev @ 81 NONAME
+	_ZN3Swi14CAsyncLauncherD2Ev @ 82 NONAME
+	_ZTIN3Swi14CAsyncLauncherE @ 83 NONAME ; #<TI>#
+	_ZTVN3Swi14CAsyncLauncherE @ 84 NONAME ; #<VT>#
+	_ZN3Swi14CAsyncLauncher15CancelOperationEv @ 85 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerER5RFileRKNS_13CInstallPrefsERK6RArrayIiER14TRequestStatus @ 86 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerERK4TBufILi256EERKNS_13CInstallPrefsERK6RArrayIiER14TRequestStatus @ 87 NONAME
+	_ZN3Swi14CAsyncLauncher8InstallLERNS_10MUiHandlerERNS_16MSisDataProviderERKNS_13CInstallPrefsERK6RArrayIiER14TRequestStatus @ 88 NONAME
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerER5RFileRKNS_13CInstallPrefsERK6RArrayIiE @ 89 NONAME
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerERK4TBufILi256EERKNS_13CInstallPrefsERK6RArrayIiE @ 90 NONAME
+	_ZN3Swi8Launcher7InstallERNS_10MUiHandlerERNS_16MSisDataProviderERKNS_13CInstallPrefsERK6RArrayIiE @ 91 NONAME
+

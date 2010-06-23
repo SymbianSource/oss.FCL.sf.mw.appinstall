@@ -1,0 +1,114 @@
+[A]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+
+[B]
+SIS1 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID1 = 81113022
+FILE1.1 = C:\sys\bin\tswiusergrantable.exe
+
+[C]
+SIS1 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID1 = 81113006
+FILE1.1 = C:\sys\bin\tswisystemcapability.exe
+
+[D]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+FILE1.2 = C:\sys\bin\tswinocapability2.exe
+
+[E]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID1 = 81113002
+FILE1.1 = C:\sys\bin\tswinocapability2.exe
+
+[F]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+
+[G]
+SIS1 = z:\tswi\tsis\data\tswinocapabilitysp.sis
+UID1 = A00001FD
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+
+[H]
+SIS1 = z:\tswi\tsis\data\tswinocapabilitypu.sis
+UID1 = A00001FD
+FILE1.1 = c:\sys\bin\tswinocapability2.exe
+
+[FG]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+
+[FH]
+SIS1 = z:\tswi\tsis\data\tswinocapabilityhardcode.sis
+UID1 = A00001FD
+FILE1.1 = e:\sys\bin\tswinocapability.exe
+FILE1.2 = c:\sys\bin\tswinocapability2.exe
+
+[AB]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+
+[AC]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+SIS2 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID2 = 81113006
+FILE2.1 = C:\sys\bin\tswisystemcapability.exe
+
+[BC]
+SIS1 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID1 = 81113022
+FILE1.1 = C:\sys\bin\tswiusergrantable.exe
+SIS2 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID2 = 81113006
+FILE2.1 = C:\sys\bin\tswisystemcapability.exe
+
+[ABC]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+SIS3 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID3 = 81113006
+FILE3.1 = C:\sys\bin\tswisystemcapability.exe
+
+[ABCD]
+SIS1 = z:\tswi\tsis\data\tswinocapability.sis
+UID1 = 81113001
+FILE1.1 = C:\sys\bin\tswinocapability.exe
+SIS2 = z:\tswi\tsis\data\tswiusergrantable_RSACA_DSACA.sis
+UID2 = 81113022
+FILE2.1 = C:\sys\bin\tswiusergrantable.exe
+SIS3 = z:\tswi\tsis\data\tswisystemcapability_Root5CA.sis
+UID3 = 81113006
+FILE3.1 = C:\sys\bin\tswisystemcapability.exe
+SIS4 = z:\tswi\tsis\data\tswinocapabilityembeded.sis
+UID4 = 81113002
+FILE4.1 = C:\sys\bin\tswinocapability.exe
+FILE4.2 = C:\sys\bin\tswinocapability2.exe
+
+[TRUSTED_PROTECTED_VID]
+SIS1 = z:\tswi\tsis\data\tswidllnocapabilityprotectedvid_Root5.sis
+UID1 = 81113027
+FILE1.1 = C:\sys\bin\tswidllnocapabilityprotectedvid.dll
+
+[SELF_SIGNED_PROTECTED_VID]
+// This SIS file can only be installed if SWIS is modified to allow
+// DLLs with protected VIDs from untrusted SIS files
+SIS1 = z:\tswi\tsis\data\tswidllnocapabilityprotectedvid.sis
+UID1 = 81113027
+FILE1.1 = C:\sys\bin\tswidllnocapabilityprotectedvid.dll

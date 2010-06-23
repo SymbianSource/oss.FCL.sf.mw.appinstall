@@ -1,0 +1,159 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//! @file
+// SWI Installer - SWI Observer Integration Tests
+
+PRINT Run all SWI Observer tests
+
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tbackuprestore
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0001
+//! @SYMTestCaseDesc		Resuming notifications. Log files left in log_swi folder are processed automatically when the SWI Observer starts. 
+//! @SYMREQ			SWIObserverREQ 1.3.5
+//! @SYMTestPriority		High
+//! @SYMTestActions		Copies an observation log file into log_swi folder. Starts and installation and then cancel it. 
+//!			    	Meanwhile, the SWI Observer will have been started.
+//! @SYMTestExpectedResults	The copied file does not exist in the log_swi folder and but refswiobs.log file exists.  
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0001
+
+RUN_UTILS MkDir c:\private\102836c3
+RUN_UTILS MkDir c:\private\102836c3\log_swi
+RUN_UTILS copyfile z:\tswi\tswiobserver\scripts\data\log_resume_notification c:\private\102836c3\log_swi\00000001
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP !Error=-3 100 tuiscriptadaptors InstallAsyncCancelStep z:\tswi\tswiobserver\scripts\testswiobserver.ini cancelinstalltime
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini resumenotification
+
+END_TESTCASE API-SEC-SWIObserver-0001
+
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0002
+//! @SYMTestCaseDesc		No notifications for failed operations. Requirement SWIObserverREQ 1.3.4.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Tries to install a sis file and cancels the installation after each dialog. Finally a successful installation is done.
+//! @SYMTestExpectedResults	When the installation is cancelled, any observation file in the swi_log folder and the output file 
+//!			 	of the reference swiobserver can not be exist
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0002
+
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 100 tuiscriptadaptors InstallAsyncCancelAfterDialogsStep z:\tswi\tswiobserver\scripts\testswiobserver.ini cancelinstallafterdialog
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini uninstallcancel
+
+END_TESTCASE API-SEC-SWIObserver-0002
+
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0003
+//! @SYMTestCaseDesc		SWI Observer notifies plug-ins of changes to the file system caused by the installation of a package.
+//!			   	SWI Observer allows plug-ins to be notified of changes to files in sys\hash. Requirement SWIObserverREQ 1.2.1 - 1.2.5.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Installs a sis file containing exe files and checks the output of the reference SWI Observer plug-in. 
+//! @SYMTestExpectedResults	The output of the reference SWI Observer plug-in is identical with the expected log file.
+//!				The expected log file contains logs both for exe files and their hash files. 
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0003
+
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini installexes
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkinstallexes
+
+END_TESTCASE API-SEC-SWIObserver-0003
+
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0004
+//! @SYMTestCaseDesc		SWI Observer notifies plug-ins of changes to the file system caused by the uninstallation of a package. Requirement SWIObserverREQ 1.2.3.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Uninstall a package containing exe files and checks the output of the reference SWI Observer plug-in. 
+//! @SYMTestExpectedResults	The output of the reference SWI Observer plug-in is identical with the expected log file. 
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0004
+
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini uninstallexes
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkuninstallexes
+
+END_TESTCASE API-SEC-SWIObserver-0004
+
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0005
+//! @SYMTestCaseDesc		SWI Observer notifies plug-ins of changes to the file system caused by the upgrade of a package. Requirement SWIObserverREQ 1.2.2.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install and then upgrade a package and checks the output of the reference SWI Observer plug-in. 
+//! @SYMTestExpectedResults	The output of the reference SWI Observer plug-in is identical with the expected log file. 
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0005
+
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini installupgradebase
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini upgradepartial
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkupgradepartial
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini upgradeaugmentation
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkupgradeaugmentation
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini uninstallupgrade
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkuninstallupgrade
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini installupgradebase
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkinstallupgradebase
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 500 tuiscriptadaptors InstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini upgradepackage
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkupgradepackage
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 500 tuiscriptadaptors UninstallStep z:\tswi\tswiobserver\scripts\testswiobserver.ini uninstallupgradedpackage
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkuninstallupgradedpackage
+
+END_TESTCASE API-SEC-SWIObserver-0005
+
+
+//! @SYMTestCaseID		API-SEC-SWIObserver-0006
+//! @SYMTestCaseDesc		SWI Observer notifies plug-ins of changes to the file system caused by the restoration of a package. Requirement SWIObserverREQ 1.2.4.
+//! @SYMTestPriority		High
+//! @SYMTestActions		Install, backup, uninstall and restore a package and checks the output of the reference SWI Observer plug-in. 
+//! @SYMTestExpectedResults	The output of the reference SWI Observer plug-in is identical with the expected log file. 
+//! @SYMDevelopedForRelease 	Oghma
+
+START_TESTCASE API-SEC-SWIObserver-0006
+
+// Clean up
+RUN_TEST_STEP 100	tbackuprestore CLEAN 	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore ABSENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+//Install
+RUN_TEST_STEP 100	tbackuprestore INSTALL	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore PRESENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+//Backup
+RUN_TEST_STEP 100	tbackuprestore BACKUP	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore PRESENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+//Uninstall
+RUN_TEST_STEP 100	tbackuprestore UNINSTALL z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore ABSENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+//Restore
+RUN_UTILS DeleteFile c:\private\102836c3\refswiobs.log
+RUN_TEST_STEP 100	tbackuprestore RESTORE	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore PRESENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tswiobserver\scripts\testswiobserver.ini checkrestore
+//Uninstall
+RUN_TEST_STEP 100	tbackuprestore UNINSTALL z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+RUN_TEST_STEP 100	tbackuprestore ABSENT	 z:\tswi\tswiobserver\scripts\testswiobserver.ini backuprestore
+
+END_TESTCASE API-SEC-SWIObserver-0006
+
