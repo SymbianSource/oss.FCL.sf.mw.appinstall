@@ -148,8 +148,19 @@ public:
 	 * @param aStream - Stream in which the package entries need to be written.
 	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	/**
+	 * Adds the write the iby file details into the stream.
+	 * @param aStream - Stream in which the iby entry need to be written.
+	 * @param aVerbose - If this option is set then detail description of iby
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddIbyEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 */
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 	/**
 	 * Delete the temporary buffer used for reading the string.
@@ -275,10 +286,19 @@ inline std::wstring CSISString::GetString() const
 	return iData;
 	}
 
-inline void CSISString::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSISString::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	(void)aVerbose;
+	(void)aCompatible;
 	aStream << iData;
+	}
+
+inline void CSISString::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	(void)aVerbose;
+	(void)aCompatible;
+	if(iData.length()>0)
+		aStream << iData;
 	}
 
 #endif // __SISSTRING_H__

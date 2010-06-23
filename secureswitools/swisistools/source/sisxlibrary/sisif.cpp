@@ -29,13 +29,13 @@
 
 #include "sisif.h"
 
-void CSISIf::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISIf::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	aStream << L"IF ";
-	iExpression.AddPackageEntry(aStream, aVerbose);
+	iExpression.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << std::endl;
-	iInstallBlock.AddPackageEntry(aStream, aVerbose);
-	iElseIfs.AddPackageEntry(aStream, aVerbose);
+	iInstallBlock.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iElseIfs.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"ENDIF" << std::endl;
 	}
 

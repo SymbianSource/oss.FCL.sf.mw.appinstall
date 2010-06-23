@@ -44,7 +44,8 @@ public:
 
 	void AddOption ();
 	void AddOptionName (const std::wstring& aName);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	inline TUint32 SupportedOptionCount() const;
 	
 private:

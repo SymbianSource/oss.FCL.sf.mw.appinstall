@@ -53,7 +53,7 @@ public:
 	virtual void CreateDefects ();
 #endif // GENERATE_ERRORS
 	
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	
 	inline TKey Key() const;
 	inline TValue Value() const;
@@ -115,7 +115,7 @@ inline void CSISProperty::CreateDefects ()
 	}
 #endif // GENERATE_ERRORS
 
-inline void CSISProperty::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSISProperty::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	(void)aVerbose;
 	aStream << iKey << L"=" << iValue;
