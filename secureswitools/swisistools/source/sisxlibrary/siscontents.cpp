@@ -310,11 +310,17 @@ void CSISContents::WriteSIS (std::wstring aTargetFileName)
 	Save (aTargetFileName);
 	}
 
-void CSISContents::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISContents::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
-	iControllerChecksum.AddPackageEntry(aStream, aVerbose);
-	iDataChecksum.AddPackageEntry(aStream, aVerbose);
-	iController.AddPackageEntry(aStream, aVerbose); // CSISCompressed
-	Controller().AddPackageEntry(aStream, aVerbose);
-	iData.AddPackageEntry(aStream, aVerbose);
+	iControllerChecksum.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iDataChecksum.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iController.AddPackageEntry(aStream, aVerbose, aCompatible); // CSISCompressed
+	Controller().AddPackageEntry(aStream, aVerbose, aCompatible);
+	iData.AddPackageEntry(aStream, aVerbose, aCompatible);
+	}
+
+void CSISContents::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	Controller().AddIbyEntry(aStream, aVerbose, aCompatible);
+	iData.AddIbyEntry(aStream, aVerbose, aCompatible);
 	}

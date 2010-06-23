@@ -80,7 +80,7 @@ void CSISDate::Set (const TUint16 aYear, const TUint8 aMonth, const TUint8 aDay)
 	iDay = aDay;
 	}
 
-void CSISDate::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISDate::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	// Month starts with 0
 	aStream << static_cast<int>(iYear)		<< L"/";

@@ -39,7 +39,7 @@ std::string CSISSupportedLanguages::Name () const
 	return "Supported Languages";
 	}
 
-void CSISSupportedLanguages::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISSupportedLanguages::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TUint32 optionCount = iSupportedLanguage.size();
 	if (optionCount == 0)
@@ -53,7 +53,7 @@ void CSISSupportedLanguages::AddPackageEntry(std::wostream& aStream, bool aVerbo
 	aStream << L"&";
 	for (TUint32 i = 0; i < optionCount; ++i)
 		{
-		iSupportedLanguage[i].AddPackageEntry(aStream, aVerbose);
+		iSupportedLanguage[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		if (i < (optionCount-1))
 			{
 			aStream << L", ";

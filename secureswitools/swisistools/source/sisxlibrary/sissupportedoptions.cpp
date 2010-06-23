@@ -24,7 +24,7 @@
 
 #include "sissupportedoptions.h"
 
-void CSISSupportedOptions::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISSupportedOptions::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TUint32 optionCount = iSupportedOption.size();
 	if (optionCount == 0)
@@ -35,7 +35,7 @@ void CSISSupportedOptions::AddPackageEntry(std::wostream& aStream, bool aVerbose
 	for (TUint32 i = 0; i < optionCount; ++i)
 		{
 		aStream << L"{";
-		iSupportedOption[i].AddPackageEntry(aStream, aVerbose);
+		iSupportedOption[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L"}";
 		if (i < (optionCount-1))
 			{
@@ -45,3 +45,23 @@ void CSISSupportedOptions::AddPackageEntry(std::wostream& aStream, bool aVerbose
 	aStream << L")" << std::endl << std::endl;
 	}
 
+void CSISSupportedOptions::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	TUint32 optionCount = iSupportedOption.size();
+	if (optionCount == 0)
+		{
+		return;
+		}
+	aStream << L"!(";
+	for (TUint32 i = 0; i < optionCount; ++i)
+		{
+		aStream << L"{";
+		iSupportedOption[i].AddIbyEntry(aStream, aVerbose, aCompatible);
+		aStream << L"}";
+		if (i < (optionCount-1))
+			{
+			aStream << L", ";
+			}
+		}
+	aStream << L")" << std::endl << std::endl;
+	}

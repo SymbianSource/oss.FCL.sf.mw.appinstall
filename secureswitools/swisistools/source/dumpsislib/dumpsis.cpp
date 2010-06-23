@@ -33,10 +33,12 @@
 #include "siscontroller.h"
 #include "exception.h"
 
-CDumpSis::CDumpSis(const std::wstring& aSISFileName, bool aVerbose)
+#define KStubSisMsg "// *** Please add stub-SIS file entry here ***"
+CDumpSis::CDumpSis(const std::wstring& aSISFileName, bool aVerbose, bool aCompatible)
 		: 	iController(NULL),
 			iSisFileName(aSISFileName),
 			iVerbose(aVerbose),
+			iCompatible(aCompatible),
 			iIsStub(false)
 	{
 	bool isSiSFile = CSISContents::IsSisFile(aSISFileName);
@@ -67,18 +69,74 @@ void CDumpSis::CreatePackage(const std::wstring& aPkgFileName)
 	std::wistringstream inStream (std::ios::in | std::ios::out);
 	std::wostream outStream (inStream.rdbuf ());
 
-	outStream << wchar_t(0xfeff);
+	if(iCompatible)
+		outStream << wchar_t(0xfeff);
+
 	if(iIsStub)
 		{
-		iController->AddPackageEntry (outStream, iVerbose);
+		iController->AddPackageEntry (outStream, iVerbose, iCompatible);
 		}
 	else
 		{
-		iSisContents.AddPackageEntry (outStream, iVerbose);
+		iSisContents.AddPackageEntry (outStream, iVerbose, iCompatible);
 		}
 	
 	std::wstring str = inStream.str();
+	if(!iCompatible)
+		{
+		std::string ns(str.begin(), str.end());
+		WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(ns.c_str()), ns.length());
+		}
+	else
 	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
+	}
+
+void CDumpSis::CreateIbyFile(const std::wstring& aIbyFileName)
+	{
+	std::wistringstream inStream (std::ios::in | std::ios::out);
+	std::wostream outStream (inStream.rdbuf ());
+
+	if(iCompatible)
+		outStream << wchar_t(0xfeff);
+
+	std::wstring tmp;
+	int index = aIbyFileName.find_last_of(L"/");
+	if(index!=-1)
+		tmp = aIbyFileName.substr(index+1,aIbyFileName.length()-index-1);
+	else
+		tmp = aIbyFileName;
+	
+	index = tmp.find_last_of(L".");
+	if(index!=-1)
+		tmp = tmp.replace(index,1,L"_");
+
+	std::transform(tmp.begin(), tmp.end(), tmp.begin(), towupper);
+
+	outStream << L"#ifndef __" << tmp << L"__" << std::endl;
+	outStream << L"#define __" << tmp << L"__" << std::endl << std::endl;
+	if(iIsStub)
+		{
+		iController->AddIbyEntry (outStream, iVerbose, iCompatible);
+		}
+	else
+		{
+		iSisContents.AddIbyEntry (outStream, iVerbose, iCompatible);
+		}
+	
+	outStream << std::endl << KStubSisMsg << std::endl;
+	outStream << std::endl << L"#endif __" << tmp << L"__" << std::endl;
+
+	std::wstring str = inStream.str();
+
+	if(!iCompatible)
+		{
+		std::string ns(str.begin(), str.end());
+		WriteToFile(aIbyFileName, reinterpret_cast<const TUint8*>(ns.c_str()), ns.length());
+		}
+	else
+		WriteToFile(aIbyFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
+
+		
 	}
 
 void CDumpSis::CreatePackage(const CSISController& aSisController, const std::wstring& aPkgFileName)
@@ -86,10 +144,59 @@ void CDumpSis::CreatePackage(const CSISController& aSisController, const std::ws
 	std::wistringstream inStream (std::ios::in | std::ios::out);
 	std::wostream outStream (inStream.rdbuf ());
 
-	outStream << wchar_t(0xfeff);
-	aSisController.AddPackageEntry (outStream, iVerbose);
+	if(iCompatible)
+		outStream << wchar_t(0xfeff);
+
+	aSisController.AddPackageEntry (outStream, iVerbose, iCompatible);
 	std::wstring str = inStream.str();
-	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
+
+	if(!iCompatible)
+		{
+		std::string ns(str.begin(), str.end());
+		WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(ns.c_str()), ns.length());
+		}
+	else
+		WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
+
+	}
+void CDumpSis::CreateIbyFile(const CSISController& aSisController, const std::wstring& aIbyFileName)
+	{
+	std::wistringstream inStream (std::ios::in | std::ios::out);
+	std::wostream outStream (inStream.rdbuf ());
+
+	if(iCompatible)
+		outStream << wchar_t(0xfeff);
+
+	std::wstring tmp;
+	int index = aIbyFileName.find_last_of(L"/");
+	if(index!=-1)
+		tmp = aIbyFileName.substr(index+1,aIbyFileName.length()-index-1);
+	else
+		tmp = aIbyFileName;
+	
+	index = tmp.find_last_of(L".");
+	if(index!=-1)
+		tmp = tmp.replace(index,1,L"_");
+
+	std::transform(tmp.begin(), tmp.end(), tmp.begin(), towupper);
+
+	outStream << L"#ifndef __" << tmp << L"__" << std::endl;
+	outStream << L"#define __" << tmp << L"__" << std::endl << std::endl;
+
+	aSisController.AddIbyEntry (outStream, iVerbose, iCompatible);
+
+	outStream << std::endl << KStubSisMsg << std::endl;
+	outStream << std::endl << L"#endif __" << tmp << L"__" << std::endl;
+	std::wstring str = inStream.str();
+
+	if(!iCompatible)
+		{
+		std::string ns(str.begin(), str.end());
+		WriteToFile(aIbyFileName, reinterpret_cast<const TUint8*>(ns.c_str()), ns.length());
+		}
+	else
+		WriteToFile(aIbyFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
+	
 	}
 
 void CDumpSis::ExtractFiles(const std::wstring& aTargetDir, TExtractionLevel aLevel)
@@ -136,6 +243,15 @@ void CDumpSis::ExtractFiles(const std::wstring& aTargetDir, TExtractionLevel aLe
 			ExtractAllCertificates(targetDir);
 			break;
 			}
+		case EIbyFiles:
+			{
+			ExtractIBYFile(targetDir);
+			ExtractBasePackageFile(targetDir);	
+			ExtractFiles(*iController, targetDir);
+			ExtractNestedSisFile(targetDir, *iController, true, 0, iSisContents.SisData().DataUnitCount());
+			ExtractAllCertificates(targetDir);
+			break;
+			}
 		}
 	}
 
@@ -171,6 +287,14 @@ void CDumpSis::ExtractCertificates(const CSISController& aSisController, const s
 		}
 	}
 
+void CDumpSis::ExtractIBYFile(const std::wstring& aTargetDir)
+	{
+	std::wstring ibyFileName = iSisFileName;
+	ibyFileName = FixPathDelimiters(ibyFileName);
+	SisFileNameToIbyFileName(ibyFileName);
+	ibyFileName = aTargetDir + KSisDirectorySeparator + ibyFileName;
+	CreateIbyFile(ibyFileName);
+	}
 
 void CDumpSis::ExtractBasePackageFile(const std::wstring& aTargetDir)
 	{
@@ -217,11 +341,40 @@ void CDumpSis::ExtractFiles(const CSISController& aSisController, const std::wst
 	for(int i = 0; i < fileList.size(); ++i)
 		{
 		const CSISFileDescription* fdesc = fileList[i];
-		const wchar_t* fileName = fdesc->GetFileName();
-		std::wstring filePath = aTargetDir + KSisDirectorySeparator + fileName;
+
 		const CSISFileData& fileData = dataUnit.FileData(fdesc->FileIndex());
-		WriteToFile(filePath, fileData.Data(), fileData.UncompressedSize());
-		delete[] const_cast<wchar_t*>(fileName);
+
+		if(!iCompatible)
+			{
+			std::wstring filePath = fdesc->Target().GetString();
+			std::wstring fileNameOnly;
+			int index = filePath.find_last_of(L"\\");
+			if(index!=-1)
+				{
+				fileNameOnly = filePath.substr(index+1,filePath.length()-index-1);
+				filePath = filePath.substr(0, index+1);
+				index = filePath.find_first_of(L":");
+				if(index!=-1)
+					{
+					filePath = filePath.substr(index+2,filePath.length()-index-2);
+					}
+				filePath = aTargetDir + KSisDirectorySeparator+filePath;
+				CreateTargetDir(filePath);
+				try
+					{
+					WriteToFile(filePath+fileNameOnly, fileData.Data(), fileData.UncompressedSize());
+					}
+					catch(...){}
+				}
+			}
+		else
+			{
+			const wchar_t* fileName = fdesc->GetFileName();
+			std::wstring filePath = aTargetDir + KSisDirectorySeparator + fileName;
+			WriteToFile(filePath, fileData.Data(), fileData.UncompressedSize());
+			delete[] const_cast<wchar_t*>(fileName);
+			}
+	
 		}
 	}
 
@@ -264,8 +417,11 @@ void CDumpSis::ExtractNestedSisFile(const std::wstring& aTargetDir,
 		std::wstring extractionPath = aTargetDir + KSisDirectorySeparator + pathName;
 		CreateTargetDir(extractionPath);
 		ExtractFiles(*iter->second, extractionPath, aStartIndex);
+		std::wstring ibyExtractionPath = extractionPath;
 		extractionPath = extractionPath + KSisDirectorySeparator + pathName + L".pkg";
 		CreatePackage(*iter->second, extractionPath);
+		ibyExtractionPath = ibyExtractionPath + KSisDirectorySeparator + pathName + L".iby";
+		CreateIbyFile(*iter->second, ibyExtractionPath);
 		ExtractNestedSisFile(aTargetDir, *(iter->second), aExtractSis, aStartIndex + iter->first, maxDataUnit);
 		}
 	}
@@ -371,6 +527,28 @@ void CDumpSis::CreateDirectoriesRecursively(std::wstring aTargetDir)
 		}
 	}
 
+void CDumpSis::SisFileNameToIbyFileName(std::wstring& aFileName)
+	{
+	int pos = aFileName.find_last_of(L'/');
+	if(std::wstring::npos != pos)
+		{
+		aFileName = aFileName.substr(pos+1);
+		}
+
+	for(int i = 0; i < aFileName.size(); ++i)
+		{
+		aFileName[i] = tolower(aFileName[i]);
+		}
+	
+	pos = aFileName.rfind(L".sis");
+	if(std::wstring::npos == pos)
+		{
+		pos = aFileName.rfind(L".ctl");
+		}
+
+	aFileName = aFileName.substr(0, pos);
+	aFileName.append(L".iby");
+	}
 void CDumpSis::SisFileNameToPkgFileName(std::wstring& aFileName)
 	{
 	int pos = aFileName.find_last_of(L'/');
