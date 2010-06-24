@@ -72,6 +72,7 @@ CIAUpdateNodeFilter::~CIAUpdateNodeFilter()
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::~CIAUpdateNodeFilter() begin");
 
     delete iFilterParams;
+    iStoredNodes.Reset();
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::~CIAUpdateNodeFilter() end");
     }
@@ -212,7 +213,14 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                     {
                     for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
                         {
-                        aFwNodes[i]->Base().SetSelected( ETrue );
+                        if ( aFwNodes[i]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                            {
+                            aFwNodes[i]->Base().SetSelected( EFalse ); 
+                            }
+                        else
+                            {
+                            aFwNodes[i]->Base().SetSelected( ETrue );
+                            }
                         }
                     for ( TInt i = 0; i < aNodes.Count(); ++i )   
                         {
@@ -231,7 +239,14 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                 {
                 for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
                     {
-                    aFwNodes[i]->Base().SetSelected( ETrue );
+                    if ( aFwNodes[i]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                        {
+                        aFwNodes[i]->Base().SetSelected( EFalse ); 
+                        }
+                    else
+                        {
+                        aFwNodes[i]->Base().SetSelected( ETrue );
+                        }
                     }
                 for ( TInt i = 0; i < aNodes.Count(); ++i )   
                     {
@@ -400,16 +415,9 @@ void CIAUpdateNodeFilter::SetDependenciesSelectedL( MIAUpdateNode& aNode,
     RPointerArray<MIAUpdateNode> deps;
     CleanupClosePushL( deps );
     
-    RPointerArray<MIAUpdateAnyNode> allNodes;
-    CleanupClosePushL( allNodes );
-    for( TInt i = 0; i < aAllNodes.Count(); ++i ) 
-        {
-        MIAUpdateAnyNode* node = aAllNodes[i];
-        User::LeaveIfError( allNodes.Append( node ) );
-        }
-    
-    IAUpdateDepUtils::GetDependenciesL( aNode, allNodes, deps );    
-    CleanupStack::PopAndDestroy( &allNodes );
+        
+    IAUpdateDepUtils::GetDependenciesL( aNode, aAllNodes, deps );    
+
     TInt depCount = deps.Count();
     for( TInt i = 0; i < depCount; i++ )
         {
@@ -421,7 +429,80 @@ void CIAUpdateNodeFilter::SetDependenciesSelectedL( MIAUpdateNode& aNode,
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::SetDependenciesSelectedL() end");
     }
 
+// -----------------------------------------------------------------------------
+// CIAUpdateNodeFilter::StoreNodeListL
+// 
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateNodeFilter::StoreNodeListL( const RPointerArray< MIAUpdateNode >& aNodes )
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::StoreNodeListL() begin");
+    iStoredNodes.Reset();
+    for( TInt i = 0; i < aNodes.Count(); ++i )
+        {
+        iStoredNodes.AppendL( aNodes[i] ); 
+        }
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::StoreNodeListL() end");
+    }
 
+// -----------------------------------------------------------------------------
+// CIAUpdateNodeFilter::RestoreNodeListL
+// 
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateNodeFilter::RestoreNodeListL( RPointerArray< MIAUpdateNode >& aNodes) const
+    {
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::RestoreNodeListL() begin");   
+    aNodes.Reset();
+    for( TInt i = 0; i < iStoredNodes.Count(); ++i )
+        {
+        aNodes.AppendL( iStoredNodes[i] ); 
+        }
+    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateNodeFilter::RestoreNodeListL() end");   
+    }
+
+// -----------------------------------------------------------------------------
+// CIAUpdateNodeFilter::SortSelectedNodesFirstL
+// 
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateNodeFilter::SortSelectedNodesFirstL( 
+                          const RPointerArray<MIAUpdateNode>& aSelectedNodes, 
+                          RPointerArray< MIAUpdateNode >& aNodes )
+    {
+    for ( TInt i = aNodes.Count() - 1 ; i >= 0 ; --i )
+        {
+        MIAUpdateNode* node( aNodes[ i ] );
+        if ( node->Base().IsSelected() )
+            {
+            aNodes.Remove( i );        
+            }
+        }
+    for ( TInt j = aSelectedNodes.Count() -1 ; j >= 0 ; --j )
+        {
+        aNodes.InsertL( aSelectedNodes[j], 0 ); 
+        }
+    }
+ 
+// -----------------------------------------------------------------------------
+// CIAUpdateNodeFilter::SortThisNodeFirstL
+// 
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateNodeFilter::SortThisNodeFirstL( const MIAUpdateNode* aFirstNode, 
+                                              RPointerArray< MIAUpdateNode >& aNodes)
+    {
+    TBool removed = EFalse; 
+    for ( TInt i = aNodes.Count() - 1 ; i >= 0 && !removed ; --i )
+        {
+        if ( aNodes[ i ] == aFirstNode )
+            {
+            aNodes.Remove( i );      
+            removed = ETrue;
+            }
+        }
+    aNodes.InsertL( aFirstNode, 0 );
+    }
 
 
 // -----------------------------------------------------------------------------

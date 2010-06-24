@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -504,18 +504,20 @@ void CIAUpdateLoader::LoadChildContainersL( MNcdNodeContainer& aParentContainer 
         IAUPDATE_TRACE_1("[IAUPDATE] Container child: %d", i);
 
         MNcdNode* node( aParentContainer.ChildL( i ) );
-        CleanupReleasePushL( *node );
-
-        MNcdNodeContainer* container(
-            node->QueryInterfaceLC< MNcdNodeContainer >() );
-        if ( container )
+        if ( node )
             {
-            IAUPDATE_TRACE("[IAUPDATE] Container child had container interface");
-            LoadContainerL( *container );
-            CleanupStack::PopAndDestroy( container );                
-            }
+            CleanupReleasePushL( *node );
 
-        CleanupStack::PopAndDestroy( node );
+            MNcdNodeContainer* container(
+            node->QueryInterfaceLC< MNcdNodeContainer >() );
+            if ( container )
+                {
+                IAUPDATE_TRACE("[IAUPDATE] Container child had container interface");
+                LoadContainerL( *container );
+                CleanupStack::PopAndDestroy( container );                
+                }
+            CleanupStack::PopAndDestroy( node );
+            }
         }
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateLoader::LoadChildContainersL() end");
@@ -636,55 +638,55 @@ void CIAUpdateLoader::LoadChildrenOfChildrenL(
     for ( TInt i = 0; i < childCount; ++i )
         {
         MNcdNode* node( aContainer.ChildL( i ) );
-        CleanupReleasePushL( *node );
-
-        MNcdNodeContainer* container( 
-            node->QueryInterfaceLC< MNcdNodeContainer >() );
-        if ( container )
+        if ( node )
             {
-            IAUPDATE_TRACE_1("[IAUPDATE] Container child: %d had container interface", i);
+            CleanupReleasePushL( *node );
 
-            switch ( aPreviousOperationType )
+            MNcdNodeContainer* container( 
+               node->QueryInterfaceLC< MNcdNodeContainer >() );
+            if ( container )
                 {
-                case TIAUpdateOperationInfo::ELoadRoot:
-                    IAUPDATE_TRACE("[IAUPDATE] Load children of the root child");
-                    // When root is loaded, also its children are loaded
-                    // and they have now their child count. So, no need to
-                    // reload children of the root. Load their children
-                    // directly now.
-                    LoadChildrenL( *container );
-                    break;
-                    
-                case TIAUpdateOperationInfo::ELoadChildren:
-                    IAUPDATE_TRACE("[IAUPDATE] Load children of a container");
-                    // Notice, that now we need to first load the child count
-                    // for the child containers. So, even if children were 
-                    // already updated by LoadChildrenL, a new request for
-                    // containers needs . Otherwise, the child count 
-                    // will not be up-to-date. When the child containers are 
-                    // loaded, the flow will continue to load the children.
-                    LoadContainerL( *container );
-                    break;
+                IAUPDATE_TRACE_1("[IAUPDATE] Container child: %d had container interface", i);
+                switch ( aPreviousOperationType )
+                    {
+                    case TIAUpdateOperationInfo::ELoadRoot:
+                        IAUPDATE_TRACE("[IAUPDATE] Load children of the root child");
+                        // When root is loaded, also its children are loaded
+                        // and they have now their child count. So, no need to
+                        // reload children of the root. Load their children
+                        // directly now.
+                        LoadChildrenL( *container );
+                        break;
+                            
+                    case TIAUpdateOperationInfo::ELoadChildren:
+                        IAUPDATE_TRACE("[IAUPDATE] Load children of a container");
+                        // Notice, that now we need to first load the child count
+                        // for the child containers. So, even if children were 
+                        // already updated by LoadChildrenL, a new request for
+                        // containers needs . Otherwise, the child count 
+                        // will not be up-to-date. When the child containers are 
+                        // loaded, the flow will continue to load the children.
+                        LoadContainerL( *container );
+                        break;
 
-                case TIAUpdateOperationInfo::ELoadAllChildren:
-                    IAUPDATE_TRACE("[IAUPDATE] Load all children of a container");
-                    // Notice, here we will try to skip the loading of the child
-                    // count of the container. So, all the children are tried to
-                    // be loaded directly even if the child count may not be
-                    // up-to-date.
-                    LoadAllChildrenL( *container );
-                    break;
-                    
-                default:
-                    IAUPDATE_TRACE("[IAUPDATE] ERROR: Wrong operation type");
-                    User::Leave( KErrArgument );
-                    break;
+                    case TIAUpdateOperationInfo::ELoadAllChildren:
+                        IAUPDATE_TRACE("[IAUPDATE] Load all children of a container");
+                        // Notice, here we will try to skip the loading of the child
+                        // count of the container. So, all the children are tried to
+                        // be loaded directly even if the child count may not be
+                        // up-to-date.
+                        LoadAllChildrenL( *container );
+                        break;
+                            
+                    default:
+                        IAUPDATE_TRACE("[IAUPDATE] ERROR: Wrong operation type");
+                        User::Leave( KErrArgument );
+                        break;
+                    }
+                CleanupStack::PopAndDestroy( container );                
                 }
-
-            CleanupStack::PopAndDestroy( container );                
+            CleanupStack::PopAndDestroy( node );
             }
-
-        CleanupStack::PopAndDestroy( node );
         }
 
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateLoader::LoadChildrenOfChildrenL() end");

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -62,22 +62,12 @@ public: // new functions
     * Set Nokia agreement as accepted by an user
     */
     void SetAgreementAcceptedL();
-    
-    /**
-    * Set Nokia agreement as asked (prompted) to an user
-    */
-    void SetAgreementAskedL();
-        
+          
     /**
     * Set automatic update checks as asked (prompted) to an user
     */
     void SetAutomaticUpdatesAskedL();
-    
-    /**
-    * Time stamp of first check updates form application is stored
-    */
-    void SetFirstTimeIfNotSetL();
-    
+            
     /**
     * Is Nokia agreement of Application Update accepted by an user
     *
@@ -86,27 +76,13 @@ public: // new functions
     TBool AgreementAcceptedL();
     
     /**
-    * Is Nokia agreement of Application Update already asked 
-    *
-    * @return True value if agreement already asked 
-    */
-    TBool AgreementAskedL();
-    
-    /**
     * Is activation for automatic update cheks from network already asked 
     *
     * @return True value if agreement already asked 
     */
     TBool AutomaticUpdateChecksAskedL();  
         
-    /**
-    * There is a delay (eg. 2 weeks) after first check updates request from an application
-    * when update check is not performed. This method checks is update check delayed. 
-    *
-    * @return True value if agreement accepted 
-    */
-    TBool FirstTimeDelayL();
-
+ 
 private:
 
     /**
@@ -134,8 +110,6 @@ private: //data
 	TFileName iPath;
 	
 	TBool iAgreementAccepted;
-	
-	TBool iAgreementAsked;
 	
 	TBool iAutomaticUpdateChecksAsked;   
    

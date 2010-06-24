@@ -60,12 +60,7 @@ USERINCLUDE   ../../provider/server/inc
 USERINCLUDE   ../../provider/deviceinteraction/inc
 
 // System include paths
-#ifndef __SERIES60_30__
 MW_LAYER_SYSTEMINCLUDE
-#else
-SYSTEMINCLUDE /Epoc32/include
-#endif
-
 
 LIBRARY euser.lib estor.lib 
 LIBRARY bafl.lib charconv.lib efsrv.lib  // needed for ARMV5 building
@@ -91,8 +86,10 @@ LIBRARY         apparc.lib
 LIBRARY         avkon.lib
 LIBRARY         etel3rdparty.lib 
 LIBRARY         apgrfx.lib
-LIBRARY         swinstcli.lib           // Silent install
-LIBRARY         widgetregistryclient.lib // Widget Registry
+//LIBRARY         swinstcli.lib           // Silent install
+LIBRARY         sif.lib // SIF installer
+LIBRARY         scrclient.lib  //Registry client
+//LIBRARY         widgetregistryclient.lib // Widget Registry
 
 // HLa - temporary java remove
 //#if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined( __S60_32__ )

@@ -78,6 +78,20 @@ public:
        
         };
 
+    /**
+    * For UI during update process
+    **/
+    
+    enum TUIUpdateState
+        {
+        ENormal,
+        EDownloading,
+        EInstalling,
+        EUpdated,
+        EFailed,
+        EDownloaded        
+        };
+    
 
     /**
      * @return TPackageType The type of this node content.
@@ -169,20 +183,20 @@ public:
      */
     virtual TInt Depth() const = 0;
 
-    /**
-     * Informs UI that downloading is ongoing
-     **/
-    virtual TBool Downloading() const = 0;
-
-    /**
-    * Informs UI that installing is ongoing
-    **/
-    virtual TBool Installing() const = 0;
+    virtual void SetUiState( TUIUpdateState aState ) = 0;
     
-    virtual void SetDownloading( TBool aDownloading ) = 0;
-
-    virtual void SetInstalling( TBool aInstalling ) = 0;
+    virtual TUIUpdateState UiState() const = 0;
     
+    // for progress bar in UI
+    virtual void SetProgress( TInt aProgress ) = 0;
+    
+    virtual TInt Progress() const = 0; 
+    
+    virtual void SetTotal( TInt aTotal ) = 0;
+    
+    virtual TInt Total() const = 0; 
+    
+       
 
 protected:
 

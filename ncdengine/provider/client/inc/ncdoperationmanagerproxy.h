@@ -63,10 +63,10 @@ class MNcdServerReportOperationObserver;
 
 
 // Forward declaration for silent install
-// SwiUI::TInstallOptions
-namespace SwiUI
+// Usif::TInstallOptions
+namespace Usif
     {
-    class TInstallOptions;    
+    class COpaqueNamedParams;    
     }
 
 /**
@@ -230,7 +230,7 @@ public:
     virtual CNcdSilentInstallOperationProxy* CreateSilentInstallOperationL(
         CNcdNodeProxy& aNode, 
         MNcdInstallOperationObserver* aObserverconst,
-        const SwiUI::TInstallOptions& aInstallOptions );
+        Usif::COpaqueNamedParams* aInstallOptions );
     
     
     /**

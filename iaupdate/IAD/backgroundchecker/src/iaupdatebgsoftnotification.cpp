@@ -103,27 +103,18 @@ CIAUpdateBGSoftNotification::~CIAUpdateBGSoftNotification()
 
     delete iTitle;
     delete iText;
-
-    delete iImagePath;
     
     delete iNotificationDialog;
 
     }
    
 // -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::ShowSoftNotificationL
+// CIAUpdateBGSoftNotification::ShowNotificationL
 // Displays notification
 // -----------------------------------------------------------------------------
 //
 void CIAUpdateBGSoftNotification::ShowNotificationL()
     {
-    
-    /*
-    _LIT( KIcon, "C:\\qgn_note_swupdate_notification.svg" );
-    _LIT( KFirstTimeText, "Check for updates ?" );
-    _LIT( KNormalText, "Check for updates ?" );
-    _LIT( KTextRow2, "Tap to view" );
-    */
     
     FLOG("[bgchecker] ShowNotificationL");
     
@@ -132,11 +123,6 @@ void CIAUpdateBGSoftNotification::ShowNotificationL()
         {
         iNotificationDialog = CHbDeviceNotificationDialogSymbian::NewL( this );
         }
-    
-    //CleanupStack::PushL( notificationDialog ); // --> memberiin - delete closessa/activaatiossa/destructorissa
-                                                           //    + leave kiinni + tuhoaminen
-    // save number of updates
-    //SetNrOfUpdates ( aNrOfUpdates );
     
     // enable indicator showing
     SetIndicatorEnabled( ETrue );
@@ -170,7 +156,7 @@ void CIAUpdateBGSoftNotification::ShowIndicatorL()
         CHbSymbianVariant::EInt );
     CleanupStack::PushL( varValue );
     // Temporary removal 
-    // ind->Activate( KIndicatorTypeBgc, varValue );
+    ind->Activate( KIndicatorTypeBgc, varValue );
     CleanupStack::PopAndDestroy( varValue );
     CleanupStack::PopAndDestroy( ind );
     
@@ -191,7 +177,7 @@ void CIAUpdateBGSoftNotification::RemoveIndicatorL()
     CHbIndicatorSymbian *ind = CHbIndicatorSymbian::NewL();
     CleanupStack::PushL( ind );
     // Temporary removal 
-    // ind->Deactivate( KIndicatorTypeBgc ); 
+    ind->Deactivate( KIndicatorTypeBgc ); 
     CleanupStack::PopAndDestroy(ind);
     
     return;
@@ -213,19 +199,6 @@ void CIAUpdateBGSoftNotification::SetTextL(
     txt = aText.AllocL();
     delete iText;
     iText = txt;
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGSoftNotification::SetImagePathL
-// Sets an image path for a soft notification
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGSoftNotification::SetImagePathL( const TDesC& aImage )
-    {
-    HBufC* txt = aImage.AllocL();
-    delete iImagePath;
-    iImagePath = txt;
-    return;
     }
 
 // -----------------------------------------------------------------------------
@@ -280,11 +253,6 @@ void CIAUpdateBGSoftNotification::FillNotificationParams()
         iNotificationDialog->SetTextL(iText->Des());
         }
     
-    if ( iImagePath )
-        {
-        iNotificationDialog->SetIconNameL(iImagePath->Des());
-        }
-    
     // set wrapping, timeout and touch 
     iNotificationDialog->SetTitleTextWrapping(
             CHbDeviceNotificationDialogSymbian::TextWordWrap);
@@ -311,16 +279,6 @@ TBool CIAUpdateBGSoftNotification::IsIndicatorEnabled()
     return iActivateIndicator;
     
     }
-// ----------------------------------------------------------
-// CIAUpdateBGSoftNotification::SetNrOfUpdates( TIAUpdateBGMode aNrOfUpdates )
-// ----------------------------------------------------------
-/*
-void CIAUpdateBGSoftNotification::SetNrOfUpdates( const int aNrOfUpdates )
-    {
-    
-    iNrOfUpdates = aNrOfUpdates;
-    
-    }*/
 
 // ----------------------------------------------------------
 // CIAUpdateBGSoftNotification::GetNrOfUpdates()

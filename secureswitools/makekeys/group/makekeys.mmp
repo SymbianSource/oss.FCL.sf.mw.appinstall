@@ -1,0 +1,51 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* This mmp file is used to replace calling makefile directly.
+*
+*/
+
+
+TARGET			makekeys.exe
+TARGETTYPE		exe
+
+
+USERINCLUDE 		../../swisistools/source/makesis
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+SYSTEMINCLUDE 		../../openssllib/import/inc
+
+
+SOURCEPATH 		../src
+SOURCE			CertificateGenerator.cpp
+SOURCE			CertificateRequestGenerator.cpp
+SOURCE			DSAKeyGenerator.cpp
+SOURCE			KeyGenerator.cpp	
+SOURCE			MAKEKEYS.CPP
+SOURCE			PARSECMD.CPP
+SOURCE			RSAKeyGenerator.cpp
+SOURCE			UTILS.CPP
+
+
+#ifndef TOOLS2_LINUX
+	MACRO			_UNICODE _CONSOLE _STLP_THREADS _WIN32 UNICODE 
+#else
+	MACRO			_UNICODE _CONSOLE UNICODE 
+#endif
+
+STATICLIBRARY			eay32 
+
+OPTION				GCC -w
+OPTION				GCC -fno-stack-check
+OPTION				GCC -fpermissive

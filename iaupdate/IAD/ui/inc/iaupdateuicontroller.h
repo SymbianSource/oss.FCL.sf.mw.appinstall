@@ -242,6 +242,13 @@ public: //new functions
     TBool ForcedRefresh() const;
       
     void SetForcedRefresh( TBool aForcedRefresh );
+    
+    /**
+     *  Set node list to normal state after update. 
+     */
+    void RefreshNodeList();
+    
+    
     /**
      * Is client role "testing"
      *

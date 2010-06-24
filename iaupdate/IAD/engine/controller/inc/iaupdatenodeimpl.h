@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -138,20 +138,19 @@ public: // MIAUpdateNode
      */
     virtual TInt Depth() const;
     
-    /**
-     * Informs UI that downloading is ongoing
-     **/
-    virtual TBool Downloading() const;
-
-    /**
-     * Informs UI that installing is ongoing
-     **/
-    virtual TBool Installing() const;
-    
-    virtual void SetDownloading( TBool aDownloading );
-
-    virtual void SetInstalling( TBool aInstalling );
+    virtual void SetUiState( TUIUpdateState aState );
         
+    virtual TUIUpdateState UiState() const;
+        
+    // for progress bar in UI
+    virtual void SetProgress( TInt aProgress );
+        
+    virtual TInt Progress() const; 
+        
+    virtual void SetTotal( TInt aTotal );
+        
+    virtual TInt Total() const; 
+               
     /**
      * @see MIAUpdateNode:::NodeType
      */
@@ -337,9 +336,10 @@ private: // data
     TDependencyCheckStatus              iDependencyCheckStatus;
     TInt                                iLeafDistance;
     TInt                                iDepth;
-    TBool                               iDownloading;
-    TBool                               iInstalling;
-
+    TUIUpdateState                      iUiUpdateState;
+    TInt                                iProgress;
+    TInt                                iTotal;
+    
     // These arrays do not own the nodes.
     RPointerArray< CIAUpdateNode >      iDependants;
     RPointerArray< CIAUpdateNode >      iExcessDependencyNodes;

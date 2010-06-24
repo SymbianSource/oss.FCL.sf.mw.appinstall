@@ -482,7 +482,12 @@ void CIAUpdateUiController::StartUpdateL()
         // controller can handle situations as a whole and not as one item at the
         // time.
         iController->StartingUpdatesL();
-            
+        
+        //Store current node list before update
+        iFilter->StoreNodeListL( iNodes );
+        
+        iFilter->SortSelectedNodesFirstL( iSelectedNodesArray, iNodes );
+                    
         iFileInUseError = EFalse;
         // Set the node index to -1 because ContinueUpdateL increases it by one
         // in the beginning of the function. So, we can use the ContinueUpdateL
@@ -546,7 +551,8 @@ void CIAUpdateUiController::ContinueUpdateL( TBool aSelfUpdateFinished )
             // Only update items that have not been installed yet.
             if ( !selectedNode->IsInstalled() )
                 {
-                IAUPDATE_TRACE("[IAUPDATE] Item not installed yet");    
+                IAUPDATE_TRACE("[IAUPDATE] Item not installed yet"); 
+                iFilter->SortThisNodeFirstL( selectedNode, iNodes );
                 if ( !selectedNode->IsDownloaded() )
                     {
                     // Because content has not been downloaded or installed yet,
@@ -555,11 +561,8 @@ void CIAUpdateUiController::ContinueUpdateL( TBool aSelfUpdateFinished )
                     selectedNode->DownloadL( *this );
                     iState = EDownloading;
                     iClosingAllowedByClient = ETrue;
-                    selectedNode->SetDownloading( ETrue);
-                    /*ShowUpdatingDialogL( R_IAUPDATE_DOWNLOADING_NOTE,
-                                         selectedNode->Base().Name(),
-                                         iNodeIndex + 1,
-                                         iSelectedNodesArray.Count() );*/ 
+                    selectedNode->SetUiState( MIAUpdateNode::EDownloading );
+                    iObserver.RefreshUI();
                     nextUpdate = EFalse;
                     }
                 else
@@ -570,13 +573,8 @@ void CIAUpdateUiController::ContinueUpdateL( TBool aSelfUpdateFinished )
                     selectedNode->InstallL( *this );
                     iState = EInstalling;
                     iClosingAllowedByClient = EFalse;
-                    /*CIAUpdateAppUi* appUi = 
-                        static_cast< CIAUpdateAppUi* >( iEikEnv->EikAppUi() );
-                    appUi->StartWGListChangeMonitoring();
-                    ShowUpdatingDialogL( R_IAUPDATE_INSTALLING_NOTE,
-                                         selectedNode->Base().Name(),
-                                         iNodeIndex + 1,
-                                         iSelectedNodesArray.Count() ); */
+                    selectedNode->SetUiState( MIAUpdateNode::EInstalling );
+                    iObserver.RefreshUI();
                     nextUpdate = EFalse;                     
                     }      
                 }
@@ -610,14 +608,9 @@ void CIAUpdateUiController::StartInstallL( MIAUpdateNode& aNode )
             
     aNode.InstallL( *this );
     iState = EInstalling;
-    /*CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
-    appUi->StartWGListChangeMonitoring();
-    iClosingAllowedByClient = EFalse;
-    ShowUpdatingDialogL( R_IAUPDATE_INSTALLING_NOTE,
-                         aNode.Base().Name(),
-                         iNodeIndex + 1,
-                         iSelectedNodesArray.Count()  ); */
-    
+    aNode.SetUiState( MIAUpdateNode::EInstalling );
+    iObserver.RefreshUI();
+        
 	IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::StartInstallL() end");
     }
 
@@ -1651,10 +1644,10 @@ void CIAUpdateUiController::HandleUiRefreshL()
                 CleanupStack::Pop( nodeId );
                 
                 }
-
-            if ( iFwNodes.Count() > 0 )
+            
+	    	for ( TInt j = 0; j < iFwNodes.Count(); ++j )
                 {
-                MIAUpdateFwNode* fwNode( iFwNodes[ 0 ] );
+                MIAUpdateFwNode* fwNode( iFwNodes[ j ] );
                 CIAUpdateNodeId* nodeId = CIAUpdateNodeId::NewLC();
                 nodeId->SetIdL( fwNode->Base().MetaId() );
                 nodeId->SetNamespaceL( fwNode->Base().MetaNamespace() );
@@ -1937,10 +1930,16 @@ void CIAUpdateUiController::InstallCompleteL( MIAUpdateNode& aNode,
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateUiController::InstallCompleteL() begin");
     IAUPDATE_TRACE_1("[IAUPDATE] error code: %d", aError );
 
-    // In release mode, we do not need the aError info, because
-    // success counters are counted by using the last operation error info
-    // when counter info is asked. In debug mode the error code is logged above.
-    (void)aError;
+    if ( aError == KErrNone )
+        {
+        aNode.SetUiState( MIAUpdateNode::EUpdated );   
+        iObserver.RefreshUI();
+        }
+    else
+        {
+        aNode.SetUiState( MIAUpdateNode::EFailed );
+        iObserver.RefreshUI();
+        }
     
     // pass UID of installed package to starter
     if ( iStarter )
@@ -1985,17 +1984,7 @@ void CIAUpdateUiController::UpdateCompleteL( TInt aError )
 
     iState = EIdle;
     iClosingAllowedByClient = EFalse;
-
-    // Remove installed nodes from the node array.
-	for ( TInt i = iNodes.Count() - 1; i >= 0; --i ) 
-        {   
-        MIAUpdateNode* node = iNodes[ i ];
-        if ( node->IsInstalled() ) 
-            {
-            iNodes.Remove( i );
-            }
-        }
-    
+       
     TInt error( aError );
     TBool selfUpdaterStarted( EFalse );
 
@@ -2054,9 +2043,12 @@ void CIAUpdateUiController::UpdateCompleteL( TInt aError )
         // completion or timer will call the callback later. But, that callback
         // will be ignored in CIAUpdateUiController::ServerReportSent because
         // iState is already then changed from ESendingReport to something else. 
-        const TInt KServerReportMaxWaitTime( 10000000 );
-        iController->FinishedUpdatesL( ETrue, KServerReportMaxWaitTime );
-        iState = ESendingReport;
+        
+        //const TInt KServerReportMaxWaitTime( 10000000 );         //Commented TEMP 
+        //iController->FinishedUpdatesL( ETrue, KServerReportMaxWaitTime ); //Commented TEMP
+        //iState = ESendingReport;  //Commented temporarily
+        EndUpdateFlowL( KErrNone );  //TEMP
+        return;                      //TEMP  
         }
 
     // When reports are sent, EndUpdateFlowL is called via the callback functions
@@ -2725,6 +2717,32 @@ void CIAUpdateUiController::SetForcedRefresh( TBool aForcedRefresh )
     {
     iForcedRefresh = aForcedRefresh;
     }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateUiController::RefreshNodeList
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateUiController::RefreshNodeList()
+    {
+    // Restore list after update, that nodes are shown in original sequence
+    iFilter->RestoreNodeListL( iNodes );
+    // Remove installed nodes from the node array.
+    // Set temp UI state to normal for remaining nodes 
+    for ( TInt i = iNodes.Count() - 1; i >= 0; --i ) 
+        {   
+        MIAUpdateNode* node = iNodes[ i ];
+        if ( node->IsInstalled() ) 
+            {
+            iNodes.Remove( i );
+            }
+        else
+            {
+            node->SetUiState( MIAUpdateNode::ENormal );        
+            }
+        }
+    }
+
 
 // ---------------------------------------------------------------------------
 // CIAUpdateUiController::ParamsWriteFileL

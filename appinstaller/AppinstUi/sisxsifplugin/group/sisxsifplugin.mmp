@@ -37,6 +37,7 @@ SOURCE          sisxsifpluginuihandlerbase.cpp
 SOURCE          sisxsifpluginuihandler.cpp
 SOURCE          sisxsifpluginuihandlersilent.cpp
 SOURCE          sisxsifplugininstallparams.cpp
+SOURCE          sisxsifpluginerrorhandler.cpp
 SOURCE          sisxsifuiselectioncache.cpp
 
 USERINCLUDE     ../inc

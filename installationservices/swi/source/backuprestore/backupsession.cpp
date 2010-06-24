@@ -216,7 +216,7 @@ namespace Swi
 
 			// Appending ELangNone at the end as marker for the end of the language IDs
 			// as we also append the language ID's from other Augmentations
-			matchingSupportedLanguagesArray.Append(ELangNone);
+			matchingSupportedLanguagesArray.AppendL(ELangNone);
 
 			CleanupStack::PopAndDestroy(2, &augmentation);
 			}

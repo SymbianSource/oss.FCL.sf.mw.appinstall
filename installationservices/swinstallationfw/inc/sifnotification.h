@@ -462,7 +462,6 @@ public:
         @param  aHandler A handle to the implementation of the MSifOperationsHandler class.      
                                         
         @return A pointer to the newly allocated CSifOperationsNotifier object, if creation is successful.
-                The pointer is also put onto the cleanup stack. 
      */         
     IMPORT_C static CSifOperationsNotifier* NewL(MSifOperationsHandler& aHandler);
     

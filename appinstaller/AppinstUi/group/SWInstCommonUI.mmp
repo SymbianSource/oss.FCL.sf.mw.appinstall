@@ -67,7 +67,7 @@ LIBRARY         eikcoctl.lib
 LIBRARY         eikdlg.lib 
 LIBRARY         eikctl.lib
 LIBRARY         platformenv.lib
-LIBRARY         commondialogs.lib
+//LIBRARY         commondialogs.lib  // Removed since CR 548
 LIBRARY         efsrv.lib
 LIBRARY         X509CertNameParser.lib
 LIBRARY         x509.lib

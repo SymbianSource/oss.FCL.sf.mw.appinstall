@@ -513,10 +513,29 @@ TBool CRestoreProcessor::DoStateUpdateRegistryL()
 	                }  		           
 	            }
 	        
+	        //Compare the new affected apps with the existing affected apps and update the existing affected apps if alredy present or 
+            //add to the list if it is a new app.
+            RArray<TAppUpdateInfo> existingAffectedApps;
+            CleanupClosePushL(existingAffectedApps);
+            const_cast<CPlan&>(iPlan).GetAffectedApps(existingAffectedApps);
+            TInt appCount = affectedApps.Count();
+            for(TInt k = 0; k < appCount ; ++k)
+                {
+                TInt count = existingAffectedApps.Count();
+                TUid appUid = affectedApps[k].iAppUid;
+                for(TInt index = 0; index < count ; ++index)
+                   {
+                   if(appUid == existingAffectedApps[index].iAppUid)
+                       {           
+                       existingAffectedApps.Remove(index);                                    
+                       }
+                   }
+                existingAffectedApps.AppendL(affectedApps[k]);
+                }
 	        const_cast<CPlan&>(iPlan).ResetAffectedApps();
 	        const_cast<CPlan&>(iPlan).SetAffectedApps(affectedApps);
 	        
-	        CleanupStack::PopAndDestroy(2, &componentIds);
+	        CleanupStack::PopAndDestroy(3, &componentIds);
 	        }
 	
 #else

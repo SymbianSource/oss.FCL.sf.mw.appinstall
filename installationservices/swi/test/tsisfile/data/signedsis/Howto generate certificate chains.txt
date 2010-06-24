@@ -1,0 +1,28 @@
+This file replaces the old generate_certs.bat, which provided incorrect information.
+
+To generate certificate chains using the existing roots, you must issue some subset of the following commands:
+
+For DSA Key pairs, first generate a set of DSA key parameters:
+# openssl dsaparam -out dsaparam.pem 512
+
+Next, generate a certificate request: (this assumes you are using one of the existing config files)
+
+For DSA Certificates:
+# openssl req -newkey dsa:dsaparams.pem -nodes -out dsa.req -keyout dsa.key -config dsa.config -days 3650
+
+For RSA Certificates:
+# openssl req -newkey rsa:512 -nodes -out rsa.req -keyout rsa.key -config rsa.config -days 3650
+
+Finally, generate a signed certificate from the request:
+
+# openssl x509 -req -in <request file> -out cert.cer -CA <signing certificate> -CAKey <signing key> -CASerial cert.srl -CAcreateserial -days 3650 -extfile <config file> -extensions v3_ca
+
+For intermediate certificates for use in SWIS, the extensions must be present as defined in this config section:
+
+[v3_ca]
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer:always
+basicConstraints=critical,CA:TRUE, pathlen:5
+keyUsage=critical,keyCertSign
+
+If these extensions are not present, and installation signed with the resulting certificate as anything other than the end entity will fail.

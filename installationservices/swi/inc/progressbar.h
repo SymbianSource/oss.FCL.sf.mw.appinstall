@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,11 +31,14 @@ namespace Swi
 	const static TInt KProgressBarUninstallAmount=1;
 	
 	/// How many bytes to copy before updating the progress bar by one increment
-	const static TInt KProgressBarInstallChunkSize=32767;
+	const static TInt KProgressBarInstallChunkSize=1048576;  //1MB
 
 	/// The extra increment we add onto the end to make there always be some progress.
 	const static TInt KProgressBarEndIncrement=1;
 	
+	/// Percentage of completion required before updating the progress bar.
+    const static TInt KProgressBarIncrement=1;
+
 	/**
 	 * Utility function to get how much to update the progress bar for a certain
 	 * size of file copied. The smallest increment is KProgressBarEndIncrement since we always want to show that 

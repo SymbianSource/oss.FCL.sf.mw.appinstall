@@ -365,45 +365,67 @@ TInt CIAUpdateNode::Depth() const
     return iDepth;
     }
 
+
 // ---------------------------------------------------------------------------
-// CIAUpdateNode::Downloading()
+// CIAUpdateNode::SetUiState()
 // 
 // ---------------------------------------------------------------------------
 //
-TBool CIAUpdateNode::Downloading() const
+void CIAUpdateNode::SetUiState( MIAUpdateNode::TUIUpdateState aState )
     {
-    return iDownloading;
+    iUiUpdateState = aState;
     }
 
 // ---------------------------------------------------------------------------
-// CIAUpdateNode::Installing()
+// CIAUpdateNode::UiState()
 // 
 // ---------------------------------------------------------------------------
 //
-TBool CIAUpdateNode::Installing() const
+MIAUpdateNode::TUIUpdateState CIAUpdateNode::UiState() const
     {
-    return iInstalling;
-    }
- 
-// ---------------------------------------------------------------------------
-// CIAUpdateNode::SetDownloading()
-// 
-// ---------------------------------------------------------------------------
-//
-void CIAUpdateNode::SetDownloading( TBool aDownloading )
-    {
-    iDownloading = aDownloading;
+    return iUiUpdateState;
     }
 
 // ---------------------------------------------------------------------------
-// CIAUpdateNode::SetInstalling()
+// CIAUpdateNode::SetProgress
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateNode::SetInstalling( TBool aInstalling )
+void CIAUpdateNode::SetProgress( TInt aProgress )
     {
-    iInstalling = aInstalling;
+    iProgress = aProgress; 
     }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Progress
+// 
+// ---------------------------------------------------------------------------
+//
+TInt CIAUpdateNode::Progress() const
+    {
+    return iProgress;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetTotal
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetTotal( TInt aTotal )
+    {
+    iTotal = aTotal; 
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Total
+// 
+// ---------------------------------------------------------------------------
+//
+TInt CIAUpdateNode::Total() const
+    {    
+    return iTotal;
+    }
+    
 
 // ---------------------------------------------------------------------------
 // CIAUpdateNode::NodeType

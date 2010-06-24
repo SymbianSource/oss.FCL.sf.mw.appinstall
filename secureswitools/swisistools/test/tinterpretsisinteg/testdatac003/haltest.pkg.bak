@@ -1,0 +1,20 @@
+;To test the HAL conditionals
+;Languages
+&EN
+
+;Header
+#{"HAL-conditionals-CPU"}, (0x89334308), 1, 0, 0
+
+%{"Vendor"}
+:"Vendor"
+
+
+IF  CPU=0 
+"data\cpu.txt"-"c:\cpu.txt"
+ELSEIF CPU=1 
+"data\mcore.txt"-"c:\mcore.txt"
+ELSE   
+"data\Nocpu.txt"-"", FILETEXT, TEXTEXIT
+ENDIF
+
+

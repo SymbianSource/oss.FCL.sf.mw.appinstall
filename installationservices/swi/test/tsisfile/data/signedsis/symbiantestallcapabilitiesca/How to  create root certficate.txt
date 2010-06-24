@@ -1,0 +1,24 @@
+# To create a RSA root cerificate need to following two steps:
+
+1. Create a private key for the CA:
+
+openssl req -nodes -newkey rsa:1024 -keyout <key file> -out <CA req file> -config <config file>
+The config file is input parameter, and should be present in advance.
+
+Example: openssl req -nodes -newkey rsa:1024 -keyout cakey.pem -out careq.pem -config rsa.config
+
+2. Create the CA certificate:
+
+openssl x509 -req -in <CA req> -extfile <config file> -extensions v3_ca -signkey <key file> -out <CA cert file>  -days 3650
+
+Example: openssl x509 -req -in careq.pem -extfile rsa.config -extensions v3_ca -signkey cakey.pem -out cacert.pem  -days 3650
+
+
+1. 
+
+openssl req -nodes -newkey rsa:1024 -keyout cakey.pem -out careq.pem -config rsa.config
+
+
+2.
+
+openssl x509 -req -in careq.pem -extfile rsa.config -extensions v3_ca -signkey cakey.pem -out symbiantestallcapabilitiesca.pem  -days 3650

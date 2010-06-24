@@ -17,5 +17,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += appinstaller/appinstaller.pro \
-           iaupdate/iaupdate.pro
+           iaupdate/iaupdate.pro \
+           ncdengine/ncdengine.pro
 

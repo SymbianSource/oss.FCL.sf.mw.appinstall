@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -26,7 +26,8 @@
 #include <iaupdateobserver.h>
 #include <barsc.h>
 
-#include "iaupdatebgremindertimer.h"
+
+#include "iaupdatebginternalfilehandler.h"
 #include "iaupdatebgcontrollerfile.h"
 #include "iaupdatebgsoftnotification.h"
 #include "iaupdatebgcheckermode.h"
@@ -34,7 +35,6 @@
 // FORWARD DECLARATIONS
 class CIAUpdate;
 class CIAUpdateParameters;
-// class CAknSoftNotifier;
 class CInternalFileHandler;
 class CIdleObserver;
 
@@ -49,8 +49,7 @@ class CIdleObserver;
 class CIAUpdateBGTimer : public CTimer, 
                  public MIAUpdateObserver, 
                  public MCenRepNotifyHandlerCallback, 
-                 public MIAUpdateBGSoftNotificationCallBack, 
-                 public MIAUpdateBGReminderTimerCallBack
+                 public MIAUpdateBGSoftNotificationCallBack 
             
     {
     public:
@@ -121,9 +120,7 @@ class CIAUpdateBGTimer : public CTimer,
         TTimeIntervalMinutes TimeIntervalFromNextShowOfNewFeatureDialogL();
         
         TBool IsAgreementAcceptedL();
-        
-        TBool IsAskedAlreadyL();
-        
+       
         void HandlerFirstTimeL();
         
         TTime GetLastTimeShowNewFeatureDialogL();
@@ -134,14 +131,6 @@ class CIAUpdateBGTimer : public CTimer,
  
         TInt SetUserDecisionL( TBool aDecision );
         
-        TBool ReminderOnL();
-
-        TInt SetReminderL( TBool aOn );
-        
-        TTime NextRemindTimeL();
-
-        TInt SetNextRemindTimeL( TTime aTime );
-        
         TIAUpdateBGMode ModeL();
 
         TInt SetModeL( TIAUpdateBGMode aMode );
@@ -150,11 +139,7 @@ class CIAUpdateBGTimer : public CTimer,
 
         TInt SetRetryTimesL( TInt aRetry );
           
-        // HBufC* ReadResourceLC( TInt aResourceId );
-        
         void StartIaupdateL() const;
-        
-        // void LaunchSoftNotificationL( const TInt& aResourceId, const TInt& SK1, const TInt& SK2 );
         
         void LaunchNotificationL( const int aNrOfUpdates );
         
@@ -170,17 +155,7 @@ class CIAUpdateBGTimer : public CTimer,
         
         void DoSoftNotificationCallBackL( TBool aIsAccepted );
         
-        void DoReminderTimerCallBackL();
-        
         void StartUpdatesCheckingL();    
-        
-        // HBufC8* LoadFileLC(const TDesC& aFile);
-        
-        TInt GetPrivatePathL( TFileName& aPath );
-        
-        TInt SetSessionPrivatePathL( RFs& aFs, const TDesC& aPath ) const;
-        
-        void SetPrivateDriveL( RFs& aFs, const TDesC& aFileName ) const;
         
         TBool IAUpdateEnabledL() const;
         
@@ -190,7 +165,6 @@ class CIAUpdateBGTimer : public CTimer,
         // Data       
         CIAUpdate* iUpdate; 
         CIAUpdateParameters* iParameters; 
-        CIAUpdateBGReminderTimer* iReminderTimer;
         CRepository* iIAUpdateCRSession; 
         CCenRepNotifyHandler* iNotifyHandler; 
         TInt iRuns;
@@ -199,8 +173,6 @@ class CIAUpdateBGTimer : public CTimer,
         CIAUpdateBGInternalFileHandler* iInternalFile;
         TIAUpdateBGMode iMode;
         CIAUpdateBGSoftNotification* iSoftNotification;
-        // RResourceFile iResourceFile;
-        RFs iFs;
     };        
 
 #endif //IAUPDATEBGREFRESHTIMER_H

@@ -32,17 +32,6 @@
 #include <e32property.h>
 #include <sacls.h>
 
-/*  HLa - temporary java remove
-#ifdef USE_OLD_JAVA_API
-    #include <mjavaregistry.h>
-    #include <swi/minstalledappsregistry.h>
-#else
-    #include <javaregistry.h>
-    #include <javaregistrypackageentry.h>
-
-    using namespace Java;
-#endif
-*/
 #include "ncdinstallationserviceobserver.h"
 #include "ncdactiveoperationobserver.h"
 #include "ncdsilentinstallactiveobserver.h"
@@ -56,23 +45,7 @@ const TInt KDelayWhenAppListInvalid = 500000;
 
 const TUint KFileOpenFlags = EFileShareReadersOrWriters;
 
-/*  HLa - temporary java remove
-#ifdef __SERIES60_31__
-
-    const TInt32 KPSUidJavaLatestInstallation = KUidJmiLatestInstallation;
-
-#else
-
-    // Defined originally in /mw/java/inc/javauids.h
-    // This should become available at some point in javadomainpskeys.h
-    //const TInt32 KPSUidJavaLatestInstallation = 0x10282567;
-    #include <javadomainpskeys.h>
-
-#endif
-*/
-
-// length taken from WidgetRegistryData.h
-const TInt KWidgetBundleIdLength = KWidgetRegistryVal + 1;    
+//const TInt KWidgetBundleIdLength = KMaxFileName + 1; 
 
 // ======== CALLBACK FUNCTION ========
  
@@ -135,12 +108,11 @@ CNcdInstallationService::~CNcdInstallationService()
     delete iJadFileName;
     delete iRecognizedMime;
     
-     /*  HLa - temporary java remove
-#ifdef USE_OLD_JAVA_API    
-    iMIDletUids.Close();
-#endif    
+    delete iResults;
+    delete iArguments;
+    
     iApaLs.Close();
-    */
+    
     
     if( iThemes )
         {
@@ -152,17 +124,7 @@ CNcdInstallationService::~CNcdInstallationService()
     CancelInstall(); 
     iRomUids.Close();
     
-    if ( iWidgetRegistry.Handle() )
-        {
-        // decreases widget server's refcount but this cannot be called
-        // if Connect has not been called or we'll get a KERN-EXEC 0
-        iWidgetRegistry.Disconnect();
-        }
-    else
-        {
-        iWidgetRegistry.Close();
-        }
-    iInstalledWidgets.ResetAndDestroy();
+    iScrSession.Close();
     iInstalledWidgetsInfos.ResetAndDestroy();
     }
 
@@ -181,13 +143,18 @@ CNcdInstallationService::CNcdInstallationService()
 void CNcdInstallationService::ConstructL()
     {
     DLTRACEIN((""));
+    
+    iResults = 0;
+    iArguments = 0;
+    
     iDocHandler = CDocumentHandler::NewL();
     iDocHandler->SetExitObserver( this );
     
     User::LeaveIfError( iFs.Connect() );
     User::LeaveIfError( iFs.ShareProtected() );
     User::LeaveIfError( iRegistrySession.Connect() );
-    User::LeaveIfError( iAknsSrv.Connect() ); 
+    User::LeaveIfError( iAknsSrv.Connect() );
+    User::LeaveIfError( iScrSession.Connect());
 
     iInstallationCompleteCallback = new(ELeave) CAsyncCallBack( 
         TCallBack( InstallationCompleteCallback, this ),
@@ -266,7 +233,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 void CNcdInstallationService::SilentInstallL( RFile& aFile,
                                         const TDesC& aMimeType,
                                         const TNcdItemPurpose& aPurpose,
-                                        const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                        const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
 
@@ -276,7 +243,7 @@ void CNcdInstallationService::SilentInstallL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallL( aFile, aMimeType, aPurpose, &aInstallOptionsPckg );
+    InstallL( aFile, aMimeType, aPurpose, aInstallOptionsPckg );
 
     DLTRACEOUT(("")); 
     }
@@ -289,7 +256,7 @@ void CNcdInstallationService::SilentInstallL( RFile& aFile,
 void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
                                             const TDesC& aMimeType,
                                             const TDesC8& aDescriptorData,
-                                            const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                            const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
 
@@ -299,7 +266,7 @@ void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallJavaL( aFile, aMimeType, aDescriptorData, &aInstallOptionsPckg );
+    InstallJavaL( aFile, aMimeType, aDescriptorData, aInstallOptionsPckg );
 
     DLTRACEOUT((""));
     }
@@ -309,7 +276,7 @@ void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
 // ---------------------------------------------------------------------------
 //
 void CNcdInstallationService::SilentInstallWidgetL( RFile& aFile,
-                                                    const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                                    const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
     
@@ -319,7 +286,7 @@ void CNcdInstallationService::SilentInstallWidgetL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallWidgetL( aFile, &aInstallOptionsPckg );
+    InstallWidgetL( aFile, aInstallOptionsPckg );
     
     DLTRACEOUT((""));
     }
@@ -382,11 +349,6 @@ void CNcdInstallationService::CancelSilentInstall( HBufC*& aFileName,
             iJadFileName = NULL;
             }
         
-#ifdef USE_OLD_JAVA_API        
-        // Clean the array.
-        iMIDletUids.Reset();
-#endif        
-
         // Reset information flags.            
         InstallationFinishedSetup( aError );
         }
@@ -518,54 +480,52 @@ void CNcdInstallationService::SisRegistryEntryLC(
 // ---------------------------------------------------------------------------
 //
 
-#ifdef USE_OLD_JAVA_API
-
 TBool CNcdInstallationService::JavaAppExistsL( 
     const TUid& aUid )
     {
-    	
-    /*  HLa - temporary java remove
     DLTRACEIN((""));
 
-    MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
-    CleanupReleasePushL( *javaRegistry );
-    
-    TRAPD( err, 
+    TBool retVal = EFalse;
+    Usif::TComponentId compId = 0;
+        
+    // Get component id
+    TRAPD( ret, compId = iScrSession.GetComponentIdForAppL( aUid ) ); 
+    if ( ret == KErrNotFound )
         {
-        // Leaves with KErrNotFound if not found
-        MJavaRegistryMIDletEntry* midletEntry = javaRegistry->MIDletEntryL(
-            aUid );    
-        midletEntry->Release();
-        });
+        return EFalse;
+        }
+    else if  (ret != KErrNone )
+        {
+        User::Leave( ret );
+        }
+         
+    Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+    TRAPD(err, iScrSession.GetComponentL(compId, *entry));
     
-    LeaveIfNotErrorL( err, KErrNotFound );
-    
-    CleanupStack::PopAndDestroy( javaRegistry );
-    return err == KErrNone;
-    */
+    if ( err == KErrNotFound )
+        {
+        retVal = EFalse;
+        }
+    else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+    else
+        {
+        // type == Java ?
+        if ( entry->SoftwareType().Compare( Usif::KSoftwareTypeJava ) == 0 )
+            {
+            retVal = ETrue;
+            }
+        else
+            {
+            retVal = EFalse;
+            }
+        }
+    CleanupStack::PopAndDestroy(entry);
+    return retVal;
     
     }
-
-#else
-
-TBool CNcdInstallationService::JavaAppExistsL( 
-    const TUid& aUid )
-    {
-    DLTRACEIN((""));
-    /*  HLa - temporary java remove
-
-    CJavaRegistry* javaRegistry = CJavaRegistry::NewLC();    
-
-    TBool exists = javaRegistry->RegistryEntryExistsL( aUid );
-    
-    CleanupStack::PopAndDestroy( javaRegistry );
-    return exists;
-    */
-    return EFalse;
-    
-    }
-
-#endif
 
 // Check via widget registry API
 TNcdApplicationStatus CNcdInstallationService::IsWidgetInstalledL(const TDesC& aIdentifier, const TCatalogsVersion& aVersion)
@@ -940,7 +900,7 @@ void CNcdInstallationService::AsyncOperationComplete( TInt aError )
     
     iInstaller.Close();
     
-    if ( aError == SwiUI::KSWInstErrUserCancel ) 
+    if ( aError == KErrCancel ) 
         {
         DLTRACE(("User cancelled, converting error to KErrAbort" ) );
         aError = KErrAbort;        
@@ -989,9 +949,7 @@ void CNcdInstallationService::NotifyObserverL()
         if ( iInstallError != KErrNone ) 
             {        
             DLTRACE(("Notify install error"));
-#ifdef USE_OLD_JAVA_API            
-            iMIDletUids.Reset();
-#endif            
+
             iObserver->InstallationCompleteL( KNullDesC, TUid(), iInstallError );       
             return; 
             }
@@ -1331,7 +1289,7 @@ void CNcdInstallationService::ConnectApaLsL()
 void CNcdInstallationService::InstallL( RFile& aFile,
                                         const TDesC& aMimeType,
                                         const TNcdItemPurpose& aPurpose,
-                                        const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+                                        const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN(( _L("iBusy=%d, MIME: %S"),iBusy, &aMimeType ));    
     DASSERT( iObserver );
@@ -1377,7 +1335,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             aFile, 
             *iRecognizedMime, 
             KNullDesC8, 
-            aSilentInstallOptionsPckg );
+            aSilentInstallOptions );
         return;
         }
     else if ( MatchWidget( aFile, aMimeType ) )
@@ -1385,7 +1343,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
         DLTRACE(("Widget"));
         InstallWidgetL( 
             aFile,
-            aSilentInstallOptionsPckg );
+            aSilentInstallOptions );
         return;
         }
     
@@ -1427,13 +1385,25 @@ void CNcdInstallationService::InstallL( RFile& aFile,
         // Start application installation.
         DLINFO(( "Calling doc handler Open" ));
 
-        if ( !aSilentInstallOptionsPckg )
+        if ( !aSilentInstallOptions )
             {
             DLINFO(("Normal install"));
             InitializeInstallerL();
-            iCancelCode = SwiUI::ERequestInstallHandle;
+            //iCancelCode = SwiUI::ERequestInstallHandle;
             
-            iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+               {
+               iResults = Usif::COpaqueNamedParams::NewL();
+               }
+            
+            iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+            
+            iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
             iInstallStatusObserver->StartToObserve();            
             }
         else
@@ -1443,7 +1413,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }
             
         iBusy = ETrue;
@@ -1514,7 +1484,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
 void CNcdInstallationService::InstallJavaL( RFile& aFile,
                                             const TDesC& /*aMimeType*/,
                                             const TDesC8& aDescriptorData,
-                                            const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+                                            const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN((_L("iBusy=%d, descriptor=%d"),iBusy, aDescriptorData.Length() ));
     DASSERT( iObserver );
@@ -1528,17 +1498,6 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 
     iInstallError = KErrNone;
     
-#ifdef USE_OLD_JAVA_API
-    // Store installed java app uids before installation to see
-    // which one is a new java app later.
-    /*  HLa - temporary java remove
-    MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
-    CleanupReleasePushL( *javaRegistry );
-    iMIDletUids.Reset();
-    javaRegistry->InstalledMIDletUidsL( iMIDletUids );
-    CleanupStack::PopAndDestroy( javaRegistry );
-    */
-#endif
     
     // In platform security systems JAR and JAD has to be in same folder
     // to get the installation process work correctly.
@@ -1560,7 +1519,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
     iInstallType = EJavaInstall;
     TDataType dataType;    
             
-    if ( aSilentInstallOptionsPckg == NULL )
+    if ( aSilentInstallOptions == NULL )
         {
         DLINFO(("Normal install"));
         InitializeInstallerL();
@@ -1568,15 +1527,40 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             {
             DLTRACE(("Installing JAD+JAR"));
             // JAD+JAR install
-            iCancelCode = SwiUI::ERequestInstall;
-            iInstaller.Install( iInstallStatusObserver->iStatus, *iJadFileName );
+            //iCancelCode = SwiUI::ERequestInstall;
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+                {
+                iResults = Usif::COpaqueNamedParams::NewL();
+                }
+             
+             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+                        
+            iInstaller.Install( *iJadFileName, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            //iInstaller.Install( iInstallStatusObserver->iStatus, *iJadFileName );
             }
         else
             {
             DLTRACE(("Installing JAR"));
             // JAR install
-            iCancelCode = SwiUI::ERequestInstallHandle;
-            iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+            //iCancelCode = SwiUI::ERequestInstallHandle;
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+               {
+               iResults = Usif::COpaqueNamedParams::NewL();
+               }
+            
+             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+             
+             iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            
+            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
             }
         
         iInstallStatusObserver->StartToObserve();
@@ -1592,7 +1576,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( *iJadFileName,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }
         else
             {
@@ -1602,7 +1586,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }        
         }
 
@@ -1618,7 +1602,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 //
 void CNcdInstallationService::InstallWidgetL( 
     RFile& aFile,
-    const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+    const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN((""));    
     
@@ -1632,13 +1616,24 @@ void CNcdInstallationService::InstallWidgetL(
     // Start application installation.
     DLINFO(( "Calling doc handler Open" ));
 
-    if ( !aSilentInstallOptionsPckg )
+    if ( !aSilentInstallOptions )
         {
         DLINFO(("Normal install"));
         InitializeInstallerL();
-        iCancelCode = SwiUI::ERequestInstallHandle;
-        
-        iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+        //iCancelCode = SwiUI::ERequestInstallHandle;
+        if ( !iArguments )
+            {
+            iArguments = Usif::COpaqueNamedParams::NewL();
+            }
+        if ( !iResults )
+           {
+           iResults = Usif::COpaqueNamedParams::NewL();
+           }
+                    
+        iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+        iInstaller.Install(aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus  );
+         
+        //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
         iInstallStatusObserver->StartToObserve();            
         }
     else
@@ -1648,7 +1643,7 @@ void CNcdInstallationService::InstallWidgetL(
         // of the silent install and it will forward the information for the callback
         // function of this class object.
         iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                       *aSilentInstallOptionsPckg );
+                                                       aSilentInstallOptions );
         }
         
     iBusy = ETrue;
@@ -1665,10 +1660,13 @@ void CNcdInstallationService::InitializeInstallerL()
     DeletePtr( iInstallStatusObserver );
     iInstallStatusObserver = CNcdActiveOperationObserver::NewL( *this );
     
+    User::LeaveIfError( iInstaller.Connect() );
+    /*
     if ( !iInstaller.Handle() ) 
         {
         User::LeaveIfError( iInstaller.Connect() );
         }
+    */
     }
     
 
@@ -1679,11 +1677,13 @@ void CNcdInstallationService::InitializeInstallerL()
 void CNcdInstallationService::CancelInstall()
     {
     DLTRACEIN((""));
-    if ( iInstallStatusObserver &&
-         iInstaller.Handle() ) 
+    //if ( iInstallStatusObserver &&
+    //     iInstaller.Handle() ) 
+    if ( iInstallStatusObserver )
         {
         DLTRACE(("Cancelling installation"));
-        iInstaller.CancelAsyncRequest( iCancelCode );
+        iInstaller.CancelOperation();
+        //iInstaller.CancelAsyncRequest( iCancelCode );
         }
     
     DeletePtr( iInstallStatusObserver );
@@ -1922,33 +1922,38 @@ void CNcdInstallationService::InitializeRomApplicationListL()
 // Gets a list of installed midlet UIDs
 // ---------------------------------------------------------------------------
 //
-#ifdef USE_OLD_JAVA_API
 
 void CNcdInstallationService::MidletUidsL( RArray<TUid>& aUids )
     {
-    	 /*  HLa - temporary java remove
-    DLTRACEIN((""));
-    MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
-    CleanupReleasePushL( *javaRegistry );
-    javaRegistry->InstalledMIDletUidsL( aUids );
-    CleanupStack::PopAndDestroy( javaRegistry ); 
-    */   
+
+    // Get ids of all java components in scr
+    RArray<Usif::TComponentId> javaComponentIdList;
+    CleanupClosePushL( javaComponentIdList );
+    
+    Usif::CComponentFilter *pJavaSwTypeFilter = Usif::CComponentFilter::NewLC();
+    pJavaSwTypeFilter->SetSoftwareTypeL( Usif::KSoftwareTypeJava );
+    iScrSession.GetComponentIdsL( javaComponentIdList, pJavaSwTypeFilter );
+    CleanupStack::PopAndDestroy( pJavaSwTypeFilter );
+
+    
+    // Get components
+    TInt aUidIndex = 0;
+    for ( TInt i = 0; i < javaComponentIdList.Count(); ++i )
+        {
+        RArray<TUid> midletUids;
+        CleanupClosePushL( midletUids );
+        iScrSession.GetAppUidsForComponentL( javaComponentIdList[i], midletUids );
+        for ( TInt j = 0; j < midletUids.Count(); ++j )
+            {
+            aUids[aUidIndex] = aUids[j];
+            aUidIndex++;
+            }
+        CleanupStack::PopAndDestroy(); // midletUids
+        }
+    
+    CleanupStack::PopAndDestroy(); // javaComponentIdList
+    
     }
-
-#else
-
-void CNcdInstallationService::MidletUidsL( RArray<TUid>& aUids )
-    {
-    /*  HLa - temporary java remove
-    DLTRACEIN((""));
-    CJavaRegistry* javaRegistry = CJavaRegistry::NewLC();
-    javaRegistry->GetRegistryEntryUidsL( aUids );          
-    CleanupStack::PopAndDestroy( javaRegistry );   
-    */ 
-    }
-
-#endif
-
 
 // ---------------------------------------------------------------------------
 // Checks if the application is in ROM
@@ -1959,125 +1964,6 @@ TBool CNcdInstallationService::IsRomApplication( const TUid& aUid ) const
     DLTRACEIN(("UID: %x", aUid.iUid ));
     return iRomUids.Find( aUid ) != KErrNotFound;    
     }
-
-
-// ---------------------------------------------------------------------------
-// Returns the UID of the latest installed midlet, NULL UID if none have
-// been installed since the last device restart
-// ---------------------------------------------------------------------------
-//
-
-/*  HLa - temporary java remove
-#ifdef USE_OLD_JAVA_API
-
-TUid CNcdInstallationService::LatestMidletUidL( 
-    MJavaRegistry& aJavaRegistry ) const
-    {
-    DLTRACEIN((""));
-    TInt suiteUid = 0;            
-    
-    // Get UID for the latest installed Midlet suite
-    // KPSUidJavaLatestInstallation = 0x10282567
-    // Ignoring error in case the key or read policy change so that client
-    // doesn't behave strangely
-    RProperty::Get( KUidSystemCategory, 
-        KPSUidJavaLatestInstallation, suiteUid );
-    
-    DLTRACE(("JMI UID: %x", suiteUid ));
-
-    if ( !suiteUid )  
-        {
-        return KNullUid;
-        }
-    
-    // Get entry for the installed suite
-    MJavaRegistrySuiteEntry* suite = aJavaRegistry.SuiteEntryL( 
-        TUid::Uid( suiteUid ) );
-    CleanupReleasePushL( *suite );        
-    RArray<TUid> suiteUids;
-    CleanupClosePushL( suiteUids );
-
-    TUid midletUid = KNullUid; 
-    suite->MIDletUidsL( suiteUids );
-    
-    // Take first midlet UID from the suite
-    if ( suiteUids.Count() ) 
-        {
-        midletUid = suiteUids[0];
-        }
-    DLTRACE(("Midlets in suite: %d", suite->NumberOfMIDletsL() ));
-    CleanupStack::PopAndDestroy( &suiteUids );
-    DLTRACE(("InstalledAppsEntryUid: %x", midletUid.iUid ));
-
-    CleanupStack::PopAndDestroy( suite );    
-    return midletUid;
-    }
-
-#else
-
-TUid CNcdInstallationService::LatestMidletUidL( 
-    CJavaRegistry& aJavaRegistry ) const
-    {
-    DLTRACEIN((""));
-    TInt suiteUid = 0;            
-    
-    // Get UID for the latest installed Midlet suite
-    // KPSUidJavaLatestInstallation = 0x10282567
-    // Ignoring error in case the key or read policy change so that client
-    // doesn't behave strangely
-    RProperty::Get( KUidSystemCategory, 
-        KPSUidJavaLatestInstallation, suiteUid );
-    
-    DLTRACE(("JMI UID: %x", suiteUid ));
-
-    if ( !suiteUid )  
-        {
-        return KNullUid;
-        }
-    
-    // Get entry for the installed suite
-    CJavaRegistryEntry* suite = aJavaRegistry.RegistryEntryL( 
-        TUid::Uid( suiteUid ) );
-    
-    if ( !suite )
-        {
-        return KNullUid;
-        }
-    
-    CleanupStack::PushL( suite );        
-    
-    DASSERT( suite->Type() < EGeneralApplication && 
-             suite->Type() >= EGeneralPackage );
-    
-    CJavaRegistryPackageEntry* entry = 
-        static_cast<CJavaRegistryPackageEntry*>( suite );
-    
-    TUid midletUid = KNullUid;
-    TInt count = entry->NumberOfEmbeddedEntries(); 
-    TBool appFound = EFalse;
-    TInt index = 0;
-    
-    // Find the first application from the suite
-    while ( index < count && !appFound )
-        {
-        CJavaRegistryEntry* app = entry->EmbeddedEntryByNumberL( index );
-        if ( app->Type() >= EGeneralApplication ) 
-            {
-            midletUid = app->Uid();
-            appFound = ETrue;
-            DLTRACE(( "Found app: %x", midletUid.iUid ));
-            }
-        delete app;
-        ++index;
-        }
-    
-    CleanupStack::PopAndDestroy( suite );    
-    return midletUid;
-    }
-
-
-#endif
-*/
 
 // ---------------------------------------------------------------------------
 // Returns true if the MIME type matches a Java application or descriptor
@@ -2091,85 +1977,35 @@ TBool CNcdInstallationService::MatchJava( const TDesC& aMime )
     }
 
 
-#ifdef USE_OLD_JAVA_API
 
 
 TUid CNcdInstallationService::InstalledMidletUidL()
     {
-    	
-    /* HLa - temporary java remove
-    DLTRACEIN((""));
-    RArray<TUid> MIDletUids;
-    CleanupClosePushL( MIDletUids );
-    
-    MJavaRegistry* javaRegistry = MJavaRegistry::CreateL();
-    CleanupReleasePushL( *javaRegistry );
-    javaRegistry->InstalledMIDletUidsL( MIDletUids );
-    TUid MIDletUid = KNullUid;
-    // Search for new uids in Java registry.
-    for ( TInt i = 0 ; i < MIDletUids.Count() ; i++ )
-        {
-        if ( iMIDletUids.Find( MIDletUids[i] ) == KErrNotFound )
-            {
-            // A new uid found, this is the installed midlet's uid
-            MIDletUid = MIDletUids[i];
-            break;
-            }
-        }
 
-    // We didn't get any new UID so we have to check Java installer's
-    // P&S key for the installed suite UID and the get the midlet UID
-    // from that. This happens when a midlet with predefined UID, 
-    // eg. WidSets, is reinstalled. Midlet UIDs are predefined with
-    // the attribute Nokia-MIDlet-UID-<n> in a JAD or JAR manifest
-    if ( MIDletUid == KNullUid ) 
+    //Usif::COpaqueNamedParams* iResults = 0; // to be removed
+    
+    RArray<TUid> appUids;
+    TUid midletUid = KNullUid;
+    TInt compId = 0;
+    
+    // Get component id
+    TRAPD ( err, iResults->IntByNameL( Usif::KSifOutParam_ComponentId ));
+    if ( err == KErrNotFound )
         {
-        MIDletUid = LatestMidletUidL( *javaRegistry );
+        return midletUid;
         }
     
-    CleanupStack::PopAndDestroy( javaRegistry );
-    CleanupStack::PopAndDestroy( &MIDletUids );
-
-    iMIDletUids.Reset();
-    return MIDletUid;
-    */
+    // Get components
+    CleanupClosePushL( appUids );
+    iScrSession.GetAppUidsForComponentL( compId, appUids );
     
-    }
-
-#else // USE_OLD_JAVA_API
-
-TUid CNcdInstallationService::InstalledMidletUidL()
-    {
-    /* HLa - temporary java remove
-    DLTRACEIN((""));
-    CJavaRegistry* registry = CJavaRegistry::NewLC();
-    TUid midletUid = LatestMidletUidL( *registry );
-    CleanupStack::PopAndDestroy( registry );
+    // return first midlet uid, if exists
+    if ( appUids.Count() != 0 )
+        {
+        midletUid = appUids[0];
+        }
+    CleanupStack::PopAndDestroy(); // appUids 
     return midletUid;
-    */
-    
-    return KNullUid;
-    
-    }
-
-#endif // USE_OLD_JAVA_API
-
-
-// ---------------------------------------------------------------------------
-// Populates the list of installed widgets
-// ---------------------------------------------------------------------------
-//
-void CNcdInstallationService::PopulateInstalledWidgetUidsL() 
-    {
-    DLTRACEIN((""));
-
-    if ( !iWidgetRegistry.Handle() )
-        {
-        User::LeaveIfError( iWidgetRegistry.Connect() );
-        }
-    
-    iInstalledWidgets.ResetAndDestroy();
-    User::LeaveIfError( iWidgetRegistry.InstalledWidgetsL( iInstalledWidgets ) );    
     }
 
 // ---------------------------------------------------------------------------
@@ -2181,38 +2017,44 @@ void CNcdInstallationService::PopulateInstalledWidgetsL
     {
     DLTRACEIN((""));
     
-    // Get the list of installed widget uids 
-    PopulateInstalledWidgetUidsL();
+    // Get ids of all widget components in scr
+    RArray<Usif::TComponentId> widgetComponentIdList;
+    Usif::CComponentFilter *pWidgetSwTypeFilter = Usif::CComponentFilter::NewLC();
+    pWidgetSwTypeFilter->SetSoftwareTypeL(Usif::KSoftwareTypeWidget);
+
+    iScrSession.GetComponentIdsL(widgetComponentIdList, pWidgetSwTypeFilter);
     
-    const TInt count = iInstalledWidgets.Count();
+    CleanupStack::PopAndDestroy(pWidgetSwTypeFilter);
+    CleanupClosePushL(widgetComponentIdList);
     
-    // Create array with UID & Version infos
+    const TInt count = widgetComponentIdList.Count();
+    
+    // Create array with id & version infos
     for ( TInt i = 0; i < count; ++i )
         {
         CExtendedWidgetInfo* tempInfo = new ( ELeave ) CExtendedWidgetInfo();
         CleanupStack::PushL( tempInfo );
         
-        CWidgetInfo* widgetInfo = iInstalledWidgets[i];
+        // Get widget
+        Usif::TComponentId compId = widgetComponentIdList[i];
+        Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+        iScrSession.GetComponentL(compId, *entry);
         
-        CWidgetPropertyValue* version = iWidgetRegistry.GetWidgetPropertyValueL
-            (widgetInfo->iUid, EBundleVersion );
-        CleanupStack::PushL( version );
-
-        // Fill info
-        tempInfo->iUid = widgetInfo->iUid;
-        if (!version->iValue.s)
-            *(tempInfo->iVersion) = KDefVersion;
-        else
-            *(tempInfo->iVersion) = *(version->iValue.s);
+        // Fill id & version
+        tempInfo->iUid.iUid= compId;
+        *(tempInfo->iVersion) = entry->Version();
         
         // Append to arrayt
         aWidgets.AppendL( tempInfo );
-
-        CleanupStack::PopAndDestroy( version );
+        
+        CleanupStack::PopAndDestroy(entry);
         CleanupStack::Pop( tempInfo );
         }
+    
+    
+    CleanupStack::PopAndDestroy(); // widgetComponentIdList
    
-        DLTRACEOUT((""));
+    DLTRACEOUT((""));
 
     }
 
@@ -2220,26 +2062,13 @@ void CNcdInstallationService::PopulateInstalledWidgetsL
 // Gets the name of widget that was installed last
 // ---------------------------------------------------------------------------
 //
+
 HBufC* CNcdInstallationService::InstalledWidgetNameLC()
     {
     DLTRACEIN((""));
     
-    TUid widgetUid = InstalledWidgetUidL();
-    
-    if ( widgetUid == KNullUid )
-        {
-        DLERROR(("No widget uid"));
-        // No new UID was found, so we assume user canceled the installation.
-        // Installer does not give any error code in that case.
-        return NULL;
-        }
-
-    HBufC* bundleId = HBufC::NewLC( KWidgetBundleIdLength );
-    TPtr des( bundleId->Des() );
-    iWidgetRegistry.GetWidgetBundleId( widgetUid, des );            
-
-    DLTRACEOUT(( _L("Widget bundle id: %S"), bundleId ));
-    return bundleId;
+    // Not currently suported
+    return NULL;
     }
     
 
@@ -2349,30 +2178,48 @@ void CNcdInstallationService::HandleInstalledWidgetL()
 
 
 // ---------------------------------------------------------------------------
-//   
+//Calling widget registry API to check if a widget with given uid is installed 
+//already
 // ---------------------------------------------------------------------------
 //
 TBool CNcdInstallationService::WidgetExistsL( const TUid& aUid )
     {
     DLTRACEIN((""));
-
-    if ( !iWidgetRegistry.Handle() )
-        {
-        User::LeaveIfError( iWidgetRegistry.Connect() );
-        }
     
-    if ( iWidgetRegistry.IsWidget( aUid ) )
+    TBool retVal = EFalse;
+        
+    // Get entry 
+    Usif::TComponentId compId = aUid.iUid;
+    Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+    TRAPD(err, iScrSession.GetComponentL(compId, *entry));
+    
+    if ( err == KErrNotFound || !retVal )
         {
-        TBuf<KWidgetBundleIdLength> id;
-        iWidgetRegistry.GetWidgetBundleId( aUid, id );
-        return iWidgetRegistry.WidgetExistsL( id );
+        retVal = EFalse;
         }
-    return EFalse;         
+    else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+    else
+        {
+        // widget ??
+        if ( entry->SoftwareType().Compare( Usif::KSoftwareTypeWidget ) == 0 )
+            {
+            retVal = ETrue;
+            }
+        else
+            {
+            retVal = EFalse;
+            }
+        }
+    CleanupStack::PopAndDestroy(entry);
+    return retVal;
     }
 
 // ---------------------------------------------------------------------------
 //Calling widget registry API to check if a widget with given uid is installed 
-//already
+//already. Returns the version of the installed widget.
 // ---------------------------------------------------------------------------
 //
 TBool CNcdInstallationService::WidgetExistsL( 
@@ -2380,33 +2227,40 @@ TBool CNcdInstallationService::WidgetExistsL(
     {
     DLTRACEIN((""));
     
-    if ( !iWidgetRegistry.Handle() )
-        {
-        User::LeaveIfError( iWidgetRegistry.Connect() );
-        }
+    TBool retVal = EFalse;
     
-    if ( iWidgetRegistry.IsWidget( aUid ) )
+    // Get entry 
+    Usif::TComponentId compId = aUid.iUid;
+    Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+    TRAPD(err, retVal= iScrSession.GetComponentL(compId, *entry));
+    
+    if ( err == KErrNotFound || !retVal )
         {
-        TBuf<KWidgetBundleIdLength> id;
-        iWidgetRegistry.GetWidgetBundleId( aUid, id );
-        if (iWidgetRegistry.WidgetExistsL( id ))
+        retVal = EFalse;
+        }
+    else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+    else
+        {
+        // widget ??
+        if ( entry->SoftwareType().Compare( Usif::KSoftwareTypeWidget ) == 0 )
             {
+            retVal = ETrue;
+        
             // Get version
-            CWidgetPropertyValue* version = 
-                iWidgetRegistry.GetWidgetPropertyValueL(aUid, EBundleVersion );
-            CleanupStack::PushL( version );
-            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
-            CleanupStack::PopAndDestroy( version ); 
-            return (ETrue);
+            TPtrC entryVersion = entry->Version();
+            TCatalogsVersion::ConvertL( aVersion, entryVersion );
             }
         else
             {
-            return (EFalse);
+            retVal = EFalse;
             }
         }
-    else
-       return(EFalse);
-
+    CleanupStack::PopAndDestroy(entry);
+    return retVal;
+    
     }
     
 // ---------------------------------------------------------------------------
@@ -2419,43 +2273,43 @@ TBool CNcdInstallationService::WidgetExistsL
     {
     DLTRACEIN((""));
     
-    if ( !iWidgetRegistry.Handle() )
-          {
-          User::LeaveIfError( iWidgetRegistry.Connect() );
-          }
-
-    RPointerArray<CWidgetInfo> widgetInfoArr;
+    TBool retVal = EFalse;
+    Usif::TComponentId compId = 0;
     
-    CleanupResetAndDestroyPushL( widgetInfoArr );
-    TInt err = iWidgetRegistry.InstalledWidgetsL(widgetInfoArr);
+    // Get widget component id by identifier
+    TRAPD( err, compId = 
+           iScrSession.GetComponentIdL( aIdentifier, Usif::KSoftwareTypeWidget ));
     
-    for( TInt i( widgetInfoArr.Count() - 1 ); i >= 0; --i ) 
+    if ( err == KErrNotFound )
         {
-        CWidgetInfo* widgetInfo( widgetInfoArr[i] );                  
-        CWidgetPropertyValue* bundleId = 
-            iWidgetRegistry.GetWidgetPropertyValueL
-                (widgetInfo->iUid, EBundleIdentifier );
-        CleanupStack::PushL( bundleId );
-        
-        if( aIdentifier.Compare( *(bundleId->iValue.s) )== 0 )
-            {
-            CWidgetPropertyValue* version = 
-                iWidgetRegistry.GetWidgetPropertyValueL
-                    (widgetInfo->iUid, EBundleVersion );
-            CleanupStack::PushL( version );
-            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
-            
-            CleanupStack::PopAndDestroy( version );
-            CleanupStack::PopAndDestroy( bundleId );
-            CleanupStack::PopAndDestroy( &widgetInfoArr );
-                        
-            return ETrue;
-            }
-        CleanupStack::PopAndDestroy( bundleId );
+        retVal = EFalse;
         }
-    CleanupStack::PopAndDestroy( &widgetInfoArr );
-    return EFalse;
+    else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+    else
+        {
+        // Widget found
+        retVal = ETrue;
+        
+        // Get entry 
+        Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+        retVal = iScrSession.GetComponentL(compId, *entry);
+        
+        // Get version
+        if ( retVal )
+            {
+            TPtrC entryVersion = entry->Version();
+            TCatalogsVersion::ConvertL( aVersion, entryVersion );
+            }
+    
+        CleanupStack::PopAndDestroy(entry);
+        }
+    
+    return retVal;
     }
+
 
 // ---------------------------------------------------------------------------
 //  Calling widget registry API to return the Uid of the widget
@@ -2468,14 +2322,12 @@ TUid CNcdInstallationService::WidgetUidL( const TDesC& aIdentifier)
     
     TUid id = TUid::Uid(0);
     
-   if ( !iWidgetRegistry.Handle() )
-          {
-          User::LeaveIfError( iWidgetRegistry.Connect() );
-          }
+    Usif::TComponentId compId = iScrSession.GetComponentIdL(aIdentifier, Usif::KSoftwareTypeNative);
     
-    id.iUid = iWidgetRegistry.GetWidgetUidL( aIdentifier);
-
+    id.iUid = compId;
+    
     return id;
+    
     
     }
 

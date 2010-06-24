@@ -16,6 +16,7 @@
 */
 
 #include "sisxsifpluginuihandler.h"     // CSisxSifPluginUiHandler
+#include "sisxsifpluginerrorhandler.h"  // CSisxSifPluginErrorHandler
 #include "sisxsifplugin.pan"            // Panic codes
 #include "sisxsifcleanuputils.h"        // CleanupResetAndDestroyPushL
 #include "sisxsifuiselectioncache.h"    // CSisxUISelectionCache
@@ -49,10 +50,11 @@ const TInt KFreeSpaceTreshold = 128*1024;   // bytes
 // CSisxSifPluginUiHandler::NewL()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandler* CSisxSifPluginUiHandler::NewL( RFs& aFs )
+CSisxSifPluginUiHandler* CSisxSifPluginUiHandler::NewL( RFs& aFs,
+        CSisxSifPluginErrorHandler& aErrorHandler )
     {
     FLOG( _L("CSisxSifPluginUiHandler::NewL") );
-    CSisxSifPluginUiHandler *self = new( ELeave ) CSisxSifPluginUiHandler( aFs );
+    CSisxSifPluginUiHandler *self = new( ELeave ) CSisxSifPluginUiHandler( aFs, aErrorHandler );
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop( self );
@@ -88,9 +90,10 @@ TBool CSisxSifPluginUiHandler::DisplayTextL( const Swi::CAppInfo& /*aAppInfo*/,
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandler::DisplayErrorL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TErrorDialog /*aType*/, const TDesC& /*aParam*/ )
+        Swi::TErrorDialog aType, const TDesC& aParam )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayErrorL") );
+    SetDisplayErrorL( aType, aParam );
     }
 
 // ---------------------------------------------------------------------------
@@ -438,21 +441,21 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
 // CSisxSifPluginUiHandler::DisplayFailedL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandler::DisplayFailedL( TErrorCategory /*aCategory*/,
-        TInt aErrorCode, const TDesC& aErrorMessage, const TDesC& /*aErrorDetails*/ )
+void CSisxSifPluginUiHandler::DisplayFailedL( const CSisxSifPluginErrorHandler& aError )
     {
-    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, aError=%d"), aErrorCode );
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, error code %d"), aError.ErrorCode() );
 
     // TODO: add error details
-    iSifUi->ShowFailedL( aErrorCode, aErrorMessage );
+    iSifUi->ShowFailedL( aError.ErrorCode(), aError.ErrorMessage() );
     }
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandler::CSisxSifPluginUiHandler()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandler::CSisxSifPluginUiHandler( RFs& aFs ) :
-        CSisxSifPluginUiHandlerBase( aFs )
+CSisxSifPluginUiHandler::CSisxSifPluginUiHandler( RFs& aFs,
+        CSisxSifPluginErrorHandler& aErrorHandler ) :
+        CSisxSifPluginUiHandlerBase( aFs, aErrorHandler )
     {
     }
 

@@ -25,6 +25,7 @@
 
 // For silent installation
 #include <SWInstDefs.h>
+#include <usif/sif/sif.h>
 #include <swi/sisregistryentry.h>
 
 class TIAUpdateVersion;
@@ -128,7 +129,13 @@ IMPORT_C TBool IsInstalledL( const TUid& aPUid, const TDesC& aExecutable );
 SwiUI::TInstallOptions SilentInstallOptionsL( const CIAUpdateBaseNode& aNode );
                                                      
 
-
+/**
+ * Creates options for silent install.
+ * Uses DriveToInstallL to etermine target drive to install.
+ * 
+ * @param aOptions  Silent install options
+ */
+void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
 
 /**
  * Finds drive where a package is currently installed
