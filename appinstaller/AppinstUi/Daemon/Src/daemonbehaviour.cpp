@@ -398,8 +398,7 @@ void CDaemonBehaviour::UpdateComponentStatusL( TChangeType aChangeType,
                 }                            
             } // for loop
         
-        FLOG_1( _L("Daemon: appInfoArray.Count = %d"), appInfoArray.Count() ); 
-        
+        FLOG_1( _L("Daemon: appInfoArray.Count = %d"), appInfoArray.Count() );         
         // Check do we have updated some application info.
         if ( appInfoArray.Count() )
             {             
@@ -476,20 +475,6 @@ void CDaemonBehaviour::UpdateStatusL(
         // Check if component or part of it is in the media.
         if ( isInTargetDrive )
             {
-            FLOG( _L("Daemon: Set component status to SCR") );
-            // Update component flag to SCR. 
-            if ( aChangeType == EMediaInserted )
-                {  
-                FLOG( _L("Daemon: Set component present = TRUE") );                                  
-                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, ETrue ) );                                                                            
-                }
-            else if ( aChangeType==EMediaRemoved )
-                {
-                FLOG( _L("Daemon: Set component present = FALSE") );                              
-                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, EFalse ) );                                                                               
-                }            
-            FLOG_1( _L("Daemon: SetIsComponentPresentL TRAP err = %d"), err );
-            
             // We need to update applications status to AppArc when
             // there is some media change. AppArc needs application
             // UID (not package UID) so we need to get all app. UIDs
@@ -499,16 +484,16 @@ void CDaemonBehaviour::UpdateStatusL(
             FLOG( _L("Daemon: Get applications UIDs from SCR") );
             RArray<TUid> appUidArray;
             CleanupClosePushL( appUidArray );
-                        
+             
             TRAP( err, aScrServer.GetAppUidsForComponentL( aComponentId, appUidArray ) );
             FLOG_1( _L("Daemon: GetAppUidsForComponentL TRAP err = %d"), err );                        
             FLOG_1( _L("Daemon: UID array count = %d"), appUidArray.Count() );
-           
+            
             for (TInt index = 0; index < appUidArray.Count(); index++)
                 {
                 FLOG_1( _L("Daemon: Add app UID = 0x%x"), 
-                        appUidArray[index].iUid );                
-            
+                 appUidArray[index].iUid );                
+                
                 TApaAppUpdateInfo appInfo;
                 appInfo.iAppUid = appUidArray[index]; 
                 
@@ -525,7 +510,23 @@ void CDaemonBehaviour::UpdateStatusL(
                 
                 aAppInfoArray.Append( appInfo );   
                 }                           
-            CleanupStack::PopAndDestroy(&appUidArray);                                  
+            CleanupStack::PopAndDestroy(&appUidArray);
+// Set do not work, it will leave.
+/*            
+            FLOG( _L("Daemon: Set component status to SCR") );
+            // Update component flag to SCR. 
+            if ( aChangeType == EMediaInserted )
+                {  
+                FLOG( _L("Daemon: Set component present = TRUE") );                                  
+                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, ETrue ) );                                                                            
+                }
+            else if ( aChangeType==EMediaRemoved )
+                {
+                FLOG( _L("Daemon: Set component present = FALSE") );                              
+                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, EFalse ) );                                                                               
+                }            
+            FLOG_1( _L("Daemon: SetIsComponentPresentL TRAP err = %d"), err );
+*/                                                          
             }   // if isInTargetDrive        
         }   // if err
     

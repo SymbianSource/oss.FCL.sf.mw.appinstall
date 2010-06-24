@@ -136,24 +136,7 @@ void CIAUpdateFWUpdateHandler::RunL()
         {
         case ENSU:
             {          
-            /*HBufC* text1 = StringLoader::LoadLC( R_IAUPDATE_INFO_NSU_1 );  
-            HBufC* text2 = StringLoader::LoadLC( R_IAUPDATE_INFO_NSU_2 );
-            
-            HBufC* text = HBufC::NewLC( text1->Length() +
-                                        text2->Length() );
-                
-            text->Des() += *text1;
-            text->Des() += *text2;
-
-            HBufC* heading = StringLoader::LoadLC( R_IAUPDATE_NEW_SW_TITLE );
-     
-            ShowDialogL( *text, *heading );
-            
-            CleanupStack::PopAndDestroy( heading ); //text, heading
-            CleanupStack::PopAndDestroy( text );
-            CleanupStack::PopAndDestroy( text2 );
-            CleanupStack::PopAndDestroy( text1 );*/
-          
+                      
             break;
             }
         case EFOTA:
@@ -229,14 +212,7 @@ void CIAUpdateFWUpdateHandler::DoCancel()
 //
 void CIAUpdateFWUpdateHandler::ShowDialogL(TDesC& /*aText*/, TDesC& /*aHeading*/ )
     {  
-    //CAknMessageQueryDialog* dlg = CAknMessageQueryDialog::NewL( aText );
-
-    //dlg->PrepareLC( R_IAUPDATE_MESSAGE_QUERY );
-
-    //CAknPopupHeadingPane* headingPane = dlg->Heading();
-    //headingPane->SetTextL( aHeading );
-	    
-    //TInt ret = dlg->RunLD();
+    
     }
         
 

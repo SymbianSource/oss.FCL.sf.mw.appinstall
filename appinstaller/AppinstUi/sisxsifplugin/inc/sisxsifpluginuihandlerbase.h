@@ -29,6 +29,7 @@
 namespace Usif
 {
     class CSisxSifPluginInstallParams;
+    class CSisxSifPluginErrorHandler;
 
 
     /**
@@ -37,14 +38,13 @@ namespace Usif
     class CSisxSifPluginUiHandlerBase : public CBase, public Swi::MUiHandler
         {
     public:     // constructors and destructor
-        CSisxSifPluginUiHandlerBase( RFs& aFs );
+        CSisxSifPluginUiHandlerBase( RFs& aFs, CSisxSifPluginErrorHandler& aErrorHandler );
         ~CSisxSifPluginUiHandlerBase();
 
     public:     // new functions
         virtual void DisplayPreparingInstallL( const TDesC& aFileName ) = 0;
         virtual void DisplayCompleteL() = 0;
-        virtual void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
-                const TDesC& aErrorMessage, const TDesC& aErrorDetails ) = 0;
+        virtual void DisplayFailedL( const CSisxSifPluginErrorHandler& aError ) = 0;
 
     public:     // new functions
         void SetInstallParamsL( const CSisxSifPluginInstallParams& aInstallParams );
@@ -53,11 +53,14 @@ namespace Usif
         void PublishStartL( const CComponentInfo::CNode& aRootNode );
         void PublishProgressL( TSifOperationPhase aPhase, TSifOperationSubPhase aSubPhase,
                 TInt aCurrentProgress, TInt aTotal );
-        void PublishCompletionL( TErrorCategory aErrorCategory, TInt aErrorCode,
-                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
+        void PublishCompletionL( const CSisxSifPluginErrorHandler& aError );
+
+    protected:  // new functions
+        void SetDisplayErrorL( Swi::TErrorDialog aType, const TDesC& aParam );
 
     protected:	// data
         RFs& iFs;
+        CSisxSifPluginErrorHandler& iErrorHandler;
         TInt iMaxInstalledSize;
         TBool iIsDriveSelectionRequired;
         CSisxSifPluginInstallParams* iInstallParams;

@@ -49,6 +49,7 @@ namespace Usif
         TSifPolicy AllowAppBreakDependency() const;
         TSifPolicy AllowOverwrite() const;
         TSifPolicy PackageInfo() const;
+        TSifPolicy AllowIncompatible() const;
 
     private:    // new functions
         CSisxSifPluginInstallParams();
@@ -77,6 +78,7 @@ namespace Usif
         TSifPolicy iAllowAppBreakDependency;
         TSifPolicy iAllowOverwrite;
         TSifPolicy iPackageInfo;
+        TSifPolicy iAllowIncompatible;
         };
 
 }   // namespace Usif

@@ -30,7 +30,8 @@ namespace Usif
     class CSisxSifPluginUiHandlerSilent : public CSisxSifPluginUiHandlerBase
         {
     public:     // constructors and destructor
-        static CSisxSifPluginUiHandlerSilent* NewL( RFs& aFs );
+        static CSisxSifPluginUiHandlerSilent* NewL( RFs& aFs,
+                CSisxSifPluginErrorHandler& aErrorHandler );
         ~CSisxSifPluginUiHandlerSilent();
 
     public:     // from MUiHandler (via CSisxSifPluginUiHandlerBase)
@@ -84,11 +85,10 @@ namespace Usif
     public:     // from CSisxSifPluginUiHandlerBase
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
-        void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
-                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
+        void DisplayFailedL( const CSisxSifPluginErrorHandler& aError );
 
     protected:  // new functions
-        CSisxSifPluginUiHandlerSilent( RFs& aFs );
+        CSisxSifPluginUiHandlerSilent( RFs& aFs, CSisxSifPluginErrorHandler& aErrorHandler );
 
     private:    // new functions
         void ConstructL();

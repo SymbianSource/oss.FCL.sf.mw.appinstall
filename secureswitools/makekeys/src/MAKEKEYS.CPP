@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -56,7 +56,7 @@ CMakeKeys::CMakeKeys()
 :m_fVerbose(FALSE)
 	{ ; }
 
-int CMakeKeys::Run(const int argc, const _TCHAR *argv[], const _TCHAR *envp[])
+int CMakeKeys::Run(const int argc, const _TCHAR *argv[])
 // Inputs   : argc, argv, envp - The command line passed to the process
 	{	
 	BOOL bValid = TRUE;
@@ -117,6 +117,7 @@ int CMakeKeys::Run(const int argc, const _TCHAR *argv[], const _TCHAR *envp[])
 
 			OUT << _T("Warning: the private key should be encrypted with the -password option") << endl;
 			OUT << _T("Do you want to use a password (y/n)? ");
+			OUT.flush();
 
 			cin >> Warn;
 
@@ -166,6 +167,7 @@ int CMakeKeys::Run(const int argc, const _TCHAR *argv[], const _TCHAR *envp[])
 
 				OUT << _T("Warning: the private key should be encrypted with the -password option") << endl;
 				OUT << _T("Do you want to use a password (y/n)? ");
+				OUT.flush();
 
 				cin >> Warn;
 
@@ -296,9 +298,13 @@ int CMakeKeys::Run(const int argc, const _TCHAR *argv[], const _TCHAR *envp[])
 	// main function - constructs a CMakeKeys object and calls it's run method
 	extern "C"
 		{
-		int _tmain(int argc, const _TCHAR *argv[], const _TCHAR *envp[])
+		int main(int argc, const char *argv[], const char *envp[])
 			{
+			// MingW doesn't support _tmain(),
+			// so using GetCommandLineW() to get wide args.
+			wchar_t** argvW = CommandLineToArgvW( GetCommandLineW(), &argc);
+			
 			CMakeKeys app;
-			return app.Run(argc, argv, envp);
+			return app.Run(argc, argvW);
 			}
 		}

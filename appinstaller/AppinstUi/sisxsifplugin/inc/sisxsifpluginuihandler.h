@@ -34,7 +34,8 @@ namespace Usif
     class CSisxSifPluginUiHandler : public CSisxSifPluginUiHandlerBase
         {
     public:     // constructors and destructor
-        static CSisxSifPluginUiHandler* NewL( RFs& aFs );
+        static CSisxSifPluginUiHandler* NewL( RFs& aFs,
+                CSisxSifPluginErrorHandler& aErrorHandler );
         ~CSisxSifPluginUiHandler();
 
     public:     // from MUiHandler (via CSisxSifPluginUiHandlerBase)
@@ -88,14 +89,13 @@ namespace Usif
     public:     // from CSisxSifPluginUiHandlerBase
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
-        void DisplayFailedL( TErrorCategory aCategory, TInt aErrorCode,
-                const TDesC& aErrorMessage, const TDesC& aErrorDetails );
+        void DisplayFailedL( const CSisxSifPluginErrorHandler& aError );
 
     public:     // new functions
         void SetDriveSelectionRequired( TBool aIsRequired );
 
     private:    // new functions
-        CSisxSifPluginUiHandler( RFs& aFs );
+        CSisxSifPluginUiHandler( RFs& aFs, CSisxSifPluginErrorHandler& aErrorHandler );
         void ConstructL();
         void AddMemorySelectionL();
         void AddCertificatesL( RPointerArray<Swi::CCertificateInfo>& aCertificates,

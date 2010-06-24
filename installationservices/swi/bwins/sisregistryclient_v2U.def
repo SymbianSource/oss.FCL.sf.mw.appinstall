@@ -197,4 +197,5 @@ EXPORTS
 	?GetAppUidsForComponentL@RSisRegistrySession@Swi@@QAEXAAHAAV?$RArray@VTUid@@@@@Z @ 196 NONAME ; void Swi::RSisRegistrySession::GetAppUidsForComponentL(int &, class RArray<class TUid> &)
 	?GetComponentIdForPackageL@RSisRegistrySession@Swi@@QBEHABVTDesC16@@0@Z @ 197 NONAME ; int Swi::RSisRegistrySession::GetComponentIdForPackageL(class TDesC16 const &, class TDesC16 const &) const
 	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplicationRegistrationData@Usif@@ABVCSisRegistryPackage@2@@Z @ 198 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Usif::CApplicationRegistrationData const &, class Swi::CSisRegistryPackage const &)
+	?SetComponentPresenceL@RSisRegistryWritableSession@Swi@@QAEXHH@Z @ 199 NONAME ; void Swi::RSisRegistryWritableSession::SetComponentPresenceL(int, int)
 

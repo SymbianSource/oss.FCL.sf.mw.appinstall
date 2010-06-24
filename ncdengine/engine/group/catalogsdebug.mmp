@@ -55,11 +55,7 @@ SOURCE		  stackpointer.cia
 #endif
 
 // System include paths
-#ifndef __SERIES60_30__
 MW_LAYER_SYSTEMINCLUDE
-#else
-SYSTEMINCLUDE /Epoc32/include
-#endif
 
 LIBRARY euser.lib flogger.lib hal.lib
 

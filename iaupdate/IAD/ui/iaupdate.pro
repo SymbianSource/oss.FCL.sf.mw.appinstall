@@ -49,7 +49,6 @@ SOURCES += iaupdatemain.cpp \
     iaupdateagreement.cpp \
     iaupdateautomaticcheck.cpp \
     iaupdatedeputils.cpp \ 
-    iaupdatefirsttimedatefile.cpp \
     iaupdatefirsttimeinfo.cpp \
     iaupdategloballockhandler.cpp \
     iaupdateinstallationlistener.cpp \
@@ -82,7 +81,6 @@ HEADERS = iaupdateapplication.h \
     iaupdateautomaticcheck.h \
     iaupdatedeputils.h \
     iaupdatefileconsts.h \
-    iaupdatefirsttimedatefile.h \
     iaupdatefirsttimeinfo.h \
     iaupdategloballockhandler.h \
     iaupdateinstallationlistener.h \

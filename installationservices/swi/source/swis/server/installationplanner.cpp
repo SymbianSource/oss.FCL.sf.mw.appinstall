@@ -1150,27 +1150,27 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             CleanupStack::PushL(targetFileName);
             TParsePtrC filename(*targetFileName);	    	   
             TBool isApparcFile = EFalse;
-            TBuf<10> extension = TParsePtrC(*targetFileName).Ext();
+            HBufC* extension = TParsePtrC(*targetFileName).Ext().AllocLC();
             
-            if(!extension.Compare(KApparcRegistrationFileExtn)) // for resource files *_reg.rsc or *.rsc
+            if(!extension->Compare(KApparcRegistrationFileExtn)) // for resource files *_reg.rsc or *.rsc
                 {
                 isApparcFile = ETrue;
                 }
             else
                 {
-                TInt extnLength = extension.Length();
+                TInt extnLength = extension->Length();
                 HBufC* extn;
                 if(extnLength == 4)                            //for localizable resource files with extn like .r01
                     {
-                    extn = extension.Right(2).AllocLC();
+                    extn = extension->Right(2).AllocLC();
                     }
                 else if(extnLength == 5)
                     {
-                    extn = extension.Right(3).AllocLC();       //for localizable resource files with extn like .r101	            
+                    extn = extension->Right(3).AllocLC();       //for localizable resource files with extn like .r101	            
                     }
                 else
                     {   
-                    CleanupStack::PopAndDestroy(targetFileName);
+                    CleanupStack::PopAndDestroy(2, targetFileName);  //extension
                     continue;
                     }
     
@@ -1193,7 +1193,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                 listOfFilesToBeExtracted.AppendL(listOfFilesToBeAdded[i]);
                 totalApplicationDataSize += listOfFilesToBeAdded[i]->UncompressedLength();
                 }	    
-            CleanupStack::PopAndDestroy(targetFileName);  	    
+            CleanupStack::PopAndDestroy(2, targetFileName);  //extension	    
             }                   
             
         //Here we do extraction of rsc files ,before extracting files we check if there is an enough space on the disk(C drive)
@@ -1289,9 +1289,8 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                 }
             
             CleanupStack::PushL(appData);
-            TUid appuid = appData->AppUid();
-            HBufC* appname = appData->AppFile().AllocLC();
-            TBuf<100> finalAppName = TParsePtrC(*appname).NameAndExt();
+            TUid appuid = appData->AppUid();            
+            HBufC* finalAppName = TParsePtrC(appData->AppFile()).NameAndExt().AllocLC();
             const RPointerArray<Usif::CLocalizableAppInfo> aLocalizableAppInfoList = appData->LocalizableAppInfoList();
             HBufC* groupName = NULL;
             HBufC* iconFileName = NULL;
@@ -1306,7 +1305,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                     DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
                     }
                 //Since locale does not exists no need to extract, create CNativeApplicationInfo without iconFileName
-                applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), _L(""));  
+                applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), _L(""));  
                 }
             else
                 {
@@ -1325,13 +1324,12 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                         iconFileName = captionAndIconInfo->IconFileName().AllocLC();
                     
                     if(iconFileName != NULL)
-                        {
-                        TBuf<100> finalIconFileName;
-                        finalIconFileName = TParsePtrC(*iconFileName).NameAndExt();
+                        {                        
+                        HBufC* finalIconFileName = TParsePtrC(*iconFileName).NameAndExt().AllocLC();
                         
                         _LIT(KIconFileNameFmt, "%c:\\resource\\install\\icon\\0x%08x\\%S");     // Applicaiton Uid
                         iconFile.Format(KIconFileNameFmt, TUint(systemDrive), appuid.iUid,
-                        &finalIconFileName);
+                        finalIconFileName);
                         
                         TInt err = fs.MkDirAll(iconFile);
                         if (err!= KErrNone && err != KErrAlreadyExists)
@@ -1341,7 +1339,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                         for(TInt k = 0; k < listOfFilesToBeAdded.Count() ; k++)
                             {                      
                             currentFileDescription = listOfFilesToBeAdded[k];
-                            if(TParsePtrC(currentFileDescription->Target()).NameAndExt().Compare(finalIconFileName))
+                            if(TParsePtrC(currentFileDescription->Target()).NameAndExt().Compare(*finalIconFileName))
                                 {
                                 break;
                                 }
@@ -1386,22 +1384,22 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                         User::LeaveIfError(iSisHelper.ExtractFileL(fs, tempIconFile, listOfFilesToBeAdded[i]->Index(), application->AbsoluteDataIndex(), UiHandler())); 	              
                         DEBUG_PRINTF(_L8("Finished extracting Icon file successfuly"));
                         //After copy the available disk space is reduced
-                        currentAvailableDriveSpace -= fileSize;
-                        CleanupStack::PopAndDestroy(2,iconFileName);  //file,iconFileSize
+                        currentAvailableDriveSpace -= fileSize;                        
+                        CleanupStack::PopAndDestroy(3,iconFileName);  //file,finalIconFileName,iconFileSize
                         
                         //Create CNativeApplicationInfo with iconFileName
-                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), iconFile);                  
+                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), iconFile);                                          
                         }
                     else
                         {
                         //Since iconFileName does not exists no need to extract, create CNativeApplicationInfo without iconName
-                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, finalAppName, groupName?*groupName:_L(""), _L(""));  
+                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), _L(""));  
                         }
                     }
                 }	    
 
             DEBUG_PRINTF2(_L("Application Uid 0x%08x"), appuid);
-            DEBUG_PRINTF2(_L("Application Name %S"), appname);
+            DEBUG_PRINTF2(_L("Application Name %S"), finalAppName);
             if(groupName)
                 DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
             if(iconFile.Length())
@@ -1410,9 +1408,9 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             const_cast <Sis::CController&>(aController).AddApplicationInfoL(applicationInfo);
             CleanupStack::Pop(applicationInfo);
             if(groupName)
-                CleanupStack::PopAndDestroy(3, appData);	//groupName,appName,appData
+                CleanupStack::PopAndDestroy(3, appData);	//groupName,finalAppName,appData
             else
-                CleanupStack::PopAndDestroy(2, appData);    //appName,appData
+                CleanupStack::PopAndDestroy(2, appData);    //finalAppName,appData
             languages.Close();	    
             }
               

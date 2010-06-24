@@ -23,6 +23,14 @@ symbian {
     TARGET.CAPABILITY = CAP_GENERAL_DLL
     TARGET.EPOCALLOWDLLDATA=1
     MMP_RULES += "OPTION ARMCC --export_all_vtbl"
+
+    defBlock = \      
+    "$${LITERAL_HASH}if defined(EABI)" \
+    "DEFFILE  ../eabi/iaupdateapi.def" \
+    "$${LITERAL_HASH}else" \
+    "DEFFILE  ../bwins/iaupdateapi.def" \
+    "$${LITERAL_HASH}endif"
+     MMP_RULES += defBlock
 } 
 
 DEPENDPATH += .

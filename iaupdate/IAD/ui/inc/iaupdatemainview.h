@@ -30,6 +30,8 @@
 class HbListWidget;
 class HbAction;
 class HbAbstractViewItem;
+class HbGroupBox;
+class HbDataForm;
 class IAUpdateEngine;
 class IAUpdateDialogUtil;
 class TIAUpdateVersion;
@@ -56,26 +58,38 @@ public slots:
  
     void handleDisclaimer();
     
-    void handleDetails( HbAbstractViewItem *, const QPointF & );
+    void handleDetails(HbAbstractViewItem *, const QPointF &);
+    
+    void handleFotaDetails(HbAbstractViewItem *, const QPointF &); 
     
     void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    
+    void handleFwSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     
     void dialogFinished(HbAction* action);
     
 private:
     
-    void getSelectedNodes(RPointerArray<MIAUpdateAnyNode> &selectedNodes) const;
+    bool fotaSelected() const;
     void markListItem(bool mark, int index);
-    bool getMandatoryNodes(RPointerArray<MIAUpdateAnyNode> &mandNodes) const;
+    void markFotaItem(bool mark);
+    bool getMandatoryNodes(RPointerArray<MIAUpdateNode> &mandNodes) const;
     void showUpdateCannotOmitDialog(); 
     void showDependenciesFoundDialog(QString &text);
     void updateSelectionsToNodeArray(MIAUpdateNode &node, bool mark);
     void updateSelectionsToList();
-    MIAUpdateAnyNode* getNode(int index) const;
+    MIAUpdateNode* getApplicationNode(int index) const;
     void showDetails(MIAUpdateAnyNode& node);
     void constructDetailsText(MIAUpdateAnyNode &node, QString &text);
     void versionText(const TIAUpdateVersion &version, QString &versionText);
     void fileSizeText(int fileSize, QString &text);
+    void setImportance(MIAUpdateAnyNode *node, QString &importanceDescription);
+    void removeCurrentContentLayout();
+    void refreshFirmwareUpdates(const RPointerArray<MIAUpdateFwNode> &fwNodes);
+    void refreshFotaUpdate(MIAUpdateFwNode& fwNode);
+    void refreshNsuUpdate();
+    void refreshApplicationUpdates(const RPointerArray<MIAUpdateNode> &nodes);
+    void updateSelectionInfoInDock();
     
 private:
     enum DialogState
@@ -88,13 +102,21 @@ private:
      
     IAUpdateEngine *mEngine;
     IAUpdateDialogUtil *mDialogUtil;
+    HbWidget *mContent;
     HbListWidget *mListView;
-    RPointerArray<MIAUpdateAnyNode> mAllNodes;
+    HbListWidget *mFwListView;
+    HbGroupBox *mApplicationUpdatesGroupBox;
+    HbGroupBox *mFwNSUGroupBox;
+    HbDataForm *mContentDataForm;
+    HbGroupBox *mSelections;
+    RPointerArray<MIAUpdateNode> mNodes;
+    RPointerArray<MIAUpdateFwNode> mFwNodes;
     DialogState mDialogState; 
     HbAction *mPrimaryAction;
     MIAUpdateNode *mNode; 
     bool mMark;
     bool mSelectionUpdate;
+    bool mSelectionConnect;
 
 };
 

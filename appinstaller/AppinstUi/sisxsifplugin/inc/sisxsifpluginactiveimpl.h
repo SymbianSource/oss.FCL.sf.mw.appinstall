@@ -37,6 +37,7 @@ namespace Usif
 {
     class CSisxSifPluginUiHandlerBase;
     class CSisxSifPluginInstallParams;
+    class CSisxSifPluginErrorHandler;
 
     /**
      *  SISX SIF plugin active implementation
@@ -93,7 +94,6 @@ namespace Usif
         void DoActivateL( TComponentId aComponentId, TRequestStatus& aStatus );
         void DoDeactivateL( TComponentId aComponentId, TRequestStatus& aStatus );
         void DoHandleErrorL( TInt aError );
-        TErrorCategory ErrorCategory( TInt aErrorCode );
         void SetFileL( const TDesC& aFileName );
         void SetFile( RFile& aFileHandle );
         TComponentId GetLastInstalledComponentIdL();
@@ -113,6 +113,7 @@ namespace Usif
         const COpaqueNamedParams* iInputParams;     // not owned
         COpaqueNamedParams* iOutputParams;      // not owned
         CSisxSifPluginInstallParams* iInstallParams;
+        CSisxSifPluginErrorHandler* iErrorHandler;
         CComponentInfo* iComponentInfo;
         TBool iHasAllFilesCapability;
         HBufC* iFileName;

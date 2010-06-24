@@ -17,6 +17,7 @@
 
 #include "sisxsifpluginuihandlersilent.h"   // CSisxSifPluginUiHandlerSilent
 #include "sisxsifplugininstallparams.h"     // CSisxSifPluginInstallParams
+#include "sisxsifpluginerrorhandler.h"      // CSisxSifPluginErrorHandler
 #include "sisxsifplugin.pan"                // Panic codes
 #include "sisxsifcleanuputils.h"            // CleanupResetAndDestroyPushL
 
@@ -29,9 +30,11 @@ using namespace Usif;
 // CSisxSifPluginUiHandlerSilent::NewL()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandlerSilent* CSisxSifPluginUiHandlerSilent::NewL( RFs& aFs )
+CSisxSifPluginUiHandlerSilent* CSisxSifPluginUiHandlerSilent::NewL( RFs& aFs,
+        CSisxSifPluginErrorHandler& aErrorHandler )
     {
-    CSisxSifPluginUiHandlerSilent *self = new( ELeave ) CSisxSifPluginUiHandlerSilent( aFs );
+    CSisxSifPluginUiHandlerSilent *self = new( ELeave ) CSisxSifPluginUiHandlerSilent(
+            aFs, aErrorHandler );
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop( self );
@@ -77,9 +80,9 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppIn
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandlerSilent::DisplayErrorL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TErrorDialog /*aType*/, const TDesC& /*aParam*/ )
+        Swi::TErrorDialog aType, const TDesC& aParam )
     {
-	// TODO: error handling
+    SetDisplayErrorL( aType, aParam );
     }
 
 // ---------------------------------------------------------------------------
@@ -143,12 +146,12 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayQuestionL( const Swi::CAppInfo& /*aA
         case Swi::EQuestionIncompatible:
         	if( iInstallParams )
         		{
-				switch( iInstallParams->PackageInfo() )
+				switch( iInstallParams->AllowIncompatible() )
 					{
 					case EAllowed:
-					case EUserConfirm:
 						okToContinue = ETrue;
 						break;
+                    case EUserConfirm:
 					case ENotAllowed:
 					default:
 						break;
@@ -491,8 +494,8 @@ void CSisxSifPluginUiHandlerSilent::DisplayCompleteL()
 // CSisxSifPluginUiHandlerSilent::DisplayFailedL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerSilent::DisplayFailedL( TErrorCategory /*aCategory*/,
-        TInt /*aErrorCode*/, const TDesC& /*aErrorMessage*/, const TDesC& /*aErrorDetails*/ )
+void CSisxSifPluginUiHandlerSilent::DisplayFailedL(
+        const CSisxSifPluginErrorHandler& /*aError*/ )
     {
     // nothing displayed in silent mode
     }
@@ -501,8 +504,9 @@ void CSisxSifPluginUiHandlerSilent::DisplayFailedL( TErrorCategory /*aCategory*/
 // CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent()
 // ---------------------------------------------------------------------------
 //
-CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent( RFs& aFs ) :
-        CSisxSifPluginUiHandlerBase( aFs )
+CSisxSifPluginUiHandlerSilent::CSisxSifPluginUiHandlerSilent( RFs& aFs,
+        CSisxSifPluginErrorHandler& aErrorHandler ) :
+        CSisxSifPluginUiHandlerBase( aFs, aErrorHandler )
     {
     }
 

@@ -198,6 +198,15 @@ TSifPolicy CSisxSifPluginInstallParams::PackageInfo() const
     }
 
 // ---------------------------------------------------------------------------
+// CSisxSifPluginInstallParams::AllowIncompatible()
+// ---------------------------------------------------------------------------
+//
+TSifPolicy CSisxSifPluginInstallParams::AllowIncompatible() const
+    {
+    return iAllowIncompatible;
+    }
+
+// ---------------------------------------------------------------------------
 // CSisxSifPluginInstallParams::CSisxSifPluginInstallParams()
 // ---------------------------------------------------------------------------
 //
@@ -229,6 +238,7 @@ void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams 
             EAllowed );
     GetPolicyParam( aParams, KSifInParam_AllowOverwrite, iAllowOverwrite, EAllowed );
     GetPolicyParam( aParams, KSifInParam_PackageInfo, iPackageInfo, EAllowed );
+    GetPolicyParam( aParams, KSifInParam_AllowIncompatible, iAllowIncompatible, EAllowed );
     }
 
 // ---------------------------------------------------------------------------
@@ -255,6 +265,7 @@ void CSisxSifPluginInstallParams::ConstructL( const CSisxSifPluginInstallParams&
     iAllowAppBreakDependency = aParams.iAllowAppBreakDependency;
     iAllowOverwrite = aParams.iAllowOverwrite;
     iPackageInfo = aParams.iPackageInfo;
+    iAllowIncompatible = aParams.iAllowIncompatible;
     }
 
 // ---------------------------------------------------------------------------
@@ -271,7 +282,7 @@ TInt CSisxSifPluginInstallParams::GetIntParam( const COpaqueNamedParams& aParams
         {
         return value;
         }
-	return aDefaultValue;
+    return aDefaultValue;
     }
 
 // ---------------------------------------------------------------------------

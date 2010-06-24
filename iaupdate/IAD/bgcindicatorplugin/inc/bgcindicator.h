@@ -11,7 +11,7 @@
  *
  * Contributors:
  *
- * Description: Message Indicator class
+ * Description: Backgroundchecker Indicator class
  *
  */
 
@@ -57,12 +57,8 @@ protected:
     
 private: 
     /**
-     * Prepares the display name from stream.
-     * @param dataStream data stream. 
+     * Start the iaupdate client
      */
-    //void prepareDisplayName(QDataStream& dataStream);
-    
-    //HLa
     void StartIaupdateL() const;
     
 private:

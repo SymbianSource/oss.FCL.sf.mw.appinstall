@@ -1005,6 +1005,7 @@ CStringItem::~CStringItem()
 
 void CStringItem::ExternalizeL(RWriteStream& aStream) const
     {
+	CItemBase::ExternalizeL(aStream);
     aStream << *iString;
     }
 

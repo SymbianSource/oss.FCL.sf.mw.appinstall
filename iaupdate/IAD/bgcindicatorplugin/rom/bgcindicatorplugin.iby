@@ -20,5 +20,4 @@
 REM DLL
 file=ABI_DIR\UREL\bgcindicatorplugin.dll               SHARED_LIB_DIR\bgcindicatorplugin.dll UNPAGED
 data=\epoc32\data\z\resource\plugins\indicators\bgcindicatorplugin.qtplugin   \resource\plugins\indicators\bgcindicatorplugin.qtplugin
-data=\epoc32\s60\icons\qgn_note_swupdate_notification.svg   \resource\iaupdate\qgn_note_swupdate_notification.svg
 #endif

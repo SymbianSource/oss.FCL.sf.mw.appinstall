@@ -43,7 +43,12 @@ CIAUpdaterSilentLauncher::CIAUpdaterSilentLauncher( RFs& aFs ): iFs( aFs )
 //
 void CIAUpdaterSilentLauncher::ConstructL()
     {
-    iOptionsPckg = SilentInstallOptionsL();
+    
+    iOptionsPckg = Usif::COpaqueNamedParams::NewL();
+    iResults = Usif::COpaqueNamedParams::NewL();
+    
+    UsifSilentInstallOptionsL( iOptionsPckg );    
+
     }
 
 // -----------------------------------------------------------------------------
@@ -68,6 +73,10 @@ CIAUpdaterSilentLauncher* CIAUpdaterSilentLauncher::NewL( RFs& aFs )
 CIAUpdaterSilentLauncher::~CIAUpdaterSilentLauncher()
     {
     iLauncher.Close();
+    
+    delete iOptionsPckg;
+    delete iResults;
+    
     }
 
 // -----------------------------------------------------------------------------
@@ -88,7 +97,7 @@ void CIAUpdaterSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aSt
 
     // Launch the installation   
     IAUPDATE_TRACE("[IAUpdater] Launch silent install");                    
-    iLauncher.SilentInstall( aStatus, aFile, iOptionsPckg );    
+    iLauncher.Install( aFile, *iOptionsPckg, *iResults, aStatus );
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::InstallL() end"); 
     }
@@ -102,71 +111,64 @@ void CIAUpdaterSilentLauncher::Cancel()
     {
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::Cancel() begin");       
 
-    iLauncher.CancelAsyncRequest( SwiUI::ERequestSilentInstall );   
+    iLauncher.CancelOperation();
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::Cancel() end"); 
     }
 
-
 // ---------------------------------------------------------------------------
-// CIAUpdaterSilentLauncher::SilentInstallOptionsL
+// IAUpdateUtils::UsifSilentInstallOptionsL
 // 
 // ---------------------------------------------------------------------------
-//
-SwiUI::TInstallOptions CIAUpdaterSilentLauncher::SilentInstallOptionsL() const
+
+void  CIAUpdaterSilentLauncher::UsifSilentInstallOptionsL( 
+        Usif::COpaqueNamedParams * aOptions )
     {
-    IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::SilentInstallOptionsL() begin"); 
+
+    aOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
+
+    // Upgrades are allowed 
+    aOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::EAllowed );
     
-    SwiUI::TInstallOptions options;
-
-    // Upgrades are allowed        
-    options.iUpgrade = SwiUI::EPolicyAllowed;
-
     // Install all if optional packets exist.
-    options.iOptionalItems = SwiUI::EPolicyAllowed;
-
+    aOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, Usif::EAllowed );
+    
     // Prevent online cert revocation check.
-    options.iOCSP = SwiUI::EPolicyNotAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::ENotAllowed );
     
     // See iOCSP setting above
-    options.iIgnoreOCSPWarnings = SwiUI::EPolicyAllowed;
-
+    aOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );
+    
     // Do not allow installation of uncertified packages.
-    options.iUntrusted = SwiUI::EPolicyNotAllowed;
-
-    // If filetexts are included in SIS package. Then, show them.
-    options.iPackageInfo = SwiUI::EPolicyUserConfirm;
+    aOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, Usif::ENotAllowed );
+    
+    // If filetexts are included in SIS package, show them.
+    aOptions->AddIntL( Usif::KSifInParam_PackageInfo, Usif::EAllowed );
     
     // Automatically grant user capabilities.
-    // See also iUntrusted above.
-    options.iCapabilities = SwiUI::EPolicyAllowed;
-
+    // See also KSifInParam_AllowUntrusted above.
+    aOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, Usif::EAllowed );
+    
     // Open application will be closed.
-    options.iKillApp = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
     
     // Files can be overwritten.
-    options.iOverwrite = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed  );
+    
+    // Incompatible allowed
+    aOptions->AddIntL( Usif::KSifInParam_AllowIncompatible, Usif::EAllowed  );
     
     // This only affects Java applications.
-    options.iDownload = SwiUI::EPolicyAllowed;
-
-    // Notice! Here we use always the same drive for the IAD.
-    // So, this will not change automatically according to the disk spaces 
-    // and when new memory cards are inserted into the phone.    
-    options.iDrive = IAUpdaterDefs::KIAUpdaterDrive;
+    aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
+    
+    // Where to save.
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
     
     // Choose the phone language.
-    options.iLang = User::Language();
+    TLanguage lang = User::Language();
+    //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
     
-    // If language is asked, then use the current phone language.
-    options.iUsePhoneLang = ETrue;
-    
-    // Does not affect SISX. This is for Java.
-    options.iUpgradeData = SwiUI::EPolicyAllowed;
-
-    IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::SilentInstallOptionsL() end"); 
-    
-    return options;
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, IAUpdateUtils::DriveToInstallL( aUid, aSize ) );
     }
 
 

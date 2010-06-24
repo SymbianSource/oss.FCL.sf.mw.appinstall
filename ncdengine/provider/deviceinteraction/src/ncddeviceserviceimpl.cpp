@@ -691,7 +691,7 @@ HBufC* CNcdDeviceService::DeviceIdentificationLC()
     // Create buffer.
     HBufC* devId = HBufC::NewLC( modelVersion.Length() );
     devId->Des().Append( modelVersion );
-    DLTRACEOUT(( _L("devId: %S"), variantInfo ));
+    DLTRACEOUT(( _L("devId: %S"), devId ));
     return devId;
     
 #else // Get devId from CTelephony

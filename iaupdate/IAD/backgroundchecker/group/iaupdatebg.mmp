@@ -41,12 +41,11 @@ MW_LAYER_SYSTEMINCLUDE
 SOURCEPATH          ../src
 SOURCE              iaupdatebgmain.cpp
 SOURCE              iaupdatebgrefreshtimer.cpp
-SOURCE              iaupdatebgremindertimer.cpp
+//SOURCE              iaupdatebgremindertimer.cpp
 SOURCE              iaupdatebgcontrollerfile.cpp
 SOURCE              iaupdatebgfirsttimehandler.cpp
 SOURCE              iaupdatebginternalfilehandler.cpp
 SOURCE              iaupdatebgsoftnotification.cpp
-
 
 
 LIBRARY             euser.lib 
@@ -66,9 +65,8 @@ LIBRARY             commonengine.lib
 LIBRARY             sysversioninfo.lib
 LIBRARY             FeatMgr.lib
 
-// HLa
-LIBRARY     hbcore.lib
-LIBRARY     hbwidgets.lib
+LIBRARY             hbcore.lib
+LIBRARY             hbwidgets.lib
 
 DEBUGLIBRARY 	    flogger.lib
 

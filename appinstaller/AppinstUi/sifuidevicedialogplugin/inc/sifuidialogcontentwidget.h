@@ -54,6 +54,7 @@ private:
     void removeDetails();
     void addDetails(const QStringList &detailList);
     void addDetail(const QString &detailText);
+    void createAppName(const QString &appName);
     void updateAppIcon(const QVariantMap &parameters);
     void updateAppSize(const QVariantMap &parameters);
     bool updateMemorySelection(const QVariantMap &parameters);

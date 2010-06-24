@@ -483,7 +483,10 @@ void CSisRegistrySession::ServiceL(const RMessage2& aMessage)
  		break;	
 	case ESetComponentState:
  		SetComponentStateL(aMessage);
- 		break;	
+ 		break;
+	case ESetComponentPresence:
+	    SetComponentPresenceL(aMessage);
+	    break;
 	case EIsFileRegistered:
  		IsFileRegisteredL(aMessage);
  		break;			
@@ -1061,6 +1064,41 @@ void CSisRegistrySession::RequestStubFileEntriesL(const RMessage2& aMessage)
 	CleanupStack::PopAndDestroy();
 	}
 
+TInt CSisRegistrySession::GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames)
+    {
+    // Read the ROM stub controller
+    CFileSisDataProvider* fileProvider = CFileSisDataProvider::NewLC(iFs, aFileName);
+    Swi::Sis::CController* stubController = NULL;
+    TRAPD(errCode, stubController = Swi::Sis::CController::NewL(*fileProvider));
+    if (errCode != KErrNone)
+        {
+        // Ignore the broken stub file under the ROM stub directory.
+        DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to read the stub controller. Error code %d."), errCode);
+        CleanupStack::PopAndDestroy(fileProvider);
+        return errCode;
+        }
+    CleanupStack::PushL(stubController);
+    const RPointerArray<Sis::CFileDescription>& depArray = stubController->InstallBlock().FileDescriptions();
+    // Get as many number of files as possible that can be accomodate in client allocated buffer.
+    TInt totalDepArrayCount = depArray.Count();
+    // Populate the files in to a temporary array.
+    for(TInt fileCount = 0; fileCount < totalDepArrayCount; ++fileCount )
+        {
+        // Only create a TPtrC when we know we have space available
+        HBufC* fileName = depArray[fileCount]->Target().Data().AllocL();
+        // Adding drive letter of rom if not mentioned in stub sis file
+        TPtr a=fileName->Des();
+        if (a[0] == '!')
+            a[0] = 'z';                        
+                                       
+		CleanupStack::PushL(fileName);
+		aFileNames.AppendL(fileName);
+		CleanupStack::Pop(fileName);
+		}
+    CleanupStack::PopAndDestroy(2, fileProvider);
+    return KErrNone;
+    }
+
 TInt CSisRegistrySession::GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames)
     {
     TBool stubNotFound(ETrue);
@@ -1488,6 +1526,16 @@ void CSisRegistrySession::SetComponentStateL(const RMessage2& aMessage)
 	aMessage.Complete(KErrNone);
 	}
 
+void CSisRegistrySession::SetComponentPresenceL(const RMessage2& aMessage)
+    {
+    TPckgBuf<Usif::TComponentId> componentId;
+    TPckgBuf<TBool> componentPresence;
+    aMessage.ReadL(EIpcArgument0, componentId, 0);
+    aMessage.ReadL(EIpcArgument1, componentPresence, 0);
+    iScrSession.SetIsComponentPresentL(componentId(), componentPresence());
+    aMessage.Complete(KErrNone);
+    }
+
 // Helper methods
 
 TBool CSisRegistrySession::IsRegisteredL(const TUid& aUid)
@@ -1547,6 +1595,13 @@ TBool CSisRegistrySession::IsRegisteredL(const TUid& aUid, const TDesC& aPackage
 	return ScrHelperUtil::IsUidAndNamePresentL(iScrSession, aUid, aPackageName);
 	}
 
+
+void CSisRegistrySession::RemoveEntryL(const TComponentId aCompId)
+    {
+    iScrSession.DeleteApplicationEntriesL(aCompId);
+    iScrSession.DeleteComponentL(aCompId);
+    }
+
 void CSisRegistrySession::RemoveEntryL(const CSisRegistryPackage& aPackage)
 	{
 	DEBUG_PRINTF4(_L("Sis Registry Server - Removing the entry from Software Component Registry of package : UID: 0x%08x, Name: %S, Vendor: %S ."),
@@ -1561,8 +1616,8 @@ void CSisRegistrySession::RemoveEntryL(const CSisRegistryPackage& aPackage)
 			aPackage.Uid().iUid, &aPackage.Name(), &aPackage.Vendor());
 		User::Leave(KErrNotFound);
 		}
-	iScrSession.DeleteApplicationEntriesL(compId);
-	iScrSession.DeleteComponentL(compId);
+	
+	RemoveEntryL(compId);
 	}
 
 void CSisRegistrySession::RemoveCleanupInfrastructureL(const CSisRegistryObject& aObject, RStsSession& aStsSession)
@@ -1744,14 +1799,11 @@ TComponentId CSisRegistrySession::AddEntryL(CSisRegistryObject& aObject, Usif::T
 	return compId;
 	}
 	
-void CSisRegistrySession::AddAppsFromStubL(TComponentId aCompId, TUid aUid)
+void CSisRegistrySession::AddAppsFromStubL(TComponentId aCompId, const TDesC& aFileName)
     {
-    TInt startingFileNo = 0;
-    TInt fileCount = 0;
     RPointerArray<HBufC> romFiles;
     CleanupResetAndDestroy<RPointerArray<HBufC> >::PushL(romFiles);
-    TInt ret = GetStubFileInfoL(aUid, EGetFiles, startingFileNo, fileCount, romFiles);
-
+    TInt ret = GetStubFilesL(aFileName, romFiles);
     RPointerArray<HBufC> apparcRegFiles;
     CleanupResetAndDestroy<RPointerArray<HBufC> >::PushL(apparcRegFiles);
        
@@ -2552,16 +2604,9 @@ void CSisRegistrySession::RegisterInRomControllerL(const TDesC& aFileName)
             // If the component being removed has registered software types, unregister them now.
             // This operation deletes MIME types mapping from AppArc and therefore is not transactional.
             UnregisterSoftwareTypesL(compId);
-
-            CSisRegistryObject* object = CSisRegistryObject::NewLC();
-            ScrHelperUtil::GetComponentL(iScrSession, compId, *object);
-
-            DEBUG_PRINTF4(_L("Sis Registry Server - Removing package registry entry for UID: %08x, Name: %S, Vendor %S."),
-                object->Uid().iUid, &(object->Name()), &(object->Vendor()));
                 
-            RemoveEntryL(*object);           
+            RemoveEntryL(compId);           
 
-            CleanupStack::PopAndDestroy();
             overwriteRegEntry = ETrue;
 	        }
 	    }
@@ -2571,7 +2616,7 @@ void CSisRegistrySession::RegisterInRomControllerL(const TDesC& aFileName)
 		{
 		// update cache or just call refresh
 		TComponentId compId = AddEntryL(*object, Usif::EScrCompHidden); // EScrCompHidden is supplied not to create any log for the ROM controller on the SCR side.
-		AddAppsFromStubL(compId, object->Uid());
+		AddAppsFromStubL(compId, aFileName);
 		
 		// store a copy of the controller
 		HBufC* name = SisRegistryUtil::BuildControllerFileNameLC(object->Uid(), object->Index(),

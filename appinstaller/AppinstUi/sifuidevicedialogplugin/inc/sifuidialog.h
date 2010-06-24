@@ -53,9 +53,6 @@ public:     // from HbDeviceDialogInterface
     void closeDeviceDialog(bool byClient);
     HbDialog *deviceDialogWidget() const;
 
-protected:  // from HbDialog
-    void closeEvent(QCloseEvent *event);
-
 signals:
     void deviceDialogClosed();
     void deviceDialogData(const QVariantMap &data);
@@ -92,7 +89,6 @@ private:
     SifUiDialogContentWidget *mContent;
     int mInstallError;
     QVariantMap mResultMap;
-    HbAction *mIgnoreCloseAction;
     HbAction *mPrimaryAction;
     HbAction *mSecondaryAction;
     HbIndicator *mIndicator;

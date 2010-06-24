@@ -48,12 +48,7 @@ USERINCLUDE   ../../inc
 USERINCLUDE   ../../engine/inc
 
 // System include paths
-#ifndef __SERIES60_30__
 MW_LAYER_SYSTEMINCLUDE
-#else
-SYSTEMINCLUDE   /epoc32/include
-#endif
-
 
 LIBRARY         euser.lib flogger.lib
 

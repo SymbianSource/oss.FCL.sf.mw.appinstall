@@ -26,8 +26,8 @@
 #include <swi/sisregistryentry.h>
 #include <apgcli.h>
 #include <centralrepository.h>
-#include <SWInstApi.h>
-#include <WidgetRegistryClient.h>
+#include <usif/sif/sif.h>
+#include <usif/scr/scr.h>
 
 #include "ncdinstallationservice.h"
 #include "ncditempurpose.h"
@@ -35,25 +35,6 @@
 #include "ncdasyncsilentinstallobserver.h"
 
 #include "ncdwidgetregistrydata.h"
-
-/**
- * New Java registry API was introduced in 3.2. We start using it 
- * from 5.0 onwards because it seems that some 3.2 devices don't support
- * it entirely
- */
- 
- /*  HLa - temporary java remove
-#if defined( __SERIES60_30__ ) || defined( __SERIES60_31__ ) || defined ( __S60_32__ )
-    #define USE_OLD_JAVA_API
-    class MJavaRegistrySuiteEntry;
-    class MJavaRegistry;
-#else
-    namespace Java
-        {
-        class CJavaRegistry;
-        }
-#endif
-*/
 
 class CDocumentHandler;
 
@@ -140,7 +121,7 @@ public: // From MNcdInstallationService
     void SilentInstallL( RFile& aFile,
                          const TDesC& aMimeType,
                          const TNcdItemPurpose& aPurpose,
-                         const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                         const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::SilentInstallJavaL
@@ -148,13 +129,13 @@ public: // From MNcdInstallationService
     void SilentInstallJavaL( RFile& aFile,
                              const TDesC& aMimeType,
                              const TDesC8& aDescriptorData,
-                             const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                             const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::SilentInstallWidgetJavaL
      */
     void SilentInstallWidgetL( RFile& aFile,
-                               const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                               const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::MNcdCancelSilentInstall
@@ -312,7 +293,7 @@ private: // new methods
     void InstallL( RFile& aFile,
                    const TDesC& aMimeType,
                    const TNcdItemPurpose& aPurpose,
-                   const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+                   const Usif::COpaqueNamedParams* aSilentInstallOptions );
 
     /**
      * @see MNcdInstallationService::InstallJavaL
@@ -323,12 +304,12 @@ private: // new methods
     void InstallJavaL( RFile& aFile,
                        const TDesC& aMimeType,
                        const TDesC8& aDescriptorData,
-                       const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+                       const Usif::COpaqueNamedParams* aSilentInstallOptions );
 
     
     void InstallWidgetL( 
         RFile& aFile,
-        const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+        const Usif::COpaqueNamedParams* aSilentInstallOptions );
         
 
     // Sets correct values for member variables after installation has finished
@@ -386,23 +367,6 @@ private: // new methods
      */
     TBool IsRomApplication( const TUid& aUid ) const;
     
-    
-    /**
-     * Gets the UID of the latest installed midlet by using the 
-     * Java installer's P&S key
-     * 
-     * @param aJavaRegistry Java registry
-     * @return Midlet UID
-     */
-     
-     /* HLa - temporary java remove
-#ifdef USE_OLD_JAVA_API
-    TUid LatestMidletUidL( MJavaRegistry& aJavaRegistry ) const;
-#else    
-    TUid LatestMidletUidL( Java::CJavaRegistry& aJavaRegistry ) const;
-#endif
-    */
-    
     static TBool MatchJava( const TDesC& aMime );
     
     TUid InstalledMidletUidL();
@@ -459,11 +423,6 @@ private: // Data
     // When installing java with JAD, the JAD path is stored here
     HBufC* iJadFileName;
     
-#ifdef USE_OLD_JAVA_API    
-    // For comparing installed midlet uids to find out the uid for the newly 
-    // installed java app.
-    RArray<TUid> iMIDletUids;
-#endif
 
     // Theme handling
     // Server session
@@ -487,18 +446,18 @@ private: // Data
     
     CNcdActiveOperationObserver* iInstallStatusObserver;
 
-    SwiUI::RSWInstLauncher iInstaller;
-        
+    //SwiUI::RSWInstLauncher iInstaller;
+    Usif::RSoftwareInstall iInstaller;
+    Usif::COpaqueNamedParams* iArguments; 
+    Usif::COpaqueNamedParams* iResults;
+    
     // ROM application UIDS
     RArray<TUid> iRomUids; 
     
-    // needed for cancelling install correctly
-    SwiUI::TServerRequest iCancelCode;  
+    //RWidgetRegistryClientSession iWidgetRegistry; 
+    Usif::RSoftwareComponentRegistry iScrSession;
     
-    
-    RWidgetRegistryClientSession iWidgetRegistry;    
-    
-    RWidgetInfoArray iInstalledWidgets;    
+    //RWidgetInfoArray iInstalledWidgets;    
     RPointerArray<CExtendedWidgetInfo> iInstalledWidgetsInfos; 
     };
 

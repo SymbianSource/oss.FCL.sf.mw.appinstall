@@ -49,6 +49,13 @@ public: // Observer API
     virtual void HandleLeaveErrorWithoutLeave( TInt aError ) = 0;
     
     /**
+     Called when UI to be redrawn during update process
+     *
+     * @param aError Error code
+    */
+    virtual void RefreshUI() = 0;
+    
+    /**
     * Called when async update list refresh is completed
     *
     * @param aError Error code
