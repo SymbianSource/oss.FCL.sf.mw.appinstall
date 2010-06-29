@@ -155,7 +155,7 @@ void CIAUpdateFWUpdateHandler::RunL()
                 if ( ( fotamodelstate != RFotaEngineSession::EDownloadComplete ) && ( fotamodelstate != RFotaEngineSession::EStartingUpdate ) )
                     {
 		                //if download is suspended, try to resume it.
-		                if ( fotamodelstate == RFotaEngineSession::EDownloadProgressingWithResume)
+		                if ( fotamodelstate == RFotaEngineSession::EDownloadProgressing)
 		                    {
 		                    TInt result = iFotaModel->TryResumeFwUpdDownload();
 						            FLOG_NUM( "[IAUPDATEFW] TryResumeFwUpdDownload result  = %d", result );   
