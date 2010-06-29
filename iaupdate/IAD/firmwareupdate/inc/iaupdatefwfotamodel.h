@@ -23,6 +23,7 @@
 
 //  INCLUDES
 #include <fotaengine.h>
+#include <badesca.h>
 
 // FORWARD DECLARATIONS
 
