@@ -35,6 +35,8 @@
 #include <cmdestination.h>
 #include <cmmanagerdef.h>
 
+#include <uikon.hrh>
+
 #include "iaupdateconnectionmethod.h"
 #include "iaupdateprivatecrkeys.h"
 #include "iaupdatefwfotamodel.h"
