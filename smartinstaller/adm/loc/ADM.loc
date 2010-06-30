@@ -1,0 +1,143 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*     Localisable Resource file for the ADM.
+
+*
+*/
+
+
+#if LANGUAGE_00
+#include "adm_00.loc"
+#elif LANGUAGE_01
+#include "adm_01.loc"
+#elif LANGUAGE_02
+#include "adm_02.loc"
+#elif LANGUAGE_03
+#include "adm_03.loc"
+#elif LANGUAGE_04
+#include "adm_04.loc"
+#elif LANGUAGE_05
+#include "adm_05.loc"
+#elif LANGUAGE_06
+#include "adm_06.loc"
+#elif LANGUAGE_07
+#include "adm_07.loc"
+#elif LANGUAGE_08
+#include "adm_08.loc"
+#elif LANGUAGE_09
+#include "adm_09.loc"
+#elif LANGUAGE_10
+#include "adm_10.loc"
+#elif LANGUAGE_13
+#include "adm_13.loc"
+#elif LANGUAGE_14
+#include "adm_14.loc"
+#elif LANGUAGE_15
+#include "adm_15.loc"
+#elif LANGUAGE_16
+#include "adm_16.loc"
+#elif LANGUAGE_17
+#include "adm_17.loc"
+#elif LANGUAGE_18
+#include "adm_18.loc"
+#elif LANGUAGE_25
+#include "adm_25.loc"
+#elif LANGUAGE_26
+#include "adm_26.loc"
+#elif LANGUAGE_27
+#include "adm_27.loc"
+#elif LANGUAGE_28
+#include "adm_28.loc"
+#elif LANGUAGE_29
+#include "adm_29.loc"
+#elif LANGUAGE_30
+#include "adm_30.loc"
+#elif LANGUAGE_31
+#include "adm_31.loc"
+#elif LANGUAGE_32
+#include "adm_32.loc"
+#elif LANGUAGE_33
+#include "adm_33.loc"
+#elif LANGUAGE_37
+#include "adm_37.loc"
+#elif LANGUAGE_39
+#include "adm_39.loc"
+#elif LANGUAGE_42
+#include "adm_42.loc"
+#elif LANGUAGE_44
+#include "adm_44.loc"
+#elif LANGUAGE_45
+#include "adm_45.loc"
+#elif LANGUAGE_49
+#include "adm_49.loc"
+#elif LANGUAGE_50
+#include "adm_50.loc"
+#elif LANGUAGE_51
+#include "adm_51.loc"
+#elif LANGUAGE_54
+#include "adm_54.loc"
+#elif LANGUAGE_57
+#include "adm_57.loc"
+#elif LANGUAGE_58
+#include "adm_58.loc"
+#elif LANGUAGE_59
+#include "adm_59.loc"
+#elif LANGUAGE_65
+#include "adm_65.loc"
+#elif LANGUAGE_67
+#include "adm_67.loc"
+#elif LANGUAGE_68
+#include "adm_68.loc"
+#elif LANGUAGE_70
+#include "adm_70.loc"
+#elif LANGUAGE_76
+#include "adm_76.loc"
+#elif LANGUAGE_78
+#include "adm_78.loc"
+#elif LANGUAGE_79
+#include "adm_79.loc"
+#elif LANGUAGE_83
+#include "adm_83.loc"
+#elif LANGUAGE_93
+#include "adm_93.loc"
+#elif LANGUAGE_94
+#include "adm_94.loc"
+#elif LANGUAGE_96
+#include "adm_96.loc"
+#elif LANGUAGE_129
+#include "adm_129.loc"
+#elif LANGUAGE_157
+#include "adm_157.loc"
+#elif LANGUAGE_158
+#include "adm_158.loc"
+#elif LANGUAGE_159
+#include "adm_159.loc"
+#elif LANGUAGE_160
+#include "adm_160.loc"
+#elif LANGUAGE_161
+#include "adm_161.loc"
+#elif LANGUAGE_186
+#include "adm_186.loc"
+#elif LANGUAGE_326
+#include "adm_326.loc"
+#elif LANGUAGE_327
+#include "adm_327.loc"
+#elif LANGUAGE_401
+#include "adm_401.loc"
+#elif LANGUAGE_402
+#include "adm_402.loc"
+//#else
+//#include "adm-original.loc"
+#endif

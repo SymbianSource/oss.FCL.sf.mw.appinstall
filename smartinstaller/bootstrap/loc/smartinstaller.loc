@@ -1,0 +1,142 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*     SmartInstaller bootstrap localisation files
+*
+*
+*/
+
+#if LANGUAGE_00
+#include "smartinstaller_00.loc"
+#elif LANGUAGE_01
+#include "smartinstaller_01.loc"
+#elif LANGUAGE_02
+#include "smartinstaller_02.loc"
+#elif LANGUAGE_03
+#include "smartinstaller_03.loc"
+#elif LANGUAGE_04
+#include "smartinstaller_04.loc"
+#elif LANGUAGE_05
+#include "smartinstaller_05.loc"
+#elif LANGUAGE_06
+#include "smartinstaller_06.loc"
+#elif LANGUAGE_07
+#include "smartinstaller_07.loc"
+#elif LANGUAGE_08
+#include "smartinstaller_08.loc"
+#elif LANGUAGE_09
+#include "smartinstaller_09.loc"
+#elif LANGUAGE_10
+#include "smartinstaller_10.loc"
+#elif LANGUAGE_13
+#include "smartinstaller_13.loc"
+#elif LANGUAGE_14
+#include "smartinstaller_14.loc"
+#elif LANGUAGE_15
+#include "smartinstaller_15.loc"
+#elif LANGUAGE_16
+#include "smartinstaller_16.loc"
+#elif LANGUAGE_17
+#include "smartinstaller_17.loc"
+#elif LANGUAGE_18
+#include "smartinstaller_18.loc"
+#elif LANGUAGE_25
+#include "smartinstaller_25.loc"
+#elif LANGUAGE_26
+#include "smartinstaller_26.loc"
+#elif LANGUAGE_27
+#include "smartinstaller_27.loc"
+#elif LANGUAGE_28
+#include "smartinstaller_28.loc"
+#elif LANGUAGE_29
+#include "smartinstaller_29.loc"
+#elif LANGUAGE_30
+#include "smartinstaller_30.loc"
+#elif LANGUAGE_31
+#include "smartinstaller_31.loc"
+#elif LANGUAGE_32
+#include "smartinstaller_32.loc"
+#elif LANGUAGE_33
+#include "smartinstaller_33.loc"
+#elif LANGUAGE_37
+#include "smartinstaller_37.loc"
+#elif LANGUAGE_39
+#include "smartinstaller_39.loc"
+#elif LANGUAGE_42
+#include "smartinstaller_42.loc"
+#elif LANGUAGE_44
+#include "smartinstaller_44.loc"
+#elif LANGUAGE_45
+#include "smartinstaller_45.loc"
+#elif LANGUAGE_49
+#include "smartinstaller_49.loc"
+#elif LANGUAGE_50
+#include "smartinstaller_50.loc"
+#elif LANGUAGE_51
+#include "smartinstaller_51.loc"
+#elif LANGUAGE_54
+#include "smartinstaller_54.loc"
+#elif LANGUAGE_57
+#include "smartinstaller_57.loc"
+#elif LANGUAGE_58
+#include "smartinstaller_58.loc"
+#elif LANGUAGE_59
+#include "smartinstaller_59.loc"
+#elif LANGUAGE_65
+#include "smartinstaller_65.loc"
+#elif LANGUAGE_67
+#include "smartinstaller_67.loc"
+#elif LANGUAGE_68
+#include "smartinstaller_68.loc"
+#elif LANGUAGE_70
+#include "smartinstaller_70.loc"
+#elif LANGUAGE_76
+#include "smartinstaller_76.loc"
+#elif LANGUAGE_78
+#include "smartinstaller_78.loc"
+#elif LANGUAGE_79
+#include "smartinstaller_79.loc"
+#elif LANGUAGE_83
+#include "smartinstaller_83.loc"
+#elif LANGUAGE_93
+#include "smartinstaller_93.loc"
+#elif LANGUAGE_94
+#include "smartinstaller_94.loc"
+#elif LANGUAGE_96
+#include "smartinstaller_96.loc"
+#elif LANGUAGE_129
+#include "smartinstaller_129.loc"
+#elif LANGUAGE_157
+#include "smartinstaller_157.loc"
+#elif LANGUAGE_158
+#include "smartinstaller_158.loc"
+#elif LANGUAGE_159
+#include "smartinstaller_159.loc"
+#elif LANGUAGE_160
+#include "smartinstaller_160.loc"
+#elif LANGUAGE_161
+#include "smartinstaller_161.loc"
+#elif LANGUAGE_186
+#include "smartinstaller_186.loc"
+#elif LANGUAGE_326
+#include "smartinstaller_326.loc"
+#elif LANGUAGE_327
+#include "smartinstaller_327.loc"
+#elif LANGUAGE_401
+#include "smartinstaller_401.loc"
+#elif LANGUAGE_402
+#include "smartinstaller_402.loc"
+#else
+#include "smartinstaller-original.loc"
+#endif

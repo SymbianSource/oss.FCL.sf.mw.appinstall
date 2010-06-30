@@ -1,0 +1,126 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*     This is the project specification file for ADM.
+*
+*
+*/
+
+
+TARGET			ADM.exe
+TARGETTYPE		exe
+UID			0x100039CE 0x2002CCCE
+
+// Use the maximum stack of 80kB
+EPOCSTACKSIZE		0x14000
+
+SOURCEPATH		../src
+SOURCE			ADM.cpp
+SOURCE			ADMApplication.cpp
+SOURCE			ADMAppUi.cpp
+SOURCE			ADMStateMachine.cpp
+SOURCE			ADMDocument.cpp
+SOURCE			ADMXmlParser.cpp
+SOURCE			ADMPackageInfo.cpp
+SOURCE			ADMDownloadHandler.cpp
+SOURCE			ADMInstallManager.cpp
+SOURCE			progressdialog.cpp
+SOURCE			ADMSisParser.cpp
+
+SOURCEPATH		../../common
+SOURCE			config.cpp
+SOURCE			utils.cpp
+SOURCE			globalwaitnote.cpp
+SOURCE			globalqueryobserver.cpp
+SOURCE			networkstatuslistener.cpp
+
+SOURCEPATH		../data
+
+START RESOURCE	ADM.rss
+LANG		00 01 02 03 04 05 06 07 08 09 10 13 14 15 16 17 18 25 26 27 28 29
+LANG		30 31 32 33 37 39 42 44 45 49 50 51 54 57 58 59 65 67 68 70 76 78 79
+LANG		83 93 94 96 129 157 158 159 160 161 186 326 327 401 402
+LANG		sc
+HEADER
+TARGETPATH resource/apps
+END	//RESOURCE
+
+START RESOURCE	ADM_reg.rss
+#ifdef WINSCW
+TARGETPATH	  /private/10003a3f/apps
+#else
+TARGETPATH	  /private/10003a3f/import/apps
+#endif
+END	//RESOURCE
+
+// ---------------------------------------------------
+// Includes
+USERINCLUDE	   ../inc ../../common ../loc
+
+SYSTEMINCLUDE	/epoc32/include/private
+SYSTEMINCLUDE 	/epoc32/include/private/swi
+SYSTEMINCLUDE	/epoc32/include
+SYSTEMINCLUDE	/epoc32/include/osextensions
+SYSTEMINCLUDE	/epoc32/include/middleware
+SYSTEMINCLUDE	/epoc32/include/domain/middleware
+SYSTEMINCLUDE	/epoc32/include/domain/osextensions
+SYSTEMINCLUDE	/epoc32/include/ctsy
+
+LIBRARY		euser.lib
+LIBRARY		apparc.lib
+LIBRARY		bafl.lib
+LIBRARY		cone.lib
+LIBRARY		eikcore.lib
+LIBRARY		avkon.lib
+LIBRARY		commonengine.lib
+LIBRARY		efsrv.lib
+LIBRARY		estor.lib
+LIBRARY		etel.lib		// Network information (roaming)
+LIBRARY		etelmm.lib		// Phone information
+LIBRARY		hal.lib			// Phone information (HAL)
+LIBRARY		sysutil.lib		// Phone information (SysUtil::)
+LIBRARY		aknnotify.lib
+LIBRARY		hlplch.lib
+LIBRARY		SWInstCli.lib		// Silent installation
+LIBRARY		DownloadMgr.lib		// Http fetch
+LIBRARY		SenXml.LIB		// Xml parser
+LIBRARY		ws32.lib
+LIBRARY		apgrfx.lib
+LIBRARY		centralrepository.lib	// CRepository
+LIBRARY		sisregistryclient.lib   // Sis Registry information
+LIBRARY		PlatformEnv.lib
+LIBRARY		flogger.lib		// Logging
+//HACK - FIXME: internal libraries
+LIBRARY		sisxfile.lib
+LIBRARY		siscontroller.lib
+LIBRARY		swidataprovider.lib
+LIBRARY		connmon.lib
+LANG SC
+
+VENDORID	0
+SECUREID	0x2002CCCE
+CAPABILITY	ReadUserData NetworkServices TrustedUI ReadDeviceData WriteDeviceData
+
+MACRO PRODUCTION_RELEASE		// Use production server for package download URL
+MACRO FEATURE_INSTALL_RESUME		// Enable installation resuming support
+MACRO FEATURE_CHANGES_DOWNLOAD_URL	// Allow download URL override in changes XML file
+MACRO FEATURE_CHANGES_USE_UID		// Use UID as the changes filename
+MACRO FEATURE_INSTALL_DRIVE_SELECTION	// Install-time installation drive selection
+MACRO FEATURE_LAUNCH_INSTALLED_APP 	// Launch installed application
+MACRO FEATURE_REPORTING 		// Reports the installation completion and status
+MACRO DO_LOG				// Enable logging
+MACRO USE_LOGFILE			// Log also to file in addition to trace log
+MACRO DEBUG_ADM			// More verbose ADM logging
+
+// End of file

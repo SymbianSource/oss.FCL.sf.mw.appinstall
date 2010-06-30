@@ -1,0 +1,9 @@
+CHARACTER_SET UTF8
+#define string_r_adm_env_creation_wait_text "Đang chuẩn bị cài đặt"
+#define string_r_adm_verifying_sw_text "Đang xác minh các thành phần"
+#define string_r_http_transaction_err "Lỗi tải về"
+#define string_r_installation_cancelled "Đã hủy cài đặt"
+#define string_r_installation_failure_err "Không cài đặt được"
+#define string_r_sibs_caption_string "Nokia Smart Installer"
+#define string_r_sibs_short_caption_string "Smart Installer"
+#define string_r_smartinstaller_loc_resource_file_1 "\\resource\\apps\\smartinstaller"

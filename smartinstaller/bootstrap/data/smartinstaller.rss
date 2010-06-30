@@ -1,0 +1,95 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*     Resource file for Bootstrap
+*
+*
+*/
+
+
+//  RESOURCE IDENTIFIER
+NAME SIBS    // 4 letter ID
+
+//  INCLUDES
+#include <eikon.rh>
+#include <avkon.rh>
+#include <avkon.rsg>
+#include <appinfo.rh>
+#include "smartinstaller.loc"
+
+//  RESOURCE DEFINITIONS
+// -----------------------------------------------------------------------------
+//
+//    Define the resource file signature
+//    This resource should be empty.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE RSS_SIGNATURE
+		{
+		}
+
+// -----------------------------------------------------------------------------
+//
+//    Default Document Name
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE TBUF r_default_document_name
+		{
+		buf="SIBS";
+		}
+
+// -----------------------------------------------------------------------------
+//
+//    Define default menu and CBA key.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE EIK_APP_INFO
+	{
+	menubar = r_focusevent_menubar;
+	cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	}
+
+
+RESOURCE MENU_BAR r_focusevent_menubar
+	{
+	titles =
+		{
+		};
+	}
+
+// ----------------------------------------------------------------------------
+//
+// r_bootstrap_localisable_app_info
+//
+// ----------------------------------------------------------------------------
+//
+RESOURCE LOCALISABLE_APP_INFO r_bootstrap_localisable_app_info
+	{
+	short_caption = string_r_sibs_short_caption_string;
+	caption_and_icon =
+		CAPTION_AND_ICON_INFO
+		{
+		caption = string_r_sibs_caption_string;
+		};
+	}
+
+RESOURCE TBUF r_http_transaction_err            {   buf = string_r_http_transaction_err;          }
+RESOURCE TBUF r_installation_failure_err        {   buf = string_r_installation_failure_err;      }
+RESOURCE TBUF r_installation_cancelled          {   buf = string_r_installation_cancelled;        }
+
+// New strings
+RESOURCE TBUF r_adm_verifying_sw_text           {   buf = string_r_adm_verifying_sw_text;         }

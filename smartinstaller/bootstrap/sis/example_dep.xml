@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DepFileContents>
+	<PackageUid>0xA000A641</PackageUid>
+	<Version>1.0.0</Version>
+
+  <Dependency>
+	<Uid>0x2001E61C</Uid>
+	<DepValue>Value</DepValue>
+		<Name>qt.sis</Name>
+		<Version>4.6.0</Version>
+		<Vendor>Nokia</Vendor>
+		<Description>Dependency to Qt Library</Description>
+	</Dependency>
+</DepFileContents>

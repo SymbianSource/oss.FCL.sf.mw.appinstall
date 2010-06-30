@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DepFileContents SYSTEM "depcontents.dtd">
+
+<DepFileContents>
+    <PackageUid>0x12340002</PackageUid>
+    <Version>0.1</Version>
+    
+    <Dependency>
+        <Uid>0x12340580</Uid>        
+    </Dependency>
+    
+    <Dependency>
+        <Uid>0x12340582</Uid>
+        <Name>Testerweb</Name>
+        <Version>0.1, 0.5</Version>
+        <Vendor>Nokia Corp</Vendor>
+        <Url>http://www.nokia.com/fetchtest</Url>
+        <Description>This package needs to be downloaded from the URL specified to the Vendor</Description>
+        
+        <DependencyAttribute Name="FutureAttribName">
+            <DependencyAttribute_StrValue>Testerweb</DependencyAttribute_StrValue>
+        </DependencyAttribute>        
+    </Dependency>        
+</DepFileContents>

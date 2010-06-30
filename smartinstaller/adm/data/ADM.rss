@@ -1,0 +1,329 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*     This file contains all the resources for the ADM.
+
+*
+*/
+
+
+//  RESOURCE IDENTIFIER
+NAME ADMX	// 4 letter ID
+
+
+//  INCLUDES
+#include <eikon.rh>
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <avkon.hrh>
+#include <appinfo.rh>
+#include "ADM.hrh"
+#include "ADM.loc"
+#include <adm.mbg>
+
+//  RESOURCE DEFINITIONS
+// -----------------------------------------------------------------------------
+//
+//	Define the resource file signature
+//	This resource should be empty.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE RSS_SIGNATURE
+	{
+	}
+
+// -----------------------------------------------------------------------------
+//
+//	Default Document Name
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE TBUF r_default_document_name
+	{
+	buf="ADMX";
+	}
+
+// -----------------------------------------------------------------------------
+//
+//	Define default menu and CBA key.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE EIK_APP_INFO
+	{
+	menubar = r_menubar;
+	cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	}
+
+
+// -----------------------------------------------------------------------------
+//
+//   r_menubar
+//   Main menubar
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE MENU_BAR r_menubar
+	{
+	titles =
+		{
+		MENU_TITLE { menu_pane = r_menu; }
+		};
+	}
+
+
+// -----------------------------------------------------------------------------
+//
+//   r_menu
+//   Menu for "Options"
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE MENU_PANE r_menu
+	{
+	items =
+		{
+		MENU_ITEM
+				{
+				command = EAknSoftkeyExit;
+				txt = R_AVKON_SOFTKEYS_EXIT;
+				}
+		};
+	}
+
+// ----------------------------------------------------------------------------
+//
+// r_localisable_app_info
+//
+// ----------------------------------------------------------------------------
+//
+RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
+	{
+	short_caption = qtn_short_caption_string;
+	caption_and_icon =
+	CAPTION_AND_ICON_INFO
+		{
+		caption = qtn_caption_string;
+
+		number_of_icons = 1;
+		icon_file = "\\resource\\apps\\adm.mif";
+		};
+	}
+
+// -----------------------------------------------------------------------------
+// Dialog for error messages
+// -----------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_adm_wait_dialog_error_query
+{
+// EEikDialogFlagNoDrag | EEikDialogFlagNoTitleBar | EEikDialogFlagCbaButtons | EEikDialogFlagNotifyEsc | EEikDialogFlagWait;
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	items=
+	{
+		DLG_LINE
+		{
+			type = EAknCtQuery;
+			id = EGeneralQuery;
+			control = AVKON_CONFIRMATION_QUERY
+			{
+				layout = EConfirmationLayout;
+				animation = R_QGN_NOTE_ERROR_ANIM;
+			};
+		}
+	};
+}
+
+RESOURCE DIALOG r_adm_exit_query
+{
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	items=
+	{
+		DLG_LINE
+		{
+			type = EAknCtQuery;
+			id = EGeneralQuery;
+			control = AVKON_CONFIRMATION_QUERY
+			{
+				layout = EConfirmationLayout;
+				bmpfile = "\\resource\\apps\\adm.mif";
+				bmpid = 16384;
+				bmpmask = 16385;
+			};
+		}
+	};
+}
+
+// Prefixes for download size
+RESOURCE TBUF16 r_kb { buf = string_r_kb; }
+RESOURCE TBUF16 r_mb { buf = string_r_mb; }
+RESOURCE TBUF16 r_gb { buf = string_r_gb; }
+
+RESOURCE TBUF r_adm_continuing_inst_text
+	{
+	buf = string_r_adm_continuing_inst_text;
+	}
+
+// Informative messages
+RESOURCE TBUF64 r_adm_installation_ok_text
+	{
+	buf = string_r_adm_installation_ok_text;
+	}
+
+// Wait notes
+RESOURCE TBUF64 r_adm_cancelling_installation_wait_text
+	{
+	buf = string_r_adm_cancelling_installation_wait_text;
+	}
+
+RESOURCE TBUF64 r_adm_reverting_changes_wait_text
+	{
+	buf = string_r_adm_reverting_changes_wait_text;
+	}
+
+RESOURCE TBUF64 r_adm_finalizing_installation_wait_text
+	{
+	buf = string_r_adm_finalizing_installation_wait_text;
+	}
+
+// Wait note detailed error message base
+RESOURCE TBUF64 r_adm_detailed_cancelling_installation_wait_text
+	{
+	buf = string_r_adm_detailed_cancelling_installation_wait_text;
+	}
+
+// Detailed error messages shown in wait note
+RESOURCE TBUF64 r_adm_err_conn_lost_text
+	{
+	buf = string_r_adm_err_conn_lost_text;
+	}
+
+// Error strings
+RESOURCE TBUF64 r_adm_error_text
+	{
+	buf = string_r_adm_error_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_no_pending_installations_text
+	{
+	buf = string_r_adm_err_no_pending_installations_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_installation_not_enough_space_text
+	{
+	buf = string_r_adm_err_installation_not_enough_space_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_installation_failed_text
+	{
+	buf = string_r_adm_err_installation_failed_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_installation_unsupported_device_text
+	{
+	buf = string_r_adm_err_installation_unsupported_device_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_download_failed_text
+	{
+	buf = string_r_adm_err_download_failed_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_unsupported_version_text
+	{
+	buf = string_r_adm_err_unsupported_version_text;
+	}
+
+// New strings
+// Wait notes
+RESOURCE TBUF64 r_adm_verifying_sw_text
+	{
+	buf = string_r_adm_verifying_sw_text;
+	}
+
+RESOURCE TBUF64 r_adm_downloading_text
+	{
+	buf = string_r_adm_downloading_text;
+	}
+
+RESOURCE TBUF64 r_adm_installing_text
+	{
+	buf = string_r_adm_installing_text;
+	}
+
+// Prompts
+RESOURCE TBUF64 r_adm_sw_update_required_text
+	{
+	buf = string_r_adm_sw_update_required_text;
+	}
+
+RESOURCE TBUF64 r_adm_roaming_text
+	{
+	buf = string_r_adm_roaming_text;
+	}
+
+RESOURCE TBUF64 r_adm_dl_prompt_text
+	{
+	buf = string_r_adm_dl_prompt_text;
+	}
+
+RESOURCE TBUF64 r_adm_launch_app_text
+	{
+	buf = string_r_adm_launch_app_text;
+	}
+
+// Informative
+RESOURCE TBUF r_adm_inst_can_be_resumed_text
+	{
+	buf = string_r_inst_adm_can_be_resumed_text;
+	}
+
+RESOURCE TBUF r_adm_inst_can_be_resumed_ovi_text
+	{
+	buf = string_r_inst_adm_can_be_resumed_ovi_text;
+	}
+
+// Old strings. Just keep them here for a while for documentation purposes.
+#if 0
+// User cancellation message string
+RESOURCE TBUF128 r_adm_continue_to_download_text
+	{
+	buf = string_r_adm_continue_to_download_text;
+	}
+
+// Device is roaming. Continue to download?
+RESOURCE TBUF128 r_adm_roaming_continue_to_download_text
+	{
+	buf = string_r_adm_roaming_continue_to_download_text;
+	}
+
+RESOURCE TBUF64 r_adm_env_creation_wait_text
+	{
+	buf = string_r_adm_preparing_inst_text;
+	}
+
+RESOURCE TBUF64 r_adm_download_wait_text
+	{
+	buf = string_r_adm_download_wait_text;
+	}
+
+RESOURCE TBUF64 r_adm_err_user_cancellation_text
+	{
+	buf = string_r_adm_err_user_cancellation_text;
+	}
+#endif
+
+// End of File

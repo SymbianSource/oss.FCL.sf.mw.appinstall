@@ -1,0 +1,624 @@
+/*!
+
+\contentspage{index.html}{Nokia Smart Installer for Symbian}
+\page index.html
+
+\title Nokia Smart Installer for Symbian Manual
+
+\section1 Version 1.0.0
+
+This document describes how you can use Nokia Smart Installer for Symbian
+to package Qt based applications for Symbian devices.
+
+\list
+
+    \o \l{Introduction}
+	\list
+	    \o \l{Accessing the Internet}
+	\endlist
+    \o \l{Installing Dependencies and Applications}
+	\list
+	    \o \l{Disk Space Requirements}
+	    \o \l{Installing Applications}
+	    \o \l{Messages}
+	\endlist
+    \o \l{Packaging}
+	\list
+	    \o \l{Wrapper Package File}
+	    \o \l{Signing Wrapper Packages}
+	\endlist
+
+\endlist
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-introduction.html
+
+\title Introduction
+
+Nokia Smart Installer for Symbian
+ensures that the installed 3rd party Qt applications have always access to the
+required versions of their dependent libraries.
+
+Smart Installer is split into two components: smartinstaller and smartinstaller
+ADM (for application dependency manager). Smart Installer is a small component
+that is embedded with the application into a wrapper package. It ensures that
+a recent version of ADM is installed on the device and installs or upgrades ADM, if
+necessary.
+
+A network connection is
+always required during installation. For a detailed description of network usage,
+see \l{Accessing the Internet}.
+
+Smart Installer is invoked during the application installation process on the
+Symbian device. It immediately fetches the latest ADM from the server and runs
+it. ADM checks whether the required components (dependencies) are already
+installed on the device and downloads and installs or upgrades them, if needed.
+Information about the application's dependencies is extracted from the
+application .sis file, where each dependency is defined using the standard
+dependency statements as defined in the pkg file format. For Qt, the
+dependencies are automatically generated during the build process, but
+developers can manually adjust them as well.
+
+After the required dependencies have been successfully installed to the device,
+the application installation process is invoked. This follows the normal UI flow
+of application installation on a Symbian device.
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-connectivity.html
+
+\title Accessing the Internet
+
+Nokia Smart Installer for Symbian tries to automatically select the appropriate
+internet access point. If the access point cannot be determined automatically,
+the user is prompted to select one. By default, Smart Installer uses the browser
+access point settings to access the internet. If the installation is started
+from the Ovi Store client, Smart Installer uses the access point used by the Ovi
+Store. In addition, the size of the download package is displayed to the user.
+Otherwise, no prompt is shown if WLAN is selected as the access point. For
+packet data connections, the user is always informed about the download size.
+
+Smart Installer downloads the required packages from a server provided by Nokia
+at dl.qt.nokia.com. Because a data connection (such as WLAN, general packet
+radio service (GPRS), EDGE, or 3G) is used, transmission fees may apply and
+therefore, some costs may be incurred for the user.
+
+If the required versions of Qt and the necessary components are already
+installed on the device, the amount of data downloaded from the server is some
+kilobytes (the latest ADM, if one is available, and a few dependency definition
+files for the components involved). If all dependencies need to be installed,
+the amount of data to download is currently about 12 MB. For a summary of
+download package sizes, see \l{Disk Space Requirements}.
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-installation.html
+
+\title Installing Dependencies and Applications
+
+The following sections describe in detail, how Nokia Smart Installer for Symbian
+installs the dependencies and the application.
+
+Due to performance reasons, the Qt libraries are always installed to the C:
+drive of the device. Other packages can be installed to other drives. Therefore,
+the minimum free space required on the C: drive is about 10 MB (up to 14 MB, if
+QtWebkit and QtMobility are also needed). The free space requirements are larger
+than the combined package download size, because the S60 application installer
+temporarily requires some additional space. Smart Installer displays an error
+message if there is not enough free space available on the device. For more
+information, see \l{Messages}.
+
+For other packages than Qt, Smart Installer chooses the next available drive if
+drive C: becomes full. The user cannot control where the packages are going to
+be installed. The process of determining the installation drive is automated to
+minimize the need for user interaction.
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-disk-space.html
+
+\title Disk Space Requirements
+
+The following table shows how much space each package consumes after
+installation to the device at the time of publication.
+
+The other packages except QtWebKit and QtMobility are the minimum set required
+for a Qt application to run in a Symbian device. For example, even though the
+Open C libraries are preinstalled in some Symbian devices it still needs to be
+updated to v1.6, so these numbers are a fair estimate of the required space.
+
+The table also describes the dependencies currently installed by Nokia Smart
+Installer for Symbian. For an updated list, see
+\l{http://wiki.forum.nokia.com/index.php/Nokia_Smart_Installer_for_Symbian#Packa
+ges_distributed_by_Smart_Installer}{Packages Distributed by Smart Installer}.
+
+\table
+	\header
+		\o Package Name
+		\o UID
+		\o Versions
+		\o Download Size
+		\o Space Required
+		\o Description
+	\row
+		\o Stdcpp
+		\o 0x2000F866
+		\o 1.6.0
+		\o 0.2 MB
+		\o 0.2 MB
+		\o Standard C++ library Common
+	\row
+		\o Openc_ssl
+		\o 0x200110CB
+		\o 1.6.0
+		\o 0.8 MB
+		\o 0.8 MB
+		\o Open C LIBSSL Common
+	\row
+		\o PIPS
+		\o 0x20013851
+		\o 1.6.0
+		\o 1.2 MB
+		\o 1.4 MB
+		\o PIPS Installer
+	\row
+		\o Sqlite
+		\o 0x2002AF5F
+		\o 0.5.0
+		\o 0.2 MB
+		\o 0.1 MB
+		\o Sqlite library
+	\row
+		\o Qt
+		\o 0x2001E61C
+		\o 4.6.3
+		\o 5.8 MB
+		\o 5.9 MB
+		\o Qt libraries
+	\row
+		\o QtWebKit
+		\o 0x200267C2
+		\o 4.6.3
+		\o 2.9 MB
+		\o 3.0 MB
+		\o QtWebKit library
+	\row
+		\o QtMobility
+		\o 0x2002AC89
+		\o 1.0.0
+		\o 1.0 MB
+		\o 1.0 MB
+		\o QtMobility library
+	\row
+		\o {3,1} \bold{Total for Qt excluding QtWebKit}
+		\o 8.3 MB
+		\o {2,1} 8.5 MB
+	\row
+		\o {3,1} \bold{Total for Qt including QtWebKit}
+		\o 12.1 MB
+		\o {2,1} 12.4 MB
+\endtable
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-app-installation.html
+
+\title Installing Applications
+
+When Nokia Smart Installer for Symbian is invoked from the Ovi Store, the
+application is installed to the drive selected in the Ovi Store as the
+installation target drive. It defaults to the drive with the largest amount of
+available space. Usually, that is the internal flash drive (eMMC) or a memory
+card. Users can change this behavior in the Ovi Store settings.
+
+Otherwise, Smart Installer uses the developer chosen installation drive defined
+in the wrapper package. For more information, see \l{Wrapper Package File}.
+
+\section1 Resuming Interrupted Installation
+
+Nokia Smart Installer for Symbian can resume cancelled or interrupted
+installation. To resume interrupted installation, users choose the Smart
+Installer icon from the application menu grid. Smart Installer icon is visible
+only, when a pending installation is available.
+
+\inlineimage smartinstaller-icon.png
+Smart Installer icon
+
+\note Only the latest interrupted installation can be resumed.
+
+\section1 Integration with Qt Build Tools
+
+The Qt build chain supports Nokia Smart Installer for Symbian from Qt 4.6.2 for
+Symbian onwards.
+
+\note It is recommended that Qt 4.6.3 or newer is used when creating the applications.
+
+\section1 Incompatible Devices
+
+There are known issues with Open C upgradeability on some devices. This makes
+Nokia Smart Installer for Symbian unsuitable for deploying Qt or any other
+package that require an Open C upgrade. If a user tries to install Qt
+applications to these devices, the error note \e {Device not supported} is
+shown, and the installation is cancelled.
+
+The following table lists devices that are known to have problems and are not
+supported by Smart Installer. For an up-to-date list, see
+\l{http://wiki.forum.nokia.com/index.php/Nokia_Smart_Installer_for_Symbian#Suppo
+rted_Devices}{Supported Devices}.
+
+\table
+	\header
+		\o Device
+		\o Incompatible Firmware Versions
+		\o Description
+	\row
+		\o Nokia 6650 AT&T variant
+		\o All
+		\o PIPS cannot be upgraded
+	\row
+		\o Nokia N96
+		\o All
+		\o Not supported by Qt
+\endtable
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-messages.html
+
+\title Messages
+
+Informative messages appear if problems occurr during the installation.
+The following table describes the messages and their causes.
+
+\table
+	\header
+		\o Message
+		\o Description
+	\row
+		\o Verifying components
+		\o Smart Installer is checking to see which components the application requires
+		   to be installed, and which components are on the device.
+
+	\row
+		\o Downloading X of Y
+		\o Required dependency X is being downloaded out of the total number of Y. Time
+		   required depends on network connection speed.
+
+	\row
+		\o Installing X of Y
+		\o Required dependency X is being installed out of the total number of Y. Time
+		   required depends on phone speed.
+
+	\row
+		\o Download XX MB?
+		\o The prompt the user gets when Smart Installer has determined which components
+		   to download. If user denies download, the installation is cancelled.
+
+	\row
+		\o Phone is roaming. Download XX MB anyway?
+		\o User is warned that device is roaming, and additional data charges may apply.
+		   User needs to confirm the download in order to continue the installation.
+
+	\row
+		\o No pending installations
+		\o Smart Installer was opened from the \gui Application menu, but no pending
+		   installations were found.
+
+	\row
+		\o Installation failed!
+		\o Unrecoverable installation failure has occurred. Installation can be resumed
+		   later by selecting the Smart Installer icon from the \gui Application menu.
+
+	\row
+		\o Installation cancelled!
+		\o User has cancelled the installation. Installation can be resumed later.
+
+	\row
+		\o Device is not supported
+		\o Device is known to have problems with Smart Installer and installation is not
+		   allowed to continue. For more information, see \l{Incompatible Devices}.
+
+	\row
+		\o Download failed!
+		\o Unrecoverable error has occurred during downloading. Check network
+		   connectivity and coverage. Installation can be resumed later.
+
+	\row
+		\o Unsupported Smart Installer version
+		\o Incompatible version of Smart Installer is in use. Software distributor must
+		   update the package. Installation cannot continue.
+
+	\row
+		\o Cancelling installation
+		\o Installation was cancelled or interrupted due to an error. Smart Installer is
+		   removing any downloaded files. Installation can be resumed later.
+
+	\row
+		\o Not enough space to install
+		\o Device does not have enough space to download and install the required
+		   components.
+
+		   Free space on the destination drive and resume the installation by
+		   selecting the Smart Installer icon from the \gui Application menu.
+
+		   Space requirements for drive C: are described in \l{Disk Space Requirements}.
+\endtable
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-packaging.html
+
+\title Packaging
+
+Nokia Smart Installer for Symbian is wrapped with the application .sis file to a
+wrapper .sis package. This is needed in order to ensure successful installation
+of the dependencies before the application is installed.
+
+For and example of a wrapper package file, see \l{Wrapper Package File}. For
+signing options for the wrapper package, see \l{Signing Wrapper Packages}. For
+adding the dependency information to the application, see \l{Application
+Dependencies}.
+
+The qmake build tool automatically creates the necessary files to the source
+directory. The make tool can be invoked to automatically create the Smart
+Installer wrapped package. For examples of the command flows, see \l{Building a
+Self-signed Smart Installer Package} and \l{Building a Symbian Signed Smart
+Installer package}.
+
+For more information about the UIDs to be used with Smart Installer, see
+\l{Reserved UIDs for Smart Installer}.
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-wrapper-format.html
+
+\title Wrapper Package File
+
+This section contains an example of a wrapper package file.
+
+To deploy the wrapper package as a self-signed .sis file, you must obtain a free
+UID from the appropriate UID range. The normal restrictions apply about which
+UIDs are available for self-signed packages. Qmake uses a fixed UID (0xA000D7CE)
+when creating a self-signed wrapper package.
+
+Nokia has reserved a UID to be used with the wrapper package (0x2002CCCF) when
+submitting the package to Symbian Signed (see \l{Signing Wrapper Packages} and
+\l{Building a Symbian Signed Smart Installer Package}). The wrapper package is
+used only temporarily to transmit the application with Nokia Smart Installer for
+Symbian to the device, and it is deleted after installation. Therefore, a fixed
+UID can be used for the wrapper package.
+
+Standard rules apply to selecting the  target drive for the installation. If the
+drive is “!”, the user is prompted to select the drive. Otherwise, the specified
+target drive is used automatically without user interaction.
+
+\code
+; The package header
+&EN
+#{"Application Installer"}, (0x2002CCCF), 1, 0, 0, TYPE=SA
+%{"Vendor-EN"}
+:"Vendor"
+
+;Supports S60 v3.1
+[0x102032BE], 0, 0, 0, {"SymbianProductID"}
+;Supports S60 v3.2
+[0x102752AE], 0, 0, 0, {"SymbianProductID"}
+;Supports S60 v5.0
+[0x1028315F], 0, 0, 0, {"SymbianProductID"}
+
+; The actual application.sis file (required)
+"application.sis"-"!:\private\2002CCCE\import\application.sis"
+
+; Embedded Smart Installer (required)
+@"smartinstaller.sis",(0x2002CCCD)
+\endcode
+
+\note This file is created automatically by qmake, and it is overwritten each
+time qmake is run.
+
+\note It is recommended that you do not change the qmake-created package
+file directly. If necessary, you can change the following values:
+
+\list
+
+    \o \c {&EN} to change the supported languages of the installer package.
+    \o \c Application to change the name of the installer package.
+    \o \c Vendor to change the vendor name.
+    \o \c {application.sis} to change the name of the application file
+	  i.e. the application to be installed.
+
+\endlist
+
+*/
+
+
+/*!
+
+\contentspage{index.html}
+\page smartinstaller-wrapper-signing.html
+
+\title Signing Wrapper Packages
+
+The wrapper package can be self-signed. However, during the installation, a
+standard warning note is displayed on the device stating that the source of
+the package is not trusted.
+
+In order to assign trust to the wrapper package, the wrapper can be put through
+the Symbian Signed Express Signed service, which offers a low-cost self-
+certification service. Unfortunately, standard signing fees apply to
+developers wanting to sign the wrapper package, but work is being done to remedy
+this situation.
+
+\note Use the provided fixed UID (0x2002CCCF) when submitting a wrapper package to Symbian Signed.
+
+\section1 Application Dependencies
+
+Qmake automatically generates package files (*.pkg) with correct dependencies
+for the version of Qt the application is built against. Developers can add
+additional dependencies using the deployment keyword in the .pro file (see Qt
+documentation for details).
+
+\note Typically, all Qt for Symbian applications have their dependencies assigned
+automatically by the build tools. Nokia Smart Installer for Symbian takes care of any
+dependencies that Qt libraries might have during installation. There is no need
+to specify any other dependencies unless your application is using the APIs
+provided by the packages in question.
+
+\note Currently Smart Installer can provide only the dependencies described in
+\l{Disk Space Requirements}.
+
+\section1 Building a Self-signed Smart Installer Package
+
+This section explains how you can create a self-signed Nokia Smart Installer for
+Symbian wrapped .sis file. It is assumed that you are already familiar with Qt
+build tools and the build process.
+
+\note Ovi Store does not accept self-signed packages.
+
+In the list below, \c Application is the target application name defined in
+the .pro file.
+
+\list 1
+
+\o To invoke the qmake tool for creating the required files needed for the build
+process, enter the following command:
+
+\code
+C:\Sources\Application> qmake
+\endcode
+
+\o To build the application release version with the GCCE compiler, enter the
+following command:
+
+\code
+C:\Sources\Application> make release-gcce
+\endcode
+
+\o To create the wrapper .sis file, enter the following command:
+
+\code
+C:\Sources\Application> make installer_sis
+\endcode
+
+\endlist
+
+Now the directory contains a self-signed application_installer.sis, which is the
+Smart Installer wrapped version of the application.sis.
+
+\section1 Building a Symbian Signed Smart Installer Package
+
+Building a Symbian Signed Smart Installer package requires passing information
+about the key to sign it to the tools.
+
+In the list below, \c Application is the target application name defined
+in the .pro file.
+
+\note Commands need to be entered on a single line.
+
+\list 1
+
+\o To invoke the qmake tool for creating the required files needed for the build
+process, enter the following command:
+
+\code
+C:\Sources\Application> qmake
+\endcode
+
+\o To build the application release version with the GCCE compiler, enter the
+following command:
+
+\code
+C:\Sources\Application> make release-gcce
+\endcode
+
+\o Create a .sis file and sign it with the appropriate keys. For Symbian
+Signed certification submission, use the keys for your Publisher ID.
+The example assumes that the Publisher ID key and certificate are in the current
+directory.
+
+\code
+C:\Sources\Application> make sis QT_SIS_CERTIFICATE=publisherid.cer QT_SIS_KEY=publisherid.key
+\endcode
+
+
+\note Here, the publisher key and certificate are located in the current folder.
+If they are located in another folder, specify the path as well as the filename.
+
+\o Submit the created .sis file
+(application.sis) to Symbian Signed for certification. Depending on
+application specific needs and properties (that is, Platform Security capabilities
+used) you may use either the Express Signed or the Certified Signed path.
+
+\note Ensure that your application complies with the Symbian Signed
+Test Criteria before submitting the file for certification. Also, if the file is
+intended for Ovi Store publishing, verify that the application complies with Ovi
+Store publishing requirements.
+
+\o After receiving the .sis file from Symbian Signed, copy it over the old
+application.sis.
+
+\o To create the signed wrapper package, enter the following command:
+
+\code
+C:\Sources\Application> make installer_sis QT_SIS_CERTIFICATE=publisherid.cer QT_SIS_KEY=publisherid.key
+\endcode
+
+\o Submit the created wrapped .sis file, application_installer.sis, to
+Symbian Signed. Express Signed is a suitable signing option for the wrapper
+package.
+
+\endlist
+
+\section1 Reserved UIDs for Smart Installer
+
+Nokia has reserved the following UIDs to be used with Nokia Smart Installer for Symbian:
+
+\table
+	\header
+		\o UID
+		\o Description
+	\row
+		\o 0x2002CCCD
+		\o Smart Installer UID. To be used in the wrapper package when including the smartinstaller.sis.
+	\row
+		\o 0x2002CCCF
+		\o Wrapper package UID when providing a package to Symbian Signed.
+	\row
+		\o 0xA000D7CE
+		\o Reserved UID when creating a self-signed wrapper package using Qt tools.
+\endtable
+
+*/

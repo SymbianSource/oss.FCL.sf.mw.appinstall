@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT Package ( Name, Uid, Vendor,Information+, Description )>
+	<!ELEMENT Name (#PCDATA)>
+	<!ELEMENT Uid (#PCDATA)>
+	<!ELEMENT Vendor (#PCDATA)>
+	<!ELEMENT Information (Version, DependentFileName,InstallPackageName,DateOfSubmission, DateOfModification, SupportedDevices+, DownloadSize, InstalledSize, Url)>
+		<!ELEMENT Version (#PCDATA)>
+		<!ELEMENT DependentFileName (#PCDATA)>
+		<!ELEMENT InstallPackageName(#PCDATA)>
+		<!ELEMENT DateOfSubmission (#PCDATA)>
+		<!ELEMENT DateOfModification (#PCDATA)>
+		<!ELEMENT SupportedDevices (Name, MachineId)>
+			<!ELEMENT Name (#PCDATA)>
+			<!ELEMENT MachineId (#PCDATA)>
+		<!ELEMENT DownloadSize (#PCDATA)>
+		<!ELEMENT InstalledSize (#PCDATA)>
+		<!ELEMENT Url (#PCDATA)>
+	<!ELEMENT Description (#PCDATA)>

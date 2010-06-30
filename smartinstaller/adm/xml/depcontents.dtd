@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT DepFileContents ( PackageUid, Version, Dependency+ )>
+	<!ELEMENT PackageUid (#PCDATA)>
+	<!ELEMENT Version (#PCDATA)>
+	<!ELEMENT Dependency ( Uid, Name?, Version, Vendor?, Url?, Description?, DependencyAttribute* )>
+	<!ELEMENT Uid (#PCDATA)>
+	<!ELEMENT Name (#PCDATA)>
+	<!ELEMENT Version (#PCDATA)>
+	<!ELEMENT Vendor (#PCDATA)>
+	<!ELEMENT Url (#PCDATA)>
+	<!ELEMENT Description (#PCDATA)>
+	<!ELEMENT DependencyAttribute ( DependencyAttribute_IntValue | DependencyAttribute_StrValue )>
+		<!ELEMENT DependencyAttribute_IntValue (#PCDATA)>
+		<!ELEMENT DependencyAttribute_StrValue (#PCDATA)>
+		<!ATTLIST DependencyAttribute Name CDATA #REQUIRED>

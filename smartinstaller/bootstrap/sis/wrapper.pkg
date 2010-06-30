@@ -1,0 +1,39 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description:
+; Wrapper package file which delivers the developer application sis file (fluidlauncher.sis)
+;
+; Languages
+&EN
+
+; Header
+#{"FluidLauncher[S] installer"},(0xe0000236),1,0,24
+
+;Localised Vendor name
+%{"Nokia"}
+
+;Unique Vendor name
+:"Nokia"
+
+;Supports Series 60 v3.1, v3.2, v5.0
+[0x102032BE], 0, 0, 0, {"S60ProductID"}
+[0x102752AE], 0, 0, 0, {"S60ProductID"}
+[0x1028315F], 0, 0, 0, {"S60ProductID"}
+
+; Wrapped depfile and actual Sis application
+;"fluidlauncher.sis"-"!:\private\2002CCCE\import\fluidlauncher.sis"
+"fluidlauncher462_s.sis"-"!:\private\2002CCCE\import\fluidlauncher.sis"
+
+; Nokia SmartInstaller App
+@"smartinstaller.sis",(0x2002CCCD)

@@ -1,0 +1,329 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*     Localisable Resource file for the ADM.
+
+*
+*/
+
+
+// ----------------------------------------------------------------------------
+// LOCALISATION STRINGS
+// ----------------------------------------------------------------------------
+
+//d:Caption string for the application. ADM = Application Dependency Manager
+//d:Application long name, shown for instance, in the Installed Applications list
+//d:Do NOT localize!
+#define qtn_caption_string "Nokia Smart Installer ADM"
+
+//d:Caption short string for the application.
+//d:Application short name
+//d:Do NOT localize!
+#define qtn_short_caption_string "Smart Installer ADM"
+
+//d:Resource file path
+//d:Do NOT localize!
+#define qtn_loc_resource_file_1 "\\resource\\apps\\ADM"
+
+// ----------------------------------------------------------------------------
+//d:String to be displayed while the preparing device before
+//d:starting dependency downloads
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_PREPARING_INST_TEXT "Preparing installation"
+
+// ----------------------------------------------------------------------------
+//d:Download confirmation query
+//d:%U = indication amount of download: "xxx.yy kB" or "xxx.yy MB" or "xxx.yy GB"
+//d:Suffixes will be localised as well, see below (STRING_R_KB, STRING_R_MB and
+//d:STRING_R_GB).
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_CONTINUE_TO_DOWNLOAD_TEXT "Continue to download %U?"
+
+// ----------------------------------------------------------------------------
+//d:Same as STRING_R_ADM_CONTINUE_TO_DOWNLOAD_TEXT except this is shown
+//d:when the device is roaming.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ROAMING_CONTINUE_TO_DOWNLOAD_TEXT "Device is roaming. Continue to download %U?"
+
+// ----------------------------------------------------------------------------
+//d:Shown after the user has pressed 'cancel' to confirm if the user wants to continue
+//d:the installation later (from the menu grid). The user has the following
+//d:options to choose from: "Yes" and "No". System default translations for those
+//d:options are used (R_AVKON_SOFTKEYS_YES_NO).
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_CONTINUE_INSTALLATION_LATER_TEXT "Continue installation later?"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the user resumes the installation by selecting Smart Installer ADM
+//d:from the application menu grid.
+//d:%U is the name of the application to be installed, for instance: Fluidlauncher
+//d:The user has the possibility to select "Yes" or "No". System default translations
+//d:for those options are used (R_AVKON_SOFTKEYS_YES_NO).
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_CONTINUE_INSTALLATION_TEXT "Continue installation of %U?"
+
+// ----------------------------------------------------------------------------
+//d:Suffix for kilobyte kB
+//l:popup_note_window
+//r:3.1
+#define STRING_R_KB				"kB"
+
+// ----------------------------------------------------------------------------
+//d:Suffix for megabyte MB
+//l:popup_note_window
+//r:3.1
+#define STRING_R_MB				"MB"
+
+// ----------------------------------------------------------------------------
+//d:Suffix for gigabyte GB
+//l:popup_note_window
+//r:3.1
+#define STRING_R_GB				"GB"
+
+// ----------------------------------------------------------------------------
+//d:Shown after succesful installation
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_INSTALLATION_OK_TEXT   "Installation complete"
+
+// ----------------------------------------------------------------------------
+//d:Download progress bar dialog
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_DOWNLOAD_WAIT_TEXT      "Downloading and installing"
+
+// ----------------------------------------------------------------------------
+//d:Cleaning up wait note when user has cancelled the installation
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_CANCELLING_INSTALLATION_WAIT_TEXT   "Cancelling installation"
+
+// ----------------------------------------------------------------------------
+//d:Cleaning up wait note when network error has occured
+//d:%U is one of the detailed description of the error shown below.
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_DETAILED_CANCELLING_INSTALLATION_WAIT_TEXT "%U!\nCancelling installation"
+
+// ----------------------------------------------------------------------------
+//d:Detailed description of network error: network connection lost
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_ERR_CONN_LOST_TEXT "Network connection lost"
+
+// ----------------------------------------------------------------------------
+//d:Cleaning up wait note when an error occured during installation, but it
+//d:is not caused by user cancelling the installation.
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_REVERTING_CHANGES_WAIT_TEXT         "Reverting changes"
+
+// ----------------------------------------------------------------------------
+//d:Shown when finalising the installation.
+//d:Shown when silently installing application sis.
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_FINALIZING_INSTALLATION_WAIT_TEXT   "Finalizing installation"
+
+// ----------------------------------------------------------------------------
+// Error strings
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+//d:General error string. Shown when an error occurs that
+//d:we want to give more detailed information about the error.
+//d:%N is the error number in decimal
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERROR_TEXT "Error occured! %N"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the user tries to restart smartinstallation from the application
+//d:menu grid, but no installations are pending.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_NO_PENDING_INSTALLATIONS_TEXT "No pending installations"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the user tries to restart smartinstallation from the application
+//d:menu grid, but the previous installation was succesful i.e. no installation
+//d:is pending.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_LATEST_INSTALLATION_OK_TEXT "No pending installations: the latest installation was succesful."
+
+// ----------------------------------------------------------------------------
+//d:Generic error note describing that installation has failed.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_INSTALLATION_FAILED_TEXT "Installation failed!"
+
+// ----------------------------------------------------------------------------
+//d:Shown when installation is tried on an unsupported device.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_INSTALLATION_UNSUPPORTED_DEVICE_TEXT "Device is not supported"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the device does not have enough free space to install
+//d:the dependencies.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_INSTALLATION_NOT_ENOUGH_SPACE_TEXT "Not enough space for the installation"
+
+// ----------------------------------------------------------------------------
+//d:Shown when download has failed to other than network timeout.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_DOWNLOAD_FAILED_TEXT "Download failed!"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the user has explicitly cancelled the installation.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_USER_CANCELLATION_TEXT "Installation cancelled!"
+
+// ----------------------------------------------------------------------------
+//d:Shown when installation is started from an ubsupported Smart Installer version.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ERR_UNSUPPORTED_VERSION_TEXT "Unsupported Smart Installer version"
+
+// ============================================================================
+//
+// Ovi Store UI flow related new strings
+//
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:String to be displayed when installation is continued instead of
+//d:the default STRING_R_ADM_PREPARING_INST_TEXT "Preparing installation"
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_CONTINUING_INST_TEXT "Continuing installation"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:String to be displayed while the preparing device before
+//d:starting dependency downloads
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_VERIFYING_SW_TEXT "Verifying components"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Details to download confirmation query. Used in STRING_R_ADM_DL_PROMPT_TEXT.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_SW_UPDATE_REQUIRED_TEXT "Download required."
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Details to download confirmation query. Linefeed '\n' is required to separate
+//d:the message from the next line.
+//d:Used in STRING_R_ADM_DL_PROMPT_TEXT as the %1U parameter.
+//d:See description of STRING_R_ADM_DL_PROMPT_TEXT for details.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_ROAMING_TEXT "Phone is roaming.\n"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Download confirmation query
+//d:%0U = STRING_R_ADM_SW_UPDATE_REQUIRED_TEXT
+//d:%1U = STRING_R_ADM_ROAMING_TEXT, if the phone is roaming. Otherwise empty.
+//d:%2U = indication amount of download: "xxx.yy kB" or "xxx.yy MB" or "xxx.yy GB"
+//d:Suffixes will be localised as well, see below (STRING_R_KB, STRING_R_MB and
+//d:STRING_R_GB).
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_DL_PROMPT_TEXT "%0U\n%1UDownload %2U?"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Download confirmation query, version for custom softkeys.
+//d:User has the option to select "Now" or "Later",
+//d:see STRING_R_SK_NOW_TEXT and STRING_R_SK_LATER_TEXT.
+//d:%0U = STRING_R_ADM_SW_UPDATE_REQUIRED_TEXT
+//d:%1U = STRING_R_ADM_ROAMING_TEXT, if the phone is roaming. Otherwise empty.
+//d:%2U = indication amount of download: "xxx.yy kB" or "xxx.yy MB" or "xxx.yy GB"
+//d:Suffixes will be localised as well, see below (STRING_R_KB, STRING_R_MB and
+//d:STRING_R_GB).
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_DL_PROMPT_NOW_TEXT "%0U\n%1UDownload %2U now?"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:(Left) Softkey label. Used together with STRING_R_ADM_DL_PROMPT_NOW_TEXT
+//l:control_pane_t1
+//r:3.1
+#define STRING_R_SK_NOW_TEXT "Now"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:(Right) Softkey label. Used together with STRING_R_ADM_DL_PROMPT_NOW_TEXT
+//l:control_pane_t2
+//r:3.1
+#define STRING_R_SK_LATER_TEXT "Later"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Download progress bar dialog
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_DOWNLOADING_TEXT "Downloading %0N of %1N"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Installation wait note
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_R_ADM_INSTALLING_TEXT "Installing %0N of %1N"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Queries the user, if the installed application is to be launched
+//d:%U is the name of the application that is retrieved from the sis package.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_ADM_LAUNCH_APP_TEXT "Installation complete. Launch %U?"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Shown if the user has cancelled installation to indicate the possibility of
+//d:continuing this installation later.
+//d:%U = STRING_R_INST_ADM_CAN_BE_RESUMED_OVI_TEXT only if Ovi Store client is running
+//d:Otherwise it will be empty.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_INST_ADM_CAN_BE_RESUMED_TEXT "To continue this installation later, select this icon in your Application menu%U"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:Shown in STRING_R_INST_ADM_CAN_BE_RESUMED_TEXT.
+//d:See description of STRING_R_INST_ADM_CAN_BE_RESUMED_TEXT
+//d:%U = Name of the application to be launched. It is localised, if localisation
+//d:for the name is provided by the application supplier.
+//l:popup_note_window
+//r:3.1
+#define STRING_R_INST_ADM_CAN_BE_RESUMED_OVI_TEXT " or find '%U' on the Ovi Store"
+
+// End of File

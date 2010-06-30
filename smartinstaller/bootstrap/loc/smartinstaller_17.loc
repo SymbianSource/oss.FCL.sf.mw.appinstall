@@ -1,0 +1,9 @@
+CHARACTER_SET UTF8
+#define string_r_adm_env_creation_wait_text "Telepítés előkészítése folyamatban"
+#define string_r_adm_verifying_sw_text "Összetevők ellenőrzése"
+#define string_r_http_transaction_err "Letöltési hiba"
+#define string_r_installation_cancelled "Telepítés megszakítva"
+#define string_r_installation_failure_err "A telepítés sikertelen"
+#define string_r_sibs_caption_string "Nokia Smart Installer"
+#define string_r_sibs_short_caption_string "Smart Installer"
+#define string_r_smartinstaller_loc_resource_file_1 "\\resource\\apps\\smartinstaller"

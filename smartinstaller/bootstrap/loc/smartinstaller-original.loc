@@ -1,0 +1,75 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*     Localisation file for SmartInstaller Bootstrap
+*
+*
+*/
+
+// ----------------------------------------------------------------------------
+//	LOCALISATION STRINGS
+// ----------------------------------------------------------------------------
+
+//Caption string for app.
+//d:Application long name, shown for instance, in the Installed Applications list
+//d:Do NOT localize!
+//l:list_single_graphic_pane_t1
+//r:3.1
+#define STRING_r_sibs_caption_string 		"Nokia Smart Installer"
+
+//Short caption string for app.
+//d:Application short name
+//d:Do NOT localize!
+//l:cell_app_pane_t1
+//r:3.1
+#define STRING_r_sibs_short_caption_string	"Smart Installer"
+
+//d:Resource file path
+//d:Do NOT localize!
+//l:none
+//r:3.1
+#define STRING_r_smartinstaller_loc_resource_file_1	"\\resource\\apps\\smartinstaller"
+
+// ----------------------------------------------------------------------------
+//d:String to be displayed while the preparing device for 'smartinstallation'
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_r_adm_env_creation_wait_text	"Preparing installation"
+
+// ----------------------------------------------------------------------------
+//d:Shown when download has failed to other than network timeout.
+//l:popup_note_window
+//r:3.1
+#define STRING_r_http_transaction_err		"Download error!"
+
+// ----------------------------------------------------------------------------
+//d:Generic error note describing that installation has failed.
+//l:popup_note_window
+//r:3.1
+#define STRING_r_installation_failure_err	"Installation failed!"
+
+// ----------------------------------------------------------------------------
+//d:Shown when the user has explicitly cancelled the installation.
+//l:popup_note_window
+//r:3.1
+#define STRING_r_installation_cancelled		"Installation cancelled!"
+
+// ----------------------------------------------------------------------------
+//d:NEW STRING!
+//d:String to be displayed while the preparing device for 'smartinstallation'
+//l:popup_note_wait_window
+//r:3.1
+#define STRING_r_adm_verifying_sw_text		"Verifying components"
+
+// End of File

@@ -1,0 +1,146 @@
+;
+; Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+; All rights reserved.
+; This component and the accompanying materials are made available
+; under the terms of "Eclipse Public License v1.0"
+; which accompanies this distribution, and is available
+; at the URL "http://www.eclipse.org/legal/epl-v10.html".
+;
+; Initial Contributors:
+; Nokia Corporation - initial contribution.
+;
+; Contributors:
+;
+; Description: 
+;
+; Installation file for ADM application
+;
+;Language - standard language definitions
+;EN,FR,GE,SP,IT,SW,DA,NO,FI,AM, EA,PO,TU,IC, YW, YH, YP,RU, YJ, YT,HU,DU,   ,CS,SK,PL,SL,TC,HK,ZH,JA, MA,   ,TH,AR,TL, BA, GL,BG,CA,HR,ET,FA,CF,EL,HE,HI,IN,   LV,LT,MS,BP,RO,SR,LS,UK,UR,VI
+&01,02,03,04,05,06,07,08,09,10,129,13,14,15,157,158,159,16,160,161,17,18,186,25,26,27,28,29,30,31,32,326,327,33,37,39,401,402,42,44,45,49,50,51,54,57,58,59,65,67,68,70,76,78,79,83,93,94,96
+
+; standard SIS file header
+#{
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM",
+"Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM","Nokia Smart Installer ADM"
+},
+(0x2002CCCE),0,24,1
+
+;Localised Vendor name
+%{
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia",
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia",
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia",
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia",
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia",
+"Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia","Nokia"
+}
+
+;Unique Vendor name
+:"Nokia"
+
+;Supports Series 60 v3.1, v3.2, v5.0
+[0x102032BE], 0, 0, 0, {
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID"
+}
+[0x102752AE], 0, 0, 0, {
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID"
+}
+[0x1028315F], 0, 0, 0, {
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID",
+"S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID","S60ProductID"
+}
+
+;Files to install
+"\Epoc32\data\z\private\10003a3f\import\apps\ADM_reg.rsc"-"c:\private\10003a3f\import\apps\ADM_reg.rsc"
+"\Epoc32\data\z\resource\apps\adm.mif"-"c:\resource\apps\adm.mif"
+"config.ini"-"c:\private\2002CCCE\config.ini"
+
+; Localised resource files
+{
+"\epoc32\data\z\resource\apps\adm.r01"
+"\epoc32\data\z\resource\apps\adm.r02"
+"\epoc32\data\z\resource\apps\adm.r03"
+"\epoc32\data\z\resource\apps\adm.r04"
+"\epoc32\data\z\resource\apps\adm.r05"
+"\epoc32\data\z\resource\apps\adm.r06"
+"\epoc32\data\z\resource\apps\adm.r07"
+"\epoc32\data\z\resource\apps\adm.r08"
+"\epoc32\data\z\resource\apps\adm.r09"
+"\epoc32\data\z\resource\apps\adm.r10"
+"\epoc32\data\z\resource\apps\adm.r129"
+"\epoc32\data\z\resource\apps\adm.r13"
+"\epoc32\data\z\resource\apps\adm.r14"
+"\epoc32\data\z\resource\apps\adm.r15"
+"\epoc32\data\z\resource\apps\adm.r157"
+"\epoc32\data\z\resource\apps\adm.r158"
+"\epoc32\data\z\resource\apps\adm.r159"
+"\epoc32\data\z\resource\apps\adm.r16"
+"\epoc32\data\z\resource\apps\adm.r160"
+"\epoc32\data\z\resource\apps\adm.r161"
+"\epoc32\data\z\resource\apps\adm.r17"
+"\epoc32\data\z\resource\apps\adm.r18"
+"\epoc32\data\z\resource\apps\adm.r186"
+"\epoc32\data\z\resource\apps\adm.r25"
+"\epoc32\data\z\resource\apps\adm.r26"
+"\epoc32\data\z\resource\apps\adm.r27"
+"\epoc32\data\z\resource\apps\adm.r28"
+"\epoc32\data\z\resource\apps\adm.r29"
+"\epoc32\data\z\resource\apps\adm.r30"
+"\epoc32\data\z\resource\apps\adm.r31"
+"\epoc32\data\z\resource\apps\adm.r32"
+"\epoc32\data\z\resource\apps\adm.r326"
+"\epoc32\data\z\resource\apps\adm.r327"
+"\epoc32\data\z\resource\apps\adm.r33"
+"\epoc32\data\z\resource\apps\adm.r37"
+"\epoc32\data\z\resource\apps\adm.r39"
+"\epoc32\data\z\resource\apps\adm.r401"
+"\epoc32\data\z\resource\apps\adm.r402"
+"\epoc32\data\z\resource\apps\adm.r42"
+"\epoc32\data\z\resource\apps\adm.r44"
+"\epoc32\data\z\resource\apps\adm.r45"
+"\epoc32\data\z\resource\apps\adm.r49"
+"\epoc32\data\z\resource\apps\adm.r50"
+"\epoc32\data\z\resource\apps\adm.r51"
+"\epoc32\data\z\resource\apps\adm.r54"
+"\epoc32\data\z\resource\apps\adm.r57"
+"\epoc32\data\z\resource\apps\adm.r58"
+"\epoc32\data\z\resource\apps\adm.r59"
+"\epoc32\data\z\resource\apps\adm.r65"
+"\epoc32\data\z\resource\apps\adm.r67"
+"\epoc32\data\z\resource\apps\adm.r68"
+"\epoc32\data\z\resource\apps\adm.r70"
+"\epoc32\data\z\resource\apps\adm.r76"
+"\epoc32\data\z\resource\apps\adm.r78"
+"\epoc32\data\z\resource\apps\adm.r79"
+"\epoc32\data\z\resource\apps\adm.r83"
+"\epoc32\data\z\resource\apps\adm.r93"
+"\epoc32\data\z\resource\apps\adm.r94"
+"\epoc32\data\z\resource\apps\adm.r96"
+}-"c:\resource\apps\adm.rsc"
+
+"\Epoc32\release\armv5\urel\ADM.exe"-"c:\sys\bin\ADM.exe"

@@ -1,0 +1,113 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*     MMP file for Bootstrap
+*
+*
+*/
+
+
+TARGET            smartinstaller.exe
+TARGETTYPE        exe
+UID		  0x100039CE 0x2002CCCD
+
+// Use maximum stack of 80kB
+EPOCSTACKSIZE		0x14000
+
+SECUREID	  	0x2002CCCD
+
+SOURCEPATH		..\src
+SOURCE			bootstrap.cpp
+SOURCE			bootstrapapplication.cpp
+SOURCE			bootstrapappui.cpp
+SOURCE			bootstrapdocument.cpp
+SOURCE			bootstrapglobalwaitnoteobserver.cpp
+SOURCE 			bootstrapinstallationobserver.cpp
+SOURCE			bootstrapstatemachine.cpp
+
+SOURCEPATH		..\..\common
+SOURCE			config.cpp
+SOURCE			utils.cpp
+
+SOURCEPATH		..\data
+
+START RESOURCE	smartinstaller.rss
+LANG		00 01 02 03 04 05 06 07 08 09 10 13 14 15 16 17 18 25 26 27 28 29
+LANG		30 31 32 33 37 39 42 44 45 49 50 51 54 57 58 59 65 67 68 70 76 78 79
+LANG		83 93 94 96 129 157 158 159 160 161 186 326 327 401 402
+LANG		sc
+HEADER
+TARGETPATH resource\apps
+END	//RESOURCE
+
+START RESOURCE	smartinstaller_reg.rss
+#ifdef WINSCW
+TARGETPATH		\private\10003a3f\apps
+#else
+TARGETPATH		\private\10003a3f\import\apps
+#endif
+END	//RESOURCE
+
+
+
+USERINCLUDE		..\inc
+USERINCLUDE		..\dll
+USERINCLUDE		..\..\common
+USERINCLUDE		..\loc
+
+SYSTEMINCLUDE	\epoc32\include\private\swi
+SYSTEMINCLUDE	\epoc32\include\private
+SYSTEMINCLUDE	\epoc32\include
+SYSTEMINCLUDE	\epoc32\include\ecom
+
+SYSTEMINCLUDE	\epoc32\include\osextensions
+SYSTEMINCLUDE	\epoc32\include\middleware
+SYSTEMINCLUDE	\epoc32\include\domain\middleware
+
+
+LIBRARY			euser.lib
+LIBRARY			apparc.lib
+LIBRARY			cone.lib
+LIBRARY			eikcore.lib
+LIBRARY			avkon.lib
+LIBRARY			commonengine.lib
+LIBRARY			efsrv.lib
+LIBRARY			estor.lib
+LIBRARY			eikcoctl.lib
+LIBRARY			eikdlg.lib
+LIBRARY			aknnotify.lib
+LIBRARY			sisregistryclient.lib   // Sis Registry information
+LIBRARY			apgrfx.lib
+LIBRARY			ws32.lib
+LIBRARY			SWInstCli.lib		// Silent Installation
+LIBRARY			DownloadMgr.lib		// Download
+LIBRARY			flogger.lib		// Logging
+LIBRARY     		centralrepository.lib
+LIBRARY     		esock.lib
+LIBRARY     		connmon.lib
+LIBRARY			SenXml.LIB		// Xml parser
+
+LANG SC
+
+VENDORID		0
+CAPABILITY		NetworkServices	TrustedUI ReadUserData ReadDeviceData WriteDeviceData
+
+//MACRO USE_ADMCHANGES_URL //URL read from ADM changes file is disabled.
+
+MACRO PRODUCTION_RELEASE
+MACRO FEATURE_BOOTSTRAP_SETIAP	// Use browser IAP
+MACRO USE_LOGFILE
+MACRO DEBUG_ADM
+MACRO DO_LOG					// Additional logging
+// End of File
