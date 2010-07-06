@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -395,4 +395,11 @@ void RSisRegistryWritableSession::SetComponentStateL(TComponentId aComponentId, 
 	TInt returnCode = SendReceive(ESetComponentState, TIpcArgs(&packageComponentId, &packageState));
 	User::LeaveIfError(returnCode);
 	}
+
+EXPORT_C void RSisRegistryWritableSession::SetComponentPresenceL(TComponentId aComponentId, TBool aState)
+    {
+    TPckgC<TComponentId> componentId(aComponentId);
+    TPckgC<TBool> componentPresence(aState);   
+    User::LeaveIfError(SendReceive(ESetComponentPresence, TIpcArgs(&componentId, &componentPresence)));
+    }
 #endif

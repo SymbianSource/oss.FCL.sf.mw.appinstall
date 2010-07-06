@@ -509,124 +509,55 @@ EXPORT_C TBool IAUpdateUtils::IsInstalledL(
 // 
 // ---------------------------------------------------------------------------
 
-EXPORT_C void  IAUpdateUtils::UsifSilentInstallOptionsL( 
+void  IAUpdateUtils::UsifSilentInstallOptionsL( 
         Usif::COpaqueNamedParams * aOptions )
     {
 
     aOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
 
     // Upgrades are allowed 
-    aOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::EAllowed );
     
     // Install all if optional packets exist.
-    aOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, Usif::EAllowed );
     
     // Prevent online cert revocation check.
-    aOptions->AddIntL( Usif::KSifInParam_PerformOCSP, EFalse );
+    aOptions->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::ENotAllowed );
     
     // See iOCSP setting above
-    aOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );
     
     // Do not allow installation of uncertified packages.
-    aOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, EFalse );
+    aOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, Usif::ENotAllowed );
     
     // If filetexts are included in SIS package, show them.
-    aOptions->AddIntL( Usif::KSifInParam_PackageInfo, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_PackageInfo, Usif::EAllowed );
     
     // Automatically grant user capabilities.
     // See also KSifInParam_AllowUntrusted above.
-    aOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, EFalse );
+    aOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, Usif::EAllowed );
     
     // Open application will be closed.
-    aOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
     
     // Files can be overwritten.
-    aOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed  );
+    
+    // Incompatible allowed
+    aOptions->AddIntL( Usif::KSifInParam_AllowIncompatible, Usif::EAllowed  );
     
     // This only affects Java applications.
-    aOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
+    aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
     
     // Where to save.
-    aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
     
     // Choose the phone language.
     TLanguage lang = User::Language();
-    // aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
+    //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
     
     //aOptions->AddIntL( Usif::KSifInParam_Drive, IAUpdateUtils::DriveToInstallL( aUid, aSize ) );
     }
-// ---------------------------------------------------------------------------
-// IAUpdateUtils::SilentInstallOptionsL
-// 
-// ---------------------------------------------------------------------------
-//
-SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
-    const CIAUpdateBaseNode& aNode )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() begin");
-    SwiUI::TInstallOptions options;
-
-    // Upgrades are allowed        
-    options.iUpgrade = SwiUI::EPolicyAllowed;
-
-    // Install all if optional packets exist.
-    options.iOptionalItems = SwiUI::EPolicyAllowed;
-
-    // Prevent online cert revocation check.
-    options.iOCSP = SwiUI::EPolicyNotAllowed;
-    
-    // See iOCSP setting above
-    options.iIgnoreOCSPWarnings = SwiUI::EPolicyAllowed;
-
-    // Do not allow installation of uncertified packages.
-    options.iUntrusted = SwiUI::EPolicyNotAllowed;
-
-    // If filetexts are included in SIS package. Then, show them.
-    options.iPackageInfo = SwiUI::EPolicyUserConfirm;
-    
-    // Automatically grant user capabilities.
-    // See also iUntrusted above.
-    options.iCapabilities = SwiUI::EPolicyAllowed;
-
-    // Open application will be closed.
-    options.iKillApp = SwiUI::EPolicyAllowed;
-    
-    // Files can be overwritten.
-    options.iOverwrite = SwiUI::EPolicyAllowed;
-    
-    // This only affects Java applications.
-    options.iDownload = SwiUI::EPolicyAllowed;
-    
-    // Where to save.
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() before DriveToInstallL");
-    TDriveUnit driveUnit;
-    if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
-        {
-        driveUnit = IAUpdateUtils::DriveToInstallWidgetL( aNode.Identifier() );
-        }
-    else
-        {
-        driveUnit = IAUpdateUtils::DriveToInstallL( aNode.Uid(), aNode.OwnContentSizeL() );
-        }
-     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() after DriveToInstallL");
-    
-    TDriveName driveName = driveUnit.Name();
-    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() driveName: %S", &driveName );
-    options.iDrive = driveName[0];
-    
-    // Choose the phone language.
-    options.iLang = User::Language();
-    
-    // If language is asked, then use the current phone language.
-    options.iUsePhoneLang = ETrue;
-    
-    // Does not affect SISX. This is for Java.
-    options.iUpgradeData = SwiUI::EPolicyAllowed;
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() end");
-    return options;
-    }
-
-
 // -----------------------------------------------------------------------------
 // IAUpdateUtils::InstalledDriveL
 // 

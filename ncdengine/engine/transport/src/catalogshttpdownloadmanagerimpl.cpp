@@ -32,7 +32,10 @@
 #include "catalogsconnection.h"
 
 #include "catalogsdebug.h"
-
+#include <QString.h>
+#include <QVector.h>
+#include <QList.h>
+#include <downloadevent.h>
 // ======== MEMBER FUNCTIONS ========
 
 // ---------------------------------------------------------------------------
@@ -59,6 +62,7 @@ CCatalogsHttpDownloadManager* CCatalogsHttpDownloadManager::NewL(
             
     DLTRACE(("constructor ok"));
     CleanupStack::PushL( self );
+   
     self->ConstructL( aCleanup );
     CleanupStack::Pop( self );
     return self;
@@ -102,15 +106,17 @@ CCatalogsHttpDownloadManager::~CCatalogsHttpDownloadManager()
         iNetworkManager->RemoveObserver( *this );
         }
 
-    if ( iDmgr.Handle() ) 
+
+    if ( iDmgr ) 
         {
         DLTRACE(("We were connected to DL manager"));
         DeleteHangingDownloads();
         }
-        
+      
     // Close download manager session    
-    iDmgr.Close();
+    iDmgr->removeAll();
     
+   
     delete iDefaultConfig;
     iManager.Release();
     
@@ -124,24 +130,20 @@ void CCatalogsHttpDownloadManager::DeleteHangingDownloads()
     {
     DLTRACEIN((""));
     // This pauses all downloads in addition to disconnecting
-    iDmgr.Disconnect();
-    const CDownloadArray& downloads( iDmgr.CurrentDownloads() );
-
-    TInt count = downloads.Count();
-    while( count-- )
-        {                         
-        RHttpDownload& dl = *( downloads[ count ] );
-        TInt32 deleteStatus = 0;
-        dl.GetIntAttribute( EDlAttrUserData, deleteStatus );
-        DLTRACE(("DeleteStatus: %d", deleteStatus ));
-        
-        if ( deleteStatus == CCatalogsHttpDownload::EDownloadCanBeDeleted ) 
+ 	iDmgr->pauseAll(); 
+   TInt count = iDownloads.Count();
+    for ( TInt i = 0; i < count; ++i )
+        {
+         TInt32 deleteStatus = 0;
+         deleteStatus = dynamic_cast<CCatalogsHttpDownload*>(iDownloads[i])->GetStatusState();
+       
+         if ( deleteStatus == CCatalogsHttpDownload::EDownloadCanBeDeleted ) 
             {
             DLTRACE(("Deleting download"));
-            dl.Delete();
+            iDmgr->removeOne(dynamic_cast<CCatalogsHttpDownload*>(iDownloads[i])->GetDownload());
             }
+        }        
         
-        }
     }
 
 // ---------------------------------------------------------------------------
@@ -172,16 +174,18 @@ MCatalogsHttpOperation* CCatalogsHttpDownloadManager::CreateDownloadL(
     {
     DLTRACEIN((""));
     // Create a new download
+   	QString Url =	QString::fromRawData( reinterpret_cast<const QChar*>(aUrl.Ptr()),aUrl.Length());
+    iDownload = iDmgr->createDownload( Url );
+    
     CCatalogsHttpDownload* dl = CCatalogsHttpDownload::NewLC( 
         *this,
         //download,
-        NULL,
+        iDownload,
         *iDefaultConfig );
     
     dl->SetUriL( aUrl );
     dl->SetFileServerSession( iFs );
-    
-    // If the given observer != NULL, set it as the observer for the download
+        // If the given observer != NULL, set it as the observer for the download
     if ( aObserver ) 
         {        
         dl->Config().SetObserver( aObserver );        
@@ -207,6 +211,7 @@ MCatalogsHttpOperation* CCatalogsHttpDownloadManager::Download(
     TInt count = iDownloads.Count();
     for ( TInt i = 0; i < count; ++i )
         {
+        	
         if ( iDownloads[i]->OperationId() == aId ) 
             {
             return iDownloads[i];
@@ -396,12 +401,19 @@ void CCatalogsHttpDownloadManager::SetConnectionMethodL(
     DLTRACEIN((""));
     if ( aMethod != iCurrentAp )
         {
+		try
+		{
         DLTRACE( ( "Set AP, type: %d, id: %u, apn: %d", 
             aMethod.iType, aMethod.iId, aMethod.iApnId ));
-        User::LeaveIfError( iDmgr.Disconnect() );    
-        User::LeaveIfError( iDmgr.SetIntAttribute( EDlMgrIap, aMethod.iApnId ) );
+		 iDmgr->pauseAll(); 
+		 
         iCurrentAp = aMethod;
         DLTRACE(("AP set"));
+		}
+		 catch(const std::exception& exception)
+		 {
+		 qt_symbian_exception2LeaveL(exception);
+		 }
         }    
     }
 
@@ -460,40 +472,23 @@ TInt32 CCatalogsHttpDownloadManager::SessionId() const
     {
     return iSessionId;
     }
-    
-    
+
 // ---------------------------------------------------------------------------
 // Handles download manager events
 // ---------------------------------------------------------------------------
-//
-void CCatalogsHttpDownloadManager::HandleDMgrEventL( RHttpDownload& aDownload,
-	THttpDownloadEvent aEvent )
-    {
-    DLTRACEIN(( "Dl state: %i, pr: %i, DL: %x", aEvent.iDownloadState, 
-        aEvent.iProgressState, &aDownload ));
-        
-    TDownloadEvent event( aDownload, aEvent );
+//    
+ void CCatalogsHttpDownloadManager::downloadMgrEventRecieved(WRT::DownloadEvent* dlmEvent)
+  {
+  	
+  	switch(dlmEvent ->type())
+		{
+ 
+    default:
+    	break;
+		};
 
-    if ( IsOneOf( aEvent.iDownloadState, EHttpDlDeleted, EHttpDlDeleting ) )
-        {
-        DLTRACEOUT(("Download was deleted"))
-        RemoveUnhandledEvents( event );
-        }
-    // Handle everything but Download name change events
-    else if ( aEvent.iProgressState != EHttpProgDlNameChanged )     
-        {        
-        DLTRACE(("Adding event to queue"));        
-        
-        if ( aEvent.iProgressState == EHttpProgResponseBodyReceived ) 
-            {
-            // Filter unhandled progress events from the queue
-            RemoveUnhandledProgressEvents( event );
-            }
-        
-        iEventQueue.AppendL( event );    
-        ContinueEventHandling();    
-        }
-    }
+  	
+  }  
 
 
 // ---------------------------------------------------------------------------
@@ -507,8 +502,19 @@ void CCatalogsHttpDownloadManager::HandleAccessPointEventL(
     DLTRACEIN((""));
     if ( aEvent == ECatalogsAccessPointClosed ) 
         {
+		try
+		{
         DLTRACE(("Disconnecting download manager"));
-        User::LeaveIfError( iDmgr.Disconnect() );
+
+		iDmgr->pauseAll();
+	}
+
+ 		catch(const std::exception& exception) 
+               { 
+               qt_symbian_exception2LeaveL(exception); 
+               } 
+            
+
         }
     }
 
@@ -556,6 +562,11 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
     
     // shared so that RFiles can be given to Download manager
     User::LeaveIfError( iFs.ShareProtected() ); 
+   	
+   	QString DmgrUid(QString::number(KNCDEngineAppID));
+    iDmgr =  new DownloadManager(DmgrUid);
+    iDmgr->initialize();
+    iQTmgr = new CCatalogsHttpQTDownloadManager(this,iDmgr);
     
     TUid sessionId( TUid::Uid( iSessionId ) );
     if ( aCleanup ) 
@@ -581,7 +592,6 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
     
     do    
         {
-        // TRAP( err, iDmgr.ConnectL( sessionId, *this, ETrue ) );
         if ( err != KErrNone ) 
             {
             DLERROR(("DL manager connection failed with err: %d, retry attempts left", 
@@ -607,13 +617,17 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
     iNetworkManager = &CCatalogsHttpSessionManager::NetworkManagerL();
     iNetworkManager->AddObserverL( *this );    
     
-//    iDmgr.SetIntAttribute( EDlMgrExitAction, EExitPause );
     // Restore downloads from previous sessions
 //    RestoreDownloadsL();
+ 
     DLTRACEOUT((""));
+
     }
     
-
+DownloadManager* CCatalogsHttpDownloadManager::GetDownloadManager()
+{
+	return iDmgr;
+}
 // ---------------------------------------------------------------------------
 // Restore downloads from previous session
 // ---------------------------------------------------------------------------
@@ -621,17 +635,19 @@ void CCatalogsHttpDownloadManager::ConstructL( TBool aCleanup )
 void CCatalogsHttpDownloadManager::RestoreDownloadsL()
     {
     DLTRACEIN((""));
-    const CDownloadArray& downloads = iDmgr.CurrentDownloads();    
     
     TBuf8<KMaxUrlLength> url;
-    TBuf<KMaxPath> filename;
     
+    
+    QList<WRT::Download*> downloads = iDmgr->currentDownloads();
+
+
     // Go through downloads, create wrappers for DL manager downloads and
     // add them to HttpDownloadManager
-    for ( TInt i = 0; i < downloads.Count(); ++i ) 
+    for ( TInt i = 0; i < downloads.size(); ++i ) 
         {                 
         DLTRACE(( "Restoring dl %i", i ));
-        RHttpDownload* dlPtr = downloads[i];
+        WRT::Download *dlPtr = downloads[i];
 
         // Create the download and push it to cleanup stack
         CCatalogsHttpDownload* dl = CCatalogsHttpDownload::NewLC( *this,
@@ -639,8 +655,9 @@ void CCatalogsHttpDownloadManager::RestoreDownloadsL()
 
         // set file server session
         dl->SetFileServerSession( iFs );
-        
-        dlPtr->GetStringAttribute( EDlAttrDestFilename, filename );
+       
+         QString name   =  dlPtr->attribute(FileName).toString();
+         TBuf<KMaxPath> filename(name.utf16());
 
         // Separate the filename from the path
         TParsePtrC parser( filename );
@@ -683,7 +700,7 @@ TInt CCatalogsHttpDownloadManager::FindInDownloads(
     DASSERT( aDownload );
     
     TInt32 id = 0;
-    aDownload->GetIntAttribute( EDlAttrId, id );    
+    //aDownload->GetIntAttribute( EDlAttrId, id );    
             
     TInt count = aArray.Count();
     for ( TInt i = 0; i < count; ++i )
@@ -954,8 +971,23 @@ TInt CCatalogsHttpDownloadManager::NewDownloadId()
     }
 
 
-RHttpDownload& CCatalogsHttpDownloadManager::CreatePlatformDownloadL( 
+Download& CCatalogsHttpDownloadManager::CreatePlatformDownloadL( 
     const TDesC8& aUrl )
     {
-    return iDmgr.CreateDownloadL( aUrl );
+    
+   	QString myString=	QString::fromRawData( reinterpret_cast<const QChar*>(aUrl.Ptr()),aUrl.Length());
+
+    return *(iDmgr->createDownload( myString ));
     }
+    
+CCatalogsHttpQTDownloadManager::CCatalogsHttpQTDownloadManager(CCatalogsHttpDownloadManager* aDownloadManager,DownloadManager* aDmgr)
+	{
+		iDownloadManager = aDownloadManager;
+		iDmgr = aDmgr;
+		connect(iDmgr, SIGNAL(downloadManagerEvent(WRT::DownloadManagerEvent*)), this,SLOT(downloadMgrEventRecieved(WRT::DownloadEvent*)));
+	}
+	
+void CCatalogsHttpQTDownloadManager::downloadMgrEventRecieved(WRT::DownloadEvent* aEvent)
+	{
+		iDownloadManager->downloadMgrEventRecieved(aEvent);
+	}

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -98,19 +98,7 @@ void CIAUpdateBGFirstTimeHandler::SetAgreementAcceptedL()
     iAgreementAccepted = ETrue;
     WriteDataL();
     }
-    
-// ---------------------------------------------------------------------------
-// CIAUpdateBGFirstTimeHandler::SetAgreementAskedL
-// Set Nokia agreement as asked (prompted) to an user
-// ---------------------------------------------------------------------------
-//
-void CIAUpdateBGFirstTimeHandler::SetAgreementAskedL()
-    {
-    ReadDataL();
-    iAgreementAsked = ETrue;
-    WriteDataL();
-    }
-        
+       
 // ---------------------------------------------------------------------------
 // CIAUpdateBGFirstTimeHandler::SetAutomaticUpdatesAskedL
 // Set automatic update checks as prompted to an use
@@ -136,17 +124,6 @@ TBool CIAUpdateBGFirstTimeHandler::AgreementAcceptedL()
 
 
 // ---------------------------------------------------------------------------
-// CIAUpdateBGFirstTimeHandler::AgreementAskedL
-// Is Nokia agreement of Application Update already asked 
-// ---------------------------------------------------------------------------
-//
-TBool CIAUpdateBGFirstTimeHandler::AgreementAskedL()
-    {
-    ReadDataL();
-    return iAgreementAsked;
-    }
-
-// ---------------------------------------------------------------------------
 // CIAUpdateBGFirstTimeHandler::AutomaticUpdateChecksAskedL
 // Is activation for automatic update cheks from network already asked 
 // ---------------------------------------------------------------------------
@@ -170,7 +147,6 @@ void CIAUpdateBGFirstTimeHandler::ReadDataL()
     if ( err == KErrNotFound )
     	{
     	iAgreementAccepted = EFalse;
-	    iAgreementAsked = EFalse;
 	    iAutomaticUpdateChecksAsked = EFalse; 
     	}
     else
@@ -216,7 +192,6 @@ void CIAUpdateBGFirstTimeHandler::WriteDataL()
 void CIAUpdateBGFirstTimeHandler::InternalizeL( RReadStream& aStream )
 	{
 	iAgreementAccepted = aStream.ReadInt32L();
-	iAgreementAsked = aStream.ReadInt32L();
 	iAutomaticUpdateChecksAsked = aStream.ReadInt32L();
 	}
 
@@ -229,7 +204,6 @@ void CIAUpdateBGFirstTimeHandler::InternalizeL( RReadStream& aStream )
 void CIAUpdateBGFirstTimeHandler::ExternalizeL( RWriteStream& aStream )
 	{
 	aStream.WriteInt32L( iAgreementAccepted );
-	aStream.WriteInt32L( iAgreementAsked );	
 	aStream.WriteInt32L( iAutomaticUpdateChecksAsked );
 	}
     

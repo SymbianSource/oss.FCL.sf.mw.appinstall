@@ -131,9 +131,7 @@ switch(role)
     case DecorationNameRole:
     case MonoDecorationNameRole:
         {
-        // QString iconName("z:/resource/messaging/message.svg");
-        // HbIcon iconName1 ("c:/qgn_note_swupdate_notification.svg");
-        QString iconName("z:/resource/iaupdate/qgn_note_swupdate_notification.svg");
+        QString iconName("");
         return iconName;
         }
     default: 

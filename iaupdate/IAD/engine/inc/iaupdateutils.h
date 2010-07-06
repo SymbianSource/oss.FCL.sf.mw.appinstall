@@ -135,7 +135,7 @@ SwiUI::TInstallOptions SilentInstallOptionsL( const CIAUpdateBaseNode& aNode );
  * 
  * @param aOptions  Silent install options
  */
-IMPORT_C void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
+void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
 
 /**
  * Finds drive where a package is currently installed

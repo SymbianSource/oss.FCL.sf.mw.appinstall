@@ -34,7 +34,7 @@ class CIAUpdateAutomaticCheck;
 class MIAUpdateNode;
 class MIAUpdateFwNode;
 class CEikonEnv;
-class RCmManagerExt;
+class RCmManager;
 class CIdle;
 class HbAction;
 class IAUpdateResultsDialog;
@@ -206,24 +206,24 @@ private:  //new methods
      /**
      * Choose a usable IAP from all SNAPs
      *
-     * @param aCmManagerExt handle of connection manager
+     * @param aCmManager handle of connection manager
      */  
-    uint GetBestIAPInAllSNAPsL( RCmManagerExt& aCmManagerExt  );
+    uint GetBestIAPInAllSNAPsL( RCmManager& aCmManager );
         
      /**
      * Choose a usable IAP from Internet SNAP
      *
-     * @param aCmManagerExt handle of connection manager
+     * @param aCmManager handle of connection manager
      */
-    uint GetBestIAPInInternetSNAPL( RCmManagerExt& aCmManagerExt  );
+    uint GetBestIAPInInternetSNAPL( RCmManager& aCmManager );
 
      /**
      * Choose the best IAP under the given SNAP
      *
-     * @param aCmManagerExt handle of connection manager
+     * @param aCmManager handle of connection manager
      * @param aSNAP SNAP ID
      */  
-     uint GetBestIAPInThisSNAPL( RCmManagerExt& aCmManagerExt, uint aSNAP = 0);
+     uint GetBestIAPInThisSNAPL( RCmManager& aCmManager, uint aSNAP = 0);
      
      /**
      * Shows update query dialog (now/later) 

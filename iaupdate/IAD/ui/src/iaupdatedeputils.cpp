@@ -21,7 +21,6 @@
 // INCLUDES
 #include "iaupdatedeputils.h"
 #include "iaupdatebasenode.h"
-#include "iaupdateanynode.h"
 #include "iaupdatenode.h"
 
 
@@ -31,7 +30,7 @@
 // ---------------------------------------------------------------------------
 //
 void IAUpdateDepUtils::GetDependenciesL( const MIAUpdateNode& aNode,
-                                         const RPointerArray<MIAUpdateAnyNode>& aAllNodes,  
+                                         const RPointerArray<MIAUpdateNode>& aAllNodes,  
                                          RPointerArray<MIAUpdateNode>& aDependencyNodes ) 
     {
     RPointerArray<MIAUpdateNode> dependencies;
@@ -81,7 +80,7 @@ void IAUpdateDepUtils::GetDependenciesL( const MIAUpdateNode& aNode,
 // ---------------------------------------------------------------------------
 //    
 void IAUpdateDepUtils::GetDependantsL( const MIAUpdateNode& aNode, 
-                                       const RPointerArray<MIAUpdateAnyNode>& aAllNodes,  
+                                       const RPointerArray<MIAUpdateNode>& aAllNodes,  
                                        RPointerArray<MIAUpdateNode>& aDependantNodes ) 
     {
     RPointerArray<MIAUpdateNode> dependants;

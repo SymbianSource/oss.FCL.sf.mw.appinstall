@@ -349,10 +349,10 @@ PERL, \dumpsis_test_usif.txt,,\epoc32\winscw\c\tswi\tdumpsis\testDumpsis.pl usif
 PERL, \dumpchainvalidity_test.txt,,\epoc32\winscw\c\tswi\tchainvalidity\testChainValidity.pl, 300, UDEB,,
 # DUMPINSTALLFILESTATUS test
 PERL, \dumpinstallstatus_test.txt,,\epoc32\winscw\c\tswi\tinstallfilestatus\testInstallStatus.pl, 300, UDEB,,
-
-[SwiTools95Only]
 # DUMPSWICERTSTORE test
 PERL, \dumpswicertstore_test.txt,,\epoc32\winscw\c\tswi\tdumpcertstore\testswiCertstore.pl, 600, UDEB,\epoc32\winscw\c\tswi\tdumpcertstore\predumpcertstoretest.bat, \epoc32\winscw\c\tswi\tdumpcertstore\postdumpcertstoretest.bat
+
+[SwiTools95Only]
 # DUMPSWIREGISTRY test
 PERL, \dumpregistry_test.txt,,\epoc32\winscw\c\tswi\tdumpregistry\testregistry.pl, 300, UDEB,,
 

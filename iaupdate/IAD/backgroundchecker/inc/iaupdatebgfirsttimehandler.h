@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -61,12 +61,7 @@ public: // new functions
     * Set Nokia agreement as accepted by an user
     */
     void SetAgreementAcceptedL();
-    
-    /**
-    * Set Nokia agreement as asked (prompted) to an user
-    */
-    void SetAgreementAskedL();
-        
+          
     /**
     * Set automatic update checks as asked (prompted) to an user
     */
@@ -79,13 +74,7 @@ public: // new functions
     */
     TBool AgreementAcceptedL();
     
-    /**
-    * Is Nokia agreement of Application Update already asked 
-    *
-    * @return True value if agreement already asked 
-    */
-    TBool AgreementAskedL();
-    
+       
     /**
     * Is activation for automatic update cheks from network already asked 
     *
@@ -120,8 +109,6 @@ private: //data
     TFileName iPath;
     
     TBool iAgreementAccepted;
-    
-    TBool iAgreementAsked;
     
     TBool iAutomaticUpdateChecksAsked;   
    

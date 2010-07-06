@@ -20,7 +20,7 @@ PRJ_MMPFILES
 catalogsdebug.mmp
 ncdutils.mmp
 ncddevicemgmt.mmp
-catalogsserver.mmp
+//catalogsserver.mmp
 catalogsengine.mmp
 catalogsproxy.mmp
 catalogsundertaker.mmp

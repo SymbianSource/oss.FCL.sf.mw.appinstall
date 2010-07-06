@@ -86,7 +86,7 @@ LIBRARY         apparc.lib
 LIBRARY         avkon.lib
 LIBRARY         etel3rdparty.lib 
 LIBRARY         apgrfx.lib
-LIBRARY         swinstcli.lib           // Silent install
+//LIBRARY         swinstcli.lib           // Silent install
 LIBRARY         sif.lib // SIF installer
 LIBRARY         scrclient.lib  //Registry client
 //LIBRARY         widgetregistryclient.lib // Widget Registry

@@ -52,21 +52,9 @@ public:
 
     void SetLastTimeShowNewFeatureDialog( TInt64 aTime );
 
-    //void SetCurrentRefreshTime();
-
     TBool UserRejectNewFeatureDialog() const;
     
     void SetUserRejectNewFeatureDialog( TBool aUserDecision );
-    
-    TBool ReminderOn();
-    
-    void SetReminder( TBool aOn );
-    
-    TTime NextRemindTime();
-    
-    void SetNextRemindTime( TTime aNextRemindTime );
-    
-    void SetNextRemindTime( TInt64 aNextRemindTime );
     
     void SetMode( TIAUpdateBGMode aMode );
     
@@ -113,13 +101,8 @@ private: // data
 
     // Time when the content was refreshed.
     TTime iLastTimeShowNewFeatureDialog;
-
     
     TBool iUserRejectNewFeatureDialog;
-    
-    TTime iNextRemindTime;
-    
-    TBool iIsReminderOn;
     
     TIAUpdateBGMode iMode;
     

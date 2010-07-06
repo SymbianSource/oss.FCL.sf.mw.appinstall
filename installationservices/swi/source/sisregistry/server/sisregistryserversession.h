@@ -161,12 +161,14 @@ private:
 
 	//sets a particular component's state to the requested value
 	void SetComponentStateL(const RMessage2& aMessage);
+	void SetComponentPresenceL(const RMessage2& aMessage);
 
 	// Helper methods
 	TBool IsRegisteredL(const TUid& aUid);
 	TBool IsRegisteredL(const CHashContainer& aHashContainer);
 	TBool IsRegisteredL(const TUid& aUid, const TDesC& aPackageName);
 
+	void RemoveEntryL(const Usif::TComponentId aCompId);
 	void RemoveEntryL(const CSisRegistryPackage& aPackage);
 	void RemoveCleanupInfrastructureL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession);
 	TBool RemoveControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, TInt aDrive);
@@ -174,7 +176,7 @@ private:
 	TUint FixedDrivesL() const;
 	Usif::TComponentId AddRegistryEntryL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aController, Usif::TScrComponentOperationType aOpType);
 	Usif::TComponentId AddEntryL(CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
-	void AddAppsFromStubL(Usif::TComponentId aCompId, TUid aUid);
+	void AddAppsFromStubL(Usif::TComponentId aCompId, const TDesC& aFileName);
 	void AddControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive);
 	void AddCleanupInfrastructureL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aControllerBuffer);
 	TUint CreateSubsessionHandleL(const TUid& aPackageUid);
@@ -202,6 +204,7 @@ private:
 	TBool IsFirmwareUpdatedL();	 
 	void  UpdateRecentFWVersionL(); 
 	TInt GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
+	TInt GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames);
 
 private:
     friend class CSisRevocationManager;

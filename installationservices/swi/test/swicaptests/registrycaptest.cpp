@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -492,6 +492,19 @@ void CDaemonRegistryCapTest::RunTestL()
 
 	TRAP(err, session.RecoverL());
 	CheckFailL(err, _L("RecoverL"));
+	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	TRAP(err, session.SetComponentPresenceL(1, EFalse));
+	CheckFailL(err, _L("SetComponentPresenceL"));
+	
+	// Negative tests
+	//TRAP(err, session.SetComponentPresenceL(1234, EFalse));
+	//CheckFailL(err, _L("SetComponentPresenceL Negative 1"));
+    //TRAP(err, session.SetComponentPresenceL(0, EFalse));
+    //CheckFailL(err, _L("SetComponentPresenceL Negative 2"));    
+    //TRAP(err, session.SetComponentPresenceL(-1, EFalse));
+    //CheckFailL(err, _L("SetComponentPresenceL Negative 3"));
+#endif
 
 	CleanupStack::PopAndDestroy(&session);
 	}

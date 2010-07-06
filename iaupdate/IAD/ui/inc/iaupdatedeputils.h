@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -25,7 +25,6 @@
 
 // FORWARD DECLARATIONS
 class MIAUpdateNode;
-class MIAUpdateAnyNode;
 
 // CLASS DECLARATION
 /**
@@ -43,7 +42,7 @@ public:
     * @param aDependencyNodes List of dependencies (to be marked). 
     */ 
     static void GetDependenciesL( const MIAUpdateNode& aNode, 
-                                  const RPointerArray<MIAUpdateAnyNode>& aAllNodes, 
+                                  const RPointerArray<MIAUpdateNode>& aAllNodes, 
                                   RPointerArray<MIAUpdateNode>& aDependencyNodes );
      
     /**
@@ -54,7 +53,7 @@ public:
     * @param aDependencyNodes List of dependendants (to be unmarked). 
     */
     static void GetDependantsL( const MIAUpdateNode& aNode, 
-                                const RPointerArray<MIAUpdateAnyNode>& aAllNodes, 
+                                const RPointerArray<MIAUpdateNode>& aAllNodes, 
                                 RPointerArray<MIAUpdateNode>& aDependantNodes );
     
     };
