@@ -43,5 +43,6 @@ IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     }
 
 IAUpdateApplication::~IAUpdateApplication()
-    {
-    }
+{
+    delete mEngine;    
+}

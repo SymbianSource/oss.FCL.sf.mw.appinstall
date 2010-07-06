@@ -61,22 +61,16 @@ class CIAUpdateBGSoftNotification : public CBase,
         
          /**
           * Shows notification and  indicator. 
-          *
-          * @param aNrOfUpdates number of updates
           */
          void ShowNotificationL();
          
          /**
           * Shows indicator. 
-          *
-          * @param aMode indicator mode (EFirstTimeMode / ENormalMode)
           */
          void ShowIndicatorL();
          
          /**
           * Removes indicator. 
-          *
-          * @param aNrOfUpdates number of updates
           */
          void RemoveIndicatorL();
 
@@ -87,13 +81,6 @@ class CIAUpdateBGSoftNotification : public CBase,
          * @param aText  text for soft notification
          */
         void SetTextL( const TDesC& aTitle, const TDesC& aText ); 
-
-        /**
-        * Set an image path for a soft notification.
-        *
-        * @param aImage image path for soft notification
-        */
-        void SetImagePathL( const TDesC& aImage );
         
         /**
         * Set number of updates a soft notification.
@@ -152,39 +139,28 @@ class CIAUpdateBGSoftNotification : public CBase,
         /**
          * Get indicator enablation state
          *
-         * @return aEnabled ETrue-enabled, EFalse-disabled
+         * @return ETrue-enabled, EFalse-disabled
          */ 
         TBool IsIndicatorEnabled();
         
-        /**
-         * Set number of updates
-         *
-         * @param aNrOfUpdates number of updates 
-         */ 
-        // void SetNrOfUpdates( const int aNrOfUpdates );
-        
-        /**
-         * Get number of updates
-         *
-         * @return  number of updates 
-         */ 
         int GetNrOfUpdates();
         
     private:  // Data
         // Note title
         HBufC* iTitle; 
+        
         // Note text
         HBufC* iText; 
-        /// Image data byte array
-        HBufC8* iImageData;
+        
         // Notification callback
         MIAUpdateBGSoftNotificationCallBack* iCallback;
-        // Image path
-        HBufC* iImagePath;
+        
         // Number of updates
         int iNrOfUpdates;
+        
         // Indictor activation state
         TBool iActivateIndicator;
+        
         //Notification dialog
         CHbDeviceNotificationDialogSymbian* iNotificationDialog;
 

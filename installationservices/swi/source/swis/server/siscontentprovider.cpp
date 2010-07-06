@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -202,7 +202,7 @@ RPointerArray<TDesC> CContentProvider::LocalizedOptionsL(TInt aLanguageIndex) co
 	for (TInt option = 0; option < options.Count(); option++)
 		{
 		const RPointerArray<CString>& names = options[option].Names();
-		ret.Append(&names[aLanguageIndex]->Data());
+		ret.AppendL(&names[aLanguageIndex]->Data());
 		}
 
 	CleanupStack::Pop(&ret);

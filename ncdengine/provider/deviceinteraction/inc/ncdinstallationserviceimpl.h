@@ -26,8 +26,6 @@
 #include <swi/sisregistryentry.h>
 #include <apgcli.h>
 #include <centralrepository.h>
-#include <SWInstApi.h>
-//#include <WidgetRegistryClient.h>
 #include <usif/sif/sif.h>
 #include <usif/scr/scr.h>
 
@@ -123,7 +121,7 @@ public: // From MNcdInstallationService
     void SilentInstallL( RFile& aFile,
                          const TDesC& aMimeType,
                          const TNcdItemPurpose& aPurpose,
-                         const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                         const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::SilentInstallJavaL
@@ -131,13 +129,13 @@ public: // From MNcdInstallationService
     void SilentInstallJavaL( RFile& aFile,
                              const TDesC& aMimeType,
                              const TDesC8& aDescriptorData,
-                             const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                             const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::SilentInstallWidgetJavaL
      */
     void SilentInstallWidgetL( RFile& aFile,
-                               const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg );
+                               const Usif::COpaqueNamedParams* aInstallOptionsPckg );
     
     /**
      * @see MNcdInstallationService::MNcdCancelSilentInstall
@@ -295,7 +293,7 @@ private: // new methods
     void InstallL( RFile& aFile,
                    const TDesC& aMimeType,
                    const TNcdItemPurpose& aPurpose,
-                   const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+                   const Usif::COpaqueNamedParams* aSilentInstallOptions );
 
     /**
      * @see MNcdInstallationService::InstallJavaL
@@ -306,12 +304,12 @@ private: // new methods
     void InstallJavaL( RFile& aFile,
                        const TDesC& aMimeType,
                        const TDesC8& aDescriptorData,
-                       const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+                       const Usif::COpaqueNamedParams* aSilentInstallOptions );
 
     
     void InstallWidgetL( 
         RFile& aFile,
-        const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg );
+        const Usif::COpaqueNamedParams* aSilentInstallOptions );
         
 
     // Sets correct values for member variables after installation has finished
@@ -448,14 +446,13 @@ private: // Data
     
     CNcdActiveOperationObserver* iInstallStatusObserver;
 
-    SwiUI::RSWInstLauncher iInstaller;
-        
+    //SwiUI::RSWInstLauncher iInstaller;
+    Usif::RSoftwareInstall iInstaller;
+    Usif::COpaqueNamedParams* iArguments; 
+    Usif::COpaqueNamedParams* iResults;
+    
     // ROM application UIDS
     RArray<TUid> iRomUids; 
-    
-    // needed for cancelling install correctly
-    SwiUI::TServerRequest iCancelCode;  
-    
     
     //RWidgetRegistryClientSession iWidgetRegistry; 
     Usif::RSoftwareComponentRegistry iScrSession;

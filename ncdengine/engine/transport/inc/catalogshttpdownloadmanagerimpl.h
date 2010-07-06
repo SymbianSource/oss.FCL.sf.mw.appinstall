@@ -24,9 +24,12 @@
 #include "catalogstransportoperationid.h"
 #include "catalogshttpsession.h"    // RCatalogsHttpOperationArray
 #include "catalogshttpsessionmanager.h"
+
 #include "catalogsconnectionmethod.h"
 #include "catalogsaccesspointobserver.h"
-
+#include <download.h>
+#include <downloadmanager.h>
+#include <QObject>
 class MCatalogsHttpConfig;
 class CCatalogsHttpConfig;
 class CCatalogsHttpDownload;
@@ -38,16 +41,22 @@ class CCatalogsHttpConnectionManager;
 class CCatalogsHttpSession;
 class CCatalogsConnection;
 class CCatalogsNetworkManager;
+class CCatalogsHttpQTDownloadManager;
+using namespace WRT;
+
+const TInt KNCDEngineAppID = 0X2002E685;
+
 
 /**
  * HTTP file download manager
  *
  */
 class CCatalogsHttpDownloadManager :       
+
     public CActive, 
-    public MHttpDownloadMgrObserver,
     public MCatalogsAccessPointObserver  
     {
+  
     public: // Constructors and destructor
     
         /**
@@ -69,7 +78,7 @@ class CCatalogsHttpDownloadManager :
         * Destructor
         */
         virtual ~CCatalogsHttpDownloadManager();
-        
+         
     public: // New methods
     
 	    /**
@@ -159,7 +168,7 @@ class CCatalogsHttpDownloadManager :
 
         void AddRef();
 
-
+		DownloadManager* GetDownloadManager();
         TInt Release();    
         
         void SetConnectionMethodL( 
@@ -202,15 +211,9 @@ class CCatalogsHttpDownloadManager :
         
         TInt NewDownloadId();
         
-        RHttpDownload& CreatePlatformDownloadL( const TDesC8& aUrl );
-    
-    public: // From MHttpDownloadMngrObserver
-     
-        /**
-        * Handles events from Download manager 
-        */
-        virtual void HandleDMgrEventL( RHttpDownload& aDownload,
-			THttpDownloadEvent aEvent );    
+       WRT::Download& CreatePlatformDownloadL( const TDesC8& aUrl );
+      void downloadMgrEventRecieved(WRT::DownloadEvent* dlmEvent);
+
 
 
     public: // from MCatalogsAccessPointObserver
@@ -316,8 +319,7 @@ class CCatalogsHttpDownloadManager :
          * Deletes downloads that have not been paused by the user
          */
         void DeleteHangingDownloads();
-        
-        
+
     private:
     
         MCatalogsHttpSessionManager& iManager;
@@ -326,8 +328,9 @@ class CCatalogsHttpDownloadManager :
         CCatalogsHttpConnectionManager& iConnectionManager;
         CCatalogsNetworkManager* iNetworkManager; // Not owned
         TInt32 iSessionId;
-        RHttpDownloadMgr iDmgr;
-        
+        DownloadManager *iDmgr;
+        CCatalogsHttpQTDownloadManager* iQTmgr;
+        WRT::Download* iDownload;           // Platform download
         // All downloads except those that are in Restored
         RCatalogsHttpOperationArray iDownloads;
         RCatalogsHttpOperationArray iRestoredDownloads;
@@ -344,4 +347,18 @@ class CCatalogsHttpDownloadManager :
         TInt iCurrentDlId; // id of the last created download
     };
 
-#endif // C_CATALOGSHTTPDOWNLOADMANAGER_H
+
+
+class  CCatalogsHttpQTDownloadManager: public QObject
+	{
+		 Q_OBJECT
+		 	public:
+		 		CCatalogsHttpQTDownloadManager(CCatalogsHttpDownloadManager* aDownloadManager,DownloadManager* aDmgr);
+	    public slots:
+    	void downloadMgrEventRecieved(WRT::DownloadEvent*);
+	    public:
+	    	CCatalogsHttpDownloadManager* iDownloadManager;
+	    	DownloadManager* iDmgr ;
+	};
+	
+	#endif // C_CATALOGSHTTPDOWNLOADMANAGER_H

@@ -213,7 +213,14 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                     {
                     for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
                         {
-                        aFwNodes[i]->Base().SetSelected( ETrue );
+                        if ( aFwNodes[i]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                            {
+                            aFwNodes[i]->Base().SetSelected( EFalse ); 
+                            }
+                        else
+                            {
+                            aFwNodes[i]->Base().SetSelected( ETrue );
+                            }
                         }
                     for ( TInt i = 0; i < aNodes.Count(); ++i )   
                         {
@@ -232,7 +239,14 @@ void CIAUpdateNodeFilter::FilterAndSortNodesL(
                 {
                 for ( TInt i = 0; i < aFwNodes.Count(); ++i )   
                     {
-                    aFwNodes[i]->Base().SetSelected( ETrue );
+                    if ( aFwNodes[i]->FwType() == MIAUpdateFwNode::EFotiNsu )
+                        {
+                        aFwNodes[i]->Base().SetSelected( EFalse ); 
+                        }
+                    else
+                        {
+                        aFwNodes[i]->Base().SetSelected( ETrue );
+                        }
                     }
                 for ( TInt i = 0; i < aNodes.Count(); ++i )   
                     {
@@ -401,16 +415,9 @@ void CIAUpdateNodeFilter::SetDependenciesSelectedL( MIAUpdateNode& aNode,
     RPointerArray<MIAUpdateNode> deps;
     CleanupClosePushL( deps );
     
-    RPointerArray<MIAUpdateAnyNode> allNodes;
-    CleanupClosePushL( allNodes );
-    for( TInt i = 0; i < aAllNodes.Count(); ++i ) 
-        {
-        MIAUpdateAnyNode* node = aAllNodes[i];
-        User::LeaveIfError( allNodes.Append( node ) );
-        }
-    
-    IAUpdateDepUtils::GetDependenciesL( aNode, allNodes, deps );    
-    CleanupStack::PopAndDestroy( &allNodes );
+        
+    IAUpdateDepUtils::GetDependenciesL( aNode, aAllNodes, deps );    
+
     TInt depCount = deps.Count();
     for( TInt i = 0; i < depCount; i++ )
         {

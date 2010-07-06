@@ -180,6 +180,18 @@ public:
 	*
 	*/
 	IMPORT_C void DeactivateComponentL(TComponentId aComponentId);
+	
+	/**
+    * Sets the component presence property for a given component id (If a package contains files 
+    * installed to a removable media, the package is considered as not fully present if the same
+    * media is not present. This property will be used to filter out applications, that are not
+    * fully present, from being diaplayed in the AppLib Menu.).
+    *
+    * @param aComponentId       Identifies a installed component
+    * @param aState             True, if the component is fully present, else False.
+    *
+    */
+	IMPORT_C void SetComponentPresenceL(TComponentId aComponentId, TBool aState);
 
 	/**
 	 * Adds a registry entry representing a package containing a Layered Execution Environment

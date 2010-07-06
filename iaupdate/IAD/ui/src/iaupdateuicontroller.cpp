@@ -1644,10 +1644,10 @@ void CIAUpdateUiController::HandleUiRefreshL()
                 CleanupStack::Pop( nodeId );
                 
                 }
-
-            if ( iFwNodes.Count() > 0 )
+            
+	    	for ( TInt j = 0; j < iFwNodes.Count(); ++j )
                 {
-                MIAUpdateFwNode* fwNode( iFwNodes[ 0 ] );
+                MIAUpdateFwNode* fwNode( iFwNodes[ j ] );
                 CIAUpdateNodeId* nodeId = CIAUpdateNodeId::NewLC();
                 nodeId->SetIdL( fwNode->Base().MetaId() );
                 nodeId->SetNamespaceL( fwNode->Base().MetaNamespace() );
@@ -2043,9 +2043,12 @@ void CIAUpdateUiController::UpdateCompleteL( TInt aError )
         // completion or timer will call the callback later. But, that callback
         // will be ignored in CIAUpdateUiController::ServerReportSent because
         // iState is already then changed from ESendingReport to something else. 
-        const TInt KServerReportMaxWaitTime( 10000000 );
-        iController->FinishedUpdatesL( ETrue, KServerReportMaxWaitTime );
-        iState = ESendingReport;
+        
+        //const TInt KServerReportMaxWaitTime( 10000000 );         //Commented TEMP 
+        //iController->FinishedUpdatesL( ETrue, KServerReportMaxWaitTime ); //Commented TEMP
+        //iState = ESendingReport;  //Commented temporarily
+        EndUpdateFlowL( KErrNone );  //TEMP
+        return;                      //TEMP  
         }
 
     // When reports are sent, EndUpdateFlowL is called via the callback functions

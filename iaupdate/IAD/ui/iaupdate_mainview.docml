@@ -15,8 +15,8 @@
                 <sizehint height="16.41791091514448un" type="PREFERRED" width="38.80597125397785un"/>
             </widget>
             <zvalue value="0.0"/>
-            <layout type="grid">
-                <griditem column="0" itemname="listWidget" row="0"/>
+            <layout orientation="Vertical" type="linear">
+                 <linearitem itemname="listWidget"/>
             </layout>
         </widget>
         <widget name="viewMenu" role="HbView:menu" type="HbMenu">

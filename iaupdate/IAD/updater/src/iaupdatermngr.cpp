@@ -166,7 +166,8 @@ void CIAUpdaterMngr::ProcessInstallingL( TIAUpdaterStartParams& aStartParams )
     TBool showing( EFalse );
     User::LeaveIfError( iFs.Connect() );
     User::LeaveIfError( iWsSession.Connect( iFs ) );
-    CIAUpdaterDialog* dialogs( CIAUpdaterDialog::NewLC( iFs, *this ) );
+    //CIAUpdaterDialog* dialogs( CIAUpdaterDialog::NewLC( iFs, *this ) );
+    CIAUpdaterDialog* dialogs( CIAUpdaterDialog::NewLC( *this ) );
     if ( count > 0 )
         {
         TInt nameIndex( 0 );

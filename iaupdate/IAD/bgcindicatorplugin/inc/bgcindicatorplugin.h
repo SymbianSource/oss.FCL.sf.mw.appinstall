@@ -11,7 +11,7 @@
  *
  * Contributors:
  *
- * Description: Message Indicator Plugin Class 
+ * Description: Backgroundchecker Indicator Plugin Class 
  *
  */
 
@@ -26,8 +26,8 @@
 #include <hbindicatorinterface.h>
 
 /**
- * Message indicator plugin class. 
- * Main class of message indicator plugin. 
+ * Backgroundchecker indicator plugin class. 
+ * Main class of backgroundchecker indicator plugin. 
  */
 class BgcIndicatorPlugin : public QObject, public HbIndicatorPluginInterface
 {

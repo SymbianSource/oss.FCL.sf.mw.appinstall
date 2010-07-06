@@ -20,7 +20,8 @@
 #define C_CATALOGSHTTPDOWNLOAD_H
 
 #include <DownloadMgrClient.h>
-
+#include <download.h>
+#include <downloadevent.h>
 #include <s32file.h>
 
 #include "catalogshttpoperation.h"
@@ -33,7 +34,8 @@ class CCatalogsHttpConfig;
 class CCatalogsHttpHeaders;
 class CCatalogsKeyValuePair;
 class CCatalogsHttpDownloadManager;
-
+class CCatalogsHttpQTDownload;
+using namespace WRT;
 /**
 * HTTP file download implementation
 *
@@ -77,7 +79,7 @@ public: // Constructors & destructor
     */
     static CCatalogsHttpDownload* NewLC( 
         CCatalogsHttpDownloadManager& aOwner, 
-        RHttpDownload* aDownload,
+        Download* aDownload,
         const CCatalogsHttpConfig& aConfig );
 
 
@@ -238,7 +240,8 @@ public: // MCatalogsHttpOperation
      */
     TInt StatusCode() const;        
     
-    
+    TDownloadDeleteState GetStatusState();
+    Download* GetDownload();
     /**
      * Not supported
      * @see MCatalogsHttpOperation::StatusText()
@@ -282,7 +285,9 @@ public: // From MCatalogsHttpObserver
         
     TBool HandleHttpError( MCatalogsHttpOperation& aOperation, 
         TCatalogsHttpError aError );
-            
+
+     void HandledownloadEventL(DownloadEvent& aEvent);   
+              
 public:     
 
     /**
@@ -321,7 +326,7 @@ protected:
     */
     CCatalogsHttpDownload( 
         CCatalogsHttpDownloadManager& aOwner, 
-        RHttpDownload* aDownload );
+        Download* aDownload );
     
     /**
     * 2nd phase constructor
@@ -509,13 +514,14 @@ private:
 
     CCatalogsHttpDownloadManager& iOwner;
     TCatalogsTransportOperationId iId;  // Operation id
-    RHttpDownload* iDownload;           // Platform download
+    Download* iDownload;           // Platform download
     CCatalogsHttpConfig* iConfig;       // Configuration
     MCatalogsHttpObserver* iObserver;   // Observer        
     TCatalogsHttpEvent iState;          // State of the download
     HBufC8* iUri;                       // Current URI
     HBufC8* iEncodedUri;                // Current URI as encoded
     CCatalogsHttpHeaders* iResponseHeaders; // Headers from HTTP response
+    CCatalogsHttpQTDownload* iQTDownload;
     
     // added request headers not supported by DL man
     HBufC8* iAddedRequestHeaders;       
@@ -555,7 +561,7 @@ private:
     // For managing async pause with dlmgr.
     TBool iPausePending;
     TBool iQueuedResume;
-    
+    TDownloadDeleteState iStatus;
 protected:
 
     // Grant access to UpdateContentType
@@ -563,4 +569,18 @@ protected:
     
     };
 
+class  CCatalogsHttpQTDownload: public QObject
+	{
+		 Q_OBJECT
+		 	public:
+		 		CCatalogsHttpQTDownload(CCatalogsHttpDownload* aHttpDownload,Download* aDownload);
+	    public slots:
+    	void downloadEvent(WRT::DownloadEvent*);
+    	void downloadError(WRT::Error);
+	    public:
+	    	CCatalogsHttpDownload* iCatalogsHttpDownload;
+	    	Download* iDownload;           // Platform download
+	};
+	
+	
 #endif // C_CATALOGSHTTPDOWNLOAD_H

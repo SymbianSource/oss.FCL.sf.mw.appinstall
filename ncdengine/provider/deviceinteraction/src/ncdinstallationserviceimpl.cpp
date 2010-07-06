@@ -45,7 +45,7 @@ const TInt KDelayWhenAppListInvalid = 500000;
 
 const TUint KFileOpenFlags = EFileShareReadersOrWriters;
 
-const TInt KWidgetBundleIdLength = KMaxFileName + 1; 
+//const TInt KWidgetBundleIdLength = KMaxFileName + 1; 
 
 // ======== CALLBACK FUNCTION ========
  
@@ -108,6 +108,11 @@ CNcdInstallationService::~CNcdInstallationService()
     delete iJadFileName;
     delete iRecognizedMime;
     
+    delete iResults;
+    delete iArguments;
+    
+    iApaLs.Close();
+    
     
     if( iThemes )
         {
@@ -138,6 +143,10 @@ CNcdInstallationService::CNcdInstallationService()
 void CNcdInstallationService::ConstructL()
     {
     DLTRACEIN((""));
+    
+    iResults = 0;
+    iArguments = 0;
+    
     iDocHandler = CDocumentHandler::NewL();
     iDocHandler->SetExitObserver( this );
     
@@ -224,7 +233,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 void CNcdInstallationService::SilentInstallL( RFile& aFile,
                                         const TDesC& aMimeType,
                                         const TNcdItemPurpose& aPurpose,
-                                        const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                        const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
 
@@ -234,7 +243,7 @@ void CNcdInstallationService::SilentInstallL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallL( aFile, aMimeType, aPurpose, &aInstallOptionsPckg );
+    InstallL( aFile, aMimeType, aPurpose, aInstallOptionsPckg );
 
     DLTRACEOUT(("")); 
     }
@@ -247,7 +256,7 @@ void CNcdInstallationService::SilentInstallL( RFile& aFile,
 void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
                                             const TDesC& aMimeType,
                                             const TDesC8& aDescriptorData,
-                                            const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                            const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
 
@@ -257,7 +266,7 @@ void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallJavaL( aFile, aMimeType, aDescriptorData, &aInstallOptionsPckg );
+    InstallJavaL( aFile, aMimeType, aDescriptorData, aInstallOptionsPckg );
 
     DLTRACEOUT((""));
     }
@@ -267,7 +276,7 @@ void CNcdInstallationService::SilentInstallJavaL( RFile& aFile,
 // ---------------------------------------------------------------------------
 //
 void CNcdInstallationService::SilentInstallWidgetL( RFile& aFile,
-                                                    const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg )
+                                                    const Usif::COpaqueNamedParams* aInstallOptionsPckg )
     {
     DLTRACEIN((""));
     
@@ -277,7 +286,7 @@ void CNcdInstallationService::SilentInstallWidgetL( RFile& aFile,
         iSilentInstallActiveObserver = CNcdSilentInstallActiveObserver::NewL( *this );        
         }
 
-    InstallWidgetL( aFile, &aInstallOptionsPckg );
+    InstallWidgetL( aFile, aInstallOptionsPckg );
     
     DLTRACEOUT((""));
     }
@@ -891,7 +900,7 @@ void CNcdInstallationService::AsyncOperationComplete( TInt aError )
     
     iInstaller.Close();
     
-    if ( aError == SwiUI::KSWInstErrUserCancel ) 
+    if ( aError == KErrCancel ) 
         {
         DLTRACE(("User cancelled, converting error to KErrAbort" ) );
         aError = KErrAbort;        
@@ -1280,7 +1289,7 @@ void CNcdInstallationService::ConnectApaLsL()
 void CNcdInstallationService::InstallL( RFile& aFile,
                                         const TDesC& aMimeType,
                                         const TNcdItemPurpose& aPurpose,
-                                        const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+                                        const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN(( _L("iBusy=%d, MIME: %S"),iBusy, &aMimeType ));    
     DASSERT( iObserver );
@@ -1326,7 +1335,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             aFile, 
             *iRecognizedMime, 
             KNullDesC8, 
-            aSilentInstallOptionsPckg );
+            aSilentInstallOptions );
         return;
         }
     else if ( MatchWidget( aFile, aMimeType ) )
@@ -1334,7 +1343,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
         DLTRACE(("Widget"));
         InstallWidgetL( 
             aFile,
-            aSilentInstallOptionsPckg );
+            aSilentInstallOptions );
         return;
         }
     
@@ -1376,13 +1385,25 @@ void CNcdInstallationService::InstallL( RFile& aFile,
         // Start application installation.
         DLINFO(( "Calling doc handler Open" ));
 
-        if ( !aSilentInstallOptionsPckg )
+        if ( !aSilentInstallOptions )
             {
             DLINFO(("Normal install"));
             InitializeInstallerL();
-            iCancelCode = SwiUI::ERequestInstallHandle;
+            //iCancelCode = SwiUI::ERequestInstallHandle;
             
-            iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+               {
+               iResults = Usif::COpaqueNamedParams::NewL();
+               }
+            
+            iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+            
+            iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
             iInstallStatusObserver->StartToObserve();            
             }
         else
@@ -1392,7 +1413,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }
             
         iBusy = ETrue;
@@ -1463,7 +1484,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
 void CNcdInstallationService::InstallJavaL( RFile& aFile,
                                             const TDesC& /*aMimeType*/,
                                             const TDesC8& aDescriptorData,
-                                            const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+                                            const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN((_L("iBusy=%d, descriptor=%d"),iBusy, aDescriptorData.Length() ));
     DASSERT( iObserver );
@@ -1498,7 +1519,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
     iInstallType = EJavaInstall;
     TDataType dataType;    
             
-    if ( aSilentInstallOptionsPckg == NULL )
+    if ( aSilentInstallOptions == NULL )
         {
         DLINFO(("Normal install"));
         InitializeInstallerL();
@@ -1506,15 +1527,40 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             {
             DLTRACE(("Installing JAD+JAR"));
             // JAD+JAR install
-            iCancelCode = SwiUI::ERequestInstall;
-            iInstaller.Install( iInstallStatusObserver->iStatus, *iJadFileName );
+            //iCancelCode = SwiUI::ERequestInstall;
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+                {
+                iResults = Usif::COpaqueNamedParams::NewL();
+                }
+             
+             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+                        
+            iInstaller.Install( *iJadFileName, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            //iInstaller.Install( iInstallStatusObserver->iStatus, *iJadFileName );
             }
         else
             {
             DLTRACE(("Installing JAR"));
             // JAR install
-            iCancelCode = SwiUI::ERequestInstallHandle;
-            iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+            //iCancelCode = SwiUI::ERequestInstallHandle;
+            if ( !iArguments )
+                {
+                iArguments = Usif::COpaqueNamedParams::NewL();
+                }
+            if ( !iResults )
+               {
+               iResults = Usif::COpaqueNamedParams::NewL();
+               }
+            
+             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+             
+             iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
+            
+            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
             }
         
         iInstallStatusObserver->StartToObserve();
@@ -1530,7 +1576,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( *iJadFileName,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }
         else
             {
@@ -1540,7 +1586,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             // of the silent install and it will forward the information for the callback
             // function of this class object.
             iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                           *aSilentInstallOptionsPckg );
+                                                           aSilentInstallOptions );
             }        
         }
 
@@ -1556,7 +1602,7 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
 //
 void CNcdInstallationService::InstallWidgetL( 
     RFile& aFile,
-    const SwiUI::TInstallOptionsPckg* aSilentInstallOptionsPckg )
+    const Usif::COpaqueNamedParams* aSilentInstallOptions )
     {
     DLTRACEIN((""));    
     
@@ -1570,13 +1616,24 @@ void CNcdInstallationService::InstallWidgetL(
     // Start application installation.
     DLINFO(( "Calling doc handler Open" ));
 
-    if ( !aSilentInstallOptionsPckg )
+    if ( !aSilentInstallOptions )
         {
         DLINFO(("Normal install"));
         InitializeInstallerL();
-        iCancelCode = SwiUI::ERequestInstallHandle;
-        
-        iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+        //iCancelCode = SwiUI::ERequestInstallHandle;
+        if ( !iArguments )
+            {
+            iArguments = Usif::COpaqueNamedParams::NewL();
+            }
+        if ( !iResults )
+           {
+           iResults = Usif::COpaqueNamedParams::NewL();
+           }
+                    
+        iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
+        iInstaller.Install(aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus  );
+         
+        //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
         iInstallStatusObserver->StartToObserve();            
         }
     else
@@ -1586,7 +1643,7 @@ void CNcdInstallationService::InstallWidgetL(
         // of the silent install and it will forward the information for the callback
         // function of this class object.
         iSilentInstallActiveObserver->StartToObserveL( aFile,
-                                                       *aSilentInstallOptionsPckg );
+                                                       aSilentInstallOptions );
         }
         
     iBusy = ETrue;
@@ -1603,10 +1660,13 @@ void CNcdInstallationService::InitializeInstallerL()
     DeletePtr( iInstallStatusObserver );
     iInstallStatusObserver = CNcdActiveOperationObserver::NewL( *this );
     
+    User::LeaveIfError( iInstaller.Connect() );
+    /*
     if ( !iInstaller.Handle() ) 
         {
         User::LeaveIfError( iInstaller.Connect() );
         }
+    */
     }
     
 
@@ -1617,11 +1677,13 @@ void CNcdInstallationService::InitializeInstallerL()
 void CNcdInstallationService::CancelInstall()
     {
     DLTRACEIN((""));
-    if ( iInstallStatusObserver &&
-         iInstaller.Handle() ) 
+    //if ( iInstallStatusObserver &&
+    //     iInstaller.Handle() ) 
+    if ( iInstallStatusObserver )
         {
         DLTRACE(("Cancelling installation"));
-        iInstaller.CancelAsyncRequest( iCancelCode );
+        iInstaller.CancelOperation();
+        //iInstaller.CancelAsyncRequest( iCancelCode );
         }
     
     DeletePtr( iInstallStatusObserver );
@@ -1920,7 +1982,7 @@ TBool CNcdInstallationService::MatchJava( const TDesC& aMime )
 TUid CNcdInstallationService::InstalledMidletUidL()
     {
 
-    Usif::COpaqueNamedParams* iResults = 0; // to be removed
+    //Usif::COpaqueNamedParams* iResults = 0; // to be removed
     
     RArray<TUid> appUids;
     TUid midletUid = KNullUid;

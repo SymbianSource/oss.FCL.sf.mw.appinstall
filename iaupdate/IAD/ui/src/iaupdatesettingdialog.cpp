@@ -26,7 +26,12 @@
 
 #include "iaupdatesettingdialog.h"
 #include "iaupdateprivatecrkeys.h"
+#include "iaupdate.hrh"
 
+
+const TInt KAutoUpdateOn( 0 );
+const TInt KAutoUpdateOff( 1 );
+const TInt KAutoUpdateOnInHomeNetwork( 2 );
 
 /*
 Constructor. It creates a formwidget on the view. 
@@ -190,7 +195,24 @@ void CIAUpdateSettingDialog::saveSettingsL()
     
     // Set auto update check
     value = mAutoUpdateItem->contentWidgetData(QString("currentIndex")).toInt();
+    
+    // Convert ist index index to setting value
+    switch ( value )
+         {
+         case KAutoUpdateOn:
+             value = EIAUpdateSettingValueDisableWhenRoaming;
+             break;
+         case KAutoUpdateOff:
+             value = EIAUpdateSettingValueDisable;
+             break;
+         case KAutoUpdateOnInHomeNetwork:
+             value = EIAUpdateSettingValueEnable;
+             break;
+         default: 
+             break;
+         }
     err = cenrep->Set( KIAUpdateAutoUpdateCheck, value ); 
+    
     User::LeaveIfError( err );
     
     TUint32 ignore = KErrNone;
@@ -238,6 +260,23 @@ void CIAUpdateSettingDialog::initializeFieldsL()
     // set auto update value
     int value = 0;
     User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, value ) );
+    
+    // map cenrep value to index
+    switch ( value )
+         {
+         case EIAUpdateSettingValueEnable:
+             value = KAutoUpdateOn; // On 
+             break;
+         case EIAUpdateSettingValueDisable:
+             value = KAutoUpdateOff; // Off
+             break;
+         case EIAUpdateSettingValueDisableWhenRoaming:
+             value = KAutoUpdateOnInHomeNetwork; // On in home network
+             break;
+         default: 
+             break;
+         }
+    
     mAutoUpdateItem->setContentWidgetData("currentIndex", value);
     
    

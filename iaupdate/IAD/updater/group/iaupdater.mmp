@@ -34,6 +34,10 @@ SECUREID        KIAUpdaterUid
 
 MW_LAYER_SYSTEMINCLUDE
 
+SYSTEMINCLUDE     /epoc32/include/mw/hb
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbcore 
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbwidgets
+
 USERINCLUDE     ../inc
 USERINCLUDE     ../updaterfiles/inc
 USERINCLUDE     ../../loc
@@ -55,11 +59,14 @@ LIBRARY         apgrfx.lib
 LIBRARY         apmime.lib
 LIBRARY         apparc.lib
 LIBRARY         sisregistryclient.lib
-LIBRARY         swinstcli.lib
 LIBRARY         estor.lib
 LIBRARY         commonengine.lib
 LIBRARY         ws32.lib 
 LIBRARY         ecom.lib
+
+LIBRARY         sif.lib
+LIBRARY         hbcore.lib
+LIBRARY         hbwidgets.lib
 
 // Updater files dll
 LIBRARY         iaupdaterfiles.lib
