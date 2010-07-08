@@ -441,6 +441,20 @@ public:
 	CChangeLocaleStep();
 	virtual TVerdict doTestStepL();
 	};
-	
+
+class CAddAppRegInfoStep : public CSisRegistrySessionStep
+    {
+public:
+    CAddAppRegInfoStep();
+    virtual TVerdict doTestStepL();
+    };
+
+class CRemoveAppRegInfoStep : public CSisRegistrySessionStep
+    {
+public:
+    CRemoveAppRegInfoStep();
+    virtual TVerdict doTestStepL();
+    };
+
 #endif
 

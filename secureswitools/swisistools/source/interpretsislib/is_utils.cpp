@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -75,20 +75,71 @@ std::wstring Utf8ToUcs2(const std::string& aStr)
 }
 
 
+void ConvertToPlatformSpecificPath( TUint16* aIn, TUint32 len )
+{
+    while( len-- > 0 )
+    {
+	#ifdef __TOOLS2_LINUX__
+    	if( *aIn == '\\' )
+    	{
+    		*aIn = '/';
+    	}
+	#else
+    	if( *aIn == '/' )
+    	{
+    		*aIn = '\\';
+    	}
+	#endif
+		
+    	aIn++;
+    }
+}
+
+#ifdef __TOOLS2_LINUX__
+void ConvertToForwardSlash( std::wstring& aIn)
+{
+	std::wstring::size_type idx = 0;
+	
+	while( (idx = aIn.find(L"\\", idx)) != std::wstring::npos)
+		{
+		aIn.replace( idx, 1, KDirectorySeparator );
+		}
+}
+#endif
+
+
 void ConvertToLocalPath( std::wstring& aIn, const std::wstring& aDrivePath )
 {
 	std::wstring::size_type idx = 0;
-	while( (idx = aIn.find(L"\\\\", idx)) != std::wstring::npos)
+
+	#ifndef __TOOLS2_LINUX__
+	while( (idx = aIn.find(L"//", idx)) != std::wstring::npos)
         {
-		aIn.replace( idx, 4, KDirectorySeparator );
+		aIn.replace( idx, 2, KDoubleSlashPathPrefix );
         }
-	//
+
     idx = 0;
+
 	while( (idx = aIn.find(L"/", idx)) != std::wstring::npos)
         {
 		aIn.replace( idx, 1, KDirectorySeparator );
         }
-    
+    #else
+
+	idx = 0;
+
+	while( (idx = aIn.find(L"\\\\", idx)) != std::wstring::npos)
+        {
+		aIn.replace( idx, 2, KDoubleSlashPathPrefix );
+        }
+
+	idx = 0;
+
+	while( (idx = aIn.find(L"\\", idx)) != std::wstring::npos)
+        {
+		aIn.replace( idx, 1, KDirectorySeparator );
+        }
+	#endif
     // If the first two characters represent a drive specification
     // then replace them entirely with the value from the 
     // PC's path ('aDrivePath').
@@ -98,14 +149,13 @@ void ConvertToLocalPath( std::wstring& aIn, const std::wstring& aDrivePath )
     const bool startsWithDrive = StringUtils::StartsWithDrive( aIn );
     if ( startsWithDrive )
     {
-	    aIn.replace(aIn.begin(), aIn.begin()+2, aDrivePath);
+	    aIn.replace(aIn.begin(), aIn.begin()+2, aDrivePath.c_str());
     }
     else
     {
-        aIn.insert( 0, aDrivePath );
+        aIn.insert( 0, aDrivePath.c_str() );
     }
 }
-
 
 struct TPair {
 	TUint16 first; 
@@ -1008,10 +1058,22 @@ wchar_t Fold(wchar_t aC)
 }
 int FoldedCompare(const std::wstring& aLeft, const std::wstring& aRight)
 {
-	std::wstring::const_iterator l  = aLeft.begin();
-	std::wstring::const_iterator r  = aRight.begin();
-	std::wstring::const_iterator le = aLeft.end();
-	std::wstring::const_iterator re = aRight.end();
+	std::wstring iLeft=aLeft.c_str();
+	std::wstring iRight=aRight.c_str();
+
+#ifdef __TOOLS2_LINUX__
+	std::wstring::size_type idx = 0;
+
+	while( (idx = iLeft.find(L"\\", idx)) != std::wstring::npos)
+        {
+		iLeft.replace( idx, 1, KDirectorySeparator );
+        }
+#endif
+
+	std::wstring::const_iterator l  = iLeft.begin();
+	std::wstring::const_iterator r  = iRight.begin();
+	std::wstring::const_iterator le = iLeft.end();
+	std::wstring::const_iterator re = iRight.end();
 
 	while (l != le && r != re)
 	{
@@ -1025,7 +1087,7 @@ int FoldedCompare(const std::wstring& aLeft, const std::wstring& aRight)
 		++r;
 	}
 
-	return aLeft.size() - aRight.size();
+	return iLeft.size() - iRight.size();
 }
 
 int ReadSecurityInfo( SBinarySecurityInfo& aInfo, const std::wstring aFileName )
@@ -1045,7 +1107,12 @@ int ReadSecurityInfo( SBinarySecurityInfo& aInfo, const std::wstring aFileName )
         throw "Failed in redirection operation";
 	}
 
+#ifndef __LINUX__
     nulStdErr = fopen("NUL:" , "w");
+#else
+    nulStdErr = fopen("/dev/null", "w");
+#endif
+
     if  (!nulStdErr)
 	{
         throw "Failed in redirection operation";
@@ -1085,5 +1152,27 @@ void Utils::GetEquivalentLanguageList(CSISLanguage::TLanguage aLang, TLanguagePa
 			aEquivalents[index] = CSISLanguage::ELangNone;
 			} // end if ptr[0]
 		} // end for i
+	}
+
+const std::wstring Utils::IntegerToWideString(int aInt)
+	{
+	std::wstringstream wstream;
+	wstream << aInt;
+	return wstream.str();
+	}
+
+std::wstring Utils::Int64ToWideString(TInt64 aInt)
+	{
+	std::wstringstream strInt64;
+	strInt64 << aInt;
+	return strInt64.str();
+	}
+
+int Utils::WideStringToInteger(const std::wstring& aWideString)
+	{
+	unsigned long int value=0;
+	std::wstringstream str(aWideString);
+	str >> value;
+	return value;
 	}
 

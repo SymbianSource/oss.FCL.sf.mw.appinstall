@@ -85,6 +85,8 @@ _LIT(KViewDataCount, "ViewDataCount");
 _LIT(KServiceOpaqueDataInfoCount, "ServiceOpaqueDataInfoCount");
 _LIT(KServiceDataTypeCount,"ServiceDataTypeCount");
 _LIT(KAppUid, "AppUid");
+_LIT(KNoOfComponents, "NoOfComponents");
+_LIT(KFormatDrive, "FormatDrive");
 
 // File related attribute names
 _LIT(KSetSizeName, "SetSize");

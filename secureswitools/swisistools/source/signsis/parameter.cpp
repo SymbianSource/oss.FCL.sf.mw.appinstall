@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -58,10 +58,22 @@ bool CParameter::CommandLine (int argc, _TCHAR* argv[])
 
 	for (int index = 1; index < argc; index++)
 		{
-		if (	(argv [index][0] == '-') ||
-				(argv [index][0] == '/'))
+ 			// WINDOWS ENVIRONMENT : If the underlying platform is WINDOWS then, 
+ 			// cope up with multiple arguments following the '-' or '/'. 
+ 			//
+ 			// LINUX ENVIRONMENT : If the underlying platform is LINUX then, cope 
+ 			// up with multiple arguments following only the '-'. This restriction 
+ 			// of not dealing with arguments following '/' is due to the fact that, 
+ 			// the absolute paths in case of LINUX start with a '/'. So, this could 
+ 			// be mistaken as an option if we treat anything prefixed by a '/' as 
+ 			// an option. Hence, this facility is being removed once for all and 
+ 			// only '-' can(should) be used for specifying an option.
+		    if (	   (argv [index][0] == '-')   
+#ifndef __LINUX__			
+				    || (argv [index][0] == '/')
+#endif
+			   )
 			{
- 			// cope with multiple arguments following the '-' or '/'
  			int wCharacter = 1;
  			while (argv[index][wCharacter] !='\0')
 				{
@@ -379,7 +391,7 @@ void CParameter::ShowBanner()
 	{
 	std::cout << std::endl << "SIGNSIS  " << " Version  5.1" << std::endl;
 	std::cout << "A utility for signing Software Installation (SIS) files." << std::endl;
-	std::cout << "Copyright (c) 2007 Symbian Software Ltd. All rights reserved. " << std::endl;
+	std::cout << "Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved." << std::endl;
 #ifdef _DEBUG
 	std::cout << std::endl << "Development Version" << std::endl;
 #endif

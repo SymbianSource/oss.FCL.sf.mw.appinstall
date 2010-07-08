@@ -42,6 +42,9 @@ makefile ../source/dumpswiregistrytool/dumpswiregistrytool.fil
 #endif
 #endif
 
+PRJ_EXPORTS
+apply_tools2_variants.xml /epoc32/tools/makefile_templates/ossi/
+
 
 PRJ_TESTEXPORTS
 

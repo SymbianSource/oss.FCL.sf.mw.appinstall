@@ -46,7 +46,7 @@
 #include "sisregistryproperty.h"
 
 #include <centralrepository.h>
-
+#include "sisregistryaccess_client.h"
 const TInt KDefaultBufferSize		= 2048;
 /////////////////////////////////////////////////////////////////////
 // defs, Constants used by test steps
@@ -243,6 +243,8 @@ CModifiableFileStep::CModifiableFileStep()
 
 TVerdict CModifiableFileStep::doTestStepL()
 	{
+
+    
 	RArray<TPtrC> theFileNames;
 	CleanupClosePushL(theFileNames);
 	GetStringArrayFromConfigL(ConfigSection(), KModFileName, theFileNames);
@@ -2776,3 +2778,70 @@ TVerdict CSisApplicationManagerStep::doTestStepL()
 	SetTestStepResult(EPass);
 	return TestStepResult();	
 	}
+
+////////////////////////////////////////////////////////////////////////////
+// CAddAppRegInfoStep 
+////////////////////////////////////////////////////////////////////////////
+CAddAppRegInfoStep::CAddAppRegInfoStep()
+    {
+    SetTestStepName(KIsFileRegisteredStep);
+    }
+
+TVerdict CAddAppRegInfoStep::doTestStepL()
+    {
+    TBool expectedResult(EPass);
+    TPtrC regFileName;
+    if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
+        {
+        ERR_PRINTF1(_L("Reg File Name was not found in ini"));
+        User::Leave(KErrNotFound);
+        }
+    
+    RSisRegistryAccessSession sisRegistryAccessSessionSession;
+    User::LeaveIfError(sisRegistryAccessSessionSession.Connect());
+    CleanupClosePushL(sisRegistryAccessSessionSession);
+    
+    TInt res = sisRegistryAccessSessionSession.AddAppRegInfoL(regFileName, iTimeMeasuredExternally );
+   
+    if(res != KErrNone)
+        {
+        ERR_PRINTF2(_L("Application Registration data not added successfuly , error %d"),res);
+        User::Leave(res);
+        }
+    CleanupStack::Pop(&sisRegistryAccessSessionSession);
+    return TestStepResult();
+    }
+
+////////////////////////////////////////////////////////////////////////////
+// CRemoveAppRegInfoStep 
+////////////////////////////////////////////////////////////////////////////
+CRemoveAppRegInfoStep::CRemoveAppRegInfoStep()
+    {
+    SetTestStepName(KIsFileRegisteredStep);
+    }
+
+TVerdict CRemoveAppRegInfoStep::doTestStepL()
+    {
+    TBool expectedResult(EPass);
+    TPtrC regFileName;
+    if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
+        {
+        ERR_PRINTF1(_L("Reg File Name was not found in ini"));
+        User::Leave(KErrNotFound);
+        }
+    
+    RSisRegistryAccessSession sisRegistryAccessSessionSession;
+    User::LeaveIfError(sisRegistryAccessSessionSession.Connect());
+    CleanupClosePushL(sisRegistryAccessSessionSession);
+    
+    TInt res = sisRegistryAccessSessionSession.RemoveAppRegInfoL(regFileName, iTimeMeasuredExternally );
+   
+    if(res != KErrNone)
+        {
+        ERR_PRINTF2(_L("Application Registration data not added successfuly , error %d"),res);
+        User::Leave(res);
+        }
+    CleanupStack::Pop(&sisRegistryAccessSessionSession);
+    return TestStepResult();
+    }
+

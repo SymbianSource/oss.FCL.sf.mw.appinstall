@@ -51,6 +51,11 @@ _LIT(KLogDir, "\\sys\\install\\log.txt");
 //Location of application registration resource files
 _LIT(KApparcRegFilePath, "\\private\\10003a3f\\apps\\*.rsc");
 _LIT(KApparcRegFileImportPath, "\\private\\10003a3f\\import\\apps\\*.rsc");
+
+//Registration resource file uid 
+const TUid KUidAppRegistrationFile = {0x101F8021};
+_LIT(KApparcRegDir, "\\private\\10003a3f\\import\\apps\\");
+
 }
 
 #endif // __SISREGISTRYSERVERCONST_H__

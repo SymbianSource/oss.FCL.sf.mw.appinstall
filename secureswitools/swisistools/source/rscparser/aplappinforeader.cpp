@@ -42,7 +42,11 @@ const TUint KNonLocalized = 0;
 
 const TUint KResourceOffsetMask = 0xFFFFF000;
 
+#ifdef __LINUX__
+std::string KAppBinaryPathAndExtension("/sys/bin/.exe");
+#else
 std::string KAppBinaryPathAndExtension("\\sys\\bin\\.exe");
+#endif
 
 const TInt KAppRegistrationInfoResourceId = 1;
 
@@ -54,7 +58,11 @@ const TUid KUidAppRegistrationFile = {0x101F8021};
 */
 std::string KAppResourceFileExtension(".rsc");
 
+#ifdef __LINUX__
+std::string KLitPathForUntrustedRegistrationResourceFiles("/private/10003a3f/import/apps/");
+#else
 std::string KLitPathForUntrustedRegistrationResourceFiles("\\private\\10003a3f\\import\\apps\\");
+#endif
 
 //
 // CAppInfoReader
@@ -198,6 +206,7 @@ Ptr16* CAppInfoReader::IconFileName()
 {
 	Ptr16* iconFileName = iIconFileName;
 	iIconFileName = NULL; // ownership transferred to caller
+	ConvertToPlatformSpecificPath(iconFileName->GetPtr(), iconFileName->GetLength());
 	return iconFileName;
 }
 
@@ -442,11 +451,22 @@ TBool CAppInfoReader::ReadL()
 		size_t found;
 		std::string iLocalPath(iDrivePath);
 
-	  	found=localizeFileName.find_last_of("/\\");
+		#ifdef __LINUX__
+	  	found=localizeFileName.find_last_of("//");
+		#else
+		found=localizeFileName.find_last_of("/\\");
+		#endif
+
 	  	if(found)
 	  		folder = localizeFileName.substr(0,found);
 	  	else
-	  		folder.assign("\\");
+		{
+			#ifdef __LINUX__
+			folder.assign("/");	  		
+			#else
+			folder.assign("\\");
+			#endif
+		}
 	  	
 	  	file = localizeFileName.substr(found+1);
 		file.append(".");
@@ -455,8 +475,13 @@ TBool CAppInfoReader::ReadL()
 				
 		std::wstring iFilePath = string2wstring(iLocalPath);
 		std::wstring iFileName = string2wstring(file);
-		iLocalPath.append("\\");
 
+		#ifdef __LINUX__
+		iLocalPath.append("/");
+		#else
+		iLocalPath.append("\\");
+		#endif
+		
 		std::list<std::wstring> locDirs;
 		GetDirContents( iFilePath, locDirs );
 
@@ -468,7 +493,7 @@ TBool CAppInfoReader::ReadL()
 			    std::string fName;
 				std::string sAbsolutePath;
 				sAbsolutePath.assign(iLocalPath);
-			 	fName = Ucs2ToUtf8( *curr );
+			 	fName = wstring2string( *curr );
 
 			   	sAbsolutePath.append(fName);
 				//cout << sAbsolutePath<<endl;
@@ -537,11 +562,14 @@ void CAppInfoReader::ReadMandatoryInfoL(RResourceReader& aResourceReader)
 
 	// read LTEXT app_file
 	PtrC16* appFile = aResourceReader.ReadTPtrCL();
+
 	if(NULL==appFile)
 	{
-		std::string errMsg= "Failed : Invalid Resource File Name. Application File Name is Mendatory.";
+		std::string errMsg= "Failed : Invalid Resource File Name. Application File Name is Mandatory.";
 		throw CResourceFileException(errMsg);
 	}
+
+	ConvertToPlatformSpecificPath(appFile->iPtr, appFile->iMaxLength);
 
 	TInt err=0;
 	// this object gets used for 2 purposes: first to check that a ParsePtrC can be created over "appFile" without it panicking, and second to construct iAppBinaryFullName
@@ -653,6 +681,7 @@ Ptr16* CAppInfoReader::CreateFullIconFileNameL(const PtrC16* aIconFileName) cons
 	filename = new Ptr16(aIconFileName->iMaxLength);
 	if(NULL==filename || NULL == filename->GetPtr())
 	{
+		parsePtr.SetToNull();
 		std::string errMsg= "Failed : Error in Reading File. Memory Allocation Failed";
 		throw CResourceFileException(errMsg);
 	}
@@ -763,8 +792,10 @@ TInt CAppInfoReader::ReadLocalisableInfoLoopL(CResourceFile& aResourceFile, TUin
 	// read LTEXT icon_file
 	iIconFileName = NULL;
 	PtrC16* iconFile = resourceReader.ReadTPtrCL();
+
 	if(NULL != iconFile)
 	{
+		ConvertToPlatformSpecificPath(iconFile->iPtr, iconFile->iMaxLength);
 		Ptr16*	iconFileName = CreateFullIconFileNameL(iconFile);
 		
 		if (iconFileName)
@@ -845,11 +876,22 @@ void CAppInfoReader::ReadOpaqueDataL(TUint aResourceId, CResourceFile* aRegistra
 				size_t find;
 				std::string iLocalPath(iDrivePath);
 		
+				#ifdef __LINUX__
+				found=localizeFileName.find_last_of("//");
+				#else
 				found=localizeFileName.find_last_of("/\\");
+				#endif
+
 				if(found)
 					folder = localizeFileName.substr(0,found);
 				else
+				{
+					#ifdef __LINUX__
+					folder.assign("/");
+					#else
 					folder.assign("\\");
+					#endif					
+				}
 			
 				file = localizeFileName.substr(found+1);
 				file.append(".");
@@ -858,7 +900,12 @@ void CAppInfoReader::ReadOpaqueDataL(TUint aResourceId, CResourceFile* aRegistra
 					
 				std::wstring iFilePath = string2wstring(iLocalPath);
 				std::wstring iFileName = string2wstring(file);
+				#ifdef __LINUX__
+				iLocalPath.append("/");
+				#else
 				iLocalPath.append("\\");
+				#endif
+
 		
 				std::list<std::wstring> locDirs;
 				GetDirContents( iFilePath, locDirs );
@@ -872,7 +919,7 @@ void CAppInfoReader::ReadOpaqueDataL(TUint aResourceId, CResourceFile* aRegistra
 						std::string sAbsolutePath;
 						std::string Locale;
 						sAbsolutePath.assign(iLocalPath);
-						fName = Ucs2ToUtf8( *curr );
+						fName = wstring2string( *curr );
 
 						find=fName.rfind("backup");
 						if(find != string::npos)
@@ -1065,12 +1112,14 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 {
 	// read LTEXT localisable_resource_file
 	PtrC16*	localisableResourceFileName = aResourceReader.ReadTPtrCL();
+
 	if(NULL == localisableResourceFileName)
 	{
 		iLocalisableResourceFileName = NULL;
 	}
 	else
 	{
+		ConvertToPlatformSpecificPath(localisableResourceFileName->iPtr, localisableResourceFileName->iMaxLength);
 		if (localisableResourceFileName->iMaxLength > 0 )
 		{
 			ParsePtrC parsePtr(localisableResourceFileName);
@@ -1078,6 +1127,7 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 			if(parsePtr.IsValidName())
 			{
 				iLocalisableResourceFileName = NULL;
+				parsePtr.SetToNull();	//To Avoid double Delete in destructor.
 				std::string errMsg= "Failed : Invalid localisable Resource File Name";
 				throw CResourceFileException(errMsg);
 			}
@@ -1090,10 +1140,12 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 
 			TInt err=0;
 			std::string sTemp = parsePtr.StrName();
+
 			err = FindWild(registrationFileDrive, KAppResourceFileExtension, sTemp);
 			if(err==1)
 			{
 				std::string errMsg= "Failed : Invalid drive for Registration File";
+				parsePtr.SetToNull();	//To Avoid double Delete in destructor.
 				throw CResourceFileException(errMsg);
 			}
 
@@ -1101,6 +1153,7 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 			if(NULL==iLocalisableResourceFileName || NULL==iLocalisableResourceFileName->GetPtr())
 			{
 				std::string errMsg= "Failed : Error in Reading File. Memory Allocation Failed";
+				parsePtr.SetToNull();	//To Avoid double Delete in destructor.
 				throw CResourceFileException(errMsg);
 			}
 
@@ -1119,6 +1172,7 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 	iCapability.iLaunchInBackground = aResourceReader.ReadInt8L();
 
 	PtrC16* iTemp = aResourceReader.ReadTPtrCL();
+
 	if(NULL==iTemp || NULL==iTemp->iPtr)
 		iCapability.iGroupName = NULL;
 	else 
@@ -1198,8 +1252,10 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 	for (TInt i=0; i < fileOwnershipArraySize; i++)
 	{
 		PtrC16* fileNamePtr_temp = aResourceReader.ReadTPtrCL();
+
 		if(NULL != fileNamePtr_temp)
 		{
+			ConvertToPlatformSpecificPath(fileNamePtr_temp->iPtr, fileNamePtr_temp->iMaxLength);
 			Ptr16* fileNamePtr = new Ptr16(fileNamePtr_temp->iMaxLength);
 			if(NULL==fileNamePtr || NULL==fileNamePtr->GetPtr())
 			{
@@ -1208,6 +1264,7 @@ TInt CAppInfoReader::ReadNonLocalisableInfoL(RResourceReader& aResourceReader, T
 			}
 			fileNamePtr->UpdateLength(fileNamePtr_temp->iMaxLength);			  
 			BufCpy(fileNamePtr->GetPtr(),fileNamePtr_temp->iPtr,fileNamePtr_temp->iMaxLength);
+
 			iOwnedFileArray->push_back(fileNamePtr);
 		}
 		else
@@ -1297,6 +1354,7 @@ void CAppInfoReader::ReadMimeTypesSupportedL(RResourceReader& aResourceReader,
 	    }
 
 		PtrC8* dataTypePtr  = aResourceReader.ReadTPtrC8L();
+
 		if(NULL != dataTypePtr)
 		{
 			TDataType* dataType = new TDataType(dataTypePtr);

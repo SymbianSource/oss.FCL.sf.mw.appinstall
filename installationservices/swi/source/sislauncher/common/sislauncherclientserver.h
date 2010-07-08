@@ -47,14 +47,18 @@ enum TSisLauncherMessages
 	EQueueStartByMimeByHandle,
 	EExecuteQueue,
 	EKillQueue,
-	EParseSwTypeRegFile,
-	ERegisterSifLauncherMimeTypes,
-	EUnregisterSifLauncherMimeTypes,
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-    EAsyncParseResourceFileSize,     //Parse registration resource file, Async Function
-    EAsyncParseResourceFileData,	 //Return parsed resource data
-    ENotifyNewAppsData,              //Notify Apparc about application data
-    ENotifyApparcForApps,          //Notify Apparc about updated applications
+	//Function Id's to be accessed by Installserver
+	EParseSwTypeRegFile = 30,
+	ERegisterSifLauncherMimeTypes,
+	ENotifyNewAppsData,                                                     //Notify Apparc about application data
+	//Function Id's to be accessed by SisRegistryServer
+	EUnregisterSifLauncherMimeTypes = 60,
+	//Function Id's to be accessed by Installserver and SisRegistryServer
+	ENotifyApparcForApps = 90,                                              //Notify Apparc about updated applications
+	//Function Id's to be accessed by all clients
+    EAsyncParseResourceFileSize = 120,                                      //Parse registration resource file, Async Function
+    EAsyncParseResourceFileData,                                            //Return parsed resource data
     #endif
 	ESeparatorEndAll	
    

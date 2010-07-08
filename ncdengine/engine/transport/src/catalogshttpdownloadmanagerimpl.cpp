@@ -77,7 +77,7 @@ CCatalogsHttpDownloadManager::~CCatalogsHttpDownloadManager()
     DLTRACEIN( ( "" ) );
 
     Cancel();
-    iEventQueue.Close();
+    // HLa iEventQueue.Close();
 
     // Release downloads
     TInt count = iDownloads.Count() - 1;
@@ -636,6 +636,7 @@ void CCatalogsHttpDownloadManager::RestoreDownloadsL()
     {
     DLTRACEIN((""));
     
+    const TInt KMaxUrlLength = 2048; // HLa
     TBuf8<KMaxUrlLength> url;
     
     
@@ -692,7 +693,8 @@ void CCatalogsHttpDownloadManager::RestoreDownloadsL()
 // ---------------------------------------------------------------------------
 // Finds the index for the given download in iDownloads
 // ---------------------------------------------------------------------------
-//            
+//   
+/* HLa
 TInt CCatalogsHttpDownloadManager::FindInDownloads( 
     const RCatalogsHttpOperationArray& aArray,
     RHttpDownload* aDownload ) const
@@ -712,7 +714,7 @@ TInt CCatalogsHttpDownloadManager::FindInDownloads(
         }
     return KErrNotFound;
     }
-
+*/
 
 // ---------------------------------------------------------------------------
 // Finds the index for the given download in the given array
@@ -834,6 +836,7 @@ void CCatalogsHttpDownloadManager::RunL()
     DLTRACEIN(( "Event queue count: %d", iEventQueue.Count() ));
    
     // Handle the event queue 
+    /* HLa
     while ( iEventQueue.Count() ) 
         {
         
@@ -895,6 +898,7 @@ void CCatalogsHttpDownloadManager::RunL()
                 }
             }
         }
+        */
     }
     
     
@@ -920,6 +924,7 @@ TInt CCatalogsHttpDownloadManager::RunError( TInt aError )
 void CCatalogsHttpDownloadManager::ContinueEventHandling()
     {
     DLTRACEIN((""));
+    /* HLa
     if( iEventQueue.Count() && !IsActive() ) 
         {
         DLTRACE(("More events to handle"));
@@ -928,9 +933,11 @@ void CCatalogsHttpDownloadManager::ContinueEventHandling()
         TRequestStatus* status = &iStatus;
         User::RequestComplete( status, KErrNone );
         }
+        */
     }
+
     
-    
+    /* HLa
 void CCatalogsHttpDownloadManager::RemoveUnhandledEvents( 
     const TDownloadEvent& aEvent )
     {
@@ -945,8 +952,9 @@ void CCatalogsHttpDownloadManager::RemoveUnhandledEvents(
             }        
         }    
     }
+*/
 
-
+/* HLa
 void CCatalogsHttpDownloadManager::RemoveUnhandledProgressEvents( 
     const TDownloadEvent& aEvent )
     {
@@ -963,7 +971,7 @@ void CCatalogsHttpDownloadManager::RemoveUnhandledProgressEvents(
             }        
         }    
     }
-
+*/
 
 TInt CCatalogsHttpDownloadManager::NewDownloadId()
     {

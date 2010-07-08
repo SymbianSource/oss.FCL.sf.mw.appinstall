@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -23,10 +23,11 @@ TARGETTYPE		LIB
 USERINCLUDE 	../source/interpretsislib
 USERINCLUDE 	../source/sisxlibrary
 USERINCLUDE 	../../swianalysistoolkit/source/common
+USERINCLUDE 	../../swianalysistoolkit/source/common/utf8
+USERINCLUDE 	../source/common
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 USERINCLUDE		../source/xmlparser
-USERINCLUDE 	../source/common
 USERINCLUDE 	../source/dbmanager
 USERINCLUDE 	../source/rscparser
 #endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
@@ -74,6 +75,7 @@ SOURCE			dbconstants.cpp
 SOURCE			xmlgenerator.cpp
 SOURCE			dbhelper.cpp
 
+
 SOURCEPATH		../source/common
 SOURCE			util.cpp
 
@@ -94,6 +96,8 @@ SOURCE			dirparse.cpp
 SOURCE			apsecutils.cpp
 
 #endif
+SOURCEPATH		../../swianalysistoolkit/source/common/utf8
+SOURCE			utf8.cpp
 
 #ifndef TOOLS2_LINUX
 MACRO	_UNICODE _CONSOLE _STLP_THREADS _WIN32 UNICODE __GNUG__ XML_LIBRARY

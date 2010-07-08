@@ -354,7 +354,15 @@ CTestStep* CTestSisRegistry::CreateTestStep(const TDesC& aStepName)
 		{
 		name = new CChangeLocaleStep;
 		}
-
+	else if (aStepName == KCAddAppRegInfoStep)
+	    {
+        name = new CAddAppRegInfoStep;
+	    }
+	else if (aStepName == KCRemoveAppRegInfoStep)
+        {
+        name = new CRemoveAppRegInfoStep;
+        }
+	
 	if(performanceStep && name)
 		{
 		CSisRegistryTestStepBase *baseTestStep = dynamic_cast<CSisRegistryTestStepBase*>(name);

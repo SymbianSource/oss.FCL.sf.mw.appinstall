@@ -226,6 +226,7 @@ void CAppLocalizableInfo::ReadViewDataL(RResourceReader& aResourceReader)
 
 		// read LTEXT caption
 		PtrC16* viewCaption = aResourceReader.ReadTPtrCL();
+
 		if(NULL != viewCaption)
 		{
 			viewData->SetCaptionL(viewCaption);
@@ -239,9 +240,10 @@ void CAppLocalizableInfo::ReadViewDataL(RResourceReader& aResourceReader)
 
 		// read LTEXT icon_file
 		PtrC16* viewIconFile = aResourceReader.ReadTPtrCL();
+
 		if(NULL != viewIconFile)
 		{
-
+			ConvertToPlatformSpecificPath(viewIconFile->iPtr, viewIconFile->iMaxLength);
 			Ptr16*	fullViewIconFileName = ViewDataIconFileNameL(viewIconFile);
 			if (fullViewIconFileName)
 			{
@@ -287,12 +289,17 @@ Ptr16* CAppLocalizableInfo::ViewDataIconFileNameL(const PtrC16* aIconFileName) c
 	 * aIconFileName will be returned since it is a valid string. 
 	 */	
 	ParsePtrC parsePtr(aIconFileName);
-	if (parsePtr.IsWild() || !parsePtr.PathPresent() || !parsePtr.NamePresent())
+
+	if ( parsePtr.IsWild() || !parsePtr.PathPresent() || !parsePtr.NamePresent() )
+	{
+		parsePtr.SetToNull();
 		return NULL;
+	}
 
 	filename = new Ptr16(aIconFileName->iMaxLength);
 	if(NULL==filename || NULL == filename->GetPtr())
 	{
+		parsePtr.SetToNull();
 		std::string errMsg= "Failed : Error in Reading File. Memory Allocation Failed";
 		throw CResourceFileException(errMsg);
 	}

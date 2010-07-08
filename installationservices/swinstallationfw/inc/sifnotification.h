@@ -77,6 +77,8 @@ public:
     
     /**
         Creates a CSifOperationStartData object.
+
+		@deprecated  Use the overload with aOperationPhase instead.
         
         @param  aGlobalComponentId  The global component id which uniquely identifies the operation          
         @param  aComponentName		The name of the software component
@@ -90,7 +92,49 @@ public:
         @return A pointer to the newly allocated CSifOperationStartData object, if creation is successful.
      */      
     IMPORT_C static CSifOperationStartData* NewL(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,
-                                                  const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType);
+                                                  const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, 
+                                                      const TDesC& aSoftwareType);
+    
+    /**
+        Creates a CSifOperationStartData object.
+        
+        @param  aGlobalComponentId  The global component id which uniquely identifies the operation          
+        @param  aComponentName      The name of the software component
+        @param  aApplicationNames   The list of applications associated with the software component, an empty array in case of no applications
+        @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
+        @param  aComponentSize      The total size of the component in bytes
+        @param  aIconPath           The path where all application and component icons are found
+        @param  aComponentIcon      The name of the component icon(without path)
+        @param  aSoftwareType       The software type name of the software component
+        @param  aOperationPhase     The type of SIF operation
+                                                   
+        @return A pointer to the newly allocated CSifOperationStartData object, if creation is successful.
+     */      
+    IMPORT_C static CSifOperationStartData* NewL(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,
+                                                  const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, 
+                                                      const TDesC& aSoftwareType, TSifOperationPhase aOperationPhase);
+
+    /**
+        Creates a CSifOperationStartData object.
+
+  		@deprecated  Use the overload with aOperationPhase instead.
+        
+        @param  aGlobalComponentId  The global component id which uniquely identifies the operation          
+        @param  aComponentName      The name of the software component
+        @param  aApplicationNames   The list of applications associated with the software component, an empty array in case of no applications
+        @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
+        @param  aComponentSize      The total size of the component in bytes
+        @param  aIconPath           The path where all application and component icons are found
+        @param  aComponentIcon      The name of the component icon(without path)
+        @param  aSoftwareType       The software type name of the software component
+                                                           
+        @return A pointer to the newly allocated CSifOperationStartData object, if creation is successful.
+                The pointer is also put onto the cleanup stack. 
+     */     
+    IMPORT_C static CSifOperationStartData* NewLC(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,
+                                                      const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, 
+                                                          const TDesC& aSoftwareType);
+    
 
     /**
         Creates a CSifOperationStartData object.
@@ -103,12 +147,14 @@ public:
         @param  aIconPath           The path where all application and component icons are found
         @param  aComponentIcon      The name of the component icon(without path)
         @param  aSoftwareType       The software type name of the software component
-                                                   
+        @param  aOperationPhase     The type of SIF operation
+                                                           
         @return A pointer to the newly allocated CSifOperationStartData object, if creation is successful.
                 The pointer is also put onto the cleanup stack. 
      */     
     IMPORT_C static CSifOperationStartData* NewLC(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,
-                                                  const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType);
+                                                      const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, 
+                                                          const TDesC& aSoftwareType, TSifOperationPhase aOperationPhase);
     
     /**
      @return The global component Id associated with the operation.
@@ -153,11 +199,17 @@ public:
     IMPORT_C ~CSifOperationStartData();          
 
     IMPORT_C void ExternalizeL(RWriteStream& aStream) const;
+    
+    /**
+     @return The type of SIF operation.
+     */   
+    IMPORT_C TSifOperationPhase OperationPhase() const;
 
 private:
     CSifOperationStartData();
     void ConstructL(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,  
-          const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType);
+                        const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, 
+                            const TDesC& aComponentIcon, const TDesC& aSoftwareType, TSifOperationPhase aOperationPhase);
     void InternalizeL(RReadStream& aStream);
 
 private:
@@ -170,6 +222,7 @@ private:
     HBufC* iIconPath;      
     HBufC* iSoftwareType;
     TSifOperation iOperationType;
+    TSifOperationPhase iOperationPhase;
     };
 
 
@@ -316,8 +369,15 @@ NONSHARABLE_CLASS(CSifOperationProgressData) : public CBase
     
     /**
      @return The current progress value.
+
+	 @deprecated  Use CurrentProgress() instead.
      */     
     IMPORT_C TInt CurrentProgess() const;
+    
+    /**
+     @return The current progress value.
+     */     
+    IMPORT_C TInt CurrentProgress() const;
     
     /**
      @return The total value to achieve completion of the subphase.

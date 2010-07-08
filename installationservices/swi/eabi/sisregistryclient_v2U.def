@@ -221,4 +221,6 @@ EXPORTS
 	_ZN3Swi27RSisRegistryWritableSession9AddEntryLERKN4Usif28CApplicationRegistrationDataERKNS_19CSisRegistryPackageE @ 220 NONAME
 	_ZNK3Swi19RSisRegistrySession25GetComponentIdForPackageLERK7TDesC16S3_ @ 221 NONAME
 	_ZN3Swi27RSisRegistryWritableSession21SetComponentPresenceLEii @ 222 NONAME
+	_ZN3Swi19RSisRegistrySession14AddAppRegInfoLERK7TDesC16 @ 223 NONAME
+	_ZN3Swi19RSisRegistrySession17RemoveAppRegInfoLERK7TDesC16 @ 224 NONAME
 

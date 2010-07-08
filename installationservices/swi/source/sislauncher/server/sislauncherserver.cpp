@@ -153,15 +153,14 @@ void CSisLauncherServer::ShortServerShutdown()
         } 
     }
 
-    // All functions require TCB capability
 const TInt CSisLauncherServer::iRanges[iRangeCount] = 
     {
     0, // All connect attempts
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-    // Range of utility services for Post manufacture management of Layered Execution Environemnts
-    EParseSwTypeRegFile,
-    EUnregisterSifLauncherMimeTypes,
-    EAsyncParseResourceFileSize,
+    EParseSwTypeRegFile,                                // accessible by Installserver 
+    EUnregisterSifLauncherMimeTypes,                    // accessible by SisRegistryServer
+    ENotifyApparcForApps,                               // accessible by Installserver and SisRegistry
+    EAsyncParseResourceFileSize,                        // accessible by all clients
 #endif
     ESeparatorEndAll,
     };
@@ -172,10 +171,12 @@ const TUint8 CSisLauncherServer::iElementsIndex[iRangeCount] =
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
     1, // Utility services used by InstallServer
     2, // Utility services used by SisRegistryServer
+    CPolicyServer::ECustomCheck,
     CPolicyServer::EAlwaysPass,
 #endif  
     CPolicyServer::ENotSupported,
     };
+
 const CPolicyServer::TPolicyElement CSisLauncherServer::iPolicyElements[] = 
     {
     {_INIT_SECURITY_POLICY_C1(ECapabilityTCB), CPolicyServer::EFailClient},
@@ -327,6 +328,22 @@ void CSisLauncherServer::HandleShutdownL(TThreadId aThread, TBool aKillOnTimeout
     CleanupStack::PopAndDestroy(threadMonitor);
     }
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+CPolicyServer::TCustomResult CSisLauncherServer::CustomSecurityCheckL(const RMessage2& aMsg, 
+    TInt& /*aAction*/, TSecurityInfo& /*aMissing*/)
+    {
+    TUint32 secureId = aMsg.SecureId().iId;
+    if (secureId == KInstallServerUid || secureId == KSisRegistryServerUid)
+        {
+        return CPolicyServer::EPass;
+        }
+    else
+        {
+        //client accessing the function is neither Install Server nor Sis Registry
+        return CPolicyServer::EFail;
+        }
+    }
+#endif
 
 #ifndef SWI_TEXTSHELL_ROM
 void CSisLauncherServer::StartDocumentL(RFile& aFile, TBool aWait)
@@ -565,6 +582,7 @@ void CSisLauncherServer::NotifyNewAppsL(const RPointerArray<Usif::CApplicationRe
     apaSession.ForceRegistration(aApplicationRegistrationData);
     CleanupStack::PopAndDestroy();
     }
+
 #endif
 #endif
 

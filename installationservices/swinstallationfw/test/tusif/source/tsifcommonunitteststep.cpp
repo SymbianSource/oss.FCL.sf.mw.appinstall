@@ -26,6 +26,7 @@
 #include <usif/sif/sifcommon.h>
 #include <ct/rcpointerarray.h>
 #include <scs/cleanuputils.h>
+#include <s32mem.h> 
 
 using namespace Usif;
 
@@ -544,4 +545,62 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 	    }
 
 	CleanupStack::PopAndDestroy(3, &stringArray);
+	
+	//Externalize, internalize tests.
+	COpaqueNamedParams* params5 = COpaqueNamedParams::NewLC();
+	HBufC* testString = _L("TestString").AllocLC();
+	
+	params5->AddStringL(_L("key1"), *testString);
+	params5->AddIntL(_L("key2"), 23);
+	
+	RArray<TInt> intArray2;
+	CleanupClosePushL(intArray2);
+	intArray2.AppendL(100);
+	intArray2.AppendL(200);
+	
+	RPointerArray<HBufC> stringArray2;
+	CleanupResetAndDestroyPushL(stringArray2);
+	stringArray2.Append(_L("TestString1").AllocL());
+    stringArray2.Append(_L("TestString2").AllocL());
+    
+    params5->AddStringArrayL(_L("key3"), stringArray2);
+    params5->AddIntArrayL(_L("key4"), intArray2);
+    
+	CBufFlat* externalizedBuffer = CBufFlat::NewL(150);
+	CleanupStack::PushL(externalizedBuffer);
+	
+	RBufWriteStream writeStream(*externalizedBuffer);
+	CleanupClosePushL(writeStream);
+	
+	params5->ExternalizeL(writeStream);
+	
+	COpaqueNamedParams* params6 = COpaqueNamedParams::NewLC();
+	
+	RBufReadStream readStream(*externalizedBuffer);
+	CleanupClosePushL(readStream);
+	params6->InternalizeL(readStream);
+	
+    if(params6->IntByNameL(_L("key2"))!= 23 || (params6->StringByNameL(_L("key1")) != _L("TestString")))
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of int and string failed."));
+        User::Leave(err);
+        } 
+    
+    const RArray<TInt>& internalizedIntArray = params6->IntArrayByNameL(_L("key4"));
+    
+    if(internalizedIntArray[0] != 100 && internalizedIntArray[0] != 200)
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of int array failed."));
+        User::Leave(err);
+        }   
+	
+    const RPointerArray<HBufC>& internalizedStringArray = params6->StringArrayByNameL(_L("key3"));
+    
+    if(*internalizedStringArray[0] != _L("TestString1") && *internalizedStringArray[1] != _L("TestString2"))
+        {
+        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of string array failed."));
+        User::Leave(err);
+        }  
+    CleanupStack::PopAndDestroy(8, params5);
+	
 	}

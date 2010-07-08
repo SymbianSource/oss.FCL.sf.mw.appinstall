@@ -37,6 +37,14 @@
 #include <xercesc/dom/DOM.hpp>
 
 #include "toolsconf.h"
+#include "symbiantypes.h"
+#include "utf8_wrapper.h"
+
+// Xerces library uses XMLCh (UTF16 format) as its default character type.
+// We can store the UTF16 returned form the xerces library in the following
+// template class.
+typedef std::basic_string<XMLCh> XercesString;
+
 
 /**
 * This template is used to cleanup memory by calling a function as pointed 
@@ -144,7 +152,7 @@ namespace XmlDetails
             std::wstring iLauncherExecutable;
 			std::vector<TCustomAcessList> iCustomAcessList;
 			std::vector<std::wstring> iMIMEDetails;
-			};
+			}; // struct TScrEnvironmentDetails
 
 		
 	class TScrPreProvisionDetail
@@ -160,11 +168,16 @@ namespace XmlDetails
 			TComponentLocalizable()
 			:iLocale(0)
 			{}
-			
+
+		public: // public Functions
+			inline XercesString Name();
+			inline XercesString Vendor();
+		
+		public: // Member variables	
 			int iLocale;
 			std::wstring iName;
 			std::wstring iVendor;
-			};
+			}; // class TComponentLocalizable
 		
 		class TComponentProperty
 			{
@@ -176,29 +189,41 @@ namespace XmlDetails
 			iIsStr8Bit(false)
 			{}
 
-		public:
+		public: // Member Functions
+			inline XercesString Name();
+			inline XercesString Value();
+
+		public: // Member variables
 			std::wstring iName;
 			int iLocale;
 			std::wstring iValue;
 			bool iIsIntValue;
 			int iIsStr8Bit;
-			};
+			}; // class TComponentProperty
 
 		class TComponentDependency
 			{
 		public:
 			class TComponentDependencyDetail
 				{
-				public:
+				public: // Member Functions
+					inline XercesString SupplierId();
+					inline XercesString FromVersion();
+					inline XercesString ToVersion();
+
+				public: // Member Variables
 					std::wstring iSupplierId;
 					std::wstring iFromVersion;
 					std::wstring iToVersion;
-				};
+				}; // class TComponentDependencyDetail
 
-			public:
+			public: // Member Functions
+				inline XercesString DependentId();
+
+			public: // Member Variables
 				std::wstring iDependentId;
 				std::vector<TComponentDependencyDetail>	iComponentDependencyList;
-			};
+			}; // class TComponentDependency
 
 		class TComponentFile
 			{
@@ -212,15 +237,24 @@ namespace XmlDetails
 				TFileProperty()
 				:iIsIntValue(false)
 				{}
+			public: // Member Functions
+				inline XercesString Name();
+				inline XercesString Value();
+	
+			public: // Member Variables
 				std::wstring iName;
 				std::wstring iValue;
 				bool iIsIntValue;
-				};
+				}; // struct TFileProperty
 
+			public: // Member Functions
+			inline XercesString Location();
+			
+			public: // Member Variables
 			std::wstring iLocation;
 			std::vector<TFileProperty> iFileProperties;
 			
-			};
+			}; // class TComponentFile
 		
 		class TComponentDetails
 			{
@@ -241,16 +275,23 @@ namespace XmlDetails
 
 				TVersion()
 				{}
+			public:
+				inline XercesString MajorVersion();
+				inline XercesString MinorVersion();
+				inline XercesString BuildVersion();
 
 			public:
 				std::wstring iMajor;
 				std::wstring iMinor;
 				std::wstring iBuild;
-				};
+				}; // class TVersion
+
+			public: // Member Functions
+			inline XercesString GlobalId();
 
 			int iIsRomApplication;
 			int iIsRemovable;
-			__int64 iSize;
+			TInt64 iSize;
 			int iScomoState;
 			std::wstring iGlobalId;
 			TVersion iVersion;
@@ -387,12 +428,14 @@ namespace XmlDetails
 			TComponentDependency iComponentDependency;
 			std::vector<TApplicationRegistrationInfo> iApplicationRegistrationInfo;
 			TComponentDetails iComponentDetails;
-			};
+			}; // class TComponent
+
+		inline XercesString SoftwareTypeName();
 
 		std::wstring iSoftwareTypeName;
 		std::vector<TComponent> iComponents;
 		
-		};
+		}; // class TScrPreProvisionDetail
 }
 
 class CScrXmlParser
@@ -511,5 +554,229 @@ class SchemaErrorHandler : public ErrorHandler
 	};
 
 XERCES_CPP_NAMESPACE_END
+
+// inline function definitions
+
+#ifndef _WIN32
+inline XercesString WStringToXercesString(const std::wstring& aString)
+	{
+	XMLCh* buffer = new XMLCh[ (aString.length() + 1) * 2 ];
+	XMLCh* temp = buffer;
+	const wchar_t* source = aString.c_str();
+
+	ConvertUCS4toUTF16(&source, source + aString.length(), &temp, buffer + aString.length());
+
+	// Appending NUL to the converted buffer.
+	*temp = 0;
+
+	XercesString result(buffer);
+	delete[] buffer;
+
+	return result; 
+	}
+
+#else
+
+// We need not do anything for WINDOWS, since XercesString
+// and WString both are same and will be in UTF-16 encoding format.
+#define WStringToXercesString(aWString) (aWString)
+
+#endif // _WIN32
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+//											UTILITY FUNCTIONS
+//------------------------------------------------------------------------------------------------------------------------------
+#ifndef _WIN32
+
+inline std::wstring XercesStringToWString(const XercesString& aString)
+	{
+	wchar_t* buffer = new wchar_t[aString.length() + 1];
+	const XMLCh* source = aString.c_str();
+
+	// Using a temp variable in place of buffer as ConvertUTF16toUTF8 modifies the source pointer passed.
+	wchar_t* temp = buffer;
+
+	ConvertUTF16toUCS4(&source, source + aString.length(), &temp, temp + aString.length());
+
+	// Appending NUL to the converted buffer.
+	*temp = 0;
+
+	std::wstring result(buffer);
+	delete[] buffer;
+	return result;
+	}
+#else
+
+// We need not do anything for WINDOWS, since XercesString
+// and WString both are same and will be in UTF-16 encoding format.
+#define XercesStringToWString(aXercesString) (aXercesString)
+
+#endif // _WIN32
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDetails::TVersion::MajorVersion()
+{
+#ifdef _WIN32
+	return iMajor;
+#else
+	return WStringToXercesString(iMajor);
+#endif // _WIN32
+}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDetails::TVersion::MinorVersion()
+{
+#ifdef _WIN32
+	return iMinor;
+#else
+	return WStringToXercesString(iMinor);
+#endif // _WIN32
+}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDetails::TVersion::BuildVersion()
+{
+#ifdef _WIN32
+	return iBuild;
+#else
+	return WStringToXercesString(iBuild);
+#endif // _WIN32
+}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDetails::GlobalId()
+{
+#ifdef _WIN32
+	return iGlobalId;
+#else  
+	return WStringToXercesString(iGlobalId);
+#endif // _WIN32
+}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::SoftwareTypeName()
+	{
+#ifdef _WIN32
+	return iSoftwareTypeName;
+#else
+	return WStringToXercesString(iSoftwareTypeName);
+#endif // _WIN32
+	}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentLocalizable::Name()
+	{
+#ifdef _WIN32
+	return iName;
+#else
+	return WStringToXercesString(iName);
+#endif // _WIN32
+	}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentLocalizable::Vendor()
+	{
+#ifdef _WIN32
+	return iVendor;
+#else
+	return WStringToXercesString(iVendor);
+#endif // _WIN32
+	}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentProperty::Name()
+	{
+#ifdef _WIN32
+	return iName;
+#else
+	return WStringToXercesString(iName);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentProperty::Value()
+	{
+#ifdef _WIN32
+	return iValue;
+#else
+	return WStringToXercesString(iValue);
+#endif // _WIN32
+	}
+
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentFile::Location()
+	{
+#ifdef _WIN32
+	return iLocation;
+#else
+	return WStringToXercesString(iLocation);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty::Name()
+	{
+#ifdef _WIN32
+	return iName;
+#else
+	return WStringToXercesString(iName);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty::Value()
+	{
+#ifdef _WIN32
+	return iValue;
+#else
+	return WStringToXercesString(iValue);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDependency::DependentId()
+	{
+#ifdef _WIN32
+	return iDependentId;
+#else
+	return WStringToXercesString(iDependentId);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDependency::TComponentDependencyDetail::SupplierId()
+	{
+#ifdef _WIN32
+	return iSupplierId;
+#else
+	return WStringToXercesString(iSupplierId);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDependency::TComponentDependencyDetail::FromVersion()
+	{
+#ifdef _WIN32
+	return iFromVersion;
+#else
+	return WStringToXercesString(iFromVersion);
+#endif // _WIN32
+	}
+
+inline XercesString XmlDetails::TScrPreProvisionDetail::TComponentDependency::TComponentDependencyDetail::ToVersion()
+	{
+#ifdef _WIN32
+	return iToVersion;
+#else
+	return WStringToXercesString(iToVersion);
+#endif // _WIN32
+	}
+
+
+
+
+
+
+
+
 
 #endif // _XMLPARSER_H

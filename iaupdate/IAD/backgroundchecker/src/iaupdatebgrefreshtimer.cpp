@@ -43,7 +43,6 @@
 //MACROS
 _LIT8( KRefreshFromNetworkDenied, "1" );
 _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
-_LIT8( KFirstTimeCase, "0" );
 
 //CONSTANTS
 const TUint KIADUpdateLauncherUid( 0x2001FE2F );
@@ -255,10 +254,16 @@ void CIAUpdateBGTimer::StartProcessL()
         case ERetryMode:
             {
             
-            // Check if indicator should be shown
-            
+            // Should indicator be shown ?
+            TInt entries = NrOfIndicatorEntries();
+            if  ( entries )
+                {
+                iSoftNotification->SetNrOfUpdates( entries );
+                iSoftNotification->ShowIndicatorL();
+                }
             
             StartUpdatesCheckingL();
+            
             break;
             }
         
@@ -445,7 +450,6 @@ TInt CIAUpdateBGTimer::SetLastTimeShowNewFeatureDialogL( TTime aTime )
     return err;
     }
 
-
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::ModeL()
 // ----------------------------------------------------------
@@ -466,6 +470,25 @@ TInt CIAUpdateBGTimer::SetModeL( TIAUpdateBGMode aMode )
     return err;
     }
 
+// ----------------------------------------------------------
+// CIAUpdateBGTimer::NrOfIndicatorEntries()
+// ----------------------------------------------------------
+TInt CIAUpdateBGTimer::NrOfIndicatorEntries()
+    {
+    iInternalFile->ReadControllerDataL();
+    return iInternalFile->NrOfIndicatorEntries();
+    }
+
+
+// ----------------------------------------------------------
+// CIAUpdateBGTimer::SetNrOfIndicatorEntriesL()
+// ----------------------------------------------------------
+TInt CIAUpdateBGTimer::SetNrOfIndicatorEntriesL( TInt aEntries )
+    {
+    iInternalFile->SetNrOfIndicatorEntries( aEntries );
+    TRAPD( err,iInternalFile->WriteControllerDataL() );
+    return err;
+    }
 
 // ----------------------------------------------------------
 // CIAUpdateBGTimer::RetryTimesL()
@@ -1222,7 +1245,9 @@ void CIAUpdateBGTimer::DoSoftNotificationCallBackL( TBool aIsAccepted )
                   }
               else
                   {
-                  //accepted, launch iad
+                  //accepted, clear indicator entries
+                  SetNrOfIndicatorEntriesL( 0 );
+                  // start IAD
                   StartIaupdateL();
                   }
               break;
@@ -1386,9 +1411,10 @@ void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
     // CleanupStack::PopAndDestroy( titleText );
     // CleanupStack::PopAndDestroy( titleText );
     
-    // Set number of updates
+    // Set number of updates for dialog and internal file
     iSoftNotification->SetNrOfUpdates( aNrOfUpdates );
-   
+    SetNrOfIndicatorEntriesL( aNrOfUpdates );
+    
     iSoftNotification->ShowNotificationL();
     FLOG("[bgchecker] LaunchNotificationL 1");
     

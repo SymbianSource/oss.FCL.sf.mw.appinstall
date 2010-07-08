@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -482,6 +482,17 @@ EXPORT_C void RSisRegistrySession::GetComponentIdsForUidL(TUid& aPackageUid, RAr
     CleanupStack::PopAndDestroy(2, buffer);           
     }
 
+EXPORT_C void RSisRegistrySession::AddAppRegInfoL(const TDesC& aAppRegFile)
+    {
+    TInt returnCode = SendReceive(EAddAppRegInfo, TIpcArgs(&aAppRegFile));
+    User::LeaveIfError(returnCode);
+    }
+
+EXPORT_C void RSisRegistrySession::RemoveAppRegInfoL(const TDesC& aAppRegFile)
+    {
+    TInt returnCode = SendReceive(ERemoveAppRegInfo, TIpcArgs(&aAppRegFile));
+    User::LeaveIfError(returnCode);
+    }
 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 

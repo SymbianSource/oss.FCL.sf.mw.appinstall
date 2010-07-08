@@ -27,5 +27,10 @@ xcopy /Q /Y \epoc32\release\winscw\udeb\z\tswi\tuiscriptadaptors\data\fotaupdate
 xcopy /Q /Y \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\fotaupdatestubapp1.sis \epoc32\release\winscw\udeb\z\system\install\
 xcopy /Q /Y \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\fotaupdatestubapp1.sis \epoc32\release\winscw\urel\z\system\install\
 
+xcopy /Q /Y \epoc32\release\winscw\udeb\z\tswi\tuiscriptadaptors\data\fotaupdateUDA1_reg.rsc \epoc32\winscw\c\private\10003a3f\apps\
+
+md \epoc32\winscw\c\private\10003a3f\import\apps
+xcopy /Q /Y \epoc32\release\winscw\udeb\z\tswi\tuiscriptadaptors\data\fotaupdateUDA2_reg.rsc \epoc32\winscw\c\private\10003a3f\import\apps
+
 rem cleanup anything from previous tests.
 del /s /f /q \epoc32\winscw\c\sys\install\sisregistry\

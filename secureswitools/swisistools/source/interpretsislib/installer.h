@@ -116,7 +116,11 @@ private:
 	bool IsValidEclipsingUpgrade(const SisFile& aSis, const SisRegistryObject& registryEntry);
 	bool ValidEclipse(const SisFile& aFile, const std::wstring& target, const InstallableFile& aInstallableFile, bool aSUFlag);
 	void HandleFileOverwriting(const SisFile& aFile, const std::wstring& target, bool aSUFlag);
+	#ifndef __TOOLS2_LINUX__
 	bool IsEclipsable(std::wstring& aRomFile, bool aSUFlag);
+	#else
+	bool IsEclipsable(std::wstring& aRomFile, bool aSUFlag, const std::wstring& aDrivePath);
+	#endif
 	void FilterNonBlockingFilesOfFilename(const SisFile& aFile, const std::wstring& target);
 	void WarnEclipseOverWrite(const SisFile& aFile);
 

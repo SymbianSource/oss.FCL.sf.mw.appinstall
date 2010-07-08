@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -34,6 +34,8 @@ _LIT(KScrIsComponentOrphaned, "SCRIsComponentOrphaned");
 _LIT(KScrCompareVersions, "SCRCompareVersions");
 _LIT(KScrIsComponentOnReadOnlyDrive, "SCRIsComponentOnReadOnlyDrive");
 _LIT(KScrComponentPresence, "ScrComponentPresence");
+_LIT(KScrComponentOnEMMC, "ScrComponentOnEMMC");
+_LIT(KScrComponentPresentForNameVendor, "ScrComponentPresentForNameVendor");
 
 class CScrIsMediaPresentStep : public CScrTestStep
 /**
@@ -110,4 +112,33 @@ protected:
 	void ImplTestStepPostambleL();		
 	};
 
+class CScrEMMCComponentStep : public CScrTestStep
+/**
+    TEF test step which checks if any components are present on EMMC
+ */
+    {
+public:
+    CScrEMMCComponentStep(CScrTestServer& aParent);
+    
+protected:
+    // From CScrTestStep
+    void ImplTestStepPreambleL();
+    void ImplTestStepL();
+    void ImplTestStepPostambleL();      
+    };
+
+class CScrComponentPresentForNameVendorStep : public CScrTestStep
+/**
+    TEF test step which checks if any components are present with the given name and vendor
+ */
+    {
+public:
+    CScrComponentPresentForNameVendorStep(CScrTestServer& aParent);
+    
+protected:
+    // From CScrTestStep
+    void ImplTestStepPreambleL();
+    void ImplTestStepL();
+    void ImplTestStepPostambleL();      
+    };
 #endif /* APPMANAGERSTEPS_H */

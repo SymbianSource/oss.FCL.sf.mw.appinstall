@@ -1,0 +1,262 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+LOAD_SUITE tdaemon
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tscr -SharedData
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0001
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file(files distributed across C drive and emmc i.e 'X' Drive) and  Format EMMC.
+//! @SYMTestExpectedResults	Registry entries for the package gets cleaned
+
+START_TESTCASE API-SEC-CR_405-5166-0001
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SA_after_emmc_format_case1
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_after_emmc_format
+END_TESTCASE API-SEC-CR_405-5166-0001
+
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0002
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c drive and then upgrade it with SP(files distributed across C drive and emmc i.e 'X' Drive) and  Format EMMC.
+//! @SYMTestExpectedResults	Registry entries for the SP package gets cleaned
+
+START_TESTCASE API-SEC-CR_405-5166-0002
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_c
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSP_on_c_and_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SP_after_emmc_format_case2
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SP_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0002
+
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0003
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c drive and then upgrade it with PU on emmc and  Format EMMC.
+//! @SYMTestExpectedResults	Registry entries for the complete package gets cleaned
+
+START_TESTCASE API-SEC-CR_405-5166-0003
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_c
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallPU_on_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SP_after_emmc_format_case3
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_after_emmc_format
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0003
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0004
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c drive and then upgrade it with two SP's both on emmc and format emmc.
+//! @SYMTestExpectedResults	Registry entries for bothe the sp's gets cleaned
+
+START_TESTCASE API-SEC-CR_405-5166-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_c
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSP_on_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSP_on_c_and_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SP_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_Two_SP_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0004
+
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0005
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Unmount and mount emmc
+//! @SYMTestExpectedResults	No change in registry entries.
+
+START_TESTCASE API-SEC-CR_405-5166-0005
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+END_TESTCASE API-SEC-CR_405-5166-0005
+
+
+RUN_UTILS DeleteFile c:\private\102020DCA\firstbootmarkerfileforx
+RUN_UTILS DeleteFile x:\sys\install\formatmarker
+
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0006
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		After first boot of the device , marker files gets created on system drive(one for each emmc) and emmc
+//! @SYMTestExpectedResults	Marker files gets created on system drive(one for each emmc) and emmc successfuly
+
+START_TESTCASE API-SEC-CR_405-5166-0006
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_marker_files
+END_TESTCASE API-SEC-CR_405-5166-0006
+
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0007
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c drive and t drive and format emmc.
+//! @SYMTestExpectedResults	No impact on the package 
+
+START_TESTCASE API-SEC-CR_405-5166-0007
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_c_and_T
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SA_on_C_and_T_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_and_T_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0007
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0008
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c , x and t drive  then unmount T drive, format emmc and again mount x drive.
+//! @SYMTestExpectedResults	Remove complete SA
+
+START_TESTCASE API-SEC-CR_405-5166-0008
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_distributed_drives
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini T
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini T
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveT
+DELAY 2000
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SA_on_C_E_and_T_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_E_and_T_after_emmc_format
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0008
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0009
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c , x and t drive  then  format emmc drive.
+//! @SYMTestExpectedResults	Remove complete SA
+
+START_TESTCASE API-SEC-CR_405-5166-0009
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_distributed_drives
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SA_on_C_E_and_T_after_emmc_format_case9
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_E_and_T_after_emmc_format
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0009
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0010
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA on c , x and format T drive.
+//! @SYMTestExpectedResults	Remove complete SA
+
+START_TESTCASE API-SEC-CR_405-5166-0010
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSA_on_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini T
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveT
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckT
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_component_exists_for_SA_after_emmc_format_3
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_after_T_dive_format
+RUN_TEST_STEP tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0010
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0011
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA(NR) on c , x and t drive  then format emmc drive.
+//! @SYMTestExpectedResults	Remove complete SA
+
+START_TESTCASE API-SEC-CR_405-5166-0011
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSANR_on_distributed_drives
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_E_and_T_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_E_and_T_after_emmc_format
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0011
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0012
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install sis file SA(NR) on c drive and t drive and format emmc.
+//! @SYMTestExpectedResults	No impact on the package 
+
+START_TESTCASE API-SEC-CR_405-5166-0012
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallSANR_on_c_and_T
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP 100 tscr ScrComponentPresentForNameVendor z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_and_T_after_emmc_format
+RUN_TEST_STEP 100 tuiscriptadaptors MmcCheckFilesStep z:\tswi\tdaemon\scripts\tdaemon.ini Check_files_exists_for_SA_on_C_and_T_after_emmc_format
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini T
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveT
+DELAY 2000
+RUN_TEST_STEP_RESULT -1 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Install
+END_TESTCASE API-SEC-CR_405-5166-0012
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0013
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install a sis file SP(eclipsing) on c drive and x drive and format emmc.
+//! @SYMTestExpectedResults	SP should be removed amd we will revert back to stubs 
+
+START_TESTCASE API-SEC-CR_405-5166-0013
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallEclipsingSA_on_c_and_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Eclipsing
+END_TESTCASE API-SEC-CR_405-5166-0013
+
+//! @SYMTestCaseID 		API-SEC-CR_405-5166-0014
+//! @SYMTestCaseDesc		CR_405-5166: SIS Registry: Cleans the registry entries for the packages installed on emmc i.e 'X' Drive
+//! @SYMDEF			CR_405-5166
+//! @SYMTestActions		Install a sis file SP(eclipsing) on c drive and x drive and format emmc.
+//! @SYMTestExpectedResults	SP should be removed amd we will revert back to stubs 
+
+START_TESTCASE API-SEC-CR_405-5166-0014
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tdaemon\scripts\tdaemon.ini InstallEclipsingPU_on_c_and_emmc
+RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+DELAY 2000
+RUN_TEST_STEP 100 tscr ScrComponentOnEMMC z:\tswi\tdaemon\scripts\tdaemon.ini CheckX
+RUN_TEST_STEP_RESULT -5 100 tuiscriptadaptors UninstallStep  z:\tswi\tdaemon\scripts\tdaemon.ini u_Eclipsing
+END_TESTCASE API-SEC-CR_405-5166-0014
+

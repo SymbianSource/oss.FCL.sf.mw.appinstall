@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -185,15 +185,21 @@ int GetErrorValue()
 	return ::GetLastError();
 	}
 
-int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
+int FileCopyA(const char* aSrc, const char* aDest, bool aFailIfExistsFlag)
 {
-	int err=CopyFileA(aSrc,aDest,aFlag);
-	return err;
+	// CopyFileA() returns zero on failure and non-zero otherwise.
+	int err=CopyFileA(aSrc,aDest,aFailIfExistsFlag);
+	// To maintain consistency with the LINUX wrapper API FileCopyA() which uses cp 
+	// command with system(), we return 0 on success and 1 on failure.
+	return !err;
 }
 
 int FileMoveA(const char* aSrc, const char* aDest)
 {
+	// MoveFileA() returns zero on failure and non-zero otherwise.
 	int err=MoveFileA(aSrc,aDest);
-	return err;
+	// To maintain consistency with the LINUX wrapper API FileMoveA() which uses mv
+	// command with system(), we return 0 on success and 1 on failure.
+	return !err;
 }
 

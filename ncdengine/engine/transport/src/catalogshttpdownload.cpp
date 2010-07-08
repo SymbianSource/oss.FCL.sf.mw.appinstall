@@ -25,6 +25,8 @@
 #include <escapeutils.h>
 #include <downloadmanager.h>
 
+#include <uri8.h> // HLa
+
 
 #include <QtGlobal>
 #include "catalogshttpdownloadmanagerimpl.h"
@@ -811,7 +813,8 @@ void CCatalogsHttpDownload::InternalizeL( RReadStream& aStream )
     iConfig->InternalizeL( aStream );
     HBufC8* contentType = NULL;
     InternalizeDesL( contentType, aStream );
-    if ( contentType->Length() > KMaxContentTypeLength ) 
+    // HLa if ( contentType->Length() > KMaxContentTypeLength ) 
+    if ( contentType->Length() > 256 )
         {
         DeletePtr( contentType );
         DLERROR(("Content type was too long, leaving with KErrCorrupt"));
@@ -1084,6 +1087,8 @@ TBool CCatalogsHttpDownload::HandleHttpError(
 // Handles events from the download manager
 // ---------------------------------------------------------------------------
 //	
+
+/* HLa
 void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
     {
     DLTRACEIN((""));
@@ -1376,6 +1381,7 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
         * Download process can be paused again. This event only occurs after
         * EHttpDlNonPausable. 
         */	
+/* HLa
         case EHttpDlPausable:
             {
             DLTRACE(( "Pausable" ));
@@ -1411,13 +1417,14 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
             }	
         }
     }
-
+*/
 
 
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
 //	
+/*
 void CCatalogsHttpDownload::HandleEventProgressL( const 
     THttpDownloadEvent& aEvent )
     {
@@ -1691,7 +1698,7 @@ void CCatalogsHttpDownload::HandleEventProgressL( const
 			break;
 		}
     }
-    
+ */   
 
 
 // ---------------------------------------------------------------------------
@@ -1797,7 +1804,8 @@ void CCatalogsHttpDownload::UpdateContentType()
         DLTRACE(("Updating the content type"));
         QString contentType;
         contentType= iDownload->attribute(WRT::ContentType).toString();
-        	TBuf<KMaxContentTypeLength>  ContentType(contentType.utf16());
+        // HLa TBuf<KMaxContentTypeLength>  ContentType(contentType.utf16());
+        TBuf<256>  ContentType(contentType.utf16());
         	iContentType.Copy(ContentType);
    
         }
@@ -1918,6 +1926,7 @@ void CCatalogsHttpDownload::UpdateUriL()
     // Get the current url of the download
     RBuf8 buf;
     CleanupClosePushL( buf );
+    const TInt KMaxUrlLength = 2048;
     buf.CreateL( KMaxUrlLength );
     QString string;
 	try
@@ -2148,6 +2157,7 @@ void CCatalogsHttpDownload::UpdateResponseHeadersL(
 TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader( 
     const TDesC8& aHeader ) const
     {
+    /* HLa
     if ( aHeader.CompareF( KHttpRequestAcceptHeader ) == 0 ) 
         {
         return EDlAttrRequestAccept;
@@ -2192,7 +2202,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader(
         {
         return EDlAttrRequestVary;
         }
-    
+    */
     return 0;
     }
     
@@ -2205,6 +2215,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader(
 TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader( 
     const TDesC8& aHeader ) const
     {
+    /* HLa
     if ( aHeader.CompareF( KHttpGeneralCacheControlHeader ) == 0 ) 
         {
         return EDlAttrGeneralCacheControl;
@@ -2224,7 +2235,8 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader(
     else if ( aHeader.CompareF( KHttpGeneralWarningHeader ) == 0 ) 
         {
         return EDlAttrGeneralWarning;
-        }    
+        }
+        */    
     return 0;
     }
     
@@ -2237,6 +2249,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader(
 TUint CCatalogsHttpDownload::MatchWithPredefinedEntityHeader( 
     const TDesC8& aHeader ) const
     {
+    /*
     if ( aHeader.CompareF( KHttpEntityAllowHeader ) == 0 ) 
         {
         return EDlAttrEntityAllow;
@@ -2261,6 +2274,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedEntityHeader(
         {
         return EDlAttrEntityLastModified;
         }
+        */
     return 0;
     }
         
@@ -2299,6 +2313,9 @@ void CCatalogsHttpDownload::AddRequestHeaderL( HBufC8*& aTarget,
         }
 
     TPtr8 ptr( aTarget->Des() );
+    
+    _LIT8( KHttpFieldSeparator, "\n"); // HLa
+    const TInt KColon( ':' ); // HLa
     
     if( newSize ) 
         {

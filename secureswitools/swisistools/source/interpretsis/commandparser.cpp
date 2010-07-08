@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -403,7 +403,7 @@ bool CCommandParser::ParseParam(int argc, const char**argv, CParameterList* aPar
 				}
 			default:
 				{
-				LERROR(Utf8ToUcs2(std::string(optPtr)));
+				LERROR(string2wstring(std::string(optPtr)));
 				throw CCommandParser::ECmdLineUnknownOption;
 				}
 			}
@@ -464,8 +464,7 @@ void CCommandParser::String2List(CParameterList& aParamList, FilePtr& aFilePtr, 
 	while (currentPos != end)
 	    {
 		currentPos = std::find(it, end, ',');
-		std::wstring x;
-		Utf8ToUcs2(std::string(it,(currentPos-it)), x);
+		std::wstring x = string2wstring(std::string(it,(currentPos-it)));
 		//aOptionsList.push_back(x);
 		(aParamList.*aFilePtr)(x);
 
@@ -492,8 +491,7 @@ void CCommandParser::String2SISFileList(CParameterList& aParamList, int aArgc, c
 	while (currentPos != end)
 	    {
 		currentPos = std::find(it, end, ',');
-		std::wstring x;
-		Utf8ToUcs2(std::string(it,(currentPos-it)), x);
+		std::wstring x = string2wstring(std::string(it,(currentPos-it)));
 
 		InstallSISFile sisFileName(x, '$', false);
 		aParamList.AddSISFile(sisFileName);
@@ -511,8 +509,7 @@ void CCommandParser::String2SISFileList(CParameterList& aParamList, int aArgc, c
 	// As the sisfile attributes are predetermined input, therefore we can just
 	// parse according to the predetermined inputs.
 
-	std::wstring fileName;
-	Utf8ToUcs2(sisFileOption, fileName);
+	std::wstring fileName = string2wstring(sisFileOption);
 
 	InstallSISFile sisFileName(fileName, '$', false);
 		

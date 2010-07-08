@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -21,6 +21,7 @@
 */
 
 #include "daemonstep.h"
+#include "sisregistrywritablesession.h"
 
 namespace Swi
 {
@@ -115,6 +116,43 @@ TVerdict CDaemonStep::runTestStepL(TBool /*aOomTest*/)
 	return EPass;
 	}
 
+//CAddDriveStep
+CAddDriveStep::CAddDriveStep()
+    {
+    }
+
+CAddDriveStep::~CAddDriveStep()
+    {
+    }
+
+TVerdict CAddDriveStep::runTestStepL(TBool /*aOomTest*/)
+    {
+    TPtrC str;
+    TInt drive(0);
+    if (!GetStringFromConfig(ConfigSection(), _L("drive"), str))
+        {
+        ERR_PRINTF1(_L("Missing drive setting"));
+        SetTestStepResult(EFail);
+        }
+    else
+        {
+        RFs fs;
+        fs.Connect();
+        
+        User::LeaveIfError(fs.CharToDrive(str[0], drive));
+        //iDriveChar = str[0];
+        fs.Close();
+        }
+    RSisRegistryWritableSession registrySession;
+            
+    User::LeaveIfError(registrySession.Connect());
+    CleanupClosePushL(registrySession);
+    registrySession.AddDriveL(drive);
+
+    CleanupStack::PopAndDestroy(&registrySession);    
+
+    return EPass;
+    }
 } // namespace Swi::Test
 
 } //namespace Swi

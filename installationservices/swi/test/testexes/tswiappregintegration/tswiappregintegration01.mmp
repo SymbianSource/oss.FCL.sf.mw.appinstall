@@ -25,7 +25,7 @@ VENDORID		0x0
 SOURCEPATH		.
 SOURCE			swiappregintegration.cpp
 
-SYSTEMINCLUDE	/epoc32/include
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 START RESOURCE	case01/swiappregintegration01_loc.rss
 HEADER
@@ -59,6 +59,14 @@ TARGETPATH	tswi/tuiscriptadaptors/data
 END
 
 START RESOURCE 	fotaupdatestubapp2_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdateUDA1_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdateUDA2_reg.rss
 TARGETPATH	tswi/tuiscriptadaptors/data
 END
 

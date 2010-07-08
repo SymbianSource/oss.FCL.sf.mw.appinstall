@@ -23,7 +23,6 @@
 #include "dbhelper.h"
 #include "dblayer.h"
 #include "dbconstants.h"
-#include "is_utils.h"
 #include "xmlgenerator.h"
 #include "xmlparser.h"
 #include "util.h"
@@ -53,6 +52,7 @@
 // SisX Library Includes
 #include "sisfiledescription.h"
 #include "sisstring.h"
+#include "utility.h"
 
 // User Includes
 #include "sisregistry.h"
@@ -66,9 +66,15 @@
 #include "configmanager.h"
 
 // Constants
+#ifndef __TOOLS2_LINUX__
 const std::wstring SisRegistry::KPathToRegistry(L"\\sys\\install\\sisregistry/");
 const std::wstring SisRegistry::KPathToRomStubs(L"\\system\\install\\");
 const std::wstring SisRegistry::KPathToRegistryVersionMarker(L"\\system\\data\\");
+#else
+const std::wstring SisRegistry::KPathToRegistry(L"/sys/install/sisregistry/");
+const std::wstring SisRegistry::KPathToRomStubs(L"/system/install/");
+const std::wstring SisRegistry::KPathToRegistryVersionMarker(L"/system/data/");
+#endif
 const std::wstring KRegistryEntry(L"00000000.reg");
 const std::wstring KControllerEntry(L"00000000_0000.ctl");
 const std::wstring KBackupLst(L"backup.lst");
@@ -83,9 +89,13 @@ const std::wstring SisRegistry::KRegistryV51(L"sisregistry_5.1.txt");
 const std::wstring SisRegistry::KRegistryV52(L"sisregistry_5.2.txt");
 const std::wstring SisRegistry::KRegistryV53(L"sisregistry_5.3.txt");
 const std::wstring SisRegistry::KRegistryV54(L"sisregistry_5.4.txt");
+#ifndef __TOOLS2_LINUX__
 const std::wstring SisRegistry::KRomStubDir(L"z:\\system\\install\\");
 const std::wstring SisRegistry::KRomRegistryVersionMarker(L"z:\\system\\data\\");
-
+#else
+const std::wstring SisRegistry::KRomStubDir(L"z:/system/install/");
+const std::wstring SisRegistry::KRomRegistryVersionMarker(L"z:/system/data/");
+#endif
 const std::string SisRegistry::KRegistryV40string("4.0");
 const std::string SisRegistry::KRegistryV50string("5.0");
 const std::string SisRegistry::KRegistryV51string("5.1");
@@ -547,9 +557,7 @@ void SisRegistry::RemoveEntry(const TUint32 aUid, const std::wstring& aPackageNa
 	
 	while(it != iEntries.end())
 	    {
-		if (aUid == it->first &&
-			aPackageName == it->second->GetPackageName() &&
-			aVendorName == it->second->GetVendorName())
+		if (aUid == it->first && !wcscmp(aPackageName.c_str(), it->second->GetPackageName().c_str()) && aVendorName == it->second->GetVendorName() )
 			{
 			LINFO(L"Removing package \"" << it->second->GetPackageName() 
 					<< L"\" prior to re-installation");
@@ -950,7 +958,11 @@ bool SisRegistry::IsFileWideCard(const std::wstring& aFileName)
 	{
 	return (aFileName.find(L'?') != std::wstring::npos || 
 			aFileName.find(L'*') != std::wstring::npos || 
+			#ifndef __TOOLS2_LINUX__
 			aFileName[aFileName.length() - 1] == L'\\');
+			#else
+			aFileName[aFileName.length() - 1] == L'/');
+			#endif
 	}
 
 
@@ -1032,7 +1044,11 @@ void SisRegistry::ExtractRegistryFiles(const std::wstring& aPath)
 			continue;
 		
 		std::fstream input;
+		#ifndef __TOOLS2_LINUX__
 		std::wstring filename(aPath + L"\\" + *c);
+		#else
+		std::wstring filename(aPath + L"/" + *c);
+		#endif
 		
 		OpenFile(filename.c_str(), input, std::fstream::in | std::fstream::binary);
 		
@@ -1043,7 +1059,7 @@ void SisRegistry::ExtractRegistryFiles(const std::wstring& aPath)
 					
 		if (!obj)
 			{
-			throw std::runtime_error("Cannot create SisRegistryObject for " + Ucs2ToUtf8(filename));
+			throw std::runtime_error("Cannot create SisRegistryObject for " + wstring2string(filename));
 			}
 		Deserialiser des(input);
 		
@@ -1243,7 +1259,7 @@ void SisRegistry::SetNextIndex(SisRegistryObject& aObj) const
 				
 				msg.append(L" does not have any SisRegistry file");
 				
-				throw std::runtime_error( Ucs2ToUtf8(msg) );
+				throw std::runtime_error( wstring2string(msg) );
 				}
 
 			aObj.SetIndex( index );
@@ -1255,7 +1271,7 @@ void SisRegistry::SetNextIndex(SisRegistryObject& aObj) const
 				
 				msg.append(L" directory NOT found");
 
-				throw std::runtime_error( Ucs2ToUtf8(msg) );
+				throw std::runtime_error( wstring2string(msg) );
 				}
 			}    
 		}
@@ -1278,7 +1294,7 @@ void SisRegistry::SetNextIndex(SisRegistryObject& aObj) const
 				
 				msg.append(L" directory NOT found");
 
-				throw std::runtime_error( Ucs2ToUtf8(msg) );
+				throw std::runtime_error( wstring2string(msg) );
 				}
 			}    
 		}
@@ -1331,7 +1347,7 @@ void SisRegistry::GenerateCtlFile(SisRegistryObject& aObj, const SisFile& aSis) 
 		
 			msg.append(L" does not have any Sis Controller file");
 
-			throw std::runtime_error( Ucs2ToUtf8(msg) );
+			throw std::runtime_error( wstring2string(msg) );
 			}
 		}
 
@@ -1450,13 +1466,18 @@ void SisRegistry::SetOriginVerification(XmlDetails::TScrPreProvisionDetail::TCom
 void SisRegistry::UpdateInstallationInformation(XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail)
 	{
 	CXmlGenerator xmlGenerator;
-	char* tmpFileName = tmpnam(NULL);
+	char* tmpFileName = tmpnam(NULL);	
 	std::wstring filename(string2wstring(tmpFileName));
 
 	int isRomApplication = 0;
 	xmlGenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail, isRomApplication);
-						
+
+	#ifdef __LINUX__
+	std::string executable = "scrtool";
+	#else
 	std::string executable = "scrtool.exe";
+	#endif
+
 	std::string command;
 	command = executable + " -d " + GetDbPath() + " -p " + tmpFileName;
 
@@ -1481,16 +1502,23 @@ std::string SisRegistry::GetDbPath()
 		iParamList.IsFlagSet(CParameterList::EFlagsDisableZDriveChecksSet) 
 		)
 		{
+		#ifndef __TOOLS2_LINUX__
 		return wstring2string(iParamList.SystemDrivePath()) + "\\sys\\install\\scr\\scr.db";
+		#else
+		return wstring2string(iParamList.SystemDrivePath()) + "/sys/install/scr/scr.db";
+		#endif
 		}
-
+	#ifndef __TOOLS2_LINUX__
 	return wstring2string(iParamList.RomDrivePath()) + "\\sys\\install\\scr\\provisioned\\scr.db";
+	#else
+	    return wstring2string(iParamList.RomDrivePath()) + "/sys/install/scr/provisioned/scr.db";
+	#endif
 	
 	}
 
 std::string SisRegistry::GetEpocRoot()
 	{
-	const char* epocRoot = getenv("EPOCROOT");
+	const char* epocRoot = getenv("EPOCROOT");	
 	if(NULL == epocRoot)
 		{
 		std::string err = "EPOCROOT environment variable not specified. Please specify it as part of your environment variable." \
@@ -1513,7 +1541,8 @@ std::wstring SisRegistry::GetGlobalId( TUint32 aUid , TInt aInstallType, std::ws
 #else		
 		swprintf(textGlobalId,20,L"%08x",aUid);
 #endif
-	
+		
+
 	std::wstring globalId = textGlobalId;
 	
 	if( aInstallType == CSISInfo::EInstAugmentation || aInstallType == CSISInfo::EInstPreInstalledPatch )
@@ -1646,7 +1675,7 @@ void SisRegistry::BackupCtl(TUint32 aUid)
 			ibackupfile.append("_backup");
 
 			int err=FileCopyA(ifile.c_str(),ibackupfile.c_str(),0);
-			if (err == 0)
+			if (err != 0)
 				LERROR(L"Failed to Backup .ctl ");
 		}
 		++currFile;
@@ -1676,7 +1705,7 @@ void SisRegistry::RestoreCtl(TUint32 aUid, TBool& aBackupFlag)
 
 					RemoveFile(path + *currFile);
 				 	int err = FileMoveA(ibackupfile.c_str(),ifile.c_str());
-					if (err == 0)
+					if (err != 0)
 						LERROR(L"Failed to Restore .ctl ");
 				}
 			}
@@ -1914,8 +1943,8 @@ void SisRegistry::AddHashContainer	(	XmlDetails::TScrPreProvisionDetail::TCompon
 	// The property is a concatenation of the algorithm id and the hash data
 	const std::string hashData = aHashContainer.GetData();
 		
-	std::string encodedHashData = Util::Base64Encode(hashData);
-	std::wstring wideHashData = Utils::string2wstring(encodedHashData);
+	std::string encodedHashData = Util::Base64Encode(hashData);	
+	std::wstring wideHashData = string2wstring(encodedHashData);
 	AddComponentProperty( aComponent, DbConstants::CompControllerHashData, wideHashData, aCount, true);
 
 	}
@@ -2075,7 +2104,7 @@ void SisRegistry::AddApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDe
 	for(filedesIter = aFileDescription.begin() ; filedesIter != aFileDescription.end(); ++filedesIter)
 	{
 		// if it has wild card characters then donot process. Continue.
-		if( IsFileWideCard((*filedesIter)->GetLocalFile()) ) 
+		if( IsFileWideCard((*filedesIter)->GetLocalFile()) )
 		{
 			continue;
 		}
@@ -2101,7 +2130,13 @@ void SisRegistry::AddApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDe
 			continue;
 
 		std::string folder;
-		found=RegistrationFileName.find("private\\10003a3f\\");
+		#ifdef __LINUX__
+		const char *privateFolder = "private/10003a3f/";
+		#else
+		const char *privateFolder = "private\\10003a3f\\";
+		#endif
+
+		found=RegistrationFileName.find(privateFolder);
 
 		if( found != string::npos ) 
 			folder = RegistrationFileName.substr(0,found); 
@@ -2184,7 +2219,7 @@ void SisRegistry::AddFileDescriptionAsFileProperty	(	XmlDetails::TScrPreProvisio
 	if(!aFileDescription->GetHash().GetData().empty())
 		{
 		std::string binHashData = Util::Base64Encode(aFileDescription->GetHash().GetData());
-		std::wstring hashData = Utils::string2wstring(binHashData);
+		std::wstring hashData = string2wstring(binHashData);
 		AddFileProperty( aComponentFile, DbConstants::FileHashData, hashData, true);
 		}
 	}

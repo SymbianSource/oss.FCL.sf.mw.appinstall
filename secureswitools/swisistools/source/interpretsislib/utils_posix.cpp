@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -22,14 +22,17 @@
 #include<sstream>
 
 #include"utility_interface.h"
+#include"util.h"
 
 bool FileExists(const std::wstring& aFile)
 {
-	return true;
+	struct stat x;
+	int err = GetStat(aFile,&x );
+	return err == 0; 
 }
 bool RemoveFile(const std::wstring& aFile)
 {
-	return true;
+	return _wunlink(aFile.c_str()) == 0;
 }
 bool CreateFile(const std::wstring& aFile)
 {
@@ -38,16 +41,16 @@ bool CreateFile(const std::wstring& aFile)
 
 int GetStat(const std::wstring& aFile, struct stat* s)
 {
-	std::string str;
- 	return stat(Ucs2ToUtf8(aFile, str).c_str(), s);
+	std::string str = wstring2string(aFile);
+ 	return stat(str.c_str(), s);
 }
 
 void GetDirContents(const std::wstring& path, 
 					std::list<std::wstring>& contents)
 {
 
-	std::string utfString;
-	DIR* currDir =  opendir(Ucs2ToUtf8(path, utfString).c_str());
+	std::string utfString = wstring2string(path);
+	DIR* currDir =  opendir(utfString.c_str());
 	
 	while (currDir)
 	{
@@ -59,8 +62,8 @@ void GetDirContents(const std::wstring& path,
 		}
 		else
 		{
-			std::wstring ucsString;
-			contents.push_back(Utf8ToUcs2(currElem->d_name, ucsString));
+			std::wstring ucsString = string2wstring(currElem->d_name);
+			contents.push_back(ucsString);
 		}
 	}
 }
@@ -111,14 +114,22 @@ bool MakeDir(const std::wstring& aDir)
     	}
     else
     	{// Skip creation of root directory
+    	#ifndef __TOOLS2_LINUX__
     	index = aDir.find(L'\\', index);
+		#else
+		index = aDir.find(L'/', index);
+		#endif
     	}
 	do
 		{
     	index += 1;
 		// Try to make each directory in the path. If ERR_ALREADY_EXISTS is returned
   	  	// then this is okay. Other errors are fatal.
+		#ifndef __TOOLS2_LINUX__
 		index = aDir.find(L'\\', index);
+		#else
+		index = aDir.find(L'/', index);
+		#endif
 		std::wstring dir = aDir.substr( 0, index );
 		if(dir == L".")
 			{
@@ -140,8 +151,8 @@ bool MakeDir(const std::wstring& aDir)
 bool OpenFile(const std::wstring& aFile, std::fstream& aStream,
 			  std::ios_base::open_mode aMode)
 {
-	std::string s;
-	aStream.open(Ucs2ToUtf8(aFile, s).c_str(), aMode);
+	std::string s = wstring2string(aFile);
+	aStream.open(s.c_str(), aMode);
 	return aStream.good();
 }
 
@@ -176,15 +187,27 @@ bool CheckSisRegistryDirPresent(const std::wstring& aDrivePath, TUint32 aUid)
 
 void RemoveHashForFile(const std::wstring& aFile, const int aDriveLetter, const std::wstring& aPath)
 {
+   	#ifndef __TOOLS2_LINUX__
 	std::wstring hashdir = L"$:\\sys\\hash\\";
+	#else
+	std::wstring hashdir = L"$:/sys/hash/";
+	#endif
 	std::wstring basename = aFile.substr( aFile.rfind( KDirectorySeparator ) + 1) ;
 	if (basename.size() == 0)
 	{
+    	#ifndef __TOOLS2_LINUX__
 		basename = aFile.substr(aFile.rfind(L"\\"));
+		#else
+		basename = aFile.substr(aFile.rfind(L"/"));
+		#endif
 	}
 
 	hashdir[0] = aDriveLetter;
+   	#ifndef __TOOLS2_LINUX__
 	std::wstring hashFile = aPath + L"\\sys\\hash\\" + basename;
+	#else
+	std::wstring hashFile = aPath + L"/sys/hash/" + basename;
+	#endif
 	if (FileExists(hashFile))
 	{
 		RemoveFile(hashFile);

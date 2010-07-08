@@ -360,31 +360,25 @@ void CSisLauncherSession::ServiceL(const RMessage2& aMessage)
             aMessage.Complete(KErrNone);
             break;
             }
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
         case EParseSwTypeRegFile:
             #ifndef SWI_TEXTSHELL_ROM
-            #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
             ParseSwTypeRegFileL(aMessage);
-            #endif
             #endif
             aMessage.Complete(KErrNone);
             break;
         case ERegisterSifLauncherMimeTypes:
             #ifndef SWI_TEXTSHELL_ROM
-            #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
             RegisterSifLauncherMimeTypesL(aMessage);
-            #endif
             #endif
             aMessage.Complete(KErrNone);
             break;
         case EUnregisterSifLauncherMimeTypes:
-            #ifndef SWI_TEXTSHELL_ROM
-            #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+            #ifndef SWI_TEXTSHELL_ROM            
             UnregisterSifLauncherMimeTypesL(aMessage);
-            #endif
             #endif
             aMessage.Complete(KErrNone);
             break;
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
         case EAsyncParseResourceFileSize:
             {
             TRAPD(err,err = AsyncParseResourceFileSizeL(aMessage));            

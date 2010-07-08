@@ -27,6 +27,7 @@
 #include "xmlparser.h"
 #include "logs.h"
 #include "exception.h"
+#include "utf8_wrapper.h"
 #include "util.h"
 
 #include <xercesc/sax2/XMLReaderFactory.hpp>
@@ -42,13 +43,65 @@
 #include <memory>
 #include <cstdio>
 
+#ifndef _WIN32
+#include <ctype.h>
+
+//__ctype_b was removed from glibc. This is a workaround to fix the linking problem
+extern "C"
+    {
+    const unsigned short int** __ctype_b()
+        {
+        return __ctype_b_loc();
+        }
+    }
+
+#endif // _WIN32
+
 XERCES_CPP_NAMESPACE_USE
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+//											UTILITY FUNCTIONS
+//------------------------------------------------------------------------------------------------------------------------------
+int XercesStringToInteger(const XercesString& aWideStr)
+	{
+	int strLen = aWideStr.length();
+	const XMLCh* source = aWideStr.c_str();	
+  char* buffer = new char[strLen << 2];
+  
+	// Using a temp variable in place of buffer as ConvertUTF16toUTF8 modifies the source pointer passed.
+	char* temp = buffer;	
+	
+	ConvertUTF16toUTF8(&source, aWideStr.c_str() + strLen, &temp,  temp + (strLen << 2));
+	
+	// Appending NUL to the converted buffer.
+	*temp = 0;
+
+	int value = 0;
+	sscanf(buffer, "%d", &value);
+
+	delete[] buffer;
+	return value;
+	}
+
 
 // these function pointers are used to call appropriate release methods of XMLString
 // present in the xerces library. 
 typedef void (*releaseXmlChPtr) (XMLCh** buf);
 typedef void (*releaseChPtr) (char** buf);
 
+#ifdef _WIN32
+
+// We need not do anything for WINDOWS, since XMLCh string(XercesString)
+// and WString both are same and will be in UTF-16 encoding format.
+#define XMLChToWString(aParameter) (aParameter)
+
+#else
+inline std::wstring XMLChToWString(const XercesString& aXercesString)
+	{
+	return XercesStringToWString (aXercesString);
+	}
+#endif // _WIN32
 
 
 DllExport CScrXmlParser::CScrXmlParser()
@@ -259,7 +312,7 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 	
 	DOMNodeList* uniqueSwTypeName = swTypeNamesNode->getElementsByTagName(tagUniqueSoftwareTypeName.get());
 	const XMLCh* textContent = uniqueSwTypeName->item(0)->getTextContent();
-	scrEnvDetails.iUniqueSoftwareTypeName = std::wstring(textContent);
+	scrEnvDetails.iUniqueSoftwareTypeName = XMLChToWString(textContent);
 	
 	DOMNodeList* localizableSwTypeNames = swTypeNamesNode->getElementsByTagName(tagLocalizableSwTypeName.get());
 	const  XMLSize_t localizableSwTypeNamesCount = localizableSwTypeNames->getLength();
@@ -284,7 +337,7 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 		textContent = launcherExecutable->item(0)->getTextContent();
 		fn_auto_ptr<releaseXmlChPtr, XMLCh> launcherExecutableText( &XMLString::release,textContent );
 		const XMLCh* launcherExecutableValue = launcherExecutableText.get();
-		scrEnvDetails.iLauncherExecutable = launcherExecutableValue;
+		scrEnvDetails.iLauncherExecutable = XMLChToWString(launcherExecutableValue);
 		}
     DOMNodeList* customAcessList = aEnvironment->getElementsByTagName(tagCustomAcess.get());
 	const  XMLSize_t customAcessDataCount = customAcessList->getLength();
@@ -304,7 +357,8 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 	for( XMLSize_t count=0 ; count<mimeCount ; ++count )
 		{
 		const XMLCh* textContent = mimes->item(count)->getTextContent();
-		scrEnvDetails.iMIMEDetails.push_back(textContent);
+		std::wstring textString = XMLChToWString(textContent);
+		scrEnvDetails.iMIMEDetails.push_back(textString);
 		}
 			
 	LOGEXIT("CScrXmlParser::GetEnvironmentData()");
@@ -349,7 +403,7 @@ XmlDetails::TScrPreProvisionDetail CScrXmlParser::GetPreProvisionDetails( const 
 	
 		DOMNodeList* softwaretype = elementRoot->getElementsByTagName(tagSoftwareTypeName.get());
 		const XMLCh* textContent = softwaretype->item(0)->getTextContent();
-		preProvisionDetail.iSoftwareTypeName = std::wstring(textContent);
+		preProvisionDetail.iSoftwareTypeName = XMLChToWString(textContent);
 	
 		// Retrieve the nodes for Component.
 		DOMNodeList* componentNodes = elementRoot->getElementsByTagName(tagComponent.get());
@@ -455,16 +509,16 @@ XmlDetails::TScrPreProvisionDetail::TComponentLocalizable CScrXmlParser::GetComp
 	if(locale->getLength() != 0)
 		{
 		const XMLCh* textLocale = locale->item(0)->getTextContent();
-		componentLocalizable.iLocale = Util::WideCharToInteger(textLocale);
+		componentLocalizable.iLocale = XercesStringToInteger(textLocale);
 		}
 	
 	const XMLCh* textName = name->item(0)->getTextContent();
-	componentLocalizable.iName = textName;
+	componentLocalizable.iName = XMLChToWString(textName);
 
 	if(vendor->getLength() != 0)
 		{
 		const XMLCh* textVendor = vendor->item(0)->getTextContent();
-		componentLocalizable.iVendor = textVendor;
+		componentLocalizable.iVendor = XMLChToWString(textVendor);
 		}
 	LOGEXIT("CScrXmlParser::GetComponentLocalizable()");
 	return componentLocalizable;
@@ -495,12 +549,12 @@ XmlDetails::TScrPreProvisionDetail::TComponentProperty CScrXmlParser::GetCompone
 	XmlDetails::TScrPreProvisionDetail::TComponentProperty componentProperty;
 	
 	const XMLCh* textName = name->getTextContent();
-	componentProperty.iName	= textName;
+	componentProperty.iName	= XMLChToWString(textName);
 	
 	if(locale->getLength() != 0)
 		{
 		const XMLCh* textLocale = locale->item(0)->getTextContent();
-		componentProperty.iLocale = Util::WideCharToInteger(textLocale);
+		componentProperty.iLocale = XercesStringToInteger(textLocale);
 		}
 
 	DOMNodeList* childNodes = value->item(0)->getChildNodes();
@@ -512,13 +566,13 @@ XmlDetails::TScrPreProvisionDetail::TComponentProperty CScrXmlParser::GetCompone
 		if( XMLString::equals(currentElement->getTagName(), tagComponentPropertyIntValue.get()))
 			{
 			componentProperty.iIsIntValue = true;
-			componentProperty.iValue = currentElement->getTextContent();
+			componentProperty.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		else if( XMLString::equals(currentElement->getTagName(), tagComponentPropertyStrValue.get()))
 			{
 			componentProperty.iIsIntValue = false;
-			componentProperty.iValue = currentElement->getTextContent();
+			componentProperty.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		}
@@ -526,7 +580,7 @@ XmlDetails::TScrPreProvisionDetail::TComponentProperty CScrXmlParser::GetCompone
 	if(isBinary->getLength() != 0)
 		{
 		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
-		componentProperty.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		componentProperty.iIsStr8Bit = XercesStringToInteger(textIsBinary);		
 		}
 	LOGEXIT("CScrXmlParser::GetComponentProperty()");
 	return componentProperty;
@@ -556,7 +610,7 @@ XmlDetails::TScrPreProvisionDetail::TComponentFile CScrXmlParser::GetComponentFi
 	// attribute - location
 	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
 	DOMNode* location = attributes->getNamedItem(tagLocation.get());
-	componentFile.iLocation = location->getTextContent();
+	componentFile.iLocation = XMLChToWString(location->getTextContent());
 	LOGEXIT("CScrXmlParser::GetComponentFile()");
 	return componentFile;
 	}
@@ -583,15 +637,15 @@ XmlDetails::TScrPreProvisionDetail::TComponentDependency CScrXmlParser::GetCompo
 		
 		DOMNodeList* supplierId = currentDepDetail->getElementsByTagName(tagSupplierId.get());
 		const XMLCh* textSupplierId = supplierId->item(0)->getTextContent();
-		componentDependencyDetail.iSupplierId = std::wstring(textSupplierId);
+		componentDependencyDetail.iSupplierId = XMLChToWString(textSupplierId);
 		
 		DOMNodeList* fromVersion = currentDepDetail->getElementsByTagName(tagFromVersion.get());
 		const XMLCh* textFromVersion = fromVersion->item(0)->getTextContent();
-		componentDependencyDetail.iFromVersion = std::wstring(textFromVersion);
+		componentDependencyDetail.iFromVersion = XMLChToWString(textFromVersion);
 
 		DOMNodeList* toVersion = currentDepDetail->getElementsByTagName(tagToVersion.get());
 		const XMLCh* textToVersion = toVersion->item(0)->getTextContent();
-		componentDependencyDetail.iToVersion = std::wstring(textToVersion);
+		componentDependencyDetail.iToVersion = XMLChToWString(textToVersion);
 
 		componentDependency.iComponentDependencyList.push_back(componentDependencyDetail);
 		
@@ -600,7 +654,7 @@ XmlDetails::TScrPreProvisionDetail::TComponentDependency CScrXmlParser::GetCompo
 	// attribute - location
 	DOMNamedNodeMap* attributes = aDOMElement->getAttributes();
 	DOMNode* dependentId = attributes->getNamedItem(tagDependentId.get());
-	componentDependency.iDependentId = dependentId->getTextContent();
+	componentDependency.iDependentId = XMLChToWString(dependentId->getTextContent());
 	LOGEXIT("CScrXmlParser::GetComponentDependency()");
 	return componentDependency;
 	}
@@ -628,7 +682,7 @@ XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty
 	DOMNodeList* isBinary = aDOMElement->getElementsByTagName(tagFilePropertyIsBinary.get());
 	
 	const XMLCh* textName = name->getTextContent();
-	fileProperty.iName	= textName;
+	fileProperty.iName	= XMLChToWString(textName);
 		
 	int valueLength = value->getLength();
 	if(valueLength != 0)
@@ -644,12 +698,12 @@ XmlDetails::TScrPreProvisionDetail::TComponentFile::TFileProperty
 				if( XMLString::equals(valueElement->getTagName(), tagFilePropertyIntValue.get()))
 					{
 					fileProperty.iIsIntValue = true;
-					fileProperty.iValue = currentElement->getTextContent();
+					fileProperty.iValue = XMLChToWString(currentElement->getTextContent());
 					}
 				else if( XMLString::equals(valueElement->getTagName(), tagFilePropertyStrValue.get()))
 					{
 					fileProperty.iIsIntValue = false;
-					fileProperty.iValue = currentElement->getTextContent();
+					fileProperty.iValue = XMLChToWString(currentElement->getTextContent());
 					}
 				}
 			}
@@ -687,31 +741,31 @@ XmlDetails::TScrPreProvisionDetail::TComponentDetails
 		{
 		LOGINFO("CScrXmlParser::GetComponentDetails()- rom app");
 		const XMLCh* textRomApplication = romApplication->item(0)->getTextContent();
-		componentDetails.iIsRomApplication = Util::WideCharToInteger(textRomApplication);
+		componentDetails.iIsRomApplication = XercesStringToInteger(textRomApplication);
 		}
 
 	if( removable->getLength() != 0)
 		{
 		const XMLCh* textRemovable = removable->item(0)->getTextContent();
-		componentDetails.iIsRemovable = Util::WideCharToInteger(textRemovable);
+		componentDetails.iIsRemovable = XercesStringToInteger(textRemovable);
 		}
 	
 	if( size->getLength() != 0)
 		{
 		const XMLCh* textSize = size->item(0)->getTextContent();
-		componentDetails.iSize = Util::WideCharToInteger(textSize);
+		componentDetails.iSize = XercesStringToInteger(textSize);
 		}
 	
 	if( scomoState->getLength() != 0)
 		{
 		const XMLCh* textScomoState = scomoState->item(0)->getTextContent();
-		componentDetails.iScomoState = Util::WideCharToInteger(textScomoState);
+		componentDetails.iScomoState = XercesStringToInteger(textScomoState);
 		}
 	
 	if( globalId->getLength() != 0)
 		{
 		const XMLCh* textGlobalId = globalId->item(0)->getTextContent();
-		componentDetails.iGlobalId = textGlobalId;
+		componentDetails.iGlobalId = XMLChToWString(textGlobalId);
 		}
 
 	if( versionDetail->getLength() != 0)
@@ -727,21 +781,21 @@ XmlDetails::TScrPreProvisionDetail::TComponentDetails
 		DOMNode* minor = attributes->getNamedItem(tagMinor.get());
 		DOMNode* build = attributes->getNamedItem(tagBuild.get());
 
-		componentDetails.iVersion.iMajor = major->getTextContent();
-		componentDetails.iVersion.iMinor = minor->getTextContent();
-		componentDetails.iVersion.iBuild = build->getTextContent();
+		componentDetails.iVersion.iMajor = XMLChToWString(major->getTextContent());
+		componentDetails.iVersion.iMinor = XMLChToWString(minor->getTextContent());
+		componentDetails.iVersion.iBuild = XMLChToWString(build->getTextContent());
 		}
 	
 	if( originVerified->getLength() != 0)
 		{
 		const XMLCh* textOriginVerified = originVerified->item(0)->getTextContent();
-		componentDetails.iOriginVerified = Util::WideCharToInteger(textOriginVerified);
+		componentDetails.iOriginVerified = XercesStringToInteger(textOriginVerified);
 		}
 	
 	if( hidden->getLength() != 0)
 		{
 		const XMLCh* textHidden = hidden->item(0)->getTextContent();
-		componentDetails.iIsHidden = Util::WideCharToInteger(textHidden);
+		componentDetails.iIsHidden = XercesStringToInteger(textHidden);
 		}
 	LOGEXIT("CScrXmlParser::GetComponentDetails()");
 	return componentDetails;
@@ -761,10 +815,10 @@ XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName
 	XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName localizedSwTypeName;
 
 	const XMLCh* textLocale = locale->getTextContent();
-	localizedSwTypeName.iLocale = Util::WideCharToInteger(textLocale);
+	localizedSwTypeName.iLocale = XercesStringToInteger(textLocale);
 	
 	const XMLCh* textName = name->getTextContent();
-	localizedSwTypeName.iName = textName;
+	localizedSwTypeName.iName =  XMLChToWString(textName);
 	LOGEXIT("CScrXmlParser::GetLocalizedSoftwareTypeName()");
 	return localizedSwTypeName;
 	}
@@ -788,7 +842,7 @@ XmlDetails::TScrEnvironmentDetails::TCustomAcessList
 	customAcessList.iSecureId = secureIdVal;
 	
 	const XMLCh* textAccessMode = accessMode->getTextContent();
-	customAcessList.iAccessMode = Util::WideCharToInteger(textAccessMode);
+	customAcessList.iAccessMode = XercesStringToInteger(textAccessMode);
 	LOGEXIT("CScrXmlParser::GetCustomAcessList()");
 	return customAcessList;
 	}
@@ -910,7 +964,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute
 	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute appAttribute;
 	
 	const XMLCh* textName = name->getTextContent();
-	appAttribute.iName	= textName;
+	appAttribute.iName	= XMLChToWString(textName);
 	
 	DOMNodeList* childNodes = value->item(0)->getChildNodes();
 	const XMLSize_t nodeCount = childNodes->getLength();
@@ -921,13 +975,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute
 		if( XMLString::equals(currentElement->getTagName(), tagApplicationAttributeIntValue.get()))
 			{
 			appAttribute.iIsIntValue = true;
-			appAttribute.iValue = currentElement->getTextContent();
+			appAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		else if( XMLString::equals(currentElement->getTagName(), tagApplicationAttributeStrValue.get()))
 			{
 			appAttribute.iIsIntValue = false;
-			appAttribute.iValue = currentElement->getTextContent();
+			appAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		}
@@ -935,7 +989,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppAttribute
 	if(isBinary->getLength() != 0)
 		{
 		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
-		appAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		appAttribute.iIsStr8Bit = XercesStringToInteger(textIsBinary);
 		}
 	LOGEXIT("CScrXmlParser::GetAppAttribute()");
 	return appAttribute;
@@ -954,7 +1008,7 @@ std::wstring CScrXmlParser::GetFileOwnershipInfo( const DOMElement* aDOMElement)
 	if( fileName->getLength() != 0)
 		{
 		const XMLCh* fil = fileName->item(0)->getTextContent();
-		file = fil;
+		file = XMLChToWString(fil);
 		}
 
 	LOGEXIT("CScrXmlParser::GetFileOwnershipInfo()");
@@ -977,13 +1031,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TDataType
 	if( priority->getLength() != 0)
 		{
 		const XMLCh* pri = priority->item(0)->getTextContent();
-		dataType.iPriority = Util::WideCharToInteger(pri);
+		dataType.iPriority = XercesStringToInteger(pri);
 		}
 
 	if( type->getLength() != 0)
 		{
 		const XMLCh* typ = type->item(0)->getTextContent();
-		dataType.iType = typ;
+		dataType.iType = XMLChToWString(typ);
 		}
 	LOGEXIT("CScrXmlParser::GetDataType()");
 	return dataType;
@@ -1005,13 +1059,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	if( OpaqueLocale->getLength() != 0)
 		{
 		const XMLCh* pri = OpaqueLocale->item(0)->getTextContent();
-		opaqueDataType.iLocale = Util::WideCharToInteger(pri);
+		opaqueDataType.iLocale = XercesStringToInteger(pri);
 		}
 
 	if( Data->getLength() != 0)
 		{
 		const XMLCh* typ = Data->item(0)->getTextContent();
-		opaqueDataType.iOpaqueData = typ;
+		opaqueDataType.iOpaqueData = XMLChToWString(typ);
 		}
 	LOGEXIT("CScrXmlParser::GetOpaqueDataType()");
 	return opaqueDataType;
@@ -1033,13 +1087,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	if( ServiceOpaqueLocale->getLength() != 0)
 		{
 		const XMLCh* pri = ServiceOpaqueLocale->item(0)->getTextContent();
-		opaqueDataType.iLocale = Util::WideCharToInteger(pri);
+		opaqueDataType.iLocale = XercesStringToInteger(pri);
 		}
 
 	if( ServiceData->getLength() != 0)
 		{
 		const XMLCh* typ = ServiceData->item(0)->getTextContent();
-		opaqueDataType.iOpaqueData = typ;
+		opaqueDataType.iOpaqueData = XMLChToWString(typ);
 		}
 	LOGEXIT("CScrXmlParser::GetServiceOpaqueDataType()");
 	return opaqueDataType;
@@ -1067,7 +1121,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInf
 	if( uid->getLength() != 0)
 		{
 		const XMLCh* priority = uid->item(0)->getTextContent();
-		appServiceInfo.iUid = Util::WideCharToInteger(priority);
+		appServiceInfo.iUid = XercesStringToInteger(priority);
 		}
 
 	// for each OpaqueData retrieve all tags
@@ -1166,7 +1220,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 	
 	LOGINFO("name->getTextContent");
 	const XMLCh* textName = name->getTextContent();
-	appLocalizableAttribute.iName = textName;
+	appLocalizableAttribute.iName = XMLChToWString(textName);
 	
 	DOMNodeList* childNodes = value->item(0)->getChildNodes();
 	const XMLSize_t nodeCount = childNodes->getLength();
@@ -1177,13 +1231,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 		if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableInfoAttributeIntValue.get()))
 			{
 			appLocalizableAttribute.iIsIntValue = true;
-			appLocalizableAttribute.iValue = currentElement->getTextContent();
+			appLocalizableAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		else if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableInfoAttributeStrValue.get()))
 			{
 			appLocalizableAttribute.iIsIntValue = false;
-			appLocalizableAttribute.iValue = currentElement->getTextContent();
+			appLocalizableAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		}
@@ -1191,7 +1245,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 	if(isBinary->getLength() != 0)
 		{
 		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
-		appLocalizableAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		appLocalizableAttribute.iIsStr8Bit = XercesStringToInteger(textIsBinary);
 		}
 
 	LOGEXIT("CScrXmlParser::GetAppLocalizableAttribute()");
@@ -1247,7 +1301,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 	LOGINFO("name->getTextContent");
 	const XMLCh* textName = name->getTextContent();
 	LOGINFO("assign name");
-	appLocalizableViewDataAttribute.iName = textName;
+	appLocalizableViewDataAttribute.iName = XMLChToWString(textName);
 
 	LOGINFO("getChildNodes()");
 	DOMNodeList* childNodes = value->item(0)->getChildNodes();
@@ -1261,14 +1315,14 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 			{
 			LOGINFO("int value");
 			appLocalizableViewDataAttribute.iIsIntValue = true;
-			appLocalizableViewDataAttribute.iValue = currentElement->getTextContent();
+			appLocalizableViewDataAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		else if( XMLString::equals(currentElement->getTagName(), tagAppLocalizableViewDataStrValue.get()))
 			{
 			LOGINFO("str value");
 			appLocalizableViewDataAttribute.iIsIntValue = false;
-			appLocalizableViewDataAttribute.iValue = currentElement->getTextContent();
+			appLocalizableViewDataAttribute.iValue = XMLChToWString(currentElement->getTextContent());
 			break;
 			}
 		}
@@ -1277,7 +1331,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizabl
 		{
 		LOGINFO("bin value");
 		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
-		appLocalizableViewDataAttribute.iIsStr8Bit = Util::WideCharToInteger(textIsBinary);		
+		appLocalizableViewDataAttribute.iIsStr8Bit = XercesStringToInteger(textIsBinary);
 		}
 	LOGEXIT("CScrXmlParser::GetAppLocalizableViewDataAttributes()");
 	return appLocalizableViewDataAttribute;
@@ -1304,25 +1358,25 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty
 	if( locale->getLength() != 0)
 		{
 		const XMLCh* loc = locale->item(0)->getTextContent();
-		appProperty.iLocale = Util::WideCharToInteger(loc);
+		appProperty.iLocale = XercesStringToInteger(loc);
 		}
 
 	if( name->getLength() != 0)
 		{
 		const XMLCh* nam = name->item(0)->getTextContent();
-		appProperty.iName = nam;
+		appProperty.iName = XMLChToWString(nam);
 		}
 	
 	if( intvalue->getLength() != 0)
 		{
 		const XMLCh* intval = intvalue->item(0)->getTextContent();
-		appProperty.iIntValue = Util::WideCharToInteger(intval);
+		appProperty.iIntValue = XercesStringToInteger(intval);
 		}
 
 	if( strvalue->getLength() != 0)
 		{
 		const XMLCh* strval = strvalue->item(0)->getTextContent();
-		appProperty.iStrValue = strval;
+		appProperty.iStrValue = XMLChToWString(strval);
 		}
 	LOGEXIT("CScrXmlParser::GetAppProperty()");
 	return appProperty;
@@ -1374,3 +1428,5 @@ void SchemaErrorHandler::resetErrors ()
 	std::string msg( "Resetting error handler object" );
 	LOGINFO(msg);
 	}
+
+

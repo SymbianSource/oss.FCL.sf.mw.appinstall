@@ -34,4 +34,6 @@ enum TSisRegistryAccessMessages
 	EAddEntry,
 	EUpdateEntry,
 	EDeleteEntry,
+	EAddAppRegInfo,
+	ERemoveAppRegInfo,
 	};

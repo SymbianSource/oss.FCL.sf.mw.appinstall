@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -427,6 +427,7 @@ void* CSignature::LoadTextKey (const std::wstring& aName, const std::wstring& aP
 					std::cout << ERR_error_string (ERR_get_error (), NULL);
 					}
 				BIO_free(mem);
+				mem = NULL;
 				RSA_free (rsa);
 				}
 			else
@@ -451,6 +452,7 @@ void* CSignature::LoadTextKey (const std::wstring& aName, const std::wstring& aP
 				{
 				std::cout << ERR_error_string (ERR_get_error (), NULL);
 				BIO_free(mem);
+				mem = NULL;
 				DSA_free (dsa);
 				}
 			else

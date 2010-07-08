@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -108,11 +108,13 @@ private:
 	void LongServerShutdown();
 	void ShortServerShutdown();
 	void CancelShutdown();
-		
+    #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	virtual TCustomResult CustomSecurityCheckL(const RMessage2& aMsg, TInt& aAction, TSecurityInfo& aMissing);
+    #endif	
 	// Server Policies
 	// separate the policies into handled and not handled
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	static const TUint iRangeCount=5;
+	static const TUint iRangeCount=6;
 #else
 	static const TUint iRangeCount=2;
 #endif

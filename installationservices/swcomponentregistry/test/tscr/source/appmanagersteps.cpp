@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -202,3 +202,95 @@ void CScrComponentPresenceStep::ImplTestStepPostambleL()
 	{
 	CScrTestStep::ImplTestStepPostambleL();
 	}
+
+// -----------CScrEMMCComponentStep-----------------
+
+CScrEMMCComponentStep::CScrEMMCComponentStep(CScrTestServer& aParent)   : CScrTestStep(aParent)
+    {
+    }
+
+void CScrEMMCComponentStep::ImplTestStepPreambleL()
+    {
+    CScrTestStep::ImplTestStepPreambleL();
+    }
+
+void CScrEMMCComponentStep::ImplTestStepL()
+    {
+    TInt noOfComponents(0);
+    GetIntFromConfig(ConfigSection(), KNoOfComponents, noOfComponents);
+    
+    TPtrC formatDrive;
+    GetStringFromConfig(ConfigSection(), KFormatDrive, formatDrive);
+    TInt drive;
+    RFs fs;
+    User::LeaveIfError(fs.Connect());
+    User::LeaveIfError(fs.CharToDrive(formatDrive[0], drive));
+    fs.Close();
+    TDriveList filterFormatDrive;
+    filterFormatDrive.FillZ(KMaxDrives);
+    filterFormatDrive[drive] = 1;
+        
+    CComponentFilter* componentFilter = CComponentFilter::NewLC();
+    componentFilter->SetInstalledDrivesL(filterFormatDrive);
+            
+    RArray<TComponentId> foundComponentIds;
+    CleanupClosePushL(foundComponentIds);
+        
+    iScrSession.GetComponentIdsL(foundComponentIds, componentFilter);
+    
+    if (foundComponentIds.Count() != noOfComponents)
+        {
+        ERR_PRINTF1(_L("Mismatch for number of components found."));
+        SetTestStepResult(EFail);
+        }
+    CleanupStack::PopAndDestroy(2);
+    }
+
+void CScrEMMCComponentStep::ImplTestStepPostambleL()
+    {
+    CScrTestStep::ImplTestStepPostambleL();
+    }
+
+// -----------CScrComponentPresentForNameVendorStep-----------------
+
+CScrComponentPresentForNameVendorStep::CScrComponentPresentForNameVendorStep(CScrTestServer& aParent)   : CScrTestStep(aParent)
+    {
+    }
+
+void CScrComponentPresentForNameVendorStep::ImplTestStepPreambleL()
+    {
+    CScrTestStep::ImplTestStepPreambleL();
+    }
+
+void CScrComponentPresentForNameVendorStep::ImplTestStepL()
+    {
+    TPtrC name;
+    GetStringFromConfig(ConfigSection(), KComponentName, name);
+    
+    TPtrC vendor;
+    GetStringFromConfig(ConfigSection(), KVendorName, vendor);
+    
+    CComponentFilter* componentFilter = CComponentFilter::NewLC();
+    componentFilter->SetNameL(name);
+    componentFilter->SetVendorL(vendor);
+    
+    RArray<TComponentId> foundComponentIds;
+    CleanupClosePushL(foundComponentIds);
+        
+    iScrSession.GetComponentIdsL(foundComponentIds, componentFilter);
+    
+    TInt noOfComponents(0);
+    GetIntFromConfig(ConfigSection(), KNoOfComponents, noOfComponents);
+        
+    if (foundComponentIds.Count() != noOfComponents)
+        {
+        ERR_PRINTF1(_L("Mismatch for number of components found."));
+        SetTestStepResult(EFail);
+        }
+    CleanupStack::PopAndDestroy(2);
+    }
+
+void CScrComponentPresentForNameVendorStep::ImplTestStepPostambleL()
+    {
+    CScrTestStep::ImplTestStepPostambleL();
+    }

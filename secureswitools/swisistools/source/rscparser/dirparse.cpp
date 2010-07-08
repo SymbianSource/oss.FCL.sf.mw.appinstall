@@ -310,9 +310,17 @@ void CreateOpaqueDataType(XmlDetails::TScrPreProvisionDetail::TApplicationRegist
 
 	componentData.iLocale = aLocale;
 	componentData.iServiceUid = aServUid;
-	componentData.iOpaqueData = aStrValue;
 
-	aAppOpaqueData.iOpaqueDataType.push_back(componentData);
+	/* 
+	 * Under LINUX : The OpaqueData which is read from the resource file will be in UTF-16 format contained
+	 *               in a std::wstring. So, we need to convert it back to UTF-32 format which is the format
+	 *               of LINUX specific std::wstring.
+     * 
+	 * Under WINDOWS : Nothing needs to be done and this is taken care of by XercesStringToWString()
+	 *				   which is platform specific.	
+	 */
+	 componentData.iOpaqueData = XercesStringToWString(reinterpret_cast<const XMLCh*>(aStrValue.c_str()));
+	 aAppOpaqueData.iOpaqueDataType.push_back(componentData);
 }
 
 /**
@@ -326,10 +334,18 @@ std::string GetDbPath(const CParameterList* aParamList)
 		aParamList->IsFlagSet(CParameterList::EFlagsDisableZDriveChecksSet) 
 		)
 		{
+			#ifdef __LINUX__
+			return wstring2string(aParamList->SystemDrivePath()) + "/sys/install/scr/scr.db";
+			#else
 			return wstring2string(aParamList->SystemDrivePath()) + "\\sys\\install\\scr\\scr.db";
+			#endif
 		}
 
+	#ifdef __LINUX__
+	return wstring2string(aParamList->RomDrivePath()) + "/sys/install/scr/provisioned/scr.db";
+	#else
 	return wstring2string(aParamList->RomDrivePath()) + "\\sys\\install\\scr\\provisioned\\scr.db";
+	#endif
 }
 
 /**
@@ -346,7 +362,12 @@ void UpdateInstallationInformation_xml(const CParameterList* aParamList,
 	int isRomApplication = 1;
 	xmlGenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail, isRomApplication);						
 
+	#ifdef __LINUX__
+	std::string executable = "scrtool";
+	#else 
 	std::string executable = "scrtool.exe";
+	#endif
+
 	std::string command;
 
 	command = executable + " -d " + GetDbPath(aParamList) + " -p " + tmpFileName;
@@ -517,13 +538,21 @@ std::string GetLocalizeFilePath(const std::string& aFileName, const CParameterLi
 	{
 		size_t found;
 		std::string folder;
+		#ifdef __LINUX__
+		found=aFileName.find("private/10003a3f/");
+		#else
 		found=aFileName.find("private\\10003a3f\\");
+		#endif
 
 		if( found != string::npos )
 			folder = aFileName.substr(0,found);
 		else
 		{
+				#ifdef __LINUX__
+				std::string errMsg= "Failed : Resource File Path should contain /private/10003a3f/";
+				#else
 				std::string errMsg= "Failed : Resource File Path should contain \\private\\10003a3f\\";
+				#endif
 				throw CResourceFileException(errMsg);
 		}
 
@@ -606,7 +635,11 @@ void ParseResourceDir(const CParameterList* aParamList, const CInterpretSIS& aIn
 	else
 	{
 		 aFilePath = aParamList->RomDrivePath();
+		 #ifdef __LINUX__
+		 aFilePath.append(L"/private/10003a3f/apps");
+		 #else
 		 aFilePath.append(L"\\private\\10003a3f\\apps");
+		 #endif
 	}
 
 	int iCount = 0;
@@ -625,9 +658,14 @@ void ParseResourceDir(const CParameterList* aParamList, const CInterpretSIS& aIn
 			{
 				iCount++;
 			    std::string fName;
-		        fName = Ucs2ToUtf8( *curr );
+		        fName = wstring2string( *curr );
 				std::string FilePath = wstring2string(aFilePath);
+				#ifdef __LINUX__				
+				FilePath.append("/");
+				#else
 				FilePath.append("\\");
+				#endif
+
 				FilePath.append(fName);
 				std::cout<<"Parsing - "<<fName<<" ";
 				ReadApplicationInformationFromResourceFilesL(scrPreProvisionDetail,FilePath,aParamList,aInterpretSis,iNewFileFlag);
@@ -645,7 +683,7 @@ void ParseResourceDir(const CParameterList* aParamList, const CInterpretSIS& aIn
 		UpdateInstallationInformation_xml(aParamList,scrPreProvisionDetail);
 	
 	if(!iCount)
-		LERROR(L"Failed : No Resource File in the Directory Specified - ");
+		LINFO(L"No Resource File in the Directory Specified - ");
 }
 
 /**
@@ -653,15 +691,28 @@ void ParseResourceDir(const CParameterList* aParamList, const CInterpretSIS& aIn
  */
 void BackupHashForFile(const std::wstring& aFile, const int aDriveLetter, const std::wstring& aPath)
 {
+	#ifdef __LINUX__
+	std::wstring hashdir = L"$:/sys/hash/";
+	#else
 	std::wstring hashdir = L"$:\\sys\\hash\\";
+	#endif
+
 	std::wstring basename = aFile.substr( aFile.rfind( KDirectorySeparator ) + 1) ;
 	if (basename.size() == 0)
 	{
+		#ifdef __LINUX__
+		basename = aFile.substr(aFile.rfind(L"/"));
+		#else
 		basename = aFile.substr(aFile.rfind(L"\\"));
+		#endif
 	}
 
 	hashdir[0] = aDriveLetter;
+	#ifdef __LINUX__
+	std::wstring hashFile = aPath + L"/sys/hash/" + basename;
+	#else
 	std::wstring hashFile = aPath + L"\\sys\\hash\\" + basename;
+	#endif
 
 	if (FileExists(hashFile))
 	{
@@ -670,7 +721,7 @@ void BackupHashForFile(const std::wstring& aFile, const int aDriveLetter, const 
 		iBackupFile.append("_backup");
 
 		int err=FileCopyA(iLocalFile.c_str(),iBackupFile.c_str(),0);
-		if (err == 0)
+		if (err != 0)
 			LERROR(L"Failed to Backup hash file ");
 	}
 }
@@ -680,15 +731,27 @@ void BackupHashForFile(const std::wstring& aFile, const int aDriveLetter, const 
  */
 void RestoreHashForFile(const std::wstring& aFile, const int aDriveLetter, const std::wstring& aPath)
 {
+	#ifdef __LINUX__
+	std::wstring hashdir = L"$:/sys/hash/";
+	#else
 	std::wstring hashdir = L"$:\\sys\\hash\\";
+	#endif
 	std::wstring basename = aFile.substr( aFile.rfind( KDirectorySeparator ) + 1) ;
 	if (basename.size() == 0)
 	{
+		#ifdef __LINUX__
+		basename = aFile.substr(aFile.rfind(L"/"));
+		#else
 		basename = aFile.substr(aFile.rfind(L"\\"));
+		#endif
 	}
 
 	hashdir[0] = aDriveLetter;
+	#ifdef __LINUX__
+	std::wstring hashFile = aPath + L"/sys/hash/" + basename;
+	#else
 	std::wstring hashFile = aPath + L"\\sys\\hash\\" + basename;
+	#endif	
 	std::wstring LocalFile(hashFile);
 	hashFile.append(L"_backup");
 
@@ -698,9 +761,8 @@ void RestoreHashForFile(const std::wstring& aFile, const int aDriveLetter, const
 		std::string iBackupFile = wstring2string(hashFile);
 
 		int err = FileMoveA(iBackupFile.c_str(),iLocalFile.c_str());
-
-		if (err == 0)
-			LERROR(L"Failed to Restore hash file ");
+		if (err != 0)
+		    LERROR(L"Failed to Restore hash file ");
 	}
 }
 
@@ -715,7 +777,12 @@ void RestoreHashForFile(const std::wstring& aFile, const int aDriveLetter, const
  */ 
 
 // Constants
+#ifdef __LINUX__
+const std::wstring KSisDirectorySeparatortap( L"/" );
+#else
 const std::wstring KSisDirectorySeparatortap( L"\\" );
+#endif
+
 
 int FirstInvalidDirSeparatorSizetap(std::wstring& aPath, std::wstring::size_type& aIndex)
 	{
@@ -723,11 +790,19 @@ int FirstInvalidDirSeparatorSizetap(std::wstring& aPath, std::wstring::size_type
 	// then the function will return 0
 	int ret = 0; 
 	int pos = 0;
+	#ifdef __LINUX__
+	if((pos = aPath.find(L"\\\\", aIndex)) != std::wstring::npos)
+	#else
 	if((pos = aPath.find(L"//", aIndex)) != std::wstring::npos)
+	#endif
 		{
 		ret = 2;
 		}
+	#ifdef __LINUX__
+	else if((pos = aPath.find(L"\\", aIndex)) != std::wstring::npos)
+	#else
 	else if((pos = aPath.find(L"/", aIndex)) != std::wstring::npos)
+	#endif
 		{
 		ret = 1;
 		}
