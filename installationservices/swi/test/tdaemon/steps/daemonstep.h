@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,6 +37,7 @@ class CAppInfo;
 namespace Test
 {
 _LIT(KDaemonStep,"DaemonStep");
+_LIT(KAddDriveStep,"AddDriveStep");
 
 class CDaemonStep : public CDaemonTestStep, public MDaemonBehaviour
 	{
@@ -54,6 +55,16 @@ protected:
 
 	CDaemon* iDaemon;
 	};
+
+class CAddDriveStep : public CDaemonTestStep
+    {
+public:
+    CAddDriveStep();
+    ~CAddDriveStep();
+
+    virtual TVerdict runTestStepL(TBool aOomTest);
+    
+    };
 
 } // namespace Swi::Test
 

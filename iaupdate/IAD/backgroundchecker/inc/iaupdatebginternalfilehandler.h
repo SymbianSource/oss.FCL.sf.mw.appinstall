@@ -71,7 +71,11 @@ public:
     TInt RetryTimes();
     
     void SetRetryTimes( TInt aRetry );
-
+    
+    TInt NrOfIndicatorEntries();
+    
+    void  SetNrOfIndicatorEntries( TInt aEntries );
+    
 protected:
 
     CIAUpdateBGInternalFileHandler();
@@ -111,7 +115,9 @@ private: // data
     TInt iSNID;
     
     TInt iRetryTimes;
-     
+    
+    TInt iNrOfIndicatiorEntries;
+    
     };
         
 #endif // IAUPDATEBGINTERNAL_FILE_HANDLER

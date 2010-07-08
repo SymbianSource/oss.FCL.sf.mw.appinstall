@@ -118,7 +118,10 @@ private:
 	void RequestRegistryEntryL(const RMessage2& aMessage);
 	void IsFileRegisteredL(const RMessage2& aMessage);
 	void GetComponentIdForUidL(const RMessage2& aMessage);
-    
+    void AddAppRegInfoL(const RMessage2& aMessage);
+    void RemoveAppRegInfoL(const RMessage2& aMessage);
+	TInt ValidateAndParseAppRegFileL(const TDesC& aRegFileName, Usif::CApplicationRegistrationData*& aAppRegData);
+	
 	// Subsession handling
 	void OpenRegistryUidEntryL(const RMessage2& aMessage);
 	void OpenRegistryPackageEntryL(const RMessage2& aMessage);
@@ -139,13 +142,14 @@ private:
 	void AppRegInfoEntryL(const RMessage2& aMessage);
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	void RegisterAllInRomAppL(RBuf& aRomApparcRegFilePath);
+	void RegisterAllAppL(RBuf& aApparcRegFolder);
     void GetComponentIdForPackageL(const RMessage2& aMessage);
     void GetAppUidsForComponentL(const RMessage2& aMessage);
     void GetComponentIdsForUidL(const RMessage2& aMessage);
 #endif
 
 	void DeleteEntryL(const RMessage2& aMessage);
+	void DeleteEntryL(const CSisRegistryObject& aObject, TInt64 aTransactionId, TBool aCleanupRequired = ETrue);
 	void AddSoftwareTypeL(const RMessage2& aMessage);
 	void AddDriveL(const RMessage2& aMessage);
 
@@ -200,12 +204,13 @@ private:
 	void UnregisterSoftwareTypesL(Usif::TComponentId aComponentId);
 	
 	void ProcessRomStubsL();
-	void ProcessRomApplicationsL();
+	void ProcessApplicationsL();
 	TBool IsFirmwareUpdatedL();	 
 	void  UpdateRecentFWVersionL(); 
 	TInt GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
 	TInt GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames);
-
+	void DriveFormatDetectedL(TDriveUnit aDrive);
+	
 private:
     friend class CSisRevocationManager;
 

@@ -32,7 +32,6 @@
 #include "sisregistryobject.h"
 #include "logger.h"
 #include "version.h"
-#include "is_utils.h"
 
 // ExpressionResult
 using namespace Utils;
@@ -108,9 +107,9 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 	    {
 		iExpressionDepth=0;
 		std::string error = "SIS File expression too complex\n";
-		std::string x;
+		std::string x = wstring2string(iExpEnv.GetPackageName());
         //
-		throw InvalidSis(Ucs2ToUtf8(iExpEnv.GetPackageName(),x), error, SIS_NOT_SUPPORTED);
+		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 	    }
 
 	switch (aExpression.Operator())
@@ -248,9 +247,9 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 		{
 		iExpressionDepth=0;
 		std::string error = "SIS File contains user options\n";
-		std::string x;
+		std::string x = wstring2string(iExpEnv.GetPackageName());
         //
-		throw InvalidSis(Ucs2ToUtf8(iExpEnv.GetPackageName(),x), error, SIS_NOT_SUPPORTED);
+		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 		}
 
 	case CSISExpression::EPrimTypeNumber:
@@ -261,9 +260,9 @@ ExpressionResult ExpressionEvaluator::Evaluate(const CSISExpression& aExpression
 		{
 		iExpressionDepth=0;
 		std::string error = "SIS File contains unknown expression\n";
-		std::string x;
+		std::string x = wstring2string(iExpEnv.GetPackageName());
         //
-		throw InvalidSis(Ucs2ToUtf8(iExpEnv.GetPackageName(),x), error, SIS_NOT_SUPPORTED);
+		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 		}
     	}
 
@@ -316,8 +315,7 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName, bool aLogIn
         }
 
     // Require for invalid file exception (also helps with debugging)
-    std::string narrowFileName;
-    narrowFileName = Ucs2ToUtf8( fileName, narrowFileName );
+	    std::string narrowFileName = wstring2string( fileName );
 
     // Now continue with file, assuming we've fixed up the path or then
     // have enough characters to process
@@ -345,8 +343,7 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName, bool aLogIn
             ConvertToLocalPath( fileName, iCDrive );
 
             // For debugging
-            narrowFileName = Ucs2ToUtf8( fileName, narrowFileName );
-
+			narrowFileName = wstring2string( fileName );
             fileExists = FileExists( fileName );
             break;
             }
@@ -363,7 +360,7 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName, bool aLogIn
 		std::ostringstream stream;
 		stream << "\tIF EXISTS(\'" << narrowFileName << "\') => " << fileExists;
 		std::string msg = stream.str();
-		std::wstring finalMessage = Utf8ToUcs2( msg );
+    std::wstring finalMessage = string2wstring( msg );
 		LINFO( finalMessage );
 		}
     //
@@ -428,7 +425,7 @@ int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
 					std::ostringstream stream;
 					stream << "Input language " << result << " is not supported by SIS file. Using first language " <<firstLanguage;
 					std::string msg = stream.str();
-					std::wstring finalMessage = Utf8ToUcs2( msg );
+				std::wstring finalMessage = string2wstring( msg );
 					LWARN( finalMessage );	
 					}
 				result = firstLanguage;
@@ -439,7 +436,7 @@ int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
 			std::ostringstream stream;
 			stream << "\tIF " << attributeName << " ... where [" << attributeName << " = " << result << "]";
 			std::string msg = stream.str();
-			std::wstring finalMessage = Utf8ToUcs2( msg );
+        std::wstring finalMessage = string2wstring( msg );
 			LINFO( finalMessage );
 			}
         }
@@ -453,8 +450,7 @@ int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
     	}
     else
         {
-        std::string packageName;
-        packageName = Ucs2ToUtf8( GetPackageName(), packageName );
+        std::string packageName = wstring2string( GetPackageName() );
         //
 		std::string error = "SIS File contains HAL attributes\n";
 		throw InvalidSis( packageName, error, SIS_NOT_SUPPORTED );

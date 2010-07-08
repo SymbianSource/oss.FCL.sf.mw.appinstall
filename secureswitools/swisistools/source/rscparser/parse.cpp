@@ -205,7 +205,12 @@ std::string ParsePtrC::Name()
 {
   string iName;
 
+  #ifdef __LINUX__
+  TInt i = Buf->rfind("/");
+  #else
   TInt i = Buf->rfind("\\");
+  #endif
+
   if(i!=string::npos)
      iName.assign(*Buf, i, Buf->size()-4);
   else
@@ -223,7 +228,12 @@ std::string ParsePtrC::NameAndExt()
 {
   string iName;
 
+  #ifdef __LINUX__
+  TInt i = Buf->rfind("/");
+  #else
   TInt i = Buf->rfind("\\");
+  #endif
+  
   if(i!=string::npos)
      iName.assign(*Buf, i, Buf->size());
 
@@ -234,7 +244,12 @@ std::string ParsePtrC::FullPath()
 {
   string iName;
 
+  #ifdef __LINUX__
+  TInt i = Buf->rfind("/");
+  #else
   TInt i = Buf->rfind("\\");
+  #endif
+  
   if(i!=string::npos)
      iName.assign(*Buf, 0, i);
 
@@ -245,8 +260,14 @@ std::string ParsePtrC::Path()
 {
   string iName;
 
+  #ifdef __LINUX__
+  TInt j = Buf->rfind("/");
+  TInt i = Buf->find("/");
+  #else
   TInt j = Buf->rfind("\\");
   TInt i = Buf->find("\\");
+  #endif
+
   if(i!=string::npos)
      iName.assign(*Buf, i, Buf->size()-j);
 
@@ -277,7 +298,12 @@ std::string ParsePtrC::FullNameWithoutDrive()
 
 TInt ParsePtrC::NamePresent()
 {
+	#ifdef __LINUX__
+	TInt i = Buf->rfind("/");
+    #else
 	TInt i = Buf->rfind("\\");
+    #endif
+
 	if(i!=string::npos)
 		iNamePresent = 1;
 	else
@@ -292,7 +318,12 @@ TInt ParsePtrC::NamePresent()
 
 TInt ParsePtrC::PathPresent()
 {
+	#ifdef __LINUX__
+	TInt i = Buf->find("/");
+	#else
 	TInt i = Buf->find("\\");
+	#endif
+
 	if(i!=string::npos)
 		iPathPresent = 1;
 	else
@@ -330,7 +361,12 @@ TInt ParsePtrC::IsWild()
 
 TInt ParsePtrC::IsValidName()
 {
-	string::size_type index = Buf->find_last_of("*?< > : \" / |");
+	#ifdef __LINUX__
+	    string::size_type index = Buf->find_last_of("*?< > : \" \\ |");
+	#else
+	    string::size_type index = Buf->find_last_of("*?< > : \" |");
+	#endif
+
 	if( index != string::npos )
 		return 1;
 	return 0;

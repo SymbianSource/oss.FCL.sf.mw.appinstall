@@ -19,6 +19,8 @@
 TARGET				sifserver.exe        
 TARGETTYPE			exe
 
+EPOCSTACKSIZE   		0x4000
+
 CAPABILITY			ProtServ TrustedUI ReadUserData WriteDeviceData
 
 VENDORID			0x70000001

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,6 +37,19 @@
 #include "./sqlite/sqlite3.h"
 
 #include <string>
+
+#ifdef __TOOLS2_LINUX__
+
+// utf16WString represents the UTF-16 data(WINDOWS wstring).
+typedef std::basic_string<unsigned short int> utf16WString;
+
+#else
+
+// Under WINDOWS, wstring will be in UTF-16 format itself.
+typedef std::wstring utf16WString;
+
+#endif
+
 
 class CDbLayer
 	{

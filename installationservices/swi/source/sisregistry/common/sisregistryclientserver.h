@@ -173,7 +173,9 @@ enum TSisRegistryMessages
 	EComponentIdForPackage,
 	EAppUidsForComponent,  
 	EComponentIdsForPackageUid,
-	ESetComponentState, //SIF only
+	ESetComponentState = 300, //SIF only
+	EAddAppRegInfo = 320,    //requires TCB
+	ERemoveAppRegInfo,       //requires TCB 
 #endif
 	ESeparatorEndAll
 	

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -64,7 +64,7 @@ void DisplayFileCapList(CDumpSis& dumpsis, Options& aOptions)
 			}
 		else
 			{
-			std::wcout << L":" << str;
+			std::wcout << L":" << str.c_str();
 			std::vector<std::wstring> capList;
 			fdesc->GetCapabilityList(capList);
 			std::wcout << std::endl;

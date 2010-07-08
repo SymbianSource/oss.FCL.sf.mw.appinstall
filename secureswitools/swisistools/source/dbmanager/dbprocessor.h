@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,7 +32,12 @@
 #include "./sqlite/sqlite3.h"
 #include "symbiantypes.h"
 #include <string>
+
+#ifdef __linux__
+typedef void* HINSTANCE;
+#else
 #include <windows.h>
+#endif // __linux__
 
 // Forward declarations
 class CStatement;
@@ -106,6 +111,50 @@ class TDbLibrary
 		
 	};
 
+
+#ifdef __TOOLS2_LINUX__
+typedef enum {
+	allowSlashConversion = 0,
+	avoidSlashConversion
+} SlashConversionFlags;
+
+// utf16WString represents the UTF-16 data(WINDOWS wstring).
+typedef std::basic_string<unsigned short int> utf16WString;
+
+
+inline void ConvertToWindowsSpecificPaths(std::wstring& aPath)
+{
+		std::wstring::size_type idx = 0;
+		while( (idx = aPath.find(L"//", idx)) != std::wstring::npos)
+		{
+			aPath.replace( idx, 2, L"\\\\" );
+		}
+
+		idx = 0;
+
+		while( (idx = aPath.find(L"/", idx)) != std::wstring::npos)
+		{
+			aPath.replace( idx, 1, L"\\" );
+		}
+}
+
+inline void ConvertToLinuxSpecificPaths(std::wstring& aPath)
+{
+	 std::wstring::size_type idx = 0;
+     while( (idx = aPath.find(L"\\\\", idx)) != std::wstring::npos)
+     {
+             aPath.replace( idx, 2, L"//" );
+     }
+
+     idx = 0;
+
+     while( (idx = aPath.find(L"\\", idx)) != std::wstring::npos)
+     {
+             aPath.replace( idx, 1, L"/" );
+     }
+}
+
+#endif
 
 /**
 	An instance of this class is used to execute all types of SQL statements with or without
@@ -183,8 +232,16 @@ class CStatement
 			@param aParameterIndex The index value identifying the parameter; the first parameter 
 			       has an index of 1.
 			@param aParameterStr The 16-bit descriptor whose content is to be assigned to the parameter.
+			@param aConvertSlash The integer value which is used only under LINUX platform specifies whether
+								 to convert any LINUX specific paths to WINDOWS specific paths in aParameterStr.
+								 This helps in avoiding the wrong interpretation of the DataType strings
+								 having the syntax (DataType/Format) as PATHs.
 		 */
-		void BindStr(int aParameterIndex, const std::wstring& aParameterStr);
+		#ifdef __TOOLS2_LINUX__
+		void BindStr(TInt aParameterIndex, const std::wstring &aParameterStr, int aConvertSlash=allowSlashConversion);
+		#else
+		void BindStr(TInt aParameterIndex, const std::wstring &aParameterStr);
+		#endif
 		
 		void BindBinary(int aParameterIndex, const std::string &aParameterStr);
 

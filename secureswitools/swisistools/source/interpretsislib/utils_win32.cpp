@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -273,7 +273,9 @@ int GetAugmentationsNumber(const std::wstring& aFile)
 
 	return 0;
 }
-std::string Utils::wstring2string (const std::wstring& aWide)
+/*
+//std::string Utils::wstring2string (const std::wstring& aWide)
+std::string wstring2string (const std::wstring& aWide)
 	{
 	int max = WideCharToMultiByte(CP_OEMCP,0,aWide.c_str(),aWide.length(),0,0,0,0);
 	std::string reply;
@@ -293,7 +295,8 @@ std::string Utils::wstring2string (const std::wstring& aWide)
 	return reply;
 	}
 
-std::wstring Utils::string2wstring (const std::string& aNarrow)
+//std::wstring Utils::string2wstring (const std::string& aNarrow)
+std::wstring string2wstring (const std::string& aNarrow)
 	{
 	int max = MultiByteToWideChar(CP_OEMCP,0,aNarrow.c_str(),aNarrow.length(),0,0);
 	std::wstring reply;
@@ -312,32 +315,4 @@ std::wstring Utils::string2wstring (const std::string& aNarrow)
 		}
 	return reply;
 	}
-
-const std::wstring Utils::IntegerToWideString(int aInt)
-	{
-	std::wstringstream wstream;
-	wstream << aInt;
-	return wstream.str();
-	}
-
-std::wstring Utils::Int64ToWideString(TInt64 aInt)
-	{
-	wchar_t wint[20];
-	
-#ifdef _MSC_VER
-	swprintf(wint, L"%I64u", aInt);
-#else
-	swprintf(wint, 20, L"%I64u", aInt);
-#endif // _MSC_VER
-	
-	std::wstring strInt64(wint);
-	return strInt64;
-	}
-
-int Utils::WideStringToInteger(const std::wstring& aWideString)
-	{
-	unsigned long int value=0;
-	std::wstringstream str(aWideString);
-	str >> value;
-	return value;
-	}
+*/

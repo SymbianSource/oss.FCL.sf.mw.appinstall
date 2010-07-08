@@ -21,6 +21,7 @@
 #include "logs.h"
 #include "util.h"
 #include "symbiantypes.h"
+#include "../sisxlibrary/utility.h"
 
 #include <string>
 #include <vector>
@@ -52,6 +53,60 @@ typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistration
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData>::const_iterator ViewDataIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppLocalizableInfo::TViewData::TViewDataAttributes>::const_iterator ViewDataAttributeIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty>::const_iterator ApplicationPropertyIterator;
+
+
+#ifdef __LINUX__
+
+/*
+* Platform specific feature
+*
+* In WINDOWS : sizeof(wchar_t) = 2
+* In LINUX   : sizeof(wchar_t) = 4
+*/
+
+static utf16WString utf32WString2utf16WString(std::wstring aParameter)
+{
+	int strLen = aParameter.length();
+	const wchar_t * source = aParameter.c_str();
+	unsigned short int* buffer = new unsigned short int[strLen + 1];
+
+	// Using a temp variable in place of buffer as ConvertUTF32toUTF16 modifies the source pointer passed.
+	unsigned short int* temp = buffer;
+
+	ConvertUTF32toUTF16(&source, source + strLen, &temp,  temp + strLen, lenientConversion);
+
+	// Appending NUL to the converted buffer.
+	*temp = 0;
+
+	utf16WString utf16Ws;
+	utf16Ws.resize(strLen);
+
+	// The built-in basic_string template class copy operation
+	// truncates when a NUL is encountered when a c_str() is
+	// used to construct the required string.
+	// So, if aParameter is any hashable string having the
+	// syntax : swtypeName + L'\0' + someId then, we will end
+	// up returning only part of the converted UTF-16 string.
+	// Hence, we resort to the explicit copy operation with
+	// two bytes at a time.
+	while( strLen-- )
+	{
+		utf16Ws[ strLen ] = buffer[ strLen ];
+	}
+
+	delete[] buffer;
+
+	return utf16Ws;
+}
+
+#else
+
+// We need not do anything for WINDOWS, since the windows wstring
+// will already be in UTF-16 encoding.
+#define utf32WString2utf16WString(aParameter) (aParameter)
+
+#endif
+
 
 
 const int KMaxDrives=26;
@@ -140,7 +195,11 @@ void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDet
 
 	for(ScrEnvIterator aScrEnvIterator = aScrEnvDetails.begin(); aScrEnvIterator != aScrEnvDetails.end(); ++aScrEnvIterator)
 		{
-		unsigned int swTypeId = Util::Crc32(aScrEnvIterator->iUniqueSoftwareTypeName.c_str(),aScrEnvIterator->iUniqueSoftwareTypeName.length()*2);
+		// To maintain the consistency of CRC value across the platforms(WINDOWS and LINUX), we are
+		// using UTF-16 string in CRC generation.
+		utf16WString utf16Ws = utf32WString2utf16WString(aScrEnvIterator->iUniqueSoftwareTypeName);
+		unsigned int swTypeId = Util::Crc32(utf16Ws.c_str(),aScrEnvIterator->iUniqueSoftwareTypeName.length()*2);
+
 		if (!aScrEnvIterator->iLauncherExecutable.empty())
 		{
 		stmtSwType->BindInt(1, swTypeId);
@@ -217,14 +276,19 @@ bool CDbLayer::AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TCo
 	std::string insertComponents;
 	XmlDetails::TScrPreProvisionDetail::TComponentDetails 
 		componentDetail = aComponent.iComponentDetails;
-
 	if (aComponent.iComponentDetails.iIsRomApplication)
 		{
 		LOGINFO("Is rom app");
 		return true;
 		}
 	LOGINFO("Not rom app");
-	unsigned int swTypeId = Util::Crc32(aSoftwareTypeName.c_str(),aSoftwareTypeName.length()*2);
+
+	// To maintain the consistency of CRC value across the platforms(WINDOWS and LINUX), we are
+	// using UTF-16 string in CRC generation.
+    utf16WString utf16Ws = utf32WString2utf16WString(aSoftwareTypeName);
+	unsigned int swTypeId = Util::Crc32(utf16Ws.c_str(),aSoftwareTypeName.length()*2);
+
+
 	std::wstring strGlobalId = componentDetail.iGlobalId;
 	
 	if(!strGlobalId.empty())
@@ -262,7 +326,12 @@ bool CDbLayer::AddComponentDetails(const XmlDetails::TScrPreProvisionDetail::TCo
 	if(!strGlobalId.empty())
 		{
 		std::wstring concatGlobalId = aSoftwareTypeName + L'\0' + strGlobalId;
-		unsigned int globalIdHash = Util::Crc32(concatGlobalId.c_str(),concatGlobalId.length()*2);
+
+		// To maintain the consistency of CRC value across the platforms(WINDOWS and LINUX), we are
+		// using UTF-16 string in CRC generation.
+		utf16WString utf16Ws = utf32WString2utf16WString(concatGlobalId);
+		unsigned int globalIdHash = Util::Crc32(utf16Ws.c_str(),concatGlobalId.length()*2);
+
 		stmtComponents->BindInt(9, globalIdHash);
 		stmtComponents->BindStr(10, concatGlobalId);
 		stmtComponents->BindStr(11, version);
@@ -376,7 +445,7 @@ void CDbLayer::AddComponentProperties(
 			{
 			if(compPropIter->iIsStr8Bit)
 				{
-				std::string str = Util::wstring2string(compPropIter->iValue);
+				std::string str = wstring2string(compPropIter->iValue);
 				std::string decodedString = Util::Base64Decode(str);
 				stmtComponentProperty->BindBinary(4, str);
 				}
@@ -429,11 +498,19 @@ void CDbLayer::AddComponentDependencies	(	int aComponentId,
 	for(compDepIter = aComponentDependencyDetails.begin() ; compDepIter != aComponentDependencyDetails.end() ; ++compDepIter)
 		{
 		std::wstring concatGlobalId = dependantGlobalId + compDepIter->iSupplierId;
-				
-		unsigned int globalIdHash = Util::Crc32(concatGlobalId.c_str(),concatGlobalId.length()*2);
-		unsigned int dependantIdHash = Util::Crc32(dependantGlobalId.c_str(),dependantGlobalId.length()*2);
-		unsigned int supplierIdHash = Util::Crc32(compDepIter->iSupplierId.c_str(),compDepIter->iSupplierId.length()*2);
-		
+
+		// To maintain the consistency of CRC value across the platforms(WINDOWS and LINUX), we are
+		// using UTF-16 string in CRC generation.
+		utf16WString utf16Ws = utf32WString2utf16WString(concatGlobalId);
+		unsigned int globalIdHash = Util::Crc32(utf16Ws.c_str(),concatGlobalId.length()*2);
+
+		utf16Ws = utf32WString2utf16WString(dependantGlobalId);
+		unsigned int dependantIdHash = Util::Crc32(utf16Ws.c_str(),dependantGlobalId.length()*2);
+
+		utf16Ws = utf32WString2utf16WString(compDepIter->iSupplierId);
+		unsigned int supplierIdHash = Util::Crc32(utf16Ws.c_str(),compDepIter->iSupplierId.length()*2);
+
+
 		std::string insertComponentDeps("INSERT INTO ComponentDependencies(GlobalIdHash,DependantGlobalIdHash, SupplierGlobalIdHash, DependantGlobalId,SupplierGlobalId,VersionFrom,VersionTo) VALUES(?,?,?,?,?,?,?);");
 		std::auto_ptr<CStatement> stmtComponentDeps(iScrDbHandler->PrepareStatement(insertComponentDeps));
 		
@@ -460,14 +537,40 @@ void CDbLayer::AddLocation(int aComponentId,  const std::wstring& aLocation)
 	
 	stmtComponentFileDetails->BindInt(1,aComponentId);
 	
-	// size does not return the actual binary size of the object
 	int length = aLocation.length()*2 ;
+
 	// generate hash for location
 	std::wstring location = aLocation;
 	std::transform(	location.begin(), location.end(), location.begin(), tolower);
 
-	unsigned int hash = Util::Crc32(location.c_str(),length);
-	
+	#ifdef __TOOLS2_LINUX__
+
+	// To maintain the consistency of the LocationHash value(essentially the CRC of
+	// Location string) across the WINDOWS and LINUX platforms, we reconstruct the
+	// location to have WINDOWS specific path.
+
+    std::wstring::size_type idx = 0;
+     while( (idx = location.find(L"//", idx)) != std::wstring::npos)
+     {
+    	 location.replace( idx, 2, L"\\\\" );
+     }
+
+     idx = 0;
+
+     while( (idx = location.find(L"/", idx)) != std::wstring::npos)
+     {
+    	 location.replace( idx, 1, L"\\" );
+     }
+
+	#endif
+
+
+	// To maintain the consistency of CRC value across the platforms(WINDOWS and LINUX), we are
+	// using UTF-16 string in CRC generation.
+
+	utf16WString utf16Ws = utf32WString2utf16WString(location);
+	unsigned int hash = Util::Crc32(utf16Ws.c_str(),length);
+
 	stmtComponentFileDetails->BindInt(2,hash);
 	stmtComponentFileDetails->BindStr(3,aLocation);
 	stmtComponentFileDetails->ExecuteStatement();
@@ -504,7 +607,7 @@ void CDbLayer::AddFileProperties(int aCmpFileId, const std::vector<XmlDetails::T
 			}
 		else
 			{
-			std::string str = Util::wstring2string(filePropIter->iValue);
+			std::string str = wstring2string(filePropIter->iValue);
 			std::string decodedString = Util::Base64Decode(str);
 			stmtFileProperty->BindBinary(3, str);
 			stmtFileProperty->BindInt(4, 1);
@@ -703,7 +806,11 @@ void CDbLayer::AddServiceInfo( int aAppUid, const std::vector<XmlDetails::TScrPr
 			
 			stmtDataType->BindInt64(1, serviceId);
 			stmtDataType->BindInt64(2, dataTypeIter->iPriority);
+			#ifdef __TOOLS2_LINUX__
+			stmtDataType->BindStr(3, dataTypeIter->iType, avoidSlashConversion);
+			#else
 			stmtDataType->BindStr(3, dataTypeIter->iType);
+			#endif
 				
 			stmtDataType->ExecuteStatement();
 			stmtDataType->Reset();

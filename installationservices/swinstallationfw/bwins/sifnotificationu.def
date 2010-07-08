@@ -51,4 +51,8 @@ EXPORTS
 	??1CSifOperationProgressData@Usif@@UAE@XZ @ 50 NONAME ; Usif::CSifOperationProgressData::~CSifOperationProgressData(void)
 	?NewL@CSifOperationProgressData@Usif@@SAPAV12@ABVTDesC16@@W4TSifOperationPhase@2@W4TSifOperationSubPhase@2@HH@Z @ 51 NONAME ; class Usif::CSifOperationProgressData * Usif::CSifOperationProgressData::NewL(class TDesC16 const &, enum Usif::TSifOperationPhase, enum Usif::TSifOperationSubPhase, int, int)
 	??1CPublishSifOperationInfo@Usif@@UAE@XZ @ 52 NONAME ; Usif::CPublishSifOperationInfo::~CPublishSifOperationInfo(void)
+	?NewL@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000W4TSifOperationPhase@2@@Z @ 53 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewL(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TSifOperationPhase)
+	?NewLC@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000W4TSifOperationPhase@2@@Z @ 54 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewLC(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TSifOperationPhase)
+	?OperationPhase@CSifOperationStartData@Usif@@QBE?AW4TSifOperationPhase@2@XZ @ 55 NONAME ; enum Usif::TSifOperationPhase Usif::CSifOperationStartData::OperationPhase(void) const
+	?CurrentProgress@CSifOperationProgressData@Usif@@QBEHXZ @ 56 NONAME ; int Usif::CSifOperationProgressData::CurrentProgress(void) const
 

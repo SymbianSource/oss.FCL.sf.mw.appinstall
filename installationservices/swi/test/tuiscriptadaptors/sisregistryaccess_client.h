@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -55,6 +55,15 @@ public:
 	 */
 	TInt DeleteEntryL(Swi::CSisRegistryPackage& aPackage, TInt& aSpentTimeInMillisecond);
 
+	/**
+	 * Adds the Application Registration Info from *_reg.rsc
+	 */
+	TInt AddAppRegInfoL(const TDesC& aAppRegFile, TInt& aSpentTimeInMillisecond);
+	
+	/**
+     * Removes the Application Registration Info
+     */
+    TInt RemoveAppRegInfoL(const TDesC& aAppRegFile, TInt& aSpentTimeInMillisecond);
 	};
 
 #endif	// __SISREGISTRYACCESSCLIENT_H__

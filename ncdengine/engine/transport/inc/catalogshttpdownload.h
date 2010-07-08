@@ -19,7 +19,7 @@
 #ifndef C_CATALOGSHTTPDOWNLOAD_H
 #define C_CATALOGSHTTPDOWNLOAD_H
 
-#include <DownloadMgrClient.h>
+// HLA: #include <DownloadMgrClient.h>
 #include <download.h>
 #include <downloadevent.h>
 #include <s32file.h>
@@ -295,8 +295,9 @@ public:
     *
     * @param aEvent Download Manager event
     */
+     /* HLa
     void HandleEventL( THttpDownloadEvent aEvent );
-    
+    */
     
     /**
      * Set file server session
@@ -349,9 +350,10 @@ private: // New methods
     /**
     * Handles event progress
     * @param aEvent The event that has progressed
-    */            
+    */
+    /* HLa
     void HandleEventProgressL( const THttpDownloadEvent& aEvent );
-
+    */
     
     /**
     * Updates the target filename from Content-Disposition -header
@@ -527,7 +529,9 @@ private:
     HBufC8* iAddedRequestHeaders;       
     TInt iRefCount;        
     TBool iNormalDelete;
-    TBuf8<KMaxContentTypeLength> iContentType;
+
+    // HLa: TBuf8<KMaxContentTypeLength> iContentType;
+    TBuf8<256> iContentType;
         
     // Transaction for retrieving all of the response headers
     MCatalogsHttpOperation* iTransaction;

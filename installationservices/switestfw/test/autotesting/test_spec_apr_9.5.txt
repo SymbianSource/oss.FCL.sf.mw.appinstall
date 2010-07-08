@@ -149,6 +149,8 @@ TESTEXECUTE, \logs\testexecute\testnoaiacert.htm,, \tswi\tuiscriptadaptors\scrip
 
 TESTEXECUTE, \logs\testexecute\testnoaiacert_ocspmandatory.htm,, \tswi\tuiscriptadaptors\scripts\testnoaiacert_ocspmandatory.script, 100, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testnoaiacert_ocspmandatory_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testnoaiacert_ocspmandatory_post.bat
 
+TESTEXECUTE, \logs\testexecute\tdaemon_winscw.htm,, \tswi\tdaemon\scripts\tdaemon_winscw.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_pre.bat, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_post.bat
+
 TESTEXECUTE, \logs\testexecute\testrun.htm,, \tswi\tuiscriptadaptors\scripts\testrun.script, 300, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy_shortrunwait.ini, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy.ini
 TESTEXECUTE, \logs\testexecute\testrunft.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testrunft.script, 300, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy_shortrunwait.ini,
 

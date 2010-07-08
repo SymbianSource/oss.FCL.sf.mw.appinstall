@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,6 +37,8 @@
 #endif // _WIN32
 
 // common interface for Windows and Linux
+
+const int commandLength = 512;
 
 wchar_t** CommandLineArgs(int &argc , char *argv[]);
 
@@ -100,31 +102,33 @@ int ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTa
 int ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage = 0);
 
 /*
-Copies an existing file to a new file.
-@Parameters : The name of an existing file. 
-If lpExistingFileName does not exist, CopyFile fails, and GetLastError returns ERROR_FILE_NOT_FOUND.
+ * Copies an existing file to a new file. 
+ *
+ * @Parameters aSrc					The name of an existing file.  
+ * @Parameters aDest				The name of the new file. 
+ * @Parameters aFailIfExistsFlag    If this parameter is TRUE and the new file specified by aDest already exists, 
+ *									the function fails. If this parameter is FALSE and the new file already exists, 
+ *									the function overwrites the existing file and succeeds.
+ * @return 
+ *									If the function succeeds, the return value is zero.
+ *									If the function fails, the return value is non-zero.
+ */
 
-@Parameters : The name of the new file. 
-
-@Parameters : If this parameter is TRUE and the new file specified by lpNewFileName already exists, the function fails. If this parameter is FALSE and the new file already exists, the function overwrites the existing file and succeeds.
-
-Return Value
-If the function succeeds, the return value is nonzero.
-If the function fails, the return value is zero.
-*/
-
-int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag);
+int FileCopyA(const char* aSrc, const char* aDest, bool aFailIfExistsFlag);
 
 
 /*
-Moves an existing file or a directory, including its children
-@Parameters : The current name of the file or directory on the local computer. 
-@Parameters : The new name for the file or directory. The new name must not already exist. A new file may be on a different file system or drive. A new directory must be on the same drive. 
-
-Return Value
-If the function succeeds, the return value is nonzero.
-If the function fails, the return value is zero.
-*/
+ * Moves an existing file or a directory, including its children.
+ *
+ * @Parameters aSrc					The current name of the file or directory on the local computer. 
+ * @Parameters aDest				The new name for the file or directory. The new name must not already exist. 
+ *									A new file may be on a different file system or drive. A new directory must be 
+ *									on the same drive. 
+ *
+ * @return
+ *									If the function succeeds, the return value is zero.
+ *									If the function fails, the return value is non-zero.
+ */
 
 int FileMoveA(const char* aSrc, const char* aDest);
 

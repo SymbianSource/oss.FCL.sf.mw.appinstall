@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,6 +30,7 @@
 #include "is_utils.h"
 #include "logger.h"
 #include "utility_interface.h"
+#include "util.h"
 
 // Constants
 const int KInterpretSISExpectedSIDLength = 8;
@@ -51,14 +52,29 @@ int StringUtils::FirstInvalidDirSeparatorSize(std::wstring& aPath, std::wstring:
 	// then the function will return 0
 	int ret = 0; 
 	int pos = 0;
-	if((pos = aPath.find(L"/", aIndex)) != std::wstring::npos)
-		{
-		ret = 1;
-		}
-	else if((pos = aPath.find(L"\\\\", aIndex)) != std::wstring::npos)
+	#ifndef __TOOLS2_LINUX__
+	if((pos = aPath.find(L"//", aIndex)) != std::wstring::npos)
 		{
 		ret = 2;
 		}
+	#else
+	if((pos = aPath.find(L"\\\\", aIndex)) != std::wstring::npos)
+		{
+		ret = 2;
+		}
+	#endif
+
+	#ifndef __TOOLS2_LINUX__
+	else if((pos = aPath.find(L"/", aIndex)) != std::wstring::npos)
+		{
+		ret = 1;
+		}
+	#else
+		else if((pos = aPath.find(L"\\", aIndex)) != std::wstring::npos)
+		{
+		ret = 1;
+		}
+	#endif
 	aIndex = pos;
 	return ret;
 	}
@@ -73,7 +89,9 @@ std::wstring StringUtils::FixPathDelimiters( const std::string& aString )
 	int len = ConvertMultiByteToWideChar(src, -1, NULL, 0);
 	buf = new wchar_t[len+1];
 	len = ConvertMultiByteToWideChar(src, -1, buf, len);
-	ret = std::wstring( buf );
+
+	ret = std::wstring( buf ,len);
+
 	delete[] buf;
 	//
     std::wstring::size_type idx = 0;
@@ -82,7 +100,7 @@ std::wstring StringUtils::FixPathDelimiters( const std::string& aString )
 		ret.replace(idx, len, KDirectorySeparator);
         }
     //
-    return ret;
+    return ret.c_str();
     }
 
 
@@ -144,6 +162,14 @@ std::string StringUtils::ToLower( const std::string& aString )
     return ret;
     }
 
+std::wstring StringUtils::ToLower( const std::wstring& aString )
+    {
+	std::wstring ret( aString );
+	std::transform( ret.begin(), ret.end(), ret.begin(), tolower );
+
+    return ret;
+    }
+
 bool StringUtils::IsLastCharacter( const std::wstring& aString, wchar_t aChar )
     {
     bool isLast = false;
@@ -164,13 +190,17 @@ bool StringUtils::StartsWithDrive( const std::wstring& aText )
     //
     if ( aText.length() >= 3 )
         {
-        const std::string prefix = ToUpper( Ucs2ToUtf8( aText.substr( 0, 3 ) ) );
+        const std::string prefix = ToUpper( wstring2string( aText.substr( 0, 3 ) ) );
         //
         const char drive = prefix[ 0 ];
         const char colon = prefix[ 1 ];
         const char backslash = prefix[ 2 ];
         //
+        #ifndef __TOOLS2_LINUX__
         if  ( colon == ':' && backslash == '\\' )
+		#else
+		if  ( colon == ':' && (backslash == '/' || backslash == '\\'))
+		#endif
             {
             startsWithDrive = ( drive >= 'A' && drive <= 'Z' ) || (drive == '!') ;
             }
@@ -270,6 +300,29 @@ std::wstring StringUtils::EnsureDirectoryTerminated( const std::wstring& aDir )
  */
 bool StringUtils::WildcardCompare(const std::wstring& aWildCardFileName, const std::wstring& aFileName)
 {
+	#ifdef __TOOLS2_LINUX__
+	// In case the incoming data is a DB entry then it will be having windows
+	// specific paths due to the consistency of DB contents across WINDOWS
+	// and LINUX. So, we need to convert them to LINUX paths and then compare.
+
+	std::wstring::size_type idx = 0;
+
+	while( (idx = aWildCardFileName.find(L"\\", idx)) != std::wstring::npos)
+        {
+		aWildCardFileName.replace( idx, 1, L"/" );
+        }
+
+	idx = 0;
+
+	while( (idx = aFileName.find(L"\\", idx)) != std::wstring::npos)
+        {
+		aFileName.replace( idx, 1, L"/" );
+        }
+	#endif
+
+	aWildCardFileName = StringUtils::ToLower(aWildCardFileName);
+	aFileName = StringUtils::ToLower(aFileName);
+
 	std::wstring::const_iterator wildCurr = aWildCardFileName.begin();
 	std::wstring::const_iterator wildEnd = aWildCardFileName.end();
 
@@ -357,7 +410,19 @@ filename.ext
 */
 std::wstring StringUtils::NameAndExt( const std::wstring& aFile )
 {
+#ifndef __TOOLS2_LINUX__
 	int pos = aFile.find_last_of(L"\\");
+#else
+	// We should also check for backward slash since the caller could be
+	// passing a string containing a windows-specific paths within LINUX.
+	//
+	//    One instance being - an SCR database entry under LINUX, which has
+	//    the windows specific paths of the installed files to maintain
+	//    consistency across WINDOWS and LINUX platforms.
+
+	int pos = aFile.find_last_of(L"/");
+	pos = pos == std::wstring::npos ? aFile.find_last_of(L"\\") : pos;
+#endif
 	if (pos == std::wstring::npos)
 	{
 		return L"";
@@ -382,7 +447,11 @@ Note that the drive letter is folded
 */
 std::wstring StringUtils::DriveAndPath( const std::wstring& aFile )
 {
-	int pos = aFile.find_last_of(L"\\");
+#ifndef __TOOLS2_LINUX__
+		int pos = aFile.find_last_of(L"\\");
+#else
+		int pos = aFile.find_last_of(L"/");
+#endif
 	if (pos == std::wstring::npos)
 	{
 		return L"";
@@ -405,8 +474,13 @@ The path is in the form:
 */
 std::wstring StringUtils::Path( const std::wstring& aFile )
 {
-	int firstPos = aFile.find_first_of(L"\\");
-	int lastPos = aFile.find_last_of(L"\\");
+#ifndef __TOOLS2_LINUX__
+		int firstPos = aFile.find_first_of(L"\\");
+		int lastPos = aFile.find_last_of(L"\\");
+#else
+		int firstPos = aFile.find_first_of(L"/");
+		int lastPos = aFile.find_last_of(L"/");
+#endif
 	
 	if (lastPos >= firstPos)
 	{
@@ -428,7 +502,12 @@ filename
 */
 std::wstring StringUtils::Name( const std::wstring& aFile )
 {
+#ifndef __TOOLS2_LINUX__
 	int startPos = aFile.find_last_of(L"\\");
+#else
+	int startPos = aFile.find_last_of(L"/");
+#endif
+	
 	int endPos = aFile.find_last_of(L".");
 
 	if (endPos > startPos)

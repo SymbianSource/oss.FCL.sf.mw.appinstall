@@ -59,24 +59,43 @@ EXPORT_C CSifOperationStartData* CSifOperationStartData::NewL(const TDesC& aGlob
                                         const RPointerArray<HBufC>& aApplicationNames, const RPointerArray<HBufC>& aApplicationIcons, 
                                         TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType)
     {
+    return CSifOperationStartData::NewL(aGlobalComponentId, aComponentName, 
+                                        aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon, aSoftwareType, EInstalling);
+    }
+
+EXPORT_C CSifOperationStartData* CSifOperationStartData::NewL(const TDesC& aGlobalComponentId, const TDesC& aComponentName,
+                                        const RPointerArray<HBufC>& aApplicationNames, const RPointerArray<HBufC>& aApplicationIcons, 
+                                        TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType, 
+                                        TSifOperationPhase aOperationPhase)
+    {
     CSifOperationStartData *self = CSifOperationStartData::NewLC(aGlobalComponentId, aComponentName, 
-                                        aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon,aSoftwareType);
+                                        aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon, aSoftwareType, aOperationPhase);
     CleanupStack::Pop(self);
     return self;
     }
 
+
+EXPORT_C CSifOperationStartData* CSifOperationStartData::NewLC(const TDesC& aGlobalComponentId, const TDesC& aComponentName,
+                                        const RPointerArray<HBufC>& aApplicationNames, const RPointerArray<HBufC>& aApplicationIcons, const TInt aComponentSize, 
+                                        const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType)
+    {
+    return CSifOperationStartData::NewLC(aGlobalComponentId, aComponentName, 
+                                        aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon, aSoftwareType, EInstalling);
+    }
+
 EXPORT_C CSifOperationStartData* CSifOperationStartData::NewLC(const TDesC& aGlobalComponentId, const TDesC& aComponentName,
 										const RPointerArray<HBufC>& aApplicationNames, const RPointerArray<HBufC>& aApplicationIcons, const TInt aComponentSize, 
-                                        const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType)
+                                        const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType, TSifOperationPhase aOperationPhase)
     {
     CSifOperationStartData *self = new(ELeave) CSifOperationStartData();
     CleanupStack::PushL(self);
-    self->ConstructL(aGlobalComponentId, aComponentName, aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon, aSoftwareType);
+    self->ConstructL(aGlobalComponentId, aComponentName, aApplicationNames, aApplicationIcons, aComponentSize, aIconPath, aComponentIcon, aSoftwareType, aOperationPhase);
     return self;
     }
 
 void CSifOperationStartData::ConstructL(const TDesC& aGlobalComponentId, const TDesC& aComponentName, const RPointerArray<HBufC>& aApplicationNames,
-                                        const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, const TDesC& aSoftwareType)
+                                        const RPointerArray<HBufC>& aApplicationIcons, TInt aComponentSize, const TDesC& aIconPath, const TDesC& aComponentIcon, 
+                                        const TDesC& aSoftwareType, TSifOperationPhase aOperationPhase)
     {
 	iGlobalComponentId = aGlobalComponentId.AllocL();
     iComponentName = aComponentName.AllocL();
@@ -99,6 +118,7 @@ void CSifOperationStartData::ConstructL(const TDesC& aGlobalComponentId, const T
     iComponentSize = aComponentSize;
     iIconPath = aIconPath.AllocL();      
     iSoftwareType = aSoftwareType.AllocL();
+    iOperationPhase = aOperationPhase;
     }
 
 EXPORT_C void CSifOperationStartData::ExternalizeL(RWriteStream& aStream) const
@@ -112,6 +132,7 @@ EXPORT_C void CSifOperationStartData::ExternalizeL(RWriteStream& aStream) const
 	aStream << *iIconPath;
 	aStream << *iComponentIcon;
 	aStream << *iSoftwareType;
+	aStream << TCardinality(iOperationPhase);
 	}
 	
 void CSifOperationStartData::InternalizeL(RReadStream& aStream)
@@ -132,6 +153,9 @@ void CSifOperationStartData::InternalizeL(RReadStream& aStream)
     iComponentIcon = HBufC::NewL(aStream, KMaxTInt);
     DeleteObjectZ(iSoftwareType);
     iSoftwareType = HBufC::NewL(aStream, KMaxTInt);
+    TCardinality c;
+    aStream >> c;
+    iOperationPhase = static_cast<TSifOperationPhase>(static_cast<TInt>(c));
     }
 
 EXPORT_C const HBufC& CSifOperationStartData::GlobalComponentId() const
@@ -173,6 +197,11 @@ EXPORT_C const HBufC& CSifOperationStartData::SoftwareType() const
 EXPORT_C TInt CSifOperationStartData::ComponentSize() const
     {
     return iComponentSize;
+    }
+
+EXPORT_C TSifOperationPhase CSifOperationStartData::OperationPhase() const
+    {
+    return iOperationPhase;
     }
 
 ////////////////////////
@@ -353,9 +382,14 @@ EXPORT_C TSifOperationSubPhase CSifOperationProgressData::SubPhase() const
     return iSubPhase;
     }
 
-EXPORT_C TInt CSifOperationProgressData::CurrentProgess() const
+EXPORT_C TInt CSifOperationProgressData::CurrentProgress() const
     {
     return iCurrentProgress;
+    }
+
+EXPORT_C TInt CSifOperationProgressData::CurrentProgess() const
+    {
+    return CurrentProgress();
     }
 
 EXPORT_C TInt CSifOperationProgressData::Total() const

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -38,13 +38,26 @@ DbHelper::~DbHelper()
 
 DbHelper::DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive)
 	{
-	std::string dllName = "sqlite3.dll";
+
+  #ifdef __LINUX__
+  std::string dllName = "sqlite-3.6.1.so"; 	  	  	 
+  #else 	  	  	 
+  std::string dllName = "sqlite3.dll"; 
+  #endif		
 	std::string dbName; 
 	
 	if (aIsSystemDrive)
+	#ifdef __TOOLS2_LINUX__
+		dbName = wstring2string(aDrivePath) + "/sys/install/scr/scr.db";
+	#else
 		dbName = wstring2string(aDrivePath) + "\\sys\\install\\scr\\scr.db";
+	#endif
 	else 
+	#ifdef __TOOLS2_LINUX__
+		dbName = wstring2string(aDrivePath) + "/sys/install/scr/provisioned/scr.db";
+	#else
 		dbName = wstring2string(aDrivePath) + "\\sys\\install\\scr\\provisioned\\scr.db";
+	#endif
 
 	std::wstring wdbname(string2wstring(dbName));
 	//Create the SCR DB if not present in the System Drive
@@ -60,14 +73,18 @@ DbHelper::DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive)
 		std::string epocRootStr(epocRoot); 
 
 		#ifndef __TOOLS2_LINUX__
-		std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32\\tools\\create_db.xml";
+			std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32\\tools\\create_db.xml";
 		#else
-		std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32/tools/create_db.xml";
+			std::wstring swEnvInfo = string2wstring(epocRootStr) + L"epoc32/tools/create_db.xml";
 		#endif
 
 		if(FileExists(swEnvInfo))
 			{
-			std::string executable = "scrtool.exe";
+			#ifdef __TOOLS2_LINUX__
+				std::string executable = "scrtool";
+			#else
+				std::string executable = "scrtool.exe";
+			#endif
 			std::string command;
 			
 			command = executable + " -c " + dbName + " -f " + wstring2string(swEnvInfo);
@@ -97,7 +114,7 @@ DbHelper::DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive)
 	catch(CException& aException)
 		{
 		int returnCode = aException.GetCode();
-		std::wstring emessage = Utf8ToUcs2( aException.GetMessageA() );
+		std::wstring emessage = string2wstring( aException.GetMessageA() );
 
 		returnCode = (returnCode == ExceptionCodes::ELibraryLoadError) ? LIBRARYLOAD_ERROR : returnCode;
 		throw InterpretSisError(emessage,returnCode);		
@@ -268,7 +285,7 @@ TUint32 DbHelper::GetUidFromFileName( const std::wstring& aFileName ) const
 	std::string selCompId("SELECT ComponentId FROM ComponentsFiles WHERE Location=?;");
 	std::auto_ptr<CStatement> stmtCompId(iScrDbHandler->PrepareStatement(selCompId));
 		
-	stmtCompId->BindStr(1, aFileName);
+	stmtCompId->BindStr(1, aFileName.c_str());
 	
 	TInt32 componentId = 0;
 	if(stmtCompId->ProcessNextRow())
@@ -280,7 +297,7 @@ TUint32 DbHelper::GetUidFromFileName( const std::wstring& aFileName ) const
 	std::string selCompPropsId("SELECT ComponentId FROM ComponentProperties WHERE StrValue=? and Name like 'WCFile%';");
 	std::auto_ptr<CStatement> stmtCompPropsId(iScrDbHandler->PrepareStatement(selCompPropsId));
 		
-	stmtCompPropsId->BindStr(1, aFileName);
+	stmtCompPropsId->BindStr(1, aFileName.c_str());
 	
 	if(stmtCompPropsId->ProcessNextRow())
 		{

@@ -258,7 +258,7 @@ void CSifSubscribeTestStep::StartOperationHandler(TUint aKey, const CSifOperatio
         INFO_PRINTF2(_L("Icon Path : %S"),  &aStartData.IconPath());
         INFO_PRINTF2(_L("Component Icon : %S"),  &aStartData.ComponentIcon());
         INFO_PRINTF2(_L("Software Type: %S"),  &aStartData.SoftwareType());
-        
+        INFO_PRINTF2(_L("Operation Phase : %d"), (TInt)aStartData.OperationPhase());
         
         }
     }
@@ -340,7 +340,7 @@ void CSifSubscribeTestStep::ProgressOperationHandler(const CSifOperationProgress
         INFO_PRINTF2(_L("Global Component Id : %S"),  &aProgressData.GlobalComponentId());
         INFO_PRINTF2(_L("Phase : %d"),  (TInt)aProgressData.Phase());
         INFO_PRINTF2(_L("Sub Phase : %d"),  (TInt)aProgressData.SubPhase());
-        INFO_PRINTF2(_L("Current Progress : %d"),  aProgressData.CurrentProgess());
+        INFO_PRINTF2(_L("Current Progress : %d"),  aProgressData.CurrentProgress());
         INFO_PRINTF2(_L("Total Value : %d"),  aProgressData.Total());
         
         }
@@ -418,6 +418,7 @@ void CSifPublishTestStep::PublishDataL(HBufC* aConfigSection)
 		TInt appNameCount =0;
 		TInt appIconCount =0;
 		TInt compSize = 0;
+		TInt phase = 0;
 		GetStringFromConfig(*configsection,KGlobalCompId, globalCompId);
 		GetStringFromConfig(*configsection,KComponentName, compName);
 		GetStringFromConfig(*configsection,KComponentIcon, compIcon);
@@ -453,8 +454,10 @@ void CSifPublishTestStep::PublishDataL(HBufC* aConfigSection)
 		GetIntFromConfig(*configsection, KComponentSize, compSize);
 		GetStringFromConfig(*configsection, KIconPath, iconPath);
 		GetStringFromConfig(*configsection, KSoftwareType, softwareType);
+		GetIntFromConfig(*configsection, KPhase, phase);
 
-        CSifOperationStartData* startdata = CSifOperationStartData::NewLC(globalCompId, compName, appNameArray, appIconArray, compSize, iconPath, compIcon, softwareType);
+		TSifOperationPhase enumPhase = static_cast<TSifOperationPhase>(phase);
+        CSifOperationStartData* startdata = CSifOperationStartData::NewLC(globalCompId, compName, appNameArray, appIconArray, compSize, iconPath, compIcon, softwareType, enumPhase);
         iPublisher->PublishStartL(*startdata);   
         CleanupStack::PopAndDestroy(3, &appNameArray);
         }

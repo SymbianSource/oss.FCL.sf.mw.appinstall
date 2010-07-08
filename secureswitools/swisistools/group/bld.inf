@@ -50,8 +50,18 @@ PRJ_EXPORTS
 ../source/xmlparser/xerces/lib/libxerces_deb.a    /epoc32/release/tools2/deb/libxerces.a
 ../source/xmlparser/xerces/lib/libxerces_rel.a    /epoc32/release/tools2/rel/libxerces.a
 
+../source/xmlparser/xerces/lib/libxerces_linux.a    /epoc32/release/tools2/linux-i386/deb/libxerces.a
+../source/xmlparser/xerces/lib/libxerces_linux.a    /epoc32/release/tools2/linux-i386/rel/libxerces.a
+
+
+#ifdef __TOOLS2_LINUX__
+../source/dbmanager/sqlite/sqlite-3.6.1.so  /epoc32/tools/sqlite-3.6.1.so
+/usr/lib/libdl.a	/epoc32/release/tools2/linux-i386/deb/libdl.a
+/usr/lib/libdl.a	/epoc32/release/tools2/linux-i386/rel/libdl.a
+#else
 ../source/dbmanager/sqlite/sqlite3.dll  /epoc32/tools/sqlite3.dll
 ../source/dbmanager/sqlite/sqlite3.def  /epoc32/tools/sqlite3.def
+#endif // __TOOLS2_LINUX__
 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 

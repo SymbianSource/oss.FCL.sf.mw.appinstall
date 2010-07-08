@@ -53,6 +53,7 @@ _LIT(KDaemonRegistryCapTestName, "Registry daemon interface capability test");
 _LIT(KRevocationRegistryCapTestName, "Registry revocation interface capability test");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KSifServerRegistryCapTestName, "Registry SIF interface security test");
+_LIT(KSisRegistryTCBCapTestName, "Sis Registry interface requiring TCB security test");
 #endif
 
 CPublicRegistryCapTest* CPublicRegistryCapTest::NewL()
@@ -607,6 +608,47 @@ void CSifServerRegistryCapTest::RunTestL()
 
 	CleanupStack::PopAndDestroy(&session);
 	}
+
+CSisRegistryTCBCapTest* CSisRegistryTCBCapTest::NewL()
+    {
+    CSisRegistryTCBCapTest* self=new(ELeave) CSisRegistryTCBCapTest();
+    CleanupStack::PushL(self);
+    self->ConstructL();
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+CSisRegistryTCBCapTest::CSisRegistryTCBCapTest()
+    {
+    SetCapabilityRequired(ECapabilityTCB); //API requires TCB capability, so giving it
+    }
+    
+void CSisRegistryTCBCapTest::ConstructL()
+    {
+    SetNameL(KSisRegistryTCBCapTestName);
+    }
+
+void CSisRegistryTCBCapTest::RunTestL()
+    {
+    Swi::RSisRegistrySession registrySession;
+    CleanupClosePushL(registrySession);
+    _LIT(regFileName,"c:\\private\\10003a3f\\import\\apps\\dummy_reg.rsc");
+    TInt err = registrySession.Connect();
+    if (KErrNone != err)
+        {
+        SetFail();
+        CleanupStack::PopAndDestroy(&registrySession);
+        return;
+        }
+
+    TRAP(err, registrySession.AddAppRegInfoL(regFileName));
+    CheckFailL(err, _L("AddAppRegInfoL"));
+    
+    TRAP(err, registrySession.RemoveAppRegInfoL(regFileName));
+    CheckFailL(err, _L("RemoveAppRegInfoL"));
+
+    CleanupStack::PopAndDestroy(&registrySession);
+    }
 #endif
 
 

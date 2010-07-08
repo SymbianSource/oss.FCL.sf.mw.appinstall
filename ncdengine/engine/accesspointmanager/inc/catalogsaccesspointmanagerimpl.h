@@ -20,6 +20,7 @@
 #define C_CATALOGSACCESSPOINTMANAGERIMPL_H
 
 #include <e32def.h>
+#include <e32base.h> // HLa: DLMgr remove
 
 #ifdef _0
 #include <ApAccessPointItem.h>

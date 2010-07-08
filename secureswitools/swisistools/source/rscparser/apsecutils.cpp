@@ -1,4 +1,4 @@
-// Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of "Eclipse Public License v1.0"
@@ -114,7 +114,12 @@ TInt CApaSecurityUtils::CheckAppSecurity( const Ptr16& aAppFilename,
 
 	std::string Filename = Ptr16ToString(&aAppFilename);
 	std::string Path(aDerivedPath);
+	#ifdef __LINUX__
+	Path.append("/sys/bin/");
+	#else
 	Path.append("\\sys\\bin\\");
+	#endif
+
 	Path.append(Filename);
 	Path.append(".exe");
 	

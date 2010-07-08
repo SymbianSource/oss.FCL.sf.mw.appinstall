@@ -135,6 +135,10 @@ class CIAUpdateBGTimer : public CTimer,
 
         TInt SetModeL( TIAUpdateBGMode aMode );
         
+        TInt NrOfIndicatorEntries();
+
+        TInt SetNrOfIndicatorEntriesL( TInt aEntries );
+        
         TInt RetryTimesL();
 
         TInt SetRetryTimesL( TInt aRetry );

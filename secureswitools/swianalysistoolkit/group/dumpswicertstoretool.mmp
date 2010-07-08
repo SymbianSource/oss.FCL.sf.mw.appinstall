@@ -55,7 +55,9 @@ SOURCE			swicertstoremetadata.cpp
 #endif
 
 STATICLIBRARY			eay32 
-STATICLIBRARY			shlwapi 
+
+// Link to mingw libs: shlwapi.a 
+APPLY				tools2_shlwapi
 
 OPTION				GCC -w
 OPTION				GCC -fno-stack-check

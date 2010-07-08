@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -201,19 +201,18 @@ class CXmlGenerator
 		void AddChildElement(	
 								XERCES_CPP_NAMESPACE::DOMElement* aRootElement, 
 								XERCES_CPP_NAMESPACE::DOMDocument* aDocument, 
-								const wchar_t* aElementName, 
-								const wchar_t* aTextValue 
+								const XMLCh* aElementName, 
+								const XMLCh* aTextValue 
 							);
 
 		XERCES_CPP_NAMESPACE::DOMElement* AddTag	
 							(	
 								XERCES_CPP_NAMESPACE::DOMElement* aRootElement, 
 								XERCES_CPP_NAMESPACE::DOMDocument* aDocument, 
-								const wchar_t* aTagName
+								const XMLCh* aTagName
 							);
 
 		void SetWriterFeatures(XERCES_CPP_NAMESPACE::DOMWriter* aDomWriter);
-
 	};
 
 

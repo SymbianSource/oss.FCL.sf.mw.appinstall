@@ -227,6 +227,7 @@ PRJ_TESTEXPORTS
 ../test/tsishelper/data/test1.data /epoc32/winscw/c/tswi/tsishelper/data/test1.data
 
 ../test/tdaemon/scripts/tdaemon.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.script
+../test/tdaemon/scripts/tdaemon_winscw.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon_winscw.script
 ../test/tdaemon/scripts/tdaemon.ini /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.ini
 
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
@@ -1078,4 +1079,6 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg
 ../test/tuiscriptadaptors/scripts/testnoaiacert.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testnoaiacert.sis
+../test/tdaemon/scripts/batchfiles/setupforemmcformat_pre.bat /epoc32/winscw/c/tswi/tdaemon/scripts/setupforemmcformat_pre.bat
+../test/tdaemon/scripts/batchfiles/setupforemmcformat_post.bat /epoc32/winscw/c/tswi/tdaemon/scripts/setupforemmcformat_post.bat
 // End of file

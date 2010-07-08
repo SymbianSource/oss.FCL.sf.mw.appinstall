@@ -254,7 +254,10 @@ CTestStep* CScrTestServer::CreateTestStep(const TDesC& aStepName)
         testStep = new CScrAddConcurrentApplicationEntryStep(*this);	
     else if (strippedStepName == KScrGetAppInfoStep)
         testStep = new CScrGetAppInfoStep(*this);
-  	
+    else if (strippedStepName == KScrComponentOnEMMC)
+           testStep = new CScrEMMCComponentStep(*this);
+    else if (strippedStepName == KScrComponentPresentForNameVendor)
+         testStep = new CScrComponentPresentForNameVendorStep(*this);
 	if(performanceStep)
 		{
 		CScrTestStep *scrTestStep = dynamic_cast<CScrTestStep*>(testStep);

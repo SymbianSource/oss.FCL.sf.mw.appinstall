@@ -19,7 +19,7 @@
 #ifndef C_CATALOGSHTTPDOWNLOADMANAGER_H
 #define C_CATALOGSHTTPDOWNLOADMANAGER_H
 
-#include <DownloadMgrClient.h>
+// #include <DownloadMgrClient.h>
 
 #include "catalogstransportoperationid.h"
 #include "catalogshttpsession.h"    // RCatalogsHttpOperationArray
@@ -30,6 +30,9 @@
 #include <download.h>
 #include <downloadmanager.h>
 #include <QObject>
+
+#include <f32file.h> //HLa
+
 class MCatalogsHttpConfig;
 class CCatalogsHttpConfig;
 class CCatalogsHttpDownload;
@@ -262,11 +265,12 @@ class CCatalogsHttpDownloadManager :
         * @param aArray Array to search from
         * @param aDownload Download to find
         * @return Index to the download in iDownloads
-        */      
+        */
+        /* HLa
         TInt FindInDownloads( 
             const RCatalogsHttpOperationArray& aArray,
             RHttpDownload* aDownload ) const;
-
+        */
 
         /**
         * Searches for the given download from the given array and returns
@@ -286,6 +290,7 @@ class CCatalogsHttpDownloadManager :
         /**
          * Download events
          */
+        /* HLa
         class TDownloadEvent        
             {
         public:
@@ -298,7 +303,7 @@ class CCatalogsHttpDownloadManager :
 			        {
 			        }
             };
-
+          */
 
         /**
          * Sets this object active if event queue has unhandled events
@@ -309,12 +314,14 @@ class CCatalogsHttpDownloadManager :
          * Removes events from event queue that belong to the same 
          * RHttpDownload as aEvent
          */
+        /*
         void RemoveUnhandledEvents( 
             const TDownloadEvent& aEvent );
 
         void RemoveUnhandledProgressEvents( 
             const TDownloadEvent& aEvent );
-
+        */
+        
         /**
          * Deletes downloads that have not been paused by the user
          */
@@ -343,7 +350,7 @@ class CCatalogsHttpDownloadManager :
         RFs iFs;
         TCatalogsConnectionMethod iCurrentAp;
 
-        RArray<TDownloadEvent> iEventQueue;
+        // RArray<TDownloadEvent> iEventQueue;  //HLa
         TInt iCurrentDlId; // id of the last created download
     };
 

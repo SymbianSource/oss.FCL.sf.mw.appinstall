@@ -204,10 +204,10 @@ void SisFile::CheckValid() const
 
 	if (failed)
 		{
-		std::string x;
-		throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x),
-			error, SIS_NOT_SUPPORTED);
+		std::string x = wstring2string(this->GetPackageName());
+		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 		}
+
 	}
 
 bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock, std::string& aError)
@@ -219,7 +219,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 		{
 		const CSISFileDescription& fD = aInstallBlock.FileDescription(i);
         const CSISFileDescription::TSISFileOperation operation = fD.Operation();
-		std::wstring target(fD.Target().GetString());
+		std::wstring target(fD.Target().GetString().c_str());
         //
         switch( operation )
             {
@@ -263,6 +263,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
             success = true;
             break;
         case CSISFileDescription::EOpNull:
+		case CSISFileDescription::EOpNone:
             success = true;
             break;
         default:
@@ -276,6 +277,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 			break;
 	    	}
 		}
+		return success;
 	}
 
 

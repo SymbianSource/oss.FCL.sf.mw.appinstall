@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -214,6 +214,25 @@ public:
      * @param aComponentIds array of component id's associated with the package uid
      */
 	IMPORT_C void GetComponentIdsForUidL(TUid& aPackageUid, RArray<Usif::TComponentId>& aComponentIds);
+	
+	/**
+    * Adds application registration information to the Software Component Registry
+    * Note that if the SCR already contains registration information for the given app this will be replaced
+    *
+    * @param aAppRegFile application's registration resource file name(with full path)
+    * @capability Tcb
+    */
+    IMPORT_C void AddAppRegInfoL(const TDesC& aAppRegFile);
+	    
+    /**
+     *  Removes application registration information from the Software Component Registry.
+     *  Note that this API should be called before the file is actually deleted
+    
+     *  @param aAppRegFile application's registration resource file name(with full path)
+     *  @capability Tcb
+     */
+    IMPORT_C void RemoveAppRegInfoL(const TDesC& aAppRegFile);
+
 		
 #endif
 

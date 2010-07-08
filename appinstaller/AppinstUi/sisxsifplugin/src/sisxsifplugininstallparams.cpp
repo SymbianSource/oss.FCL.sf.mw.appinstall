@@ -308,9 +308,8 @@ void CSisxSifPluginInstallParams::GetPolicyParam( const COpaqueNamedParams& aPar
 void CSisxSifPluginInstallParams::GetStringParamL( const COpaqueNamedParams& aParams,
         const TDesC& aParamName, HBufC*& aBuf )
     {
-    TPtr value( NULL, 0 );
-    TRAPD( err, value = aParams.StringByNameL( aParamName ) );
-    if( !err && value.Length() )
+    TPtrC value( aParams.StringByNameL( aParamName ) );
+    if( value.Length() )
         {
         if( aBuf )
             {
