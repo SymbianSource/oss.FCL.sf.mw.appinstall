@@ -180,18 +180,27 @@ void CSISController::Load (const std::wstring& aFileName)
 }
 
 
-void CSISController::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISController::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
-	iSupportedLanguages.AddPackageEntry(aStream, aVerbose);
-	iInfo.AddPackageEntry(aStream, aVerbose);
-	iPrerequisites.AddPackageEntry(aStream, aVerbose);
-	iSupportedOptions.AddPackageEntry(aStream, aVerbose);
-	iProperties.AddPackageEntry(aStream, aVerbose);
-	iLogo.AddPackageEntry(aStream, aVerbose);
-	iInstallBlock.AddPackageEntry(aStream, aVerbose);
+	iSupportedLanguages.AddPackageEntry(aStream, aVerbose, aCompatible );
+	iInfo.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iPrerequisites.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iSupportedOptions.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iProperties.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iLogo.AddPackageEntry(aStream, aVerbose, aCompatible);
+	iInstallBlock.AddPackageEntry(aStream, aVerbose, aCompatible);
 	for(int i = 0; i < iSignatures.size(); ++i)
 		{
-		iSignatures[i].AddPackageEntry(aStream, aVerbose);
+		iSignatures[i].AddPackageEntry(aStream, aVerbose, aCompatible);
+		}
+	}
+
+void CSISController::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	iInstallBlock.AddIbyEntry(aStream, aVerbose, aCompatible);
+	for(int i = 0; i < iSignatures.size(); ++i)
+		{
+		iSignatures[i].AddIbyEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 

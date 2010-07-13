@@ -68,17 +68,17 @@ std::string CSISDependency::Name () const
 	return "Dependency";
 	}
 
-void CSISDependency::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISDependency::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	aStream << ((iDependencyType == ETargetDependency)?L"[" : L"(");
-	iUid.AddPackageEntry(aStream, aVerbose);
+	iUid.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << ((iDependencyType == ETargetDependency)?L"]," : L"),");
-	iVersionRange.AddPackageEntry(aStream, aVerbose);
+	iVersionRange.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L" ,{";
 	for (int i = 0; i < iDependencyNames.size(); ++i)
 		{
 		aStream << L"\"";
-		iDependencyNames[i].AddPackageEntry(aStream, aVerbose);
+		iDependencyNames[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L"\"";
 		if ((i+1) < iDependencyNames.size())
 			{

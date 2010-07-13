@@ -150,12 +150,14 @@ public:
 	 */
 	void SetNow ();
 	/**
-	 * Adds package entry related to sis info.
-	 * @param aStream stream into which the package details need to be written.
-	 * @param aVerbose If this option is set then detail description of pkg
+	 * Adds the write the package details into the stream.
+	 * @param aStream - Stream in which the package entries need to be written.
+	 * @param aVerbose - If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	/**
 	 * @return Vendor Name Count
 	 */

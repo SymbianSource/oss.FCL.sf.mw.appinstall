@@ -40,7 +40,7 @@ bool CSISPrerequisites::HasUID (const CSISUid& aUid) const
 	return false;
 	}
 
-void CSISPrerequisites::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISPrerequisites::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if (iTargetDevices.size())
 		{
@@ -56,7 +56,7 @@ void CSISPrerequisites::AddPackageEntry(std::wostream& aStream, bool aVerbose) c
 			{
 			aStream << L"; Target dependencies" << std::endl;
 			}
-		iTargetDevices.AddPackageEntry(aStream, aVerbose);
+		iTargetDevices.AddPackageEntry(aStream, aVerbose, aCompatible);
 		}
 
 	if (iDependencies.size())
@@ -65,7 +65,35 @@ void CSISPrerequisites::AddPackageEntry(std::wostream& aStream, bool aVerbose) c
 			{
 			aStream << L"; Dependencies" << std::endl;
 			}
-		iDependencies.AddPackageEntry(aStream, aVerbose);
+		iDependencies.AddPackageEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 
+void CSISPrerequisites::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	if (iTargetDevices.size())
+		{
+		// Since iTargetDevices and iDependencies are of same type and they
+		// have different structure in the package (pkg) file we need to set
+		// 
+		for(int i = 0; i < iTargetDevices.size(); ++i)
+			{
+			iTargetDevices[i].SetDependencyType(CSISDependency::ETargetDependency);
+			}
+		
+		if (aVerbose)
+			{
+			aStream << L"; Target dependencies" << std::endl;
+			}
+		iTargetDevices.AddIbyEntry(aStream, aVerbose, aCompatible);
+		}
+
+	if (iDependencies.size())
+		{
+		if (aVerbose)
+			{
+			aStream << L"; Dependencies" << std::endl;
+			}
+		iDependencies.AddIbyEntry(aStream, aVerbose, aCompatible);
+		}
+	}

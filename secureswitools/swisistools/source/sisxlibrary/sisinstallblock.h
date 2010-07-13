@@ -167,11 +167,23 @@ public:
 	 */
 	void ExtractCapabilities(const std::wstring& aFileName);
 	/**
-	 * Add package entry related to this install block.
-	 * @param aStream stream where the details need to be written.
-	 * @param aVerbose if true detail description will be written.
+	 * Adds the write the package details into the stream.
+	 * @param aStream - Stream in which the package entries need to be written.
+	 * @param aVerbose - If this option is set then detail description of pkg
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	/**
+	 * Adds the write the iby file details into the stream.
+	 * @param aStream - Stream in which the iby entry need to be written.
+	 * @param aVerbose - If this option is set then detail description of iby
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddIbyEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 */
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	/**
 	 * Get the list of files present in the sis file. It can also return all
 	 * the files present in the nested if blocks and else blocks.

@@ -46,7 +46,8 @@ public:
 
 	void AddOptionName (const std::wstring& aName);
 	TUint32 LanguageCount () const;
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 private:
 	CSISArrayOfStrings iNames;

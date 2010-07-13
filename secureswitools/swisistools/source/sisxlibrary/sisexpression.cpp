@@ -268,7 +268,7 @@ void CSISExpression::SetVariable (const std::wstring& aIdentifier)
 	SetValue (static_cast <TUint32> (IdentifyUCKeyword (KVariables, aIdentifier, L"unknown variable")));
 	}
 
-void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TExpressionFeatures* features = findExpressionFeature (iOperator);
 	if(NULL == features)
@@ -285,7 +285,7 @@ void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 			aStream << L"\"";
 			}
 
-		LHS().AddPackageEntry(aStream, aVerbose);
+		LHS().AddPackageEntry(aStream, aVerbose, aCompatible);
 		if(iOperator.Value() == EFuncExists)
 			{
 			aStream << L"\"";
@@ -297,11 +297,11 @@ void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 	std::wstring supportedLanguageStr = iString.GetString().substr(0,KFuncSupportedLanguagePrefix.length());
 	if((iOperator.Value() == EFuncExists) && (versionStr == KFuncVersionPrefix))
 		{
-		WriteVersionCondition (aStream, aVerbose);
+		WriteVersionCondition (aStream, aVerbose, aCompatible);
 		}
 	else if ((iOperator.Value() == EFuncExists) && (supportedLanguageStr == KFuncSupportedLanguagePrefix))
 		{
-		WriteSupportedLanguageCondition (aStream, aVerbose);
+		WriteSupportedLanguageCondition (aStream, aVerbose, aCompatible);
 		}
 	else
 		{	
@@ -316,7 +316,7 @@ void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 			aStream << L"\"";
 			}
 
-		RHS().AddPackageEntry(aStream, aVerbose);
+		RHS().AddPackageEntry(aStream, aVerbose, aCompatible);
 		if(iOperator.Value() == EFuncExists)
 			{
 			aStream << L"\"";
@@ -335,7 +335,7 @@ void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 				aStream << L"\"";
 				}
 			
-			iString.AddPackageEntry(aStream, aVerbose);
+			iString.AddPackageEntry(aStream, aVerbose, aCompatible);
 			if(iOperator.Value() == EFuncExists)
 				{
 				aStream << L"\"";
@@ -370,7 +370,7 @@ void CSISExpression::AddPackageEntry(std::wostream& aStream, bool aVerbose) cons
 		}
 	}
 
-void CSISExpression::WriteVersionCondition(std::basic_ostream<wchar_t>& aStream, bool aVerbose) const
+void CSISExpression::WriteVersionCondition(std::basic_ostream<wchar_t>& aStream, bool aVerbose, bool aCompatible) const
 	{
 	std::wstring parseString = iString.GetString().substr(KFuncVersionPrefix.length());
 	std::wstring outputArgs;
@@ -530,7 +530,7 @@ void CSISExpression::WriteVersionCondition(std::basic_ostream<wchar_t>& aStream,
 
 		// Output the condition as an exists statement and comment warnings to the stream
 		aStream << L"exists(\"";
-		iString.AddPackageEntry(aStream, aVerbose);
+		iString.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L"\")" << std::endl;
 		aStream << L"; warning: \"VERSION\" condition output as \"EXISTS\"" << std::endl;
 		aStream << L"; " << msgString;
@@ -594,7 +594,7 @@ bool CSISExpression::IsDecimal(const std::wstring& aString, TInt& aDecimalValue)
 	return false;
 	}
 
-void CSISExpression::WriteSupportedLanguageCondition(std::basic_ostream<wchar_t>& aStream, bool aVerbose) const
+void CSISExpression::WriteSupportedLanguageCondition(std::basic_ostream<wchar_t>& aStream, bool aVerbose, bool aCompatible) const
 	{
 	std::wstring parseString = iString.GetString().substr(KFuncSupportedLanguagePrefix.length());
 	std::wstring outputArgs;
@@ -623,7 +623,7 @@ void CSISExpression::WriteSupportedLanguageCondition(std::basic_ostream<wchar_t>
 
 		// Output the condition as an exists statement and comment warnings to the stream
 		aStream << L"exists(\"";
-		iString.AddPackageEntry(aStream, aVerbose);
+		iString.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L"\")" << std::endl;
 		aStream << L"; warning: \"Supported_Language\" condition output as \"EXISTS\"" << std::endl;
 		aStream << L"; " << msgString;

@@ -165,7 +165,7 @@ const wchar_t* CSISLanguage::GetLanguageCode(TDialect& aDialect) const
 	return L"Unknown";
 	}
 
-void CSISLanguage::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISLanguage::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TDialect dialect = 0;
 	aStream << GetLanguageCode(dialect);

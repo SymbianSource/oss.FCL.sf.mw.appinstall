@@ -69,6 +69,8 @@ public:
 	bool				Version () const { return iVersion; }
 	bool				ExtractFiles () const { return iExtractFilesFlag; }
 	bool				PauseOnExit () const { return iPauseOnExit; }
+	bool				GetCompatibleMode () const { return iCompatibleMode; }
+	bool				GetIBYFlag () const { return iCreateIBYFile; }
 
 	/**
 	Return the iList exe flag to which is set to true when -l is specified 
@@ -101,6 +103,8 @@ private:
 	bool				iPauseOnExit;
 	bool				iList;
 	bool				iCreateECI;
+	bool				iCompatibleMode;
+	bool				iCreateIBYFile;
 	std::wstring		iSISFileName;
 	std::wstring		iExtractDirectory;
 	};
