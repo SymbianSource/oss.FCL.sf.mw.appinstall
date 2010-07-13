@@ -39,13 +39,28 @@ std::string CSISSupportedOption::Name () const
 	return "Supported Option";
 	}
 
-void CSISSupportedOption::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISSupportedOption::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	TUint32 optionCount = iNames.size();
 	for (TUint32 i = 0; i < optionCount; ++i)
 		{
 		aStream << L"\"";
-		iNames[i].AddPackageEntry(aStream, aVerbose);
+		iNames[i].AddPackageEntry(aStream, aVerbose, aCompatible);
+		aStream << L"\"";
+		if (i < (optionCount-1))
+			{
+			aStream << L", ";
+			}
+		}
+	}
+
+void CSISSupportedOption::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	TUint32 optionCount = iNames.size();
+	for (TUint32 i = 0; i < optionCount; ++i)
+		{
+		aStream << L"\"";
+		iNames[i].AddIbyEntry(aStream, aVerbose, aCompatible);
 		aStream << L"\"";
 		if (i < (optionCount-1))
 			{

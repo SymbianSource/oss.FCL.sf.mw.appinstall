@@ -124,7 +124,7 @@ CSISInfo::TSISInstallationType CSISInfo::InterpretType (const std::wstring& aOpt
 	return reply;
 	}
 
-void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if (aVerbose)
 		{
@@ -134,7 +134,7 @@ void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 	for (int i=0; i < iNames.size(); ++i)
 		{
 		aStream << L"\"";
-		iNames[i].AddPackageEntry(aStream, aVerbose);
+		iNames[i].AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << L"\"";
 		if ((i+1)<iNames.size())
 			{
@@ -142,9 +142,9 @@ void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 			}
 		}
 	aStream << L"}, (";
-	iUid.AddPackageEntry(aStream, aVerbose);
+	iUid.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"), ";
-	iVersion.AddPackageEntry(aStream, aVerbose);
+	iVersion.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L", TYPE=";
 	switch (iInstallType)
 		{
@@ -198,7 +198,7 @@ void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 		for (int j = 0; j < vendorCount; ++j)
 			{
 			aStream << L"\"";
-			iVendorNames[j].AddPackageEntry(aStream, aVerbose);
+			iVendorNames[j].AddPackageEntry(aStream, aVerbose, aCompatible);
 			aStream << L"\"";
 			if ((j+1)<vendorCount)
 				{
@@ -215,11 +215,11 @@ void CSISInfo::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 	if (aVerbose)
 		{
 		aStream << L"; SIS file build time ";
-		iCreationTime.AddPackageEntry(aStream, aVerbose);
+		iCreationTime.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << std::endl;
 		}
 	aStream << L":\"";
-	iVendorUniqueName.AddPackageEntry(aStream, aVerbose);
+	iVendorUniqueName.AddPackageEntry(aStream, aVerbose, aCompatible);
 	aStream << L"\"" << std::endl;
 	aStream << std::endl;
 	}

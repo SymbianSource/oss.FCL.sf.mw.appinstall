@@ -45,12 +45,12 @@ public:
 
 	void Set (const std::wstring& aMime, const std::wstring& aTarget, const TUint32 aFileIndex, const CSISDataUnit& aDataUnit);
 	void SetSizes (const TUint64 aCompressedSize, const TUint64 aUncompressedSize);
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	inline const CSISFileDescription& FileDesc() const; 
 
 private:
 	CSISFileDescription iLogoFile;
-
 	};
 
 

@@ -61,7 +61,7 @@ public:
 	void SetHash(const TUint8* aHash, TUint32 aHashSize);
 	bool VerifyAlgorithm () const;
 	const CSISBlob& Blob() const;
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 private:
 	CSISUInt32	iAlgorithm;

@@ -61,11 +61,13 @@ void Options::DisplayError (CmdLineException err)
 
 void Options::DisplayUsage ()
 	{
-	std::cout << "Usage: " << CommandName () << " [-v] [-h] [-x] [-l[-y]][-d directory] filename.sis" << std::endl;
+	std::cout << "Usage: " << CommandName () << " [-v] [-h] [-x] [-b] [-c] [-l[-y]][-d directory] filename.sis" << std::endl;
 	std::cout << "Where:\t-i\tdisplays verbose output" << std::endl;
 	std::cout << "\t-v\tdisplays version" << std::endl;
 	std::cout << "\t-h\tdisplays this message" << std::endl;
 	std::cout << "\t-x\textracts the files" << std::endl;
+	std::cout << "\t-b\textracts Iby file(s) too" << std::endl;
+	std::cout << "\t-c\tcompatible mode" << std::endl;
 	std::cout << "\t-d\tspecifies where you wish to extract the files to" << std::endl; 
 	std::cout << "\t-p\tpauses when finishing" << std::endl;
 	std::cout << "\t-l\tlist the executable against their capablities. " << std::endl;
@@ -94,7 +96,9 @@ Options::Options (int argc, wchar_t** argv)
 	iExtractFilesFlag (false),
 	iPauseOnExit (false),
 	iList(false),
-	iCreateECI(false)
+	iCreateECI(false),
+	iCompatibleMode(false),
+	iCreateIBYFile(false)
 	{
 	while (--argc)
 		{
@@ -153,8 +157,15 @@ Options::Options (int argc, wchar_t** argv)
 					case 'Y':
 						iCreateECI = true;
 						break;
+					case 'c':
+					case 'C':
+						iCompatibleMode = true;
+						break;
+					case 'b':
+					case 'B':
+						iCreateIBYFile = true;
+						break;
 
-			
 					default:
 						throw ECmdLineUnknownOption;
 					}

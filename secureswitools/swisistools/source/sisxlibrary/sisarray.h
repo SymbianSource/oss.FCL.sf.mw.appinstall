@@ -94,8 +94,20 @@ public:
 	 * @param aStream stream into which the package details need to be written.
 	 * @param aVerbose If this option is set then detail description of pkg
 	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddPackageEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 * 
 	 */
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
+		/**
+	 * Adds iby file entry related to this structure.
+	 * @param aStream stream into which the iby file details need to be written.
+	 * @param aVerbose If this option is set then detail description of iby
+	 * 			will be written into the stream.
+	 * @param aCompatible - Flag to notify AddIbyEntry that Dumpsis works in the original,compatible mode
+	 * or in the new way.
+	 */
+	void AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 	
 	/**
 	 * Operator to access content of this array
@@ -333,11 +345,20 @@ template <class T, CSISFieldRoot::TFieldType FieldType> inline
 	}
 
 template <class T, CSISFieldRoot::TFieldType FieldType>
-		void CSISArray <T, FieldType>::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+		void CSISArray <T, FieldType>::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	for (SisArrayIter(T) iterMemb = SisArrayMem(T).begin (); iterMemb != SisArrayMem(T).end (); iterMemb++)
 		{
-		(**iterMemb)->AddPackageEntry(aStream, aVerbose);
+		(**iterMemb)->AddPackageEntry(aStream, aVerbose, aCompatible);
+		}
+	}
+
+template <class T, CSISFieldRoot::TFieldType FieldType>
+		void CSISArray <T, FieldType>::AddIbyEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
+	{
+	for (SisArrayIter(T) iterMemb = SisArrayMem(T).begin (); iterMemb != SisArrayMem(T).end (); iterMemb++)
+		{
+		(**iterMemb)->AddIbyEntry(aStream, aVerbose, aCompatible);
 		}
 	}
 

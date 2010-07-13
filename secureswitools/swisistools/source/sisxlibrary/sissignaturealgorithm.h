@@ -55,7 +55,7 @@ public:
 	TAlgorithm Algorithm () const;
 	bool IsAlgorithmKnown () const;
 	void Verify (const TUint32 aLanguages) const;
-	void AddPackageEntry(std::wostream& aStream, bool aVerbose) const;
+	void AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const;
 
 protected:
 	CSISString	iAlgorithmIdentifier;
@@ -93,12 +93,12 @@ inline bool CSISSignatureAlgorithm::IsAlgorithmKnown () const
 	return (iAlgorithm > EAlgNone) && (iAlgorithm < EAlgIllegal);
 	}
 
-inline void CSISSignatureAlgorithm::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
+inline void CSISSignatureAlgorithm::AddPackageEntry(std::wostream& aStream, bool aVerbose, bool aCompatible) const
 	{
 	if (aVerbose)
 		{
 		aStream << L"Algorithm: ";
-		iAlgorithmIdentifier.AddPackageEntry(aStream, aVerbose);
+		iAlgorithmIdentifier.AddPackageEntry(aStream, aVerbose, aCompatible);
 		aStream << std::endl;
 		}
 	}
