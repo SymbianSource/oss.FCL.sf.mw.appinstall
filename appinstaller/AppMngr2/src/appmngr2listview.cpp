@@ -36,7 +36,6 @@
 #include <eikmenup.h>                   // CEikMenuPaneItem
 #include <akntitle.h>                   // CAknTitlePane
 #include <StringLoader.h>               // StringLoader
-#include <AknInfoPopupNoteController.h> // CAknInfoPopupNoteController
 #include <appmngr2.rsg>                 // Resource IDs
 
 const TUid KStatusPaneUid = { EEikStatusPaneUidTitle };
@@ -68,7 +67,6 @@ CAppMngr2ListView::~CAppMngr2ListView()
         AppUi()->RemoveFromViewStack( *this, iContainer );
         delete iContainer;
         }
-    delete iInfoPopup;
     }
 
 // ---------------------------------------------------------------------------
@@ -89,15 +87,7 @@ void CAppMngr2ListView::RefreshL( TInt aMoreRefreshesExpected )
             StopDisplayingMenuBar();
             iMaintainFocus = EFalse;
             }
-
-        // Close progress note used in application startup
-        if( iInfoPopup && !aMoreRefreshesExpected )
-            {
-            iInfoPopup->HideInfoPopupNote();
-            delete iInfoPopup;
-            iInfoPopup = NULL;
-            }
-
+            
         FLOG( "CAppMngr2ListView::RefreshL() end" );
         }
     }
@@ -237,16 +227,7 @@ void CAppMngr2ListView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
         }
     UpdateMiddleSoftkeyCommandL();
 
-    if( iInfoPopup == NULL )
-        {
-        iInfoPopup = CAknInfoPopupNoteController::NewL();
-        iInfoPopup->SetTimePopupInView( 0 );
-        iInfoPopup->HideWhenAppFaded( EFalse );
-        HBufC* noteText = StringLoader::LoadLC( R_QTN_AM_SCANNING_MEMORY );
-        iInfoPopup->SetTextL( *noteText );
-        CleanupStack::PopAndDestroy( noteText );
-        iInfoPopup->ShowInfoPopupNote();
-        }
+    // Note Infopopup is removed and replaced with wait dialog.         
     }
 
 // ---------------------------------------------------------------------------
@@ -262,11 +243,6 @@ void CAppMngr2ListView::DoDeactivate()
         AppUi()->RemoveFromViewStack( *this, iContainer );
         delete iContainer;
         iContainer = NULL;
-        }
-    if( iInfoPopup )
-        {
-        delete iInfoPopup;
-        iInfoPopup = NULL;
         }
     }
 

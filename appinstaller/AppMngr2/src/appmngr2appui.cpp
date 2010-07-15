@@ -32,6 +32,11 @@
 #include <featmgr.h>                    // FeatureManager
 #include <e32property.h>                // RProperty
 #include <hlplch.h>                     // HlpLauncher
+#include <StringLoader.h>               // StringLoader
+#include <appmngr2.rsg>                 // Resource IDs
+#include <AknGlobalNote.h>              // WaitNote
+#include <avkon.rsg>
+
 
 _LIT( KSWInstCommonUIResourceFileName, "SWInstCommonUI.rsc" );
 
@@ -58,6 +63,15 @@ void CAppMngr2AppUi::ConstructL()
     iResourceFileOffset = iEikonEnv->AddResourceFileL( *fullName );
     CleanupStack::PopAndDestroy( fullName );
 
+    // Let's start global wait note so user can see that 
+    // App. Mngr is scanning memory.
+    HBufC* string = StringLoader::LoadLC( R_QTN_AM_SCANNING_MEMORY );  
+    CAknGlobalNote* note = CAknGlobalNote::NewLC();
+    note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );    
+    FLOG( "CAppMngr2AppUi::ConstructL: ShowNoteL EAknGlobalWaitNote " );
+    iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
+    CleanupStack::PopAndDestroy( 2, string );
+                
     FLOG( "CAppMngr2AppUi::ConstructL, creting model" );
     iModel = CAppMngr2Model::NewL( iEikonEnv->FsSession(), *this );
 
@@ -110,14 +124,23 @@ void CAppMngr2AppUi::ConstructL()
 CAppMngr2AppUi::~CAppMngr2AppUi()
     {
     FLOG( "CAppMngr2AppUi::~CAppMngr2AppUi" );
+    
+    if( iNoteId )
+        {
+        // If appmngr is closed for some reason let's make sure 
+        // the note is closed.
+        TRAP_IGNORE( CancelNoteL() );
+        }
+    
     delete iIdle;
     delete iModel;
+    
     if( iResourceFileOffset > 0 )
         {
         iEikonEnv->DeleteResourceFile( iResourceFileOffset );
         }
     FeatureManager::UnInitializeLib();    
-    delete iExitTimer;
+    delete iExitTimer;   
     }
 
 // ---------------------------------------------------------------------------
@@ -140,6 +163,9 @@ void CAppMngr2AppUi::InstalledAppsChanged( TInt aMoreRefreshesExpected )
         {
         CAppMngr2ListView* view = static_cast<CAppMngr2ListView*>( iView );
         TRAP_IGNORE( view->RefreshL( aMoreRefreshesExpected ) );
+        
+        // Let's close global wait note since memory scanning is ready.      
+        TRAP_IGNORE( CancelNoteL() );
         }
     }
 
@@ -154,6 +180,9 @@ void CAppMngr2AppUi::InstallationFilesChanged( TInt aMoreRefreshesExpected )
         {
         CAppMngr2ListView* view = static_cast<CAppMngr2ListView*>( iView );
         TRAP_IGNORE( view->RefreshL( aMoreRefreshesExpected ) );
+        
+        // Let's close global wait note since memory scanning is ready. 
+        TRAP_IGNORE( CancelNoteL() );
         }
     }
 
@@ -253,5 +282,22 @@ void CAppMngr2AppUi::HandleCommandL( TInt aCommand )
         default:
             break;
         }
+    }
+
+// ---------------------------------------------------------------------------
+// CAppMngr2AppUi::CancelNoteL()
+// ---------------------------------------------------------------------------
+//
+void CAppMngr2AppUi::CancelNoteL()
+    {
+    FLOG( "CAppMngr2AppUi::CancelNoteL: iNoteId = %d", iNoteId );
+     if ( iNoteId )
+         {         
+         CAknGlobalNote* note = CAknGlobalNote::NewLC();
+         FLOG( "CAppMngr2AppUi::CancelNoteL: note->CancelNoteL" );
+         note->CancelNoteL( iNoteId );         
+         CleanupStack::PopAndDestroy();       
+         iNoteId = 0;
+         }        
     }
 

@@ -93,6 +93,7 @@ LIBRARY             platformenv.lib                 // DriveInfo
 LIBRARY             appmngr2pluginapi.lib           // AppMngr2 Runtime API
 LIBRARY             ecom.lib                        // ECom
 LIBRARY             caf.lib                         // Content Access Framework
+LIBRARY             aknnotify.lib					// GlobalNote
 
 DEBUGLIBRARY        flogger.lib                     // RFileLogger
 

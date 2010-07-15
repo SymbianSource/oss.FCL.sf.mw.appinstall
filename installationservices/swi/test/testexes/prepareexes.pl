@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+# Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 # All rights reserved.
 # This component and the accompanying materials are made available
 # under the terms of the License "Eclipse Public License v1.0"
@@ -715,6 +715,8 @@ SignFile("wrongromeclipsingpu.sis", "wrongromeclipsingpu_root5.sis", "root5ca", 
 SignFile("hiddensa.sis", "hiddensa_root5.sis", "root5ca", \*iby);
 
 SignFile("smlsyncagent.sis", "smlsyncagent_root5.sis", "root5ca", \*iby);
+SignFile("eclipsingdllupgradepu_on_c_and_emmc.sis", "eclipsingdllupgradepu_on_c_and_emmc_root5.sis", "root5ca", \*iby);
+SignFile("eclipsingdllupgradesa_on_c_and_emmc.sis", "eclipsingdllupgradesa_on_c_and_emmc_root5.sis", "root5ca", \*iby);
 
 #Swi Support for RFS
 SignFile("swi_rfs_test_SA.sis", "swi_rfs_test_SA_root5.sis", "root5ca", \*iby);
@@ -784,6 +786,8 @@ SignFileWithSpecifiedCert("ruromupgraderucertsastub_sprunrsu.sis", "ruromupgrade
 SignFileWithSpecifiedCert("rusaruupgrade_purunr.sis", "rusaruupgrade_purunr_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 SignFileWithSpecifiedCert("rusastubupgrade_punrru.sis", "rusastubupgrade_punrru_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 SignFileWithSpecifiedCert("ruromupgraderucertsa_protectedsid.sis", "ruromupgraderucertsa_protectedsid_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
+SignFileWithSpecifiedCert("emmc_format_base_distributed_NR.sis", "emmc_format_base_distributed_NR_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
+SignFileWithSpecifiedCert("emmc_format_base_on_c_and_t_NR.sis", "emmc_format_base_on_c_and_t_NR_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 
 # new tests for media propagation of packages signed by SU.
 

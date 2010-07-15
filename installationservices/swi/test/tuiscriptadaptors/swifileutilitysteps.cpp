@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -128,3 +128,69 @@ TVerdict CSwiDeleteFilesStep::doTestStepL()
 	SetTestStepResult(EPass);	
 	return TestStepResult();
 	}
+
+
+CSwiFileExistsStep::CSwiFileExistsStep()
+    {
+    SetTestStepName(KSwiFileExistsStep);
+    }
+
+
+TVerdict CSwiFileExistsStep::doTestStepL()
+    {
+    SetTestStepResult(EFail);
+    
+    RTestUtilSessionSwi testUtil;
+    User::LeaveIfError(testUtil.Connect());
+    CleanupClosePushL(testUtil);
+    
+    _LIT(KNoOfFiles, "FilesCount");
+    _LIT(KFile, "File");
+    
+    TInt filesCount(0);
+    GetIntFromConfig(ConfigSection(), KNoOfFiles(), filesCount);
+    
+    if(filesCount == 0)
+        {
+        User::Leave(KErrArgument);
+        }
+    
+    for(TInt i=0; i<filesCount; ++i)
+        {
+        TBuf<12> file;
+        file = KFile;
+        GenerateIndexedAttributeNameL(file, filesCount);
+        
+        TPtrC fileName;
+        GetStringFromConfig(ConfigSection(), file, fileName);
+        
+        HBufC* fileNameBuf = fileName.AllocLC();
+        TBool result= testUtil.FileExistsL(*fileNameBuf);
+        
+        if(!result)
+            {
+            INFO_PRINTF2(_L("File not found - %S ."), fileNameBuf);
+            CleanupStack::PopAndDestroy(fileNameBuf);
+            return TestStepResult();
+            }
+        else
+            {
+            INFO_PRINTF2(_L("File exists -  %S ."), fileNameBuf);
+            CleanupStack::PopAndDestroy(fileNameBuf);
+            }
+        }
+    
+    CleanupStack::PopAndDestroy(&testUtil);
+    
+    SetTestStepResult(EPass);
+    return TestStepResult();
+    }
+
+
+void CSwiFileExistsStep::GenerateIndexedAttributeNameL(TDes& aInitialAttributeName, TInt aIndex)
+    {
+    const TInt MAX_INT_STR_LEN = 8;
+    TBuf<MAX_INT_STR_LEN> integerAppendStr;
+    integerAppendStr.Format(_L("%d"), aIndex);
+    aInitialAttributeName.Append(integerAppendStr);
+    }

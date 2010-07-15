@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -140,6 +140,7 @@ private:
 	// support for the writeable interface
 	void RegisterEntryL(const RMessage2& aMessage, TBool aNewEntry);	
 	void DeleteEntryL(const RMessage2& aMessage);
+	void DeleteEntryL(const CSisRegistryObject& aObject, TInt64 aTransactionId, TBool aRegenerateCache = ETrue);
 	void RequestDependenciesRegistryEntryL(const RMessage2& aMessage);
 	void RequestDependentPackagesRegistryEntryL(const RMessage2& aMessage);
 	void AddDriveL(const RMessage2& aMessage);
@@ -170,6 +171,7 @@ private:
 	void LoggingFileInfoL(const RMessage2& aMessage);
 	void RequestMatchingSupportedLanguagesL(const RMessage2& aMessage);
 	void RequestInternalRegistryFilesL(const RMessage2& aMessage);
+	void DriveFormatDetectedL(TDriveUnit aDrive);
 private:
     friend class CSisRevocationManager;
 	RFs iFs;

@@ -194,6 +194,11 @@ void CSisRegistryCache::PackageListL(RPointerArray<CSisRegistryPackage>& aPackag
 		}
 	CleanupStack::Pop(&aPackages);
 	}
+
+const RPointerArray<CSisRegistryToken>& CSisRegistryCache::TokenList() const
+    {
+    return iTokens;
+    }
 	
 RFs& CSisRegistryCache::RFsHandle()
 	{ 
@@ -441,7 +446,7 @@ void CSisRegistryCache::BuildFileListL(TUid aUid, const TDesC& aPath)
 			User::Leave(KErrCorrupt);	
 			}
 			
-		iTokens.AppendL(token);
+		iTokens.Append(token);
 		CleanupStack::Pop(token);
 		CleanupStack::PopAndDestroy(&fileStream);
 				
@@ -1412,7 +1417,7 @@ void CSisRegistryCache::ControllerDriveListL(const CSisRegistryObject& aObject,
 	CleanupClosePushL(aDriveList);
 	aDriveList.Reset();
 	// a copy of the controller is always kept on drive C
-	aDriveList.AppendL(iSystemDrive);
+	aDriveList.Append(iSystemDrive);
 	
 	// only controllers will be written to removable media and 
 	// we have now to check for those 
