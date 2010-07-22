@@ -94,6 +94,7 @@ _LIT(KEmbeddedPackagesStep, "EmbeddedPackages");
 _LIT(KChangeLocale, "ChangeLocale");
 _LIT(KCAddAppRegInfoStep,"AddAppRegInfo");
 _LIT(KCRemoveAppRegInfoStep,"RemoveAppRegInfo");
+_LIT(KCheckAppRegData,"CheckAppRegData");
 
 // Base class for all steps
 class CSisRegistryTestStepBase : public CTestStep

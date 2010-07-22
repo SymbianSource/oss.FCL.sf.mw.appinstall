@@ -362,7 +362,10 @@ CTestStep* CTestSisRegistry::CreateTestStep(const TDesC& aStepName)
         {
         name = new CRemoveAppRegInfoStep;
         }
-	
+	else if (aStepName == KCheckAppRegData)
+	    {
+        name = new CheckAppRegData;
+	    }
 	if(performanceStep && name)
 		{
 		CSisRegistryTestStepBase *baseTestStep = dynamic_cast<CSisRegistryTestStepBase*>(name);

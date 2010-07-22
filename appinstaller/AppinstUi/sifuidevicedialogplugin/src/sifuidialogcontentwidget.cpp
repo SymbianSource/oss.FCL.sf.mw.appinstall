@@ -40,10 +40,10 @@ const int KAppNameIndex = 0;
 const int KAppSizeIndex = 1;
 
 enum TSifUiDriveName {
-    EUnknown,
     EPhoneMemory,
     EMassStorage,
-    EMemoryCard
+    EMemoryCard,
+    EOtherDrive
 };
 
 
@@ -90,7 +90,7 @@ TSifUiDriveName driveName(const QChar& volume)
         return EMemoryCard;
     }
 #endif  // Q_OS_SYMBIAN
-    return EUnknown;
+    return EOtherDrive;
 }
 
 
@@ -240,7 +240,6 @@ void SifUiDialogContentWidget::changeType(SifUiDeviceDialogType type)
             mStackedWidget->setCurrentWidget(mProgressBar);
             break;
         case SifUiCompleteNote:
-            // TODO: remove mStackedWidget?
             break;
         case SifUiErrorNote:
             mStackedWidget->setCurrentWidget(mErrorText);
@@ -448,7 +447,7 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         //TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_device_memory_mb")
                         //    .arg(volume).arg(size/KSifUiMega));
-                        driveList.append(tr("%1: Device (%L2 MB free)"
+                        driveList.append(tr("%1: Phone mem. (%L2 MB)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for internal phone memory with kilobytes of free space.
@@ -457,10 +456,11 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         //TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_device_memory_kb")
                         //    .arg(volume).arg(size/KSifUiKilo));
-                        driveList.append(tr("%1: Device (%L2 kB free)"
+                        driveList.append(tr("%1: Phone mem. (%L2 kB)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
                     break;
+
                 case EMassStorage:
                     if (size > KSifUiMega) {
                         //: Drive name for mass storage with megabytes of free space.
@@ -469,7 +469,7 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         // TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_mass_storage_mb")
                         //    .arg(volume).arg(size/KSifUiMega));
-                        driveList.append(tr("%1: Mass.mem (%L2 MB free)"
+                        driveList.append(tr("%1: Mass.mem (%L2 MB)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for mass storage with kilobytes of free space.
@@ -478,10 +478,11 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         // TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_mass_storage_kb")
                         //    .arg(volume).arg(size/KSifUiKilo));
-                        driveList.append(tr("%1: Mass.mem (%L2 kB free)"
+                        driveList.append(tr("%1: Mass.mem (%L2 kB)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
                     break;
+
                 case EMemoryCard:
                     if (size > KSifUiMega) {
                         //: Drive name for memory card with megabytes of free space.
@@ -490,7 +491,7 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         // TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_memory_card_mb")
                         //    .arg(volume).arg(size/KSifUiMega));
-                        driveList.append(tr("%1: Mem.card (%L2 MB free)"
+                        driveList.append(tr("%1: Mem.card (%L2 MB)"
                             ).arg(volume).arg(size/KSifUiMega));
                     } else {
                         //: Drive name for memory card with kilobytes of free space.
@@ -499,11 +500,26 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                         // TODO: enable when available
                         //driveList.append(hbTrId("txt_installer_memory_card_kb")
                         //    .arg(volume).arg(size/KSifUiKilo));
-                        driveList.append(tr("%1: Mem.card (%L2 kB free)"
+                        driveList.append(tr("%1: Mem.card (%L2 kB)"
                             ).arg(volume).arg(size/KSifUiKilo));
                     }
                     break;
+
+                case EOtherDrive:
                 default:
+                    if (size > KSifUiMega) {
+                        //: Generic drive name for other removable drives, like
+                        //: USB memories attached via USB OTG adapter.
+                        // TODO: proper localisation needed
+                        driveList.append(tr("%1: Drive (%L2 MB)"
+                            ).arg(volume).arg(size/KSifUiMega));
+                    } else {
+                        //: Generic drive name for other removable drives, like
+                        //: USB memories attached via USB OTG adapter.
+                        // TODO: proper localisation needed
+                        driveList.append(tr("%1: Drive (%L2 kB)"
+                            ).arg(volume).arg(size/KSifUiKilo));
+                    }
                     break;
                 }
             }

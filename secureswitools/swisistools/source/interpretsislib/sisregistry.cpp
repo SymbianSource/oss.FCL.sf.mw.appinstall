@@ -1466,13 +1466,22 @@ void SisRegistry::SetOriginVerification(XmlDetails::TScrPreProvisionDetail::TCom
 void SisRegistry::UpdateInstallationInformation(XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail)
 	{
 	CXmlGenerator xmlGenerator;
-	char* tmpFileName = tmpnam(NULL);	
+
+	#ifndef __TOOLS2_LINUX__
+		char* tmpFileName = tmpnam(NULL);	
+	#else
+		char tmpFileName[] = "/tmp/interpretsis_XXXXXX";	
+		int temp_fd;
+		temp_fd=mkstemp(tmpFileName); 
+		fclose(fdopen(temp_fd,"w"));
+	#endif
+
 	std::wstring filename(string2wstring(tmpFileName));
 
 	int isRomApplication = 0;
 	xmlGenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail, isRomApplication);
 
-	#ifdef __LINUX__
+	#ifdef __TOOLS2_LINUX__
 	std::string executable = "scrtool";
 	#else
 	std::string executable = "scrtool.exe";

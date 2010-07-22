@@ -447,7 +447,7 @@ void CDbLayer::AddComponentProperties(
 				{
 				std::string str = wstring2string(compPropIter->iValue);
 				std::string decodedString = Util::Base64Decode(str);
-				stmtComponentProperty->BindBinary(4, str);
+				stmtComponentProperty->BindBinary(4, decodedString);
 				}
 			else
 				{
@@ -609,7 +609,7 @@ void CDbLayer::AddFileProperties(int aCmpFileId, const std::vector<XmlDetails::T
 			{
 			std::string str = wstring2string(filePropIter->iValue);
 			std::string decodedString = Util::Base64Decode(str);
-			stmtFileProperty->BindBinary(3, str);
+			stmtFileProperty->BindBinary(3, decodedString);
 			stmtFileProperty->BindInt(4, 1);
 			}
 
@@ -677,6 +677,18 @@ int CDbLayer::AddAppAttribute( int aComponentId, const std::vector<XmlDetails::T
 	std::auto_ptr<CStatement> stmtAppAttribute(iScrDbHandler->PrepareStatement(insertAppAttributes));
 
 	stmtAppAttribute->BindInt64(2, aComponentId);
+
+	//Assigning Default Values
+	TInt64 intVal = 0; 
+	stmtAppAttribute->BindInt64(5, intVal); //Attributes
+	stmtAppAttribute->BindInt64(6, intVal); //Hidden
+	stmtAppAttribute->BindInt64(7, intVal); //Embeddable
+	stmtAppAttribute->BindInt64(8, intVal); //Newfile
+	stmtAppAttribute->BindInt64(9, intVal); //Launch
+	stmtAppAttribute->BindInt64(11, intVal); //DefaultScreenNumber
+	std::wstring strVal(L"");
+	stmtAppAttribute->BindStr(10, strVal); //GroupName
+	
 	int appUid = 0;
 	std::string appfile;
 	for(ApplicationAttributeIterator applicationAttributeIter = aAppAttribute.begin(); applicationAttributeIter != aAppAttribute.end() ; ++applicationAttributeIter )
@@ -839,6 +851,13 @@ void CDbLayer::AddLocalizableAttribute( int aAppUid, const std::vector<XmlDetail
 	insertAppLocalizableInfo = "INSERT INTO LocalizableAppInfo(AppUid,ShortCaption,GroupName,Locale,CaptionAndIconId) VALUES(?,?,?,?,?);";
 	std::auto_ptr<CStatement> stmtAppLocalizableInfo(iScrDbHandler->PrepareStatement(insertAppLocalizableInfo));
 
+	//Assigning default value
+	TInt64 intVal = 0;
+	stmtAppLocalizableInfo->BindInt64(4, intVal); //Locale
+	std::wstring strVal(L"");
+	stmtAppLocalizableInfo->BindStr(2, strVal); //ShortCaption
+	stmtAppLocalizableInfo->BindStr(3, strVal); //GroupName
+
 	std::string insertCaptionAndIconInfo;
 		
 	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
@@ -924,6 +943,13 @@ void CDbLayer::AddViewDataAttributes( int alocalAppInfoId, const std::vector<Xml
 	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
 	std::auto_ptr<CStatement> stmtCaptionAndIconInfo(iScrDbHandler->PrepareStatement(insertCaptionAndIconInfo));
 
+	//Assigning Default Value
+	TInt64 intVal = 0;
+	stmtViewData->BindInt64(3, intVal); //ScreenMode
+	stmtCaptionAndIconInfo->BindInt64(2, intVal); //NumberOfIcons
+	std::wstring strVal(L"");
+	stmtCaptionAndIconInfo->BindStr(3, strVal); //IconFile
+
 	bool captionAndIconInfoPresent = 0;
 	//for every TViewData
 	stmtViewData->BindInt64(1, alocalAppInfoId);
@@ -994,7 +1020,9 @@ void CDbLayer::AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPrePr
 
 		if(appPropertyIter->iIsStr8Bit)
 			{
-			stmtAppProperty->BindBinary(6, appPropertyIter->iStrValue);
+				std::string str = wstring2string(appPropertyIter->iStrValue);
+				std::string decodedString = Util::Base64Decode(str);
+				stmtAppProperty->BindBinary(6, decodedString);
 			}
 		else
 			{

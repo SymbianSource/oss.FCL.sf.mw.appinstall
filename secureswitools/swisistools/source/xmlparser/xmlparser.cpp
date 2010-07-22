@@ -894,7 +894,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo CScrXmlParser::
 		appProperty.iLocale = opaqueDataType.iLocale;
 		appProperty.iName = L"OpaqueData";
 		appProperty.iIntValue = 0;
-		appProperty.iIsStr8Bit = true;
+		appProperty.iIsStr8Bit = opaqueDataType.iIsBinary;
 		appProperty.iServiceUid = 0;
 		appProperty.iStrValue = opaqueDataType.iOpaqueData;
 		
@@ -1050,9 +1050,11 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	// tags in OpaqueDataType 
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagData( &XMLString::release, XMLString::transcode("Data") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagOpaqueLocale( &XMLString::release, XMLString::transcode("OpaqueLocale") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagIsBinary( &XMLString::release, XMLString::transcode("IsBinary") );
 
 	DOMNodeList* Data = aDOMElement->getElementsByTagName(tagData.get());
 	DOMNodeList* OpaqueLocale = aDOMElement->getElementsByTagName(tagOpaqueLocale.get());
+	DOMNodeList* isBinary = aDOMElement->getElementsByTagName(tagIsBinary.get());
 	
 	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType;
 
@@ -1067,6 +1069,13 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 		const XMLCh* typ = Data->item(0)->getTextContent();
 		opaqueDataType.iOpaqueData = XMLChToWString(typ);
 		}
+	
+	if(isBinary->getLength() != 0)
+		{
+		const XMLCh* textIsBinary = isBinary->item(0)->getTextContent();
+		opaqueDataType.iIsBinary = XercesStringToInteger(textIsBinary);		
+		}
+
 	LOGEXIT("CScrXmlParser::GetOpaqueDataType()");
 	return opaqueDataType;
 	}
@@ -1135,7 +1144,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInf
 		appProperty.iLocale = opaqueDataType.iLocale;
 		appProperty.iName = L"OpaqueData";
 		appProperty.iIntValue = 0;
-		appProperty.iIsStr8Bit = true;
+		appProperty.iIsStr8Bit = opaqueDataType.iIsBinary;
 		appProperty.iServiceUid = appServiceInfo.iUid;
 		appProperty.iStrValue = opaqueDataType.iOpaqueData;
 		

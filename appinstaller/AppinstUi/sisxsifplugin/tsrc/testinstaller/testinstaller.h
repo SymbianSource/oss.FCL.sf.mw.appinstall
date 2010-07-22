@@ -43,6 +43,7 @@ private slots:
     void silentInstallCheckChanged(int state);
     void silentRemoveCheckChanged(int state);
     void rfileCheckChanged(int state);
+    void ocspCheckChanged(int state);
     void installableDirChanged(int index);
     void installableFileChanged(int index);
     void installUsingNewApi();
@@ -75,6 +76,7 @@ private:    // data
     bool         mUseSilentInstall;
     bool         mUseSilentUninstall;
     bool         mUseRFileInstall;
+    bool         mOcsp;
     HbComboBox   *mInstallDirectories;
     HbComboBox   *mInstallableFiles;
     HbComboBox   *mRemovableApps;

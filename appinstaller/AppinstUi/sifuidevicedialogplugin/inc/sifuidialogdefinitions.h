@@ -27,6 +27,13 @@ enum SifUiDeviceDialogType
     SifUiErrorNote = 4
     };
 
+enum SifUiInstallingPhase
+    {
+    SifUiInstalling = 0,
+    SifUiDownloading = 1,
+    SifUiCheckingCerts = 2
+    };
+
 enum SifUiDeviceDialogReturnValue
     {
     SifUiContinue = 0,
@@ -56,6 +63,7 @@ const QString KSifUiCertificates = "cert";              // binary
 const QString KSifUiProgressNoteText = "txt";           // string
 const QString KSifUiProgressNoteFinalValue = "fin";     // integer
 const QString KSifUiProgressNoteValue = "val";          // integer
+const QString KSifUiProgressNotePhase = "phase";        // enum SifUiInstallingPhase
 
 // Variant map keys for "progress note" and "installation complete note" buttons
 const QString KSifUiProgressNoteIsHideButtonHidden = "hidebtn";     // boolean

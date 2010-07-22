@@ -35,10 +35,11 @@ namespace Swi
 
 namespace Usif
 {
+    class CComponentEntry;
     class CSisxSifPluginUiHandlerBase;
     class CSisxSifPluginInstallParams;
     class CSisxSifPluginErrorHandler;
-
+    
     /**
      *  SISX SIF plugin active implementation
      *  Universal Software Install Framework (USIF) plugin for native SISX
@@ -97,12 +98,16 @@ namespace Usif
         void SetFileL( const TDesC& aFileName );
         void SetFile( RFile& aFileHandle );
         TComponentId GetLastInstalledComponentIdL();
+        void GetComponentAndUidL( TComponentId aComponentId, CComponentEntry& aEntry, TUid& aUid ) const;
         TBool RequiresUserCapabilityL( const CComponentInfo::CNode& aRootNode );
+        void SetInstallPrefsRevocationServerUriL( const TDesC& aUri );
+        void UpdateInstallPrefsForPerformingOcspL();
         void StartInstallingL();
         void StartSilentInstallingL();
         void StartSilentUninstallingL();
         void FinalizeInstallationL();
         void UpdateStartupListL();
+        void FillDeviceSupportedLanguagesL();
 
     private:    // data
         RFs iFs;
@@ -134,6 +139,7 @@ namespace Usif
             ERunningOperation,
             EPostprocessing
             } iPhase;
+        RArray<TInt> iDeviceSupportedLanguages;
         };
 
 }   // namespace Usif

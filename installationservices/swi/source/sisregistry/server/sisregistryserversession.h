@@ -118,9 +118,10 @@ private:
 	void RequestRegistryEntryL(const RMessage2& aMessage);
 	void IsFileRegisteredL(const RMessage2& aMessage);
 	void GetComponentIdForUidL(const RMessage2& aMessage);
-    void AddAppRegInfoL(const RMessage2& aMessage);
+	void AddAppRegInfoL(const RMessage2& aMessage);
     void RemoveAppRegInfoL(const RMessage2& aMessage);
-	TInt ValidateAndParseAppRegFileL(const TDesC& aRegFileName, Usif::CApplicationRegistrationData*& aAppRegData);
+    void ValidateAndParseAppRegFileL(const TDesC& aRegFileName, Usif::CApplicationRegistrationData*& aAppRegData, TBool aInternal);
+    void ReRegisterAppRegFileL(const TDesC& aRegFileDrivePath, const TUid& aAppUid);
 	
 	// Subsession handling
 	void OpenRegistryUidEntryL(const RMessage2& aMessage);
@@ -207,8 +208,8 @@ private:
 	void ProcessApplicationsL();
 	TBool IsFirmwareUpdatedL();	 
 	void  UpdateRecentFWVersionL(); 
-	TInt GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
-	TInt GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames);
+	void GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
+	void GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames);
 	void DriveFormatDetectedL(TDriveUnit aDrive);
 	
 private:

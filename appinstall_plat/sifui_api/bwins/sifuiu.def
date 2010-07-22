@@ -4,22 +4,22 @@ EXPORTS
 	?ShowConfirmationL@CSifUi@@QAEHABVCSifUiAppInfo@@@Z @ 3 NONAME ; int CSifUi::ShowConfirmationL(class CSifUiAppInfo const &)
 	?ShowCompleteL@CSifUi@@QAEXXZ @ 4 NONAME ; void CSifUi::ShowCompleteL(void)
 	?ExternalizeL@CSifUiAppInfo@@QBEXAAVRWriteStream@@@Z @ 5 NONAME ; void CSifUiAppInfo::ExternalizeL(class RWriteStream &) const
-	?ShowProgressL@CSifUi@@QAEXABVCSifUiAppInfo@@H@Z @ 6 NONAME ; void CSifUi::ShowProgressL(class CSifUiAppInfo const &, int)
-	?NewLC@CSifUiCertificateInfo@@SAPAV1@AAVCCertificateInfo@Swi@@@Z @ 7 NONAME ; class CSifUiCertificateInfo * CSifUiCertificateInfo::NewLC(class Swi::CCertificateInfo &)
-	?Bitmaps@CSifUiAppInfo@@QBEPBVCApaMaskedBitmap@@XZ @ 8 NONAME ; class CApaMaskedBitmap const * CSifUiAppInfo::Bitmaps(void) const
-	?IncreaseProgressBarValueL@CSifUi@@QAEXH@Z @ 9 NONAME ; void CSifUi::IncreaseProgressBarValueL(int)
-	?ShowFailedL@CSifUi@@QAEXHABVTDesC16@@0@Z @ 10 NONAME ; void CSifUi::ShowFailedL(int, class TDesC16 const &, class TDesC16 const &)
-	?ExternalizeL@CSifUiCertificateInfo@@QBEXAAVRWriteStream@@@Z @ 11 NONAME ; void CSifUiCertificateInfo::ExternalizeL(class RWriteStream &) const
-	?IsCancelled@CSifUi@@QAEHXZ @ 12 NONAME ; int CSifUi::IsCancelled(void)
-	?Name@CSifUiAppInfo@@QBEABVTDesC16@@XZ @ 13 NONAME ; class TDesC16 const & CSifUiAppInfo::Name(void) const
-	?NewL@CSifUi@@SAPAV1@XZ @ 14 NONAME ; class CSifUi * CSifUi::NewL(void)
-	?NewL@CSifUiAppInfo@@SAPAV1@ABV1@@Z @ 15 NONAME ; class CSifUiAppInfo * CSifUiAppInfo::NewL(class CSifUiAppInfo const &)
-	?Version@CSifUiAppInfo@@QBEABVTVersion@@XZ @ 16 NONAME ; class TVersion const & CSifUiAppInfo::Version(void) const
-	?SetCertificateInfoL@CSifUi@@QAEXABV?$RPointerArray@VCSifUiCertificateInfo@@@@@Z @ 17 NONAME ; void CSifUi::SetCertificateInfoL(class RPointerArray<class CSifUiCertificateInfo> const &)
-	?Size@CSifUiAppInfo@@QBEHXZ @ 18 NONAME ; int CSifUiAppInfo::Size(void) const
-	?SetMemorySelectionL@CSifUi@@QAEXABV?$RArray@H@@@Z @ 19 NONAME ; void CSifUi::SetMemorySelectionL(class RArray<int> const &)
-	?NewLC@CSifUiAppInfo@@SAPAV1@ABVTDesC16@@0ABVTVersion@@HPBVCApaMaskedBitmap@@@Z @ 20 NONAME ; class CSifUiAppInfo * CSifUiAppInfo::NewLC(class TDesC16 const &, class TDesC16 const &, class TVersion const &, int, class CApaMaskedBitmap const *)
-	?Vendor@CSifUiAppInfo@@QBEABVTDesC16@@XZ @ 21 NONAME ; class TDesC16 const & CSifUiAppInfo::Vendor(void) const
+	?NewLC@CSifUiCertificateInfo@@SAPAV1@AAVCCertificateInfo@Swi@@@Z @ 6 NONAME ; class CSifUiCertificateInfo * CSifUiCertificateInfo::NewLC(class Swi::CCertificateInfo &)
+	?Bitmaps@CSifUiAppInfo@@QBEPBVCApaMaskedBitmap@@XZ @ 7 NONAME ; class CApaMaskedBitmap const * CSifUiAppInfo::Bitmaps(void) const
+	?IncreaseProgressBarValueL@CSifUi@@QAEXH@Z @ 8 NONAME ; void CSifUi::IncreaseProgressBarValueL(int)
+	?ShowFailedL@CSifUi@@QAEXHABVTDesC16@@0@Z @ 9 NONAME ; void CSifUi::ShowFailedL(int, class TDesC16 const &, class TDesC16 const &)
+	?ExternalizeL@CSifUiCertificateInfo@@QBEXAAVRWriteStream@@@Z @ 10 NONAME ; void CSifUiCertificateInfo::ExternalizeL(class RWriteStream &) const
+	?IsCancelled@CSifUi@@QAEHXZ @ 11 NONAME ; int CSifUi::IsCancelled(void)
+	?Name@CSifUiAppInfo@@QBEABVTDesC16@@XZ @ 12 NONAME ; class TDesC16 const & CSifUiAppInfo::Name(void) const
+	?NewL@CSifUi@@SAPAV1@XZ @ 13 NONAME ; class CSifUi * CSifUi::NewL(void)
+	?NewL@CSifUiAppInfo@@SAPAV1@ABV1@@Z @ 14 NONAME ; class CSifUiAppInfo * CSifUiAppInfo::NewL(class CSifUiAppInfo const &)
+	?Version@CSifUiAppInfo@@QBEABVTVersion@@XZ @ 15 NONAME ; class TVersion const & CSifUiAppInfo::Version(void) const
+	?SetCertificateInfoL@CSifUi@@QAEXABV?$RPointerArray@VCSifUiCertificateInfo@@@@@Z @ 16 NONAME ; void CSifUi::SetCertificateInfoL(class RPointerArray<class CSifUiCertificateInfo> const &)
+	?Size@CSifUiAppInfo@@QBEHXZ @ 17 NONAME ; int CSifUiAppInfo::Size(void) const
+	?SetMemorySelectionL@CSifUi@@QAEXABV?$RArray@H@@@Z @ 18 NONAME ; void CSifUi::SetMemorySelectionL(class RArray<int> const &)
+	?NewLC@CSifUiAppInfo@@SAPAV1@ABVTDesC16@@0ABVTVersion@@HPBVCApaMaskedBitmap@@@Z @ 19 NONAME ; class CSifUiAppInfo * CSifUiAppInfo::NewLC(class TDesC16 const &, class TDesC16 const &, class TVersion const &, int, class CApaMaskedBitmap const *)
+	?Vendor@CSifUiAppInfo@@QBEABVTDesC16@@XZ @ 20 NONAME ; class TDesC16 const & CSifUiAppInfo::Vendor(void) const
+	?ShowProgressL@CSifUi@@QAEXABVCSifUiAppInfo@@HW4TInstallingPhase@1@@Z @ 21 NONAME ; void CSifUi::ShowProgressL(class CSifUiAppInfo const &, int, enum CSifUi::TInstallingPhase)
 	?SetButtonVisible@CSifUi@@QAEXW4TOptionalButton@1@H@Z @ 22 NONAME ; void CSifUi::SetButtonVisible(enum CSifUi::TOptionalButton, int)
 	?SelectedDrive@CSifUi@@QAEHAAH@Z @ 23 NONAME ; int CSifUi::SelectedDrive(int &)
 	?NewLC@CSifUi@@SAPAV1@XZ @ 24 NONAME ; class CSifUi * CSifUi::NewLC(void)

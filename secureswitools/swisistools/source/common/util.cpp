@@ -183,51 +183,6 @@ int Util::ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_
 
 #endif // __linux__
 
-
-#ifndef __linux__
-/*
-DllExport std::string Util::wstring2string (const std::wstring& aWide)
-	{
-	int max = ConvertWideCharToMultiByte(aWide.c_str(),aWide.length(),0,0);
-	std::string reply;
-	if (max > 0 )
-		{
-		char* buffer = new char [max];
-		try
-			{
-			ConvertWideCharToMultiByte(aWide.c_str(),aWide.length(),buffer,max);
-			reply = std::string (buffer, max);
-			}
-		catch (...)
-			{
-			}
-		delete [] buffer;
-		}
-	return reply;
-	}
-
-std::wstring Util::string2wstring (const std::string& aNarrow)
-	{
-	int max = ConvertMultiByteToWideChar(aNarrow.c_str(),aNarrow.length(),0,0);
-	std::wstring reply;
-	if (max > 0 )
-		{
-		wchar_t* buffer = new wchar_t [max];
-		try
-			{
-			ConvertMultiByteToWideChar(aNarrow.c_str(),aNarrow.length(),buffer,max);
-			reply = std::wstring (buffer, max);
-			}
-		catch (...)
-			{
-			}
-		delete [] buffer;
-		}
-	return reply;
-	}
-*/
-#endif
-
 std::wstring Util::string2wstring (const char* aNarrow)
 	{
 	std::string narrowStr(aNarrow);
@@ -292,22 +247,30 @@ std::string Util::Base64Encode( const std::string& aBinaryData )
 
 std::string Util::Base64Decode( const std::string& aEncodedData )
 	{
-	BIO *mem = BIO_new(BIO_s_mem());
-	BIO_write(mem, aEncodedData.c_str(), aEncodedData.length());
+	unsigned char* pIn = aEncodedData.c_str();
+	int inLen = aEncodedData.length();
+	unsigned char* pOut = new unsigned char[inLen];
 
-	BIO* b64 = BIO_new(BIO_f_base64());
-	mem = BIO_push(b64, mem);
-	int inlen = 0;
-	char inbuf[40]={0};
+	int outLen;
+	std::string aDecodeData;
+		
+    // create a memory buffer containing base64 encoded data
+    BIO* bmem = BIO_new_mem_buf((void*)pIn, inLen);
 
-	inlen = BIO_read(b64, inbuf, aEncodedData.length());
-    BIO_write(mem, inbuf, inlen);
-	std::string decodedData = inbuf;
-	
-	BIO_free_all(mem);
-	return decodedData;
+    // push a Base64 filter so that reading from buffer decodes it
+    BIO *bioCmd = BIO_new(BIO_f_base64());
+    // we don't want newlines
+    BIO_set_flags(bioCmd, BIO_FLAGS_BASE64_NO_NL);
+    bmem = BIO_push(bioCmd, bmem);
+
+    int finalLen = BIO_read(bmem, (void*)pOut, outLen);
+
+	aDecodeData.assign(pOut, pOut+finalLen);
+	delete pOut;
+    BIO_free_all(bmem);
+
+	return aDecodeData;
 	}
-
 
 TUint32 Util::Crc32(const void* aPtr, TInt aLength)
 	{

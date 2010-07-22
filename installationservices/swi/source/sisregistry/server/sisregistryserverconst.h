@@ -54,8 +54,8 @@ _LIT(KApparcRegFileImportPath, "\\private\\10003a3f\\import\\apps\\*.rsc");
 
 //Registration resource file uid 
 const TUid KUidAppRegistrationFile = {0x101F8021};
-_LIT(KApparcRegDir, "\\private\\10003a3f\\import\\apps\\");
-
+_LIT(KApparcRegImportDir, "\\private\\10003a3f\\import\\apps\\");
+_LIT(KApparcRegDir, "\\private\\10003a3f\\apps\\");
 }
 
 #endif // __SISREGISTRYSERVERCONST_H__

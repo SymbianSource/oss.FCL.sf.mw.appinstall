@@ -88,9 +88,9 @@ private:
     SifUiDialogTitleWidget *mTitle;
     SifUiDialogContentWidget *mContent;
     int mInstallError;
-    QVariantMap mResultMap;
     HbAction *mPrimaryAction;
     HbAction *mSecondaryAction;
+    QVariantMap mResultMap;
     HbIndicator *mIndicator;
 
     QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber) *mSubscriber;

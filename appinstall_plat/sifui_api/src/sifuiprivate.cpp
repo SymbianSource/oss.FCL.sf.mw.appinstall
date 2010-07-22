@@ -162,13 +162,15 @@ void CSifUiPrivate::SetCertificateInfoL(
 // ---------------------------------------------------------------------------
 //
 void CSifUiPrivate::ShowProgressL( const CSifUiAppInfo& aAppInfo,
-        TInt aProgressBarFinalValue )
+        TInt aProgressBarFinalValue, CSifUi::TInstallingPhase aPhase )
     {
     ChangeNoteTypeL( ESifUiProgressNote );
 
     AddParamsAppInfoL( aAppInfo );
     AddParamL( KSifUiProgressNoteFinalValue, aProgressBarFinalValue );
     iProgressBarFinalValue = aProgressBarFinalValue;
+    AddParamL( KSifUiProgressNotePhase, aPhase );
+    iInstallingPhase = aPhase;
     AddParamsHiddenButtonsL();
 
     UpdateDialogOrIndicatorWithoutWaitingL();
@@ -346,6 +348,7 @@ void CSifUiPrivate::IndicatorUserActivated( const TDesC& aType,
     if( aType == KSifUiInstallIndicatorType )
         {
         CloseInstallIndicator();
+        iIsFirstTimeToDisplay = ETrue;
         TRAP_IGNORE( DisplayDeviceDialogL() );
         }
     }
@@ -537,8 +540,17 @@ void CSifUiPrivate::ResendAllInstallationDetailsL()
         AddParamsAppInfoL( *iAppInfo );
         }
     AddParamsCertificatesL();
-    // TODO: AddParamsIconL();
+    if( iProgressBarFinalValue )
+        {
+        AddParamL( KSifUiProgressNoteFinalValue, iProgressBarFinalValue );
+        }
+    if( iProgressBarCurrentValue )
+        {
+        AddParamL( KSifUiProgressNoteValue, iProgressBarCurrentValue );
+        }
+    AddParamL( KSifUiProgressNotePhase, iInstallingPhase );
     AddParamsHiddenButtonsL();
+    // TODO: AddParamsIconL();
     }
 
 // ---------------------------------------------------------------------------
@@ -553,19 +565,7 @@ void CSifUiPrivate::ActivateInstallIndicatorL()
         iIndicator->SetObserver( this );
         }
 
-    if( iAppInfo && iAppInfo->Name().Length() )
-        {
-        CHbSymbianVariant* param = NULL;
-        TPtrC appName = iAppInfo->Name();
-        param = CHbSymbianVariant::NewL( &appName, CHbSymbianVariant::EDes );
-        CleanupStack::PushL( param );
-        iIndicator->Activate( KSifUiInstallIndicatorType, param );
-        CleanupStack::PopAndDestroy( param );
-        }
-    else
-        {
-        iIndicator->Activate( KSifUiInstallIndicatorType );
-        }
+    UpdateInstallIndicatorProgressL();
     }
 
 // ---------------------------------------------------------------------------
@@ -574,15 +574,36 @@ void CSifUiPrivate::ActivateInstallIndicatorL()
 //
 void CSifUiPrivate::UpdateInstallIndicatorProgressL()
     {
+    CHbSymbianVariantMap* parameters = CHbSymbianVariantMap::NewL();
+    CleanupStack::PushL( parameters );
+
+    CHbSymbianVariant* param = NULL;
+
+    if( iAppInfo && iAppInfo->Name().Length() )
+        {
+        TPtrC appName = iAppInfo->Name();
+        param = CHbSymbianVariant::NewL( &appName, CHbSymbianVariant::EDes );
+        parameters->Add( KSifUiInstallIndicatorAppName, param );
+        }
+    if( iInstallingPhase )
+        {
+        param = CHbSymbianVariant::NewL( &iInstallingPhase, CHbSymbianVariant::EInt );
+        parameters->Add( KSifUiInstallIndicatorPhase, param );
+        }
     if( iProgressBarFinalValue )
         {
-        CHbSymbianVariant* param = NULL;
         TInt progressPercent = KProgFull * iProgressBarCurrentValue / iProgressBarFinalValue;
         param = CHbSymbianVariant::NewL( &progressPercent, CHbSymbianVariant::EInt );
-        CleanupStack::PushL( param );
-        iIndicator->Activate( KSifUiInstallIndicatorType, param );
-        CleanupStack::PopAndDestroy( param );
+        parameters->Add( KSifUiInstallIndicatorProgress, param );
         }
+
+    // TODO: should both install indicator and device dialog use the same variant map?
+
+    param = CHbSymbianVariant::NewL( parameters, CHbSymbianVariant::EVariantMap );
+    CleanupStack::Pop( parameters );
+    CleanupStack::PushL( param );
+    iIndicator->Activate( KSifUiInstallIndicatorType, param );
+    CleanupStack::PopAndDestroy( param );
     }
 
 // ---------------------------------------------------------------------------

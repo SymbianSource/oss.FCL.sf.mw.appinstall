@@ -1012,7 +1012,7 @@ void CStringItem::ExternalizeL(RWriteStream& aStream) const
 void CStringItem::InternalizeL(RReadStream& aStream)
     {
     CItemBase::InternalizeL(aStream);
-    delete iString;
+    DeleteObjectZ(iString);
     iString = HBufC::NewL(aStream, KMaxOpaqueParamsDescriptorSize);
     }
 

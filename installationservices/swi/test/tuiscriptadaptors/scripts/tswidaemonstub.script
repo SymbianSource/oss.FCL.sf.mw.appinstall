@@ -19,6 +19,7 @@
 PRINT Run SWI Daemon Stub tests
 LOAD_SUITE tuiscriptadaptors
 LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tdaemon
 
 //! @SYMTestCaseID 		API-SEC-SWIDaemonStub-I-0001
 //! @SYMTestCaseDesc 		Install SA and SP on the media card
@@ -51,6 +52,7 @@ RUN_TEST_STEP 100 tSisRegistryTest DeleteRegistry
 
 // Mount the card back and wait for registy to be rebuilt (for ROM stubs)
 RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
 DELAY 5000
 
 // Ensure files on the removable drive aren't cleaned up and also the SA stub tries to propagate

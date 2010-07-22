@@ -37,7 +37,7 @@ signals:
     void opFailed(int error);
 
 public:     // new functions
-    void install(const QString &fileName, bool silent, bool openfile);
+    void install(const QString &fileName, bool silent, bool openfile, bool ocsp);
     void remove(const Usif::TComponentId& aComponentId, bool silent);
     void remove(const TUid& aUid, const TDesC8& aMime, bool silent);
 

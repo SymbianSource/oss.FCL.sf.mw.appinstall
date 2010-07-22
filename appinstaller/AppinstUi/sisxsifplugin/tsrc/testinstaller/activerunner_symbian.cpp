@@ -18,6 +18,8 @@
 #include "activerunner_symbian.h"
 #include "activerunner.h"
 
+_LIT( KDefaultOcspResponderUrl, "http://4fil30423.noe.nokia.com:45000/" );
+
 
 ActiveRunnerPrivate::ActiveRunnerPrivate( ActiveRunner *aRunner ) :
         CActive( CActive::EPriorityStandard ), q_ptr( aRunner )
@@ -48,9 +50,9 @@ TInt ActiveRunnerPrivate::Initialize( bool aUseSif )
     return err;
     }
 
-TInt ActiveRunnerPrivate::Install( const QString& aFileName, bool aSilent, bool aOpenFile )
+TInt ActiveRunnerPrivate::Install( const QString& aFileName, bool aSilent, bool aOpenFile, bool aOcsp )
     {
-    TRAPD( err, DoInstallL( aFileName, aSilent, aOpenFile ) );
+    TRAPD( err, DoInstallL( aFileName, aSilent, aOpenFile, aOcsp ) );
     return err;
     }
 
@@ -114,7 +116,7 @@ void ActiveRunnerPrivate::DoInitializeL( bool aUseSif )
         }
     }
 
-void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bool aOpenFile )
+void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bool aOpenFile, bool aOcsp )
     {
     if( iFileName )
         {
@@ -145,36 +147,31 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bo
 
     if( iUseSif )
         {
+        delete iArguments;
+        iArguments = NULL;
+        iArguments = Usif::COpaqueNamedParams::NewL();
+
+        delete iResults;
+        iResults = NULL;
+        iResults = Usif::COpaqueNamedParams::NewL();
+
         if( aSilent )
             {
-            delete iArguments;
-            iArguments = NULL;
-            iArguments = Usif::COpaqueNamedParams::NewL();
-            iArguments->AddIntL( Usif::KSifInParam_InstallSilently, 1 );
+            iArguments->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
+            }
+        if( aOcsp )
+            {
+            iArguments->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::EAllowed );
+            iArguments->AddStringL( Usif::KSifInParam_OCSPUrl, KDefaultOcspResponderUrl );
+            }
 
-            delete iResults;
-            iResults = NULL;
-            iResults = Usif::COpaqueNamedParams::NewL();
-
-            if( aOpenFile )
-                {
-                iSoftwareInstall.Install( fileHandle, *iArguments, *iResults, iStatus );
-                }
-            else
-                {
-                iSoftwareInstall.Install( fileName, *iArguments, *iResults, iStatus );
-                }
+        if( aOpenFile )
+            {
+            iSoftwareInstall.Install( fileHandle, *iArguments, *iResults, iStatus );
             }
         else
             {
-            if( aOpenFile )
-                {
-                iSoftwareInstall.Install( fileHandle, iStatus );
-                }
-            else
-                {
-                iSoftwareInstall.Install( fileName, iStatus );
-                }
+            iSoftwareInstall.Install( fileName, *iArguments, *iResults, iStatus );
             }
         }
     else
@@ -201,7 +198,7 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bo
                 }
             else
                 {
-                iSWInstLauncher.Install( iStatus, fileName );
+                iSWInstLauncher.Install( iStatus, fileName  );
                 }
             }
         }

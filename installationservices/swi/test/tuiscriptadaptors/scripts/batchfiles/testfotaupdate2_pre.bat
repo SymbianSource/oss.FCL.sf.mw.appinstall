@@ -29,3 +29,5 @@ xcopy /Q /Y \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\fotaupdatestubapp2.s
 
 xcopy /Q /Y \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\sw.txt 		\epoc32\release\winscw\urel\z\resource\versions\
 xcopy /Q /Y \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\sw.txt 		\epoc32\release\winscw\udeb\z\resource\versions\
+
+del /s /f /q \epoc32\winscw\c\sys\install\scr\

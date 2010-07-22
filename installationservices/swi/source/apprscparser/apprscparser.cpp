@@ -105,6 +105,7 @@ EXPORT_C CAppRegInfoReader::~CAppRegInfoReader()
 	{
 	delete iAppBinaryFullName;		
 	iLocalizableRscArray.ResetAndDestroy();
+	iDeviceSupportedLanguages.Close();
 	
 	if (iUseRegFileHandle)
 	    delete iRegistrationFileName; // We had created the filename from the handle
@@ -156,6 +157,12 @@ EXPORT_C Usif::CApplicationRegistrationData* CAppRegInfoReader::ReadL(const RArr
 	// Check to see if we are only interested in any localized info
 	iReadOnlyOneLocalizedRscInfo = aAppLanguages.Count()?EFalse:ETrue;
 	
+	// We need to parse for all device supported languages. Populate iDeviceSupportedLanguages.
+	if (aAppLanguages.Count()>0)
+	    {             
+        GetInstalledLanguagesL();
+	    }
+
 	DEBUG_PRINTF2(_L("Opening rsc file %S"), iRegistrationFileName); //TODO
 	CResourceFile* registrationFile = NULL;
 	if (iUseRegFileHandle)
@@ -192,7 +199,7 @@ EXPORT_C Usif::CApplicationRegistrationData* CAppRegInfoReader::ReadL(const RArr
 		}
 	
 	TUint localizableResourceId = 1; // Only initialising this here to keep the compiler happy
-	TRAP(err, ReadNonLocalizableInfoL(resourceReader, localizableResourceId, aAppLanguages));
+	TRAP(err, ReadNonLocalizableInfoL(resourceReader, localizableResourceId, iDeviceSupportedLanguages));
 
 	if (!err)
 	    {
@@ -234,7 +241,8 @@ EXPORT_C Usif::CApplicationRegistrationData* CAppRegInfoReader::ReadL(const RArr
 		appRegInfo = Usif::CApplicationRegistrationData::NewL(iOwnedFileArray, iServiceArray, iLocalizableAppInfoArray, 
                                         appPropertiesArray, iOpaqueDataArray, iAppUid, *iAppBinaryFullName, iAppCharacteristics, iDefaultScreenNumber);
 		
-		DEBUG_PRINTF2(_L("Count Languages : %d"), aAppLanguages.Count());
+		DEBUG_PRINTF2(_L("Count Languages (from client) : %d"), aAppLanguages.Count());
+		DEBUG_PRINTF2(_L("Count Languages (after reset) : %d"), iDeviceSupportedLanguages.Count());
 		DEBUG_PRINTF2(_L("Count of Loc files parsed : %d"), iLocalizableRscArray.Count());
 		DEBUG_PRINTF2(_L("Count of Loc data passed to SWI : %d"), iLocalizableAppInfoArray.Count());				
 	   }
@@ -834,4 +842,60 @@ void CAppRegInfoReader::Panic(TInt aPanic)
     {
     _LIT(KSWIAppRegInfoReaderPanic,"SWIAppRegInfoReaderPanic");
     User::Panic(KSWIAppRegInfoReaderPanic, aPanic);
+    }
+
+void CAppRegInfoReader::GetInstalledLanguagesL()
+    {
+    _LIT(KLanguagesIni, "z:\\resource\\bootdata\\languages.txt");
+    const TInt KReadBufSize = 10;
+    
+    iDeviceSupportedLanguages.Reset();
+    
+    RFile file;
+    TInt err = file.Open(iFs, KLanguagesIni, EFileRead|EFileShareReadersOnly);
+    if (KErrNone == err)
+        {
+        CleanupClosePushL(file);
+        
+        TFileText reader;
+        reader.Set(file);
+        err = reader.Seek(ESeekStart);
+        if (KErrNone == err)
+            {
+            TBuf<KReadBufSize> readBuf;
+            while(KErrNone == reader.Read(readBuf))
+                {
+                if (readBuf.Length() > 0)
+                    {
+                    TLex lex(readBuf);
+                    lex.SkipSpace();
+                    TInt language;
+                    err = lex.Val(language);
+                    if (KErrNone != err)
+                        {
+                        readBuf.Zero();
+                        continue; // Read the next line
+                        }
+                    iDeviceSupportedLanguages.AppendL((TLanguage)language);
+                    }
+                readBuf.Zero();
+                }
+            }
+        else
+            {
+            DEBUG_PRINTF3(_L("Reading %S failed with %d"), &KLanguagesIni, err);
+            }
+        
+        CleanupStack::PopAndDestroy(&file);
+        }
+    else
+        {
+        DEBUG_PRINTF3(_L("Opening %S failed with %d"), &KLanguagesIni, err);
+        }
+    
+    // If we are not able fetch the device languages, just parse for the current device language
+    if (0 == iDeviceSupportedLanguages.Count())
+        {
+        iDeviceSupportedLanguages.AppendL(User::Language());
+        }
     }

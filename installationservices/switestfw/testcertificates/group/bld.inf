@@ -1,0 +1,78 @@
+/*
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Generic technology part of test framework security subsystem
+*
+*/
+
+
+
+/**
+ @file
+ @internalComponent
+*/
+
+ 
+PRJ_TESTEXPORTS
+// Export certificates for security tests. 
+// Note that these certificates should not appear in a CBR and are not included in the source directives in the mrp file.
+
+
+// SWI Component
+../swi/test/trevocation/ocsp/expressandcertifiedsignedCert/CaCert/swicertstore.dat /epoc32/winscw/c/tswi/trevocation/swicertstore.dat
+../swi/pctools/test/tdumpcertstore/certificates/sucert.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/sucert.der
+../swi/pctools/test/tdumpcertstore/certificates/root5ca.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/root5ca.der
+../swi/pctools/test/tdumpcertstore/certificates/second.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/second.der
+../swi/pctools/test/tdumpcertstore/certificates/symbian-test-chain-rsa.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbian-test-chain-rsa.der
+../swi/pctools/test/tdumpcertstore/certificates/symbian-test-dsa.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbian-test-dsa.der
+../swi/pctools/test/tdumpcertstore/certificates/symbian-test-expired-rsa.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbian-test-expired-rsa.der
+../swi/pctools/test/tdumpcertstore/certificates/symbian-test-rsa.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbian-test-rsa.der
+../swi/pctools/test/tdumpcertstore/certificates/symbian-test-tcb-rsa.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbian-test-tcb-rsa.der
+../swi/pctools/test/tdumpcertstore/certificates/symbiantestrootcadiffserial.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbiantestrootcadiffserial.der
+../swi/pctools/test/tdumpcertstore/certificates/symbiantestrsaca.der /epoc32/winscw/c/tswi/tdumpcertstore/certificates/symbiantestrsaca.der
+../swi/sistools/test/tinterpretsis/certs/default.cer /epoc32/winscw/c/tswi/tinterpretsis/certs/default.cer
+../swi/sistools/test/tinterpretsis/certs/signing.cer /epoc32/winscw/c/tswi/tinterpretsis/certs/signing.cer
+../swi/sistools/test/tsignsis/kanji_cer.cer 		/epoc32/winscw/c/tswi/tsignsis/kanji_cer.cer
+../swi/sistools/test/tinterpretsisinteg/testdatah004/cert-gen.cer /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatah004/cert-gen.cer
+../swi/test/tsisfile/data/files/default.cer							/epoc32/winscw/c/tswi/tsignsis/default.cer
+../swi/sistools/test/tsignsis/signingdata/emptylinescert.key.pem /epoc32/winscw/c/tswi/tsignsis/signingdata/emptylinescert.key.pem
+../swi/sistools/test/tsignsis/signingdata/emptylinescert.pem /epoc32/winscw/c/tswi/tsignsis/signingdata/emptylinescert.pem
+../swi/sistools/test/tsignsis/signingdata/good-r5.key.pem /epoc32/winscw/c/tswi/tsignsis/signingdata/good-r5.key.pem
+../swi/sistools/test/tsignsis/signingdata/good-r5.pem /epoc32/winscw/c/tswi/tsignsis/signingdata/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdatah004/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatah004/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdatah004/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatah004/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai001/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai001/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai001/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai001/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai002/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai002/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai002/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai002/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai003/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai003/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdatai003/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatai003/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj001/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj001/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj001/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj001/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj002/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj002/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj002/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj002/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj003/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj003/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj003/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj003/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj004/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj004/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj004/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj004/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj005/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj005/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj005/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj005/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj006/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj006/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj006/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj006/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj007/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj007/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj007/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj007/good-r5.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj008/good-r5.key.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj008/good-r5.key.pem
+../swi/sistools/test/tinterpretsisinteg/testdataj008/good-r5.pem /epoc32/winscw/c/tswi/tinterpretsisinteg/testdataj008/good-r5.pem
+ 
+

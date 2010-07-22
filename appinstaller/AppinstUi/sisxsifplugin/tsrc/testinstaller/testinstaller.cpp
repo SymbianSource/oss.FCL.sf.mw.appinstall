@@ -42,7 +42,7 @@ using namespace Usif;
 
 TestInstaller::TestInstaller(int& argc, char* argv[]) : HbApplication(argc, argv),
     mMainWindow(0), mInstallView(0), mRemoveView(0),
-    mUseSilentInstall(false), mUseSilentUninstall(false), mUseRFileInstall(false),
+    mUseSilentInstall(false), mUseSilentUninstall(false), mUseRFileInstall(false), mOcsp(false),
     mInstallDirectories(0), mInstallableFiles(0), mRemovableApps(0),
     mCurrentDirPath(), mCurrentFile(), mRunner(0)
 {
@@ -72,15 +72,21 @@ TestInstaller::TestInstaller(int& argc, char* argv[]) : HbApplication(argc, argv
             this, SLOT(installableFileChanged(int)));
     installLayout->addItem(mInstallableFiles);
 
+    QGraphicsLinearLayout *checkboxesLayout = new QGraphicsLinearLayout(Qt::Horizontal);
     HbCheckBox *silentInstallCheckBox = new HbCheckBox;
     silentInstallCheckBox->setText(tr("Silent"));
     connect(silentInstallCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(silentInstallCheckChanged(int)));
-    installLayout->addItem(silentInstallCheckBox);
+    checkboxesLayout->addItem(silentInstallCheckBox);
     HbCheckBox *rfileCheckBox = new HbCheckBox;
     rfileCheckBox->setText(tr("Use RFile"));
     connect(rfileCheckBox, SIGNAL(stateChanged(int)), this, SLOT(rfileCheckChanged(int)));
-    installLayout->addItem(rfileCheckBox);
+    checkboxesLayout->addItem(rfileCheckBox);
+    HbCheckBox *ocspCheckBox = new HbCheckBox;
+    ocspCheckBox->setText(tr("OCSP"));
+    connect(ocspCheckBox, SIGNAL(stateChanged(int)), this, SLOT(ocspCheckChanged(int)));
+    checkboxesLayout->addItem(ocspCheckBox);
+    installLayout->addItem(checkboxesLayout);
     installLayout->addStretch();
 
     HbPushButton *installNew = new HbPushButton(tr("Install using new API"));
@@ -179,6 +185,12 @@ void TestInstaller::rfileCheckChanged(int state)
 {
     Qt::CheckState s = static_cast<Qt::CheckState>(state);
     mUseRFileInstall = (s == Qt::Checked);
+}
+
+void TestInstaller::ocspCheckChanged(int state)
+{
+    Qt::CheckState s = static_cast<Qt::CheckState>(state);
+    mOcsp = (s == Qt::Checked);
 }
 
 void TestInstaller::installableDirChanged(int /*index*/)
@@ -388,7 +400,7 @@ bool TestInstaller::createRunner(bool useSif)
 void TestInstaller::doInstall(const QString &fileName)
 {
     if (mRunner) {
-        mRunner->install(fileName, mUseSilentInstall, mUseRFileInstall);
+        mRunner->install(fileName, mUseSilentInstall, mUseRFileInstall, mOcsp );
     }
 }
 

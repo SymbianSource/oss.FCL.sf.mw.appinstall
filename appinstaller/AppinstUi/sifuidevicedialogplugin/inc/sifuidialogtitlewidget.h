@@ -41,7 +41,7 @@ public:
 
 private:
     Q_DISABLE_COPY(SifUiDialogTitleWidget)
-    QString defaultTitle(SifUiDeviceDialogType type);
+    QString defaultTitle(SifUiDeviceDialogType type, SifUiInstallingPhase phase);
     void updateTitle(const QVariantMap &parameters);
     void updateCertificates(const QVariantMap &parameters);
     QList<SifUiDialogCertificateInfo*> *getCertificates(QByteArray array);

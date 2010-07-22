@@ -50,7 +50,8 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         void SetMemorySelectionL( const RArray<TInt>& aDriveNumbers );
         TInt SelectedDrive( TInt& aDriveNumber );
         void SetCertificateInfoL( const RPointerArray<CSifUiCertificateInfo>& aCertificates );
-        void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue );
+        void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue,
+                CSifUi::TInstallingPhase aPhase );
         void IncreaseProgressBarValueL( TInt aIncrement );
         TBool IsCancelled();
         void SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible );
@@ -111,6 +112,7 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         TChar iSelectedDrive;
         TInt iProgressBarFinalValue;
         TInt iProgressBarCurrentValue;
+        CSifUi::TInstallingPhase iInstallingPhase;
         TBool iNoHideProgressButton;
         TBool iNoCancelProgressButton;
         TBool iNoShowInAppLibButton;

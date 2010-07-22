@@ -28,6 +28,7 @@
 
 namespace Usif
 {
+    class CComponentEntry;
     class CSisxSifPluginInstallParams;
     class CSisxSifPluginErrorHandler;
 
@@ -50,13 +51,18 @@ namespace Usif
         void SetInstallParamsL( const CSisxSifPluginInstallParams& aInstallParams );
         void SetMaxInstalledSize( TInt aSize );
         void SetDriveSelectionRequired( TBool aIsRequired );
+        TBool IsOcspMandatoryL() const;
+
+        // functions to publish operation progress
         void PublishStartL( const CComponentInfo::CNode& aRootNode );
-        void PublishProgressL( TSifOperationPhase aPhase, TSifOperationSubPhase aSubPhase,
-                TInt aCurrentProgress, TInt aTotal );
-        void PublishCompletionL( const CSisxSifPluginErrorHandler& aError );
+        void PublishStartL( const CComponentEntry& aEntry );
+        void PublishProgressL( TSifOperationSubPhase aSubPhase );
+        void PublishCompletionL();
 
     protected:  // new functions
         void SetDisplayErrorL( Swi::TErrorDialog aType, const TDesC& aParam );
+        void SetOcspErrorL( Swi::TRevocationDialogMessage aMessage );
+        TBool ShowQuestionL( const TDesC& aText ) const;
 
     protected:	// data
         RFs& iFs;
@@ -64,8 +70,13 @@ namespace Usif
         TInt iMaxInstalledSize;
         TBool iIsDriveSelectionRequired;
         CSisxSifPluginInstallParams* iInstallParams;
-        HBufC* iGlobalComponentId;
+        
+        // members for publishing operation progress
         CPublishSifOperationInfo* iPublishSifOperationInfo;
+        TSifOperationPhase iOperationPhase;
+        HBufC* iGlobalComponentId;
+        TInt iProgressBarCurrentValue;
+        TInt iProgressBarFinalValue;
         };
 
 }   // namespace Usif

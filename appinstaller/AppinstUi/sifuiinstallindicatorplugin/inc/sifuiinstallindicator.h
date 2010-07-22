@@ -26,11 +26,11 @@ class QValueSpacePublisher;
 QTM_END_NAMESPACE
 
 // Variant map keys for parameters
-const QString KSifUiInstallIndicatorAppNameKey = "name";    // QString
-const QString KSifUiInstallIndicatorPhaseKey = "phase";     // int (enum Phase)
-const QString KSifUiInstallIndicatorProgressKey = "prog";   // int (0..100)
-const QString KSifUiInstallIndicatorCompleteKey = "done";   // int (KErrNone or error code)
-const QString KSifUiInstallIndicatorIconKey = "icon";       // TBD
+const QString KSifUiInstallIndicatorAppName = "name";       // QString
+const QString KSifUiInstallIndicatorPhase = "phase";        // int (enum Phase)
+const QString KSifUiInstallIndicatorProgress = "prog";      // int (0..100)
+const QString KSifUiInstallIndicatorComplete = "done";      // int (KErrNone or error code)
+const QString KSifUiInstallIndicatorIcon = "icon";          // TODO: TBD
 
 
 /**

@@ -114,7 +114,7 @@ QVariant SifUiInstallIndicator::indicatorData(int role) const
                     data = tr("Installed");
                 }
             } else {
-                switch(mPhase) {
+                switch (mPhase) {
                     case Installing:
                         //: Indicates that application installation is ongoing.
                         // TODO: localized UI string needed
@@ -140,10 +140,19 @@ QVariant SifUiInstallIndicator::indicatorData(int role) const
             if (mIsComplete) {
                 data = mAppName;
             } else {
-                if (!mAppName.isEmpty()) {
-                    //: Application name %1 followed by installation progress %L2
-                    // TODO: localized UI string needed
-                    data = tr("%1 (%L2 %)").arg(mAppName).arg(mProgress);
+                switch (mPhase) {
+                    case Installing:
+                    case Downloading:
+                        if (!mAppName.isEmpty()) {
+                            //: Application name %1 followed by installation progress %L2
+                            // TODO: localized UI string needed
+                            data = tr("%1 (%L2 %)").arg(mAppName).arg(mProgress);
+                        }
+                        break;
+                    case CheckingCerts:
+                    default:
+                        data = mAppName;
+                        break;
                 }
             }
             break;
@@ -195,19 +204,19 @@ void SifUiInstallIndicator::processParameters(const QVariant &parameter)
             QMapIterator<QString,QVariant> iter(map);
             while (iter.hasNext()) {
                 iter.next();
-                if (iter.key() == KSifUiInstallIndicatorAppNameKey) {
+                if (iter.key() == KSifUiInstallIndicatorAppName) {
                     mAppName = iter.value().toString();
-                } else if (iter.key() == KSifUiInstallIndicatorPhaseKey) {
+                } else if (iter.key() == KSifUiInstallIndicatorPhase) {
                     int value = Installing;
                     getIntValue(iter.value(), value);
                     mPhase = static_cast<Phase>(value);
-                } else if (iter.key() == KSifUiInstallIndicatorProgressKey) {
+                } else if (iter.key() == KSifUiInstallIndicatorProgress) {
                     getIntValue(iter.value(), mProgress);
-                } else if (iter.key() == KSifUiInstallIndicatorCompleteKey) {
+                } else if (iter.key() == KSifUiInstallIndicatorComplete) {
                     mIsComplete = true;
                     mErrorCode = KErrNone;
                     getIntValue(iter.value(), mErrorCode);
-                } else if (iter.key() == KSifUiInstallIndicatorIconKey) {
+                } else if (iter.key() == KSifUiInstallIndicatorIcon) {
                     // TODO: icon?
                 } else {
                     // ignore other types
