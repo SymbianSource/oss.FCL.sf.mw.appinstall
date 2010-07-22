@@ -89,6 +89,7 @@ class CNcdLoadNodeOperationImpl : public CNcdBaseOperation,
                                   public MCatalogsHttpObserver,
                                   public MNcdParserDataBlocksObserver
     {
+protected:
 class CNcdNodeIconMap;    
 public:
 
