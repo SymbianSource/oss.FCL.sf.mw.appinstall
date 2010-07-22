@@ -8,7 +8,7 @@ EXPORTS
 	_ZN6CSifUi11ShowFailedLEiRK7TDesC16S2_ @ 7 NONAME
 	_ZN6CSifUi13SelectedDriveERi @ 8 NONAME
 	_ZN6CSifUi13ShowCompleteLEv @ 9 NONAME
-	_ZN6CSifUi13ShowProgressLERK13CSifUiAppInfoi @ 10 NONAME
+	_ZN6CSifUi13ShowProgressLERK13CSifUiAppInfoiNS_16TInstallingPhaseE @ 10 NONAME
 	_ZN6CSifUi16SetButtonVisibleENS_15TOptionalButtonEi @ 11 NONAME
 	_ZN6CSifUi17ShowConfirmationLERK13CSifUiAppInfo @ 12 NONAME
 	_ZN6CSifUi19SetCertificateInfoLERK13RPointerArrayI21CSifUiCertificateInfoE @ 13 NONAME

@@ -80,6 +80,8 @@ void CIAUpdateBGTimer::ConstructL()
     
     iSoftNotification = CIAUpdateBGSoftNotification::NewL( this ); 
     
+    iIndicatorNotifyHandler = CIAUpdateBGNotifyHandler::NewL();
+    
     // loc: initialize localisation text loader
     /*
     TBool res = HbTextResolverSymbian::Init(KLocFile, KLocFilePath);
@@ -109,6 +111,7 @@ CIAUpdateBGTimer::~CIAUpdateBGTimer()
     delete iControllerFile;
     delete iInternalFile;
     delete iSoftNotification;
+    delete iIndicatorNotifyHandler;
     
     }
 
@@ -118,7 +121,11 @@ CIAUpdateBGTimer::~CIAUpdateBGTimer()
 void CIAUpdateBGTimer::StartProcessL()
     {
     FLOG("[bgchecker] StartProcessL");
-        
+    
+    // start listening indicator remove
+    iIndicatorNotifyHandler->StartListeningL( this );
+    
+    
     iMode = ModeL();
     
     switch ( iMode )
@@ -1564,8 +1571,27 @@ void CIAUpdateBGTimer::Shutdown()
         iSoftNotification = NULL;
         }
     
+    if ( iIndicatorNotifyHandler )
+        {
+        delete iIndicatorNotifyHandler;
+        iIndicatorNotifyHandler = NULL;
+        }
+    
     CActiveScheduler::Stop();
         
     FLOG("[bgchecker] Shutdown() end");
+    }   
+// ---------------------------------------------------------------------------
+// CIAUpdateBGTimer::HandleIndicatorRemoveL()
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateBGTimer::HandleIndicatorRemoveL() 
+    {
+    // remove indicator from indicator menu
+    iSoftNotification->RemoveIndicatorL();
+    
+    //clear nr of indicator entries in internal file
+    SetNrOfIndicatorEntriesL( 0 );
     }
+
 // End of file

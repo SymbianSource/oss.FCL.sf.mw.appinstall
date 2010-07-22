@@ -30,8 +30,11 @@
 #include <swi/sisregistrysession.h>         // RSisRegistrySession
 #include "sisregistrywritablesession.h"     // RSisRegistryWritableSession
 #include <e32property.h>                    // RProperty
+#include <centralrepository.h>              // CRepository
 #include <sacls.h>                          // KUidSwiLatestInstallation
+#include <SWInstallerInternalCRKeys.h>      // KCRUidSWInstallerSettings
 #include <featmgr.h>                        // FeatureManager
+#include <syslangutil.h>                    // GetInstalledLanguages
 
 // TODO: replace with proper logging
 #ifdef _DEBUG
@@ -80,6 +83,7 @@ CSisxSifPluginActiveImpl::~CSisxSifPluginActiveImpl()
     delete iAsyncLauncher;
     delete iUiHandler;
     delete iInstallPrefs;
+    iDeviceSupportedLanguages.Reset();
     iInputParams = NULL;    // not owned
     iOutputParams = NULL;   // not owned
     delete iInstallParams;
@@ -158,6 +162,7 @@ void CSisxSifPluginActiveImpl::RunL()
         case EUninstall:
             __ASSERT_DEBUG( iPhase == ERunningOperation, Panic( ESisxSifInternalError ) );
             UpdateStartupListL();
+            iUiHandler->PublishCompletionL();
             CompleteClientRequest( KErrNone );
             break;
 
@@ -629,25 +634,13 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId,
     {
     CommonRequestPreambleL( aInputParams, aOutputParams, aStatus );
 
-    RSoftwareComponentRegistry scrSession;
-    User::LeaveIfError( scrSession.Connect() );
-    CleanupClosePushL( scrSession );
-
-    CPropertyEntry* propertyEntry = scrSession.GetComponentPropertyL( aComponentId, KCompUid );
-    CleanupStack::PushL( propertyEntry );
-    CIntPropertyEntry* intPropertyEntry = dynamic_cast< CIntPropertyEntry* >( propertyEntry );
-    FLOG_2( _L("CSisxSifPluginActiveImpl::DoUninstallL, component %d, property 0x%08x"),
-            aComponentId, intPropertyEntry );
-    if( !intPropertyEntry )
-        {
-        FLOG( _L("CSisxSifPluginActiveImpl: UID property not found ERROR") );
-        User::Leave( KErrNotFound );
-        }
-
-    TUid objectId = TUid::Uid( intPropertyEntry->IntValue() );
-    CleanupStack::PopAndDestroy( 2, &scrSession );      // propertyEntry, scrSession
-
-    iAsyncLauncher->UninstallL( *iUiHandler, objectId, iStatus );
+    TUid uid;
+    CComponentEntry *entry = CComponentEntry::NewLC();
+    GetComponentAndUidL( aComponentId, *entry, uid );
+    iUiHandler->PublishStartL( *entry );
+    CleanupStack::PopAndDestroy( entry );
+    
+    iAsyncLauncher->UninstallL( *iUiHandler, uid, iStatus );
 
     iOperation = EUninstall;
     iPhase = ERunningOperation;
@@ -711,13 +704,12 @@ void CSisxSifPluginActiveImpl::DoHandleErrorL( TInt aError )
         {
         iErrorHandler->FillOutputParamsL( *iOutputParams );
         }
-
+    iUiHandler->PublishCompletionL();
+    
     if( aError != KErrNone && aError != KErrCancel )
         {
         iUiHandler->DisplayFailedL( *iErrorHandler );
         }
-
-    iUiHandler->PublishCompletionL( *iErrorHandler );
     }
 
 // ---------------------------------------------------------------------------
@@ -773,6 +765,45 @@ TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     }
 
 // ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::GetComponentAndUidL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::GetComponentAndUidL( TComponentId aComponentId,
+        CComponentEntry& aEntry, TUid& aUid ) const
+    {
+    FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentAndUidL, component %d"), aComponentId );
+    
+    RSoftwareComponentRegistry scrSession;
+    User::LeaveIfError( scrSession.Connect() );
+    CleanupClosePushL( scrSession );
+
+    if( scrSession.GetComponentL( aComponentId, aEntry ) )
+        {
+        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentAndUidL, entry found") );
+        
+        CPropertyEntry* propertyEntry = scrSession.GetComponentPropertyL( aComponentId, KCompUid );
+        CleanupStack::PushL( propertyEntry );
+        
+        CIntPropertyEntry* intPropertyEntry = dynamic_cast< CIntPropertyEntry* >( propertyEntry );
+        if( !intPropertyEntry )
+            {
+            FLOG( _L("CSisxSifPluginActiveImpl::GetComponentUidL, UID property not found") );
+            User::Leave( KErrNotFound );
+            }
+        aUid = TUid::Uid( intPropertyEntry->IntValue() );
+        
+        CleanupStack::PopAndDestroy( propertyEntry );
+        }
+    else
+        {
+        FLOG( _L("CSisxSifPluginActiveImpl::GetComponentAndUidL, entry not found") );
+        User::Leave( KErrNotFound );
+        }
+
+    CleanupStack::PopAndDestroy( &scrSession );
+    }
+
+// ---------------------------------------------------------------------------
 // CSisxSifPluginActiveImpl::RequiresUserCapabilityL()
 // ---------------------------------------------------------------------------
 //
@@ -795,6 +826,65 @@ TBool CSisxSifPluginActiveImpl::RequiresUserCapabilityL(
     }
 
 // ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::SetInstallPrefsRevocationServerUriL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::SetInstallPrefsRevocationServerUriL( const TDesC& aUri )
+    {
+    if( aUri.Length() )
+        {
+        HBufC8* uriBuf = HBufC8::NewLC( aUri.Length() );
+        TPtr8 uri( uriBuf->Des() );
+        uri.Copy( aUri );
+        iInstallPrefs->SetRevocationServerUriL( uri );
+        CleanupStack::PopAndDestroy( uriBuf );
+        }
+    else
+        {
+        iInstallPrefs->SetRevocationServerUriL( KNullDesC8 );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL()
+    {
+    if( IsSilentMode() )
+        {
+        TBool performOcsp( iInstallParams->PerformOCSP() != ENotAllowed );
+        iInstallPrefs->SetPerformRevocationCheck( performOcsp );
+
+        if( performOcsp )
+            {
+            SetInstallPrefsRevocationServerUriL( iInstallParams->OCSPUrl() );
+            }
+        }
+    else
+        {
+        CRepository* cenRep = CRepository::NewLC( KCRUidSWInstallerSettings );
+
+        TInt ocspProcedure = ESWInstallerOcspProcedureOff;
+        (void)cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure );
+        TBool performOcsp( ocspProcedure != ESWInstallerOcspProcedureOff );
+        iInstallPrefs->SetPerformRevocationCheck( performOcsp );
+
+        if( performOcsp )
+            {
+            HBufC* ocspUrlBuf = HBufC::NewLC(
+                    NCentralRepositoryConstants::KMaxUnicodeStringLength );
+            TPtr ocspUrl( ocspUrlBuf->Des() );
+            (void)cenRep->Get( KSWInstallerOcspDefaultURL, ocspUrl );
+            SetInstallPrefsRevocationServerUriL( ocspUrl );
+            CleanupStack::PopAndDestroy( ocspUrlBuf );
+            }
+
+        CleanupStack::PopAndDestroy( cenRep );
+        }
+    }
+
+// ---------------------------------------------------------------------------
 // CSisxSifPluginActiveImpl::StartInstallingL()
 // ---------------------------------------------------------------------------
 //
@@ -808,13 +898,18 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 
 	iUiHandler->PublishStartL( rootNode );
 
+	UpdateInstallPrefsForPerformingOcspL();
+	FillDeviceSupportedLanguagesL();
+
     if( iFileHandle )
         {
-        iAsyncLauncher->InstallL( *iUiHandler, *iFileHandle, *iInstallPrefs, iStatus );
+        iAsyncLauncher->InstallL( *iUiHandler, *iFileHandle, *iInstallPrefs,
+                iDeviceSupportedLanguages, iStatus );
         }
     else if( iFileName )
         {
-        iAsyncLauncher->InstallL( *iUiHandler, *iFileName, *iInstallPrefs, iStatus );
+        iAsyncLauncher->InstallL( *iUiHandler, *iFileName, *iInstallPrefs,
+                iDeviceSupportedLanguages, iStatus );
         }
     else
         {
@@ -879,8 +974,8 @@ void CSisxSifPluginActiveImpl::FinalizeInstallationL()
         iOutputParams->AddIntL( KSifOutParam_ComponentId, componentId );
         }
 
+    iUiHandler->PublishCompletionL();
 	iUiHandler->DisplayCompleteL();
-    iUiHandler->PublishCompletionL( *iErrorHandler );
     }
 
 // ---------------------------------------------------------------------------
@@ -919,5 +1014,32 @@ void CSisxSifPluginActiveImpl::UpdateStartupListL()
 
         CleanupStack::PopAndDestroy( &process );
         }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL()
+    {
+    FLOG( _L("CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL, begin") );
+    
+    CArrayFixFlat<TInt>* installedLanguages = NULL;
+    TInt err = SysLangUtil::GetInstalledLanguages( installedLanguages, &iFs );
+    CleanupStack::PushL( installedLanguages );
+    User::LeaveIfError( err );
+    if( installedLanguages )
+        {
+        iDeviceSupportedLanguages.Reset();
+        for( TInt index = 0; index < installedLanguages->Count(); index++ )
+            {
+            TInt language = (*installedLanguages)[ index ];
+            FLOG_1( _L("CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL: %d"), language );
+            iDeviceSupportedLanguages.AppendL( language );
+            }
+        }
+    CleanupStack::PopAndDestroy( installedLanguages );
+    
+    FLOG( _L("CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL, end") );
     }
 

@@ -86,7 +86,8 @@ private:
 	HBufC* CreateFullIconFileNameL(const TDesC& aIconFileName) const;
 	void FindLocalizableResourceFilesL(const TLanguage& aApplicationLanguage);
 	void CheckForDefaultResourceFileL();
-	TBool TypeUidIsForRegistrationFile(const TUidType& aUidType);    
+	TBool TypeUidIsForRegistrationFile(const TUidType& aUidType);   
+	void GetInstalledLanguagesL();
      
     static void Panic(TInt aPanic);
 	
@@ -115,6 +116,7 @@ private:
 	const RFile* iRegFileHandle;
 	TBool iReadOnlyOneLocalizedRscInfo;
     TBool iUseRegFileHandle;
+    RArray<TLanguage> iDeviceSupportedLanguages;
 	};
 
 #endif	// __APPRSCPARSER_H__

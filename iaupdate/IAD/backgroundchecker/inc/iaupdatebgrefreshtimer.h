@@ -32,6 +32,8 @@
 #include "iaupdatebgsoftnotification.h"
 #include "iaupdatebgcheckermode.h"
 
+#include "iaupdatebgnotifyhandler.h"
+
 // FORWARD DECLARATIONS
 class CIAUpdate;
 class CIAUpdateParameters;
@@ -49,7 +51,8 @@ class CIdleObserver;
 class CIAUpdateBGTimer : public CTimer, 
                  public MIAUpdateObserver, 
                  public MCenRepNotifyHandlerCallback, 
-                 public MIAUpdateBGSoftNotificationCallBack 
+                 public MIAUpdateBGSoftNotificationCallBack,
+                 public MIAUpdateBGNotifyObserver
             
     {
     public:
@@ -82,6 +85,10 @@ class CIAUpdateBGTimer : public CTimer,
     public: //MReminderTimerCallBack
 
         void ReminderTimerCallBack();
+    
+    private: // From MIAUpdateBGNotifyObserver   
+
+         void HandleIndicatorRemoveL();
         
     private:
     
@@ -177,6 +184,8 @@ class CIAUpdateBGTimer : public CTimer,
         CIAUpdateBGInternalFileHandler* iInternalFile;
         TIAUpdateBGMode iMode;
         CIAUpdateBGSoftNotification* iSoftNotification;
+        
+        CIAUpdateBGNotifyHandler* iIndicatorNotifyHandler;
     };        
 
 #endif //IAUPDATEBGREFRESHTIMER_H

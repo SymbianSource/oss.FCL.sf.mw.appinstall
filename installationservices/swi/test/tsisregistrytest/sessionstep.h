@@ -456,5 +456,11 @@ public:
     virtual TVerdict doTestStepL();
     };
 
+class CheckAppRegData : public CSisRegistrySessionStep
+    {
+public:
+    CheckAppRegData();
+    virtual TVerdict doTestStepL();
+    };
 #endif
 

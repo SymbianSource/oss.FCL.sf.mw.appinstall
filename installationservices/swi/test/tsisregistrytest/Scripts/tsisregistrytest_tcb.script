@@ -1,0 +1,175 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run all SisRegistry tests
+//
+LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tuiscriptadaptors
+//
+
+
+RUN_UTILS MkDir c:\private\10003a3f\import
+RUN_UTILS MkDir c:\private\10003a3f\import\apps
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\swiappregintegration02\swiappregintegration02_reg.rsc c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0001
+//! @SYMTestCaseDesc		Add the Application Registration info into SCR from _reg.rsc
+//! @SYMTestPriority		
+//! @SYMTestActions		Parse then _reg.rsc file placed in apparc's pvt folder and populate the db and then remove the app data
+//! @SYMTestExpectedResults	The test completes with KErrNone completion code.
+
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0001
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_C_Drive
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_No_Data
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0001
+RUN_UTILS DeleteFile  c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0002
+//! @SYMTestCaseDesc		Add the Application Registration info into SCR from _reg.rsc
+//! @SYMTestPriority		Low
+//! @SYMTestActions		Parse then _reg.rsc file placed in non apparc's pvt folder and populate the db
+//! @SYMTestExpectedResults	The test completes with KErrArgument completion code.
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0002
+RUN_TEST_STEP_RESULT -5 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_nonapparc_folder
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0002
+
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\swiappregintegration02\swiappregintegration02_reg.rsc c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0003
+//! @SYMTestCaseDesc		Add the Application Registration info into SCR from _reg.rsc
+//! @SYMTestPriority		
+//! @SYMTestActions		Parse then same _reg.rsc file placed in apparc's pvt folder twice and populate the db and then remove the app data.
+//! @SYMTestExpectedResults	Removes the existing app reg info  and completes with KErrNone completion code
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0003
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_C_Drive
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_No_Data
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0003
+RUN_UTILS DeleteFile  c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0004
+//! @SYMTestCaseDesc		Overwrite the existing Application Registration info with a new one into SCR.
+//! @SYMTestPriority		
+//! @SYMTestActions		Install the SA package and its SP upgrade(with app),parse then _reg.rsc file(havig same appuid as of SP) placed in apparc's pvt folder 
+//!				populate the db and then remove tha app data, the reg data for the .rsc file associated with the removed app(in rom) should come back.
+//! @SYMTestExpectedResults	Upon removal of reg file data, the reg data for the .rsc file associated with the removed app(in rom) should come back successfully.
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0004
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_base01
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_C_Drive_base01
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_base01
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_z_Drive
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0004
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0005
+//! @SYMTestCaseDesc		Overwrite the existing Application Registration info with a new one into SCR.
+//! @SYMTestPriority		
+//! @SYMTestActions		Install the SA package and its SP upgrade(with app),parse then _reg.rsc file(havig same appuid as of SP) placed in apparc's pvt folder 
+//!				populate the db and then remove tha app data.
+//! @SYMTestExpectedResults	Upon removal of reg file data, the reg data for the .rsc file associated with the removed app(in rom) should come back.
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0005
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini swiappregintegration_base01_sp
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_base01
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_z_Drive
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini u_swiappregintegration_base01
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0005
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0006
+//! @SYMTestCaseDesc		Removal the Application Registration info from SCR fails.
+//! @SYMTestPriority		
+//! @SYMTestActions		Process the path of the app reg filer and if its is non apparc return
+//! @SYMTestExpectedResults	Completes with KErrArgument completion code
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0006
+RUN_TEST_STEP_RESULT -5 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_nonapparc_folder
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0006
+
+RUN_UTILS MkDir c:\private\10003a3f\import
+RUN_UTILS MkDir c:\private\10003a3f\import\apps
+RUN_UTILS CopyFile  z:\systemtest\testdata\dummy.txt c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0007
+//! @SYMTestCaseDesc		Removal the non _reg.rsc file data from SCR.
+//! @SYMTestPriority		
+//! @SYMTestActions		Open the file and check if its a valid _reg.rsc file
+//! @SYMTestExpectedResults	Completes with KErrArgument completion code
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0007
+RUN_TEST_STEP_RESULT -5 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_nonapparc_folder
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0007
+
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0008
+//! @SYMTestCaseDesc		Add the non _reg.rsc file data into SCR
+//! @SYMTestPriority		
+//! @SYMTestActions		Open the file and check if its a valid _reg.rsc file
+//! @SYMTestExpectedResults	Completes with KErrArgument completion code
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0008
+RUN_TEST_STEP_RESULT -5 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0008
+RUN_UTILS DeleteFile  c:\private\10003a3f\import\apps\swiappregintegration02_reg.rsc
+
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\swiappregintegration_base01\swiappregintegration_base01_reg.rsc c:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0009
+//! @SYMTestCaseDesc		Overwrite the existing Application Registration info present in z drive with a new one(in c drive) into SCR.
+//! @SYMTestPriority		
+//! @SYMTestActions		Add the app reg info of reg present in c drive , which overwritres the reg data of rom,  then remove the reg data of c drive 
+//!				reg data of file in rom should come back.
+//! @SYMTestExpectedResults     Upon removal of reg file data, reg data of file present in z should comes back
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0009
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_base01
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_C_Drive_base01
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_base01
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_z_Drive
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0009
+RUN_UTILS DeleteFile  c:\private\10003a3f\import\apps\swiappregintegration_base01_reg.rsc
+
+RUN_UTILS CopyFile  z:\tswi\tuiscriptadaptors\data\swiappregintegration12\swiappregintegration12_reg.rsc c:\private\10003a3f\import\apps\swiappregintegration12_reg.rsc
+//! @file
+//! @SYMTestCaseID		API-SEC-SISREGISTRY_TCB-0010
+//! @SYMTestCaseDesc		Overwrite the existing Application Registration info with a new one into SCR.
+//! @SYMTestPriority		
+//! @SYMTestActions		Add the app reg data of rsc file in c drive overwriting the reg data of the stub in rom having an app (with reg file)
+//!				remove the reg data of rsc in c drive, the stub should be reregistered.
+//! @SYMTestExpectedResults	Upon removal of reg file data, the stub with reg data in z should comes back
+
+START_TESTCASE API-SEC-SISREGISTRY_TCB-0010
+RUN_TEST_STEP 100 tSisRegistryTest AddAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_eclipse_stub
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_eclipse_stub_c
+RUN_TEST_STEP 100 tSisRegistryTest RemoveAppRegInfo z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_eclipse_stub
+RUN_TEST_STEP 100 tSisRegistryTest CheckAppRegData z:\tswi\tsisregistrytest\scripts\tsisregistrytest.ini AddAppRegInfo_apparc_folder_eclipse_stub_z
+END_TESTCASE API-SEC-SISREGISTRY_TCB-0010
+RUN_UTILS DeleteFile  c:\private\10003a3f\import\apps\swiappregintegration12_reg.rsc

@@ -25,7 +25,6 @@ PRJ_EXPORTS
 //Configuration tool migration
 ../conf/iaupdate.confml                    CONFML_EXPORT_PATH(iaupdate.confml,s60)
 ../conf/iaupdate_2000F85A.crml	           CRML_EXPORT_PATH(iaupdate_2000F85A.crml,s60)
-../conf/CI_iaupdate.confml                    CONFML_EXPORT_PATH(CI_iaupdate.confml,s60)
 
 ../rom/iaupdateapi.iby             CORE_MW_LAYER_IBY_EXPORT_PATH( iaupdateapi.iby )
 

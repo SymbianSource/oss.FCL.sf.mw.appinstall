@@ -157,7 +157,7 @@ TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
 
-    iMode = EModeInstall;
+    iOperationPhase = EInstalling;
     return ETrue;
     }
 
@@ -259,35 +259,30 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
         return EFalse;
         }
 
-    TSifOperationPhase phase = ( iMode == EModeInstall ? EInstalling : EUninstalling );
     switch( aEvent )
         {
         case Swi::EEventSetProgressBarFinalValue:
             iProgressBarFinalValue = aValue;
-            if( iMode == EModeInstall )
+            if( iOperationPhase == EInstalling )
                 {
-                CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
-                iSifUi->ShowProgressL( *appInfo, aValue );
-                CleanupStack::PopAndDestroy( appInfo );
+                ShowProgressL( aAppInfo, iProgressBarFinalValue, CSifUi::EInstalling );
                 }
             break;
 
         case Swi::EEventUpdateProgressBar:
-            if( iMode == EModeInstall )
+            if( iOperationPhase == EInstalling )
                 {
                 iSifUi->IncreaseProgressBarValueL( aValue );
                 }
-            PublishProgressL( phase, EFileOperation, aValue, iProgressBarFinalValue );
-            break;
-
-        case Swi::EEventOcspCheckEnd:
-            // TODO: do something
+            iProgressBarCurrentValue += aValue;
+            PublishProgressL( EFileOperation );
             break;
 
         case Swi::EEventDevCert:
             // TODO: show "developer certificate" warning note
             break;
 
+        case Swi::EEventOcspCheckEnd:
         case Swi::EEventAbortedInstall:
         case Swi::EEventAbortedUnInstall:
         case Swi::EEventCompletedInstall:
@@ -305,13 +300,33 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
 // CSisxSifPluginUiHandler::HandleCancellableInstallEventL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandler::HandleCancellableInstallEventL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TInstallCancellableEvent /*aEvent*/, Swi::MCancelHandler& /*aCancelHandler*/,
-        TInt /*aValue*/,const TDesC& /*aDes*/ )
+void CSisxSifPluginUiHandler::HandleCancellableInstallEventL( const Swi::CAppInfo& aAppInfo,
+        Swi::TInstallCancellableEvent aEvent, Swi::MCancelHandler& aCancelHandler,
+        TInt aValue, const TDesC& /*aDes*/ )
     {
-    FLOG( _L("CSisxSifPluginUiHandler::HandleCancellableInstallEventL") );
+    FLOG_2( _L("CSisxSifPluginUiHandler::HandleCancellableInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
 
-    // TODO: Swi::EEventOcspCheckStart
+    if( iSifUi->IsCancelled() )
+        {
+        aCancelHandler.HandleCancel();
+        }
+    else
+        {
+        switch( aEvent )
+            {
+            case Swi::EEventOcspCheckStart:
+                ShowProgressL( aAppInfo, aValue, CSifUi::ECheckingCerts );
+                iProgressBarCurrentValue += aValue;
+                PublishProgressL( EOCSPCheck );
+                break;
+
+            case Swi::EEventRemovingFiles:
+            case Swi::EEventCopyingFiles:
+            case Swi::EEventShuttingDownApps:
+            default:
+                break;
+            }
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -336,11 +351,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
     switch( aSigValidationResult )
         {
         case Swi::EValidationSucceeded:
-            {
-            CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
-            result = iSifUi->ShowConfirmationL( *appInfo );
-            CleanupStack::PopAndDestroy( appInfo );
-            }
+            result = ShowConfirmationL( aAppInfo );
             break;
 
         case Swi::ESignatureSelfSigned:
@@ -353,9 +364,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
         case Swi::EMandatorySignatureMissing:
             if( aInstallAnyway )
                 {
-                CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
-                result = iSifUi->ShowConfirmationL( *appInfo );
-                CleanupStack::PopAndDestroy( appInfo );
+                result = ShowConfirmationL( aAppInfo );
                 }
             break;
 
@@ -371,12 +380,28 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandler::DisplayOcspResultL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TRevocationDialogMessage /*aMessage*/, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
-        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/, TBool /*aWarningOnly*/ )
+        Swi::TRevocationDialogMessage aMessage, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
+        RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/, TBool aWarningOnly )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayOcspResultL") );
+    TBool okToContinue = EFalse;
 
-    return ETrue;
+    if( aWarningOnly && !IsOcspMandatoryL() )
+        {
+        // TODO: localised UI string needed, see R_SISXUI_OCSP_SECURITY_WARNING
+        _LIT( KText, "Installation security warning. Unable to verify supplier. Continue anyway?" );
+        if( ShowQuestionL( KText ) )
+            {
+            okToContinue = ETrue;
+            }
+        }
+
+    if( !okToContinue )
+        {
+        SetOcspErrorL( aMessage );
+        }
+
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -411,7 +436,7 @@ TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& /*aAppInf
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayUninstallL") );
 
-    iMode = EModeUninstall;
+    iOperationPhase = EUninstalling;
     return ETrue;       // uninstall is always silent
     }
 
@@ -434,7 +459,6 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
     FLOG( _L("CSisxSifPluginUiHandler::DisplayCompleteL") );
 
     iSifUi->ShowCompleteL();
-    iMode = EModeUndefined;
     }
 
 // ---------------------------------------------------------------------------
@@ -542,3 +566,26 @@ CSifUiAppInfo* CSisxSifPluginUiHandler::GetAppInfoLC( const Swi::CAppInfo& aAppI
     return appInfo;
     }
 
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::ShowProgressL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::ShowProgressL( const Swi::CAppInfo& aAppInfo,
+        TInt aProgressBarFinalValue, CSifUi::TInstallingPhase aPhase )
+    {
+    CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
+    iSifUi->ShowProgressL( *appInfo, aProgressBarFinalValue, aPhase );
+    CleanupStack::PopAndDestroy( appInfo );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::ShowConfirmationL()
+// ---------------------------------------------------------------------------
+//
+TBool CSisxSifPluginUiHandler::ShowConfirmationL( const Swi::CAppInfo& aAppInfo )
+    {
+    CSifUiAppInfo *appInfo = GetAppInfoLC( aAppInfo );
+    TBool result = iSifUi->ShowConfirmationL( *appInfo );
+    CleanupStack::PopAndDestroy( appInfo );
+    return result;
+    }

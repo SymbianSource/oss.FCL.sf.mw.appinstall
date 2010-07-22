@@ -23,10 +23,11 @@
  @internalTechnology
 */
 
+#include "util.h"
 #include "xmlgenerator.h"
-#include "../common/exception.h"
+#include "exception.h"
 #include "is_utils.h"
-#include "../common/util.h"
+
 #include "utf8_wrapper.h"
 
 #include <xercesc/dom/DOM.hpp>
@@ -108,6 +109,7 @@ const XMLCh* KApplicationRegistrationInfo = (const XMLCh*) "A\0p\0p\0l\0i\0c\0a\
 const XMLCh* KOpaqueData = (const XMLCh*) 				  "O\0p\0a\0q\0u\0e\0D\0a\0t\0a\0\0\0";
 const XMLCh* KData = (const XMLCh*)						  "D\0a\0t\0a\0\0\0";
 const XMLCh* KOpaqueLocale = (const XMLCh*)				  "O\0p\0a\0q\0u\0e\0L\0o\0c\0a\0l\0e\0\0\0";
+const XMLCh* KIsBinary = (const XMLCh*)				  	  "I\0s\0B\0i\0n\0a\0r\0y\0\0\0";
 const XMLCh* KFileOwnershipinfo = (const XMLCh*)		  "F\0i\0l\0e\0O\0w\0n\0e\0r\0s\0h\0i\0p\0i\0n\0f\0o\0\0\0";
 const XMLCh* KFileName = (const XMLCh*) 				  "F\0i\0l\0e\0N\0a\0m\0e\0\0\0";
 const XMLCh* KApplicationLocalizableInfo = (const XMLCh*) "A\0p\0p\0l\0i\0c\0a\0t\0i\0o\0n\0L\0o\0c\0a\0l\0i\0z\0a\0b\0l\0e\0I\0n\0f\0o\0\0\0";
@@ -440,10 +442,25 @@ void CXmlGenerator::WriteAppRegInfo
 			if(0 == fileAppOpaqueDataType->iServiceUid)
 			{
 				DOMElement* filePropValueRoot = AddTag(compFileRoot, aDocument, KOpaqueData);
-				XercesString opaqueData = WStringToXercesString(fileAppOpaqueDataType->iOpaqueData);
-				AddChildElement(filePropValueRoot,aDocument, KData, opaqueData.c_str());
+				
+				if(fileAppOpaqueDataType->iIsBinary)
+				{
+					std::string temp = wstring2string(fileAppOpaqueDataType->iOpaqueData);
+					std::string binStrData = Util::Base64Encode(temp);
+					std::wstring binData = string2wstring(binStrData);
+					AddChildElement(filePropValueRoot,aDocument, KData, binData.c_str());
+				}
+				else
+				{
+					AddChildElement(filePropValueRoot,aDocument, KData, fileAppOpaqueDataType->iOpaqueData.c_str());
+				}
+				
 				XercesString locale = IntegerToXercesString(fileAppOpaqueDataType->iLocale);
 				AddChildElement(filePropValueRoot,aDocument, KOpaqueLocale, locale.c_str());
+
+				XercesString iBinary = IntegerToXercesString(fileAppOpaqueDataType->iIsBinary);
+				AddChildElement(filePropValueRoot,aDocument, KIsBinary, iBinary.c_str());
+				
 			}
 		}
 

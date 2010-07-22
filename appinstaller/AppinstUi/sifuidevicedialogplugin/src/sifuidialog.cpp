@@ -44,8 +44,8 @@ const QString KSwiErrorFormat = " (%1)";
 SifUiDialog::SifUiDialog(const QVariantMap &parameters) : HbDialog(),
     mCommonTranslator(0), mSifUITranslator(0), mLastDialogError(KErrNone),
     mShowEventReceived(false), mDialogType(SifUiUnspecifiedDialog),
-    mTitle(0), mContent(0), mResultMap(), mPrimaryAction(0),
-    mSecondaryAction(0), mIndicator(0), mSubscriber(0)
+    mTitle(0), mContent(0), mPrimaryAction(0), mSecondaryAction(0),
+    mResultMap(), mIndicator(0), mSubscriber(0)
 {
     mCommonTranslator = new HbTranslator(KTranslationsPath, KCommonTranslationsFile);
     mSifUITranslator = new HbTranslator(KTranslationsPath, KSifUiTranslationsFile);
@@ -183,9 +183,9 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
 
     Q_ASSERT(mContent == 0);
     mContent = new SifUiDialogContentWidget(this);
-    mContent->constructFromParameters(parameters);
     connect(mContent, SIGNAL(memorySelectionChanged(const QChar &)),
             this, SLOT(handleMemorySelectionChanged(const QChar &)));
+    mContent->constructFromParameters(parameters);
     setContentWidget(mContent);
 
     updateButtons(parameters);
@@ -305,8 +305,7 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
 //
 void SifUiDialog::sendResult(SifUiDeviceDialogReturnValue value)
 {
-    QVariant returnValue(value);
-    mResultMap.insert(KSifUiQueryReturnValue, returnValue);
+    mResultMap[KSifUiQueryReturnValue] = QVariant(value);
     emit deviceDialogData(mResultMap);
 }
 
@@ -336,8 +335,8 @@ void SifUiDialog::handleCancelled()
 //
 void SifUiDialog::handleMemorySelectionChanged(const QChar &driveLetter)
 {
-    QVariant memorySelection(driveLetter);
-    mResultMap.insert(KSifUiSelectedMemory, memorySelection);
+    mResultMap[KSifUiSelectedMemory] = QVariant(driveLetter);
+    emit deviceDialogData(mResultMap);
 }
 
 // ----------------------------------------------------------------------------

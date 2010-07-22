@@ -331,10 +331,12 @@ namespace XmlDetails
 					{
 					public:
 					TOpaqueDataType()
-					:iLocale(0)
+					:iLocale(0),
+					iIsBinary(false)
 					{}
 					int iLocale;
 					int iServiceUid;
+					bool iIsBinary; 
 					std::wstring iOpaqueData;
 					};
 

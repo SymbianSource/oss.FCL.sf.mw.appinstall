@@ -23,6 +23,8 @@
 // in sifuidevicedialogdefinitions.h and sifuiinstallindicatorparams.h files.
 // Symbian code needs descriptor constants, as Qt code uses QString constants.
 
+// TODO: split this file into two, export install indicator parameters for Java
+
 _LIT( KSifUiDeviceDialog, "com.nokia.sifui/1.0" );
 _LIT( KSifUiInstallIndicatorType, "com.nokia.sifui.indi/1.0" );
 
@@ -62,6 +64,7 @@ _LIT( KSifUiCertificates, "cert" );                 // binary
 _LIT( KSifUiProgressNoteText, "txt" );              // string
 _LIT( KSifUiProgressNoteFinalValue, "fin" );        // integer
 _LIT( KSifUiProgressNoteValue, "val" );             // integer
+_LIT( KSifUiProgressNotePhase, "phase" );           // enum CSifUi::TInstallingPhase
 
 // Variant map keys for "progress note" and "installation complete note" buttons
 _LIT( KSifUiProgressNoteIsHideButtonHidden, "hidebtn" );        // boolean
@@ -73,6 +76,12 @@ _LIT( KSifUiErrorNoteIsDetailsButtonHidden, "errdtlbtn" );      // boolean
 _LIT( KSifUiErrorCode, "err" );                     // integer
 _LIT( KSifUiErrorMessage, "msg" );                  // string
 _LIT( KSifUiErrorDetails, "det" );                  // string
+
+// Variant map keys for "install indicator" parameters
+_LIT( KSifUiInstallIndicatorAppName, "name" );      // string
+_LIT( KSifUiInstallIndicatorPhase, "phase" );       // int CSifUi::TInstallingPhase
+_LIT( KSifUiInstallIndicatorProgress, "prog" );     // int (0..100), shown as percentage
+_LIT( KSifUiInstallIndicatorIcon, "icon" );         // TODO: TBD
 
 #endif  // SIFUIDEFS_H
 

@@ -356,7 +356,16 @@ void UpdateInstallationInformation_xml(const CParameterList* aParamList,
 												XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail)
 {
 	CXmlGenerator xmlGenerator;
-	char* tmpFileName = tmpnam(NULL);
+
+	#ifndef __TOOLS2_LINUX__
+		char* tmpFileName = tmpnam(NULL);	
+	#else
+		char tmpFileName[] = "/tmp/interpretsis_preprovision_XXXXXX";	
+		int temp_fd;
+		temp_fd=mkstemp(tmpFileName); 
+		fclose(fdopen(temp_fd,"w"));
+	#endif
+
 	std::wstring filename(string2wstring(tmpFileName));
 
 	int isRomApplication = 1;

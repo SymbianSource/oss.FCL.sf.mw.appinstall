@@ -95,9 +95,9 @@ EXPORT_C void CSifUi::SetCertificateInfoL(
 // ---------------------------------------------------------------------------
 //
 EXPORT_C void CSifUi::ShowProgressL( const CSifUiAppInfo& aAppInfo,
-        TInt aProgressBarFinalValue )
+        TInt aProgressBarFinalValue, TInstallingPhase aPhase )
     {
-    iPrivate->ShowProgressL( aAppInfo, aProgressBarFinalValue );
+    iPrivate->ShowProgressL( aAppInfo, aProgressBarFinalValue, aPhase );
     }
 
 // ---------------------------------------------------------------------------

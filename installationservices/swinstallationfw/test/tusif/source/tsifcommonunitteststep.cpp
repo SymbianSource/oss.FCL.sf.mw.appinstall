@@ -72,8 +72,8 @@ void CSifCommonUnitTestStep::ImplTestStepL()
 	INFO_PRINTF1(_L("I am in CSifCommonUnitTestStep::doTestStep()."));
 
 	SetTestStepResult(EFail);
-
 	TestComponentInfoL();
+
 	TestOpaqueNamedParamsL();
 
 	SetTestStepResult(EPass);
@@ -560,9 +560,29 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 	
 	RPointerArray<HBufC> stringArray2;
 	CleanupResetAndDestroyPushL(stringArray2);
-	stringArray2.Append(_L("TestString1").AllocL());
-    stringArray2.Append(_L("TestString2").AllocL());
-    
+	const HBufC16* testString1 = _L("TestString1").AllocLC();
+	
+	
+	TInt err1 = stringArray2.Append(testString1);
+	if (err1 != KErrNone)
+	    {
+	    CleanupStack::PopAndDestroy();
+	    }
+	else
+	    {
+	    CleanupStack::Pop();
+	    }
+	
+	const HBufC16* testString2 = _L("TestString2").AllocLC();
+	TInt err2 = stringArray2.Append(testString2);
+	if (err2 != KErrNone)
+	    {
+	    CleanupStack::PopAndDestroy();
+	    }
+	else
+	    {
+	    CleanupStack::Pop();
+	    }
     params5->AddStringArrayL(_L("key3"), stringArray2);
     params5->AddIntArrayL(_L("key4"), intArray2);
     
@@ -588,7 +608,7 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
     
     const RArray<TInt>& internalizedIntArray = params6->IntArrayByNameL(_L("key4"));
     
-    if(internalizedIntArray[0] != 100 && internalizedIntArray[0] != 200)
+    if(internalizedIntArray[0] != 100 && internalizedIntArray[1] != 200)
         {
         INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of int array failed."));
         User::Leave(err);
@@ -596,11 +616,23 @@ void CSifCommonUnitTestStep::TestOpaqueNamedParamsL()
 	
     const RPointerArray<HBufC>& internalizedStringArray = params6->StringArrayByNameL(_L("key3"));
     
-    if(*internalizedStringArray[0] != _L("TestString1") && *internalizedStringArray[1] != _L("TestString2"))
+    if (err1 == KErrNone)
         {
-        INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of string array failed."));
-        User::Leave(err);
-        }  
+        if(*internalizedStringArray[0] != _L("TestString1") && *internalizedStringArray[1] != _L("TestString2"))
+            {
+            INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of string array failed."));
+            User::Leave(err);
+            }
+        }
+    else if (err2 == KErrNone)
+        {
+        if(*internalizedStringArray[0] != _L("TestString2"))
+            {
+            INFO_PRINTF1(_L("TestOpaqueNamedParamsL: Internalize of string array failed."));
+            User::Leave(err);
+            }
+        }
+    
     CleanupStack::PopAndDestroy(8, params5);
 	
 	}

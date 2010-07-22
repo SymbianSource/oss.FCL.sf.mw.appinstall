@@ -2789,7 +2789,6 @@ CAddAppRegInfoStep::CAddAppRegInfoStep()
 
 TVerdict CAddAppRegInfoStep::doTestStepL()
     {
-    TBool expectedResult(EPass);
     TPtrC regFileName;
     if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
         {
@@ -2809,12 +2808,14 @@ TVerdict CAddAppRegInfoStep::doTestStepL()
         User::Leave(res);
         }
     CleanupStack::Pop(&sisRegistryAccessSessionSession);
+    SetTestStepResult(EPass);
     return TestStepResult();
     }
 
 ////////////////////////////////////////////////////////////////////////////
 // CRemoveAppRegInfoStep 
 ////////////////////////////////////////////////////////////////////////////
+
 CRemoveAppRegInfoStep::CRemoveAppRegInfoStep()
     {
     SetTestStepName(KIsFileRegisteredStep);
@@ -2822,7 +2823,6 @@ CRemoveAppRegInfoStep::CRemoveAppRegInfoStep()
 
 TVerdict CRemoveAppRegInfoStep::doTestStepL()
     {
-    TBool expectedResult(EPass);
     TPtrC regFileName;
     if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
         {
@@ -2835,13 +2835,101 @@ TVerdict CRemoveAppRegInfoStep::doTestStepL()
     CleanupClosePushL(sisRegistryAccessSessionSession);
     
     TInt res = sisRegistryAccessSessionSession.RemoveAppRegInfoL(regFileName, iTimeMeasuredExternally );
-   
+    
     if(res != KErrNone)
         {
         ERR_PRINTF2(_L("Application Registration data not added successfuly , error %d"),res);
         User::Leave(res);
         }
-    CleanupStack::Pop(&sisRegistryAccessSessionSession);
+    CleanupStack::PopAndDestroy(&sisRegistryAccessSessionSession);
+    SetTestStepResult(EPass);
     return TestStepResult();
     }
 
+//////////////////////
+//////CheckAppRegData
+/////////////////////
+
+CheckAppRegData::CheckAppRegData()
+    {
+    SetTestStepName(KIsFileRegisteredStep);
+    }
+
+TVerdict CheckAppRegData::doTestStepL()
+    {
+    SetTestStepResult(EPass);
+    // Verify if the reg data is removed properly or not
+    TBool isAppDataExists(EFalse);
+    Usif::RSoftwareComponentRegistry scrSession;            
+    User::LeaveIfError(scrSession.Connect());
+    CleanupClosePushL(scrSession);
+    GetBoolFromConfig(ConfigSection(), _L("appDataExists"), isAppDataExists);
+    if(isAppDataExists)
+        {
+        TPtrC appFileName;
+        if(GetStringFromConfig(ConfigSection(), _L("appFileName"), appFileName))
+            {
+            TUid appUid;
+            TInt intAppUid(0);
+            if(!GetHexFromConfig(ConfigSection(), _L("appUid"), intAppUid))
+                {
+                User::Leave(KErrNotFound);
+                }
+            
+            appUid = TUid::Uid(intAppUid);
+            RArray<TUid> appUidArray;
+            CleanupClosePushL(appUidArray);
+            appUidArray.AppendL(appUid);
+            
+            //check if we have rolled back to the reg in rom after removal            
+            Usif::RApplicationInfoView appRegistryView;
+            CleanupClosePushL(appRegistryView);
+            Usif::CAppInfoFilter* appInfoFilter = Usif::CAppInfoFilter::NewLC();
+            appInfoFilter->SetAllApps();
+            appRegistryView.OpenViewL(scrSession, appInfoFilter);
+            RPointerArray<Usif::TAppRegInfo> appInfo;
+            CleanupClosePushL(appInfo);
+            appRegistryView.GetNextAppInfoL(5, appInfo);
+        
+            for(TInt i = 0; i < 5 ; ++i)
+                {
+                if(appInfo[i]->Uid() == appUid)
+                    {
+                    if(appInfo[i]->FullName().Compare(appFileName) != 0)
+                        {
+                        SetTestStepResult(EFail);
+                        CleanupStack::Pop(&appInfo);
+                        appInfo.ResetAndDestroy();
+                        CleanupStack::PopAndDestroy(4, &scrSession); // appInfoFilter, appRegistryView, appUid, scrSession
+                        return TestStepResult();
+                        }
+                    break;
+                    }
+                }
+            CleanupStack::Pop(&appInfo);
+            appInfo.ResetAndDestroy();
+            CleanupStack::PopAndDestroy(3, &appUidArray); // appInfoFilter, appRegistryView, 
+            }  
+        }
+    else
+        {
+        TUid appUid = TUid::Uid(0);
+        TInt intAppUid(0);
+        if(!GetHexFromConfig(ConfigSection(), _L("appUid"), intAppUid))
+            {
+            User::Leave(KErrNotFound);
+            }
+        appUid = TUid::Uid(intAppUid);
+        
+        TRAPD(err, scrSession.GetComponentIdForAppL(appUid));
+        if(err != KErrNotFound)
+            {
+            SetTestStepResult(EFail);
+            CleanupStack::PopAndDestroy(&scrSession);
+            return TestStepResult();
+            }
+        }
+
+    CleanupStack::PopAndDestroy(&scrSession);
+    return TestStepResult();
+    }

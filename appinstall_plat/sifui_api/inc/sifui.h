@@ -104,6 +104,15 @@ class CSifUi : public CBase
                 const RPointerArray<CSifUiCertificateInfo>& aCertificates );
 
         /**
+         * Installing phases in progress notes. Indicated in progress note title text.
+         */
+        enum TInstallingPhase {
+            EInstalling,
+            EDownloading,
+            ECheckingCerts
+        };
+
+        /**
          * Displays main installation progress note. If the progress note or main
          * confirmation query is already displayed, then updates the dialog content.
          * Use IncreaseProgressBarValueL() to increase the progress bar value.
@@ -112,8 +121,10 @@ class CSifUi : public CBase
          * with the final error or complete note.
          * @param aAppInfo - application information (name, size, version, vendor, icon)
          * @param aProgressBarFinalValue - final value of the progress bar
+         * @param aPhase - defines new title text for the progress note dialog
          */
-        IMPORT_C void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue );
+        IMPORT_C void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue,
+                TInstallingPhase aPhase = EInstalling );
 
         /**
          * Updates the progress bar value displayed in progress note. Initially progress bar

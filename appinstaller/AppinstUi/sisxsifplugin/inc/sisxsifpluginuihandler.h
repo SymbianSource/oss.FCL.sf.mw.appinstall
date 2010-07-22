@@ -24,6 +24,7 @@
 class CSifUi;
 class CSifUiAppInfo;
 class CSisxSifUiSelectionCache;
+enum CSifUi::TInstallingPhase;
 
 
 namespace Usif
@@ -101,20 +102,16 @@ namespace Usif
         void AddCertificatesL( RPointerArray<Swi::CCertificateInfo>& aCertificates,
                 RPointerArray<CPKIXValidationResultBase>& aPkixResults );
         CSifUiAppInfo* GetAppInfoLC( const Swi::CAppInfo& aAppInfo );
+        void ShowProgressL( const Swi::CAppInfo& aAppInfo, TInt aProgressBarFinalValue,
+                CSifUi::TInstallingPhase aPhase );
+        TBool ShowConfirmationL( const Swi::CAppInfo& aAppInfo );
 
     private:    // data
-        enum TMode
-            {
-            EModeUndefined,
-            EModeInstall,
-            EModeUninstall
-            } iMode;
         CSifUi* iSifUi;
         CSisxSifUiSelectionCache* iSelectionCache;
         CApaMaskedBitmap* iLogo;
         TBool iQuestionIncompatibleDisplayed;
         RArray<TInt> iSelectableDrives;
-        TInt iProgressBarFinalValue;
         };
 
 }   // namespace Usif

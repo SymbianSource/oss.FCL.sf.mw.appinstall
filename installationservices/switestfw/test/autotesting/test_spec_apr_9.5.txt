@@ -107,7 +107,7 @@ TESTEXECUTE, \logs\testexecute\tdataprovider.htm,, -Dstartupmode=1 -- z:\tswi\td
 
 TESTEXECUTE, \logs\testexecute\testwritableswicertstore.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testwritableswicertstore.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\copytuiscriptadaptors.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\cleanswicertstore.bat
 TESTEXECUTE, \logs\testexecute\tsilent_winscw.htm,, \tswi\tuiscriptadaptors\scripts\tsilent_winscw.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\copytuiscriptadaptors.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\cleanswicertstore.bat
-TESTEXECUTE, \logs\testexecute\tswidaemonstub.htm,, \tswi\tuiscriptadaptors\scripts\tswidaemonstub.script, 300, UDEB#UREL,,
+#TESTEXECUTE, \logs\testexecute\tswidaemonstub.htm,, \tswi\tuiscriptadaptors\scripts\tswidaemonstub.script, 300, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\inc098114_winscw.htm,, \tswi\tuiscriptadaptors\scripts\inc098114_winscw.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\copytuiscriptadaptors.bat
 TESTEXECUTE, \logs\testexecute\tcleanupinfrastructure.htm,, \tswi\tuiscriptadaptors\scripts\tcleanupinfrastructure.script, 300, UDEB#UREL,\epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tcleanupinfrastructure_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tcleanupinfrastructure_post.bat
 
@@ -149,7 +149,7 @@ TESTEXECUTE, \logs\testexecute\testnoaiacert.htm,, \tswi\tuiscriptadaptors\scrip
 
 TESTEXECUTE, \logs\testexecute\testnoaiacert_ocspmandatory.htm,, \tswi\tuiscriptadaptors\scripts\testnoaiacert_ocspmandatory.script, 100, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testnoaiacert_ocspmandatory_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testnoaiacert_ocspmandatory_post.bat
 
-TESTEXECUTE, \logs\testexecute\tdaemon_winscw.htm,, \tswi\tdaemon\scripts\tdaemon_winscw.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_pre.bat, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_post.bat
+#TESTEXECUTE, \logs\testexecute\tdaemon_winscw.htm,, \tswi\tdaemon\scripts\tdaemon_winscw.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_pre.bat, \epoc32\winscw\c\tswi\tdaemon\scripts\setupforemmcformat_post.bat
 
 TESTEXECUTE, \logs\testexecute\testrun.htm,, \tswi\tuiscriptadaptors\scripts\testrun.script, 300, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy_shortrunwait.ini, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy.ini
 TESTEXECUTE, \logs\testexecute\testrunft.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testrunft.script, 300, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\setupSwiPolicy.bat swipolicy_shortrunwait.ini,
@@ -173,11 +173,12 @@ TESTEXECUTE, \logs\testexecute\devcerts_backup.htm,, -Dstartupmode=1 -- \tswi\td
 TESTEXECUTE, \logs\testexecute\devcerts_restore.htm,, -Dstartupmode=1 -- \tswi\tdevcerts\scripts\devcerts_restore.script, 300, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\changedevid.bat, \epoc32\winscw\c\tswi\tdevcerts\scripts\batchfiles\devcerts_restore_post.bat
 
 TESTEXECUTE, \logs\testexecute\tsisregistrytest.htm,, -Dstartupmode=1 -- \tswi\tsisregistrytest\scripts\tsisregistrytest.script, 1500, UDEB#UREL, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\useautocfg.bat, \epoc32\winscw\c\tswi\tsisregistrytest\Scripts\batchfiles\tsisregistrytest_post.bat
+TESTEXECUTE, \logs\testexecute\tsisregistrytest_tcb.htm,, -Dstartupmode=1 -- \tswi\tsisregistrytest\scripts\tsisregistrytest_tcb.script, 1500, UDEB#UREL, \epoc32\winscw\c\tswi\tsisregistrytest\scripts\batchfiles\tsisregistrytest_tcb_pre.bat, \epoc32\winscw\c\tswi\tsisregistrytest\scripts\batchfiles\tsisregistrytest_tcb_post.bat
 
 TESTEXECUTE, \logs\testexecute\testdevicelanguages.htm,, \tswi\tuiscriptadaptors\scripts\testdevicelanguages.script, 300, UDEB#UREL,,
 
 TESTEXECUTE, \logs\testexecute\testVFPOnEmulator.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testVFPOnEmulator.script, 300, UDEB#UREL,,
-TESTEXECUTE, \logs\testexecute\tdaemon.htm,, -Dstartupmode=1 -- \tswi\tdaemon\scripts\tdaemon.script, 300, UDEB#UREL,, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\callcreateandsignunicode.bat
+#TESTEXECUTE, \logs\testexecute\tdaemon.htm,, -Dstartupmode=1 -- \tswi\tdaemon\scripts\tdaemon.script, 300, UDEB#UREL,, %SECURITYSOURCEDIR%\installationservices\switestfw\test\autotesting\callcreateandsignunicode.bat
 
 # createandsignunicode.pl needs to be run as it builds some SIS files the following tests rely on, however it is a SisTools test so it is run through a batch file and the results not recorded here
 TESTEXECUTE, \logs\testexecute\tbackuprestore.htm,, -Dstartupmode=1 -- \tswi\tbackuprestore\scripts\tbackuprestore.script, 1500, UDEB#UREL,\epoc32\winscw\c\tswi\tbackuprestore\scripts\batchfiles\tbackuprestore_pre.bat, \epoc32\winscw\c\tswi\tbackuprestore\scripts\batchfiles\tbackuprestore_post.bat

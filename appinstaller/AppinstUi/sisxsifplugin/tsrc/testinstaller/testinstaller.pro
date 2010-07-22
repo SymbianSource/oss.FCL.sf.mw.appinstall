@@ -37,7 +37,7 @@ symbian {
         /epoc32/include/platform/mw \
         /epoc32/include/mw/hb/hbcore \
         /epoc32/include/mw/hb/hbwidgets
-    LIBS += -lHbCore -lHbWidgets -lxqservice -lsif -lscrclient -lswinstcli
+    LIBS += -lHbCore -lHbWidgets -lxqservice -lsif -lscrclient -lswinstcli -lefsrv 
 
 	HEADERS += activerunner_symbian.h
 	SOURCES += activerunner_symbian.cpp

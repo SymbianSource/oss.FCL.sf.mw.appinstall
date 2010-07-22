@@ -23,7 +23,7 @@
 #include <hbpushbutton.h>
 #include <hbmessagebox.h>
 
-const char KSifUiCertTrusted[]    = "qtg_small_secure";
+const char KSifUiCertTrusted[]    = "qtg_small_lock";
 const char KSifUiCertNotTrusted[] = "qtg_small_untrusted";
 
 
@@ -75,7 +75,8 @@ void SifUiDialogTitleWidget::updateFromParameters(const QVariantMap &parameters)
 // SifUiDialogTitleWidget::defaultTitle()
 // ----------------------------------------------------------------------------
 //
-QString SifUiDialogTitleWidget::defaultTitle(SifUiDeviceDialogType type)
+QString SifUiDialogTitleWidget::defaultTitle(SifUiDeviceDialogType type,
+        SifUiInstallingPhase phase)
 {
     QString title;
     switch (type) {
@@ -85,9 +86,21 @@ QString SifUiDialogTitleWidget::defaultTitle(SifUiDeviceDialogType type)
             title = hbTrId("txt_installer_title_install");
             break;
         case SifUiProgressNote:
-            //: Progress note title. Installation is going on and progress bar
-            //: shows how it proceeds.
-            title = hbTrId("txt_installer_title_installing");
+            switch (phase) {
+                case SifUiCheckingCerts:
+                    //: Progress note title. Installer validates certificates online.
+                    //: This may take some time.
+                    //TODO: localised UI string needed
+                    title = hbTrId("Checking certificate validity");
+                    break;
+                case SifUiInstalling:
+                case SifUiDownloading:
+                default:
+                    //: Progress note title. Installation is going on and progress bar
+                    //: shows how it proceeds.
+                    title = hbTrId("txt_installer_title_installing");
+                    break;
+            }
             break;
         case SifUiCompleteNote:
             //: Installation complete note title. Indicates that installation
@@ -116,7 +129,15 @@ void SifUiDialogTitleWidget::updateTitle(const QVariantMap &parameters)
         titleText = parameters.value(KSifUiDialogTitle).toString();
     } else {
         SifUiDeviceDialogType type = SifUiDialog::dialogType(parameters);
-        titleText = defaultTitle(type);
+        SifUiInstallingPhase progressPhase = SifUiInstalling;
+        if (parameters.contains(KSifUiProgressNotePhase)) {
+            bool ok = false;
+            int i = parameters.value(KSifUiProgressNotePhase).toInt(&ok);
+            if (ok) {
+                progressPhase = static_cast<SifUiInstallingPhase>(i);
+            }
+        }
+        titleText = defaultTitle(type, progressPhase);
     }
     if (mTitle) {
         if (titleText != mTitle->plainText()) {

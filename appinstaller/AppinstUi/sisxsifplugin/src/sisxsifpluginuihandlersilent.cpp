@@ -189,6 +189,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayInstallL( const Swi::CAppInfo& /*aAp
         const CApaMaskedBitmap* /*aLogo*/,
         const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
+    iOperationPhase = EInstalling;
     return ETrue;
     }
 
@@ -338,8 +339,31 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOptionsL( const Swi::CAppInfo& /*aAp
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::HandleInstallEventL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TInstallEvent /*aEvent*/, TInt /*aValue*/, const TDesC& /*aDes*/ )
+        Swi::TInstallEvent aEvent, TInt aValue, const TDesC& /*aDes*/ )
     {
+    switch( aEvent )
+        {
+        case Swi::EEventSetProgressBarFinalValue:
+            iProgressBarFinalValue = aValue;
+            break;
+
+        case Swi::EEventUpdateProgressBar:
+            iProgressBarCurrentValue += aValue;
+            PublishProgressL( EFileOperation );
+            break;
+
+        case Swi::EEventDevCert:
+        case Swi::EEventOcspCheckEnd:
+        case Swi::EEventAbortedInstall:
+        case Swi::EEventAbortedUnInstall:
+        case Swi::EEventCompletedInstall:
+        case Swi::EEventCompletedUnInstall:
+        case Swi::EEventCompletedNoMessage:
+        case Swi::EEventLeave:
+        default:
+            break;
+        }
+
     return ETrue;
     }
 
@@ -348,9 +372,21 @@ TBool CSisxSifPluginUiHandlerSilent::HandleInstallEventL( const Swi::CAppInfo& /
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandlerSilent::HandleCancellableInstallEventL(
-        const Swi::CAppInfo& /*aAppInfo*/, Swi::TInstallCancellableEvent /*aEvent*/,
+        const Swi::CAppInfo& /*aAppInfo*/, Swi::TInstallCancellableEvent aEvent,
         Swi::MCancelHandler& /*aCancelHandler*/, TInt /*aValue*/, const TDesC& /*aDes*/ )
     {
+    switch( aEvent )
+        {
+        case Swi::EEventOcspCheckStart:
+            PublishProgressL( EOCSPCheck );
+            break;
+
+        case Swi::EEventRemovingFiles:
+        case Swi::EEventCopyingFiles:
+        case Swi::EEventShuttingDownApps:
+        default:
+            break;
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -407,24 +443,33 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayOcspResultL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TRevocationDialogMessage /*aMessage*/, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
+        Swi::TRevocationDialogMessage aMessage, RPointerArray<TOCSPOutcome>& /*aOutcomes*/,
         RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/, TBool aWarningOnly )
     {
 	TBool okToContinue = EFalse;
-	// TODO: KSWInstallerOcspProcedure setting (off/on/must)
-	if( iInstallParams && aWarningOnly )
+
+	if( aWarningOnly && !IsOcspMandatoryL() )
 		{
-		switch( iInstallParams->IgnoreOCSPWarnings() )
-			{
-			case EAllowed:
-				okToContinue = ETrue;
-				break;
-			case EUserConfirm:
-			case ENotAllowed:
-			default:
-				break;
-			}
+	    if( iInstallParams )
+	        {
+            switch( iInstallParams->IgnoreOCSPWarnings() )
+                {
+                case EAllowed:
+                    okToContinue = ETrue;
+                    break;
+                case EUserConfirm:
+                case ENotAllowed:
+                default:
+                    break;
+                }
+	        }
 		}
+
+	if( !okToContinue )
+	    {
+	    SetOcspErrorL( aMessage );
+	    }
+
     return okToContinue;
     }
 
@@ -469,6 +514,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
     {
+    iOperationPhase = EUninstalling;
     return ETrue;
     }
 

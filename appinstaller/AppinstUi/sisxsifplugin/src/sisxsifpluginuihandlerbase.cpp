@@ -19,6 +19,10 @@
 #include "sisxsifplugininstallparams.h"     // CSisxSifPluginInstallParams
 #include "sisxsifpluginerrorhandler.h"      // CSisxSifPluginErrorHandler
 #include "sisxsifcleanuputils.h"            // CleanupResetAndDestroyPushL
+#include <centralrepository.h>              // CRepository
+#include <SWInstallerInternalCRKeys.h>      // KCRUidSWInstallerSettings
+#include <hb/hbwidgets/hbdevicemessageboxsymbian.h> // CHbDeviceMessageBoxSymbian
+#include <usif/scr/screntries.h>            // CComponentEntry
 
 using namespace Usif;
 
@@ -42,8 +46,8 @@ CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase( RFs& aFs,
 CSisxSifPluginUiHandlerBase::~CSisxSifPluginUiHandlerBase()
     {
     delete iInstallParams;
-    delete iGlobalComponentId;
     delete iPublishSifOperationInfo;
+    delete iGlobalComponentId;
     }
 
 // ---------------------------------------------------------------------------
@@ -77,6 +81,19 @@ void CSisxSifPluginUiHandlerBase::SetMaxInstalledSize( TInt aSize )
 void CSisxSifPluginUiHandlerBase::SetDriveSelectionRequired( TBool aIsRequired )
     {
     iIsDriveSelectionRequired = aIsRequired;
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::IsOcspMandatoryL()
+// ---------------------------------------------------------------------------
+//
+TBool CSisxSifPluginUiHandlerBase::IsOcspMandatoryL() const
+    {
+    CRepository* cenRep = CRepository::NewLC( KCRUidSWInstallerSettings );
+    TInt ocspProcedure = ESWInstallerOcspProcedureOff;
+    User::LeaveIfError( cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure ) );
+    CleanupStack::PopAndDestroy( cenRep );
+    return ( ocspProcedure == ESWInstallerOcspProcedureMust );
     }
 
 // ---------------------------------------------------------------------------
@@ -122,15 +139,45 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aR
     }
 
 // ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::PublishStartL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry )
+    {
+    RPointerArray<HBufC> appNames;
+    CleanupResetAndDestroyPushL( appNames );
+    RPointerArray<HBufC> appIcons;
+    CleanupResetAndDestroyPushL( appIcons );
+
+    if( iGlobalComponentId )
+        {
+        delete iGlobalComponentId;
+        iGlobalComponentId = NULL;
+        }
+    iGlobalComponentId = aEntry.GlobalId().AllocL();
+
+    CSifOperationStartData* data = CSifOperationStartData::NewLC( *iGlobalComponentId,
+            aEntry.Name(), appNames, appIcons, aEntry.ComponentSize(),
+            KNullDesC, KNullDesC, aEntry.SoftwareType() );
+
+    if( !iPublishSifOperationInfo )
+        {
+        iPublishSifOperationInfo = CPublishSifOperationInfo::NewL();
+        }
+    iPublishSifOperationInfo->PublishStartL( *data );
+
+    CleanupStack::PopAndDestroy( 3, &appNames );    // data, appIcons, appNames
+    }
+
+// ---------------------------------------------------------------------------
 // CSisxSifPluginUiHandlerBase::PublishProgressL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerBase::PublishProgressL( TSifOperationPhase aPhase,
-        TSifOperationSubPhase aSubPhase, TInt aCurrentProgress, TInt aTotal )
+void CSisxSifPluginUiHandlerBase::PublishProgressL( TSifOperationSubPhase aSubPhase )
     {
     User::LeaveIfNull( iPublishSifOperationInfo );
     CSifOperationProgressData* data = CSifOperationProgressData::NewLC( *iGlobalComponentId,
-            aPhase, aSubPhase, aCurrentProgress, aTotal );
+            iOperationPhase, aSubPhase, iProgressBarCurrentValue, iProgressBarFinalValue );
     iPublishSifOperationInfo->PublishProgressL( *data );
     CleanupStack::PopAndDestroy( data );
     }
@@ -139,12 +186,12 @@ void CSisxSifPluginUiHandlerBase::PublishProgressL( TSifOperationPhase aPhase,
 // CSisxSifPluginUiHandlerBase::PublishCompletionL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerBase::PublishCompletionL( const CSisxSifPluginErrorHandler& aError )
+void CSisxSifPluginUiHandlerBase::PublishCompletionL()
     {
     User::LeaveIfNull( iPublishSifOperationInfo );
     CSifOperationEndData* data = CSifOperationEndData::NewLC( *iGlobalComponentId,
-            aError.ErrorCategory(), aError.ErrorCode(), aError.ErrorMessage(),
-            aError.ErrorMessageDetails() );
+            iErrorHandler.ErrorCategory(), iErrorHandler.ErrorCode(),
+            iErrorHandler.ErrorMessage(), iErrorHandler.ErrorMessageDetails() );
     iPublishSifOperationInfo->PublishCompletionL( *data );
     CleanupStack::PopAndDestroy( data );
     }
@@ -237,4 +284,73 @@ void CSisxSifPluginUiHandlerBase::SetDisplayErrorL( Swi::TErrorDialog aType, con
         details.Append( aParam );
         }
     }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::SetOcspErrorL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::SetOcspErrorL( Swi::TRevocationDialogMessage aMessage )
+    {
+    // TODO: localised error strings needed
+    iErrorHandler.SetErrorMessage( _L("Unable to check certificate validity online." ) );
+    iErrorHandler.SetExtendedErrorCode( aMessage );
+    switch( aMessage )
+        {
+        case Swi::EInvalidRevocationServerUrl:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("Invalid server URL. Check settings.") );
+            break;
+        case Swi::EUnableToObtainCertificateStatus:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("Unable to obtain certificate status. Try again later.") );
+            break;
+        case Swi::EResponseSignatureValidationFailure:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("Response signature validation failure. Check settings.") );
+            break;
+        case Swi::EInvalidRevocationServerResponse:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("The OCSP server reply is invalid. Check settings.") );
+            break;
+        case Swi::EInvalidCertificateStatusInformation:
+        case Swi::ECertificateStatusIsUnknownSelfSigned:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("Invalid certificate status information. Try again later.") );
+            break;
+        case Swi::ECertificateStatusIsUnknown:
+            iErrorHandler.SetErrorCode( KErrGeneral );
+            iErrorHandler.SetErrorMessageDetails( _L("Unknown certificate. Try again later.") );
+            break;
+        case Swi::ECertificateStatusIsRevoked:
+            iErrorHandler.SetErrorCode( KErrAccessDenied );
+            iErrorHandler.SetErrorMessageDetails( _L("The certificate has been revoked.") );
+            break;
+        default:
+            break;
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::ShowQuestionL()
+// ---------------------------------------------------------------------------
+//
+TBool CSisxSifPluginUiHandlerBase::ShowQuestionL( const TDesC& aText ) const
+    {
+    TBool questionAccepted = EFalse;
+
+    CHbDeviceMessageBoxSymbian *note = NULL;
+    note = CHbDeviceMessageBoxSymbian::NewL( CHbDeviceMessageBoxSymbian::EQuestion );
+    CleanupStack::PushL( note );
+
+    note->SetTextL( aText );
+    note->SetTimeout( 0 );
+    if( note->ExecL() == CHbDeviceMessageBoxSymbian::EAcceptButton )
+        {
+        questionAccepted = ETrue;
+        }
+
+    CleanupStack::PopAndDestroy( note );
+    return questionAccepted;
+    }
+
 
