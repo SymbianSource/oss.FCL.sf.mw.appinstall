@@ -380,7 +380,14 @@ std::wstring FixPathDelimiters( const std::wstring& aString )
     int len = 0;
 	while(len = FirstInvalidDirSeparatorSize(ret, idx))
         {
-		ret.replace( idx, len, KSisDirectorySeparator );
+		if(idx == 0 && len == 2)
+			{
+			ret.replace( idx, len, KSisInitialNetworkPathSlashes );
+			}
+		else
+			{
+			ret.replace( idx, len, KSisDirectorySeparator );
+			}
         }
     return ret.c_str();
     }

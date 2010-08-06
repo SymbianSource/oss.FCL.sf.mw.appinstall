@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -67,7 +67,11 @@ CSISContents::CSISContents (const CSISContents& aInitialiser) :
 bool CSISContents::IsSisFile(const std::wstring& aFileName)
 	{
 	TSISStream input;
+	#ifdef __TOOLS2_LINUX__
 	std::wstring fileName = FixPathDelimiters(aFileName);
+	#else
+	std::wstring fileName = aFileName;
+	#endif
 	HANDLE file = ::MakeSISOpenFile(fileName.c_str(),GENERIC_READ,OPEN_EXISTING);
 	CSISException::ThrowIf ((INVALID_HANDLE_VALUE == file), 
 							CSISException::EFileProblem, std::wstring (L"cannot open ") + fileName);
@@ -99,7 +103,11 @@ bool CSISContents::IsSisFile(TSISStream& aStream)
 void CSISContents::Load (const std::wstring& aFileName, TUint64* size)
 	{
 	TSISStream input;
+	#ifdef __TOOLS2_LINUX__
 	std::wstring fileName = FixPathDelimiters(aFileName);
+	#else
+	std::wstring fileName = aFileName;
+	#endif
 	HANDLE file = ::MakeSISOpenFile(fileName.c_str(),GENERIC_READ,OPEN_EXISTING);
 	if (INVALID_HANDLE_VALUE == file)
 		{

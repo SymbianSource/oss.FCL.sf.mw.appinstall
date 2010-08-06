@@ -19,8 +19,8 @@
 #define SIFUIINSTALLINDICATORPLUGIN_IBY
 
 file=ABI_DIR\UREL\sifuiinstallindicatorplugin.dll SHARED_LIB_DIR\sifuiinstallindicatorplugin.dll UNPAGED
-data=\epoc32\data\z\resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin \resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin
-data=\epoc32\data\z\resource\qt\crml\sifuiinstallindicatorplugin.qcrml \resource\qt\crml\sifuiinstallindicatorplugin.qcrml
+data=DATAZ_\resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin \resource\plugins\indicators\sifuiinstallindicatorplugin.qtplugin
+data=DATAZ_\resource\qt\crml\sifuiinstallindicatorplugin.qcrml \resource\qt\crml\sifuiinstallindicatorplugin.qcrml
 
 #endif  // SIFUIINSTALLINDICATORPLUGIN_IBY
 

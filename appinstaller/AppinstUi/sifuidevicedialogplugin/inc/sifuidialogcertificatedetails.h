@@ -51,4 +51,4 @@ private:    // data
     const QList<SifUiDialogCertificateInfo*> &mCertificates;
 };
 
-#endif // SIFUICERTIFICSIFUIDIALOGCERTIFICATEDETAILS_HATES_H
+#endif // SIFUIDIALOGCERTIFICATEDETAILS_H

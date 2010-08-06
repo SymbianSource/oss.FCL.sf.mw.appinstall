@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+# Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 # All rights reserved.
 # This component and the accompanying materials are made available
 # under the terms of the License "Eclipse Public License v1.0"
@@ -345,6 +345,22 @@ $PkgFilePREQ2525SupportedLanguageTemplate = "
 %s
 ;
 ";
+
+#
+# Template string to generate PKG file for TestNRFlag.
+#
+$PkgFileWithNRflag = "	
+; File to verify NR flag is dumped correctly.
+;
+;Languages
+&EN
+;
+#{\"TestPacakge\"}, (0x80000077), 1, 0, 0, TYPE=SA, RU, NR
+;
+%{\"Vendor\"}
+:\"Vendor\"
+";
+
 #
 # Do test for each elements of TestItems array
 #
@@ -535,6 +551,9 @@ TestHiddenFlag();
 SatisfyCoverage();
 
 VerifyErroneousCommandLineArg();
+
+TestNRFlag();
+
 #
 # Display the result
 #
@@ -1481,3 +1500,52 @@ sub VerifyErroneousCommandLineArg
 	unlink $TestLogFile;
 	}
 
+sub TestNRFlag
+	{
+	$TestNRflagsis = "test_nr_flag.sis";
+	$TestNRflagLog = "test_nr_flag.Log";
+	$TestNRflagpkg = "test_nr_flag.pkg";
+	$DumpsisGenPkgPath = "\/test_nr_flag";
+	$ExpectedStringInDumpedPackage = "NR";
+	WriteLog("Test if the NR flag, in the original package file, is present in the dumped package file \n");
+
+	CreateFile('test_nr_flag.pkg', $PkgFileWithNRflag);
+	# Create a sis file
+	my $result = system("/epoc32/tools/MAKESIS -v $TestNRflagpkg $TestNRflagsis > $TestNRflagLog ");
+	
+	# Execute DumpSIS on the created sis file.
+	my $result1 = system("/epoc32/tools/DUMPSIS $TestNRflagsis > $TestNRflagLog");
+	
+	use Cwd;
+	$dir = cwd;
+	chdir $dir.$DumpsisGenPkgPath;
+	open($pkgcontent,$TestNRflagpkg);
+	foreach (<$pkgcontent>) 
+	{
+		$_ =~ tr/\000//d;
+		if ($_ =~ m/$ExpectedStringInDumpedPackage/) 
+		{
+			$result2 = 1;
+		}
+	}
+	close($pkgcontent);
+
+	chdir $dir;
+	$NumberOfTests++;
+	if ($result == 0 && $result1 == 0 && $result2 == 1) 
+		{
+		$NumberOfPassed++;
+		WriteLog("Passed\n\n");
+		}
+	else 
+		{
+		$NumberOfFailed++;
+		WriteLog("Failed\n\n");
+		}
+		
+	unlink $TestNRflagpkg;
+	unlink $TestNRflagsis;
+	unlink $TestNRflagLog;
+	use File::Path;
+	rmtree "$dir$DumpsisGenPkgPath";
+	}

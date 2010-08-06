@@ -16,21 +16,23 @@
 */
 
 
-/********************************************************
- *                                                      *
- *   WARNING - WORK-IN-PROGRESS - THIS API MAY CHANGE   *
- *                                                      *
- ********************************************************/
+/**************************************************************
+ *                                                            *
+ *   WARNING - WORK-IN-PROGRESS - THIS API MAY STILL CHANGE   *
+ *                                                            *
+ **************************************************************/
 
 #ifndef C_SIFUI_H
 #define C_SIFUI_H
 
 #include <e32base.h>                            // CBase
+#include <bamdesca.h>                           // MDesCArray
 
 class CSifUiPrivate;
 class CApaMaskedBitmap;
 class CSifUiCertificateInfo;
 class CSifUiAppInfo;
+class CSifUiErrorInfo;
 
 namespace Swi {
     class CAppInfo;
@@ -67,25 +69,57 @@ class CSifUi : public CBase
         ~CSifUi();
 
     public:     // new functions
-        /**
-         * Displays main installation confirmation query and waits for user response.
-         * Returns ETrue if user accepted the query. The next ShowProgressL() call
-         * changes the dialog to installation progress note. And finally, ShowFailedL()
-         * or ShowCompleteL() changes the dialog to the final error or complete note.
-         * If the installation confirmation query should contain memory selection option,
-         * then set the selectable drives with SetMemorySelectionL() first. User selected
-         * drive can be retrieved with SelectedDrive().
-         * @param aAppInfo - application information (name, size, version, vendor, icon)
-         * @return TBools - ETrue if user accepted the query, EFalse otherwise
-         */
-        IMPORT_C TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
+
+        //=================================================
+        // Preparing note method
+        //=================================================
 
         /**
-         * Defines memory selection alternatives for the main installation
-         * confirmation query displayed with ShowConfirmationL() function.
+         * Displays installation dialog with "Preparing" text and indefinite progress bar.
+         * No buttons are available. Use ShowConfirmationL() method to update the dialog
+         * content to the installation confirmation query.
+         */
+        IMPORT_C void ShowPreparingL();
+
+
+        //=================================================
+        // Install confirmation query methods
+        //=================================================
+
+        /**
+         * Defines memory selection alternatives for the ShowConfirmationL() installation
+         * confirmation query. Use SelectedDrive() method to get the selected drive number
+         * after ShowConfirmationL() call.
          * @param aDriveNumbers - options for memory selection
          */
         IMPORT_C void SetMemorySelectionL( const RArray<TInt>& aDriveNumbers );
+
+        /**
+         * Defines certificate details for the ShowConfirmationL() installation
+         * confirmation query. If certificates are not set, then application is
+         * untrusted.
+         * @param aCertificates - certificate details
+         */
+        IMPORT_C void SetCertificateInfoL(
+                const RPointerArray<CSifUiCertificateInfo>& aCertificates );
+
+        /**
+         * Displays installation confirmation query and waits for user response.
+         * Returns ETrue if the user accepted the query. The next ShowProgressL() call
+         * changes the dialog content to installation progress note. And finally,
+         * ShowCompleteL() or ShowFailedL() call changes the dialog content to the
+         * complete or error note.
+         * If preparing installation note needs to be displayed before confirmation query,
+         * then call ShowPreparingL() before any other functions.
+         * If the installation confirmation query should contain memory selection option,
+         * then set the selectable drives with SetMemorySelectionL() first. User selected
+         * drive can be retrieved with SelectedDrive() after ShowConfirmationL() returns.
+         * If the installation confirmation query should contain certificate details, then
+         * set the certificate details using SetCertificateInfoL() first.
+         * @param aAppInfo - application information (name, size, version, vendor, icon)
+         * @return TBools - ETrue if the user accepted the query, EFalse otherwise
+         */
+        IMPORT_C TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
 
         /**
          * Gets the selected drive where new component should be installed.
@@ -95,13 +129,10 @@ class CSifUi : public CBase
          */
         IMPORT_C TInt SelectedDrive( TInt& aDriveNumber );
 
-        /**
-         * Defines certificate details for the main installation confirmation
-         * query displayed with ShowConfirmationL() function.
-         * @param aCertificates - certificate details
-         */
-        IMPORT_C void SetCertificateInfoL(
-                const RPointerArray<CSifUiCertificateInfo>& aCertificates );
+
+        //=================================================
+        // Progress note methods
+        //=================================================
 
         /**
          * Installing phases in progress notes. Indicated in progress note title text.
@@ -113,12 +144,12 @@ class CSifUi : public CBase
         };
 
         /**
-         * Displays main installation progress note. If the progress note or main
-         * confirmation query is already displayed, then updates the dialog content.
-         * Use IncreaseProgressBarValueL() to increase the progress bar value.
+         * Displays installation progress note. Changes confirmation query content
+         * to progress note. If the progress note is already displayed, then updates
+         * the dialog content. Use IncreaseProgressBarValueL() method to increase the
+         * progress bar value.
          * Dialog remains on the screen after progress bar shows full 100% value.
-         * Use ShowFailedL() or ShowCompleteL() to replace the dialog content
-         * with the final error or complete note.
+         * Use ShowCompleteL() or ShowFailedL() methods to show the result.
          * @param aAppInfo - application information (name, size, version, vendor, icon)
          * @param aProgressBarFinalValue - final value of the progress bar
          * @param aPhase - defines new title text for the progress note dialog
@@ -142,15 +173,46 @@ class CSifUi : public CBase
          */
         IMPORT_C TBool IsCancelled();
 
+
+        //=================================================
+        // Final complete and error notes
+        //=================================================
+
+        /**
+         * Displays installation complete note and waits for the user to close it.
+         * Installation complete note contains "Show" button to show installed
+         * applications in application library. Use SetButtonVisible() method to
+         * hide the "Show" button when necessary.
+         */
+        IMPORT_C void ShowCompleteL();
+
+        /**
+         * Displays installation error note and waits for user to close it.
+         * Installation error note contains "Details" button to show the detailed
+         * error message (when available). Also SetButtonVisible() method can be
+         * used to hide the "Details" button if necessary.
+         * @param aErrorCategory - error category
+         * @param aErrorMessage - localized error message to be displayed
+         * @param aErrorDetails - localized error message details (if any)
+         * @param aErrorCode - error code
+         * @param aErrorCode - error code
+         */
+        IMPORT_C void ShowFailedL( const CSifUiErrorInfo& aErrorInfo );
+
+
+        //=================================================
+        // Buttons in progress/complete/error notes
+        //=================================================
+
         /**
          * Toolbar buttons in progress and complete notes that can be disabled/hidden.
          */
         enum TOptionalButton
             {
-            EHideProgressButton,
-            ECancelProgressButton,
-            EShowInAppLibButton,
-            EErrorDetailsButton
+            EHideProgressButton,        // "Hide" button in progress note
+            ECancelProgressButton,      // "Cancel" button in progress note
+            EShowInAppLibButton,        // "Show" button in complete note
+            EErrorDetailsButton         // "Details" button in error note
             };
 
         /**
@@ -163,21 +225,56 @@ class CSifUi : public CBase
          */
         IMPORT_C void SetButtonVisible( TOptionalButton aButton, TBool aIsVisible );
 
-        /**
-         * Displays main installation complete note. Installation complete note contains
-         * button to launch the application libaray to show the recently installed apps.
-         */
-        IMPORT_C void ShowCompleteL();
+
+        //=================================================
+        // Other query dialogs
+        //=================================================
 
         /**
-         * Displays main installation error note. Installation error note contains button
-         * to see detailed error message when available.
-         * @param aErrorCode - error code
-         * @param aErrorMessage - localized error message to be displayed
-         * @param aErrorDetails - localized error message details (if any)
+         * Displays dialog requesting capabilities for the application being installed
+         * and waits for user response. Returns ETrue if the user granted the capabilities.
+         * Other dialogs (like progress note) are not affected.
+         * @param aCapabilities - requested user capabilities
+         * @return TBool - ETrue if the user granted the capabilities, EFalse otherwise
          */
+        IMPORT_C TBool ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities );
+
+        /**
+         * Displays a selection dialog with radio-buttons in a pop-up window,
+         * and waits for user response. Other displayed installation dialogs
+         * (like progress note) are not affected. Returns boolean that indicates
+         * if the user cancelled the query. Selected item index is returned in
+         * aSelectedIndex parameter (KErrNotFound if cancelled).
+         * @param aTitle - selection dialog title
+         * @param aSelectableItems - array of selectable items
+         * @param aSelectedIndex - returns selected item index
+         * @return TBool - ETrue if the user accepted the query, EFalse otherwise
+         */
+        IMPORT_C TBool ShowSingleSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, TInt& aSelectedIndex );
+
+        /**
+         * Displays a multi-selection dialog with checkboxes in a pop-up window,
+         * and waits for user response. Other displayed installation dialogs
+         * (like progress note) are not affected. Returns user selected indices,
+         * in aSelectedIndexes array (empty if cancelled).
+         * @param aTitle - multi-selection dialog title
+         * @param aSelectableItems - array of selectable items
+         * @param aSelectedIndexes - returns the selected item indices
+         * @return TBool - ETrue if the user accepted the query, EFalse otherwise
+         */
+        IMPORT_C TBool ShowMultiSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, RArray<TInt>& aSelectedIndexes );
+
+
+        //=================================================
+        // DEPRECATED METHODS
+        //=================================================
+
+        // DEPRECATED, WILL BE REMOVED, DO NOT USE
         IMPORT_C void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
             const TDesC& aErrorDetails = KNullDesC );
+
 
     private:    // new functions
         CSifUi();

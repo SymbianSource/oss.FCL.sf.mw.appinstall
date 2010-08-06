@@ -66,8 +66,9 @@ private:    // new functions
     bool constructDialog(const QVariantMap &parameters);
     bool updateFromParameters(const QVariantMap &parameters);
     void updateButtons(const QVariantMap &parameters);
+    void prepareForErrorDetails(const QVariantMap &parameters);
+    bool displayAdditionalQuery(const QVariantMap &parameters);
     void sendResult(SifUiDeviceDialogReturnValue value);
-    void monitorIndicatorActivity();
 
 private slots:
     void handleAccepted();
@@ -76,6 +77,8 @@ private slots:
     void handleHidePressed();
     void handleShowInstalled();
     void handleErrorDetails();
+    void handleCapabilitiesGranted();
+    void handleCapabilitiesDenied();
 
 private:
     Q_DISABLE_COPY(SifUiDialog)
@@ -87,7 +90,9 @@ private:
     SifUiDeviceDialogType mDialogType;
     SifUiDialogTitleWidget *mTitle;
     SifUiDialogContentWidget *mContent;
-    int mInstallError;
+    QString mErrorDetails;
+    int mErrorCode;
+    int mExtendedErrorCode;
     HbAction *mPrimaryAction;
     HbAction *mSecondaryAction;
     QVariantMap mResultMap;

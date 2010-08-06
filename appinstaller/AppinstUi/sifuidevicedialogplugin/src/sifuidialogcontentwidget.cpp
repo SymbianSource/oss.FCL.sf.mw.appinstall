@@ -24,11 +24,14 @@
 #include <hbprogressbar.h>
 #include <QPixmap>
 #include <qsysteminfo.h>                    // QSystemStorageInfo
-QTM_USE_NAMESPACE
+#include <qvaluespacepublisher.h>           // QValueSpacePublisher
+#include <qvaluespacesubscriber.h>          // QValueSpaceSubscriber
 #if defined(Q_OS_SYMBIAN)
 #include <driveinfo.h>                      // DriveInfo
 #include <fbs.h>                            // CFbsBitmap
 #endif  // Q_OS_SYMBIAN
+
+QTM_USE_NAMESPACE
 
 const char KSifUiDefaultApplicationIcon[] = "qtg_large_application";
 const char KSifUiErrorIcon[] = "qtg_large_warning";
@@ -45,6 +48,23 @@ enum TSifUiDriveName {
     EMemoryCard,
     EOtherDrive
 };
+
+const char KInitialDefaultDrive = 'C';
+
+// Path and value name for QValueSpacePublisher/QValueSpaceSubscriber.
+const QString KSifUiCenRepPath = "/KCRUIDSifUiDefaults";
+const QString KSifUiCenRepDefaultDrive = "KCRUIDSifUiDefaultDrive";
+
+// TODO: replace with proper logging
+#ifdef _DEBUG
+#define FLOG1(x)        qDebug() << (x)
+#define FLOG2(x,y)      qDebug() << (x) << (y)
+#define FLOG3(x,y,z)    qDebug() << (x) << (y) << (z)
+#else
+#define FLOG1(x)
+#define FLOG2(x,y)
+#define FLOG3(x,y,z)
+#endif
 
 
 // ======== LOCAL FUNCTIONS ========
@@ -105,7 +125,7 @@ SifUiDialogContentWidget::SifUiDialogContentWidget(QGraphicsItem *parent,
         mAppIcon(0), mAppName(0), mAppSize(0),
         mMainLayout(0), mAppDetailsLayout(0), mStackedWidget(0),
         mMemorySelection(0), mProgressBar(0), mErrorText(0),
-        mBitmap(0), mMask(0)
+        mBitmap(0), mMask(0), mPublisher(0), mSubscriber(0)
 {
 }
 
@@ -125,6 +145,8 @@ SifUiDialogContentWidget::~SifUiDialogContentWidget()
 //
 void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parameters)
 {
+    FLOG1("SifUiDialogContentWidget::constructFromParameters");
+
     Q_ASSERT(mMainLayout == 0);
     mMainLayout = new QGraphicsLinearLayout(Qt::Vertical);
 
@@ -158,8 +180,6 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
 
     Q_ASSERT(mMemorySelection == 0);
     mMemorySelection = new HbComboBox;
-    connect(mMemorySelection, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(handleMemorySelectionChange(int)));
     mStackedWidget->addWidget(mMemorySelection);
 
     Q_ASSERT(mProgressBar == 0);
@@ -187,6 +207,8 @@ void SifUiDialogContentWidget::constructFromParameters(const QVariantMap &parame
 //
 void SifUiDialogContentWidget::updateFromParameters(const QVariantMap &parameters)
 {
+    FLOG1("SifUiDialogContentWidget::updateFromParameters");
+
     // Application icon
     updateAppIcon(parameters);
 
@@ -232,6 +254,8 @@ void SifUiDialogContentWidget::updateFromParameters(const QVariantMap &parameter
 //
 void SifUiDialogContentWidget::changeType(SifUiDeviceDialogType type)
 {
+    FLOG2("SifUiDialogContentWidget::changeType", type);
+
     switch (type) {
         case SifUiConfirmationQuery:
             mStackedWidget->setCurrentWidget(mMemorySelection);
@@ -250,15 +274,27 @@ void SifUiDialogContentWidget::changeType(SifUiDeviceDialogType type)
 }
 
 // ----------------------------------------------------------------------------
+// SifUiDialogContentWidget::applicationName()
+// ----------------------------------------------------------------------------
+//
+QString SifUiDialogContentWidget::applicationName() const
+{
+    if (mAppName) {
+        return mAppName->plainText();
+    }
+    return QString();
+}
+
+// ----------------------------------------------------------------------------
 // SifUiDialogContentWidget::handleMemorySelectionChange()
 // ----------------------------------------------------------------------------
 //
 void SifUiDialogContentWidget::handleMemorySelectionChange(int selectedIndex)
 {
+    FLOG2("SifUiDialogContentWidget::handleMemorySelectionChange", selectedIndex);
+
     QChar selectedDrive = mDriveLetterList[selectedIndex][0];
-
-    // TODO: save selected drive to cenrep
-
+    saveSelectedDriveAsDefault( selectedDrive );
     emit memorySelectionChanged( selectedDrive );
 }
 
@@ -277,7 +313,9 @@ QString SifUiDialogContentWidget::applicationName(const QVariantMap &parameters)
             //: confirmation query. %1 is the application name and %2 is the version number.
             //: Version number consist of major, minor, and build numbers.
             //: For example: "Chess (v 1.01(123))".
-            appName = hbTrId("txt_installer_list_appname_version").arg(nameParam, versionParam);
+            // TODO: use hbTrId when arg() starts to work with limited length arguments like "%[99]1"
+            //appName = hbTrId("txt_installer_list_appname_version").arg(nameParam, versionParam);
+            appName = QString("%1 (v %2)").arg(nameParam, versionParam);
         } else {
             appName = nameParam;
         }
@@ -293,8 +331,9 @@ QString SifUiDialogContentWidget::applicationSize(const QVariantMap &parameters)
 {
     QString appSize = "";
     if (parameters.contains(KSifUiApplicationSize)) {
-        uint size = parameters.value(KSifUiApplicationSize).toUInt();
-        if (size > 0) {
+        bool ok = false;
+        uint size = parameters.value(KSifUiApplicationSize).toUInt(&ok);
+        if (ok) {
             if (size > KSifUiMega) {
                 //: Application size in SW install confirmation query, %1 is in megabytes
                 appSize = hbTrId("txt_installer_list_appsize_mb").arg(size/KSifUiMega);
@@ -374,6 +413,7 @@ void SifUiDialogContentWidget::updateAppIcon(const QVariantMap &parameters)
 {
     Q_ASSERT(mAppIcon != 0);
 
+    // TODO: proper icon handling
     if (parameters.contains(KSifUiDialogType) &&
         (parameters.value(KSifUiDialogType).toInt() == SifUiErrorNote)) {
         mAppIcon->setIcon(HbIcon(KSifUiErrorIcon));
@@ -432,13 +472,18 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
         QString drives = parameters.value(KSifUiMemorySelection).toString();
         mDriveLetterList = drives.split(",");
 
+        QChar defaultDrive = readDefaultSelectedDrive();
+        int defaultDriveIndex = 0;
+
         QStringList driveList;
         QSystemStorageInfo info;
         QStringList volumeList = info.logicalDrives();
         foreach (QString volume, volumeList) {
             if (mDriveLetterList.contains(volume)) {
                 qlonglong size = info.availableDiskSpace(volume);
-                switch (driveName(volume[0])) {
+
+                QChar driveLetter(volume[0]);
+                switch (driveName(driveLetter)) {
                 case EPhoneMemory:
                     if (size > KSifUiMega) {
                         //: Drive name for internal phone memory with megabytes of free space.
@@ -522,13 +567,24 @@ bool SifUiDialogContentWidget::updateMemorySelection(const QVariantMap &paramete
                     }
                     break;
                 }
+
+                if (driveLetter == defaultDrive) {
+                    defaultDriveIndex = driveList.count() - 1;
+                }
             }
         }
 
+        disconnect(mMemorySelection, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(handleMemorySelectionChange(int)));
         mMemorySelection->setItems(driveList);
+        if (defaultDriveIndex) {
+            FLOG2("SifUiDialogContentWidget::updateMemorySelection, setCurrentIndex",
+                defaultDriveIndex);
+            mMemorySelection->setCurrentIndex(defaultDriveIndex);
+        }
+        connect(mMemorySelection, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(handleMemorySelectionChange(int)));
         mStackedWidget->setCurrentWidget(mMemorySelection);
-
-        // TODO: set selected item, read the default from cenrep
 
         return true;
     }
@@ -548,9 +604,12 @@ bool SifUiDialogContentWidget::updateProgressBar(const QVariantMap &parameters)
     }
     if (parameters.contains(KSifUiProgressNoteValue)) {
         int newValue = mProgressBar->progressValue();
-        newValue += parameters.value(KSifUiProgressNoteValue).toInt();
-        mProgressBar->setProgressValue(newValue);
-        progressBarChanged = true;
+        bool ok = false;
+        newValue += parameters.value(KSifUiProgressNoteValue).toInt(&ok);
+        if (ok) {
+            mProgressBar->setProgressValue(newValue);
+            progressBarChanged = true;
+        }
     }
     if (progressBarChanged) {
         mStackedWidget->setCurrentWidget(mProgressBar);
@@ -564,16 +623,9 @@ bool SifUiDialogContentWidget::updateProgressBar(const QVariantMap &parameters)
 //
 bool SifUiDialogContentWidget::updateErrorText(const QVariantMap &parameters)
 {
-    if (parameters.contains(KSifUiErrorCode)) {
-        // TODO: proper error texts
-        bool ok = false;
-        int errorCode = parameters.value(KSifUiErrorCode).toInt(&ok);
-        QString errorText;
-        if (ok) {
-            errorText = tr("Error %1").arg(errorCode);
-        } else {
-            errorText = tr("No error code.");
-        }
+    // TODO: move default error messages (category based) here
+    if (parameters.contains(KSifUiErrorMessage)) {
+        QString errorText = parameters.value(KSifUiErrorMessage).toString();
         mErrorText->setPlainText(errorText);
         mStackedWidget->setCurrentWidget(mErrorText);
         return true;
@@ -581,5 +633,45 @@ bool SifUiDialogContentWidget::updateErrorText(const QVariantMap &parameters)
     return false;
 }
 
+// ----------------------------------------------------------------------------
+// SifUiDialogContentWidget::saveSelectedDriveAsDefault()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialogContentWidget::saveSelectedDriveAsDefault(const QChar& drive)
+{
+    if (drive != readDefaultSelectedDrive()) {
+        if (!mPublisher) {
+            mPublisher = new QValueSpacePublisher(KSifUiCenRepPath, this);
+        }
+        FLOG2("SifUiDialogContentWidget::saveSelectedDriveAsDefault", drive);
+        // QValueSpacePublisher supports integer and byte array types in Symbian
+        int asciiValue = drive.toAscii();
+        mPublisher->setValue(KSifUiCenRepDefaultDrive, asciiValue);
+        mPublisher->sync();
+    }
+}
 
+// ----------------------------------------------------------------------------
+// SifUiDialogContentWidget::readDefaultSelectedDrive()
+// ----------------------------------------------------------------------------
+//
+QChar SifUiDialogContentWidget::readDefaultSelectedDrive()
+{
+    QChar selectedDrive = KInitialDefaultDrive;
+
+    if (!mSubscriber) {
+        mSubscriber = new QValueSpaceSubscriber(KSifUiCenRepPath, this);
+    }
+    QVariant variant = mSubscriber->value(KSifUiCenRepDefaultDrive);
+    if (variant.isValid() && !variant.isNull()) {
+        bool ok = false;
+        int asciiValue = variant.toInt(&ok);
+        if (ok) {
+            selectedDrive = QChar(asciiValue);
+        }
+    }
+
+    FLOG2("SifUiDialogContentWidget::readDefaultSelectedDrive", selectedDrive);
+    return selectedDrive;
+}
 

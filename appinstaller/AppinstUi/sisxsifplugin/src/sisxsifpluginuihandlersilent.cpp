@@ -20,6 +20,7 @@
 #include "sisxsifpluginerrorhandler.h"      // CSisxSifPluginErrorHandler
 #include "sisxsifplugin.pan"                // Panic codes
 #include "sisxsifcleanuputils.h"            // CleanupResetAndDestroyPushL
+#include "sisxsifpluginerrors.h"            // Error codes
 
 using namespace Usif;
 
@@ -54,9 +55,10 @@ CSisxSifPluginUiHandlerSilent::~CSisxSifPluginUiHandlerSilent()
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TFileTextOption /*aOption*/, const TDesC& /*aText*/ )
+        Swi::TFileTextOption aOption, const TDesC& aText )
     {
 	TBool okToContinue = EFalse;
+
 	if( iInstallParams )
 		{
 		switch( iInstallParams->PackageInfo() )
@@ -65,13 +67,33 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppIn
 				okToContinue = ETrue;
 				break;
 			case EUserConfirm:
-				// TODO: EPolicyUserConfirm
+			    switch( aOption )
+			        {
+			        case Swi::EInstFileTextOptionContinue:
+			            ShowQuestionWithContinueL( aText );
+                        okToContinue = ETrue;
+			            break;
+			        case Swi::EInstFileTextOptionSkipOneIfNo:
+			            okToContinue = ShowQuestionL( aText );
+			            break;
+			        case Swi::EInstFileTextOptionAbortIfNo:
+			        case Swi::EInstFileTextOptionExitIfNo:
+			            okToContinue = ShowQuestionL( aText );
+			            break;
+			        case Swi::EInstFileTextOptionForceAbort:
+			            ShowQuestionWithContinueL( aText );
+			            break;
+			        default:
+			            break;
+			        }
 				break;
 			case ENotAllowed:
 			default:
+		        SetErrorL( KErrPermissionDenied, ESifUiNeedsPackageInfoParameter, aText );
 				break;
 			}
 		}
+
     return okToContinue;
     }
 
@@ -82,7 +104,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayTextL( const Swi::CAppInfo& /*aAppIn
 void CSisxSifPluginUiHandlerSilent::DisplayErrorL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TErrorDialog aType, const TDesC& aParam )
     {
-    SetDisplayErrorL( aType, aParam );
+    SetErrorSwiErrorL( aType, aParam );
     }
 
 // ---------------------------------------------------------------------------
@@ -93,6 +115,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL( const Swi::CAppInf
         const RPointerArray<TDesC>& /*aComponents*/ )
     {
 	TBool okToContinue = EFalse;
+
 	if( iInstallParams )
 		{
 		switch( iInstallParams->AllowAppBreakDependency() )
@@ -103,9 +126,11 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayDependencyBreakL( const Swi::CAppInf
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    SetErrorL( KErrPermissionDenied, ESifUiNeedsAllowAppBreakDependencyParameter );
 				break;
 			}
 		}
+
     return okToContinue;
     }
 
@@ -117,6 +142,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL( const Swi::CAppI
         const RPointerArray<TDesC>& /*aAppNames*/ )
     {
 	TBool okToContinue = EFalse;
+
 	if( iInstallParams )
 		{
 		switch( iInstallParams->AllowAppShutdown() )
@@ -127,9 +153,11 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL( const Swi::CAppI
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    SetErrorL( KErrPermissionDenied, ESifUiNeedsAllowAppShutdownParameter );
 				break;
 			}
 		}
+
     return okToContinue;
     }
 
@@ -138,9 +166,10 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayApplicationsInUseL( const Swi::CAppI
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TQuestionDialog aQuestion, const TDesC& /*aDes*/ )
+        Swi::TQuestionDialog aQuestion, const TDesC& aDes )
     {
 	TBool okToContinue = EFalse;
+
     switch( aQuestion )
         {
         case Swi::EQuestionIncompatible:
@@ -157,6 +186,10 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayQuestionL( const Swi::CAppInfo& /*aA
 						break;
 					}
         		}
+        	if( !okToContinue )
+        	    {
+                SetErrorL( KErrPermissionDenied, ESifUiNeedsAllowIncompatibleParameter, aDes );
+        	    }
             break;
 
         case Swi::EQuestionOverwriteFile:
@@ -173,11 +206,17 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayQuestionL( const Swi::CAppInfo& /*aA
 						break;
 					}
         		}
+        	if( !okToContinue )
+        	    {
+                SetErrorL( KErrPermissionDenied, ESifUiNeedsAllowOverwriteParameter, aDes );
+                }
         	break;
 
         default:
+            SetErrorL( KErrNotSupported, KErrNotSupported, aDes );
             break;
         }
+
     return okToContinue;
     }
 
@@ -201,6 +240,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayGrantCapabilitiesL( const Swi::CAppI
         const TCapabilitySet& /*aCapabilitySet*/ )
     {
 	TBool okToContinue = EFalse;
+
 	if( iInstallParams )
 		{
 		switch( iInstallParams->GrantCapabilities() )
@@ -211,9 +251,11 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayGrantCapabilitiesL( const Swi::CAppI
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    SetErrorL( KErrPermissionDenied, ESifUiNeedsGrantCapabilitiesParameter );
 				break;
 			}
 		}
+
     return okToContinue;
     }
 
@@ -478,9 +520,12 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOcspResultL( const Swi::CAppInfo& /*
 // ---------------------------------------------------------------------------
 //
 void CSisxSifPluginUiHandlerSilent::DisplayCannotOverwriteFileL( const Swi::CAppInfo& /*aAppInfo*/,
-        const Swi::CAppInfo& /*aInstalledAppInfo*/, const TDesC& /*aFileName*/ )
+        const Swi::CAppInfo& /*aInstalledAppInfo*/, const TDesC& aFileName )
     {
-	// TODO: error handling
+    // TODO: localized UI string needed: "The package tries to overwrite file '%1' it does not own."
+	TName detailsString;
+	detailsString.Format( _L("The package tries to overwrite file '%S' it does not own."), &aFileName );
+    SetErrorL( KErrPermissionDenied, ESifUiCannotOverwriteFile, detailsString );
     }
 
 // ---------------------------------------------------------------------------
@@ -492,6 +537,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
         TVersion /*aWantedVersionTo*/, TVersion /*aInstalledVersion*/ )
     {
 	TBool okToContinue = EFalse;
+
 	if( iInstallParams )
 		{
 		switch( iInstallParams->AllowAppBreakDependency() )
@@ -505,6 +551,12 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
 				break;
 			}
 		}
+
+	if( !okToContinue )
+	    {
+        SetErrorL( KErrSifMissingDependencies, 0, KNullDesC );
+	    }
+
     return okToContinue;
     }
 

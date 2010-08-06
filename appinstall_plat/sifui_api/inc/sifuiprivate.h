@@ -46,18 +46,23 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         ~CSifUiPrivate();
 
     public:     // new functions
-        TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
+        void ShowPreparingL();
         void SetMemorySelectionL( const RArray<TInt>& aDriveNumbers );
-        TInt SelectedDrive( TInt& aDriveNumber );
         void SetCertificateInfoL( const RPointerArray<CSifUiCertificateInfo>& aCertificates );
+        TBool ShowConfirmationL( const CSifUiAppInfo& aAppInfo );
+        TInt SelectedDrive( TInt& aDriveNumber );
         void ShowProgressL( const CSifUiAppInfo& aAppInfo, TInt aProgressBarFinalValue,
                 CSifUi::TInstallingPhase aPhase );
         void IncreaseProgressBarValueL( TInt aIncrement );
         TBool IsCancelled();
-        void SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible );
         void ShowCompleteL();
-        void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
-                const TDesC& aErrorDetails );
+        void ShowFailedL( const CSifUiErrorInfo& aErrorInfo );
+        void SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible );
+        TBool ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities );
+        TBool ShowSingleSelectionL( const TDesC& aTitle, const MDesCArray& aSelectableItems,
+            TInt& aSelectedIndex );
+        TBool ShowMultiSelectionL( const TDesC& aTitle, const MDesCArray& aSelectableItems,
+            RArray<TInt>& aSelectedIndexes );
 
     protected:  // from CActive
         void DoCancel();
@@ -78,6 +83,7 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         void ChangeNoteTypeL( TInt aType );
         void AddParamL( const TDesC& aKey, TInt aValue );
         void AddParamL( const TDesC& aKey, const TDesC& aValue );
+        void AddParamBinaryL( const TDesC& aKey, const CBufBase& aBinary );
         void AddParamListL( const TDesC& aKey, const MDesCArray& aList );
         void AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo );
         void AddParamsCertificatesL();

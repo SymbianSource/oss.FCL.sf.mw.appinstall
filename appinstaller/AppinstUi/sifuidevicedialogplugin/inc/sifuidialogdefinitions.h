@@ -72,9 +72,14 @@ const QString KSifUiCompleteNoteIsShowButtonHidden = "showbtn";     // boolean
 const QString KSifUiErrorNoteIsDetailsButtonHidden = "errdtlbtn";   // boolean
 
 // Variant map keys for "error" dialog parameters
-const QString KSifUiErrorCode = "err";                  // integer
-const QString KSifUiErrorMessage = "msg";               // string
-const QString KSifUiErrorDetails = "det";               // string
+const QString KSifUiErrorCategory = "errcat";           // enum Usif::TErrorCategory
+const QString KSifUiErrorCode = "errcode";              // integer
+const QString KSifUiErrorCodeExtended = "errext";       // integer
+const QString KSifUiErrorMessage = "errmsg";            // string
+const QString KSifUiErrorDetails = "errdet";            // string
+
+// Variant map keys for "grant capabilities" dialog parameters
+const QString KSifUiGrantCapabilities = "grcap";        // binary (TCapabilitySet)
 
 #endif // SIFUIDIALOGDEFINITIONS_H
 

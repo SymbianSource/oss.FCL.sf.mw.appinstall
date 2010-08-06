@@ -38,6 +38,7 @@
 
 // Constants
 const std::wstring KSisDirectorySeparator( L"/" );
+const std::wstring KSisInitialNetworkPathSlashes( L"//" );
 
 typedef struct {
 	wchar_t*		iName;

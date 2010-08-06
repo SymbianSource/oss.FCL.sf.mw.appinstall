@@ -17,6 +17,7 @@
 
 #include "sifui.h"                              // CSifUi
 #include "sifuiprivate.h"                       // CSifUiPrivate
+#include "sifuierrorinfo.h"                     // CSifUiErrorInfo
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -54,12 +55,12 @@ CSifUi::~CSifUi()
     }
 
 // ---------------------------------------------------------------------------
-// CSifUi::ShowConfirmationL()
+// CSifUi::ShowPreparingL()
 // ---------------------------------------------------------------------------
 //
-EXPORT_C TBool CSifUi::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+EXPORT_C void CSifUi::ShowPreparingL()
     {
-    return iPrivate->ShowConfirmationL( aAppInfo );
+    iPrivate->ShowPreparingL();
     }
 
 // ---------------------------------------------------------------------------
@@ -72,15 +73,6 @@ EXPORT_C void CSifUi::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
     }
 
 // ---------------------------------------------------------------------------
-// CSifUi::SelectedDrive()
-// ---------------------------------------------------------------------------
-//
-EXPORT_C TInt CSifUi::SelectedDrive( TInt& aDriveNumber )
-    {
-    return iPrivate->SelectedDrive( aDriveNumber );
-    }
-
-// ---------------------------------------------------------------------------
 // CSifUi::SetCertificateInfoL()
 // ---------------------------------------------------------------------------
 //
@@ -88,6 +80,24 @@ EXPORT_C void CSifUi::SetCertificateInfoL(
         const RPointerArray<CSifUiCertificateInfo>& aCertificates )
     {
     iPrivate->SetCertificateInfoL( aCertificates );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::ShowConfirmationL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+    {
+    return iPrivate->ShowConfirmationL( aAppInfo );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::SelectedDrive()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TInt CSifUi::SelectedDrive( TInt& aDriveNumber )
+    {
+    return iPrivate->SelectedDrive( aDriveNumber );
     }
 
 // ---------------------------------------------------------------------------
@@ -119,15 +129,6 @@ EXPORT_C TBool CSifUi::IsCancelled()
     }
 
 // ---------------------------------------------------------------------------
-// CSifUi::SetButtonVisible()
-// ---------------------------------------------------------------------------
-//
-EXPORT_C void CSifUi::SetButtonVisible( TOptionalButton aButton, TBool aIsVisible )
-    {
-    iPrivate->SetButtonVisible( aButton, aIsVisible );
-    }
-
-// ---------------------------------------------------------------------------
 // CSifUi::ShowCompleteL()
 // ---------------------------------------------------------------------------
 //
@@ -140,10 +141,62 @@ EXPORT_C void CSifUi::ShowCompleteL()
 // CSifUi::ShowFailedL()
 // ---------------------------------------------------------------------------
 //
+EXPORT_C void CSifUi::ShowFailedL( const CSifUiErrorInfo& aErrorInfo )
+    {
+    iPrivate->ShowFailedL( aErrorInfo );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::SetButtonVisible()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C void CSifUi::SetButtonVisible( TOptionalButton aButton, TBool aIsVisible )
+    {
+    iPrivate->SetButtonVisible( aButton, aIsVisible );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::ShowGrantCapabilitiesL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities )
+    {
+    return iPrivate->ShowGrantCapabilitiesL( aCapabilities );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::ShowSingleSelectionL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowSingleSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, TInt& aSelectedIndex )
+    {
+    return iPrivate->ShowSingleSelectionL( aTitle, aSelectableItems, aSelectedIndex );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUi::ShowMultiSelectionL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowMultiSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, RArray<TInt>& aSelectedIndexes )
+    {
+    return iPrivate->ShowMultiSelectionL( aTitle, aSelectableItems, aSelectedIndexes );
+    }
+
+
+// ---------------------------------------------------------------------------
+// CSifUi::ShowFailedL()
+// ---------------------------------------------------------------------------
+//
+// TODO: This function is deprecated, remove it completely.
 EXPORT_C void CSifUi::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
         const TDesC& aErrorDetails )
     {
-    iPrivate->ShowFailedL( aErrorCode, aErrorMessage, aErrorDetails );
+    CSifUiErrorInfo* errorInfo = CSifUiErrorInfo::NewLC( Usif::EUnknown, aErrorCode,
+            0, aErrorMessage, aErrorDetails );
+    iPrivate->ShowFailedL( *errorInfo );
+    CleanupStack::PopAndDestroy( errorInfo );
     }
 
 // ---------------------------------------------------------------------------

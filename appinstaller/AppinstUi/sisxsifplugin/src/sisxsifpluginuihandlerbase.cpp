@@ -127,7 +127,7 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aR
 
     CSifOperationStartData* data = CSifOperationStartData::NewLC( *iGlobalComponentId,
             aRootNode.ComponentName(), appNames, appIcons, aRootNode.MaxInstalledSize(),
-            KNullDesC, KNullDesC, aRootNode.SoftwareTypeName() );
+            KNullDesC, KNullDesC, aRootNode.SoftwareTypeName(), iOperationPhase );
 
     if( !iPublishSifOperationInfo )
         {
@@ -158,7 +158,7 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry )
 
     CSifOperationStartData* data = CSifOperationStartData::NewLC( *iGlobalComponentId,
             aEntry.Name(), appNames, appIcons, aEntry.ComponentSize(),
-            KNullDesC, KNullDesC, aEntry.SoftwareType() );
+            KNullDesC, KNullDesC, aEntry.SoftwareType(), iOperationPhase );
 
     if( !iPublishSifOperationInfo )
         {
@@ -197,14 +197,92 @@ void CSisxSifPluginUiHandlerBase::PublishCompletionL()
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandlerBase::SetDisplayErrorL()
+// CSisxSifPluginUiHandlerBase::SetErrorL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerBase::SetDisplayErrorL( Swi::TErrorDialog aType, const TDesC& aParam )
+void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode )
     {
-    iErrorHandler.SetExtendedErrorCode( aType );
+    iErrorHandler.SetErrorCode( aErrorCode );
+    iErrorHandler.SetExtendedErrorCode( aExtErrorCode );
 
+    // TODO: localized UI strings needed
+    switch( iErrorHandler.ErrorCategory() )
+        {
+        case ELowMemory:
+            // txt_error_info_there_is_not_enough_memory_currentl
+            iErrorHandler.SetErrorMessage( _L("There is not enough memory currently.") );
+            break;
+        case ELowDiskSpace:
+            // txt_error_info_there_is_not_enough_space_currently
+            iErrorHandler.SetErrorMessage( _L("There is not enough space currently in this drive.") );
+            break;
+        case ENetworkUnavailable:
+            // txt_error_info_network_is_unavailable_currently
+            iErrorHandler.SetErrorMessage( _L("Network  is unavailable currently.") );
+            break;
+        case EInstallerBusy:
+            // txt_error_info_installer_is_busy_currently
+            iErrorHandler.SetErrorMessage( _L("Installer is busy currently.") );
+            break;
+        case ECorruptedPackage:
+            // txt_error_info_installation_package_is_corrupted
+            iErrorHandler.SetErrorMessage( _L("Installation package is corrupted. You may want to try again.") );
+            break;
+        case EApplicationNotCompatible:
+            // txt_error_info_application_is_not_compatible_with
+            iErrorHandler.SetErrorMessage( _L("Application is not compatible with this device.") );
+            break;
+        case ESecurityError:
+            // txt_error_info_there_is_a_security_issue_with_this
+            iErrorHandler.SetErrorMessage( _L("There is a security issue with this application.") );
+            break;
+        case EUnexpectedError:
+        case EUnknown:
+            // txt_error_info_an_unexpected_error_occurred
+            iErrorHandler.SetErrorMessage( _L("An unexpected error occurred.") );
+            break;
+        case EUserCancelled:
+            if( iOperationPhase == EInstalling )
+                {
+                // txt_error_info_application_not_installed
+                iErrorHandler.SetErrorMessage( _L("Application not installed.") );
+                }
+            else
+                {
+                // txt_error_info_application_not_deleted
+                iErrorHandler.SetErrorMessage( _L("Application not deleted. ") );
+                }
+            break;
+        case EUninstallationBlocked:
+            // txt_error_info_application_cannot_be_deleted
+            iErrorHandler.SetErrorMessage( _L("Application cannot be deleted.") );
+            break;
+        case ENone:
+        default:
+            break;
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::SetErrorL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode,
+    const TDesC& aErrMsgDetails )
+    {
+    SetErrorL( aErrorCode, aExtErrorCode );
+    iErrorHandler.SetErrorMessageDetails( aErrMsgDetails );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::SetErrorSwiErrorL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::SetErrorSwiErrorL( Swi::TErrorDialog aType,
+        const TDesC& /*aParam*/ )
+    {
     // TODO: localised detailed error messages
+    // TODO: append aParam when message supports parameters
     TBuf<512> details;
     switch( aType )
         {
@@ -242,7 +320,8 @@ void CSisxSifPluginUiHandlerBase::SetDisplayErrorL( Swi::TErrorDialog aType, con
             details.Copy(_L("EUiInsufficientSpaceOnDrive"));
             break;
         case Swi::EUiCapabilitiesCannotBeGranted:
-            details.Copy(_L("EUiCapabilitiesCannotBeGranted"));
+            // aParam contains list of capability names
+            details.Copy(_L("Cannot grant capabilities requested by the application."));
             break;
         case Swi::EUiUnknownFile:
             details.Copy(_L("EUiUnknownFile"));
@@ -278,11 +357,7 @@ void CSisxSifPluginUiHandlerBase::SetDisplayErrorL( Swi::TErrorDialog aType, con
             break;
         }
 
-    if( aParam.Length() )
-        {
-        details.Append( _L("\n") );
-        details.Append( aParam );
-        }
+    SetErrorL( KErrGeneral, aType, details );
     }
 
 // ---------------------------------------------------------------------------
@@ -353,4 +428,24 @@ TBool CSisxSifPluginUiHandlerBase::ShowQuestionL( const TDesC& aText ) const
     return questionAccepted;
     }
 
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::ShowQuestionWithContinueL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::ShowQuestionWithContinueL( const TDesC& aText ) const
+    {
+    CHbDeviceMessageBoxSymbian *note = NULL;
+    note = CHbDeviceMessageBoxSymbian::NewL( CHbDeviceMessageBoxSymbian::EQuestion );
+    CleanupStack::PushL( note );
+
+    note->SetTextL( aText );
+    note->SetTimeout( 0 );
+    note->SetButton( CHbDeviceMessageBoxSymbian::EAcceptButton, EFalse );
+    note->SetButton( CHbDeviceMessageBoxSymbian::ERejectButton, ETrue );
+    // TODO: localized UI string needed
+    note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, _L("Continue") );
+    (void)note->ExecL();
+
+    CleanupStack::PopAndDestroy( note );
+    }
 

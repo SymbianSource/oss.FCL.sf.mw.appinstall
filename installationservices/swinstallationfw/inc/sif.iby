@@ -19,7 +19,7 @@
 #ifndef SIF_IBY
 #define SIF_IBY
 
-define ZDRIVE \epoc32\data\Z
+define ZDRIVE EPOCROOT##epoc32\data\Z
 
 #include "siflauncherconfig.iby"
 

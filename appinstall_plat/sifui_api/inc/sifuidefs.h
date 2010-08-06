@@ -23,10 +23,7 @@
 // in sifuidevicedialogdefinitions.h and sifuiinstallindicatorparams.h files.
 // Symbian code needs descriptor constants, as Qt code uses QString constants.
 
-// TODO: split this file into two, export install indicator parameters for Java
-
 _LIT( KSifUiDeviceDialog, "com.nokia.sifui/1.0" );
-_LIT( KSifUiInstallIndicatorType, "com.nokia.sifui.indi/1.0" );
 
 enum TSifUiDeviceDialogType
     {
@@ -58,7 +55,7 @@ _LIT( KSifUiApplicationVersion, "ver" );            // descriptor
 _LIT( KSifUiApplicationSize, "size" );              // integer
 _LIT( KSifUiApplicationDetails, "details" );        // descriptor array
 _LIT( KSifUiMemorySelection, "mem" );               // descriptor (comma separated drive letters)
-_LIT( KSifUiCertificates, "cert" );                 // binary
+_LIT( KSifUiCertificates, "cert" );                 // binary (CSifUiCertificateInfo)
 
 // Variant map keys for "progress note" dialog parameters
 _LIT( KSifUiProgressNoteText, "txt" );              // string
@@ -73,15 +70,14 @@ _LIT( KSifUiCompleteNoteIsShowButtonHidden, "showbtn" );        // boolean
 _LIT( KSifUiErrorNoteIsDetailsButtonHidden, "errdtlbtn" );      // boolean
 
 // Variant map keys for "error" dialog parameters
-_LIT( KSifUiErrorCode, "err" );                     // integer
-_LIT( KSifUiErrorMessage, "msg" );                  // string
-_LIT( KSifUiErrorDetails, "det" );                  // string
+_LIT( KSifUiErrorCategory, "errcat" );              // enum Usif::TErrorCategory
+_LIT( KSifUiErrorCode, "errcode" );                 // integer
+_LIT( KSifUiErrorCodeExtended, "errext" );          // integer
+_LIT( KSifUiErrorMessage, "errmsg" );               // string
+_LIT( KSifUiErrorDetails, "errdet" );               // string
 
-// Variant map keys for "install indicator" parameters
-_LIT( KSifUiInstallIndicatorAppName, "name" );      // string
-_LIT( KSifUiInstallIndicatorPhase, "phase" );       // int CSifUi::TInstallingPhase
-_LIT( KSifUiInstallIndicatorProgress, "prog" );     // int (0..100), shown as percentage
-_LIT( KSifUiInstallIndicatorIcon, "icon" );         // TODO: TBD
+// Variant map keys for "grant capabilities" dialog parameters
+_LIT( KSifUiGrantCapabilities, "grcap" );           // binary (TCapabilitySet)
 
 #endif  // SIFUIDEFS_H
 
