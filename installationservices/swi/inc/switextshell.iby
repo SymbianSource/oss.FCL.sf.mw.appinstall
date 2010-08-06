@@ -19,7 +19,7 @@
 #ifndef SWITEXTSHELL
 #define SWITEXTSHELL
 
-define ROMDRIVE \epoc32\data\Z
+define ROMDRIVE EPOCROOT##epoc32\data\Z
 
 // SWI configuration - already in textshell ROM
 #include <swiconfig.iby>
@@ -63,6 +63,7 @@ data = \epoc32\winscw\c\tswi\certstore\swicertstore.dat resource\swicertstore.da
 data=ROMDRIVE\resource\swicertstore.dat		\resource\swicertstore.dat  attrib=r
 #endif
 
+#ifndef __SWI_IBY__  
 // Core SWI code
 file=ABI_DIR\BUILD_DIR\installserver.exe			sys\bin\installserver.exe
 file=ABI_DIR\BUILD_DIR\sishelper_tshell.dll			sys\bin\sishelper.dll
@@ -115,7 +116,7 @@ file=ABI_DIR\BUILD_DIR\swiobserverclient.dll 			sys\bin\swiobserverclient.dll
 file=ABI_DIR\BUILD_DIR\swiobserver.exe 				sys\bin\swiobserver.exe
 #endif
 
-
+#endif //__SWI_IBY__
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	//Universal Software Install Framework production
 	#include "scr.iby" // Software Component Registry

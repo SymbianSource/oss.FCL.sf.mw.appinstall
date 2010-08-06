@@ -32,14 +32,18 @@ HEADERS += inc/sifuidevicedialogplugin.h \
     inc/sifuidialogtitlewidget.h \
     inc/sifuidialogcontentwidget.h \
     inc/sifuidialogcertificateinfo.h \
-    inc/sifuidialogcertificatedetails.h
+    inc/sifuidialogcertificatedetails.h \
+    inc/sifuidialoggrantcapabilities.h \
+    inc/sifuidialoggrantcapabilitiescontent.h
 
 SOURCES += src/sifuidevicedialogplugin.cpp \
     src/sifuidialog.cpp \
     src/sifuidialogtitlewidget.cpp \
     src/sifuidialogcontentwidget.cpp \
     src/sifuidialogcertificateinfo.cpp \
-    src/sifuidialogcertificatedetails.cpp
+    src/sifuidialogcertificatedetails.cpp \
+    src/sifuidialoggrantcapabilities.cpp \
+    src/sifuidialoggrantcapabilitiescontent.cpp
 
 symbian: {
     TARGET.EPOCALLOWDLLDATA = 1
@@ -51,6 +55,10 @@ symbian: {
     pluginstub.sources = sifuidevicedialogplugin.dll
     pluginstub.path = /resource/plugins/devicedialogs
     DEPLOYMENT += pluginstub
+
+    crmlFiles.sources = sifuidevicedialogplugin.qcrml
+    crmlFiles.path = /resource/qt/crml
+    DEPLOYMENT += crmlFiles
 
     LIBS += -lfbscli -lPlatformEnv -lestor
 }

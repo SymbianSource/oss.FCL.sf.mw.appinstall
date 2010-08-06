@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -53,12 +53,21 @@ CCompressed::~CCompressed()
 void CCompressed::ConstructL(TInt64& aBytesRead, TReadTypeBehaviour aTypeReadBehaviour)
 	{	
 	CField::ConstructL(iDataProvider, EFieldTypeCompressed, aBytesRead, aTypeReadBehaviour);	
+	// Get the current offset
 	User::LeaveIfError(iDataProvider.Seek(ESeekCurrent, iOffset));
+	TInt64 fieldOffset = 0;
+
+#ifdef SIS_CRC_CHECK_ENABLED
 
 	// Calculate CRC of header and field data
-	TInt64 fieldOffset = iOffset - HeaderSize();
+	fieldOffset = iOffset - HeaderSize();
 	User::LeaveIfError(iDataProvider.Seek(ESeekStart, fieldOffset));
 	CField::CalculateCrcL(iDataProvider, HeaderSize() + Length() + PaddingSize(), iCrc );
+#else
+	fieldOffset = iOffset + Length() + PaddingSize();
+	User::LeaveIfError(iDataProvider.Seek(ESeekStart, fieldOffset));
+#endif
+
 	aBytesRead += Length() + PaddingSize();
 	}
 

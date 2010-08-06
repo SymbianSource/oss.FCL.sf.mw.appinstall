@@ -60,9 +60,12 @@ namespace Usif
         void PublishCompletionL();
 
     protected:  // new functions
-        void SetDisplayErrorL( Swi::TErrorDialog aType, const TDesC& aParam );
+        void SetErrorL( TInt aErrorCode, TInt aExtErrorCode );
+        void SetErrorL( TInt aErrorCode, TInt aExtErrorCode, const TDesC& aErrMsgDetails );
+        void SetErrorSwiErrorL( Swi::TErrorDialog aType, const TDesC& aParam );
         void SetOcspErrorL( Swi::TRevocationDialogMessage aMessage );
         TBool ShowQuestionL( const TDesC& aText ) const;
+        void ShowQuestionWithContinueL( const TDesC& aText ) const;
 
     protected:	// data
         RFs& iFs;
@@ -70,7 +73,7 @@ namespace Usif
         TInt iMaxInstalledSize;
         TBool iIsDriveSelectionRequired;
         CSisxSifPluginInstallParams* iInstallParams;
-        
+
         // members for publishing operation progress
         CPublishSifOperationInfo* iPublishSifOperationInfo;
         TSifOperationPhase iOperationPhase;

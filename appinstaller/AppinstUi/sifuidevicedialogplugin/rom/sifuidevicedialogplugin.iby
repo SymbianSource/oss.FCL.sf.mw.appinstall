@@ -20,5 +20,6 @@
 
 file=ABI_DIR\UREL\sifuidevicedialogplugin.dll SHARED_LIB_DIR\sifuidevicedialogplugin.dll UNPAGED
 data=DATAZ_\pluginstub\sifuidevicedialogplugin.qtplugin \resource\plugins\devicedialogs\sifuidevicedialogplugin.qtplugin
+data=DATAZ_\resource\qt\crml\sifuidevicedialogplugin.qcrml \resource\qt\crml\sifuidevicedialogplugin.qcrml
 
 #endif  // SIFUIDEVICEDIALOGPLUGIN_IBY

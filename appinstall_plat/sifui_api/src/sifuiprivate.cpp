@@ -18,6 +18,8 @@
 #include "sifuiprivate.h"                       // CSifUiPrivate
 #include "sifuicertificateinfo.h"               // CSifUiCertificateInfo
 #include "sifuiappinfo.h"                       // CSifUiAppInfo
+#include "sifuierrorinfo.h"                     // CSifUiErrorInfo
+#include "sifuiinstallindicatordefinitions.h"   // indicator type label and parameter names
 #include <hb/hbcore/hbsymbianvariant.h>         // CHbSymbianVariantMap
 #include <hb/hbwidgets/hbdevicenotificationdialogsymbian.h> // CHbDeviceNotificationDialogSymbian
 #include <apgicnfl.h>                           // CApaMaskedBitmap
@@ -25,13 +27,26 @@
 #include <e32property.h>                        // RProperty
 
 const TInt KDriveLettersLen = 32;
-const TInt KCertificateBufferGranularity = 1024;
+const TInt KBufferGranularity = 1024;
 const TInt KProgFull = 100;                     // 100%
 
 const TUid KInstallIndicatorCategory = { 0x20022FC5 };
 const TUint KInstallIndicatorStatus = 0x2002E690;
 
 _LIT( KSifUiDefaultApplicationIcon, "qtg_large_application" );
+
+// TODO: replace with proper logging
+#ifdef _DEBUG
+#define FLOG(x)         RDebug::Print(x);
+#define FLOG_1(x,y)     RDebug::Print(x, y);
+#define FLOG_2(x,y,z)   RDebug::Print(x, y, z);
+#define FLOG_3(x,y,z,v) RDebug::Print(x, y, z, v);
+#else
+#define FLOG(x)
+#define FLOG_1(x,y)
+#define FLOG_2(x,y,z)
+#define FLOG_3(x,y,z,v)
+#endif
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -42,6 +57,8 @@ _LIT( KSifUiDefaultApplicationIcon, "qtg_large_application" );
 //
 CSifUiPrivate* CSifUiPrivate::NewL()
     {
+    FLOG( _L("CSifUiPrivate::NewL") );
+
     CSifUiPrivate* self = new( ELeave ) CSifUiPrivate();
     CleanupStack::PushL( self );
     self->ConstructL();
@@ -55,6 +72,8 @@ CSifUiPrivate* CSifUiPrivate::NewL()
 //
 CSifUiPrivate::~CSifUiPrivate()
     {
+    FLOG( _L("CSifUiPrivate::~CSifUiPrivate") );
+
     Cancel();
     delete iWait;
     delete iDeviceDialog;
@@ -66,22 +85,12 @@ CSifUiPrivate::~CSifUiPrivate()
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::ShowConfirmationL()
+// CSifUiPrivate::ShowPreparingL()
 // ---------------------------------------------------------------------------
 //
-TBool CSifUiPrivate::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+void CSifUiPrivate::ShowPreparingL()
     {
-    ChangeNoteTypeL( ESifUiConfirmationQuery );
-
-    AddParamsAppInfoL( aAppInfo );
-    if( iSelectableDrives )
-        {
-        AddParamL( KSifUiMemorySelection, *iSelectableDrives );
-        }
-    AddParamsCertificatesL();
-
-    UpdateDialogAndWaitForResponseL();
-    return( iDialogReturnValue == KErrNone );
+    // TODO: implement
     }
 
 // ---------------------------------------------------------------------------
@@ -90,6 +99,8 @@ TBool CSifUiPrivate::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
 //
 void CSifUiPrivate::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
     {
+    FLOG( _L("CSifUiPrivate::SetMemorySelectionL") );
+
     if( iSelectableDrives )
         {
         delete iSelectableDrives;
@@ -105,6 +116,8 @@ void CSifUiPrivate::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
             {
             TChar driveLetter;
             TInt err = RFs::DriveToChar( aDriveNumbers[ index ], driveLetter );
+            FLOG_3( _L("CSifUiPrivate::SetMemorySelectionL, index %d, drive %d, err %d"),
+                    index, aDriveNumbers[ index ], err );
             if( !err )
                 {
                 driveList.Append( driveLetter );
@@ -113,19 +126,7 @@ void CSifUiPrivate::SetMemorySelectionL( const RArray<TInt>& aDriveNumbers )
             }
         iSelectableDrives = driveList.AllocL();
         }
-    }
-
-// ---------------------------------------------------------------------------
-// CSifUiPrivate::SelectedDrive()
-// ---------------------------------------------------------------------------
-//
-TInt CSifUiPrivate::SelectedDrive( TInt& aDriveNumber )
-    {
-    if( iSelectedDriveSet )
-        {
-        return RFs::CharToDrive( iSelectedDrive, aDriveNumber );
-        }
-    return KErrNotFound;
+    FLOG_1( _L("CSifUiPrivate::SetMemorySelectionL, iSelectableDrives=%S"), iSelectableDrives );
     }
 
 // ---------------------------------------------------------------------------
@@ -135,6 +136,8 @@ TInt CSifUiPrivate::SelectedDrive( TInt& aDriveNumber )
 void CSifUiPrivate::SetCertificateInfoL(
         const RPointerArray<CSifUiCertificateInfo>& aCertificates )
     {
+    FLOG( _L("CSifUiPrivate::SetCertificateInfoL") );
+
     if( iCertificateBuffer )
         {
         delete iCertificateBuffer;
@@ -142,7 +145,7 @@ void CSifUiPrivate::SetCertificateInfoL(
         }
     if( aCertificates.Count() )
         {
-        iCertificateBuffer = CBufFlat::NewL( KCertificateBufferGranularity );
+        iCertificateBuffer = CBufFlat::NewL( KBufferGranularity );
         RBufWriteStream writeStream( *iCertificateBuffer );
         CleanupClosePushL( writeStream );
 
@@ -158,12 +161,53 @@ void CSifUiPrivate::SetCertificateInfoL(
     }
 
 // ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowConfirmationL()
+// ---------------------------------------------------------------------------
+//
+TBool CSifUiPrivate::ShowConfirmationL( const CSifUiAppInfo& aAppInfo )
+    {
+    FLOG( _L("CSifUiPrivate::ShowConfirmationL") );
+
+    ChangeNoteTypeL( ESifUiConfirmationQuery );
+
+    AddParamsAppInfoL( aAppInfo );
+    if( iSelectableDrives )
+        {
+        AddParamL( KSifUiMemorySelection, *iSelectableDrives );
+        }
+    AddParamsCertificatesL();
+
+    UpdateDialogAndWaitForResponseL();
+    return( iDialogReturnValue == KErrNone );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::SelectedDrive()
+// ---------------------------------------------------------------------------
+//
+TInt CSifUiPrivate::SelectedDrive( TInt& aDriveNumber )
+    {
+    FLOG( _L("CSifUiPrivate::SelectedDrive") );
+
+    if( iSelectedDriveSet )
+        {
+        TInt err = RFs::CharToDrive( iSelectedDrive, aDriveNumber );
+        FLOG_2( _L("CSifUiPrivate::SelectedDrive, aDriveNumber=%d, err=%d"), aDriveNumber, err );
+        return err;
+        }
+    FLOG( _L("CSifUiPrivate::SelectedDrive, KErrNotFound") );
+    return KErrNotFound;
+    }
+
+// ---------------------------------------------------------------------------
 // CSifUiPrivate::ShowProgressL()
 // ---------------------------------------------------------------------------
 //
 void CSifUiPrivate::ShowProgressL( const CSifUiAppInfo& aAppInfo,
         TInt aProgressBarFinalValue, CSifUi::TInstallingPhase aPhase )
     {
+    FLOG( _L("CSifUiPrivate::ShowProgressL") );
+
     ChangeNoteTypeL( ESifUiProgressNote );
 
     AddParamsAppInfoL( aAppInfo );
@@ -182,6 +226,8 @@ void CSifUiPrivate::ShowProgressL( const CSifUiAppInfo& aAppInfo,
 //
 void CSifUiPrivate::IncreaseProgressBarValueL( TInt aNewValue )
     {
+    FLOG_1( _L("CSifUiPrivate::IncreaseProgressBarValueL, aNewValue=%d"), aNewValue );
+
     ChangeNoteTypeL( ESifUiProgressNote );
 
     AddParamL( KSifUiProgressNoteValue, aNewValue );
@@ -201,11 +247,48 @@ TBool CSifUiPrivate::IsCancelled()
     }
 
 // ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowCompleteL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::ShowCompleteL()
+    {
+    FLOG( _L("CSifUiPrivate::ShowCompleteL") );
+
+    ChangeNoteTypeL( ESifUiCompleteNote );
+
+    AddParamsHiddenButtonsL();
+
+    CompleteDialogOrIndicatorAndWaitForResponseL( KErrNone );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowFailedL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::ShowFailedL( const CSifUiErrorInfo& aErrorInfo )
+    {
+    FLOG_1( _L("CSifUiPrivate::ShowFailedL, aErrorCode=%d"), aErrorInfo.ErrorCode() );
+
+    ChangeNoteTypeL( ESifUiErrorNote );
+
+    AddParamL( KSifUiErrorCategory, aErrorInfo.ErrorCategory() );
+    AddParamL( KSifUiErrorCode, aErrorInfo.ErrorCode() );
+    AddParamL( KSifUiErrorCodeExtended, aErrorInfo.ExtendedErrorCode() );
+    AddParamL( KSifUiErrorMessage, aErrorInfo.ErrorMessage() );
+    AddParamL( KSifUiErrorDetails, aErrorInfo.ErrorMessageDetails() );
+    AddParamsHiddenButtonsL();
+
+    CompleteDialogOrIndicatorAndWaitForResponseL( aErrorInfo.ErrorCode() );
+    }
+
+// ---------------------------------------------------------------------------
 // CSifUiPrivate::SetButtonVisible()
 // ---------------------------------------------------------------------------
 //
 void CSifUiPrivate::SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible )
     {
+    FLOG( _L("CSifUiPrivate::SetButtonVisible") );
+
     switch( aButton )
         {
         case CSifUi::EHideProgressButton:
@@ -226,35 +309,50 @@ void CSifUiPrivate::SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIs
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::ShowCompleteL()
+// CSifUiPrivate::ShowGrantCapabilitiesL()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::ShowCompleteL()
+TBool CSifUiPrivate::ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities )
     {
-    ChangeNoteTypeL( ESifUiCompleteNote );
+    CBufFlat* buffer = CBufFlat::NewL( KBufferGranularity );
+    CleanupStack::PushL( buffer );
 
-    AddParamsHiddenButtonsL();
+    RBufWriteStream writeStream( *buffer );
+    CleanupClosePushL( writeStream );
+    TPckg<TCapabilitySet> capabilitySetPackage( aCapabilities );
+    writeStream.WriteL( capabilitySetPackage );
+    writeStream.CommitL();
+    CleanupStack::PopAndDestroy( &writeStream );
 
-    CompleteDialogOrIndicatorAndWaitForResponseL( KErrNone );
+    AddParamBinaryL( KSifUiGrantCapabilities, *buffer );
+    UpdateDialogAndWaitForResponseL();
+
+    CleanupStack::PopAndDestroy( buffer );
+    return( iDialogReturnValue == KErrNone );
     }
 
 // ---------------------------------------------------------------------------
-// CSifUiPrivate::ShowFailedL()
+// CSifUiPrivate::ShowSingleSelectionL()
 // ---------------------------------------------------------------------------
 //
-void CSifUiPrivate::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
-        const TDesC& aErrorDetails )
+TBool CSifUiPrivate::ShowSingleSelectionL( const TDesC& /*aTitle*/,
+        const MDesCArray& /*aSelectableItems*/, TInt& aSelectedIndex )
     {
-    ChangeNoteTypeL( ESifUiErrorNote );
+    // TODO: implement
+    aSelectedIndex = 0;
+    return ETrue;
+    }
 
-    AddParamL( KSifUiErrorCode, aErrorCode );
-    AddParamL( KSifUiErrorMessage, aErrorMessage );
-    if( aErrorDetails != KNullDesC )
-        {
-        AddParamL( KSifUiErrorDetails, aErrorDetails );
-        }
-
-    CompleteDialogOrIndicatorAndWaitForResponseL( aErrorCode );
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowMultiSelectionL()
+// ---------------------------------------------------------------------------
+//
+TBool CSifUiPrivate::ShowMultiSelectionL( const TDesC& /*aTitle*/,
+        const MDesCArray& /*aSelectableItems*/, RArray<TInt>& aSelectedIndexes )
+    {
+    // TODO: implement
+    aSelectedIndexes.Reset();
+    return ETrue;
     }
 
 // ---------------------------------------------------------------------------
@@ -263,6 +361,8 @@ void CSifUiPrivate::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
 //
 void CSifUiPrivate::DoCancel()
     {
+    FLOG( _L("CSifUiPrivate::DoCancel") );
+
     if( iWait && iWait->IsStarted() && iWait->CanStopNow() )
         {
         iWaitCompletionCode = KErrCancel;
@@ -276,6 +376,8 @@ void CSifUiPrivate::DoCancel()
 //
 void CSifUiPrivate::RunL()
     {
+    FLOG_1( _L("CSifUiPrivate::RunL, iStatus.Int()=%d"), iStatus.Int() );
+
     if( iWait )
         {
         iWait->AsyncStop();
@@ -288,11 +390,14 @@ void CSifUiPrivate::RunL()
 //
 void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
     {
+    FLOG( _L("CSifUiPrivate::DataReceived") );
+
     const CHbSymbianVariant* selectedDriveVariant = aData.Get( KSifUiSelectedMemory );
     if( selectedDriveVariant )
         {
         iSelectedDrive = *( selectedDriveVariant->Value<TChar>() );
         iSelectedDriveSet = ETrue;
+        FLOG_1( _L("CSifUiPrivate::DataReceived, iSelectedDrive=%d"), (TUint)iSelectedDrive );
         }
 
     const CHbSymbianVariant* variant = aData.Get( KSifUiQueryReturnValue );
@@ -334,6 +439,8 @@ void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
 //
 void CSifUiPrivate::DeviceDialogClosed( TInt aCompletionCode )
     {
+    FLOG_1( _L("CSifUiPrivate::DeviceDialogClosed, aCompletionCode=%d"), aCompletionCode );
+
     iIsDisplayingDialog = EFalse;
     WaitedResponseReceived( aCompletionCode );
     }
@@ -345,6 +452,8 @@ void CSifUiPrivate::DeviceDialogClosed( TInt aCompletionCode )
 void CSifUiPrivate::IndicatorUserActivated( const TDesC& aType,
         CHbSymbianVariantMap& /*aData*/ )
     {
+    FLOG( _L("CSifUiPrivate::IndicatorUserActivated") );
+
     if( aType == KSifUiInstallIndicatorType )
         {
         CloseInstallIndicator();
@@ -445,6 +554,20 @@ void CSifUiPrivate::AddParamListL( const TDesC& aKey, const MDesCArray& aList )
     }
 
 // ---------------------------------------------------------------------------
+// CSifUiPrivate::AddParamBinaryL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::AddParamBinaryL( const TDesC& aKey, const CBufBase& aBinary )
+    {
+    CHbSymbianVariant* variant = NULL;
+    const TPtrC8 ptr( const_cast<CBufBase&>( aBinary ).Ptr( 0 ).Ptr(), aBinary.Size() );
+    variant = CHbSymbianVariant::NewL( &ptr, CHbSymbianVariant::EBinary );
+    CleanupStack::PushL( variant );
+    User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
+    CleanupStack::Pop( variant );
+    }
+
+// ---------------------------------------------------------------------------
 // CSifUiPrivate::AddParamsAppInfoL()
 // ---------------------------------------------------------------------------
 //
@@ -452,9 +575,13 @@ void CSifUiPrivate::AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo )
     {
     AddParamL( KSifUiApplicationName, aAppInfo.Name() );
     const TVersion& version( aAppInfo.Version() );
-    if( version.iBuild || version.iMajor || version.iMinor )
+    if( version.iMajor || version.iMinor )
         {
-        AddParamL( KSifUiApplicationVersion, version.Name() );
+        TVersionName versionName;
+        versionName.AppendNum( version.iMajor );
+        versionName.Append( TChar('.') );
+        versionName.AppendNum( version.iMinor );
+        AddParamL( KSifUiApplicationVersion, versionName );
         }
     if( aAppInfo.Vendor().Length() )
         {
@@ -485,13 +612,7 @@ void CSifUiPrivate::AddParamsCertificatesL()
     {
     if( iCertificateBuffer )
         {
-        const TPtrC8 dataPtr( iCertificateBuffer->Ptr( 0 ).Ptr(),
-                iCertificateBuffer->Size() );
-        CHbSymbianVariant* certificates = CHbSymbianVariant::NewL( &dataPtr,
-                CHbSymbianVariant::EBinary );
-        CleanupStack::PushL( certificates );
-        User::LeaveIfError( VariantMapL()->Add( KSifUiCertificates, certificates ) );
-        CleanupStack::Pop( certificates );
+        AddParamBinaryL( KSifUiCertificates, *iCertificateBuffer );
         }
     }
 

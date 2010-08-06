@@ -351,7 +351,7 @@ void CSisxSifPluginActiveImpl::Uninstall(
 	if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
 		{
 		FLOG( _L( "CSisxSifPluginActiveImpl::Uninstall, missing ECapabilityTrustedUI") );
-		iErrorHandler->SetExtendedErrorCode( ETrustedUICapabilityRequired );
+		iErrorHandler->SetExtendedErrorCode( ESifUiTrustedUICapabilityRequired );
 		CompleteClientRequest( KErrPermissionDenied );
 		return;
 		}
@@ -594,7 +594,7 @@ void CSisxSifPluginActiveImpl::DoInstallL( const TSecurityContext& aSecurityCont
         if( !aSecurityContext.HasCapability( ECapabilityTrustedUI ) )
             {
             FLOG( _L("CSisxSifPluginActiveImpl::Install, missing ECapabilityTrustedUI") );
-            iErrorHandler->SetExtendedErrorCode( ETrustedUICapabilityRequired );
+            iErrorHandler->SetExtendedErrorCode( ESifUiTrustedUICapabilityRequired );
             CompleteClientRequest( KErrPermissionDenied );
             return;
             }
@@ -639,7 +639,7 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId,
     GetComponentAndUidL( aComponentId, *entry, uid );
     iUiHandler->PublishStartL( *entry );
     CleanupStack::PopAndDestroy( entry );
-    
+
     iAsyncLauncher->UninstallL( *iUiHandler, uid, iStatus );
 
     iOperation = EUninstall;
@@ -705,7 +705,7 @@ void CSisxSifPluginActiveImpl::DoHandleErrorL( TInt aError )
         iErrorHandler->FillOutputParamsL( *iOutputParams );
         }
     iUiHandler->PublishCompletionL();
-    
+
     if( aError != KErrNone && aError != KErrCancel )
         {
         iUiHandler->DisplayFailedL( *iErrorHandler );
@@ -772,7 +772,7 @@ void CSisxSifPluginActiveImpl::GetComponentAndUidL( TComponentId aComponentId,
         CComponentEntry& aEntry, TUid& aUid ) const
     {
     FLOG_1( _L("CSisxSifPluginActiveImpl::GetComponentAndUidL, component %d"), aComponentId );
-    
+
     RSoftwareComponentRegistry scrSession;
     User::LeaveIfError( scrSession.Connect() );
     CleanupClosePushL( scrSession );
@@ -780,10 +780,10 @@ void CSisxSifPluginActiveImpl::GetComponentAndUidL( TComponentId aComponentId,
     if( scrSession.GetComponentL( aComponentId, aEntry ) )
         {
         FLOG( _L("CSisxSifPluginActiveImpl::GetComponentAndUidL, entry found") );
-        
+
         CPropertyEntry* propertyEntry = scrSession.GetComponentPropertyL( aComponentId, KCompUid );
         CleanupStack::PushL( propertyEntry );
-        
+
         CIntPropertyEntry* intPropertyEntry = dynamic_cast< CIntPropertyEntry* >( propertyEntry );
         if( !intPropertyEntry )
             {
@@ -791,7 +791,7 @@ void CSisxSifPluginActiveImpl::GetComponentAndUidL( TComponentId aComponentId,
             User::Leave( KErrNotFound );
             }
         aUid = TUid::Uid( intPropertyEntry->IntValue() );
-        
+
         CleanupStack::PopAndDestroy( propertyEntry );
         }
     else
@@ -1023,7 +1023,7 @@ void CSisxSifPluginActiveImpl::UpdateStartupListL()
 void CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL()
     {
     FLOG( _L("CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL, begin") );
-    
+
     CArrayFixFlat<TInt>* installedLanguages = NULL;
     TInt err = SysLangUtil::GetInstalledLanguages( installedLanguages, &iFs );
     CleanupStack::PushL( installedLanguages );
@@ -1039,7 +1039,7 @@ void CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL()
             }
         }
     CleanupStack::PopAndDestroy( installedLanguages );
-    
+
     FLOG( _L("CSisxSifPluginActiveImpl::FillDeviceSupportedLanguagesL, end") );
     }
 

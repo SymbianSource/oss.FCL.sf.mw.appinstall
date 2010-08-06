@@ -32,6 +32,7 @@ SOURCE          sifui.cpp
 SOURCE          sifuiprivate.cpp
 SOURCE          sifuicertificateinfo.cpp
 SOURCE          sifuiappinfo.cpp
+SOURCE          sifuierrorinfo.cpp
 
 USERINCLUDE     ../inc
 MW_LAYER_SYSTEMINCLUDE

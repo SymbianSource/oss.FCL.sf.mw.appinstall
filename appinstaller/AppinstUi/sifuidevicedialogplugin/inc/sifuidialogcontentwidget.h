@@ -20,6 +20,7 @@
 
 #include <hbwidget.h>
 #include <sifuidialogdefinitions.h>
+#include <qmobilityglobal.h>            // QTM namespace macros
 
 class HbLabel;
 class QGraphicsLinearLayout;
@@ -27,6 +28,11 @@ class HbStackedWidget;
 class HbComboBox;
 class HbProgressBar;
 class CFbsBitmap;
+
+QTM_BEGIN_NAMESPACE
+class QValueSpacePublisher;
+class QValueSpaceSubscriber;
+QTM_END_NAMESPACE
 
 
 class SifUiDialogContentWidget : public HbWidget
@@ -40,6 +46,7 @@ public:
     void constructFromParameters(const QVariantMap &parameters);
     void updateFromParameters(const QVariantMap &parameters);
     void changeType(SifUiDeviceDialogType type);
+    QString applicationName() const;
 
 signals:
     void memorySelectionChanged(const QChar &driveLetter);
@@ -60,6 +67,8 @@ private:
     bool updateMemorySelection(const QVariantMap &parameters);
     bool updateProgressBar(const QVariantMap &parameters);
     bool updateErrorText(const QVariantMap &parameters);
+    void saveSelectedDriveAsDefault(const QChar& drive);
+    QChar readDefaultSelectedDrive();
 
 private:    // data
     HbLabel *mAppIcon;
@@ -74,6 +83,8 @@ private:    // data
     HbLabel *mErrorText;
     CFbsBitmap *mBitmap;
     CFbsBitmap *mMask;
+    QTM_PREPEND_NAMESPACE(QValueSpacePublisher) *mPublisher;
+    QTM_PREPEND_NAMESPACE(QValueSpaceSubscriber) *mSubscriber;
 };
 
 #endif // SIFUIDIALOGCONTENTWIDGET_H

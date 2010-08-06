@@ -15,9 +15,10 @@
 *
 */
 
-#include "sifuidialog.h"
-#include "sifuidialogtitlewidget.h"
-#include "sifuidialogcontentwidget.h"
+#include "sifuidialog.h"                    // SifUiDialog
+#include "sifuidialogtitlewidget.h"         // SifUiDialogTitleWidget
+#include "sifuidialogcontentwidget.h"       // SifUiDialogContentWidget
+#include "sifuidialoggrantcapabilities.h"   // SifUiDialogGrantCapabilities
 #include "sifuiinstallindicatorparams.h"
 #include <QFile>
 #include <hblabel.h>
@@ -44,7 +45,8 @@ const QString KSwiErrorFormat = " (%1)";
 SifUiDialog::SifUiDialog(const QVariantMap &parameters) : HbDialog(),
     mCommonTranslator(0), mSifUITranslator(0), mLastDialogError(KErrNone),
     mShowEventReceived(false), mDialogType(SifUiUnspecifiedDialog),
-    mTitle(0), mContent(0), mPrimaryAction(0), mSecondaryAction(0),
+    mTitle(0), mContent(0), mErrorDetails(), mErrorCode(KErrNone),
+    mExtendedErrorCode(KErrNone), mPrimaryAction(0), mSecondaryAction(0),
     mResultMap(), mIndicator(0), mSubscriber(0)
 {
     mCommonTranslator = new HbTranslator(KTranslationsPath, KCommonTranslationsFile);
@@ -200,24 +202,20 @@ bool SifUiDialog::constructDialog(const QVariantMap &parameters)
 bool SifUiDialog::updateFromParameters(const QVariantMap &parameters)
 {
     SifUiDeviceDialogType prevDialogType = mDialogType;
-    mDialogType = dialogType(parameters);
-    if (mTitle)
-        {
-        mTitle->updateFromParameters(parameters);
+    if (!displayAdditionalQuery(parameters)) {
+        mDialogType = dialogType(parameters);
+        if (mTitle)
+            {
+            mTitle->updateFromParameters(parameters);
+            }
+        if (mContent)
+            {
+            mContent->updateFromParameters(parameters);
+            }
+        if (prevDialogType != mDialogType) {
+            updateButtons(parameters);
         }
-    if (mContent)
-        {
-        mContent->updateFromParameters(parameters);
-        }
-    if (prevDialogType != mDialogType) {
-        updateButtons(parameters);
-    }
-    if (parameters.contains(KSifUiErrorCode)) {
-        bool ok = false;
-        int errorCode = parameters.value(KSifUiErrorCode).toInt(&ok);
-        if (ok) {
-            mInstallError = errorCode;
-        }
+        prepareForErrorDetails(parameters);
     }
     return true;
 }
@@ -300,6 +298,49 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
 }
 
 // ----------------------------------------------------------------------------
+// SifUiDialog::prepareForErrorDetails()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialog::prepareForErrorDetails(const QVariantMap &parameters)
+{
+    if (parameters.contains(KSifUiErrorDetails)) {
+        mErrorDetails = parameters.value(KSifUiErrorDetails).toString();
+    }
+    if (parameters.contains(KSifUiErrorCode)) {
+        bool ok = false;
+        int errorCode = parameters.value(KSifUiErrorCode).toInt(&ok);
+        if (ok) {
+            mErrorCode = errorCode;
+        }
+    }
+    if (parameters.contains(KSifUiErrorCodeExtended)) {
+        bool ok = false;
+        int errorCode = parameters.value(KSifUiErrorCodeExtended).toInt(&ok);
+        if (ok) {
+            mExtendedErrorCode = errorCode;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::displayAdditionalQuery()
+// ----------------------------------------------------------------------------
+//
+bool SifUiDialog::displayAdditionalQuery(const QVariantMap &parameters)
+{
+    if (parameters.contains(KSifUiGrantCapabilities)) {
+        SifUiDialogGrantCapabilities *dlg = new SifUiDialogGrantCapabilities(
+            mContent->applicationName(), parameters.value(KSifUiGrantCapabilities));
+        connect(dlg, SIGNAL(accepted()), this, SLOT(handleCapabilitiesGranted()));
+        connect(dlg, SIGNAL(declined()), this, SLOT(handleCapabilitiesDenied()));
+        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+        dlg->open();
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
 // SifUiDialog::sendResult()
 // ----------------------------------------------------------------------------
 //
@@ -363,12 +404,7 @@ void SifUiDialog::handleShowInstalled()
         bool result = request->send();
         if (result) {
             closeDeviceDialog(false);
-        } else {
-            // TODO: proper error handling
-            int error = request->lastError();
-            QString messageText = tr("Unable to open AppLib. Error %1").arg(error);
-            HbMessageBox::warning(messageText);
-        }
+        } // else error silently ignored
         delete request;
     }
 
@@ -381,13 +417,33 @@ void SifUiDialog::handleShowInstalled()
 //
 void SifUiDialog::handleErrorDetails()
 {
-    // TODO: show proper error details dialog
-    QString messageText;
-    messageText = tr("Error code %1").arg(mInstallError);
+    QString messageText = mErrorDetails;
 
     if (QFile::exists(KSwiErrorsFile)) {
-        messageText.append(KSwiErrorFormat.arg(mInstallError));
+        messageText.append(KSwiErrorFormat.arg(mErrorCode));
+        if (mExtendedErrorCode) {
+            messageText.append(KSwiErrorFormat.arg(mExtendedErrorCode));
+        }
     }
+
     HbMessageBox::warning(messageText);
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::handleCapabilitiesGranted()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialog::handleCapabilitiesGranted()
+{
+    sendResult(SifUiContinue);
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::handleCapabilitiesDenied()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialog::handleCapabilitiesDenied()
+{
+    sendResult(SifUiCancel);
 }
 

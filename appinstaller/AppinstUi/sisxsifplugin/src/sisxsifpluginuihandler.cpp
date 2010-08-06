@@ -23,6 +23,7 @@
 #include <sifui.h>                      // CSifUi
 #include <sifuiappinfo.h>               // CSifUiAppInfo
 #include <sifuicertificateinfo.h>       // CSifUiCertificateInfo
+#include <sifuierrorinfo.h>             // CSifUiErrorInfo
 #include <bautils.h>                    // BaflUtils
 #include <driveinfo.h>                  // DriveInfo
 #include <featmgr.h>                    // FeatureManager
@@ -78,11 +79,32 @@ CSisxSifPluginUiHandler::~CSisxSifPluginUiHandler()
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandler::DisplayTextL( const Swi::CAppInfo& /*aAppInfo*/,
-        Swi::TFileTextOption /*aOption*/, const TDesC& /*aText*/ )
+        Swi::TFileTextOption aOption, const TDesC& aText )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayTextL") );
+    TBool okToContinue = EFalse;
 
-    return ETrue;
+    switch( aOption )
+        {
+        case Swi::EInstFileTextOptionContinue:
+            ShowQuestionWithContinueL( aText );
+            okToContinue = ETrue;
+            break;
+        case Swi::EInstFileTextOptionSkipOneIfNo:
+            okToContinue = ShowQuestionL( aText );
+            break;
+        case Swi::EInstFileTextOptionAbortIfNo:
+        case Swi::EInstFileTextOptionExitIfNo:
+            okToContinue = ShowQuestionL( aText );
+            break;
+        case Swi::EInstFileTextOptionForceAbort:
+            ShowQuestionWithContinueL( aText );
+            break;
+        default:
+            break;
+        }
+
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -93,19 +115,24 @@ void CSisxSifPluginUiHandler::DisplayErrorL( const Swi::CAppInfo& /*aAppInfo*/,
         Swi::TErrorDialog aType, const TDesC& aParam )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayErrorL") );
-    SetDisplayErrorL( aType, aParam );
+    SetErrorSwiErrorL( aType, aParam );
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginUiHandler::
+// CSisxSifPluginUiHandler::DisplayDependencyBreakL()
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandler::DisplayDependencyBreakL( const Swi::CAppInfo& /*aAppInfo*/,
         const RPointerArray<TDesC>& /*aComponents*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayDependencyBreakL") );
+    TBool okToContinue = EFalse;
 
-    return ETrue;
+    // TODO: localized UI string needed
+    _LIT( KText, "Removal may stop other applications working. Continue?" );
+    okToContinue = ShowQuestionL( KText );
+
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -116,8 +143,7 @@ TBool CSisxSifPluginUiHandler::DisplayApplicationsInUseL( const Swi::CAppInfo& /
         const RPointerArray<TDesC>& /*aAppNames*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayApplicationsInUseL") );
-
-    return ETrue;
+    return ETrue;   // silently accepted
     }
 
 // ---------------------------------------------------------------------------
@@ -128,23 +154,30 @@ TBool CSisxSifPluginUiHandler::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo
         Swi::TQuestionDialog aQuestion, const TDesC& /*aDes*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayQuestionL") );
+    TBool okToContinue = EFalse;
 
-    TBool result = ETrue;
     switch( aQuestion )
         {
         case Swi::EQuestionIncompatible:
             if( !iQuestionIncompatibleDisplayed )
                 {
-                // TODO: show dialog
+                _LIT( KText, "Application not compatible with phone. Continue anyway?" );
+                okToContinue = ShowQuestionL( KText );
                 iQuestionIncompatibleDisplayed = ETrue;
                 }
+            else
+                {
+                okToContinue = ETrue;   // already accepted once
+                }
             break;
+
         case Swi::EQuestionOverwriteFile:
         default:
-            // silently accepted
+            okToContinue = ETrue;   // silently accepted
             break;
         }
-    return result;
+
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -166,11 +199,14 @@ TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL( const Swi::CAppInfo& /*aAppInfo*/,
-        const TCapabilitySet& /*aCapabilitySet*/ )
+        const TCapabilitySet& aCapabilitySet )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL") );
+    TBool okToContinue = EFalse;
 
-    return ETrue;
+    okToContinue = iSifUi->ShowGrantCapabilitiesL( aCapabilitySet );
+
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -469,8 +505,11 @@ void CSisxSifPluginUiHandler::DisplayFailedL( const CSisxSifPluginErrorHandler& 
     {
     FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, error code %d"), aError.ErrorCode() );
 
-    // TODO: add error details
-    iSifUi->ShowFailedL( aError.ErrorCode(), aError.ErrorMessage() );
+    CSifUiErrorInfo* errorInfo = CSifUiErrorInfo::NewLC( aError.ErrorCategory(),
+        aError.ErrorCode(), aError.ExtendedErrorCode(), aError.ErrorMessage(),
+        aError.ErrorMessageDetails() );
+    iSifUi->ShowFailedL( *errorInfo );
+    CleanupStack::PopAndDestroy( errorInfo );
     }
 
 // ---------------------------------------------------------------------------
