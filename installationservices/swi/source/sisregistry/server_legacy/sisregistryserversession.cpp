@@ -1856,6 +1856,7 @@ void CSisRegistrySession::RequestSidToFileNameL(const RMessage2& aMessage)
 				{
 				// Destroys object so we continue to next iteration.
 				CleanupStack::PopAndDestroy(sidObject);
+				sidObject = NULL;
 				}
 			}  // End for loop.
 

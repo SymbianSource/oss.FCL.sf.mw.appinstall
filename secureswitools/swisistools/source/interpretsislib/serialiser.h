@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -26,6 +26,7 @@
 #include "serialisable.h"
 #include "ucmp.h"
 #include "cardinality.h"
+#include "utf8.h"
 
 /**
 * @file SERIALISER.H
@@ -81,15 +82,49 @@ public:
 
 	Serialiser& operator<<(std::wstring& val)
 	{
+
+	std::wstring tempval = val.c_str();
+	
+#ifdef __TOOLS2_LINUX__
+	std::wstring::size_type idx = 0;
+	while( (idx = tempval.find(L"/", idx)) != std::wstring::npos)
+        {
+		tempval.replace( idx, 1, L"\\" );
+        }
+#endif
+
 	Cardinality card;
-	TUint32 size = val.size() << 1;
+	TUint32 size = tempval.size() << 1;
+
+#ifdef __TOOLS2_LINUX__
+	const wchar_t * source = tempval.c_str();
+	unsigned short int* buffer = new unsigned short int[size];
+
+	// Using a temp variable in place of buffer as ConvertUTF32toUTF16 modifies the source pointer passed.
+	unsigned short int* temp = buffer;
+
+	ConvertUTF32toUTF16(&source, tempval.c_str() + tempval.size(), &temp,  temp + size, lenientConversion);
+
+	// Appending NULL to the converted buffer.
+	*temp = NULL;
+#endif
+	
 	card.SetSize(size);
 	*this << card;
 
 	TUnicodeCompressor comp;
-	TMemoryUnicodeSource src((TUint16*)val.c_str());
+
+#ifdef __TOOLS2_LINUX__
+	TMemoryUnicodeSource src((TUint16*)buffer);
+#else
+	TMemoryUnicodeSource src((TUint16*)tempval.c_str());
+#endif
+
 	//The compressed unicode output could end up larger than the input, thus restricting the output to KMaxTInt.
-	comp.CompressL(*this, src, KMaxTInt, val.size());
+	comp.CompressL(*this, src, KMaxTInt, tempval.size());
+#ifdef __TOOLS2_LINUX__
+	delete[] buffer;
+#endif
 	return *this;
 	}
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -90,6 +90,7 @@ public: // API
 	static const std::string KRegistryV52string;
 	static const std::string KRegistryV53string;
 	static const std::string KRegistryV54string;
+	typedef std::multimap<TUint32, SisRegistryObject*> EntryMap;
 
 private: // Internal methods
     void ReadStubs( const std::wstring& aDirectory );
@@ -109,6 +110,7 @@ public:
 	TUint32 GetUid(TUint32 aSid) const;
 	TUint32 GetUid(const std::wstring& aSidFile) const;
 	bool GetInRom(TUint32 aUid) const;
+	std::string GetDbPath();
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	const DbHelper* GetDbHelper() const;	
 #endif
@@ -122,9 +124,6 @@ private: // Utility functions
 
 private: // Friends
 	friend struct Contains;
-
-private: // Type definitions
-	typedef std::multimap<TUint32, SisRegistryObject*> EntryMap;
 
 private: // Constants
 	static const std::wstring KPathToRegistry;
@@ -259,8 +258,6 @@ private:
 	void UpdateInstallationInformation(XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail);
 	
 	void GenerateDbRegistryEntry(const SisRegistryObject& aSisRegistryObject, bool aOriginVerified);
-
-	std::string GetDbPath();
 
 	std::wstring GetGlobalId( TUint32 aUid , TInt aInstallType, std::wstring aPackageName);
 

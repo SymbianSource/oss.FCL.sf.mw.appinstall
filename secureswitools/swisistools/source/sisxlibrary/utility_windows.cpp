@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -184,4 +184,16 @@ int GetErrorValue()
 	{
 	return ::GetLastError();
 	}
+
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
+{
+	int err=CopyFileA(aSrc,aDest,aFlag);
+	return err;
+}
+
+int FileMoveA(const char* aSrc, const char* aDest)
+{
+	int err=MoveFileA(aSrc,aDest);
+	return err;
+}
 

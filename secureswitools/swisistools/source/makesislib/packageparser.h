@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -194,7 +194,7 @@ public:
 	 * @param aMakeStub boolean which tells whether to create stub or not.
 	 * @param aReportInterpretSisError whether to report interpretsis failure or not.
 	 */
-	void MakeSis(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError);
+	void MakeSisL(const wchar_t* aPkgFileName, const wchar_t* aSisFileName, bool aMakeStub, bool aReportInterpretSisError);
 	
 	/**
 	 * This function will parse the package file. In case of any error it will

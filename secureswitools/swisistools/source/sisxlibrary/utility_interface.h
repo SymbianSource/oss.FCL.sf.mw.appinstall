@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -98,6 +98,33 @@ int ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTa
  * 			the complete conversion of the source string.
  */
 int ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage = 0);
+
+/*
+Copies an existing file to a new file.
+@Parameters aSrc : The name of an existing file. 
+@Parameters aDest : The name of the new file. 
+@Parameters aFlag : (only for windows) If this parameter is TRUE and the new file specified by aDest already exists, the function fails. If this parameter is FALSE and the new file already exists, the function overwrites the existing file and succeeds.
+
+Return Value
+If the function succeeds, the return value is zero.
+If the function fails, the return value is nonzero.
+*/
+
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag);
+
+
+/*
+Moves an existing file or a directory, including its children
+@Parameters aSrc : The current name of the file or directory on the local computer. 
+@Parameters aDest : The new name for the file or directory. The new name must not already exist. A new file may be on a different file system or drive. A new directory must be on the same drive. 
+
+Return Value
+If the function succeeds, the return value is zero.
+If the function fails, the return value is nonzero.
+*/
+
+int FileMoveA(const char* aSrc, const char* aDest);
+
 
 // interface for only Linux
 

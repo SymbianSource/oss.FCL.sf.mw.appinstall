@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -123,7 +123,7 @@ ConfigManager::ConfigManager(const CParameterList& aParamList)
     if ( FileExists( fileName ) )
         {
     	std::string fName;
-        fName = Ucs2ToUtf8( fileName );
+        fName = wstring2string( fileName );
         //
         std::ifstream stream;
 	    stream.open( fName.c_str(), std::ios::binary );
@@ -382,7 +382,7 @@ void ConfigManager::ConvertLineData( const std::string& aKey, std::string& aValu
 		std::ostringstream stream;
     	stream << "Unsupported keyword at line " << aLineNumber << " of ini file [" << aKey << " = " << aValue << "] ";
     	stream << std::endl;
-    	std::wstring finalMessage = Utf8ToUcs2( stream.str() );
+    	std::wstring finalMessage = string2wstring( stream.str() );
 		LWARN( finalMessage );
 		}
     }
@@ -398,7 +398,7 @@ std::string ConfigManager::AttributeNameById( TUint32 aId )
 		if  ( KConfigAttributes[i].iId == aId )
 			{
 			std::wstring entry( KConfigAttributes[i].iName );
-            ret = Ucs2ToUtf8( entry );
+            ret = wstring2string( entry );
 			}
 		}
     //
@@ -411,7 +411,7 @@ const ConfigAttribute* ConfigManager::AttributeByName( const std::string& aName 
 	std::string upperCased( aName );
     upperCased = StringUtils::ToUpper( upperCased );
     std::wstring searchFor;
-    searchFor = Utf8ToUcs2( upperCased );
+    searchFor = string2wstring( upperCased );
     //
     const int attributeCount = sizeof( KConfigAttributes ) / sizeof( ConfigAttribute );
     const ConfigAttribute* ret = NULL;
@@ -512,7 +512,7 @@ int ConfigManager::ConvertToDriveAttributes( const std::string& aString, DriveAt
 			}
 
 		// Set the drive representation location
-		Utf8ToUcs2(std::string(it, (currentPos-it)), aDrive->iDir);
+		aDrive->iDir = string2wstring(std::string(it, (currentPos-it)));
 			
 		temp =  StringUtils::TrimWhiteSpace( std::string(currentPos, end) );
 
@@ -614,7 +614,7 @@ void ConfigManager::CheckAndAddDrive(const int aDrive, const std::wstring& aDir,
 		char drive = aDrive;
 	 	std::stringstream warn;
 		warn << "Redefining drive: " << drive;
-		std::wstring finalMessage = Utf8ToUcs2( warn.str() );
+		std::wstring finalMessage = string2wstring( warn.str() );
 		LWARN( finalMessage + L" to " + aDir);
 
 		delete it->second;
@@ -687,7 +687,7 @@ void ConfigManagerException::Display() const
 			stream << "\'" << iValue << "\'" << " directory is not found";
 			break;
 		case ETypeDriveError:
-			LERROR( Utf8ToUcs2( iValue ) );
+			LERROR( string2wstring( iValue ) );
 			return;
 
 		default:
@@ -696,7 +696,7 @@ void ConfigManagerException::Display() const
 		}
     //
     stream << std::endl;
-    std::wstring finalMessage = Utf8ToUcs2( stream.str() );
+    std::wstring finalMessage = string2wstring( stream.str() );
     //
 	LERROR( finalMessage );
     }

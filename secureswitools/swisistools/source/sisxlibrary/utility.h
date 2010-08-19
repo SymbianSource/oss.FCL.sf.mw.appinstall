@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,11 +32,13 @@
 #include <string>
 #include "basetype.h"
 #include "fieldroot.h"
+#include "../common/toolsconf.h"
 
 #define FreeMemory(x) {if((x) != NULL) {free(x); (x)=NULL;}}
 
 // Constants
 const std::wstring KSisDirectorySeparator( L"/" );
+const std::wstring KSisInitialNetworkPathSlashes( L"//" );
 
 typedef struct {
 	wchar_t*		iName;
@@ -62,7 +64,7 @@ typedef enum {CERTFILE, KEYFILE} TFileType;
 
 int SearchSortedUCTable (const SIdentifierTable aTable [], const std::wstring& aIdentifier);
 TUint32 IdentifyUCKeyword (const SKeyword aKeyword [], std::wstring aIdentifier, const std::wstring& aContext);
-std::string wstring2string (const std::wstring& aWide);
+DllExport std::string wstring2string (const std::wstring& aWide);
 std::wstring string2wstring (const std::string& aNarrow);
 bool ValidateFileName (std::wstring& aName, const bool aMustExist);
 bool ValidateFileName (std::wstring& aName, const bool aMustExist, const std::wstring& aDefaultExtension);

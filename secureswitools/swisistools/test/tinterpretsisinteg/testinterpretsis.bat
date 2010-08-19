@@ -1890,7 +1890,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1904,7 +1904,7 @@ mkdir .\romdrive\system\data
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_1.txt .\romdrive\system\data\sisregistry_5.1.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1918,7 +1918,7 @@ mkdir .\romdrive\system\data\ > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_4_1.txt .\romdrive\system\data\sisregistry_4.0.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_40\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_40\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1928,7 +1928,7 @@ GOTO PASS_CLEAN
 if not exist .\romdrive\system\install mkdir .\romdrive\system\install > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -k 5.3 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1940,7 +1940,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_4_1.txt .\romdrive\system\data\sisregistry_4.0.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -k 5.3 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1952,7 +1952,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1964,7 +1964,7 @@ mkdir .\romdrive\system\data
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_1.txt .\romdrive\system\data\sisregistry_5.1.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1976,7 +1976,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -2503,7 +2503,7 @@ call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterprets
 if not %errorlevel%==0 GOTO LAST
 set exist_file=.\edrive\private\10202dce\802730A9_0.sis
 if not exist %exist_file% GOTO FAIL_NOT_FOUND
-call fc .\edrive\private\10202dce\802730A9_0.sis \epoc32\winscw\c\tswi\tinterpretsisinteg\data\802730A9_0.sis | find "FC: no differences encountered" > NUL
+call fc /c  .\edrive\private\10202dce\802730A9_0.sis \epoc32\winscw\c\tswi\tinterpretsisinteg\data\802730A9_0.sis | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN

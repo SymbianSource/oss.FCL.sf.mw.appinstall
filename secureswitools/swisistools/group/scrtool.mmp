@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -27,6 +27,7 @@ USERINCLUDE 		../../swianalysistoolkit/source/common/utf8
 USERINCLUDE 		../source/xmlparser
 USERINCLUDE 		../source/dbmanager
 USERINCLUDE 		../source/dbmanager/sqlite
+USERINCLUDE		../source/sisxlibrary
 
 SYSTEMINCLUDE 		../source/xmlparser/xerces/include
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
@@ -46,7 +47,14 @@ SOURCEPATH 		../source/common
 SOURCE			logs.cpp exception.cpp util.cpp
 
 
-STATICLIBRARY		eay32 xerces
+STATICLIBRARY		xerces
+STATICLIBRARY		sisx
+#ifndef TOOLS2_LINUX
+STATICLIBRARY		eay32
+#else
+STATICLIBRARY		crypto dl c
+#endif
+
 
 #ifndef TOOLS2_LINUX
 MACRO	_UNICODE _CONSOLE _STLP_THREADS _WIN32 UNICODE __GNUG__ XML_LIBRARY
@@ -60,5 +68,8 @@ SOURCE			../../../swianalysistoolkit/source/common/utf8/utf8.cpp
 OPTION			GCC -w
 OPTION			GCC -fno-stack-check
 OPTION			GCC -fpermissive
+#ifdef TOOLS2_LINUX
+OPTION			GCC -rdynamic
+#endif 
 //OPTION			GCC -masm=intel
 SMPSAFE

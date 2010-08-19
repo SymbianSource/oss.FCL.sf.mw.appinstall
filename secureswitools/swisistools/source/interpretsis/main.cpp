@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -29,6 +29,22 @@
 #include "logger.h"
 #include "../common/exception.h"
 
+
+#ifndef _WIN32
+#include <ctype.h>
+
+//__ctype_b was removed from glibc. This is a workaround to fix the linking problem
+extern "C"
+    {
+    const unsigned short int** __ctype_b()
+        {
+        return __ctype_b_loc();
+        }
+    }
+
+#endif // _WIN32
+
+
 int main(int argc, const char* argv[])
 	{
 	bool pauseWhenDone = false;
@@ -48,7 +64,7 @@ int main(int argc, const char* argv[])
 
 		if (options.LogFile().size() > 0)
 			{
-			logFile = new std::wofstream(Ucs2ToUtf8(options.LogFile()).c_str(), std::ios::app);
+			logFile = new std::wofstream(wstring2string(options.LogFile()).c_str(), std::ios::app);
 			Logger::SetStream(*logFile);
 			}
 		else
@@ -90,7 +106,7 @@ int main(int argc, const char* argv[])
     	}
 	catch  (InterpretSisError& e)
 		{
-		LERROR(L"\t" << Utf8ToUcs2(e.what()));
+		LERROR(L"\t" << string2wstring(e.what()));
 		result =  e.GetErrorCode();
 		}
 	catch (CSISException e)
@@ -109,7 +125,7 @@ int main(int argc, const char* argv[])
 #endif
 	catch (std::exception &err)
 		{
-		std::wstring emessage = Utf8ToUcs2( err.what() );
+		std::wstring emessage = string2wstring( err.what() );
 		LERROR( L"Error: " << emessage);
 		result = STD_EXCEPTION;
 		}

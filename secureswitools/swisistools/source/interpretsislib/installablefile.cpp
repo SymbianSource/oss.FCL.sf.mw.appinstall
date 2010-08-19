@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -44,12 +44,17 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFil
   iTargetFile(aFdes.Target().GetString()),
   iLocalTargetFile(aFdes.Target().GetString())
 {
+	// Transforming the file path into lower case to maintain consistency
+	// between Windows and Linux as Linux path is case-sensitive.
+	std::transform(iTargetFile.begin(), iTargetFile.end(), iTargetFile.begin(), tolower);
+	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
+
 	// Update the installing file with the actual target drive letter
 	ChangeTargetDrive(aDrivePath, aInstallingDrive);
 
 	// warn the user if they are using a winscw emulator binary
 	if (aFdata->IsEmulatorExecutable())
-			LWARN(iTargetFile << L" is an emulator binary!");
+			LWARN(iTargetFile.c_str() << L" is an emulator binary!");
 }
 
 // PA SIS files		
@@ -64,6 +69,11 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::ws
   iTargetFile(aFdes.Target().GetString()),
   iLocalTargetFile(aFdes.Target().GetString())
   {
+	// Transforming the file path into lower case to maintain consistency
+	// between Windows and Linux as Linux path is case-sensitive.
+	std::transform(iTargetFile.begin(), iTargetFile.end(), iTargetFile.begin(), tolower);
+	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
+
 	// Update the installing file with the actual target drive letter
 	ChangeTargetDrive(aDrivePath, aInstallingDrive);
 
@@ -86,7 +96,7 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::ws
 				iSid = info.iSecureId;
 				
 				if(fileType & EFileEmulatorExe)
-					LWARN(iTargetFile << L" is an emulator binary!");
+					LWARN(iTargetFile.c_str() << L" is an emulator binary!");
 				}
 			else if (fileType & EFileDll)
 				{
@@ -111,6 +121,9 @@ void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInst
 {
 	// get the local path
 	ConvertToLocalPath(iLocalTargetFile,aDrivePath);
+#ifdef __TOOLS2_LINUX__
+	ConvertToForwardSlash(iTargetFile);
+#endif
 
 	// change the drive letter
 	if (StringUtils::StartsWithDrive(iTargetFile))

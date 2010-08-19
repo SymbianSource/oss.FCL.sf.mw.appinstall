@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -23,6 +23,7 @@ TARGETTYPE		LIB
 USERINCLUDE 	../source/dumpsislib
 USERINCLUDE 	../source/sisxlibrary
 USERINCLUDE 	../../swianalysistoolkit/source/common
+USERINCLUDE 	../../swianalysistoolkit/source/common/utf8
 
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN

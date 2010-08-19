@@ -204,9 +204,8 @@ void SisFile::CheckValid() const
 
 	if (failed)
 		{
-		std::string x;
-		throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x),
-			error, SIS_NOT_SUPPORTED);
+		std::string x = wstring2string(this->GetPackageName());
+		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 		}
 	}
 
@@ -263,6 +262,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
             success = true;
             break;
         case CSISFileDescription::EOpNull:
+		case CSISFileDescription::EOpNone:
             success = true;
             break;
         default:
@@ -276,6 +276,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 			break;
 	    	}
 		}
+	return success;
 	}
 
 
@@ -421,9 +422,9 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 
 		if (ifBlock.WasteOfSpace())
 			{
-			std::string x;
 			std::string error = "corrupt SIS file";
-			throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x), error, INVALID_SIS);
+			std::string x = wstring2string(this->GetPackageName());
+			throw InvalidSis(x, error, INVALID_SIS);
 			}
 
 		// Main expression

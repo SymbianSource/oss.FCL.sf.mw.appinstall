@@ -141,6 +141,7 @@ namespace Swi
 				SetTestStepResult(err);		
 				User::Leave(err);
 				}
+#ifdef SIS_CRC_CHECK_ENABLED			
 			TRAP(err, contents->CheckCrcL());
 			if (err == KErrCorrupt)
 				{
@@ -148,10 +149,11 @@ namespace Swi
 				SetTestStepResult(err);		
 				User::Leave(err);
 				}
+#endif  			
 			CleanupStack::Pop(contents);	
-			return contents;								
-			}
+			return contents;	
 			
+			}		
 	CController* CParserTestStep::GetControllerL(CContents& contents, TBool aUseInPlaceParse)
 		{
 		TRAPD(err, iControllerData = contents.ReadControllerL());

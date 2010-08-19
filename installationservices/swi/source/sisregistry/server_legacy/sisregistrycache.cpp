@@ -82,20 +82,23 @@ CSisRegistryCache::~CSisRegistryCache()
 	// General note: trap the error because this is not a leaving function
 	// and generating an error will not help 
 
-	// store the backup file out 
- 	TRAP(res, StoreBackupL());
- 	if (res != KErrNone)
- 		{
- 	DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to store backup (failure code: %d.)"), res);
- 		}
+	if (iIntegrityService)
+	    {
+	    // store the backup file out 
+	    TRAP(res, StoreBackupL());
+	    if (res != KErrNone)
+	        {
+	        DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to store backup (failure code: %d.)"), res);
+	        }
 
-	// integrity service operation committing point 
-	TRAP(res, iIntegrityService->CommitL());
-	if (res != KErrNone)
- 		{
-	DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to commit integrity services changes (failure code %d.)"), res);
- 		}
-
+	    // integrity service operation committing point 
+	    TRAP(res, iIntegrityService->CommitL());
+	    if (res != KErrNone)
+	        {
+	        DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to commit integrity services changes (failure code %d.)"), res);
+	        }
+	    }
+	
 	delete iBackupFile;
 	
 	delete iIntegrityService;
@@ -446,7 +449,7 @@ void CSisRegistryCache::BuildFileListL(TUid aUid, const TDesC& aPath)
 			User::Leave(KErrCorrupt);	
 			}
 			
-		iTokens.Append(token);
+		iTokens.AppendL(token);
 		CleanupStack::Pop(token);
 		CleanupStack::PopAndDestroy(&fileStream);
 				
@@ -1417,7 +1420,7 @@ void CSisRegistryCache::ControllerDriveListL(const CSisRegistryObject& aObject,
 	CleanupClosePushL(aDriveList);
 	aDriveList.Reset();
 	// a copy of the controller is always kept on drive C
-	aDriveList.Append(iSystemDrive);
+	aDriveList.AppendL(iSystemDrive);
 	
 	// only controllers will be written to removable media and 
 	// we have now to check for those 

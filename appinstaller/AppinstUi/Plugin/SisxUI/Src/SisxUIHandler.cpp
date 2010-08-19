@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -478,7 +478,9 @@ TBool CSisxUIHandler::DisplayUpgradeL( const Swi::CAppInfo& aAppInfo,
     // than the currently installed old version (i.e. when downgrading). See
     // also User::QueryVersionSupported() although it has bit different meaning.
     TBool downgrading = ( newVersion.iMajor < oldVersion.iMajor ||
-            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor < oldVersion.iMinor ) );
+            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor < oldVersion.iMinor ) ||
+            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor == oldVersion.iMinor &&
+                newVersion.iBuild < oldVersion.iBuild ) );
     if( !downgrading )
         {
         iShowingDialog = EFalse;

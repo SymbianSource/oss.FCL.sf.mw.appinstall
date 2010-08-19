@@ -231,6 +231,6 @@ RESOURCE TBUF r_am_note_locked_settigs
 
 RESOURCE TBUF r_am_set_ocsp_none
     {
-    buf = qtn_selec_sett_val_field_none;
+    buf = qtn_am_set_ocsp_url_none;
     } 
 

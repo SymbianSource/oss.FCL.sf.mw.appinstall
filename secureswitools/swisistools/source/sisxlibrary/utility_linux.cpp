@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -175,18 +175,24 @@ bool IsBadWritePtr(const void* pv, unsigned long ulSize)
 int _wunlink(const wchar_t* wc)
 	{
 	  int ret = 0;
-	  int len = wcstombs(0,wc,-1);
-	  char *tmp = new char[len];
+	  const int len = wcstombs(0,wc,-1);
+	  
+	  char* tmp = new char[len+1];
 	  ret = wcstombs(tmp, wc, len);
+
 	  if(ret == -1) {
 		printf("wunlink: wcstombs error\n");
-		delete[] tmp;
+		delete [] tmp;
 		return ret;
 		}
+
 	  tmp[ret] = '\0';
 	  ret = unlink(tmp);
+
 	  if(ret != 0)
 		printf("wunlink: %s: %s\n", tmp, strerror(ret));
+
+	  delete [] tmp;
 	  return ret;
 	}
 
@@ -621,5 +627,35 @@ int ConvertMultiByteToWideChar(const char* aSource, int /*aSourceLen*/, wchar_t*
 	}
 
 
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
+	{
+		int err= 0;
+		const int len = 512;
+		// Overwrites the orphaned file(if any).
+		char cmd[ len ] = "cp -f ";
+		strcat(cmd, aSrc);
+		strcat(cmd, " ");
+		strcat(cmd, aDest);
+		strcat(cmd, " 2> /dev/null");
 
+        err = system(cmd);
+
+		return err;
+	}
+	
+int FileMoveA(const char* aSrc, const char* aDest)
+	{
+		int err= 0;
+
+		// Overwrites the orphaned file(if any).
+		char cmd[ 512 ] = "mv -f ";
+		strcat(cmd, aSrc);
+		strcat(cmd, " ");
+		strcat(cmd, aDest);
+		strcat(cmd, " 2> /dev/null");
+
+		err = system(cmd);
+
+		return err;
+	}
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -48,7 +48,7 @@ void SISLogger::Log(const std::wstring& aString)
 	}
 
 
-std::string wstring2string (const std::wstring& aWide)
+DllExport std::string wstring2string (const std::wstring& aWide)
 	{
 	int max = ConvertWideCharToMultiByte(aWide.c_str(),aWide.length(),0,0);
 	std::string reply;
@@ -84,8 +84,8 @@ std::wstring string2wstring (const std::string& aNarrow)
 			{
 			}
 		delete [] buffer;
-		}
-	return reply;
+		}	
+	return reply.c_str();
 	}
 
 void EnsureExtended (std::wstring& aName, const std::wstring& aDefaultExtension)
@@ -374,15 +374,22 @@ int FirstInvalidDirSeparatorSize(std::wstring& aPath, std::wstring::size_type& a
 
 std::wstring FixPathDelimiters( const std::wstring& aString )
     {
+
     std::wstring ret = aString;
-	
     std::wstring::size_type idx = 0;
     int len = 0;
 	while(len = FirstInvalidDirSeparatorSize(ret, idx))
         {
-		ret.replace( idx, len, KSisDirectorySeparator );
+		if(idx == 0 && len == 2)
+			{
+			ret.replace( idx, len, KSisInitialNetworkPathSlashes );
+			}
+		else
+			{
+			ret.replace( idx, len, KSisDirectorySeparator );
+			}
         }
-    return ret;
+    return ret.c_str();
     }
 
 int GetFileType(std::wstring& aFileName)
