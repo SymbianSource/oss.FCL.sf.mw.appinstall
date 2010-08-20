@@ -95,10 +95,13 @@ TestInstaller::TestInstaller(int& argc, char* argv[]) : HbApplication(argc, argv
     installLayout->addItem(installOld);
     HbPushButton *launchApp = new HbPushButton(tr("Install by opening file"));
     installLayout->addItem(launchApp);
+    HbPushButton *cancelInstall = new HbPushButton(tr("Cancel installing"));
+    installLayout->addItem(cancelInstall);
     installLayout->addStretch();
     connect(installNew, SIGNAL(clicked()), this, SLOT(installUsingNewApi()));
     connect(installOld, SIGNAL(clicked()), this, SLOT(installUsingOldApi()));
     connect(launchApp, SIGNAL(clicked()), this, SLOT(installByOpeningFile()));
+    connect(cancelInstall, SIGNAL(clicked()), this, SLOT(cancelInstalling()));
 
     HbToolBar *installToolBar = new HbToolBar();
     installToolBar->addAction(tr("RemoveView"), this, SLOT(removeViewActivated()));
@@ -226,6 +229,17 @@ void TestInstaller::installByOpeningFile()
 {
     if (mInstallableFiles) {
         doOpenFile(mCurrentFile);
+    }
+}
+
+void TestInstaller::cancelInstalling()
+{
+    if (mRunner) {
+        delete mRunner;
+        mRunner = 0;
+        HbMessageBox::warning(tr("Running operation deleted"));
+    } else {
+        HbMessageBox::warning(tr("No operation running"));
     }
 }
 

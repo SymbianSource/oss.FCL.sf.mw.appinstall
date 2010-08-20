@@ -1582,6 +1582,7 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/scripts/int_nr_option-37.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-37.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-38.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-38.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-39.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-39.script
+../test/tinterpretsisinteg/scripts/int_defaultvaluetest.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_defaultvaluetest.script
 
 ../test/tinterpretsisinteg/preq2525-interpretsis-01/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-01/argumentfile.ini
 ../test/tinterpretsisinteg/preq2525-interpretsis-02/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-02/argumentfile.ini
@@ -1900,6 +1901,7 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/int_nr_option-37_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/int_nr_option-37_db.bat
 ../test/tinterpretsisinteg/int_nr_option-38_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/int_nr_option-38_db.bat
 ../test/tinterpretsisinteg/int_nr_option-39_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/int_nr_option-39_db.bat
+../test/tinterpretsisinteg/int_defaultvaluetest_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/int_defaultvaluetest_db.bat
 
 ../test/tinterpretsisinteg/parameters_file/testcasef009file_db.txt /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/testcasef009file_db.txt
 ../test/tinterpretsisinteg/parameters_file/testcasei003file_db.txt /epoc32/winscw/c/tswi/tinterpretsisinteg/parameters_file/testcasei003file_db.txt
@@ -1917,8 +1919,8 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/testdatascr/base_r.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatascr/base_r.pkg
 ../test/tinterpretsisinteg/testdatascr/hiddensa.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/testdatascr/hiddensa.pkg
 
-../test/tinterpretsisinteg/TestElseIfData/TestElseIf.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/TestElseIfData/TestElseIf.pkg
-../test/tinterpretsisinteg/TestElseIfData/file0 /epoc32/winscw/c/tswi/tinterpretsisinteg/TestElseIfData/file0
+../test/tinterpretsisinteg/testelseifdata/testelseif.pkg /epoc32/winscw/c/tswi/tinterpretsisinteg/testelseifdata/testelseif.pkg
+../test/tinterpretsisinteg/testelseifdata/file0 /epoc32/winscw/c/tswi/tinterpretsisinteg/testelseifdata/file0
 
 // exports for scrtool
 ../test/tscrtool/tscrtool.ini				/epoc32/winscw/c/tswi/tscrtool/tscrtool.ini
@@ -1942,6 +1944,7 @@ PRJ_TESTEXPORTS
 ../test/tscrtool/data/preprovision_noappattrib.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_noappattrib.xml
 ../test/tscrtool/data/preprovision_nullappfile.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_nullappfile.xml
 ../test/tscrtool/data/preprovision_nocaptioniconinfo.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_nocaptioniconinfo.xml
+../test/tscrtool/data/preprovision_invalid_appproperty.xml		/epoc32/winscw/c/tswi/tscrtool/data/preprovision_invalid_appproperty.xml
 
 //script files for PREQ2525 installing equivalent language
 ../test/tinterpretsisinteg/api-inst-preq2525-interpretsis-01_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-preq2525-interpretsis-01_db.bat

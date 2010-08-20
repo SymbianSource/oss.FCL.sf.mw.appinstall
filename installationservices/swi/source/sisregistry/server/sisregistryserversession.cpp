@@ -1133,7 +1133,7 @@ void CSisRegistrySession::GetStubFilesL(const TDesC& aFileName, RPointerArray<HB
         if (a[0] == '!')
             {
             TChar driveChar;
-            iFs.DriveToChar(EDriveZ, driveChar);
+            User::LeaveIfError(iFs.DriveToChar(EDriveZ, driveChar));
             a[0] = driveChar;
             }
 
@@ -1216,7 +1216,7 @@ void CSisRegistrySession::GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode,
                         if (a[0] == '!')
                             {
                             TChar driveChar;
-                            iFs.DriveToChar(EDriveZ, driveChar);
+                            User::LeaveIfError(iFs.DriveToChar(EDriveZ, driveChar));
                             a[0] = driveChar;
                             }                        
                        
@@ -1328,7 +1328,11 @@ void CSisRegistrySession::AddDriveL(const RMessage2& aMessage)
 	        {
 	        // First boot detected. Add the first boot marker file as well as the format marker on the drive.
 	        SisRegistryUtil::CreateFileWithAttributesL(iFs, firstBootMarkerFilePath);
-	        SisRegistryUtil::CreateFileWithAttributesL(iFs, formatMarkerPath, fileAttributes);
+	        TRAPD(err,SisRegistryUtil::CreateFileWithAttributesL(iFs, formatMarkerPath, fileAttributes);)
+			if (err != KErrNone && err != KErrAlreadyExists)
+				{
+				User::Leave(err);
+				}   
 	        }
 	    else
 	        {

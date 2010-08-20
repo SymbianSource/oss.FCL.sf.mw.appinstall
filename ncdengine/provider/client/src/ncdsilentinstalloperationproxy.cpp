@@ -74,6 +74,9 @@ CNcdSilentInstallOperationProxy::CNcdSilentInstallOperationProxy(
 CNcdSilentInstallOperationProxy::~CNcdSilentInstallOperationProxy()
     {
     DLTRACEIN(( "" ));
+    
+    delete iInstallOptions;
+    
     // Cancel must be called here because base class will only call its own
     // DoCancel()
     Cancel();

@@ -68,17 +68,22 @@ private:    // new functions
     void updateButtons(const QVariantMap &parameters);
     void prepareForErrorDetails(const QVariantMap &parameters);
     bool displayAdditionalQuery(const QVariantMap &parameters);
+    bool displayGrantCapabilitiesQuery(const QVariantMap &parameters);
+    bool displaySelectLanguageQuery(const QVariantMap &parameters);
+    bool displaySelectOptionsQuery(const QVariantMap &parameters);
     void sendResult(SifUiDeviceDialogReturnValue value);
 
 private slots:
-    void handleAccepted();
-    void handleCancelled();
+    void handleInstallAccepted();
+    void handleInstallCancelled();
     void handleMemorySelectionChanged(const QChar &driveLetter);
     void handleHidePressed();
     void handleShowInstalled();
     void handleErrorDetails();
     void handleCapabilitiesGranted();
-    void handleCapabilitiesDenied();
+    void handleAdditionalDialogClosed();
+    void handleLanguageSelected(int index);
+    void handleOptionsDialogClosed(int code);
 
 private:
     Q_DISABLE_COPY(SifUiDialog)

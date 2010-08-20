@@ -109,6 +109,7 @@ PRJ_TESTEXPORTS
 ../test/tscr/scripts/data/scr-newerminordbversion.db 	z:/tusif/tscr/data/scr-newerminordbversion.db
 ../test/tscr/scripts/data/scr-oldermajordbversion.db 	z:/tusif/tscr/data/scr-oldermajordbversion.db
 ../test/tscr/scripts/data/scr-multiapp.db 	z:/tusif/tscr/data/scr-multiapp.db
+../test/tscr/scripts/data/scr-nodefaultvalues.db 	z:/tusif/tscr/data/scr-nodefaultvalues.db
 
 ../test/testdb/scr.db			z:/sys/install/scr/provisioned/scr.db
 

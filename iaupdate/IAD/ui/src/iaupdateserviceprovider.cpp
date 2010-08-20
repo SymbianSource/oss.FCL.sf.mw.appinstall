@@ -42,11 +42,11 @@ IAUpdateServiceProvider::~IAUpdateServiceProvider()
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateServiceProvider::~IAUpdateServiceProvider()");
 }
 
-void IAUpdateServiceProvider::startedByLauncher(bool refreshFromNetworkDenied)
+void IAUpdateServiceProvider::startedByLauncher(QString refreshFromNetworkDenied)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateServiceProvider::startedByLauncher() begin");
     mAsyncReqId = setCurrentRequestAsync();
-    mEngine->StartedByLauncherL(refreshFromNetworkDenied);
+    mEngine->StartedByLauncherL(refreshFromNetworkDenied.toInt());
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateServiceProvider::startedByLauncher() end");
 }
 

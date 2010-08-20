@@ -448,11 +448,13 @@ void CXmlGenerator::WriteAppRegInfo
 					std::string temp = wstring2string(fileAppOpaqueDataType->iOpaqueData);
 					std::string binStrData = Util::Base64Encode(temp);
 					std::wstring binData = string2wstring(binStrData);
-					AddChildElement(filePropValueRoot,aDocument, KData, binData.c_str());
+					XercesString opaqueBinData = WStringToXercesString(binData);
+					AddChildElement(filePropValueRoot,aDocument, KData, opaqueBinData.c_str());
 				}
 				else
 				{
-					AddChildElement(filePropValueRoot,aDocument, KData, fileAppOpaqueDataType->iOpaqueData.c_str());
+					XercesString opaqueData = WStringToXercesString(fileAppOpaqueDataType->iOpaqueData);
+					AddChildElement(filePropValueRoot,aDocument, KData, opaqueData.c_str());
 				}
 				
 				XercesString locale = IntegerToXercesString(fileAppOpaqueDataType->iLocale);

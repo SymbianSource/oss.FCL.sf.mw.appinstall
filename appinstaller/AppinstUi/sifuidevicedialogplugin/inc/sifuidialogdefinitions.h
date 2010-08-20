@@ -81,5 +81,13 @@ const QString KSifUiErrorDetails = "errdet";            // string
 // Variant map keys for "grant capabilities" dialog parameters
 const QString KSifUiGrantCapabilities = "grcap";        // binary (TCapabilitySet)
 
+// Variant map keys for "select language" dialog parameters
+const QString KSifUiSelectableLanguages = "lang";       // binary (TPckg< RArray<TLanguage> >)
+const QString KSifUiSelectedLanguageIndex = "langind";  // integer
+
+// Variant map keys for "select options" dialog parameters
+const QString KSifUiSelectableOptions = "opts";         // descriptor array
+const QString KSifUiSelectedOptions = "optsind";        // binary (TPckg< RArray<TInt> >)
+
 #endif // SIFUIDIALOGDEFINITIONS_H
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -79,7 +79,7 @@ class CCatalogsHttpSessionManager : public CActive,
         /**
         * @see MCatalogsHttpSessionManager::StartOperation()
         */        
-        TInt StartOperation( MCatalogsHttpOperation* aOperation );
+        TInt StartOperation( MCatalogsHttpOperation* aOperation, TBool aConnect );
 
 
         /**

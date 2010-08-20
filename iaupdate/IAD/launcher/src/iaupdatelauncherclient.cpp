@@ -48,11 +48,13 @@ IAUpdateLauncherClient::~IAUpdateLauncherClient()
 void IAUpdateLauncherClient::launch()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::launch() begin");
-    mServiceRequest = new XQServiceRequest("com.nokia.services.swupdate.swupdate_interface","startedByLauncher(bool)",false);
+    mServiceRequest = new XQServiceRequest("com.nokia.services.swupdate.swupdate_interface","startedByLauncher(QString)",false);
     
     XQRequestInfo requestInfo;
     requestInfo.setEmbedded(true);
     mServiceRequest->setInfo(requestInfo);
+    QString stringRefreshFromNetworkDenied("0");
+    *mServiceRequest << stringRefreshFromNetworkDenied;   
     bool ret = mServiceRequest->send();   
     IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateLauncherClient::launch() ret %d", ret );
     if (!ret)

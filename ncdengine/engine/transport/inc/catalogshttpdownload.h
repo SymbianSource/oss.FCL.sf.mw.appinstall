@@ -579,8 +579,8 @@ class  CCatalogsHttpQTDownload: public QObject
 		 	public:
 		 		CCatalogsHttpQTDownload(CCatalogsHttpDownload* aHttpDownload,Download* aDownload);
 	    public slots:
-    	void downloadEvent(WRT::DownloadEvent*);
-    	void downloadError(WRT::Error);
+    	void downloadEventHandler(DownloadEvent*);
+    	void downloadErrorHandler(Error);
 	    public:
 	    	CCatalogsHttpDownload* iCatalogsHttpDownload;
 	    	Download* iDownload;           // Platform download

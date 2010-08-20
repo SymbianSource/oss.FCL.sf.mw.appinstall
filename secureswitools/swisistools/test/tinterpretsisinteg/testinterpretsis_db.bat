@@ -2746,8 +2746,8 @@ if not %errorlevel%==0 GOTO LAST
 GOTO PASS_CLEAN
 
 :TestElseIF
-call makesis \epoc32\winscw\c\tswi\tinterpretsisinteg\TestElseIfData\TestElseIf.pkg \epoc32\winscw\c\tswi\tinterpretsisinteg\sisfiles\TestElseIf.sis > NUL
-call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/TestElseIf.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness_db.txt 
+call makesis \epoc32\winscw\c\tswi\tinterpretsisinteg\testelseifdata\testelseif.pkg \epoc32\winscw\c\tswi\tinterpretsisinteg\sisfiles\testelseif.sis > NUL
+call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/testelseif.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness_db.txt 
 if not %errorlevel%==0 GOTO LAST
 
 set exist_file=.\cdrive\data\First_first.txt

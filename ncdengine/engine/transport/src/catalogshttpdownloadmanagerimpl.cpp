@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -32,10 +32,11 @@
 #include "catalogsconnection.h"
 
 #include "catalogsdebug.h"
-#include <QString.h>
-#include <QVector.h>
-#include <QList.h>
+#include <QString>
+#include <QVector>
+#include <QList>
 #include <downloadevent.h>
+#include <xqconversions.h>
 // ======== MEMBER FUNCTIONS ========
 
 // ---------------------------------------------------------------------------
@@ -174,7 +175,7 @@ MCatalogsHttpOperation* CCatalogsHttpDownloadManager::CreateDownloadL(
     {
     DLTRACEIN((""));
     // Create a new download
-   	QString Url =	QString::fromRawData( reinterpret_cast<const QChar*>(aUrl.Ptr()),aUrl.Length());
+    QString Url = XQConversions::s60Desc8ToQString(aUrl);  
     iDownload = iDmgr->createDownload( Url );
     
     CCatalogsHttpDownload* dl = CCatalogsHttpDownload::NewLC( 
@@ -477,7 +478,7 @@ TInt32 CCatalogsHttpDownloadManager::SessionId() const
 // Handles download manager events
 // ---------------------------------------------------------------------------
 //    
- void CCatalogsHttpDownloadManager::downloadMgrEventRecieved(WRT::DownloadEvent* dlmEvent)
+ void CCatalogsHttpDownloadManager::downloadMgrEventRecieved(WRT::DownloadManagerEvent* dlmEvent)
   {
   	
   	switch(dlmEvent ->type())
@@ -739,7 +740,7 @@ TInt CCatalogsHttpDownloadManager::StartOperation(
     {
     DLTRACEIN(( "" ));
     DASSERT( aOperation );
-    TInt err = iManager.StartOperation( aOperation );
+    TInt err = iManager.StartOperation( aOperation, EFalse );
     if ( err == KErrNone || err == KCatalogsHttpOperationQueued ) 
         {
         TInt err2 = MoveRestoredDlToCurrentDls( *aOperation );
@@ -992,10 +993,10 @@ CCatalogsHttpQTDownloadManager::CCatalogsHttpQTDownloadManager(CCatalogsHttpDown
 	{
 		iDownloadManager = aDownloadManager;
 		iDmgr = aDmgr;
-		connect(iDmgr, SIGNAL(downloadManagerEvent(WRT::DownloadManagerEvent*)), this,SLOT(downloadMgrEventRecieved(WRT::DownloadEvent*)));
+		connect(iDmgr, SIGNAL(downloadManagerEvent(DownloadManagerEvent*)), this,SLOT(downloadMgrEventRecieved(DownloadManagerEvent*)));
 	}
 	
-void CCatalogsHttpQTDownloadManager::downloadMgrEventRecieved(WRT::DownloadEvent* aEvent)
+void CCatalogsHttpQTDownloadManager::downloadMgrEventRecieved(DownloadManagerEvent* aEvent)
 	{
 		iDownloadManager->downloadMgrEventRecieved(aEvent);
 	}

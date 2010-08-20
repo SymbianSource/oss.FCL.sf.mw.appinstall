@@ -34,7 +34,8 @@ HEADERS += inc/sifuidevicedialogplugin.h \
     inc/sifuidialogcertificateinfo.h \
     inc/sifuidialogcertificatedetails.h \
     inc/sifuidialoggrantcapabilities.h \
-    inc/sifuidialoggrantcapabilitiescontent.h
+    inc/sifuidialoggrantcapabilitiescontent.h \
+    inc/sifuidialogselectlanguage.h
 
 SOURCES += src/sifuidevicedialogplugin.cpp \
     src/sifuidialog.cpp \
@@ -43,14 +44,17 @@ SOURCES += src/sifuidevicedialogplugin.cpp \
     src/sifuidialogcertificateinfo.cpp \
     src/sifuidialogcertificatedetails.cpp \
     src/sifuidialoggrantcapabilities.cpp \
-    src/sifuidialoggrantcapabilitiescontent.cpp
+    src/sifuidialoggrantcapabilitiescontent.cpp \
+    src/sifuidialogselectlanguage.cpp
 
 symbian: {
     TARGET.EPOCALLOWDLLDATA = 1
     TARGET.CAPABILITY = CAP_GENERAL_DLL
     TARGET.UID3 = 0x2002C3AC
 
-    SOURCES += src/sifuidialogtitlewidget_symbian.cpp
+    SOURCES += src/sifuidialogtitlewidget_symbian.cpp \
+        src/sifuidialogselectlanguage_symbian.cpp \
+        src/sifuidialogselectoptions_symbian.cpp
 
     pluginstub.sources = sifuidevicedialogplugin.dll
     pluginstub.path = /resource/plugins/devicedialogs

@@ -240,31 +240,28 @@ class CSifUi : public CBase
         IMPORT_C TBool ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities );
 
         /**
-         * Displays a selection dialog with radio-buttons in a pop-up window,
-         * and waits for user response. Other displayed installation dialogs
-         * (like progress note) are not affected. Returns boolean that indicates
-         * if the user cancelled the query. Selected item index is returned in
-         * aSelectedIndex parameter (KErrNotFound if cancelled).
-         * @param aTitle - selection dialog title
-         * @param aSelectableItems - array of selectable items
-         * @param aSelectedIndex - returns selected item index
-         * @return TBool - ETrue if the user accepted the query, EFalse otherwise
+         * Displays pop-up language selection dialog with radio-buttons, and
+         * waits for user response. Other displayed installation dialogs (like
+         * progress note) are not affected. Returns integer that is the index
+         * of the selected language in given langauge array, or error code.
+         * Return value is KErrCancel if the user cancelled the query.
+         * @param aLanguages - array of selectable languages
+         * @return The selected item index to aLangauges array, or error code.
          */
-        IMPORT_C TBool ShowSingleSelectionL( const TDesC& aTitle,
-            const MDesCArray& aSelectableItems, TInt& aSelectedIndex );
+        IMPORT_C TInt ShowSelectLanguageL( const RArray<TLanguage>& aLanguages );
 
         /**
-         * Displays a multi-selection dialog with checkboxes in a pop-up window,
-         * and waits for user response. Other displayed installation dialogs
-         * (like progress note) are not affected. Returns user selected indices,
-         * in aSelectedIndexes array (empty if cancelled).
-         * @param aTitle - multi-selection dialog title
-         * @param aSelectableItems - array of selectable items
+         * Displays multi-selection pop-up dialog with checkboxes, and waits
+         * for user response. Other displayed installation dialogs (like progress
+         * note) are not affected. Returns ETrue if the user made the selection,
+         * EFalse if the user cancelled the query. Selected indices are returned
+         * in aSelectedIndexes array.
+         * @param aSelectableItems - array of selectable items displayed
          * @param aSelectedIndexes - returns the selected item indices
          * @return TBool - ETrue if the user accepted the query, EFalse otherwise
          */
-        IMPORT_C TBool ShowMultiSelectionL( const TDesC& aTitle,
-            const MDesCArray& aSelectableItems, RArray<TInt>& aSelectedIndexes );
+        IMPORT_C TBool ShowSelectOptionsL( const MDesCArray& aSelectableItems,
+                RArray<TInt>& aSelectedIndexes );
 
 
         //=================================================
@@ -274,6 +271,10 @@ class CSifUi : public CBase
         // DEPRECATED, WILL BE REMOVED, DO NOT USE
         IMPORT_C void ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
             const TDesC& aErrorDetails = KNullDesC );
+        IMPORT_C TBool ShowSingleSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, TInt& aSelectedIndex );
+        IMPORT_C TBool ShowMultiSelectionL( const TDesC& aTitle,
+            const MDesCArray& aSelectableItems, RArray<TInt>& aSelectedIndexes );
 
 
     private:    // new functions

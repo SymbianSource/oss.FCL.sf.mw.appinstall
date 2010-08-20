@@ -21,7 +21,7 @@
 #include "logs.h"
 #include "util.h"
 #include "symbiantypes.h"
-#include "../sisxlibrary/utility.h"
+#include "utility.h"
 
 #include <string>
 #include <vector>
@@ -680,6 +680,8 @@ int CDbLayer::AddAppAttribute( int aComponentId, const std::vector<XmlDetails::T
 
 	//Assigning Default Values
 	TInt64 intVal = 0; 
+	stmtAppAttribute->BindInt64(1, intVal); //AppUid
+	stmtAppAttribute->BindInt64(4, intVal); //TypeId
 	stmtAppAttribute->BindInt64(5, intVal); //Attributes
 	stmtAppAttribute->BindInt64(6, intVal); //Hidden
 	stmtAppAttribute->BindInt64(7, intVal); //Embeddable
@@ -687,6 +689,7 @@ int CDbLayer::AddAppAttribute( int aComponentId, const std::vector<XmlDetails::T
 	stmtAppAttribute->BindInt64(9, intVal); //Launch
 	stmtAppAttribute->BindInt64(11, intVal); //DefaultScreenNumber
 	std::wstring strVal(L"");
+	stmtAppAttribute->BindStr(3, strVal);  //AppFile
 	stmtAppAttribute->BindStr(10, strVal); //GroupName
 	
 	int appUid = 0;
@@ -854,14 +857,21 @@ void CDbLayer::AddLocalizableAttribute( int aAppUid, const std::vector<XmlDetail
 	//Assigning default value
 	TInt64 intVal = 0;
 	stmtAppLocalizableInfo->BindInt64(4, intVal); //Locale
+	stmtAppLocalizableInfo->BindInt64(5, intVal); //CaptionAndIconId
 	std::wstring strVal(L"");
-	stmtAppLocalizableInfo->BindStr(2, strVal); //ShortCaption
-	stmtAppLocalizableInfo->BindStr(3, strVal); //GroupName
-
+	stmtAppLocalizableInfo->BindStr(2, strVal);   //ShortCaption
+	stmtAppLocalizableInfo->BindStr(3, strVal);   //GroupName
+	
 	std::string insertCaptionAndIconInfo;
 		
 	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
 	std::auto_ptr<CStatement> stmtCaptionAndIconInfo(iScrDbHandler->PrepareStatement(insertCaptionAndIconInfo));
+
+	//Assigning default value
+	stmtCaptionAndIconInfo->BindStr(1, strVal);   //Caption
+	stmtCaptionAndIconInfo->BindInt64(2, intVal); //NumberOfIcons
+	stmtCaptionAndIconInfo->BindStr(3, strVal);   //IconFile
+
 
 	bool captionAndIconInfoPresent = 0;
 	//for every TLocalizableAttribute
@@ -938,16 +948,22 @@ void CDbLayer::AddViewDataAttributes( int alocalAppInfoId, const std::vector<Xml
 	insertViewData = "INSERT INTO ViewData(LocalAppInfoId,Uid,ScreenMode,CaptionAndIconId) VALUES(?,?,?,?);";
 	std::auto_ptr<CStatement> stmtViewData(iScrDbHandler->PrepareStatement(insertViewData));
 
+
+	//Assigning Default Value
+	TInt64 intVal = 0;
+	stmtViewData->BindInt64(2, intVal); //Uid
+	stmtViewData->BindInt64(3, intVal); //ScreenMode
+	stmtViewData->BindInt64(4, intVal); //CaptionAndIconId
+
 	std::string insertCaptionAndIconInfo;
 		
 	insertCaptionAndIconInfo = "INSERT INTO CaptionAndIconInfo(Caption,NumberOfIcons,IconFile) VALUES(?,?,?);";
 	std::auto_ptr<CStatement> stmtCaptionAndIconInfo(iScrDbHandler->PrepareStatement(insertCaptionAndIconInfo));
 
 	//Assigning Default Value
-	TInt64 intVal = 0;
-	stmtViewData->BindInt64(3, intVal); //ScreenMode
 	stmtCaptionAndIconInfo->BindInt64(2, intVal); //NumberOfIcons
 	std::wstring strVal(L"");
+	stmtCaptionAndIconInfo->BindStr(1, strVal); //Caption
 	stmtCaptionAndIconInfo->BindStr(3, strVal); //IconFile
 
 	bool captionAndIconInfoPresent = 0;
@@ -1020,9 +1036,10 @@ void CDbLayer::AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPrePr
 
 		if(appPropertyIter->iIsStr8Bit)
 			{
-				std::string str = wstring2string(appPropertyIter->iStrValue);
-				std::string decodedString = Util::Base64Decode(str);
-				stmtAppProperty->BindBinary(6, decodedString);
+				std::string str;
+				int len = appPropertyIter->iStrValue.length();
+				str.assign(appPropertyIter->iStrValue.c_str(),appPropertyIter->iStrValue.c_str()+len);
+				stmtAppProperty->BindBinary(6, str);
 			}
 		else
 			{

@@ -33,6 +33,9 @@ symbian: {
 	TARGET.VID = VID_DEFAULT
 	TARGET.UID3 = 0x20019119
 	TARGET.EPOCALLOWDLLDATA = 1
+	rssrules = "hidden = KAppIsHidden;"
+        RSS_RULES += rssrules
+	
 	INCLUDEPATH += $$MW_LAYER_SYSTEMINCLUDE
 	INCLUDEPATH += $$APP_LAYER_SYSTEMINCLUDE
 
@@ -55,4 +58,5 @@ symbian: {
 	LIBS += -lhttpfiltercommon -lecom -lhttp -lesock -lcommdb -lsysutil -lhash -lestlib -lestor -lbafl -lplatformenv
 	LIBS += -lXmlEngineUtils  -lXmlEngineDOM -lXmlEngine -lXmlInterface -lxmlframework  -lcharconv -ledbms -lefsrv
   LIBS += -lncdutils_20019119 -lncddevicemgmt_20019119
+  LIBS += -lxqutils
 }

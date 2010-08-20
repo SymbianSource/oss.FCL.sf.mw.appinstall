@@ -1948,4 +1948,10 @@
 	<check type="result"/>
 	</test>
 
+<test id="INT_DefaultValueTest">
+	<title>INT_DefaultValueTest</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_defaultvaluetest_db.bat  INT_DefaultValueTest</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_DefaultValueTest  INT_DefaultValueTest 3  "positive"  "both" "nouid" "nobatchfile" "int_defaultvaluetest.script" "int_defaultvaluetest.htm" "FAIL = 0" "FAIL = 0" </check>
+</test>
+
 </testlist>

@@ -19,14 +19,16 @@
 #include "sifuidialogtitlewidget.h"         // SifUiDialogTitleWidget
 #include "sifuidialogcontentwidget.h"       // SifUiDialogContentWidget
 #include "sifuidialoggrantcapabilities.h"   // SifUiDialogGrantCapabilities
-#include "sifuiinstallindicatorparams.h"
+#include "sifuidialogselectlanguage.h"      // SifUiDialogSelectLanguage
+#include "sifuiinstallindicatorparams.h"    // KSifUiInstallIndicatorType
 #include <QFile>
-#include <hblabel.h>
-#include <hbaction.h>
-#include <hbindicator.h>
-#include <hbtranslator.h>
-#include <hbmessagebox.h>
-#include <qvaluespacesubscriber.h>
+#include <HbLabel>
+#include <HbAction>
+#include <HbIndicator>
+#include <HbTranslator>
+#include <HbMessageBox>
+#include <HbSelectionDialog>
+#include <QValueSpaceSubscriber>
 #include <xqappmgr.h>                       // XQApplicationManager
 
 QTM_USE_NAMESPACE
@@ -37,6 +39,30 @@ const QString KCommonTranslationsFile = "common";
 const QString KSwiErrorsFile = "c:\\temp\\swierrors.txt";
 const QString KSwiErrorFormat = " (%1)";
 
+#ifdef Q_OS_SYMBIAN
+QByteArray ConvertOptionalComponentIndexesL( const QList<QVariant> &aIndexes );
+#endif // Q_OS_SYMBIAN
+
+
+// ======== LOCAL FUNCTIONS ========
+
+// ----------------------------------------------------------------------------
+// convertOptionalComponentIndexes()
+// ----------------------------------------------------------------------------
+//
+QVariant convertOptionalComponentIndexes(const QList<QVariant> &selections)
+{
+#ifdef Q_OS_SYMBIAN
+    QByteArray byteArray;
+    QT_TRAP_THROWING( byteArray = ConvertOptionalComponentIndexesL( selections ) );
+    return QVariant( byteArray );
+#else
+    return QVariant();
+#endif
+}
+
+
+// ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
 // SifUiDialog::SifUiDialog()
@@ -237,7 +263,7 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
             mPrimaryAction = new HbAction(hbTrId("txt_common_button_ok"));
             addAction(mPrimaryAction);
             disconnect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(close()));
-            connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleAccepted()));
+            connect(mPrimaryAction, SIGNAL(triggered()), this, SLOT(handleInstallAccepted()));
             break;
         case SifUiProgressNote:
             if (!parameters.contains(KSifUiProgressNoteIsHideButtonHidden)) {
@@ -283,7 +309,8 @@ void SifUiDialog::updateButtons(const QVariantMap &parameters)
                 mSecondaryAction = new HbAction(hbTrId("txt_common_button_cancel"));
                 addAction(mSecondaryAction);
                 disconnect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(close()));
-                connect(mSecondaryAction, SIGNAL(triggered()), this, SLOT(handleCancelled()));
+                connect(mSecondaryAction, SIGNAL(triggered()),
+                    this, SLOT(handleInstallCancelled()));
             }
             break;
         case SifUiCompleteNote:
@@ -328,13 +355,70 @@ void SifUiDialog::prepareForErrorDetails(const QVariantMap &parameters)
 //
 bool SifUiDialog::displayAdditionalQuery(const QVariantMap &parameters)
 {
+    if (displayGrantCapabilitiesQuery(parameters) ||
+        displaySelectLanguageQuery(parameters) ||
+        displaySelectOptionsQuery(parameters)) {
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::displayGrantCapabilitiesQuery()
+// ----------------------------------------------------------------------------
+//
+bool SifUiDialog::displayGrantCapabilitiesQuery(const QVariantMap &parameters)
+{
     if (parameters.contains(KSifUiGrantCapabilities)) {
         SifUiDialogGrantCapabilities *dlg = new SifUiDialogGrantCapabilities(
             mContent->applicationName(), parameters.value(KSifUiGrantCapabilities));
-        connect(dlg, SIGNAL(accepted()), this, SLOT(handleCapabilitiesGranted()));
-        connect(dlg, SIGNAL(declined()), this, SLOT(handleCapabilitiesDenied()));
         dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+        connect(dlg, SIGNAL(accepted()), this, SLOT(handleCapabilitiesGranted()));
+        connect(dlg, SIGNAL(rejected()), this, SLOT(handleAdditionalDialogClosed()));
         dlg->open();
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::displaySelectLanguageQuery()
+// ----------------------------------------------------------------------------
+//
+bool SifUiDialog::displaySelectLanguageQuery(const QVariantMap &parameters)
+{
+    if (parameters.contains(KSifUiSelectableLanguages)) {
+        SifUiDialogSelectLanguage *dlg = new SifUiDialogSelectLanguage(
+                parameters.value(KSifUiSelectableLanguages));
+        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+        connect(dlg, SIGNAL(languageSelected(int)),
+            this, SLOT(handleLanguageSelected(int)));
+        connect(dlg, SIGNAL(languageSelectionCancelled()),
+            this, SLOT(handleAdditionalDialogClosed()));
+        dlg->open();
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::displaySelectOptionsQuery()
+// ----------------------------------------------------------------------------
+//
+bool SifUiDialog::displaySelectOptionsQuery(const QVariantMap &parameters)
+{
+    if (parameters.contains(KSifUiSelectableOptions)) {
+        HbSelectionDialog *dlg = new HbSelectionDialog;
+        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+
+        // TODO: localized UI string needed
+        HbLabel *title = new HbLabel("Items to install:");
+        dlg->setHeadingWidget(title);
+
+        dlg->setStringItems(parameters.value(KSifUiSelectableOptions).toStringList());
+        dlg->setSelectionMode(HbAbstractItemView::MultiSelection);
+
+        dlg->open(this, SLOT(handleOptionsDialogClosed(int)));
         return true;
     }
     return false;
@@ -351,20 +435,20 @@ void SifUiDialog::sendResult(SifUiDeviceDialogReturnValue value)
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialog::handleAccepted()
+// SifUiDialog::handleInstallAccepted()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::handleAccepted()
+void SifUiDialog::handleInstallAccepted()
 {
     mContent->changeType(SifUiProgressNote);
     sendResult(SifUiContinue);
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialog::handleCancelled()
+// SifUiDialog::handleInstallCancelled()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::handleCancelled()
+void SifUiDialog::handleInstallCancelled()
 {
     sendResult(SifUiCancel);
     close();
@@ -439,11 +523,37 @@ void SifUiDialog::handleCapabilitiesGranted()
 }
 
 // ----------------------------------------------------------------------------
-// SifUiDialog::handleCapabilitiesDenied()
+// SifUiDialog::handleAdditionalDialogClosed()
 // ----------------------------------------------------------------------------
 //
-void SifUiDialog::handleCapabilitiesDenied()
+void SifUiDialog::handleAdditionalDialogClosed()
 {
     sendResult(SifUiCancel);
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::handleLanguageSelected()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialog::handleLanguageSelected(int index)
+{
+    mResultMap[KSifUiSelectedLanguageIndex] = QVariant(index);
+    sendResult(SifUiContinue);
+}
+
+// ----------------------------------------------------------------------------
+// SifUiDialog::handleOptionsDialogClosed()
+// ----------------------------------------------------------------------------
+//
+void SifUiDialog::handleOptionsDialogClosed(int code)
+{
+    if (code == HbDialog::Accepted) {
+        HbSelectionDialog *dlg = reinterpret_cast<HbSelectionDialog*>(sender());
+        QList<QVariant> selections = dlg->selectedItems();
+        mResultMap[KSifUiSelectedOptions] = convertOptionalComponentIndexes(selections);
+        sendResult(SifUiContinue);
+    } else {
+        sendResult(SifUiCancel);
+    }
 }
 

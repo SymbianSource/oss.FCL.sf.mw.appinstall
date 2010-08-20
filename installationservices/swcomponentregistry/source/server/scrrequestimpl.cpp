@@ -4541,7 +4541,7 @@ TBool CScrRequestImpl::GetApplicationRegistrationInfoL(CApplicationRegistrationD
     if(stmt->ProcessNextRowL())
       {
       aApplicationRegistration.iAppUid = TUid::Uid(stmt->IntColumnL(0)); 
-      HBufC* appFile = stmt->StrColumnL(2).AllocLC();
+      HBufC* appFile = stmt->StrColumnL(2).AllocL();
       DeleteObjectZ(aApplicationRegistration.iAppFile);
       aApplicationRegistration.iAppFile = appFile;
       aApplicationRegistration.iTypeId = stmt->IntColumnL(3);
@@ -4562,8 +4562,7 @@ TBool CScrRequestImpl::GetApplicationRegistrationInfoL(CApplicationRegistrationD
       DEBUG_PRINTF2(_L("The Launch for this App is %d "), aApplicationRegistration.iCharacteristics.iLaunchInBackground);
       DEBUG_PRINTF2(_L("The Group Name for this App is %S "),  &(aApplicationRegistration.iCharacteristics.iGroupName));
       DEBUG_PRINTF2(_L("The Default screen number for this App is %d "), aApplicationRegistration.iDefaultScreenNumber);
-                      
-      CleanupStack::Pop(1);
+                       
       }
     else
       {
@@ -4677,7 +4676,7 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
         }
         else
         {
-        DEBUG_PRINTF(_L8("No Nearest locale found for AppUid %d in the SCR"));
+        DEBUG_PRINTF2(_L("No Nearest locale found for AppUid 0x%x in the SCR"), aAppUid);
         }    
     }
 
@@ -4696,30 +4695,37 @@ void CScrRequestImpl::NextApplicationRegistrationInfoSizeL(const RMessage2& aMes
         if((aSubsessionContext->iAppRegIndex < aSubsessionContext->iAppUids.Count()))
             {
             TUid appUid = aSubsessionContext->iAppUids[aSubsessionContext->iAppRegIndex];
-                
+              
             //Populate the Application Registration Info
-            if(GetApplicationRegistrationInfoL(*aApplicationRegistration,appUid))
+            TBool retVal = EFalse;
+            TRAPD(err, retVal = GetApplicationRegistrationInfoL(*aApplicationRegistration, appUid));
+
+            //Check if we have a valid application
+            if((KErrNone == err) && retVal)
                 {
-                //Populate File ownership info           
-                GetFileOwnershipInfoL(*aApplicationRegistration,appUid);
-                   
+                TRAP(err,
+                //Populate File ownership info 
+                GetFileOwnershipInfoL(*aApplicationRegistration, appUid);
                 //Populate service info
                 GetServiceInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
-                
                 //Populate localizable appinfo including caption and icon info 
-                //and view data and its caption and icon info.            
-                GetLocalizableAppInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
-                
-                GetAppRegOpaqueDataL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage);
+                //and view data and its caption and icon info. 
+                GetLocalizableAppInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+
+                GetAppRegOpaqueDataL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
     
-                GetAppPropertiesInfoL(*aApplicationRegistration,appUid, aSubsessionContext->iLanguage); 
+                GetAppPropertiesInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage); );
+    
                 dataFound = ETrue;
                 }
             else
                 {
                 DeleteObjectZ(aApplicationRegistration);
                 }
-                        
+
+            if(KErrNone != err)
+                DEBUG_PRINTF2(_L8("Error while reading the app registration info 0x%x. Ignoring current application details."), appUid);
+                           
             //Incrementing the index
             aSubsessionContext->iAppRegIndex++;
                         

@@ -21,6 +21,8 @@ TARGET = iaupdatelauncher
 symbian {
     TARGET.UID3 = 0x2001FE2F
     TARGET.CAPABILITY = CAP_APPLICATION
+    SKINICON = qtg_large_swupdate 
+    TRANSLATIONS = swupdate.ts
 }    
 DEPENDPATH += .
 DEPENDPATH += ./src
