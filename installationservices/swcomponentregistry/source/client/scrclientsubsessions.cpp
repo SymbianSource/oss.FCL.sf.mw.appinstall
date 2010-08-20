@@ -643,7 +643,7 @@ EXPORT_C void RApplicationRegistryView::GetNextApplicationRegistrationInfoL(TInt
         {
           applicationRegistration = CApplicationRegistrationData::NewLC();
           TBool isApplicationRegistrationDataPresent = EFalse;                                    
-          DEBUG_PRINTF(_L("Sending the request to retrieve the next Application Info from the AppInfo view."));
+          DEBUG_PRINTF(_L("Sending the request to retrieve the next application details from the Application Registration view."));
           TIpcArgs args;
           TInt argNum = 1;
           isApplicationRegistrationDataPresent = GetObjectL(*this, *applicationRegistration, EGetApplicationRegistrationSize, EGetApplicationRegistrationData, argNum, args);

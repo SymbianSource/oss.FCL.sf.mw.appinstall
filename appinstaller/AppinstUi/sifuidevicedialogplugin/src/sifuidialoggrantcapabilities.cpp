@@ -15,10 +15,12 @@
 *
 */
 
-#include <sifuidialoggrantcapabilities.h>   // SifUiDialogGrantCapabilities
-#include <sifuidialoggrantcapabilitiescontent.h> // SifUiDialogGrantCapabilitiesContent
+#include "sifuidialoggrantcapabilities.h"   // SifUiDialogGrantCapabilities
+#include "sifuidialoggrantcapabilitiescontent.h" // SifUiDialogGrantCapabilitiesContent
 #include <HbLabel>
 
+
+// ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
 // SifUiDialogGrantCapabilities::SifUiDialogGrantCapabilities()

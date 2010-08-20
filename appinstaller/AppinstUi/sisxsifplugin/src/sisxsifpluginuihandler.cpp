@@ -27,7 +27,6 @@
 #include <bautils.h>                    // BaflUtils
 #include <driveinfo.h>                  // DriveInfo
 #include <featmgr.h>                    // FeatureManager
-//#include <csxhelp/am.hlp.hrh>           // Help IDs
 
 using namespace Usif;
 
@@ -189,7 +188,6 @@ TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*
         const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
-
     iOperationPhase = EInstalling;
     return ETrue;
     }
@@ -202,10 +200,7 @@ TBool CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL( const Swi::CAppInfo& /
         const TCapabilitySet& aCapabilitySet )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL") );
-    TBool okToContinue = EFalse;
-
-    okToContinue = iSifUi->ShowGrantCapabilitiesL( aCapabilitySet );
-
+    TBool okToContinue = iSifUi->ShowGrantCapabilitiesL( aCapabilitySet );
     return okToContinue;
     }
 
@@ -214,11 +209,11 @@ TBool CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL( const Swi::CAppInfo& /
 // ---------------------------------------------------------------------------
 //
 TInt CSisxSifPluginUiHandler::DisplayLanguageL( const Swi::CAppInfo& /*aAppInfo*/,
-        const RArray<TLanguage>& /*aLanguages*/ )
+        const RArray<TLanguage>& aLanguages )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayLanguageL") );
-
-    return 0;
+    TInt langIndex = iSifUi->ShowSelectLanguageL( aLanguages );
+    return langIndex;
     }
 
 // ---------------------------------------------------------------------------
@@ -274,11 +269,29 @@ TBool CSisxSifPluginUiHandler::DisplayUpgradeL( const Swi::CAppInfo& /*aAppInfo*
 // ---------------------------------------------------------------------------
 //
 TBool CSisxSifPluginUiHandler::DisplayOptionsL( const Swi::CAppInfo& /*aAppInfo*/,
-        const RPointerArray<TDesC>& /*aOptions*/, RArray<TBool>& /*aSelections*/ )
+        const RPointerArray<TDesC>& aOptions, RArray<TBool>& aSelections )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayOptionsL") );
+    TInt optionCount = aOptions.Count();
+    CPtrCArray* selectableItems = new( ELeave ) CPtrC16Array( optionCount );
+    CleanupStack::PushL( selectableItems );
+    for( TInt index = 0; index < optionCount; index++ )
+        {
+        selectableItems->AppendL( *aOptions[ index ] );
+        }
 
-    return ETrue;
+    RArray<TInt> selectedIndexes;
+    TBool isSelected = iSifUi->ShowSelectOptionsL( *selectableItems, selectedIndexes );
+    if( isSelected && selectedIndexes.Count() )
+        {
+        TInt selectionsCount = aSelections.Count();
+        __ASSERT_DEBUG( selectionsCount == optionCount, User::Invariant() );
+        for( TInt index = 0; index < selectionsCount; index++ )
+            {
+            aSelections[ index ] = ( selectedIndexes.Find( index ) != KErrNotFound );
+            }
+        }
+    return isSelected;
     }
 
 // ---------------------------------------------------------------------------

@@ -59,10 +59,9 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         void ShowFailedL( const CSifUiErrorInfo& aErrorInfo );
         void SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIsVisible );
         TBool ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities );
-        TBool ShowSingleSelectionL( const TDesC& aTitle, const MDesCArray& aSelectableItems,
-            TInt& aSelectedIndex );
-        TBool ShowMultiSelectionL( const TDesC& aTitle, const MDesCArray& aSelectableItems,
-            RArray<TInt>& aSelectedIndexes );
+        TInt ShowSelectLanguageL( const RArray<TLanguage>& aLanguages );
+        TBool ShowSelectOptionsL( const MDesCArray& aSelectableItems,
+                RArray<TInt>& aSelectedIndexes );
 
     protected:  // from CActive
         void DoCancel();
@@ -83,8 +82,9 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         void ChangeNoteTypeL( TInt aType );
         void AddParamL( const TDesC& aKey, TInt aValue );
         void AddParamL( const TDesC& aKey, const TDesC& aValue );
-        void AddParamBinaryL( const TDesC& aKey, const CBufBase& aBinary );
         void AddParamListL( const TDesC& aKey, const MDesCArray& aList );
+        void AddParamBinaryL( const TDesC& aKey, const CBufBase& aBinary );
+        void AddParamPckgL( const TDesC& aKey, const TDesC8& aPckg );
         void AddParamsAppInfoL( const CSifUiAppInfo& aAppInfo );
         void AddParamsCertificatesL();
         void AddParamsHiddenButtonsL();
@@ -123,6 +123,8 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         TBool iNoCancelProgressButton;
         TBool iNoShowInAppLibButton;
         TBool iNoErrorDetailsButton;
+        TInt iSelectedLanguage;
+        RArray<TInt> iSelectedOptions;
     };
 
 

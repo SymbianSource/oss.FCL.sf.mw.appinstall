@@ -126,65 +126,8 @@ void CNcdSilentInstallActiveObserver::StartToObserveL( RFile& aFile,
         {
         iResults = Usif::COpaqueNamedParams::NewL();
         }
-    /*
-    if (iResults)
-        {
-        delete (iResults);
-        iResults = 0;
-        }
-   iResults = Usif::COpaqueNamedParams::NewL();
-
-    if (iArguments)
-        {
-        delete (iArguments);
-        iArguments = 0;
-        }
-    iArguments = Usif::COpaqueNamedParams::NewL();
-
-    // Silent installation request
-    
-    TBool iSet = ETrue;
-    
-    enum TSifPolicy
-        {
-        EAllowed        = 0,
-        ENotAllowed     = 1,
-        EUserConfirm    = 2
-        };
-    
-    if (iSet)
-       iArguments->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
-    else
-        iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse ); 
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::ENotAllowed );  
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::EAllowed );
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_AllowUntrusted, Usif::ENotAllowed );
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_GrantCapabilities, Usif::ENotAllowed );
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_InstallOptionalItems, Usif::EAllowed );
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );   
-    //iArguments->AddIntL( Usif::KSifInParam_PackageInfo, ETrue );
-    if (iSet)
-        iArguments->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
-    if (iSet)
-       iArguments->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed );
-    if (iSet)
-       iArguments->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed );
-    
-    
-    //iArguments->AddIntL(Usif::KSifInParam_InstallSilently, 1);
-    //iArguments->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );     
-    
-    iInstaller.Install(aFile, *iArguments, *iResults, iStatus); 
-    */
     
     iInstaller.Install( aFile, *aSilentInstallOptions, *iResults, iStatus ); 
-    
     
     SetActive();
     }
@@ -244,27 +187,6 @@ Usif::RSoftwareInstall& CNcdSilentInstallActiveObserver::SilentLauncher()
 
 TInt CNcdSilentInstallActiveObserver::ConvertErrorCode( TInt aErrorCode )
     {
-    /*
-    switch ( aErrorCode )
-        {
-        case SwiUI::KSWInstErrUserCancel:
-            // To simplify the cancel response and cancel handling,
-            // convert the error code to normal cancel error code.
-            aErrorCode = KErrCancel;
-            break;
-
-        case SwiUI::KSWInstErrInsufficientMemory:
-            // To simplify the insufficient memory response and its handling,
-            // convert the error code to normal no memory code.
-            aErrorCode = KErrNoMemory;
-            break;
-                    
-        default:
-            // Nothing to do here.
-            break;
-        }
-    */
-    
     return aErrorCode;
     }
 

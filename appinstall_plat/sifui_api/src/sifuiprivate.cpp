@@ -314,45 +314,53 @@ void CSifUiPrivate::SetButtonVisible( CSifUi::TOptionalButton aButton, TBool aIs
 //
 TBool CSifUiPrivate::ShowGrantCapabilitiesL( const TCapabilitySet& aCapabilities )
     {
+    TPckg<TCapabilitySet> capabilitySetPckg( aCapabilities );
+    AddParamPckgL( KSifUiGrantCapabilities, capabilitySetPckg );
+    UpdateDialogAndWaitForResponseL();
+    return( iDialogReturnValue == KErrNone );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowSelectLanguageL()
+// ---------------------------------------------------------------------------
+//
+TInt CSifUiPrivate::ShowSelectLanguageL( const RArray<TLanguage>& aLanguages )
+    {
     CBufFlat* buffer = CBufFlat::NewL( KBufferGranularity );
     CleanupStack::PushL( buffer );
 
     RBufWriteStream writeStream( *buffer );
     CleanupClosePushL( writeStream );
-    TPckg<TCapabilitySet> capabilitySetPackage( aCapabilities );
-    writeStream.WriteL( capabilitySetPackage );
+    TPckg< const RArray<TLanguage> > languagesPckg( aLanguages );
+    writeStream.WriteL( languagesPckg );
     writeStream.CommitL();
     CleanupStack::PopAndDestroy( &writeStream );
 
-    AddParamBinaryL( KSifUiGrantCapabilities, *buffer );
-    UpdateDialogAndWaitForResponseL();
-
+    AddParamBinaryL( KSifUiSelectableLanguages, *buffer );
     CleanupStack::PopAndDestroy( buffer );
+    UpdateDialogAndWaitForResponseL();
+    if( iDialogReturnValue == KErrNone )
+        {
+        return iSelectedLanguage;
+        }
+    return iDialogReturnValue;
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowSelectOptionsL()
+// ---------------------------------------------------------------------------
+//
+TBool CSifUiPrivate::ShowSelectOptionsL( const MDesCArray& aSelectableItems,
+        RArray<TInt>& aSelectedIndexes )
+    {
+    AddParamListL( KSifUiSelectableOptions, aSelectableItems );
+    iSelectedOptions.Reset();
+    UpdateDialogAndWaitForResponseL();
+    if( iSelectedOptions.Count() )
+        {
+        aSelectedIndexes = iSelectedOptions;
+        }
     return( iDialogReturnValue == KErrNone );
-    }
-
-// ---------------------------------------------------------------------------
-// CSifUiPrivate::ShowSingleSelectionL()
-// ---------------------------------------------------------------------------
-//
-TBool CSifUiPrivate::ShowSingleSelectionL( const TDesC& /*aTitle*/,
-        const MDesCArray& /*aSelectableItems*/, TInt& aSelectedIndex )
-    {
-    // TODO: implement
-    aSelectedIndex = 0;
-    return ETrue;
-    }
-
-// ---------------------------------------------------------------------------
-// CSifUiPrivate::ShowMultiSelectionL()
-// ---------------------------------------------------------------------------
-//
-TBool CSifUiPrivate::ShowMultiSelectionL( const TDesC& /*aTitle*/,
-        const MDesCArray& /*aSelectableItems*/, RArray<TInt>& aSelectedIndexes )
-    {
-    // TODO: implement
-    aSelectedIndexes.Reset();
-    return ETrue;
     }
 
 // ---------------------------------------------------------------------------
@@ -362,10 +370,23 @@ TBool CSifUiPrivate::ShowMultiSelectionL( const TDesC& /*aTitle*/,
 void CSifUiPrivate::DoCancel()
     {
     FLOG( _L("CSifUiPrivate::DoCancel") );
-
-    if( iWait && iWait->IsStarted() && iWait->CanStopNow() )
+    if( iDeviceDialog )
         {
-        iWaitCompletionCode = KErrCancel;
+        iDeviceDialog->Cancel();        // Closes the device dialog.
+        }
+
+    // Cancelled device dialog does not call DeviceDialogClosed() hence have
+    // to complete the request now. CActive::Cancel() waits until the request
+    // is completed.
+    TRequestStatus* status( &iStatus );
+    User::RequestComplete( status, KErrCancel );
+
+    // Normally User::RequestComplete() invokes RunL(), but not now, because
+    // the object is not active any more (after it has been cancelled). Hence,
+    // have to stop CActiveSchedulerWait too.
+    iWaitCompletionCode = KErrCancel;
+    if( iWait && iWait->IsStarted() )
+        {
         iWait->AsyncStop();
         }
     }
@@ -378,7 +399,7 @@ void CSifUiPrivate::RunL()
     {
     FLOG_1( _L("CSifUiPrivate::RunL, iStatus.Int()=%d"), iStatus.Int() );
 
-    if( iWait )
+    if( iWait && iWait->IsStarted() )
         {
         iWait->AsyncStop();
         }
@@ -398,6 +419,26 @@ void CSifUiPrivate::DataReceived( CHbSymbianVariantMap& aData )
         iSelectedDrive = *( selectedDriveVariant->Value<TChar>() );
         iSelectedDriveSet = ETrue;
         FLOG_1( _L("CSifUiPrivate::DataReceived, iSelectedDrive=%d"), (TUint)iSelectedDrive );
+        }
+
+    const CHbSymbianVariant* selectedLangVariant = aData.Get( KSifUiSelectedLanguageIndex );
+    if( selectedLangVariant )
+        {
+        iSelectedLanguage = *( selectedLangVariant->Value<TInt>() );
+        FLOG_1( _L("CSifUiPrivate::DataReceived, iSelectedLanguage=%d"), iSelectedLanguage );
+        }
+
+    const CHbSymbianVariant* selectedOptsVariant = aData.Get( KSifUiSelectedOptions );
+    if( selectedOptsVariant )
+        {
+        const TDesC8 *dataPtr = reinterpret_cast< const TDesC8* >( selectedOptsVariant->Data() );
+        RMemReadStream readStream( selectedOptsVariant->Data(), dataPtr->Size() );
+        CleanupClosePushL( readStream );
+        TPckg< RArray<TInt> > selectedOptionsPckg( iSelectedOptions );
+        readStream.ReadL( selectedOptionsPckg );
+        CleanupStack::PopAndDestroy( &readStream );
+        FLOG_1( _L("CSifUiPrivate::DataReceived, iSelectedOptions.Count()=%d"),
+            iSelectedOptions.Count() );
         }
 
     const CHbSymbianVariant* variant = aData.Get( KSifUiQueryReturnValue );
@@ -565,6 +606,17 @@ void CSifUiPrivate::AddParamBinaryL( const TDesC& aKey, const CBufBase& aBinary 
     CleanupStack::PushL( variant );
     User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
     CleanupStack::Pop( variant );
+    }
+
+// ---------------------------------------------------------------------------
+// CSifUiPrivate::AddParamPckgL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::AddParamPckgL( const TDesC& aKey, const TDesC8& aPckg )
+    {
+    CHbSymbianVariant* variant = NULL;
+    variant = CHbSymbianVariant::NewL( &aPckg, CHbSymbianVariant::EBinary );
+    User::LeaveIfError( VariantMapL()->Add( aKey, variant ) );
     }
 
 // ---------------------------------------------------------------------------

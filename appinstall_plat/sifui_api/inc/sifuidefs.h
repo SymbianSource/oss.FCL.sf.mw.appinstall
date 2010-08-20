@@ -79,5 +79,13 @@ _LIT( KSifUiErrorDetails, "errdet" );               // string
 // Variant map keys for "grant capabilities" dialog parameters
 _LIT( KSifUiGrantCapabilities, "grcap" );           // binary (TCapabilitySet)
 
+// Variant map keys for "select language" dialog parameters
+_LIT( KSifUiSelectableLanguages, "lang" );          // binary (TPckg< RArray<TLanguage> >)
+_LIT( KSifUiSelectedLanguageIndex, "langind" );     // integer
+
+// Variant map keys for "select options" dialog parameters
+_LIT( KSifUiSelectableOptions, "opts" );            // descriptor array
+_LIT( KSifUiSelectedOptions, "optsind" );           // binary (TPckg< RArray<TInt> >)
+
 #endif  // SIFUIDEFS_H
 

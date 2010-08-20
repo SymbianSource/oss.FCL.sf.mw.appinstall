@@ -15,21 +15,20 @@
 *
 */
 
-#include <sifuidialoggrantcapabilitiescontent.h> // SifUiDialogGrantCapabilitiesContent
+#include "sifuidialoggrantcapabilitiescontent.h" // SifUiDialogGrantCapabilitiesContent
 #include <QGraphicsLinearLayout>
 #include <HbLabel>
 #include <HbPushButton>
 #include <HbScrollArea>
 #include <HbAction>
 #include <HbDialog>
-#ifdef Q_OS_SYMBIAN
-#include <s32mem.h>                     // TMemBuf
-#endif // Q_OS_SYMBIAN
 
 const QString KDetailsTextHtmlBeginList = "<html>%1<ul>";
 const QString KDetailsTextHtmlListItem = "<li>%1</li>";
 const QString KDetailsTextHtmlEndList = "</ul></html>";
 
+
+// ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
 // SifUiDialogGrantCapabilitiesContent::~SifUiDialogGrantCapabilitiesContent()
@@ -135,8 +134,9 @@ void SifUiDialogGrantCapabilitiesContent::viewDetails()
 //
 void SifUiDialogGrantCapabilitiesContent::setCapabilities(const QVariant &capabilities)
 {
-#ifdef Q_OS_SYMBIAN
     QByteArray byteArray = capabilities.toByteArray();
+
+#ifdef Q_OS_SYMBIAN
     const TPtrC8 ptr(reinterpret_cast<const TText8*>(byteArray.constData()), byteArray.length());
     QT_TRAP_THROWING(setCapabilitiesSymbianL(ptr));
 #endif  // Q_OS_SYMBIAN
@@ -153,15 +153,8 @@ void SifUiDialogGrantCapabilitiesContent::setCapabilities(const QVariant &capabi
 //
 void SifUiDialogGrantCapabilitiesContent::setCapabilitiesSymbianL( const TDesC8& aBuf )
 {
-    TMemBuf buf;
-    TUint8* ptr = const_cast<TUint8*>(aBuf.Ptr());
-    buf.Set(ptr, ptr + aBuf.Size(), MStreamBuf::ERead);
-    RReadStream readStream(&buf);
-    CleanupClosePushL(readStream);
-    TCapabilitySet capabilitySet;
-    TPckg<TCapabilitySet> capabilitySetPackage( capabilitySet );
-    readStream.ReadL(capabilitySetPackage);
-    CleanupStack::PopAndDestroy(&readStream);
+    const TPckgC<TCapabilitySet>& capabilitySetPckg( reinterpret_cast< const TPckgC<TCapabilitySet>& >( aBuf ) );
+    const TCapabilitySet& capabilitySet( capabilitySetPckg() );
 
     mIsCapabilitiesValid = true;
     for( TInt i = 0; i < ECapability_HardLimit && mIsCapabilitiesValid; i++ ) {

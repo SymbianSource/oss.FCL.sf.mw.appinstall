@@ -29,7 +29,7 @@ class SifUiDialogGrantCapabilitiesContent : public HbWidget
     Q_OBJECT
 
 public:     // constructor and destructor
-    SifUiDialogGrantCapabilitiesContent(const QString& applicationName,
+    SifUiDialogGrantCapabilitiesContent(const QString &applicationName,
         const QVariant &capabilities, QGraphicsItem *parent = 0);
     virtual ~SifUiDialogGrantCapabilitiesContent();
 
@@ -43,9 +43,9 @@ private slots:
 private:    // new functions
     void setCapabilities(const QVariant &capabilities);
 #ifdef Q_OS_SYMBIAN
-    void setCapabilitiesSymbianL( const TDesC8& aBuf );
+    void setCapabilitiesSymbianL( const TDesC8 &aBuf );
     QString capabilityName( const TCapability aCapability );
-#endif
+#endif // Q_OS_SYMBIAN
 
 private:    // data
     QStringList mCapabilities;

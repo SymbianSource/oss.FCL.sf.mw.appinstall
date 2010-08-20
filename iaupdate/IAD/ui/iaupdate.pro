@@ -24,6 +24,7 @@ symbian {
     TARGET.CAPABILITY = CAP_APPLICATION TrustedUI PowerMgmt
     rssrules = "hidden = KAppIsHidden;"
     RSS_RULES += rssrules
+    TRANSLATIONS = swupdate.ts
 }
 
 DEPENDPATH += .

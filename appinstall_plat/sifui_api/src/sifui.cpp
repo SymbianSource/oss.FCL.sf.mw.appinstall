@@ -165,39 +165,58 @@ EXPORT_C TBool CSifUi::ShowGrantCapabilitiesL( const TCapabilitySet& aCapabiliti
     }
 
 // ---------------------------------------------------------------------------
-// CSifUi::ShowSingleSelectionL()
+// CSifUi::ShowSelectLanguageL()
 // ---------------------------------------------------------------------------
 //
-EXPORT_C TBool CSifUi::ShowSingleSelectionL( const TDesC& aTitle,
-            const MDesCArray& aSelectableItems, TInt& aSelectedIndex )
+EXPORT_C TInt CSifUi::ShowSelectLanguageL( const RArray<TLanguage>& aLanguages )
     {
-    return iPrivate->ShowSingleSelectionL( aTitle, aSelectableItems, aSelectedIndex );
+    return iPrivate->ShowSelectLanguageL( aLanguages );
     }
 
 // ---------------------------------------------------------------------------
-// CSifUi::ShowMultiSelectionL()
+// CSifUi::ShowSelectOptionsL()
 // ---------------------------------------------------------------------------
 //
-EXPORT_C TBool CSifUi::ShowMultiSelectionL( const TDesC& aTitle,
-            const MDesCArray& aSelectableItems, RArray<TInt>& aSelectedIndexes )
+EXPORT_C TBool CSifUi::ShowSelectOptionsL( const MDesCArray& aSelectableItems,
+        RArray<TInt>& aSelectedIndexes )
     {
-    return iPrivate->ShowMultiSelectionL( aTitle, aSelectableItems, aSelectedIndexes );
+    return iPrivate->ShowSelectOptionsL( aSelectableItems, aSelectedIndexes );
     }
 
 
 // ---------------------------------------------------------------------------
-// CSifUi::ShowFailedL()
+// DEPRECATED: CSifUi::ShowFailedL()
 // ---------------------------------------------------------------------------
 //
 // TODO: This function is deprecated, remove it completely.
-EXPORT_C void CSifUi::ShowFailedL( TInt aErrorCode, const TDesC& aErrorMessage,
-        const TDesC& aErrorDetails )
+EXPORT_C void CSifUi::ShowFailedL( TInt /*aErrorCode*/, const TDesC& /*aErrorMessage*/,
+        const TDesC& /*aErrorDetails*/ )
     {
-    CSifUiErrorInfo* errorInfo = CSifUiErrorInfo::NewLC( Usif::EUnknown, aErrorCode,
-            0, aErrorMessage, aErrorDetails );
-    iPrivate->ShowFailedL( *errorInfo );
-    CleanupStack::PopAndDestroy( errorInfo );
+    User::Invariant();
     }
+
+// ---------------------------------------------------------------------------
+// DEPRECATED: CSifUi::ShowSingleSelectionL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowSingleSelectionL( const TDesC& /*aTitle*/,
+            const MDesCArray& /*aSelectableItems*/, TInt& /*aSelectedIndex*/ )
+    {
+    User::Invariant();
+    return EFalse;  // for compiler
+    }
+
+// ---------------------------------------------------------------------------
+// DEPRECATED: CSifUi::ShowMultiSelectionL()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C TBool CSifUi::ShowMultiSelectionL( const TDesC& /*aTitle*/,
+            const MDesCArray& /*aSelectableItems*/, RArray<TInt>& /*aSelectedIndexes*/ )
+    {
+    User::Invariant();
+    return EFalse;  // for compiler
+    }
+
 
 // ---------------------------------------------------------------------------
 // CSifUi::CSifUi()

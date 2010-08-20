@@ -30,7 +30,7 @@ class SifUiDialogGrantCapabilities : public HbDialog
     Q_OBJECT
 
 public:     // constructor and destructor
-    SifUiDialogGrantCapabilities(const QString& applicationName,
+    SifUiDialogGrantCapabilities(const QString &applicationName,
         const QVariant &capabilities, QGraphicsItem *parent = 0);
     virtual ~SifUiDialogGrantCapabilities();
 

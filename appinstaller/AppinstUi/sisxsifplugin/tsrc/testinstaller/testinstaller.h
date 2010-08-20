@@ -49,6 +49,7 @@ private slots:
     void installUsingNewApi();
     void installUsingOldApi();
     void installByOpeningFile();
+    void cancelInstalling();
     void removeUsingNewApi();
     void removeUsingOldApi();
     void handleComplete();

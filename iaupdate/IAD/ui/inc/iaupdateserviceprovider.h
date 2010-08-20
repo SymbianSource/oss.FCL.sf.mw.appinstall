@@ -65,7 +65,7 @@ class IAUpdateServiceProvider : public XQServiceProvider
     ~IAUpdateServiceProvider();
     
     public slots:
-    void startedByLauncher(bool refreshFromNetworkDenied);
+    void startedByLauncher(QString refreshFromNetworkDenied);
     void checkUpdates(QString stringWgId, 
                       QString stringUid,  
                       QString searchCriteria, 

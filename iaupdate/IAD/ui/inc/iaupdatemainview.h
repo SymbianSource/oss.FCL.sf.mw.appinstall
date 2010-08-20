@@ -35,6 +35,7 @@ class HbDataForm;
 class IAUpdateEngine;
 class IAUpdateDialogUtil;
 class TIAUpdateVersion;
+class HbTranslator;
 
 
 class IAUpdateMainView : public HbView
@@ -117,6 +118,7 @@ private:
     bool mMark;
     bool mSelectionUpdate;
     bool mSelectionConnect;
+    HbTranslator *mTranslator;
 
 };
 

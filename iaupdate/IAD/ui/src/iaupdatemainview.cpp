@@ -34,6 +34,7 @@
 #include <hblabel.h>
 #include <hbgroupbox.h>
 #include <hbdataform.h>
+#include <hbtranslator.h>
 
 #include "iaupdatemainview.h"
 #include "iaupdateengine.h"
@@ -49,6 +50,8 @@
 const int KKiloByte = 1024;
 const int KMegaByte = 1024 * 1024;
 const int KMaxShownInKiloBytes = 10 * KMegaByte;
+const QString KTranslationsPath = "/resource/qt/translations/";
+const QString KTranslationsFile = "swupdate";
 
 
 IAUpdateMainView::IAUpdateMainView(IAUpdateEngine *engine):
@@ -65,6 +68,9 @@ mEngine(engine)
     mNode = NULL;
     mSelectionUpdate = false;
     mSelectionConnect = false;
+    mTranslator = NULL;
+        
+    //mTranslator = new HbTranslator(KTranslationsPath, KTranslationsFile);
     
     HbDocumentLoader loader;
     bool ok = false;
@@ -116,6 +122,8 @@ mEngine(engine)
     
     mSelections = new HbGroupBox(dockContainer);
     mSelections->setHeading("Selected 0/0 (0 kB)");
+    //QString selectedString = QString(hbTrId("txt_software_subhead_selected_1l_2l_3l_kb")).arg(0).arg(0).arg(0);
+    //mSelections->setHeading(selectedString);                                            
     
     dockLayout->addItem( mSelections);
     
@@ -132,7 +140,7 @@ mEngine(engine)
 IAUpdateMainView::~IAUpdateMainView()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::~IAUpdateMainView() begin");
-    
+    //delete mTranslator;
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::~IAUpdateMainView() end");
 }
 
@@ -166,6 +174,7 @@ void IAUpdateMainView::refresh(const RPointerArray<MIAUpdateNode> &nodes,
         if (error == KErrNone)
         {
             formText = QString("Applications are up to date");
+            //formText = hbTrId("txt_software_formlabel_applications_are_up_to_date");
         }
         else
         {
@@ -204,7 +213,7 @@ void IAUpdateMainView::handleDisclaimer()
     }
     if (mDialogUtil)
     {
-        HbAction *primaryAction = new HbAction("OK");
+        HbAction *primaryAction = new HbAction(hbTrId("txt_common_button_ok"));
         mDialogUtil->showAgreement(primaryAction);
     }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleDisclaimer() end");

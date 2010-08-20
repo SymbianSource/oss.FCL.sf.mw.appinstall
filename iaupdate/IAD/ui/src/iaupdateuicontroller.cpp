@@ -340,9 +340,11 @@ void CIAUpdateUiController::CheckUpdatesL()
                 if ( mDialogUtil )
                     {
                     mPrimaryAction = NULL;
-                    mPrimaryAction = new HbAction("Accept");
+                    //mPrimaryAction = new HbAction(hbTrId("txt_software_button_accept"));
+					mPrimaryAction = new HbAction("Accept");
                     HbAction *secondaryAction = NULL;
-                    secondaryAction = new HbAction("Decline");
+                    //secondaryAction = new HbAction(hbTrId("txt_software_button_decline"));
+					secondaryAction = new HbAction("Decline");
                     mDialogUtil->showAgreement(mPrimaryAction,secondaryAction);
                     iDialogState = EAgreement;
                     }
@@ -460,8 +462,9 @@ void CIAUpdateUiController::StartUpdateL()
         if ( mDialogUtil )
             {
             mPrimaryAction = NULL;
-            mPrimaryAction = new HbAction("OK");
-            mDialogUtil->showInformation(QString("Insufficient memory. Free some memory and try again."), mPrimaryAction);
+            mPrimaryAction = new HbAction(hbTrId("txt_common_button_ok"));
+            //mDialogUtil->showInformation(hbTrId("txt_software_info_insufficient_memory_free_some_m"), mPrimaryAction);
+			mDialogUtil->showInformation(QString("Insufficient memory. Free some memory and try again."), mPrimaryAction);
             iDialogState = EInsufficientMemory;
             }
         }

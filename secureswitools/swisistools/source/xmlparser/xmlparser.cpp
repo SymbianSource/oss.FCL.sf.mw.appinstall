@@ -29,6 +29,7 @@
 #include "exception.h"
 #include "utf8_wrapper.h"
 #include "util.h"
+#include "utility.h"
 
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
@@ -894,9 +895,20 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo CScrXmlParser::
 		appProperty.iLocale = opaqueDataType.iLocale;
 		appProperty.iName = L"OpaqueData";
 		appProperty.iIntValue = 0;
-		appProperty.iIsStr8Bit = opaqueDataType.iIsBinary;
+		appProperty.iIsStr8Bit = true;
 		appProperty.iServiceUid = 0;
-		appProperty.iStrValue = opaqueDataType.iOpaqueData;
+
+		if(opaqueDataType.iIsBinary == 1)
+		{
+			std::string str = wstring2string(opaqueDataType.iOpaqueData);
+			std::string decodedString = Util::Base64Decode(str);
+			int len = decodedString.length();
+			appProperty.iStrValue.assign(decodedString.c_str(),decodedString.c_str()+len);
+		}
+		else
+		{
+			appProperty.iStrValue = opaqueDataType.iOpaqueData;
+		}
 		
 		appRegistrationInfo.iApplicationProperty.push_back(appProperty);
 		}
@@ -1144,10 +1156,18 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInf
 		appProperty.iLocale = opaqueDataType.iLocale;
 		appProperty.iName = L"OpaqueData";
 		appProperty.iIntValue = 0;
-		appProperty.iIsStr8Bit = opaqueDataType.iIsBinary;
+		appProperty.iIsStr8Bit = true;
 		appProperty.iServiceUid = appServiceInfo.iUid;
-		appProperty.iStrValue = opaqueDataType.iOpaqueData;
-		
+		if(opaqueDataType.iIsBinary == 1)
+		{
+			std::string str = wstring2string(opaqueDataType.iOpaqueData);
+			std::string decodedString = Util::Base64Decode(str);
+			appProperty.iStrValue = string2wstring(decodedString);
+		}
+		else
+		{
+			appProperty.iStrValue = opaqueDataType.iOpaqueData;
+		}
 		aAppRegistrationInfo.iApplicationProperty.push_back(appProperty);
 		}
 
@@ -1375,18 +1395,20 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty
 		const XMLCh* nam = name->item(0)->getTextContent();
 		appProperty.iName = XMLChToWString(nam);
 		}
-	
+
 	if( intvalue->getLength() != 0)
 		{
 		const XMLCh* intval = intvalue->item(0)->getTextContent();
 		appProperty.iIntValue = XercesStringToInteger(intval);
 		}
-
-	if( strvalue->getLength() != 0)
+	else if( strvalue->getLength() != 0)
 		{
 		const XMLCh* strval = strvalue->item(0)->getTextContent();
 		appProperty.iStrValue = XMLChToWString(strval);
 		}
+
+	appProperty.iIsStr8Bit = false;
+	
 	LOGEXIT("CScrXmlParser::GetAppProperty()");
 	return appProperty;
 	}
