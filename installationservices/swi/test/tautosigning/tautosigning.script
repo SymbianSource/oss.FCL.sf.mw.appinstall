@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -16,6 +16,7 @@
 
 PRINT Run all SWIS tests
 LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tSisRegistryTest
 
 //! @file
 //! @SYMTestCaseID		API-SEC-TAUTOSIGNING-UNSIGNED-0001
@@ -218,3 +219,49 @@ START_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0006
 RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 3-6signeduserunauthorised
 
 END_TESTCASE API-SEC-TAUTOSIGNING-SIGNED-0006
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+//! @SYMTestCaseDesc		Installs/Uninstalls a Self-Signed SIS file with AllowSelfSigned 
+//! 						Central Reposatory setting as True. Then change the Central Reposatory 
+//! 						setting as False and then Install Again.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall. Change the Central Reposatory 
+//! 					setting. Attempts an install.
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall. Sucessful Change Setting. Unsucessful Install.
+//! @SYMPREQ			PREQ7308
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini ResetKeyVAlue
+RUN_TEST_STEP_RESULT 106 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini 2-2selfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini SetKeyVAlue
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0007
+
+//! @file
+//! @SYMTestCaseID		API-SEC-TAUTOSIGNING-SELFSIGNED-0008
+//! @SYMTestCaseDesc		Installs/Uninstalls a Embedded Self-Signed SIS file with AllowSelfSigned 
+//! 						Central Reposatory setting as True. Then change the Central Reposatory 
+//! 						setting as False and then Install Again.
+//! @SYMTestPriority		Low
+//! @SYMTestStatus		3. Released
+//! @SYMTestActions		Attempts an install followed by an uninstall. Change the Central Reposatory 
+//! 					setting. Attempts an install.
+//! @SYMTestExpectedResults	Sucessful Install, Sucessful Uninstall. Sucessful Change Setting. Unsucessful Install.
+//! @SYMPREQ			PREQ7308
+//! @SYMTestType		UT
+
+START_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0008
+
+RUN_TEST_STEP 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini ResetKeyVAlue
+RUN_TEST_STEP_RESULT 106 100 tuiscriptadaptors CheckedInstallStep z:\tswi\tautosigning\scripts\tautosigning.ini embedselfsigneddata
+RUN_TEST_STEP 100 tSisRegistryTest SetCenRepSetting z:\tswi\tautosigning\scripts\tautosigning.ini SetKeyVAlue
+
+END_TESTCASE API-SEC-TAUTOSIGNING-SELFSIGNED-0008

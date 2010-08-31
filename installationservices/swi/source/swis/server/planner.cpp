@@ -355,7 +355,6 @@ void CPlanner::CreateNewNodesL(RPointerArray<CSisRegistryPackage>& aProcessPacka
 	{
 	// We are removing items from array (aProcessPackages)and thus require index 
 	// adjustment. But if loop run in reverse order there is no need to adjust the index
-	CleanupResetAndDestroyPushL(aPlannedPackages);
 	for (TInt i = aProcessPackages.Count() - 1; i >= 0; --i)
 		{
 		// Ignore already added package
@@ -398,7 +397,6 @@ void CPlanner::CreateNewNodesL(RPointerArray<CSisRegistryPackage>& aProcessPacka
 		aProcessPackages.Remove(i);
 		CleanupStack::PopAndDestroy(&registryEntry);
 		}
-	CleanupStack::Pop(&aPlannedPackages);
 	}
 
 /**
@@ -521,7 +519,6 @@ CApplication* CPlanner::CreatePlannedApplicationL(CUninstallationNode& aRootNode
             User::Leave(err);
 		    }
 		}
-
 	CleanupStack::Pop(rootApplication);
 	
 	return rootApplication;
@@ -536,14 +533,13 @@ CApplication* CPlanner::CreatePlannedApplicationL(CUninstallationNode& aRootNode
  */
 void CPlanner::ConfirmForUninstallL(CUninstallationNode& aNode, RPointerArray<CSisRegistryPackage>& aPlannedPackages)
 	{
-	CleanupResetAndDestroyPushL(aPlannedPackages);
 	aNode.SetIsPlanned(ETrue);
 
 	// aNode owns package therefore to transfer the ownership
 	// a copy of CSisRegistryPackage is made.
 	CSisRegistryPackage* package = CSisRegistryPackage::NewLC(aNode.PackageL());
 	aPlannedPackages.AppendL(package);
-	CleanupStack::Pop(2, &aPlannedPackages);
+	CleanupStack::Pop(package);
 	}
 
 /**

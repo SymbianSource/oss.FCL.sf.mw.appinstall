@@ -33,6 +33,7 @@
 #include "sissignaturecertificatechain.h"
 #include "sispackagetrust.h"
 #include <hash.h>
+#include "nativecomponentinfo.h"
 
 namespace Swi
 {
@@ -41,7 +42,7 @@ class TSisTrustStatus;
 class CCertChainConstraints;
 
 namespace Sis
- {
+{
 
 class CInfo;
 class CPrerequisites;
@@ -320,7 +321,27 @@ public: // Accessors
     */
 	inline void SetHasExecutable(TBool aHasExe);
 	
-	#endif
+	/** Returns a flag 
+	@return iIsDriveSelectionRequired TBool flag
+	*/
+	inline TBool CController::DriveSelectionRequired() const;
+	
+	/** Sets the status of flag 
+	@param aIsDriveSelectionRequired TBool
+    */
+    inline void CController::SetDriveSelectionRequired(TBool aIsDriveSelectionRequired);
+	
+	/** Returns a pointer array of CNativeApplicationInfo 
+	@return RPointerArray iApplicationInfo
+	*/
+    inline RCPointerArray<CNativeComponentInfo::CNativeApplicationInfo>& CController::GetApplicationInfo();
+	
+    /** Adds the application Info to the array of CNativeApplicationInfo 
+	@param aApplicationInfo The info for a native application
+	*/
+    inline void CController::AddApplicationInfoL(const CNativeComponentInfo::CNativeApplicationInfo* aApplicationInfo);
+    
+    #endif
 	
 private:
 
@@ -372,6 +393,8 @@ private:
 	
 	TBool iHasExe;						   ///< Indicates Whether the component has an exe or not
 	
+	TBool iIsDriveSelectionRequired;       ///< Indicates Whether drive selection is required or not.
+		
 	mutable TSisTrustStatus* iTrustStatus; ///< The install trust status
 
     mutable RArray<TInt> iCertChainIndices; ///< Contains the indexes of the chains
@@ -379,6 +402,7 @@ private:
 	mutable TInt iRemoveWithLastDependent;  ///< Whether uninstall with last dependent
 	
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	RCPointerArray<CNativeComponentInfo::CNativeApplicationInfo> iApplicationInfo;  ///< Pointer Array of application info objects CNativeApplicationInfo.
 	TCapabilitySet iUserGrantableCapabilities;
 	#endif
 	
@@ -481,9 +505,30 @@ inline void CController::SetHasExecutable(TBool aHasExe)
 	{
 	iHasExe = aHasExe;
 	}
+
+inline TBool CController::DriveSelectionRequired() const
+    {
+    return iIsDriveSelectionRequired;
+    }
+
+inline void CController::SetDriveSelectionRequired(TBool aIsDriveSelectionRequired)
+    {
+    iIsDriveSelectionRequired = aIsDriveSelectionRequired;
+    }
+
+inline RCPointerArray<CNativeComponentInfo::CNativeApplicationInfo>& CController::GetApplicationInfo()
+    {
+    return iApplicationInfo;
+    }
+
+inline void CController::AddApplicationInfoL(const CNativeComponentInfo::CNativeApplicationInfo* aApplicationInfo)
+    {
+    iApplicationInfo.AppendL(aApplicationInfo);
+    }
+
 #endif
 
- } // namespace Sis
+} // namespace Sis
 
 } // namespace Swi
 

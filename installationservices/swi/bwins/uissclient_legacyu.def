@@ -97,8 +97,8 @@ EXPORTS
 	?UpdateProgressBarL@RUiHandler@Swi@@QAEXABVTAppInfo@2@H@Z @ 96 NONAME ; void Swi::RUiHandler::UpdateProgressBarL(class Swi::TAppInfo const &, int)
 	?NewL@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 97 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewL(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
 	?NewLC@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 98 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewLC(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
-	?CalculateProgressBarValue@CProgressBarValuePublisher@Swi@@QAEHH@Z @ 99 NONAME ; void Swi::CProgressBarValuePublisher::UpdateProgressBarValueL(int)
-	?SetFinalProgressBarValue@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 100 NONAME ; void Swi::CProgressBarValuePublisher::SetFinalProgressBarValue(int)
-	?SetProgressBarValuePublisher@RUiHandler@Swi@@QAEXPAVCProgressBarValuePublisher@2@@Z @ 101 NONAME ; void Swi::RUiHandler::SetProgressBarValuePublisher(class Swi::CProgressBarValuePublisher *)
-	?NewL@CProgressBarValuePublisher@Swi@@SAPAV12@XZ @ 102 NONAME  ; class Swi::CProgressBarValuePublisher * Swi::CProgressBarValuePublisher::NewL(void)
-	
+	?UpdateProgressBarValueL@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 99 NONAME ABSENT ; void Swi::CProgressBarValuePublisher::UpdateProgressBarValueL(int)
+	?SetFinalProgressBarValue@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 100 NONAME ABSENT ; void Swi::CProgressBarValuePublisher::SetFinalProgressBarValue(int)
+	?SetProgressBarValuePublisher@RUiHandler@Swi@@QAEXPAVCProgressBarValuePublisher@2@@Z @ 101 NONAME ABSENT ; void Swi::RUiHandler::SetProgressBarValuePublisher(class Swi::CProgressBarValuePublisher *)
+	?NewL@CProgressBarValuePublisher@Swi@@SAPAV12@XZ @ 102 NONAME ABSENT ; class Swi::CProgressBarValuePublisher * Swi::CProgressBarValuePublisher::NewL(void)
+

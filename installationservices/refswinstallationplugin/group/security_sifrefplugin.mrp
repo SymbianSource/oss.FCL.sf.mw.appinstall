@@ -1,0 +1,8 @@
+component	security_sifrefplugin
+source	\sf\mw\appinstall\installationservices\refswinstallationplugin\
+binary	\sf\mw\appinstall\installationservices\refswinstallationplugin\group	all
+exports	\sf\mw\appinstall\installationservices\refswinstallationplugin\group
+notes_source	\component_defs\release.src
+
+ipr T
+

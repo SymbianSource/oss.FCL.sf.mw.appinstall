@@ -1,0 +1,50 @@
+/*
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Mime type recogniser for SIF test package type
+*
+*/
+
+
+/**
+ @file
+*/
+TARGET			tsifpkgrec.dll
+
+CAPABILITY		TrustedUI ProtServ
+
+TARGETTYPE		PLUGIN
+UID				0x10009D8D 0x102866F0
+VENDORID 		0x70000001
+
+SOURCEPATH		../source
+SOURCE			tsifpkgrec.cpp
+
+START RESOURCE	102866F0.rss
+TARGET			tsifpkgrec.rsc
+END
+
+USERINCLUDE		../source
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+LIBRARY			euser.lib apmime.lib efsrv.lib
+
+START WINS
+BASEADDRESS		0x44700000
+END
+
+START MARM
+END
+SMPSAFE

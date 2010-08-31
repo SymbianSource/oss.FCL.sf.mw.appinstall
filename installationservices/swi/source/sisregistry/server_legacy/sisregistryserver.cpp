@@ -25,8 +25,6 @@
 #include <s32mem.h>
 #include <f32file.h>
 #include <s32file.h>
-#include <startupdomainpskeys.h>
-#include <e32const.h>
 
 #include "sisregistryserver.h"
 #include "sisregistrycache.h"
@@ -106,16 +104,6 @@ void CSisRegistryServer::ConstructL()
 //
 	{
 	DEBUG_PRINTF(_L8("SIS Registry Server - Starting Server"));
-    TInt value( EIdlePhase1Ok );
-    RProperty::Get( KPSUidStartup, KPSIdlePhase1Ok, value );
-    if ( value == EIdlePhase1NOK )
-        {
-        DEBUG_PRINTF(_L8("SIS Registry Server - Setting process priority to Low"));
-		// Using 150 instead of EPriorityLow as there is conflict between TPriority
-		// and TProcessPriority enum constants.
-		RProcess().SetPriority(TProcessPriority(150));
-        DEBUG_PRINTF(_L8("SIS Registry Server - Set process priority to Low"));
-        }	
 	StartL(KSisRegistryName);
 	// create the cache
 	iCache = CSisRegistryCache::NewL();

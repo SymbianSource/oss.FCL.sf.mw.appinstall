@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,6 +30,9 @@
 #include <usif/sts/sts.h>
 #include "swtypereginfo.h"
 #include "installswtypehelper.h"
+#include "cleanuputils.h"
+#include "userselections.h"
+#include "sissupportedlanguages.h"
 #else
 #include "integrityservices.h"
 #endif
@@ -60,7 +63,7 @@
 #include "progressbar.h"
 #include "fileextractor.h"
 #include "securitycheckutil.h"
-
+#include <s32strm.h>
 using namespace Swi;
 
 
@@ -170,7 +173,11 @@ CInstallationProcessor::~CInstallationProcessor()
 		
 	iFilesToCopy.ResetAndDestroy();
 	iApparcRegFiles.ResetAndDestroy();
-	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	iApparcRegFilesForParsing.ResetAndDestroy();
+	iApparcRegFileData.ResetAndDestroy();
+	delete iAppRegExtractor;	
+#endif	
 	iLoader.Close();
 	iSkipFile.Close();
 	
@@ -200,6 +207,16 @@ void CInstallationProcessor::DoCancel()
 		{
 		iFileExtractor->Cancel();
 		}
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  	
+	if (iAppRegExtractor != NULL)
+        {
+		if (iAppRegExtractor->IsActive())
+			{
+			iAppRegExtractor->Cancel();
+			}
+		}
+#endif
 	}
 
 void CInstallationProcessor::DisplayFileL(const CSisRegistryFileDescription& aFileDescription, Sis::TSISFileOperationOptions aFileOperationOption)
@@ -565,6 +582,10 @@ TBool CInstallationProcessor::DoStateInitializeL()
 	iFilesToCopyCurrent = 0;
 	iFilesToCopy.ResetAndDestroy();
 	iApparcRegFiles.ResetAndDestroy();
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	iApparcRegFilesForParsing.ResetAndDestroy();
+	iApparcRegFileData.ResetAndDestroy();
+#endif
 	return ETrue;
 	}
 	
@@ -752,14 +773,77 @@ TBool CInstallationProcessor::DoStateProcessFilesL()
 			CleanupStack::PopAndDestroy(2, &entry); // presintalledSids
 #else
 			CleanupStack::PopAndDestroy(3, &session); // entry, presintalledSids
-#endif
-			
+#endif			
 			}
 		
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
+		
+		// Find out all the regisration resource files associated with this package UID and add to the list of 
+		// files to be processed later for parsing		
+		TRAPD(err, AddAppArcRegResourceFilesL());
+		if ( err != KErrNotFound && err != KErrNone)
+		    User::Leave(err);
+#endif
 		iCurrent = 0;
 		return ETrue;
 		}
 	}
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void CInstallationProcessor::AddAppArcRegResourceFilesL()
+    {
+    RSisRegistryEntry entry;
+    TInt err = KErrNone;
+    if ( !ApplicationL().IsUninstall() )
+        err = entry.Open(iRegistryWrapper.RegistrySession(), ApplicationL().ControllerL().Info().Uid().Uid());
+    else
+        return;
+    
+    User::LeaveIfError(err);
+    CleanupClosePushL(entry);
+    AddAppArcRegResourceFilesForRegEntryL(entry);
+    
+    RPointerArray<CSisRegistryPackage> augmentationArray;
+    CleanupResetAndDestroyPushL(augmentationArray);
+    entry.AugmentationsL(augmentationArray);
+    CleanupStack::Pop(&augmentationArray);
+    CleanupStack::PopAndDestroy(&entry);    
+        
+    CleanupResetAndDestroyPushL(augmentationArray);
+    TInt count = augmentationArray.Count();
+    for ( TInt i=0; i < count; ++i)
+        {
+        TInt err = entry.OpenL(iRegistryWrapper.RegistrySession(),*augmentationArray[i]);
+        User::LeaveIfError(err);
+        CleanupClosePushL(entry);
+        AddAppArcRegResourceFilesForRegEntryL(entry);
+        CleanupStack::PopAndDestroy(&entry);
+        }
+    
+    CleanupStack::PopAndDestroy(&augmentationArray);
+    }
+
+void CInstallationProcessor::AddAppArcRegResourceFilesForRegEntryL(RSisRegistryEntry& aEntry)
+    {
+    RPointerArray<HBufC> filesArray;
+    CleanupResetAndDestroyPushL(filesArray);
+    aEntry.FilesL(filesArray);    
+    TInt count = filesArray.Count();
+    CSisRegistryPackage *regPkg = aEntry.PackageL();
+    CleanupStack::PushL(regPkg);
+    
+    for (TInt i=0; i<count; ++i)
+        {
+        if (FileIsApparcReg(*filesArray[i]))
+            {
+            CAppRegFileData *tmpAppRegFileData = CAppRegFileData::NewLC(*filesArray[i],*regPkg);
+            iApparcRegFilesForParsing.AppendL(tmpAppRegFileData);
+            CleanupStack::Pop(tmpAppRegFileData);
+            }
+        }
+    CleanupStack::PopAndDestroy(2,&filesArray);
+    }
+#endif
 
 TBool CInstallationProcessor::DoStateVerifyPathsL()
 	{
@@ -818,8 +902,76 @@ TBool CInstallationProcessor::DoStateInstallFilesL()
 	iCurrent = 0;
 	return ETrue;
 	}
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+TBool CInstallationProcessor::DoParseApplicationRegistrationFilesL()
+    {
+    if (iCurrent == 0)
+        DEBUG_PRINTF2(_L("Install Server - DoParseApplicationRegistrationFilesL - Number of Application registration resource files to be parsed %d"), iApparcRegFilesForParsing.Count());
+    
+	if (iAppRegExtractor != NULL)
+        {
+        if (iAppRegExtractor->GetErrorCode() == KErrCorrupt)
+            {
+            delete iApparcRegFilesForParsing[--iCurrent];
+            iApparcRegFilesForParsing.Remove(iCurrent);
+            }
+        }
+    
+    if (iCurrent < iApparcRegFilesForParsing.Count())
+        { 
+        TDesC& fileDescription = (iApparcRegFilesForParsing[iCurrent++]->GetAppRegFile());   
+        // Continue processing the next file if a registration resource file is not found(in case of SA over SA)
+        TRAPD(err,ParseRegistrationResourceFileL(fileDescription));        
+        if(KErrNotFound == err || KErrPathNotFound == err)
+            {               
+            delete iApparcRegFilesForParsing[--iCurrent];
+            iApparcRegFilesForParsing.Remove(iCurrent); 
+            TRequestStatus* status = &iStatus;
+            User::RequestComplete(status, KErrNone);     
+            WaitState(ECurrentState);
+            }
+        else if(KErrNone != err )
+            {
+            User::Leave(err);
+            }
+        else
+            {
+            WaitState(ECurrentState);
+            }
+        return EFalse;
+        }
+    else
+        {
+        iCurrent = 0;
+        return ETrue;
+        }
+    }
 
-
+TBool CInstallationProcessor::ParseRegistrationResourceFileL(const TDesC& aTargetFileName)
+    {
+    DEBUG_PRINTF2(_L("Install Server - ParseRegistrationResourceFileL - Parsing '%S' registration resource file"), &aTargetFileName);
+    if ( NULL == iAppRegExtractor )
+        {
+        DEBUG_PRINTF(_L("Install Server - ParseRegistrationResourceFileL - Creating CAppRegExtractor for async parsing of registration resource file"));
+        CApplication& app = const_cast<CApplication&>(ApplicationL());
+        RArray<TInt> matchingLanguages = app.GetDeviceSupportedLanguages();
+        RArray<TLanguage> devLanguages;
+        CleanupClosePushL(devLanguages);
+        TInt count = matchingLanguages.Count();
+        
+        DEBUG_PRINTF2(_L("Install Server - ParseRegistrationResourceFileL - %d matching languages found"),count);
+        for ( TInt i=0; i<count; i++)
+            {
+            devLanguages.Append((TLanguage)matchingLanguages[i]);            
+            }
+        iAppRegExtractor = CAppRegExtractor::NewL(Fs(),devLanguages,iApparcRegFileData);
+        CleanupStack::Pop(&devLanguages);       
+        }
+        
+    iAppRegExtractor->ExtractAppRegInfoSizeL(aTargetFileName, iStatus);
+    return EFalse;
+    }
+#endif
 
 TBool CInstallationProcessor::DoStateDisplayFilesL()
 	{
@@ -846,6 +998,100 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	// destroy the memory heavy file copy descriptions
 	iFilesToCopy.ResetAndDestroy();
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	RArray<TAppUpdateInfo> affectedApps;    
+	CleanupClosePushL(affectedApps);
+	const CApplication& application = ApplicationL();
+	//if there are reg files in the package or if its an upgrade (in case of SA (with app) over SA(with no app))
+	if(iApparcRegFilesForParsing.Count() != 0 || application.IsUpgrade())
+	    {
+	    //Create the list of Application Uids which are affected by the Installation    	    	    
+	    Usif::TComponentId componentId = 0;
+	    RArray<Usif::TComponentId> componentIds;
+	    CleanupClosePushL(componentIds);
+	    RArray<TUid> existingAppUids;
+	    CleanupClosePushL(existingAppUids);
+	    TAppUpdateInfo existingAppInfo;     
+	    TUid packageUid = application.ControllerL().Info().Uid().Uid();
+	    
+        if(application.IsUpgrade()) 
+            {	 	    
+            //Get all componentIds
+            iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds);            
+            TInt count = componentIds.Count();
+            if(0 == count)
+                {
+                DEBUG_PRINTF(_L("ComponentIDs not found for the base package"));
+                User::Leave(KErrNotFound);
+                }
+                                
+            //SA over SA
+            if(application.ControllerL().Info().InstallType() == Sis::EInstInstallation )
+                {        
+                //Get the compid for base package
+                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForUidL(packageUid);               
+                      
+                TInt index = componentIds.Find(componentId);
+
+                //Exclude the Base SA compId from the list 
+                componentIds.Remove(index);
+                //Get the apps for Base SA compId and mark them as to be deleted
+                existingAppUids.Reset();
+                TRAPD(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids);)  
+                //If Base Package does not contain any app then GetAppUidsForComponentL will return KErrNotFound, ignore the error else leave
+                if (KErrNone != err && KErrNotFound != err)
+                    {
+                    User::Leave(err);
+                    }
+                
+                for(TInt i = 0 ; i < existingAppUids.Count(); ++i)
+                    {
+                    existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);    
+                    affectedApps.AppendL(existingAppInfo);
+                    }                
+                //Get the apps for Remaining CompIds and mark them as to be upgraded               
+                for(TInt i = 0 ; i < componentIds.Count(); ++i)
+                    {
+                    existingAppUids.Reset();                    
+                    //If there are no apps within the existing components (SP's) then it will return KErrNotFound
+                    TRAPD(err, iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids);) 
+                    if (KErrNone != err && KErrNotFound != err)
+                        {
+                        User::Leave(err);
+                        }
+                    
+                    for(TInt k = 0 ; k < existingAppUids.Count(); ++k)
+                        {
+                        existingAppInfo = TAppUpdateInfo(existingAppUids[k], EAppInstalled);    
+                        affectedApps.AppendL(existingAppInfo);
+                        }
+                    }                                
+                }
+                
+            //SP over SP
+            if(application.ControllerL().Info().InstallType() == Sis::EInstAugmentation)
+                {
+                componentId = iRegistryWrapper.RegistrySession().GetComponentIdForPackageL(application.PackageL().Name(), application.PackageL().Vendor());     
+                //Get the apps for Base SP compId and mark them as to be deleted
+                existingAppUids.Reset();
+                //If there are no apps within the existing component (SP) then it will return KErrNotFound
+                TRAPD(err, iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentId, existingAppUids);) 
+                if (KErrNone != err && KErrNotFound != err)
+					{
+                    User::Leave(err);
+					}
+                
+                for(TInt i = 0 ; i < existingAppUids.Count(); ++i)
+                   {
+                   existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);    
+                   affectedApps.Append(existingAppInfo);
+                   }                                  
+                }        
+            }	                   
+        CleanupStack::PopAndDestroy(2, &componentIds);
+	    }		
+#endif
+	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	// Now that we are ready to make changes to the registry we start a transaction
 	// Note that the commit/rollback action is subsequently taken by the later steps of the state machine
@@ -936,6 +1182,11 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 			{
 			iRegistryWrapper.RegistrySession().UpdateEntryL(ApplicationL(), thisController, TransactionSession().TransactionIdL());
 			}
+		TInt count = iApparcRegFileData.Count();
+        for (int i = 0; i < count; i++)
+            {
+		    iRegistryWrapper.RegistrySession().UpdateEntryL(ApplicationL(), *iApparcRegFileData[i], iApparcRegFilesForParsing[i]->GetSisRegistryPackage());
+		    }
 #else
 		session.UpdateEntryL(ApplicationL(), thisController, IntegrityServices().TransactionId());
 #endif
@@ -954,6 +1205,11 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 			{
 			iRegistryWrapper.RegistrySession().AddEntryL(ApplicationL(), thisController, TransactionSession().TransactionIdL());
 			}
+		TInt count = iApparcRegFileData.Count();
+		for (int i = 0; i < count; i++)
+		    {
+                iRegistryWrapper.RegistrySession().AddEntryL(*iApparcRegFileData[i], iApparcRegFilesForParsing[i]->GetSisRegistryPackage());
+		    }
 #else
 		session.AddEntryL(ApplicationL(), thisController, IntegrityServices().TransactionId());
 #endif
@@ -976,6 +1232,79 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
 	// RSisRegistryWritableSession::AddEntryL()
 	// RSisRegistryWritableSession::UpdateEntryL()
 	InstallSoftwareTypeHelper::RegisterMimeTypesL(iSoftwareTypeRegInfoArray);
+	
+	//if there are reg files in the package or if its an upgrade (in case of SA (with app) over SA(with no app))
+	if(iApparcRegFilesForParsing.Count() != 0 || application.IsUpgrade())
+	    {
+	    //Create the list of Application Uids which are affected by the Installation                           
+        RArray<Usif::TComponentId> componentIds;
+        CleanupClosePushL(componentIds);
+        RArray<TUid> newAppUids;    
+        CleanupClosePushL(newAppUids);
+        TAppUpdateInfo existingAppInfo, newAppInfo;     
+        TUid packageUid = application.ControllerL().Info().Uid().Uid();
+        //Get all componentIds for the application
+        componentIds.Reset();
+        iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds);
+        TInt count = componentIds.Count();
+        
+        //Get the apps for All CompIds               
+        for(TInt i = 0 ; i < count; i++)
+            {
+            newAppUids.Reset();                    
+            TRAPD(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], newAppUids))
+            if (KErrNone != err && KErrNotFound != err)
+                {
+                User::Leave(err);
+                }
+            
+            for(TInt i = 0 ; i < newAppUids.Count(); ++i)
+                {
+                existingAppInfo = TAppUpdateInfo(newAppUids[i], EAppUninstalled);
+                TInt index = 0;
+                index = affectedApps.Find(existingAppInfo);
+                if(KErrNotFound != index)
+                    {
+                    affectedApps.Remove(index);
+                    }
+                existingAppInfo = TAppUpdateInfo(newAppUids[i],EAppInstalled);
+                affectedApps.AppendL(existingAppInfo);            
+                }        
+            }
+        
+        for(TInt i = 0; i < affectedApps.Count(); i++)
+           {
+           DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
+           DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
+           }
+        
+        //Updating apps to be notified
+        RArray<TAppUpdateInfo> currentNotifiableApps;
+        CleanupClosePushL(currentNotifiableApps);
+        const_cast<CPlan&>(Plan()).GetAffectedApps(currentNotifiableApps);
+        TInt appCount = affectedApps.Count();
+        for(TInt k = 0; k < appCount ; ++k)
+            {
+            TInt count = currentNotifiableApps.Count();
+            TUid appUid = affectedApps[k].iAppUid;
+            //compare the apps present in the package currently being processed with the existing set of affected apps,
+            //if alredy exists then update else add it to the list
+            for(TInt index = 0; index < count ; ++index)
+               {
+               if(appUid == currentNotifiableApps[index].iAppUid)
+                   {           
+                   currentNotifiableApps.Remove(index);                                    
+                   }
+               }
+            currentNotifiableApps.AppendL(affectedApps[k]);
+            }
+        
+        const_cast<CPlan&>(Plan()).ResetAffectedApps();
+        const_cast<CPlan&>(Plan()).SetAffectedApps(currentNotifiableApps);
+        
+        CleanupStack::PopAndDestroy(3, &componentIds);
+	    }
+	CleanupStack::PopAndDestroy(&affectedApps);
 #endif
 	return ETrue;
 	}
@@ -1307,8 +1636,47 @@ void CInstallationProcessor::LaunchFileL(const CSisRegistryFileDescription& aFil
 		RSisLauncherSession launcher;
 		CleanupClosePushL(launcher);
 		User::LeaveIfError(launcher.Connect());
-	
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		RPointerArray<Usif::CApplicationRegistrationData> appRegInfoArray;
+		CleanupClosePushL(appRegInfoArray);
+
+		RFs fs;
+		CleanupClosePushL(fs);
+        User::LeaveIfError(fs.Connect());
+		User::LeaveIfError(fs.ShareProtected());
+		RArray<TLanguage> appLanguages;
+		CleanupClosePushL(appLanguages);
+				        
+		const TInt appCount = iApparcRegFiles.Count();
+		for (TInt i=0; i<appCount; ++i)
+			{
+			TInt bufLen = iApparcRegFiles[i]->Size();
+			HBufC* buf = HBufC::NewLC(bufLen);
+			TPtr appFile = buf->Des();
+			appFile.Format(_L("%S"), iApparcRegFiles[i]);
+
+			RFile file;
+			User::LeaveIfError(file.Open(fs, appFile, EFileRead));
+			CleanupClosePushL(file);
+			Usif::CApplicationRegistrationData* appRegData  = NULL;
+			TRAPD(err, appRegData = launcher.SyncParseResourceFileL(file, appLanguages));
+			if (KErrNone == err)
+			    {
+		         CleanupStack::PushL(appRegData);
+		         appRegInfoArray.AppendL(appRegData);
+		         CleanupStack::Pop(appRegData);
+			    }
+			CleanupStack::PopAndDestroy(2,buf);
+			}
+		
+		launcher.NotifyNewAppsL(appRegInfoArray);
+        fs.Close();
+        appRegInfoArray.ResetAndDestroy();
+		CleanupStack::PopAndDestroy(3, &appRegInfoArray);
+#else
 		launcher.NotifyNewAppsL(iApparcRegFiles);
+#endif
 		// clean up our list so we don't notify of the files twice
 		iApparcRegFiles.ResetAndDestroy();
 		
@@ -1333,7 +1701,7 @@ TBool CInstallationProcessor::ShouldLaunchL(const CSisRegistryFileDescription& a
 		}
 	return EFalse;
 	}
-	
+
 void CInstallationProcessor::AddApparcFilesInListL(const TDesC& aTargetFileName)
 	{
 	if (FileIsApparcReg(aTargetFileName))
@@ -1342,5 +1710,79 @@ void CInstallationProcessor::AddApparcFilesInListL(const TDesC& aTargetFileName)
 		HBufC* tmp = aTargetFileName.AllocLC();
 		iApparcRegFiles.AppendL(tmp);
 		CleanupStack::Pop(tmp);
+
+#ifdef 	SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	    // we're installing a reg file so add it to our list for parsing it and 
+		// populating SCR in EParseApplicationRegistrationFiles state of CProcessor	    
+		TInt index = UserSelectedLanguageIndexL(ApplicationL());
+		CSisRegistryPackage *regPkg = CSisRegistryPackage::NewLC(ApplicationL().ControllerL().Info().Uid().Uid(),\
+		        ApplicationL().ControllerL().Info().Names()[index]->Data(),\
+		        ApplicationL().ControllerL().Info().UniqueVendorName().Data());
+		CAppRegFileData *appRegData =CAppRegFileData::NewLC(aTargetFileName,*regPkg);
+	    iApparcRegFilesForParsing.AppendL(appRegData);
+	    CleanupStack::Pop(appRegData);
+	    CleanupStack::PopAndDestroy(regPkg);
+#endif		
 		}		
 	}
+
+#ifdef  SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+TInt CInstallationProcessor::UserSelectedLanguageIndexL(const CApplication& aApplication) const
+// used to find out which is the index of the selected language, 
+// based on the language selection. This will be used for the relevant package and vendor names
+    {
+    TLanguage language = aApplication.UserSelections().Language();
+    
+    TInt index = KErrNotFound;
+    for (TInt i = 0; i < aApplication.ControllerL().SupportedLanguages().Count(); i++)
+        {
+        if (aApplication.ControllerL().SupportedLanguages()[i] == language)
+            {
+            index = i;
+            break;  
+            }
+        }
+    User::LeaveIfError(index);
+    return index;
+    }   
+
+CAppRegFileData* CAppRegFileData::NewL(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage)
+    {
+    CAppRegFileData* self = CAppRegFileData::NewLC(aAppRegFile, aSisRegistryPackage);
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+CAppRegFileData* CAppRegFileData::NewLC(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage)
+    {
+    CAppRegFileData* self = new(ELeave) CAppRegFileData();
+    CleanupStack::PushL(self);
+    self->ConstructL(aAppRegFile, aSisRegistryPackage);
+    return self;
+    }
+void CAppRegFileData::ConstructL(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage)
+    {
+    iAppRegFile = aAppRegFile.AllocL();
+    iSisRegistryPackage = CSisRegistryPackage::NewL(aSisRegistryPackage);
+    }
+CAppRegFileData::CAppRegFileData()
+    {
+    }
+
+CAppRegFileData::~CAppRegFileData()
+    {
+    delete iAppRegFile;
+    delete iSisRegistryPackage;
+    }
+
+TDesC& CAppRegFileData::GetAppRegFile()
+    {
+    return *iAppRegFile;
+    }
+
+CSisRegistryPackage& CAppRegFileData::GetSisRegistryPackage()
+    {
+    return *iSisRegistryPackage;
+    }
+#endif

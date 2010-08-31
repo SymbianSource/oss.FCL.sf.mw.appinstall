@@ -176,7 +176,13 @@ class CSisInstaller : public CActive, public MShutdownObserver
         /**
         * Indicates if this package is valid.
         */
-        TBool IsValidPackageL( const TDesC& aPackageName );      
+        TBool IsValidPackageL(); 
+        
+        /**
+         * Calculate precent value for universal indicator.
+         * This precent value show how many packages has been installed.
+         */      
+        void CalcPercentValue();
         	          
 	
     private:
@@ -212,6 +218,11 @@ class CSisInstaller : public CActive, public MShutdownObserver
         CProgramStatus* iProgramStatus;   
         // For plugin support
         TBool iUpdateCache;
+        // File handle for USIF.
+        RFile iSisFileHandle;
+        TBool iFileOpen;
+        //CDialogTimer* iDialogTimer; 
+        TReal32 iPercentValue;
     };		
 }
 

@@ -1,0 +1,50 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:  Project specification for SifUiCli. This component
+*               provides UI interface for SIF plugins.
+*
+*/
+
+
+#include <platform_paths.hrh>
+#include <data_caging_paths.hrh>
+
+TARGET          sifui.dll
+TARGETTYPE      dll
+UID             0x1000008D 0x20022FC2
+
+CAPABILITY      CAP_GENERAL_DLL DRM
+VENDORID        VID_DEFAULT
+
+SOURCEPATH      ../src
+SOURCE          sifui.cpp
+SOURCE          sifuiprivate.cpp
+SOURCE          sifuicertificateinfo.cpp
+SOURCE          sifuiappinfo.cpp
+SOURCE          sifuierrorinfo.cpp
+
+USERINCLUDE     ../inc
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib       // User
+LIBRARY         HbCore.lib      // CHbDeviceDialog
+LIBRARY         HbWidgets.lib   // CHbDeviceNotificationDialogSymbian 
+LIBRARY         apgrfx.lib      // CApaMaskedBitmap
+LIBRARY         fbscli.lib      // CFbsBitmap
+LIBRARY         bafl.lib        // CDesC16ArrayFlat
+LIBRARY         efsrv.lib       // RFs
+LIBRARY         estor.lib       // RBufWriteStream
+
+SMPSAFE
+

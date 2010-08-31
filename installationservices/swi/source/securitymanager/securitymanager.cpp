@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -41,7 +41,7 @@
 #include "hashcontainer.h"
 #include "certchainconstraints.h"
 #include "devinfosupportclient.h"
-#include "cleanuputils.h"
+
 #include "log.h"
 
 // PKIX dependencies
@@ -711,7 +711,6 @@ EXPORT_C void CSecurityManager::PerformOcspL(const TDesC8& aOcspUri,
 											 RPointerArray<CX509Certificate>& aCertOut,
 											 TRequestStatus& aStatus)
 	{	
-	CleanupResetAndDestroyPushL(aCertOut);
 	Cancel();
 	
 	DEBUG_PRINTF2(_L8("Security Manager - Performing OCSP with revocation server at %S."),
@@ -728,7 +727,7 @@ EXPORT_C void CSecurityManager::PerformOcspL(const TDesC8& aOcspUri,
  		aCertOut.AppendL(certOut);
  		CleanupStack::Pop(certOut);
  		}
- 	
+ 		
  	DEBUG_PRINTF2(_L8("Security Manager - Validating %d certificate chains for this controller."), numChains);
 
 	iClientStatus = &aStatus;
@@ -749,7 +748,6 @@ EXPORT_C void CSecurityManager::PerformOcspL(const TDesC8& aOcspUri,
 	
 	iRevocationHandler->SendRequestL(iValidPkixChains, aIap, iStatus);
 	
-	CleanupStack::Pop(&aCertOut);
 	SetActive();
 	}
 
@@ -1146,7 +1144,6 @@ EXPORT_C void CSecurityManager::GetCertificatesFromControllerL(
 	const Sis::CController& aController,
 	RPointerArray<CX509Certificate>& aCerts)
 	{
-	CleanupResetAndDestroyPushL(aCerts);
 	// Go through all SIS chains and extract end certificates from them.
 	const RPointerArray<Sis::CSignatureCertificateChain>& chains=
 		aController.SignatureCertificateChains();
@@ -1168,7 +1165,6 @@ EXPORT_C void CSecurityManager::GetCertificatesFromControllerL(
 		// Cleanup.
 		CleanupStack::PopAndDestroy(pkixChain);
 		}
-	CleanupStack::Pop(&aCerts);
 	}
 
 EXPORT_C void CSecurityManager::FillCertInfoArrayL(

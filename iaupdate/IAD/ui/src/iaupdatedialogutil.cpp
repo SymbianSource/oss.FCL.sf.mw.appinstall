@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,147 +11,114 @@
 *
 * Contributors:
 *
-* Description:    
+* Description:   This module contains the implementation of IAUpdateDialogUtil class 
+*                member functions.
 *
 */
-
-
-
-// INCLUDE FILES
+#include <hblabel.h>
+#include <hbmessagebox.h>
 
 #include "iaupdatedialogutil.h"
+#include "iaupdatedialogobserver.h"
 #include "iaupdatedebug.h"
-#include <iaupdate.rsg>
-
-#include <aknmessagequerydialog.h>      // CAknMessageQueryDialog
-#include <aknnotewrappers.h>    // CAknInformationNote
-#include <StringLoader.h>
 
 
-/*******************************************************************************
- * class TIAUpdateDialogParam
- *******************************************************************************/
+
+IAUpdateDialogUtil::IAUpdateDialogUtil(QObject *parent, IAUpdateDialogObserver *observer)
+: QObject(parent),
+  mObserver(observer)
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateDialogUtil::IAUpdateDialogUtil()");
+}
+
+IAUpdateDialogUtil::~IAUpdateDialogUtil()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateDialogUtil::~IAUpdateDialogUtil()");
+}
 
 
-// -------------------------------------------------------------------------------
-// TIAUpdateDialogParam::TIAUpdateDialogParam
-//
-// -------------------------------------------------------------------------------
-//
-TIAUpdateDialogParam::TIAUpdateDialogParam()
- : iCountSuccessfull( KErrNotFound ), iCountCancelled( KErrNotFound ),
-   iCountFailed( KErrNotFound ), iResourceId( KErrNotFound ), iNode( NULL ), 
-   iLinkObserver( NULL )
-    {
+void IAUpdateDialogUtil::showInformation(const QString &text, HbAction *primaryAction)
+{    
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation); 
+    messageBox->setText(text);
+    int actionCount = messageBox->actions().count();
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        messageBox->removeAction(messageBox->actions().at(i));
     }
+    if (primaryAction)
+    {    
+        messageBox->addAction(primaryAction);
+    }  
+    messageBox->setTimeout(HbPopup::NoTimeout); 
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    messageBox->open(this,SLOT(finished(HbAction*)));
+}
 
 
-/*******************************************************************************
- * class IAUpdateDialogUtil
- *******************************************************************************/
-
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowMessageQueryL
-//
-//------------------------------------------------------------------------------
-//
-void IAUpdateDialogUtil::ShowMessageQueryL(const TDesC& aTitle, const TDesC& aText)
-	{
-	TPtrC ptr = aText;
-	CAknMessageQueryDialog* query = CAknMessageQueryDialog::NewL( ptr );
-	query->PrepareLC( R_IAUPDATE_MESSAGE_QUERY );
-
-	if ( aTitle.Length() != 0 )
-		{
-		CAknPopupHeadingPane* headingPane = query->Heading();
-		headingPane->SetTextL( aTitle );
-		}
-	query->RunLD();
-	}
-
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowMessageQueryL
-//
-//------------------------------------------------------------------------------
-//
-void IAUpdateDialogUtil::ShowMessageQueryL( const TDesC& aTitle, TInt aResource )
-	{
-	HBufC* hBuf = StringLoader::LoadLC( aResource );
-	ShowMessageQueryL( aTitle, hBuf->Des() );
-	CleanupStack::PopAndDestroy( hBuf );
-	}
-
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowInformationQueryL
-//
-//------------------------------------------------------------------------------
-//
-void IAUpdateDialogUtil::ShowInformationQueryL(const TDesC& aText)
-	{
-	CAknQueryDialog* queryDialog = new (ELeave) CAknQueryDialog;
-	queryDialog->ExecuteLD(R_IAUPDATE_INFORMATION_QUERY, aText);
-	}
-
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowInformationQueryL
-//
-//------------------------------------------------------------------------------
-//
-void IAUpdateDialogUtil::ShowInformationQueryL(TInt aResource)
-	{
-	HBufC* hBuf = StringLoader::LoadLC(aResource);
-	ShowInformationQueryL( hBuf->Des() );
-	CleanupStack::PopAndDestroy( hBuf );
-	}
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowConfirmationQueryL
-//
-//------------------------------------------------------------------------------
-//
-TInt IAUpdateDialogUtil::ShowConfirmationQueryL( const TDesC& aText, 
-                                          TInt aSoftkeyResourceId )
-	{
-	CAknQueryDialog* queryDialog = CAknQueryDialog::NewL( 
-	                               CAknQueryDialog::EConfirmationTone );
-
-    queryDialog->PrepareLC( R_IAUPDATE_CONFIRMATION_QUERY );
-    queryDialog->SetPromptL( aText );
-    queryDialog->ButtonGroupContainer().SetCommandSetL( aSoftkeyResourceId );
-    return ( queryDialog->RunLD() );
-	}
-
-//------------------------------------------------------------------------------
-// IAUpdateDialogUtil::ShowConfirmationQueryL
-//
-//------------------------------------------------------------------------------
-//
-TInt IAUpdateDialogUtil::ShowConfirmationQueryL( TInt aResource, 
-                                          TInt aSoftkeyResourceId )
-	{
-	HBufC* hBuf = StringLoader::LoadLC( aResource) ;
-	TInt ret = ShowConfirmationQueryL( *hBuf, aSoftkeyResourceId );
-	CleanupStack::PopAndDestroy( hBuf );
-	return ret;
-	}
-
-
-
-
-// -----------------------------------------------------------------------------
-// IAUpdateDialogUtil::Panic
-//
-// -----------------------------------------------------------------------------
-//
-void IAUpdateDialogUtil::Panic( TInt aReason ) 
-    {
-	_LIT(KPanicCategory, "IAUpdateDialogUtil");
-	
-	User::Panic(KPanicCategory, aReason); 
+void IAUpdateDialogUtil::showQuestion(const QString &text, HbAction *primaryAction, HbAction *secondaryAction)
+{
+    HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeQuestion); 
+    messageBox->setIconVisible(false);
+    messageBox->setText(text);
+    int actionCount = messageBox->actions().count();
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        messageBox->removeAction(messageBox->actions().at(i));
     }
-    
-//  End of File  
+    if (primaryAction)
+    {    
+        messageBox->addAction(primaryAction);
+    }
+    if (secondaryAction)
+    {    
+        messageBox->addAction(secondaryAction);
+    } 
+    messageBox->setTimeout(HbPopup::NoTimeout); 
+    messageBox->setAttribute(Qt::WA_DeleteOnClose);
+    messageBox->open(this,SLOT(finished(HbAction*)));
+}
+
+
+void IAUpdateDialogUtil::showAgreement(HbAction *primaryAction, HbAction *secondaryAction)
+{
+    HbMessageBox *agreementDialog = new HbMessageBox(HbMessageBox::MessageTypeQuestion); 
+    HbLabel *label = new HbLabel(agreementDialog);
+    label->setHtml(QString("Disclaimer"));
+    agreementDialog->setHeadingWidget(label);
+    agreementDialog->setIconVisible(false);
+    agreementDialog->setText("This application allows you to download and use applications and services provided by Nokia or third parties. Service Terms and Privacy Policy will apply. Nokia will not assume any liability or responsibility for the availability or third party applications or services. Before using the third party application or service, read the applicable terms of use.<br /><br />Use of this application involves transmission of data. Contact your network service provider for information about data transmission charges.<br /><br />(c) 2007-2010 Nokia. All rights reserved.");
+
+    int actionCount = agreementDialog->actions().count();
+    for (int i=actionCount-1; i >= 0; i--)
+    { 
+        agreementDialog->removeAction(agreementDialog->actions().at(i));
+    }
+    if (primaryAction)
+    {    
+        agreementDialog->addAction(primaryAction);
+    }    
+    if (secondaryAction)
+    {
+        agreementDialog->addAction(secondaryAction);
+    }
+    agreementDialog->setTimeout(HbPopup::NoTimeout);
+    agreementDialog->setAttribute(Qt::WA_DeleteOnClose);
+    agreementDialog->open(this,SLOT(finished(HbAction*)));
+}
+
+
+
+void IAUpdateDialogUtil::finished(HbAction *action)
+{
+    if (mObserver)
+    {
+        mObserver->dialogFinished(action);
+    }
+}
+
+
+
+
+
+

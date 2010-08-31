@@ -1,0 +1,43 @@
+/*
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+/**
+ @file
+ apprscparser
+*/
+
+target      apprscparser.dll
+CAPABILITY 	All -Tcb
+targettype  DLL
+UID			0x1000008D 0x2002E943
+VENDORID 	0x70000001
+
+USERINCLUDE	../source/apprscparser
+USERINCLUDE	../inc
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN 
+
+SOURCEPATH	../source/apprscparser
+
+SOURCE		apprscparser.cpp
+
+LIBRARY euser.lib
+LIBRARY efsrv.lib
+LIBRARY estor.lib
+LIBRARY bafl.lib
+LIBRARY scrclient.lib
+
+SMPSAFE

@@ -28,6 +28,7 @@
 #include "iaupdatecontrollerobserver.h"
 #include "iaupdatenodeobserver.h"
 #include "iaupdatewaitdialogobserver.h"
+#include "iaupdatedialogobserver.h"
 #include "iaupdatestarterobserver.h"
 #include "iaupdateroaminghandlerobserver.h"
 #include "iaupdaterefreshobserver.h"
@@ -47,7 +48,13 @@ class CIAUpdateRefreshHandler;
 class MIAUpdateUiControllerObserver;
 class MIAUpdateHistory;
 class MIAUpdateFwNode;
+class IAUpdateWaitDialog;
+class IAUpdateDialogUtil;
+
+class QString;
 class CIAUpdateNodeId;
+class CEikonEnv;
+class HbAction;
 
 
 // CLASS DECLARATION
@@ -62,7 +69,8 @@ class CIAUpdateUiController :
     public MIAUpdateWaitDialogObserver,
     public MIAUpdateStarterObserver,
     public MIAUpdateRoamingHandlerObserver,
-    public MIAUpdateRefreshObserver
+    public MIAUpdateRefreshObserver,
+    public IAUpdateDialogObserver
     {
            
 public: //new functions
@@ -234,6 +242,13 @@ public: //new functions
     TBool ForcedRefresh() const;
       
     void SetForcedRefresh( TBool aForcedRefresh );
+    
+    /**
+     *  Set node list to normal state after update. 
+     */
+    void RefreshNodeList();
+    
+    
     /**
      * Is client role "testing"
      *
@@ -323,11 +338,13 @@ private:  // MIAUpdateRoamingHandlerObserver
 private: // From MIAUpdateWaitDialogObserver    
     
     /**
-     * This is called when the dialog is about to be closed.
-     * @param aButtonId - Id of the button, which was used to cancel the dialog.
-     * @return ETrue, if it's ok to close the dialog, EFalse otherwise.
+     * This is called when the dialog is  closed.
      */
-    TBool HandleDialogExitL( TInt aButtonId );   
+     void HandleWaitDialogCancel();   
+     
+private: // From IAUpdateDialogObserver     
+         
+     void dialogFinished(HbAction *action);   
     
 
 private: // From MIAUpdateRefreshObserver   
@@ -352,6 +369,8 @@ private: // construction
 
 
 private: // new functions
+    
+    void AgreementHandledL();
 
     /**
      * Called when refreshing updates list is completed.
@@ -429,7 +448,7 @@ private: // new functions
      * @param aDisplayString       A string to be displayed
      * @param aVisibilityDelayOff  ETrue if visibility delay is off
      */                  
-    void ShowWaitDialogL( const TDesC& aDisplayString, 
+    void ShowWaitDialogL( const QString& aDisplayString, 
                           TBool aVisibilityDelayOff ); 
     
     /**
@@ -544,6 +563,14 @@ private: // data
         ESelfUpdating
         };
 
+    enum TDialogState
+        {
+        ENoDialog,
+        EAgreement,
+        EInsufficientMemory  
+        };
+    
+    
     MIAUpdateUiControllerObserver& iObserver;
 
     MIAUpdateController* iController;
@@ -557,8 +584,10 @@ private: // data
     RPointerArray<CIAUpdateNodeId> iPreviousSelections;
     
     RPointerArray<MIAUpdateNode> iServicePackNodes;
+    
+    IAUpdateDialogUtil *mDialogUtil;  
  
-    CIAUpdateWaitDialog* iWaitDialog;
+    IAUpdateWaitDialog *mWaitDialog;
     
     CIAUpdateProgressDialog* iProgressDialog;
     
@@ -584,6 +613,8 @@ private: // data
     
     TState iState;
     
+    TDialogState iDialogState;
+    
     TBool iClosingAllowedByClient;
     
     CIAUpdateUiConfigData* iConfigData;
@@ -603,6 +634,8 @@ private: // data
     TBool iForcedRefresh;
         
     TBool iTestRole;
+    
+    HbAction *mPrimaryAction;
 
     };
 

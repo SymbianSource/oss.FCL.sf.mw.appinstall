@@ -1,0 +1,9 @@
+component	security_softwaretransactionservices
+source	\sf\mw\appinstall\installationservices\swtransactionservices
+binary	\sf\mw\appinstall\installationservices\swtransactionservices\group	all
+exports	\sf\mw\appinstall\installationservices\swtransactionservices\group
+notes_source	\component_defs\release.src
+
+ipr E 
+ipr T \sf\mw\appinstall\installationservices\swtransactionservices\test
+

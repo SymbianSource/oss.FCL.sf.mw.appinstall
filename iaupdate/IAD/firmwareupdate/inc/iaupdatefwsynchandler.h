@@ -22,9 +22,8 @@
 
 // INCLUDES
 #include <e32base.h>
-#include <AknProgressDialog.h>
 #include <SyncMLObservers.h>
-#include <cmmanagerext.h>
+#include <cmmanager.h>
 
 #include "iaupdatefwsyncutil.h"
 #include "iaupdatefwsyncprofile.h"
@@ -47,9 +46,7 @@ class CIAUpdateFWFotaModel;
 NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase, 
 						public MIAUpdateFWActiveCallerObserver,
 						public MSyncMLEventObserver,
-						public MSyncMLProgressObserver,
-						public MProgressDialogCallback
-						
+						public MSyncMLProgressObserver
 	{
     public:
         /**
@@ -275,8 +272,8 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
     private:
         
         TUint32 SelectConnectionMethodL();
-        TUint32 GetBestIAPInInternetSNAPL( RCmManagerExt& aCmManagerExt  );
-        TUint32 GetBestIAPInThisSNAPL( RCmManagerExt& aCmManagerExt, TUint32 aSNAPID  );
+        TUint32 GetBestIAPInInternetSNAPL( RCmManager& aCmManager );
+        TUint32 GetBestIAPInThisSNAPL( RCmManager& aCmManager, TUint32 aSNAPID  );
 
     private:
 		// session with sync server

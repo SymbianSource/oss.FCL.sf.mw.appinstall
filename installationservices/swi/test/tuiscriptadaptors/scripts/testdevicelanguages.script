@@ -599,6 +599,8 @@ RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\script
 RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini equ_package_info_english_am
 // Uninstall  
 RUN_TEST_STEP 100 tuiscriptadaptors UninstallAsyncStep z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini uninstall_base_bf_sg_sr_sa_options
+// Always set the language back to English, as tscr test cases assume that device is in english lang
+RUN_TEST_STEP 100 tSisRegistryTest ChangeLocale z:\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini langauge_to_english
 END_TESTCASE API-INST-PREQ2525-SWI-0009
 
 START_TESTCASE API-INST-PREQ2525-SWI-0010

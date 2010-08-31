@@ -77,6 +77,9 @@ protected:
 		EVerifyPaths,
 		ERemovePrivateDirectories,
 		EInstallFiles,
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		EParseApplicationRegistrationFiles,
+#endif		
 		EDisplayFiles, 
 		ERunFiles,
 		EUpdateRegistry,
@@ -114,6 +117,9 @@ protected:
 	virtual TBool DoStateProcessFilesL();
 	virtual TBool DoStateInstallFilesL() = 0;
 	virtual TBool DoStateDisplayFilesL() = 0;
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	virtual TBool DoParseApplicationRegistrationFilesL() = 0;
+#endif	
 	virtual TBool DoStateUpdateRegistryL() = 0;
 	virtual TBool DoStateRemoveFilesL();
 	virtual TBool DoStateRemovePrivateDirectoriesL();
@@ -200,6 +206,7 @@ protected:
 
 private:
 	TBool IsSafeUninstallModeSetL();
+	TInt  RemoveWithRetryAttemptL(TDesC& aFileName);
 private:
 	/// Installation plan
 	const CPlan& iPlan;

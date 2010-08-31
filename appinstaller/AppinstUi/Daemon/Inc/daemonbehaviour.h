@@ -20,6 +20,8 @@
 
 #include <e32base.h>
 #include <f32file.h>
+#include <usif/scr/scr.h>
+#include <usif/scr/screntries.h>
 
 #include "daemon.h"
 #include "daemoninstaller.h"
@@ -116,8 +118,16 @@ private:
      @param aDirectory The directory to search for PreInstalled Files   
      */
     void ProcessPreinstalledFilesL(TInt aDrive, const TDesC& aDirectory);
-
-          
+    
+    
+    void UpdateComponentStatusL( TChangeType aChangeType, TInt aDrive );
+    
+    void UpdateStatusL( Usif::RSoftwareComponentRegistry& iScrServer,
+                        Usif::TComponentId componentId,
+                        TChangeType aChangeType,
+                        TInt aTargetDrive,
+                        RArray<TApaAppUpdateInfo>& iAppInfoArray );
+    
 private:
     
     RFs iFs;        
@@ -128,13 +138,10 @@ private:
     // Has MediaProcessingStart already been called?
     TBool iStartNotified;
     TInt iDrive;
-  
-#ifdef RD_MULTIPLE_DRIVE 
     // Contains inserted drives.
-    RArray<TInt> iDriveArray;
-#endif   
+    RArray<TInt> iDriveArray;   
     // General program status. Note this do not affect to plug-in.
-    TInt iGeneralProcessStatus; //For uninstaller
+    TInt iGeneralProcessStatus; //For uninstaller   
     };
 
 } // namespace Swi

@@ -36,7 +36,9 @@
 
 #include "dessisdataprovider.h"
 #include "cafsisdataprovider.h"
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <apsidchecker.h>
+#endif
 #include <e32math.h>
 
 using namespace Swi;
@@ -756,6 +758,7 @@ void CAsyncManager::ConstructL()
 
 	iAsyncLauncher=CAsyncLauncher::NewL();
 	User::LeaveIfError(RProperty::Get(KUidSystemCategory, KSystemStartupModeKey, iBootMode));
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifndef SWI_TEXTSHELL_ROM
 	if (iBootMode != KTextShell) 
 		{
@@ -771,6 +774,9 @@ void CAsyncManager::ConstructL()
 	// we always get the boot mode as 0 , reset the value to 1.
 	iBootMode = KTextShell;
 #endif
+#else
+	iBootMode = KTextShell;
+#endif
 	iNotificationCount = 0;
 	}
 
@@ -784,12 +790,14 @@ CAsyncManager::~CAsyncManager()
 
 	delete iWatchdog;
 	iWatchdog=0;
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifndef SWI_TEXTSHELL_ROM
 	if (iBootMode != KTextShell)
 		{
 		iSwiSidChecker->SetRescanCallBackL(TCallBack()); // nb. must be before delete of scheduler...
 		delete iSwiSidChecker;
 		}
+#endif
 #endif
 	CActiveScheduler::Install(0);
 	delete iScheduler;

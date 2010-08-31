@@ -1,0 +1,228 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+//
+PRINT Run all tsif Suite Tests
+
+// Delete the SCR Database file
+LOAD_SUITE tscr
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+
+LOAD_SUITE tUsifSuite
+
+/// ************************ SIF Component test cases ************************
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0001
+//! @SYMTestCaseDesc 		Test plugin resolution by MIME type
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0001
+
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyNonNativePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyNonNativePackageNonExistence
+RUN_TEST_STEP !Result=-1 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini InvalidNonNativeUninstallByNameAndVendor
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
+
+END_TESTCASE API-SEC-SIF-tsif-0001
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0002
+//! @SYMTestCaseDesc 		Test plugin "selection" by passing opaque options
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0002
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeSilentInstall
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
+
+END_TESTCASE API-SEC-SIF-tsif-0002
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0003
+//! @SYMTestCaseDesc 		Plugin resolution - negative test
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0003
+
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallNonInstallableByFileName
+RUN_TEST_STEP !Result=-10303 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallNonInstallableByFileHandle
+
+END_TESTCASE API-SEC-SIF-tsif-0003
+
+// Ensure clean database before the next test, as it relies on component ids starting from 1
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0004
+//! @SYMTestCaseDesc 		Install/uninstall - negative test
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0004
+
+// install already installed
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileName
+RUN_TEST_STEP !Result=-10309 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallAlreadyInstalled
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
+// invalid install
+RUN_TEST_STEP !Result=-46 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InvalidInstallByFileName
+RUN_TEST_STEP !Result=-46 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InvalidInstallByFileHandle
+// invalid uninstall
+RUN_TEST_STEP !Result=-10313 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByInvalidId
+RUN_TEST_STEP !Result=-10313 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByInvalidId2
+// Temporarily removed - requires adding a non-removable component
+///RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallNonRemovable
+
+END_TESTCASE API-SEC-SIF-tsif-0004
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0005
+//! @SYMTestCaseDesc 		Activate/deactivate test
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0005
+
+// deactivate
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifDeactivateStep z:\tusif\tsif\tsif.ini DeactivateByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyInactivePackageExistence
+// activate
+RUN_TEST_STEP 100 tUsifSuite SifActivateStep z:\tusif\tsif\tsif.ini ActivateByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-SIF-tsif-0005
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0006
+//! @SYMTestCaseDesc 		Activate/deactivate - negative test
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0006
+
+RUN_TEST_STEP !Result=-10313 100 tUsifSuite SifActivateStep z:\tusif\tsif\tsif.ini ActivateByInvalidId
+RUN_TEST_STEP !Result=-10313 100 tUsifSuite SifDeactivateStep z:\tusif\tsif\tsif.ini DeactivateByInvalidId
+
+END_TESTCASE API-SEC-SIF-tsif-0006
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0007
+//! @SYMTestCaseDesc 		Test opaque params by file name/handle
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0007
+
+// Ensure clean database before the next test, as it relies on component ids starting from 1
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallByFileNameWithOpaqueParams
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallByFileHandleWithOpaqueParams
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-SIF-tsif-0007
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0008
+//! @SYMTestCaseDesc 		Synchronous cancellation by file name/handle
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0008
+
+// Synchronous cancellation by file name
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini SynchronousCancelInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+// Synchronous cancellation by file handle
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini SynchronousCancelInstallByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-SIF-tsif-0008
+
+
+//! @SYMTestCaseID 		API-SEC-SIF-tsif-0009
+//! @SYMTestCaseDesc 		Concurrent operations
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsif-0009
+
+// with overlapping session
+RUN_TEST_STEP 100 tUsifSuite SifMultipleInstallStep z:\tusif\tsif\tsif.ini MultipleInstallWithOverlappingSession
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+// with overlapping request
+RUN_TEST_STEP 100 tUsifSuite SifMultipleInstallStep z:\tusif\tsif\tsif.ini MultipleInstallWithOverlappingRequest
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageNonExistence
+// with disabled ExclusiveOperation flag
+RUN_TEST_STEP 100 tUsifSuite SifMultipleInstallStep z:\tusif\tsif\tsif.ini MultipleNonExclusiveInstall
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsif\tsif.ini VerifyPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+
+END_TESTCASE API-SEC-SIF-tsif-0009
+
+
+// ************************ SIF Unit test cases ************************
+//! @SYMTestCaseID 		API-SEC-SIF-tsifunit-0001
+//! @SYMTestStatus   		3. Released
+
+START_TESTCASE API-SEC-SIF-tsifunit-0001
+
+RUN_TEST_STEP 100 tUsifSuite SifCommonUnitTestStep
+
+END_TESTCASE API-SEC-SIF-tsifunit-0001
+
+
+/// ************************ SIF Concurrency  Test  ************************
+//! @SYMTestCaseID 		API-SEC-SIF-tsifconcurrent-0001
+//! @SYMTestStatus   		3. Released
+
+CONCURRENT
+
+START_TESTCASE API-SEC-SIF-tsifconcurrent-0001
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini InstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileNameForUninstalledComponent
+// Since we cannot guarantee the order of installs, we cannot check reliably for componentId in the returned opaque results
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsif\tsif.ini NonNativeInstallByFileNameDoNotMatchComponentId
+
+END_TESTCASE API-SEC-SIF-tsifconcurrent-0001
+
+CONSECUTIVE
+
+// Cleanup after SEC-SIF-tsifconcurrent-001
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini NonNativeUninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsif\tsif.ini UninstallByNameAndVendor
+
+//Run the AppUid Generation tests.
+RUN_SCRIPT z:\tusif\tsif\tsif_appuidgen.script
+
+// Wait 3 seconds in order to let the SIF server shutdown itself
+DELAY 3000
+
+
+PRINT Completed SIF component tests

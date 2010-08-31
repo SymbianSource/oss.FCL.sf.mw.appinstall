@@ -24,7 +24,7 @@
 #include <e32base.h>
 
 // FORWARD DECLARATIONS
-
+class HbAction;
 
 // CLASS DECLARATION
 /**
@@ -62,12 +62,7 @@ public: // new functions
     * @return True value if agreement accepted 
     */
     TBool AcceptAgreementL();
-    
-    /**
-    * Shows Nokia agreement of Application Update 
-    */
-    void ShowAgreementL();
-    
+        
     /**
     * Is Nokia agreement of Application Update accepted by an user
     *
@@ -89,16 +84,7 @@ private:
      */
     void ConstructL();
     
-    /**
-    * Shows agreement dialog
-    * 
-    * @param aCbaResource Resource id of CBA
-    *
-    * @return Value of user selection 
-    */
-    TInt ShowDialogL( TInt aCbaResourceId );
-    
-    
+       
 private: //data
     
     };

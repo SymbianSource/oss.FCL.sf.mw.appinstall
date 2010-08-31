@@ -26,6 +26,7 @@ class CAppMngr2Model;
 class CAppMngr2InfoBase;
 class CAknTitlePane;
 class CAknWaitDialog;
+class CAknInfoPopupNoteController;
 
 
 class CAppMngr2ListView : public CAknView
@@ -69,6 +70,7 @@ protected:  // data
 
 private:    // data
     TInt iMiddleSoftkeyCommandId;
+    CAknInfoPopupNoteController* iInfoPopup;
     TBool iMaintainFocus;
     };
 

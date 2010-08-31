@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -123,38 +123,6 @@ void SisRegistryUtil::EnsureDirExistsL(RFs& aFs, const TDesC& aPath)
 		User::LeaveIfError(err);
 		}
 	}
-
-void SisRegistryUtil::CreateFileWithAttributesL(RFs& aFs, const TDesC& aPath, const TUint aAttributesMask)
-    {
-    // Creates the folder structure by ignoring the filename at the end.
-    EnsureDirExistsL(aFs, aPath);
-
-    RFile file;
-    CleanupClosePushL(file);
-    User::LeaveIfError(file.Create(aFs, aPath, EFileWrite));
-   
-    if(aAttributesMask != 0)
-        {
-        file.SetAtt(aAttributesMask, 0); // Ignoring return value.
-        }
-    CleanupStack::PopAndDestroy(&file);
-    }
-
-TInt SisRegistryUtil::DeleteFile(RFs& aFs, const TDesC& aPath)
-    {
-    TInt err = aFs.Delete(aPath);
-    
-    if(KErrNone != err)
-        {
-        DEBUG_PRINTF2(_L("Failed to delete file %S."), &aPath);
-        }
-    else
-        {
-        DEBUG_PRINTF2(_L("Deleted file %S successfully."), &aPath);
-        }
-    
-    return err;
-    }
 
 // Processes the ROM stub files. Retuns ETrue if the aUid or aName
 // is found in any of the ROM stub files, else returns EFalse.

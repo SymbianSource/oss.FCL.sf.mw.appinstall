@@ -1,0 +1,87 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+// This script implements SCR Applicaiton Registry Performance Tests.
+//
+
+PRINT Run SCR Applicaiton Registry Performance Tests
+
+LOAD_SUITE tscr
+LOAD_SUITE tscrapparc
+// Load the event logger test suite
+LOAD_SUITE EventLogServer -SharedData
+
+// Load SCR test suite
+LOAD_SUITE tscr -SharedData // SharedData is used for sharing the componentid between test steps
+SHARED_DATA z:\tusif\tscr\tscr_performance.ini shared_data
+
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0001
+//! @SYMTestCaseDesc 			The time taken to add a minimal appregistration data (without localized info and opaque data).
+//! SYMTestPerformanceTarget	100ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0001
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_minimal_app_reg_info
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_minimal_app_reg_info
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0001
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0002
+//! @SYMTestCaseDesc 			The time taken to add a minimal appregistration data (without localized info).
+//! SYMTestPerformanceTarget	150ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0002
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_minimal_app_reg_info_with_opaquedata
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_minimal_app_reg_info_with_opaquedata
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0002
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0003
+//! @SYMTestCaseDesc 			The time taken to add an appregistration data (without localized info and opaque data).
+//! SYMTestPerformanceTarget	150ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0003
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_app_reg_info_no_localized
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_app_reg_info_no_localized
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0003
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0004
+//! @SYMTestCaseDesc 			The time taken to add an appregistration data (without localized info).
+//! SYMTestPerformanceTarget	200ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0004
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_app_reg_info_no_localized_with_opaquedata
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_app_reg_info_no_localized_with_opaquedata
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0004
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0005
+//! @SYMTestCaseDesc 			The time taken to add an appregistration data with 1 localized info.
+//! SYMTestPerformanceTarget	200ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0005
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_app_reg_info_1_localized
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_app_reg_info_1_localized
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0005
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0006
+//! @SYMTestCaseDesc 			The time taken to add an appregistration data with 2 localized info.
+//! SYMTestPerformanceTarget	200ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0006
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_app_reg_info_2_localized
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_app_reg_info_2_localized
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0006
+
+//! @SYMTestCaseID				APPINSTALL-SCR-APP-PERFORMANCE-0007
+//! @SYMTestCaseDesc 			The time taken to add an appregistration data with 5 localized info.
+//! SYMTestPerformanceTarget	200ms
+START_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0007
+RUN_TEST_STEP 100 tscr Performance-SCRAddApplicationEntry z:\tusif\tscr\tscr_performance.ini add_app_reg_info_5_localized
+RUN_TEST_STEP 100 tscrapparc Performance-ScrGetApplicationRegistrationView z:\tusif\tscr\tscr_performance.ini get_add_app_reg_info_5_localized
+END_TESTCASE APPINSTALL-SCR-APP-PERFORMANCE-0007
+
+//RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file

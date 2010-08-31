@@ -15,9 +15,6 @@
 *
 */
 
-
-
-
 #include <bautils.h>
 #include <s32file.h>
 #include <sysversioninfo.h>
@@ -67,7 +64,7 @@ CIAUpdateBGInternalFileHandler* CIAUpdateBGInternalFileHandler::NewLC()
 //
 CIAUpdateBGInternalFileHandler::CIAUpdateBGInternalFileHandler()
     : iLastTimeShowNewFeatureDialog( 0 ), iUserRejectNewFeatureDialog( EFalse ), 
-      iNextRemindTime(0), iIsReminderOn( EFalse ), iMode( EFirstTimeMode ), iFwVersion( NULL ), 
+      iMode( EFirstTimeMode ), iFwVersion( NULL ), 
       iSNID(0), iRetryTimes(0)
     {
     }
@@ -215,62 +212,6 @@ void CIAUpdateBGInternalFileHandler::SetUserRejectNewFeatureDialog( TBool aUserD
     iUserRejectNewFeatureDialog = aUserDecision;
     }
 
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGInternalFileHandler::ReminderOn
-//
-// -----------------------------------------------------------------------------
-//
-TBool CIAUpdateBGInternalFileHandler::ReminderOn()
-    {
-    return iIsReminderOn;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGInternalFileHandler::SetReminder
-//
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGInternalFileHandler::SetReminder( TBool aOn )
-    {
-    iIsReminderOn = aOn;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGInternalFileHandler::NextRemindTime
-//
-// -----------------------------------------------------------------------------
-//
-TTime CIAUpdateBGInternalFileHandler::NextRemindTime()
-    {
-    return iNextRemindTime;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGInternalFileHandler::SetNextRemindTime
-//
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGInternalFileHandler::SetNextRemindTime( TTime aNextRemindTime )
-    {
-    iNextRemindTime = aNextRemindTime;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateBGInternalFileHandler::SetNextRemindTime
-//
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateBGInternalFileHandler::SetNextRemindTime( TInt64 aNextRemindTime )
-    {
-    iNextRemindTime = aNextRemindTime;
-    }
-
-
 // -----------------------------------------------------------------------------
 // CIAUpdateBGInternalFileHandler::SetMode
 //
@@ -280,7 +221,6 @@ void CIAUpdateBGInternalFileHandler::SetMode( TIAUpdateBGMode aMode )
     {
     iMode = aMode;
     }
-
 
 // -----------------------------------------------------------------------------
 // CIAUpdateBGInternalFileHandler::Mode
@@ -292,7 +232,6 @@ TIAUpdateBGMode CIAUpdateBGInternalFileHandler::Mode()
     return iMode;
     }
 
-
 // -----------------------------------------------------------------------------
 // CIAUpdateBGInternalFileHandler::FwVersion
 //
@@ -302,7 +241,6 @@ HBufC* CIAUpdateBGInternalFileHandler::FwVersion()
     {
     return iFwVersion;
     }
-
 
 // ----------------------------------------------------------
 // CIAUpdateBGInternalFileHandler::SetFwVersionL()
@@ -365,6 +303,26 @@ void CIAUpdateBGInternalFileHandler::SetRetryTimes( TInt aRetry )
     }
 
 // -----------------------------------------------------------------------------
+// CIAUpdateBGInternalFileHandler::NrOfIndicatorEntries
+//
+// -----------------------------------------------------------------------------
+//
+TInt CIAUpdateBGInternalFileHandler::NrOfIndicatorEntries()
+    {
+    return iNrOfIndicatiorEntries;
+    }
+
+
+// -----------------------------------------------------------------------------
+// CIAUpdateBGInternalFileHandler::SetNrOfIndicatorEntries
+//
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateBGInternalFileHandler::SetNrOfIndicatorEntries( TInt aEntries )
+    {
+    iNrOfIndicatiorEntries = aEntries;
+    }
+// -----------------------------------------------------------------------------
 // CIAUpdateBGInternalFileHandler::InternalizeL
 //
 // -----------------------------------------------------------------------------
@@ -382,14 +340,6 @@ void CIAUpdateBGInternalFileHandler::InternalizeL( RReadStream& aStream )
     // Static casting is safe to do here because enum and TInt are the same.
     SetUserRejectNewFeatureDialog( static_cast< TBool >( userDecision ) );
     
-    TInt64 nextRemindTime( 0 );
-    aStream >> nextRemindTime;
-    SetNextRemindTime( nextRemindTime );
-    
-    TInt remindOn( aStream.ReadUint8L() );
-    // Static casting is safe to do here because enum and TInt are the same.
-    SetReminder( static_cast< TBool >( remindOn ) );
-    
     TInt mode( aStream.ReadUint8L() );
     SetMode( static_cast<TIAUpdateBGMode> (mode) );
     
@@ -405,6 +355,10 @@ void CIAUpdateBGInternalFileHandler::InternalizeL( RReadStream& aStream )
     
     TInt retry ( aStream.ReadUint8L() );
     SetRetryTimes( retry );
+    
+    TInt entries ( aStream.ReadUint8L() );
+    SetNrOfIndicatorEntries( entries );
+    
     }
 
 
@@ -424,12 +378,6 @@ void CIAUpdateBGInternalFileHandler::ExternalizeL( RWriteStream& aStream )
     TInt userDecision ( UserRejectNewFeatureDialog() );
     aStream.WriteUint8L( userDecision );
     
-    TInt64 nextRemindTime( NextRemindTime().Int64() ); 
-    aStream << nextRemindTime;
-    
-    TInt remindOn ( ReminderOn() );
-    aStream.WriteUint8L( remindOn );
-    
     TInt mode( Mode() );
     aStream.WriteUint8L( mode );
     
@@ -443,6 +391,10 @@ void CIAUpdateBGInternalFileHandler::ExternalizeL( RWriteStream& aStream )
     
     TInt retry ( RetryTimes() );
     aStream.WriteUint8L( retry ); 
+    
+    TInt entries ( NrOfIndicatorEntries() );
+    aStream.WriteUint8L( entries ); 
+    
     }
 
 //EOF

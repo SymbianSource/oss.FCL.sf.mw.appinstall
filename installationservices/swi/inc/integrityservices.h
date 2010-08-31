@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -275,6 +275,13 @@ class CIntegrityServices : public CBase
 		 */
 		static void NormalizeDirectoryName(TDes& aFileName);
 		
+		/**
+		Creates a backup file by copying the source to a defined backup name. This MUST be used for executables.
+		The source files will then be deleted by invoking RLoader::Delete
+		@param aSource	the file to backup
+		@param aBackup	the name of the backup file
+		*/
+		void CopyToBackupL(const TDesC& aSource, const TDesC& aBackup);
 
 	private:
 	

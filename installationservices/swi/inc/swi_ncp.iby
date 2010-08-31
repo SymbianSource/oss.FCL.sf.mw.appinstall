@@ -1,0 +1,73 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+#ifndef __SWI_NCP_IBY__
+#define __SWI_NCP_IBY__
+
+REM Secure Software Install
+
+file=ABI_DIR\BUILD_DIR\installserver.exe		sys\bin\installserver.exe
+file=ABI_DIR\BUILD_DIR\plan.dll				sys\bin\plan.dll
+file=ABI_DIR\BUILD_DIR\sishelper.dll			sys\bin\sishelper.dll
+file=ABI_DIR\BUILD_DIR\swidataprovider.dll	sys\bin\swidataprovider.dll
+file=ABI_DIR\BUILD_DIR\sisxfile.dll			sys\bin\sisxfile.dll
+file=ABI_DIR\BUILD_DIR\siscontroller.dll		sys\bin\siscontroller.dll
+file=ABI_DIR\BUILD_DIR\sisresult.dll			sys\bin\sisresult.dll
+file=ABI_DIR\BUILD_DIR\uiss.dll				sys\bin\uiss.dll
+file=ABI_DIR\BUILD_DIR\uissclient.dll		sys\bin\uissclient.dll
+file=ABI_DIR\BUILD_DIR\sisregistryclient.dll		sys\bin\sisregistryclient.dll
+file=ABI_DIR\BUILD_DIR\sisregistryserver.exe		sys\bin\sisregistryserver.exe
+file=ABI_DIR\BUILD_DIR\sislauncherclient.dll		sys\bin\sislauncherclient.dll
+file=ABI_DIR\BUILD_DIR\sislauncherserver.exe		sys\bin\sislauncherserver.exe
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\apprscparser.dll			sys\bin\apprscparser.dll
+file=ABI_DIR\BUILD_DIR\swtypereginfo.dll		sys\bin\swtypereginfo.dll
+#endif
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+file=ABI_DIR\BUILD_DIR\integrityservices.dll		sys\bin\integrityservices.dll
+file=ABI_DIR\BUILD_DIR\sisregistryhelperserver.exe		sys\bin\sisregistryhelperserver.exe
+#endif
+
+file=ABI_DIR\BUILD_DIR\ocspsupport.exe			sys\bin\ocspsupport.exe
+file=ABI_DIR\BUILD_DIR\ocspsupportclient.dll		sys\bin\ocspsupportclient.dll
+file=ABI_DIR\BUILD_DIR\devinfosupportcommon.dll		sys\bin\devinfosupportcommon.dll
+file=ABI_DIR\BUILD_DIR\devinfosupport.exe			sys\bin\devinfosupport.exe
+file=ABI_DIR\BUILD_DIR\devinfosupportclient.dll		sys\bin\devinfosupportclient.dll
+file=ABI_DIR\BUILD_DIR\securitymanager.dll		sys\bin\securitymanager.dll
+file=ABI_DIR\BUILD_DIR\backuprestore.dll		sys\bin\backuprestore.dll
+file=ABI_DIR\BUILD_DIR\cafdataprovider.dll		sys\bin\cafdataprovider.dll
+file=ABI_DIR\BUILD_DIR\pkgremover.dll			sys\bin\pkgremover.dll
+file=ABI_DIR\BUILD_DIR\swiobserver.exe			sys\bin\swiobserver.exe
+file=ABI_DIR\BUILD_DIR\swiutils.dll			sys\bin\swiutils.dll
+
+#include "swiplugin.iby"
+
+file=ABI_DIR\BUILD_DIR\swiobserverclient.dll		sys\bin\swiobserverclient.dll
+
+#ifndef __TEXTSHELL_OBY__
+ECOM_PLUGIN(upsobserver.dll, upsobserver.rsc)
+#endif
+
+ECOM_PLUGIN(recsisx.dll, 0x10202DD0.rsc)
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+ECOM_PLUGIN(swisidchecker.dll, 10281FBC.rsc)
+#endif
+
+#endif

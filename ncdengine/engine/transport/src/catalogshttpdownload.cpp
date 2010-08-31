@@ -23,6 +23,13 @@
 #include <DocumentHandler.h>
 #include <apmstd.h> // TDataType
 #include <escapeutils.h>
+#include <downloadmanager.h>
+#include <cmmanager.h>
+#include <cmdestination.h>
+#include <uri8.h> 
+#include <QtGlobal>
+#include <QStringList>
+#include <xqconversions.h>
 
 #include "catalogshttpdownloadmanagerimpl.h"
 #include "catalogshttpobserver.h"
@@ -95,7 +102,7 @@ _LIT8( KHttpEntityLastModifiedHeader, "Last-Modified" );
 //	
 CCatalogsHttpDownload* CCatalogsHttpDownload::NewLC( 
     CCatalogsHttpDownloadManager& aOwner, 
-    RHttpDownload* aDownload,
+    Download* aDownload,
     const CCatalogsHttpConfig& aConfig )
     {
     CCatalogsHttpDownload* self = new( ELeave ) CCatalogsHttpDownload( 
@@ -140,7 +147,7 @@ CCatalogsHttpDownload::~CCatalogsHttpDownload()
         else 
             {
             DLTRACE(( "Deleting download" ));
-            iDownload->Delete();                        
+             iOwner.GetDownloadManager()->removeOne(iDownload);                      
             
             if ( iState.iOperationState != ECatalogsHttpOpCompleted ) 
                 {
@@ -244,8 +251,8 @@ TInt CCatalogsHttpDownload::Cancel()
         {
         iObserver = NULL;
         TInt32 state = 0;
-        iDownload->GetIntAttribute( EDlAttrState, state );
-        
+
+         state = (Download::State)iDownload->attribute(State).toInt();
         if ( IsOneOf( 
                 static_cast<THttpDownloadState>( state ), 
                 EHttpDlCreated,
@@ -473,7 +480,14 @@ TInt CCatalogsHttpDownload::Pause()
         TInt err = KErrNone;
         if ( iDownload ) 
             {
-            err = iDownload->Pause();
+					    try
+							{
+							iDownload->pause();
+							}
+			        catch(const std::exception& exception)
+			        	{
+							 err = qt_symbian_exception2Error(exception);
+			        	}
             }
         
         DLTRACE(("Pause err: %d", err ));
@@ -680,7 +694,7 @@ TInt32 CCatalogsHttpDownload::ContentSize() const
     // client-server communication with the Download manager server
     if ( iDownload && iContentSize <= 0 ) 
         {                
-        iDownload->GetIntAttribute( EDlAttrLength, iContentSize );    
+        iContentSize = iDownload->attribute(TotalSize).toInt();
         DLTRACE(("Content size from download: %i", iContentSize ));
         }
     return iContentSize;
@@ -706,7 +720,8 @@ TBool CCatalogsHttpDownload::IsPausable() const
     TBool pausable = ETrue;
     if ( iDownload ) 
         {        
-        iDownload->GetBoolAttribute( EDlAttrPausable, pausable );
+
+        pausable=iDownload->attribute(Pausable).toBool();
         }
     return pausable;
     }
@@ -799,7 +814,8 @@ void CCatalogsHttpDownload::InternalizeL( RReadStream& aStream )
     iConfig->InternalizeL( aStream );
     HBufC8* contentType = NULL;
     InternalizeDesL( contentType, aStream );
-    if ( contentType->Length() > KMaxContentTypeLength ) 
+    // HLa if ( contentType->Length() > KMaxContentTypeLength ) 
+    if ( contentType->Length() > 256 )
         {
         DeletePtr( contentType );
         DLERROR(("Content type was too long, leaving with KErrCorrupt"));
@@ -839,7 +855,152 @@ TInt CCatalogsHttpDownload::HandleHttpConfigEvent(
     return KErrNone;
     }
 
+void CCatalogsHttpDownload::HandledownloadEventL(DownloadEvent& aEvent)
+{
+	
+	switch(aEvent.type())
+	{
+		
+		case DownloadEvent::Started:
+		
+			break;
+		
+		case DownloadEvent::Error:	
+		case DownloadEvent::Failed:
+		case DownloadEvent::NetworkLoss:    
+		case DownloadEvent::ConnectionNeeded:  
+		case DownloadEvent::ConnectionDisconnected:    
+			{
+		    TInt32 errorId = -1;
+		    if ( aEvent.type() == DownloadEvent::NetworkLoss  || 
+		         aEvent.type() == DownloadEvent::ConnectionNeeded ||
+		         aEvent.type() == DownloadEvent::ConnectionDisconnected )
+		        {
+		        errorId = WRT::ConnectionFailed;
+		        }
+            SetTransferring( EFalse );
+            errorId = iDownload->attribute(LastError).toInt();
+            if ( errorId > 0 )
+                {
+                // Symbian error codes are always negative numbers 
+                errorId =  -1 * errorId;
+                }
+                                    
+            /*if ( ( errorId == ConnectionFailed || 
+                   errorId == TransactionFailed )) 
+                {
+                DLTRACE(("Try to reconnect"));
+                iReconnectWhenFail = EFalse;
+                iDownload->start();
+                break;
+                }
+            else if ( errorId == ContentExpired ||
+                      errorId == PartialContentModified )
+                {
+                DLTRACE(("Content has changed, reset and restart"));
+                iReconnectWhenFail = EFalse;
+                iDownload->cancel();
+                iDownload->start();
+                break;
+                }*/
+            iState.iOperationState = ECatalogsHttpOpFailed;
+            
+            TBool deleted = EFalse;
+            if ( iObserver ) 
+                {
+                // Determine whether failure was due to a HTTP error or some
+                // other error. 
+                //if ( errorId >= 400 ) 
+                //    {
+               //     deleted = iObserver->HandleHttpError( 
+               //     *this, TCatalogsHttpError(
+              //      ECatalogsHttpErrorHttp, 
+              //      errorId ) );
+              //      }
+              //  else 
+                    {
+                    AddRef();
+                    //iOwner.ConnectionManager().ReportConnectionError( 
+                    //               TCatalogsConnectionMethod(), errorId );
+                                
+                    if ( iRefCount > 1 )
+                        {                       
+                        deleted = iObserver->HandleHttpError( 
+                        *this, TCatalogsHttpError( 
+                        ECatalogsHttpErrorGeneral, errorId ) );
+                        }
+                    else 
+                        {
+                        deleted = ETrue;
+                        }
+                    Release();
+                    }
+                }
+            if ( !deleted )
+                {                
+                iOwner.CompleteOperation( this );
+                iState.iProgressState = ECatalogsHttpDone;
+                }
+			}
+			break;
+		
+		case DownloadEvent::Cancelled:
+		
+			break;
+		case DownloadEvent::ContentTypeChanged:
+			
+			break;
+		case DownloadEvent::HeadersReceived:
+			{
+					// Read the response headers from platform DL manager
+			UpdateResponseHeadersL();		
+			UpdateContentType();
+		  }
+			break;
+	
+	  
+		case DownloadEvent::Completed:
+			  {            
+            // move/rename temp file as the target file
+            TRAPD( err, MoveFileL() );
+            
+            // DLMAIN-546, delete DL manager's download before starting
+            // the next one so that downloads don't jam, again
+            if ( iDownload ) 
+                {   
+                	iTransferredSize = iDownload->attribute(DownloadedSize).toInt();             
+         
+                    
+                DLTRACE(("Deleting download"));                
+                DeletePlatformDownload();                
+                }
+            iState.iProgressState = ECatalogsHttpDone;
+            iOwner.CompleteOperation( this );
+            iState.iOperationState = ECatalogsHttpOpCompleted;
+            
+            if ( iObserver ) 
+                {                
+                iObserver->HandleHttpEventL( *this, iState );
+                }
 
+	     }
+			break;
+			
+		case DownloadEvent::InProgress:
+		    {
+		    iTransferredSize  =  iDownload->attribute(DownloadedSize).toInt();
+		    if ( iObserver ) 
+		        {                
+		        iObserver->HandleHttpEventL( *this, iState );
+		        }
+		    }
+		    break;
+		  
+	  default:
+            {
+            }		  
+	};
+}
 // ---------------------------------------------------------------------------
 // Handles events from the transaction
 // ---------------------------------------------------------------------------
@@ -991,6 +1152,8 @@ TBool CCatalogsHttpDownload::HandleHttpError(
 // Handles events from the download manager
 // ---------------------------------------------------------------------------
 //	
+
+/* HLa
 void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
     {
     DLTRACEIN((""));
@@ -1025,20 +1188,20 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
     
 	TInt32 statusCode = -1;
 	
-	iDownload->GetIntAttribute( EDlAttrStatusCode, statusCode );
-	DLINFO( ("Response status: %i", statusCode ) );
+	 statusCode  = (Download::State)iDownload->attribute(WRT::State).toInt(); 
+	 DLINFO( ("Response status: %i", statusCode ) );
 
 #ifdef CATALOGS_BUILD_CONFIG_DEBUG    
     TInt32 errorId = 0;
+		errorId=iDownload->attribute(LastError).toInt();
 
-	iDownload->GetIntAttribute( EDlAttrErrorId, errorId );
 	DLINFO( ("Error id: %i", errorId ) );
 	    
 #endif
 
     TInt32 globalErrorId = 0;    
-	iDownload->GetIntAttribute( 
-	    EDlAttrGlobalErrorId, globalErrorId );
+   globalErrorId= iDownload->attribute(LastError).toInt();
+
 	DLINFO( ("Global error id: %i", globalErrorId ) );
 	
 
@@ -1085,7 +1248,7 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
                 {
                 DLTRACE(("Try to reconnect"));
                 iReconnectWhenFail = EFalse;
-                iDownload->Start();                
+                iDownload->start();                
                 break;
                 }
             
@@ -1143,9 +1306,9 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
             // DLMAIN-546, delete DL manager's download before starting
             // the next one so that downloads don't jam, again
             if ( iDownload ) 
-                {                
-                iDownload->GetIntAttribute( 
-                    EDlAttrDownloadedSize, iTransferredSize );   
+                {   
+                	iTransferredSize = iDownload->attribute(DownloadedSize).toInt();             
+         
                     
                 DLTRACE(("Deleting download"));                
                 DeletePlatformDownload();                
@@ -1179,7 +1342,8 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
             DLTRACE(( "Download failed" ));
             TInt32 errorId = -1;
             SetTransferring( EFalse );
-        	iDownload->GetIntAttribute( EDlAttrErrorId, errorId );
+            errorId = iDownload->attribute(LastError).toInt();
+        
         	DLINFO( ("Error id: %i", errorId ) );
 
         	DLINFO( ("Global error id: %i", globalErrorId ) );
@@ -1190,7 +1354,7 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
                 {
                 DLTRACE(("Try to reconnect"));
                 iReconnectWhenFail = EFalse;
-                iDownload->Start();
+                iDownload->start();
                 break;
                 }
             else if ( errorId == EContentExpired ||
@@ -1198,8 +1362,8 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
                 {
                 DLTRACE(("Content has changed, reset and restart"));
                 iReconnectWhenFail = EFalse;
-                iDownload->Reset();
-                iDownload->Start();
+                iDownload->cancel();
+                iDownload->start();
                 break;
                 }
             
@@ -1282,6 +1446,7 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
         * Download process can be paused again. This event only occurs after
         * EHttpDlNonPausable. 
         */	
+/* HLa
         case EHttpDlPausable:
             {
             DLTRACE(( "Pausable" ));
@@ -1317,13 +1482,14 @@ void CCatalogsHttpDownload::HandleEventL( THttpDownloadEvent aEvent )
             }	
         }
     }
-
+*/
 
 
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
 //	
+/*
 void CCatalogsHttpDownload::HandleEventProgressL( const 
     THttpDownloadEvent& aEvent )
     {
@@ -1388,8 +1554,7 @@ void CCatalogsHttpDownload::HandleEventProgressL( const
 		    if ( !iPaused ) 
 		        {		  
                 TInt32 globalErrorId = 0;
-            	iDownload->GetIntAttribute( 
-            	    EDlAttrGlobalErrorId, globalErrorId );
+            	    globalErrorId = iDownload->attribute(LastError).toInt();
             	DLINFO( ("Global error id: %i", globalErrorId ) );
 
                 if ( globalErrorId == KErrCancel ) 
@@ -1495,7 +1660,8 @@ void CCatalogsHttpDownload::HandleEventProgressL( const
 		    iReconnectCount = KReconnectAttempts;
 
 		    TInt32 size = 0;
-	        iDownload->GetIntAttribute( EDlAttrDownloadedSize, size );   
+		     size = iDownload->attribute(DownloadedSize).toInt();
+
 	        DLTRACE(("Transferred size from download: %i", size));
 
 	        if ( size != iTransferredSize ) 
@@ -1597,7 +1763,7 @@ void CCatalogsHttpDownload::HandleEventProgressL( const
 			break;
 		}
     }
-    
+ */   
 
 
 // ---------------------------------------------------------------------------
@@ -1636,7 +1802,7 @@ void CCatalogsHttpDownload::SetHeaderMode( TCatalogsHttpHeaderMode aMode )
 //	
 CCatalogsHttpDownload::CCatalogsHttpDownload( 
     CCatalogsHttpDownloadManager& aOwner, 
-    RHttpDownload* aDownload ) :
+    Download* aDownload ) :
     iOwner( aOwner ), 
     iDownload( aDownload ), 
     iState( ECatalogsHttpOpCreated, ECatalogsHttpNone ),
@@ -1659,7 +1825,8 @@ void CCatalogsHttpDownload::ConstructL( const CCatalogsHttpConfig* aConfig )
         {        
         // id part will be updated from disk
         iId = TCatalogsTransportOperationId( iOwner.SessionId(), KErrNotFound );
-
+				iQTDownload = new CCatalogsHttpQTDownload(this,iDownload);
+				 
         UpdateSecondaryIdL();
         
         User::LeaveIfError( SetDeleteState( EDownloadCanBeDeleted ) );
@@ -1700,8 +1867,12 @@ void CCatalogsHttpDownload::UpdateContentType()
         {
         // Download always exists when this is called so no need to check
         DLTRACE(("Updating the content type"));
-        iDownload->GetStringAttribute( EDlAttrContentType,
-            iContentType );
+        QString contentType;
+        contentType= iDownload->attribute(WRT::ContentType).toString();
+        // HLa TBuf<KMaxContentTypeLength>  ContentType(contentType.utf16());
+        TBuf<256>  ContentType(contentType.utf16());
+        	iContentType.Copy(ContentType);
+   
         }
     DLTRACEOUT(("Content-type: %S", &iContentType ));
     }
@@ -1820,10 +1991,18 @@ void CCatalogsHttpDownload::UpdateUriL()
     // Get the current url of the download
     RBuf8 buf;
     CleanupClosePushL( buf );
+    const TInt KMaxUrlLength = 2048;
     buf.CreateL( KMaxUrlLength );
-    
-    User::LeaveIfError( iDownload->GetStringAttribute( EDlAttrCurrentUrl,
-        buf ) );
+    QString string;
+	try
+	{
+    string = iDownload->attribute(SourceUrl).toString();
+	}
+    catch(const std::exception& exception)
+    	{
+			 qt_symbian_exception2LeaveL(exception);
+    	}
+
     
     // DL manager has the encoded URI
     AssignDesL( iEncodedUri, buf );
@@ -1867,8 +2046,8 @@ void CCatalogsHttpDownload::UpdateRequestHeadersL()
             }
         else 
             {
-            User::LeaveIfError( iDownload->SetStringAttribute(
-                predefined, headers[i]->Value() ) );
+/*            User::LeaveIfError( iDownload->SetStringAttribute(
+                predefined, headers[i]->Value() ) );*/
             }
         }
 
@@ -1877,8 +2056,8 @@ void CCatalogsHttpDownload::UpdateRequestHeadersL()
     if ( iAddedRequestHeaders ) 
         {
         DLTRACE(( "added request headers: %S", iAddedRequestHeaders ));
-        User::LeaveIfError( iDownload->SetStringAttribute(
-            EDlAttrRequestHeaderAddon, *iAddedRequestHeaders ) );
+     /*   User::LeaveIfError( iDownload->SetStringAttribute(
+            EDlAttrRequestHeaderAddon, *iAddedRequestHeaders ) );*/
         delete iAddedRequestHeaders;
         iAddedRequestHeaders = NULL;
         }    
@@ -2043,6 +2222,7 @@ void CCatalogsHttpDownload::UpdateResponseHeadersL(
 TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader( 
     const TDesC8& aHeader ) const
     {
+    /* HLa
     if ( aHeader.CompareF( KHttpRequestAcceptHeader ) == 0 ) 
         {
         return EDlAttrRequestAccept;
@@ -2087,7 +2267,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader(
         {
         return EDlAttrRequestVary;
         }
-    
+    */
     return 0;
     }
     
@@ -2100,6 +2280,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader(
 TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader( 
     const TDesC8& aHeader ) const
     {
+    /* HLa
     if ( aHeader.CompareF( KHttpGeneralCacheControlHeader ) == 0 ) 
         {
         return EDlAttrGeneralCacheControl;
@@ -2119,7 +2300,8 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader(
     else if ( aHeader.CompareF( KHttpGeneralWarningHeader ) == 0 ) 
         {
         return EDlAttrGeneralWarning;
-        }    
+        }
+        */    
     return 0;
     }
     
@@ -2132,6 +2314,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader(
 TUint CCatalogsHttpDownload::MatchWithPredefinedEntityHeader( 
     const TDesC8& aHeader ) const
     {
+    /*
     if ( aHeader.CompareF( KHttpEntityAllowHeader ) == 0 ) 
         {
         return EDlAttrEntityAllow;
@@ -2156,6 +2339,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedEntityHeader(
         {
         return EDlAttrEntityLastModified;
         }
+        */
     return 0;
     }
         
@@ -2194,6 +2378,9 @@ void CCatalogsHttpDownload::AddRequestHeaderL( HBufC8*& aTarget,
         }
 
     TPtr8 ptr( aTarget->Des() );
+    
+    _LIT8( KHttpFieldSeparator, "\n"); // HLa
+    const TInt KColon( ':' ); // HLa
     
     if( newSize ) 
         {
@@ -2245,7 +2432,25 @@ TInt CCatalogsHttpDownload::StartDownload()
     
     TRAPD( err, 
         {
-        iOwner.SetConnectionL( *iConnection );
+        if ( Config().ConnectionMethod().iType == ECatalogsConnectionMethodTypeDestination )
+            {
+            RCmManager cmManager;
+            CleanupClosePushL( cmManager );
+            cmManager.OpenL();
+            RCmDestination dest = cmManager.DestinationL( Config().ConnectionMethod().iId );
+            CleanupClosePushL( dest );
+            HBufC* temp = dest.NameLC();    
+            QString destname;
+            destname = XQConversions::s60DescToQString( *temp );
+            CleanupStack::PopAndDestroy( temp );
+            CleanupStack::PopAndDestroy( &dest ); 
+            CleanupStack::PopAndDestroy( &cmManager ); 
+            if ( iOwner.GetDownloadManager() )
+                {
+                iOwner.GetDownloadManager()->attribute(AccessPoints).toStringList();
+                iOwner.GetDownloadManager()->setAttribute(AccessPoint, destname);
+                }
+            }
             
         // Update the configuration 
         if ( iState.iProgressState == ECatalogsHttpNone ) 
@@ -2254,10 +2459,17 @@ TInt CCatalogsHttpDownload::StartDownload()
             InitializeDownloadL();
             }
         });
-    
+   
     if ( err == KErrNone ) 
         {
-        err = iDownload->Start();
+						 try
+							{
+							iDownload->start();
+							}
+			        catch(const std::exception& exception)
+			        	{
+							 qt_symbian_exception2LeaveL(exception);
+			        	}
         }
     return err;
     }
@@ -2471,13 +2683,17 @@ TInt CCatalogsHttpDownload::SetDeleteState(
     TInt err = KErrNone;
     if ( iDownload ) 
         {    
-        err = iDownload->SetIntAttribute( EDlAttrUserData, aStatus );
+
+        iStatus = aStatus;
         }
     
     return err;
     }
 
-
+CCatalogsHttpDownload::TDownloadDeleteState CCatalogsHttpDownload::GetStatusState()
+	{
+		return iStatus;
+	}
 // ---------------------------------------------------------------------------
 // Gets delete status and download id from the platform download
 // ---------------------------------------------------------------------------
@@ -2491,7 +2707,8 @@ TInt CCatalogsHttpDownload::GetDeleteState(
     TInt err = KErrNotReady;
     if ( iDownload ) 
         {
-        err = iDownload->GetIntAttribute( EDlAttrUserData, data );
+
+        err = iStatus;
         DLTRACE(("Data: %d", data));
         aStatus = static_cast<TDownloadDeleteState>( data );
         }
@@ -2570,10 +2787,18 @@ void CCatalogsHttpDownload::InitializeDownloadL()
             UpdateRequestHeadersL();                    
             }
                 
-        // Check if the download has been set progressive
-        TBool progressive = EFalse;
-        User::LeaveIfError( iDownload->GetBoolAttribute( 
-            EDlAttrProgressive, progressive ) );
+        // Check if the 
+        //download has been set progressive
+        /* MTA
+         * TBool progressive = EFalse;
+		try
+		{
+		         progressive =iDownload->attribute(Progressive).toBool(); 
+		}
+        catch(const std::exception& exception)
+        	{
+				 qt_symbian_exception2LeaveL(exception);
+        	}  
 
         
         // We want to have progressive downloads because then DL manager uses
@@ -2591,18 +2816,34 @@ void CCatalogsHttpDownload::InitializeDownloadL()
              !iFileIsSet ) 
             {
             DLTRACE(("Setting download as progressive"));
-            User::LeaveIfError( iDownload->SetBoolAttribute( 
-                EDlAttrProgressive, ETrue ) );
-            }
+						try
+						{
+						   iDownload->setAttribute(Progressive,ETrue);
+						}
+						catch(const std::exception& exception)
+						{
+							qt_symbian_exception2LeaveL(exception);
+						}  
+						}
         
         // Doesn't pause the download after content type has been received
-        User::LeaveIfError( iDownload->SetBoolAttribute( 
-            EDlAttrNoContentTypeCheck, ETrue ) );
-
+					try
+					{
+						iDownload->setAttribute(Progressive,ETrue);
+					}
+					catch(const std::exception& exception)
+					{
+						qt_symbian_exception2LeaveL(exception);
+					}  
+**/
         if ( !iFileIsSet )
             {
             DLTRACE(("Setting filehandle to download"));
-            User::LeaveIfError( iDownload->SetFileHandleAttribute( file ) );
+           // User::LeaveIfError( iDownload->SetFileHandleAttribute( file ) );
+            file.Close();
+            TInt ret = BaflUtils::DeleteFile( iFs, *iTempFilename );
+            iDownload->setAttribute(DestinationPath,XQConversions::s60DescToQString(iConfig->Directory()));
+            iDownload->setAttribute(FileName, XQConversions::s60DescToQString(*iTempFilename));
             iFileIsSet = ETrue;                        
             }
 
@@ -2610,7 +2851,10 @@ void CCatalogsHttpDownload::InitializeDownloadL()
         }        
     }
 
-
+Download* CCatalogsHttpDownload::GetDownload()
+{
+	return iDownload;
+}
 // ---------------------------------------------------------------------------
 // Delete platform download and reset secondary id
 // ---------------------------------------------------------------------------
@@ -2619,7 +2863,7 @@ void CCatalogsHttpDownload::DeletePlatformDownload()
     {
     if ( iDownload )
         {
-        iDownload->Delete();
+        iOwner.GetDownloadManager()->removeOne(iDownload);
         iDownload = NULL;
         iId.SetSecondaryId( KErrNotFound );
         }
@@ -2633,8 +2877,7 @@ void CCatalogsHttpDownload::DeletePlatformDownload()
 void CCatalogsHttpDownload::UpdateSecondaryIdL()
     {
     TInt32 secondaryId = KErrNotFound;
-    User::LeaveIfError( 
-        iDownload->GetIntAttribute( EDlAttrId, secondaryId ) );
+    secondaryId = iDownload->id();
     iId.SetSecondaryId( secondaryId );    
     }
 
@@ -2675,3 +2918,22 @@ void CCatalogsHttpDownload::ReplaceExtension( TDes& aName, const TDesC& aExt )
        aName.Append( aExt );
        }
     }
+    
+CCatalogsHttpQTDownload::CCatalogsHttpQTDownload(CCatalogsHttpDownload* aHttpDownload,Download* aDownload)
+	{
+		iCatalogsHttpDownload = aHttpDownload;
+		iDownload = aDownload;
+		connect(iDownload, SIGNAL(downloadEvent(DownloadEvent*)), this,SLOT(downloadEventHandler(DownloadEvent*)));
+        connect(iDownload, SIGNAL(downloadError(Error)), this,SLOT(downloadErrorHandler(Error)));
+	}
+	
+void CCatalogsHttpQTDownload::downloadEventHandler(DownloadEvent* aEvent)
+	{
+		iCatalogsHttpDownload->HandledownloadEventL(*aEvent);
+	}
+void CCatalogsHttpQTDownload::downloadErrorHandler(Error)
+	{
+		//iCatalogsHttpDownload->HandledownloadEventL(*aEvent);
+	}
+
+

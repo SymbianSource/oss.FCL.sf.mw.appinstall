@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -104,9 +104,6 @@ void RSisHelper::EndAsyncExtractionL()
 EXPORT_C void RSisHelper::FillDrivesAndSpacesL(RArray<TChar>& aDriveLetters, 
 	RArray<TInt64>& aDriveSpaces)
 	{
-	CleanupClosePushL(aDriveLetters);
-	CleanupClosePushL(aDriveSpaces);
-	
 	// calculate the likely size of the data transfer buffer
 	const TInt KMaxBufSize=
 		sizeof(TInt)+                 // number of entries
@@ -146,7 +143,6 @@ EXPORT_C void RSisHelper::FillDrivesAndSpacesL(RArray<TChar>& aDriveLetters,
 	
 	// cleanup
 	CleanupStack::PopAndDestroy(2, buf); // ins, buf
-	CleanupStack::Pop(2, &aDriveLetters);
 	}
 
 EXPORT_C void RSisHelper::OpenDrmContentL(ContentAccess::TIntent aIntent)
@@ -268,7 +264,6 @@ TBool RSisHelper::IsDrmProtectedL()
 #endif
 void RSisHelper::GetEquivalentLanguageListL(TLanguage aLangId,RArray<TLanguage>& aEquivLangs)
 	{
-	CleanupClosePushL(aEquivLangs);
 	// calculate the likely size of the data transfer buffer
 	const TInt KMaxBufSize=
 		sizeof(TInt)+                 // number of entries
@@ -296,5 +291,4 @@ void RSisHelper::GetEquivalentLanguageListL(TLanguage aLangId,RArray<TLanguage>&
 		}
 	// cleanup
 	CleanupStack::PopAndDestroy(2, buf); // buf
-	CleanupStack::Pop(&aEquivLangs);
 	}

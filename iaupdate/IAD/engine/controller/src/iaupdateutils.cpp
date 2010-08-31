@@ -39,7 +39,8 @@
 #include <ncdpurchaseoption.h>
 
 #include <catalogsutils.h>
-#include <widgetregistryclient.h>
+//#include <WidgetRegistryClient.h>
+#include <usif/scr/scr.h>
 
 //Constants
 const TText KVersionSeparator( '.' );
@@ -303,6 +304,47 @@ EXPORT_C TBool IAUpdateUtils::IsAppInstalledL(
 
 EXPORT_C TBool IAUpdateUtils::IsWidgetInstalledL(const TDesC& aIdentifier, TIAUpdateVersion& aVersion )
     {
+    
+    TBool retVal = EFalse;
+    
+    // Connect to registry
+    Usif::RSoftwareComponentRegistry scrSession;  
+    CleanupClosePushL( scrSession );
+    User::LeaveIfError( scrSession.Connect());
+       
+    // // Get widget component id by identifier
+    Usif::TComponentId compId = 0;
+    TRAPD( err, compId = 
+           scrSession.GetComponentIdL( aIdentifier, Usif::KSoftwareTypeWidget ));
+    
+    if ( err == KErrNotFound )
+        {
+        retVal = EFalse;
+        }
+    else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+    else
+        {
+        // Widget found
+        retVal = ETrue;
+        
+        // Get entry 
+        Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+        retVal = scrSession.GetComponentL(compId, *entry);
+        
+        // Convert version
+        DesToVersionL ( entry->Version(), aVersion.iMajor, aVersion.iMinor, aVersion.iBuild  );
+    
+        CleanupStack::PopAndDestroy(entry);
+        }
+    
+    CleanupStack::PopAndDestroy( &scrSession ); 
+    
+    return retVal;
+    
+    /*
     RWidgetRegistryClientSession widgetRegistry;
 
     User::LeaveIfError( widgetRegistry.Connect() );
@@ -339,6 +381,7 @@ EXPORT_C TBool IAUpdateUtils::IsWidgetInstalledL(const TDesC& aIdentifier, TIAUp
     CleanupStack::PopAndDestroy( &widgetInfoArr );
     CleanupStack::PopAndDestroy( &widgetRegistry);
     return EFalse;
+    */
       
      
     }
@@ -461,79 +504,60 @@ EXPORT_C TBool IAUpdateUtils::IsInstalledL(
     return exeFound;
     }
 
-
 // ---------------------------------------------------------------------------
-// IAUpdateUtils::SilentInstallOptionsL
+// IAUpdateUtils::UsifSilentInstallOptionsL
 // 
 // ---------------------------------------------------------------------------
-//
-SwiUI::TInstallOptions IAUpdateUtils::SilentInstallOptionsL(
-    const CIAUpdateBaseNode& aNode )
+
+void  IAUpdateUtils::UsifSilentInstallOptionsL( 
+        Usif::COpaqueNamedParams * aOptions )
     {
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() begin");
-    SwiUI::TInstallOptions options;
 
-    // Upgrades are allowed        
-    options.iUpgrade = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
 
+    // Upgrades are allowed 
+    aOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::EAllowed );
+    
     // Install all if optional packets exist.
-    options.iOptionalItems = SwiUI::EPolicyAllowed;
-
+    aOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, Usif::EAllowed );
+    
     // Prevent online cert revocation check.
-    options.iOCSP = SwiUI::EPolicyNotAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::ENotAllowed );
     
     // See iOCSP setting above
-    options.iIgnoreOCSPWarnings = SwiUI::EPolicyAllowed;
-
+    aOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );
+    
     // Do not allow installation of uncertified packages.
-    options.iUntrusted = SwiUI::EPolicyNotAllowed;
-
-    // If filetexts are included in SIS package. Then, show them.
-    options.iPackageInfo = SwiUI::EPolicyUserConfirm;
+    aOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, Usif::ENotAllowed );
+    
+    // If filetexts are included in SIS package, show them.
+    aOptions->AddIntL( Usif::KSifInParam_PackageInfo, Usif::EAllowed );
     
     // Automatically grant user capabilities.
-    // See also iUntrusted above.
-    options.iCapabilities = SwiUI::EPolicyAllowed;
-
+    // See also KSifInParam_AllowUntrusted above.
+    aOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, Usif::EAllowed );
+    
     // Open application will be closed.
-    options.iKillApp = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
     
     // Files can be overwritten.
-    options.iOverwrite = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed  );
+    
+    // Incompatible allowed
+    aOptions->AddIntL( Usif::KSifInParam_AllowIncompatible, Usif::EAllowed  );
     
     // This only affects Java applications.
-    options.iDownload = SwiUI::EPolicyAllowed;
+    aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
     
     // Where to save.
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() before DriveToInstallL");
-    TDriveUnit driveUnit;
-    if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
-        {
-        driveUnit = IAUpdateUtils::DriveToInstallWidgetL( aNode.Identifier() );
-        }
-    else
-        {
-        driveUnit = IAUpdateUtils::DriveToInstallL( aNode.Uid(), aNode.OwnContentSizeL() );
-        }
-     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() after DriveToInstallL");
-    
-    TDriveName driveName = driveUnit.Name();
-    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() driveName: %S", &driveName );
-    options.iDrive = driveName[0];
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
     
     // Choose the phone language.
-    options.iLang = User::Language();
+    TLanguage lang = User::Language();
+    //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
     
-    // If language is asked, then use the current phone language.
-    options.iUsePhoneLang = ETrue;
-    
-    // Does not affect SISX. This is for Java.
-    options.iUpgradeData = SwiUI::EPolicyAllowed;
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::SilentInstallOptionsL() end");
-    return options;
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, IAUpdateUtils::DriveToInstallL( aUid, aSize ) );
     }
-
-
 // -----------------------------------------------------------------------------
 // IAUpdateUtils::InstalledDriveL
 // 
@@ -653,6 +677,11 @@ void IAUpdateUtils::InstalledDriveWidgetL( RFs& aFs,
                                            TDriveUnit& aLocationDrive )
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
+    aLocationDrive = EDriveC;
+    
+    //HLa: Widget registry remove
+    
+    /*
     TFileName widgetPath;
     aWidgetRegistry.GetWidgetPath( aUid, widgetPath );
     aLocationDrive = widgetPath.Mid( 0, 2 );
@@ -674,6 +703,8 @@ void IAUpdateUtils::InstalledDriveWidgetL( RFs& aFs,
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Physically removable drive not present, install to C:");
             }
         }
+    */
+    
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
     }
 
@@ -762,7 +793,12 @@ TDriveUnit IAUpdateUtils::DriveToInstallWidgetL( const TDesC& aIdentifier )
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() begin");
     IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() identifier: %S", &aIdentifier );
+    
+
     TDriveUnit targetDriveUnit( EDriveC );
+    
+    //HLa: Widget registry remove
+    /*
     RWidgetRegistryClientSession widgetRegistry;
 
     User::LeaveIfError( widgetRegistry.Connect() );
@@ -796,8 +832,11 @@ TDriveUnit IAUpdateUtils::DriveToInstallWidgetL( const TDesC& aIdentifier )
         
     CleanupStack::PopAndDestroy( &widgetInfoArr );
     CleanupStack::PopAndDestroy( &widgetRegistry);
+    */
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() end");
+
     return targetDriveUnit;
+
     }
 
 

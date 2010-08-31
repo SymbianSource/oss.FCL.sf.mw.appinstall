@@ -22,13 +22,13 @@
 #include <pathinfo.h>
 #include <data_caging_path_literals.hrh>
 #include <SWInstCommonUI.rsg>
-#include <AknCommonDialogs.h>
-#include <CAknMemorySelectionDialog.h>
+//#include <AknCommonDialogs.h> // Removed since CR 548
+//#include <CAknMemorySelectionDialog.h> // Removed since CR 548
 #ifdef RD_MULTIPLE_DRIVE 
-#include <CAknMemorySelectionDialogMultiDrive.h>
-#include <AknCommonDialogsDynMem.h>
+//#include <CAknMemorySelectionDialogMultiDrive.h> // Removed since CR 548
+//#include <AknCommonDialogsDynMem.h> // Removed since CR 548
 #else
-#include <CAknMemorySelectionDialog.h>
+//#include <CAknMemorySelectionDialog.h> // Removed since CR 548
 #endif //RD_MULTIPLE_DRIVE
 
 #include "CUIDriveUtils.h"
@@ -119,9 +119,12 @@ CCUIDriveUtils::~CCUIDriveUtils()
 // -----------------------------------------------------------------------------
 //
 TBool CCUIDriveUtils::ShowSelectionDialogL( TInt& aSelectedDrive )
-    {       
+    {  
+
     TBool result( EFalse );
     
+    // Removed since CR 548   
+/*    
     aSelectedDrive = 0;    
 
 #ifdef RD_MULTIPLE_DRIVE           
@@ -230,7 +233,7 @@ TBool CCUIDriveUtils::ShowSelectionDialogL( TInt& aSelectedDrive )
 
 #endif  //RD_MULTIPLE_DRIVE  
     CleanupStack::PopAndDestroy( 2 ); // header, memoryDialog
- 
+*/ 
     return result;    
     }    
 

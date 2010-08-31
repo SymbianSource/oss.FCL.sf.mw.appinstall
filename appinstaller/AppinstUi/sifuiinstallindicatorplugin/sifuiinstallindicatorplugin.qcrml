@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repository target="RProperty" uidValue="0x20022FC5">
+    <key ref="/SifUiInstallIndicator/Status" int="0x2002E690"/>
+</repository>

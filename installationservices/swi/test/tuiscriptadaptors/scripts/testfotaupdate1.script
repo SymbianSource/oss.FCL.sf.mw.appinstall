@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -18,6 +18,7 @@
 PRINT Run SWI FOTA Update tests
 LOAD_SUITE tuiscriptadaptors
 LOAD_SUITE tSisRegistryTest
+LOAD_SUITE tscrapparc
 
 //! @SYMTestCaseID INST-REG-FOTA-0001
 //! @SYMTestCaseDesc Tests F/W update scenario
@@ -28,3 +29,46 @@ LOAD_SUITE tSisRegistryTest
 START_TESTCASE FotaTest1
 RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini package_info_fota_v1
 END_TESTCASE FotaTest1
+
+
+//! @SYMTestCaseID INST-REG-FOTA-0003
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files
+//! @SYMTestExpectedResults Scr db is updated with latest app info
+START_TESTCASE FotaTest3
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini app_info_fota_v1
+END_TESTCASE FotaTest3
+
+//! @SYMTestCaseID INST-REG-FOTA-0004
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files in stub
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files in stub
+//! @SYMTestExpectedResults Registry is updated with latest stub info
+START_TESTCASE FotaTest4
+RUN_TEST_STEP 100 tSisRegistryTest IsPackageInstalled z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini stubapp_info_fota_v1
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini stubapp_scr_info_fota_v1
+END_TESTCASE FotaTest4
+
+
+//! @SYMTestCaseID INST-REG-FOTA-0005
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files present in <systemdrive>\private\10003a3f\apps
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files present in <systemdrive>\private\10003a3f\apps
+//! @SYMTestExpectedResults Scr db is updated with latest app info
+START_TESTCASE FotaTest5
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini app_info_fota_UDA1
+END_TESTCASE FotaTest5
+
+//! @SYMTestCaseID INST-REG-FOTA-0006
+//! @SYMTestCaseDesc Tests F/W update scenario for application registration resource files present in <systemdrive>\private\10003a3f\import\apps
+//! @SYMREQ PREQ1835
+//! @SYMTestPriority High
+//! @SYMTestActions Tests F/W update scenario for application registration resource files present in <systemdrive>\private\10003a3f\import\apps
+//! @SYMTestExpectedResults Scr db is updated with latest app info
+START_TESTCASE FotaTest6
+RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\testfotaupdate.ini app_info_fota_UDA2
+END_TESTCASE FotaTest6

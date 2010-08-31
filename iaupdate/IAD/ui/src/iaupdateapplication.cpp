@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,65 +11,38 @@
 *
 * Contributors:
 *
-* Description:   This module contains the implementation of CIAUpdateApplication
+* Description:   This module contains the implementation of IAUpdateApplication 
 *                class member functions.
 *
 */
 
-
-
-#include <eikstart.h>
-#include "iaupdatedocument.h"
 #include "iaupdateapplication.h"
-#include "iaupdateserver.h"
+#include "iaupdatemainwindow.h"
+#include "iaupdateengine.h"
+#include "iaupdatemainview.h"
+#include "iaupdatesettingdialog.h"
 
-
-// ---------------------------------------------------------
-// CAppMngrApp::CreateDocumentL()
-// Creates CIAUpdateDocumentt object
-// ---------------------------------------------------------
-//
-CApaDocument* CIAUpdateApplication::CreateDocumentL()
-    {  
-    // Create an IAUpdate document, and return a pointer to it
-    CApaDocument* document = CIAUpdateDocument::NewL(*this);
-    return document;
-    }
-
-
-// ---------------------------------------------------------
-// CIAUpdateApplication::AppDllUid
-// Returns application UID
-// ---------------------------------------------------------
-//
-TUid CIAUpdateApplication::AppDllUid() const
+IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
+    HbApplication( argc, argv ),
+    mEngine (new IAUpdateEngine),
+    mMainWindow (new IAUpdateMainWindow(mEngine))
     {
-    // Return the UID for the IAUpdate application
-    return KUidIAUpdateApp;
-    }
-
-// ---------------------------------------------------------
-// CIAUpdateApplication::NewAppServerL
-// Cretaes an instance of applicayion server class
-// ---------------------------------------------------------
-//
-void CIAUpdateApplication::NewAppServerL( CApaAppServer*& aAppServer )
-    {
-    aAppServer = CIAUpdateServer::NewL();    
-    }
     
-	
-// ================= OTHER EXPORTED FUNCTIONS ==============
-//
-// Create an application, and return a pointer to it
-LOCAL_C CApaApplication* NewApplication()
-    {
-    return new CIAUpdateApplication;
+    // get mainview 
+    IAUpdateMainView* mainView = mMainWindow->GetMainView();
+    
+    // get settig view
+    CIAUpdateSettingDialog* settingView = mMainWindow->GetSettingView();
+    
+    // Connect view change signals to the view change slots
+    //connect(&(*mEngine), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+    connect(&(*settingView), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+    connect(&(*mainView), SIGNAL(toSettingView()), &(*mMainWindow), SLOT(toSettingView()));
+    connect(&(*mEngine), SIGNAL(refresh(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)),
+            &(*mMainWindow), SLOT(refreshMainView(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)));
     }
 
-GLDEF_C TInt E32Main()
-    {
-    return EikStart::RunApplication(NewApplication);
-    }
-
-// End of File  
+IAUpdateApplication::~IAUpdateApplication()
+{
+    delete mEngine;    
+}

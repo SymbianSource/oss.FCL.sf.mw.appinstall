@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -511,8 +511,6 @@ void CSisHelperSession::ServiceError(const RMessage2& aMessage, TInt aError)
 void CSisHelperSession::FillDrivesAndSpacesL(RArray<TChar>& aDriveLetters, 
 					                        RArray<TInt64>& aDriveSpaces)
 	{
-	CleanupClosePushL(aDriveLetters);
-	CleanupClosePushL(aDriveSpaces);
 	// This is the LFSS free space threshold
 	TInt freeSpaceAdjustment = 1024 * 128;    // Bytes	
 
@@ -568,7 +566,6 @@ void CSisHelperSession::FillDrivesAndSpacesL(RArray<TChar>& aDriveLetters,
         User::LeaveIfError(aDriveSpaces.Append(volSpace));
         }
     CleanupStack::PopAndDestroy(&fs);
-    CleanupStack::Pop(2, &aDriveLetters);
 	}
 
 

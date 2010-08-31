@@ -38,7 +38,6 @@ class CUissCmd;
 class CWriteStream;
 class CProgressBarValuePublisher;
 
-
 /**
  * RClass which is used to make calls to the UI Support server using
  * the client-server framework. The ExecuteL() method is passed a
@@ -64,10 +63,12 @@ public:
 	 */
 	IMPORT_C void UpdateProgressBarL(const TAppInfo& aAppInfo, TInt aAmount);
 	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/** Sets a reference to the progress bar value publisher object. The ownership is NOT transferred. */
 	IMPORT_C void SetProgressBarValuePublisher(CProgressBarValuePublisher* aPublisher);
 private:
 	CProgressBarValuePublisher* iPublisher; // Owned by the state machine
+#endif
 	};
 
 /**
@@ -819,6 +820,7 @@ inline const TVersion& TAppInfo::AppVersion() const
 	return iAppVersion;
 	}
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	NONSHARABLE_CLASS(CProgressBarValuePublisher) : public CBase
 	/**
 	 * This class is used to publish the percentage value of the installation progress bar.
@@ -833,7 +835,7 @@ inline const TVersion& TAppInfo::AppVersion() const
 		IMPORT_C void SetFinalProgressBarValue(TInt aValue);
 		
 		/** Updates the value of the progress bar value property by adding the given value to the current value. */
-		IMPORT_C TInt CalculateProgressBarValue(TInt aValue);
+		IMPORT_C TInt UpdateProgressBarValueL(TInt aValue);
 	
 	private:
 		CProgressBarValuePublisher();
@@ -845,6 +847,7 @@ inline const TVersion& TAppInfo::AppVersion() const
 		TInt iLastPercentCompletion;
 		TInt iLastProgressValue;
 		};
+#endif
 
 } // namespace Swi
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -29,7 +29,7 @@
 #include "utility.h"
 #include "exception.h"
 #include "utils.h"
-#include "utf8.h"
+#include "utf8_wrapper.h"
 
 // we cannot write or read a string directly from a file, because we don't know what format the
 // MS implementation of STL will use for the std::string. So we need to go via an intemediate buffer.

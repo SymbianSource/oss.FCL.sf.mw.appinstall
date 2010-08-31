@@ -207,6 +207,7 @@ void SisFile::CheckValid() const
 		std::string x = wstring2string(this->GetPackageName());
 		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
 		}
+
 	}
 
 bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock, std::string& aError)
@@ -218,7 +219,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 		{
 		const CSISFileDescription& fD = aInstallBlock.FileDescription(i);
         const CSISFileDescription::TSISFileOperation operation = fD.Operation();
-		std::wstring target(fD.Target().GetString());
+		std::wstring target(fD.Target().GetString().c_str());
         //
         switch( operation )
             {
@@ -276,7 +277,7 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 			break;
 	    	}
 		}
-	return success;
+		return success;
 	}
 
 
@@ -422,9 +423,9 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 
 		if (ifBlock.WasteOfSpace())
 			{
+			std::string x;
 			std::string error = "corrupt SIS file";
-			std::string x = wstring2string(this->GetPackageName());
-			throw InvalidSis(x, error, INVALID_SIS);
+			throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x), error, INVALID_SIS);
 			}
 
 		// Main expression
@@ -445,8 +446,7 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 				ProcessInstallBlock(ifElseBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive);
 				break;	// Stop processing else if blocks
 				}
-			// Process the rest of the files
-			GetInstallableFiles(aFiles, ifElseBlock.InstallBlock(), aDrivePath, aInstallingDrive);
+			
 			}
 		} 
 	}

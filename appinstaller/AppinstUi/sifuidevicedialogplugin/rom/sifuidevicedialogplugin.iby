@@ -1,0 +1,25 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: ROM image files for SW install notification dialog plugin.
+*
+*/
+
+#ifndef SIFUIDEVICEDIALOGPLUGIN_IBY
+#define SIFUIDEVICEDIALOGPLUGIN_IBY
+
+file=ABI_DIR\UREL\sifuidevicedialogplugin.dll SHARED_LIB_DIR\sifuidevicedialogplugin.dll UNPAGED
+data=DATAZ_\pluginstub\sifuidevicedialogplugin.qtplugin \resource\plugins\devicedialogs\sifuidevicedialogplugin.qtplugin
+data=DATAZ_\resource\qt\crml\sifuidevicedialogplugin.qcrml \resource\qt\crml\sifuidevicedialogplugin.qcrml
+
+#endif  // SIFUIDEVICEDIALOGPLUGIN_IBY

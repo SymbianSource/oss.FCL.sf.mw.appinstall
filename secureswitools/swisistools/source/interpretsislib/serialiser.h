@@ -26,7 +26,7 @@
 #include "serialisable.h"
 #include "ucmp.h"
 #include "cardinality.h"
-#include "utf8.h"
+#include "utf8_wrapper.h"
 
 /**
 * @file SERIALISER.H

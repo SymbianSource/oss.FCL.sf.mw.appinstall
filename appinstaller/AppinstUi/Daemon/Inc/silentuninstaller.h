@@ -23,6 +23,10 @@
 #include <e32base.h>
 #include <f32file.h>
 #include <SWInstApi.h>
+#include <usif/sif/sif.h>
+#include <usif/sif/sifcommon.h>
+
+#include "sisregistrysession.h"
 
 namespace Swi
 {
@@ -58,7 +62,7 @@ class CSilentUninstaller : public CBase
         void UninstallL(         
                 TUid& aUid, 
                 TRequestStatus& aReqStatus, 
-                TDesC8& aMIME  );
+                TDesC& aMIME  );
 
         /**
          * Cancel the current installation.        
@@ -81,12 +85,14 @@ class CSilentUninstaller : public CBase
 
     private: //  Data
         
-        // Silent uninstaller
-        SwiUI::RSWInstSilentLauncher iLauncher;
-        // Uninstall options
-        SwiUI::TUninstallOptions iOptions;
-        // Uninstall options package
-        SwiUI::TUninstallOptionsPckg iOptionsPckg;
+        // SW installer framework
+        Usif::RSoftwareInstall iSWInstallerFW;
+        // Install parameters
+        Usif::COpaqueNamedParams* iSifOptions;
+        // Result parameters like error codes.
+        Usif::COpaqueNamedParams* iSifResults;
+        // SisRegister for native install packages.
+        RSisRegistrySession iRegistrySession;
         // File server
         RFs& iFs;
         // Defines need of connection to install server.

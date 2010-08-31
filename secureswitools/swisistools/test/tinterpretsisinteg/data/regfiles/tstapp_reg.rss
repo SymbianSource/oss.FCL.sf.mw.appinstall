@@ -1,0 +1,80 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+/**
+ @file TstApp_reg.rss
+ @internalComponent - Internal Symbian test code
+*/
+
+
+#include <appinfo.rh>
+#include <tstapp_loc.rsg>
+
+UID2 KUidAppRegistrationResourceFile
+UID3 0x123
+RESOURCE APP_REGISTRATION_INFO
+	{	
+	app_file = TstApp;
+	localisable_resource_file="\\Resource\\Apps\\tstapp_loc";
+	localisable_resource_id = R_LAI;
+	attributes = KAppIsControlPanelItem;
+	hidden = KAppNotHidden;
+	embeddability = KAppNotEmbeddable;
+	newfile = KAppDoesNotSupportNewFile;
+	launch = KAppLaunchInForeground;
+	group_name = "Games";
+	file_ownership_list = 
+		{
+		FILE_OWNERSHIP_INFO { file_name="C:\\System\\file2"; }
+		};
+
+	datatype_list = 
+		{
+		DATATYPE { priority=EDataTypePriorityNormal; type="text/plain"; }
+		};
+
+	service_list =
+		{
+		SERVICE_INFO { uid = 0x10101010;},
+		SERVICE_INFO 
+			{
+			uid = 0x01020304; 
+			datatype_list = 
+				{
+				DATATYPE { priority=EDataTypePriorityNormal; type="text/custom1"; }
+				};
+			opaque_data = r_first_service_specific_data;
+			},
+		SERVICE_INFO { uid = 0x02345000; opaque_data = r_second_service_specific_data;},
+		SERVICE_INFO { uid = 0x05678000; opaque_data = r_first_service_specific_data;},
+		SERVICE_INFO { uid = 0x01020305; opaque_data = R_SERVICE_SPECIFIC_DATA_LOC; }
+		};
+
+	}
+
+STRUCT SERVICE_NAME
+	{
+	LTEXT name = "";
+	}
+
+RESOURCE SERVICE_NAME r_first_service_specific_data
+	{
+	name = "Non-localised_text_for_service_uid_0x01020304";
+	}
+
+RESOURCE SERVICE_NAME r_second_service_specific_data
+	{
+	name = "Non-localised_text_for_service_uid_0x02345000";
+	}

@@ -82,23 +82,20 @@ CSisRegistryCache::~CSisRegistryCache()
 	// General note: trap the error because this is not a leaving function
 	// and generating an error will not help 
 
-	if (iIntegrityService)
-	    {
-	    // store the backup file out 
-	    TRAP(res, StoreBackupL());
-	    if (res != KErrNone)
-	        {
-	        DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to store backup (failure code: %d.)"), res);
-	        }
+	// store the backup file out 
+ 	TRAP(res, StoreBackupL());
+ 	if (res != KErrNone)
+ 		{
+ 	DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to store backup (failure code: %d.)"), res);
+ 		}
 
-	    // integrity service operation committing point 
-	    TRAP(res, iIntegrityService->CommitL());
-	    if (res != KErrNone)
-	        {
-	        DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to commit integrity services changes (failure code %d.)"), res);
-	        }
-	    }
-	
+	// integrity service operation committing point 
+	TRAP(res, iIntegrityService->CommitL());
+	if (res != KErrNone)
+ 		{
+	DEBUG_PRINTF2(_L8("Sis Registry Server - Failed to commit integrity services changes (failure code %d.)"), res);
+ 		}
+
 	delete iBackupFile;
 	
 	delete iIntegrityService;
@@ -186,22 +183,14 @@ void CSisRegistryCache::UidListL(RArray<TUid>& aUids) const
 
 void CSisRegistryCache::PackageListL(RPointerArray<CSisRegistryPackage>& aPackages) const
 	{
-	CleanupResetAndDestroyPushL(aPackages);
 	aPackages.ResetAndDestroy();
-	
 	for (TInt i = 0; i < iTokens.Count(); i++)
 		{
 		CSisRegistryPackage *package = CSisRegistryPackage::NewLC(*iTokens[i]);
 		aPackages.AppendL(package);
 		CleanupStack::Pop(package);
 		}
-	CleanupStack::Pop(&aPackages);
 	}
-
-const RPointerArray<CSisRegistryToken>& CSisRegistryCache::TokenList() const
-    {
-    return iTokens;
-    }
 	
 RFs& CSisRegistryCache::RFsHandle()
 	{ 
@@ -449,7 +438,7 @@ void CSisRegistryCache::BuildFileListL(TUid aUid, const TDesC& aPath)
 			User::Leave(KErrCorrupt);	
 			}
 			
-		iTokens.AppendL(token);
+		iTokens.Append(token);
 		CleanupStack::Pop(token);
 		CleanupStack::PopAndDestroy(&fileStream);
 				
@@ -525,13 +514,6 @@ void CSisRegistryCache::InitFromBackupL()
 	
 void CSisRegistryCache::InitStartUpL()
 	{
-    TRAPD(res, UpdateRecentFWVersionL(););
-    if (res != KErrNone)
-        {
-        // log that
-        DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
-        }
-	
 	// else reinit lists- initial settings, esp at the first reboot
 	BuildUidListL();
 	iUseIntegServices = EFalse; // temporarily "turn off" integrity services. It is not needed to process ROM stubs
@@ -543,6 +525,13 @@ void CSisRegistryCache::InitStartUpL()
 			
 	// only when all is processed one can check the package state		
 	UpdatePackagePresentStateL();
+	
+    TRAPD(res, UpdateRecentFWVersionL(););
+    if (res != KErrNone)
+        {
+        // log that
+        DEBUG_PRINTF2(_L8("Updating recent Firmware Version failed with error code = %d."), res);
+        }
 	}
 
 void CSisRegistryCache::StoreBackupL()
@@ -726,22 +715,19 @@ CSisRegistryPackage& CSisRegistryCache::SidToPackageL(const TUid aSid) const
 
 void CSisRegistryCache::SidToPackageL(const TUid aSid, RArray<CSisRegistryPackage>& aListMatchingPackages) const
 	{
-	CleanupClosePushL(aListMatchingPackages);
-	for (TInt i = 0; i < iTokens.Count(); i++)
-	{
-	if (iTokens[i]->SidPresent(aSid))
+		for (TInt i = 0; i < iTokens.Count(); i++)
 		{
-		aListMatchingPackages.AppendL(*iTokens[i]); 
+		if (iTokens[i]->SidPresent(aSid))
+			{
+			aListMatchingPackages.AppendL(*iTokens[i]); 
+			}
 		}
-	}
 	
 	DEBUG_PRINTF2(_L("SidToPackageL ListMatchingPackages->Count = %d"), aListMatchingPackages.Count());
 	if(aListMatchingPackages.Count() == 0  )
 		{
 		User::Leave(KErrNotFound);
 		}
-	
-	CleanupStack::Pop(&aListMatchingPackages);
 	}
 	
 TBool CSisRegistryCache::ModifiableL(const TDesC& aFileName)
@@ -849,7 +835,6 @@ CHashContainer* CSisRegistryCache::HashL(const TDesC& aFileName)
 
 void CSisRegistryCache::PackageAugmentationsL(const TUid aUid, RPointerArray<CSisRegistryPackage>& aPackages) const
 	{
-	CleanupResetAndDestroyPushL(aPackages);
 	for (TInt i = 0; i < iTokens.Count(); i++)
 		{
 		if ((iTokens[i]->Uid() == aUid) && (iTokens[i]->Index() != CSisRegistryPackage::PrimaryIndex))
@@ -859,7 +844,6 @@ void CSisRegistryCache::PackageAugmentationsL(const TUid aUid, RPointerArray<CSi
 			CleanupStack::Pop(tmp);
 			}
 		}
-	CleanupStack::Pop(&aPackages);
 	}
 	
 TInt CSisRegistryCache::PackageAugmentationsNumber(const TUid aUid) const
@@ -1022,13 +1006,11 @@ void CSisRegistryCache::DependentsPackagesL(
 							   RPointerArray<CSisRegistryPackage>& aDependents
 							   )
 	{
-	CleanupResetAndDestroyPushL(aDependents);
 	aDependents.ResetAndDestroy();
 	// if it is an augmentation - nothing depends on it
 	if (aObject.InstallType() == Sis::EInstAugmentation || 
 		aObject.InstallType() == Sis::EInstPreInstalledPatch)
 		{
-		CleanupStack::Pop(&aDependents);
 		return;
 		}	
 		
@@ -1080,13 +1062,11 @@ void CSisRegistryCache::DependentsPackagesL(
 			CleanupStack::PopAndDestroy(2, &stream);// &stream, tmpObject
 			}
 		}
-	CleanupStack::Pop(&aDependents);
 	}
 
 void CSisRegistryCache::EmbeddingPackagesL(const CSisRegistryObject& aObject,
 									   RPointerArray<CSisRegistryPackage>& aEmbeddingPackages)
 	{
-	CleanupResetAndDestroyPushL(aEmbeddingPackages);
 	aEmbeddingPackages.ResetAndDestroy();
 	
 	TUid matchingUid = aObject.Uid();
@@ -1111,14 +1091,12 @@ void CSisRegistryCache::EmbeddingPackagesL(const CSisRegistryObject& aObject,
 			}
 		// delete entry & stream 
 		CleanupStack::PopAndDestroy(2, &stream);// &stream, tmpObject
-		}
-	CleanupStack::Pop(&aEmbeddingPackages);
+		}	
 	}
 	
 void CSisRegistryCache::GenerateChainListL(const CSisRegistryObject& aObject, 
 											 RPointerArray<HBufC8>& aChainList)	
 	{
-	CleanupResetAndDestroyPushL(aChainList);
 	aChainList.ResetAndDestroy();
 	// read the controller for every member of the list	
 	for (TInt i = 0; i < aObject.ControllerInfo().Count(); i++)
@@ -1140,7 +1118,6 @@ void CSisRegistryCache::GenerateChainListL(const CSisRegistryObject& aObject,
 		// release the data	
 		CleanupStack::PopAndDestroy(3, name); // fileProvider, controller
 		}	
-	CleanupStack::Pop(&aChainList);
 	}
 
 HBufC8* CSisRegistryCache::LoadControllerLC(const CSisRegistryObject& aObject, TUint aIndex)
@@ -1417,10 +1394,9 @@ TBool CSisRegistryCache::RemoveControllerL(const CSisRegistryObject& aObject,
 void CSisRegistryCache::ControllerDriveListL(const CSisRegistryObject& aObject,
 										 RArray<TInt>& aDriveList)
 	{
-	CleanupClosePushL(aDriveList);
 	aDriveList.Reset();
 	// a copy of the controller is always kept on drive C
-	aDriveList.AppendL(iSystemDrive);
+	aDriveList.Append(iSystemDrive);
 	
 	// only controllers will be written to removable media and 
 	// we have now to check for those 
@@ -1428,22 +1404,21 @@ void CSisRegistryCache::ControllerDriveListL(const CSisRegistryObject& aObject,
 	TUint fixedDrives = FixedDrives();
 	TUint remainingDrives = installationDrives & ~fixedDrives;
 
-	if (remainingDrives)
-		{
-		TInt index = 0;
-		// reuse the path but change drive letter
-		while (remainingDrives)
+		if (remainingDrives)
 			{
-			// compare a single drive digit
-			if (remainingDrives & 0x00000001)
+			TInt index = 0;
+			// reuse the path but change drive letter
+			while (remainingDrives)
 				{
-				User::LeaveIfError(aDriveList.Append(index)); 
+				// compare a single drive digit
+				if (remainingDrives & 0x00000001)
+					{
+					User::LeaveIfError(aDriveList.Append(index)); 
+					}
+				remainingDrives>>=1;
+				index++;
 				}
-			remainingDrives>>=1;
-			index++;
 			}
-		}
-	CleanupStack::Pop(&aDriveList);	
 	}
 
 	
@@ -2073,8 +2048,6 @@ void CSisRegistryCache::RemovablePackageListL(RPointerArray<CSisRegistryPackage>
 	CSisRegistryObject* obj = 0;
 	TUint id = 0;
 	
-	CleanupResetAndDestroyPushL(aPackages);
-
 	aPackages.ResetAndDestroy();
 	for (TInt i = 0; i < iTokens.Count(); i++)
 		{
@@ -2091,7 +2064,6 @@ void CSisRegistryCache::RemovablePackageListL(RPointerArray<CSisRegistryPackage>
 
 		CloseReadHandleL(id);
 		}	
-	CleanupStack::Pop(&aPackages);
 	}
 	
 void CSisRegistryCache::RecoverL()

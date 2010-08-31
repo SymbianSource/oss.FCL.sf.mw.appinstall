@@ -250,6 +250,10 @@ data = ZDRIVE\tswi\tsis\data\armv5\filesp-signed_root5.sis 			tswi\tsis\data\fil
 data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu.sis 			tswi\tsis\data\eclipsingromexepu.sis
 data = ZDRIVE\tswi\tsis\data\armv5\eclipsingromexepu_root5.sis 			tswi\tsis\data\eclipsingromexepu_root5.sis
 
+//temporary fix to include cenrep file for timezone server
+data = \epoc32\data\z\private\10202be9\1020383e.txt					private\10202be9\1020383e.txt
+
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 // Used for registry management
 file=ABI_DIR\BUILD_DIR\sisregistryaccessserver.exe 		sys\bin\sisregistryaccessserver.exe
@@ -284,8 +288,8 @@ file=ABI_DIR\BUILD_DIR\ceddump.exe                  				System\Programs\ceddump.
 data = \epoc32\winscw\c\tswi\tsis\data\certstore\cacerts.dat \tswi\tsis\data\certstore\cacerts.dat
 data = \epoc32\winscw\c\tswi\tsis\data\certstore\certclients.dat \tswi\tsis\data\certstore\certclients.dat
 
-#include "thindump.iby"
-#include "sntpclient.iby"
+//#include "thindump.iby"
+//#include "sntpclient.iby"
 #include <insock.iby>
 #include <centralrepository.iby>
 
@@ -305,24 +309,33 @@ data = \epoc32\winscw\c\tswi\tsis\data\certstore\certclients.dat \tswi\tsis\data
 #include "sqlite3.iby"
 
 file=ABI_DIR\BUILD_DIR\SDPCodec.dll SHARED_LIB_DIR\SDPCodec.dll
-
+#ifndef __TLS_IBY__
 file=ABI_DIR\DEBUG_DIR\securesocket.DLL	System\Libs\securesocket.DLL
+#endif //__TLS_IBY__
 
+#ifndef __IPSEC_IBY__
 file=ABI_DIR\DEBUG_DIR\ipsecpolapi.dll		System\Libs\ipsecpolapi.dll
 file=ABI_DIR\DEBUG_DIR\lib_pfkey.dll		System\Libs\lib_pfkey.dll
+#endif  // __IPSEC_IBY__
 #include "etext.iby"
 
-file=ABI_DIR\DEBUG_DIR\eikcore.dll		System\Libs\EikCore.dll
+//file=ABI_DIR\DEBUG_DIR\eikcore.dll		System\Libs\EikCore.dll
 
-file=ABI_DIR\BUILD_DIR\clock.dll 		System\Libs\Clock.dll
-file=ABI_DIR\BUILD_DIR\EIKSRVC.DLL				System\Libs\EIKSRVC.DLL
-file=ABI_DIR\BUILD_DIR\UIKLAF.DLL				System\Libs\UIKLAF.DLL
-file=ABI_DIR\BUILD_DIR\eikcoctl.dll 			System\Libs\EikCoctl.dll
-file=ABI_DIR\BUILD_DIR\exparser.dll		        System\Libs\exparser.dll
-file=ABI_DIR\BUILD_DIR\form.dll 		System\Libs\Form.dll
+//file=ABI_DIR\BUILD_DIR\clock.dll 		System\Libs\Clock.dll
+//file=ABI_DIR\BUILD_DIR\EIKSRVC.DLL				System\Libs\EIKSRVC.DLL
+//file=ABI_DIR\BUILD_DIR\UIKLAF.DLL				System\Libs\UIKLAF.DLL
+//file=ABI_DIR\BUILD_DIR\eikcoctl.dll 			System\Libs\EikCoctl.dll
+//file=ABI_DIR\BUILD_DIR\exparser.dll		        System\Libs\exparser.dll   temp comment as not found in DFS build 
+//file=ABI_DIR\BUILD_DIR\form.dll 		System\Libs\Form.dll
 #include "fepbase.iby"
-file=ABI_DIR\BUILD_DIR\tagma.dll 		System\Libs\Tagma.dll
+//file=ABI_DIR\BUILD_DIR\tagma.dll 		System\Libs\Tagma.dll
 //file=ABI_DIR\BUILD_DIR\tzclient.dll		System\Libs\tzclient.dll
+
+// to avoide dependency error in DFS build 
+#ifndef __HBLIB_IBY__ 
+file=ABI_DIR\BUILD_DIR\HbCore.dll SHARED_LIB_DIR\HbCore.dll
+#endif  // __HBLIB_IBY__ 
+
 
 
 #endif //TSWITEXTSHELL

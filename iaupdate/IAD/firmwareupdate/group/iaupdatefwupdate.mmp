@@ -48,7 +48,6 @@ SOURCE iaupdatefwsynchandler.cpp
 
 
 LIBRARY         euser.lib
-LIBRARY         avkon.lib 
 LIBRARY         centralrepository.lib
 LIBRARY         SyncMLClientAPI.lib
 LIBRARY         fotaengine.lib
@@ -56,7 +55,6 @@ LIBRARY		ConnMon.lib
 LIBRARY		sysutil.lib
 LIBRARY         nsmltransporthandler.lib
 LIBRARY         cmmanager.lib
-LIBRARY         commonengine.lib
 DEBUGLIBRARY 	flogger.lib
 
 SMPSAFE

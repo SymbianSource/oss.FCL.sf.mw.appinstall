@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -22,28 +22,28 @@
 */
 
 PRJ_PLATFORMS
-DEFAULT TOOLS
-TOOLS2
+DEFAULT TOOLS2
+TOOLS
 
 PRJ_MMPFILES
 
-#ifdef TOOLS 
-#ifndef TOOLS2
-#ifdef SYMBIAN_OLD_EXPORT_LOCATION
-makefile ../source/chainvalidityandinstallfilestatustools/dumpchainvaliditytool/dumpchainvaliditytool.fil
-#else
-makefile ../source/chainvalidityandinstallfilestatustools/dumpchainvaliditytool/dumpchainvaliditytool2.fil
+#ifdef TOOLS2
+#ifndef TOOLS2_LINUX
+dumpchainvaliditytool.mmp
+dumpinstallfilestatustool.mmp
+dumpswicertstoretool.mmp
+#endif
 #endif
 
-makefile ../source/chainvalidityandinstallfilestatustools/dumpinstallfilestatustool/dumpinstallfilestatustool.fil
-makefile ../source/dumpswicertstoretool/dumpswicertstoretool.fil
 
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
+#ifdef TOOLS
 makefile ../source/dumpswiregistrytool/dumpswiregistrytool.fil
 #endif
+#endif
 
-#endif
-#endif
+PRJ_EXPORTS
+apply_tools2_variants.xml /epoc32/tools/makefile_templates/ossi/
 
 
 PRJ_TESTEXPORTS
@@ -186,7 +186,7 @@ PRJ_TESTEXPORTS
 ../test/tdumpregistry/dumpregistry-output/a0000206.out /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/a0000206.out
 ../test/tdumpregistry/dumpregistry-output/a0000206.tmp /epoc32/winscw/c/tswi/tdumpregistry/dumpregistry-output/a0000206.tmp
 ../test/tdumpregistry/testregistry.pl /epoc32/winscw/c/tswi/tdumpregistry/testregistry.pl
-
+#endif
 
 // tdumpcertstore
 ../test/tdumpcertstore/certstore.bat /epoc32/winscw/c/tswi/tdumpcertstore/certstore.bat
@@ -220,5 +220,4 @@ PRJ_TESTEXPORTS
 ../test/tdumpcertstore/predumpcertstoretest.bat /epoc32/winscw/c/tswi/tdumpcertstore/predumpcertstoretest.bat
 ../test/tdumpcertstore/postdumpcertstoretest.bat /epoc32/winscw/c/tswi/tdumpcertstore/postdumpcertstoretest.bat
 ../test/tdumpcertstore/testswicertstore.pl /epoc32/winscw/c/tswi/tdumpcertstore/testswicertstore.pl
-#endif
 // End of file

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -28,7 +28,7 @@
 #include <SWInstCommonUI.rsg>
 #include <SWInstDefs.h>
 #include <featmgr.h>
-#include <csxhelp/am.hlp.hrh>
+//#include <csxhelp/am.hlp.hrh>
 #include <swi/sisinstallerrors.h>
 #include <AknUtils.h>
 #include <eikfrlb.h> //for the marquee effect
@@ -478,9 +478,7 @@ TBool CSisxUIHandler::DisplayUpgradeL( const Swi::CAppInfo& aAppInfo,
     // than the currently installed old version (i.e. when downgrading). See
     // also User::QueryVersionSupported() although it has bit different meaning.
     TBool downgrading = ( newVersion.iMajor < oldVersion.iMajor ||
-            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor < oldVersion.iMinor ) ||
-            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor == oldVersion.iMinor &&
-                newVersion.iBuild < oldVersion.iBuild ) );
+            ( newVersion.iMajor == oldVersion.iMajor && newVersion.iMinor < oldVersion.iMinor ) );
     if( !downgrading )
         {
         iShowingDialog = EFalse;
@@ -1839,9 +1837,9 @@ void CSisxUIHandler::Finalize()
 //
 TInt CSisxUIHandler::ShowCapabilitiesHelp( TAny* aPtr )
     {
-    TRAP_IGNORE( 
-        reinterpret_cast<CSisxUIHandler*>(aPtr)->iCommonDialogs->LaunchHelpL( KAM_HLP_INSTALL_CAPAB )    
-        );    
+    //TRAP_IGNORE( 
+    //    reinterpret_cast<CSisxUIHandler*>(aPtr)->iCommonDialogs->LaunchHelpL( KAM_HLP_INSTALL_CAPAB )    
+    //    );    
 
     return KErrNone;    
     }

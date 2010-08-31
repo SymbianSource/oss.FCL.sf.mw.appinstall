@@ -585,7 +585,6 @@ private:
 	// Is the planning hapens just for component information collection?
 	TBool iIsInInfoCollectionMode;
 	#endif
-
 	};
 } // namespace Swi 
 

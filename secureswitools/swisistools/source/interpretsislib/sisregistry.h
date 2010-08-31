@@ -60,6 +60,11 @@ public: // Constructor & destructor
 	~SisRegistry();
 
 public: // API
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	void BackupCtl(TUint32 aUid);
+	void RestoreCtl(TUint32 aUid, TBool& aBackupFlag);
+	void RemoveCtlBackup(TUint32 aUid);
+#endif
 	TBool IsInstalled(TUint32 aUid) const;
 	const SisRegistryPackage& SidToPackage(TUint32 aSid);
 	void SidToFileName(TUint32 aSid, std::wstring& aFileName);
@@ -179,7 +184,14 @@ private:
 	void AddFileDescription	(	XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, 
 								const std::vector<FileDescription*>& aFileDescription 
 							);
-	
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	void AddApplicationRegistrationInfoL	(	XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, 
+								const std::vector<FileDescription*>& aFileDescription,
+								int aInRom 
+							);
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+
 	void AddFileDescriptionAsFileProperty	(	XmlDetails::TScrPreProvisionDetail::TComponentFile& aComponentFile, 
 												const FileDescription* aFileDescription
 											);

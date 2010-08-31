@@ -20,6 +20,9 @@
 #include "log.h"
 #include "plan.h"
 #include "swispubsubdefs.h"
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  
+#include <usif/scr/appregentries.h>
+#endif
 
 namespace Swi
 {
@@ -52,11 +55,11 @@ CSwisStateMachine::~CSwisStateMachine()
 	Cancel();
 	// close UISS session
 	iUiHandler.Close();
-	delete iProgressPublisher;
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	iStsSession.Close();
 	delete iRegistryWrapper;
+	delete iProgressPublisher;
 #else
 	delete iIntegrityServices;
 #endif
@@ -69,12 +72,12 @@ void CSwisStateMachine::ConstructL()
 	{
 	// mark the installation/un-installation operation as unconfirmed to start with
 	iOperationConfirmed = EFalse;
-	iProgressPublisher = Swi::CProgressBarValuePublisher::NewL();
-	iUiHandler.SetProgressBarValuePublisher(iProgressPublisher);
-	
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	iStsSession.CreateTransactionL();	
 	iRegistryWrapper = CRegistryWrapper::NewL();
+	iProgressPublisher = CProgressBarValuePublisher::NewL();
+	iUiHandler.SetProgressBarValuePublisher(iProgressPublisher);
 #else
 	// Create integrity services, use the current time as transaction ID
 	TTime currentTime;
@@ -347,6 +350,15 @@ TInt CSwisStateMachine::RunError(TInt aError)
 		// re-generate the sisregistry cache .. very time consuming!
 		ResetRegistryCache();
 		}
+#else
+	// Deregister the force registered applications from AppArc
+	DEBUG_PRINTF(_L8("Deregistering the force registered applications with AppArc"));
+	RSisLauncherSession launcher;
+	CleanupClosePushL(launcher);
+	User::LeaveIfError(launcher.Connect());
+	RArray<TAppUpdateInfo> emptyAppRegDataArray;
+	launcher.NotifyNewAppsL(emptyAppRegDataArray);
+	CleanupStack::PopAndDestroy(&launcher);
 #endif
 
 	iMessage.Complete(aError);
@@ -423,10 +435,10 @@ void CSwisStateMachine::SetIsInInfoMode(TBool aOperationalMode)
 	{
 	iIsInInfoMode = aOperationalMode;
 	}
-#endif
 
 void CSwisStateMachine::SetFinalProgressBarValue(TInt aValue)
 	{
 	iProgressPublisher->SetFinalProgressBarValue(aValue);
 	}
+#endif
 } // namespace Swi

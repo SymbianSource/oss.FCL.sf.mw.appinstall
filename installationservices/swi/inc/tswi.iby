@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -211,6 +211,10 @@ data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\tsisregistry_performance.i
 data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.ini \tswi\tsisregistrytest\scripts\integritychecktest.ini
 data = \epoc32\winscw\c\tswi\tsisregistrytest\scripts\integritychecktest.script \tswi\tsisregistrytest\scripts\integritychecktest.script
 
+//SWI AppReg integration test script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiappregintegration.script \tswi\tuiscriptadaptors\scripts\tswiappregintegration.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini \tswi\tuiscriptadaptors\scripts\tswiappregintegration.ini
+
 file=ABI_DIR\BUILD_DIR\sisregistryaccessserver.exe 		sys\bin\sisregistryaccessserver.exe
 #else
 //tsisregistrytest
@@ -313,8 +317,12 @@ data = \epoc32\winscw\c\tswi\tsisregistrytest\data\802730b1\00000000_0000.ctl \t
 #endif //SECURITY_NORMAL_SWICERTSTORE__
 
 // tuiscriptadaptors (unit test for SWIS)
+
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.ini
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script \tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script
+data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script \tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialog.script \tswi\tuiscriptadaptors\scripts\tuileavedialog.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script \tswi\tuiscriptadaptors\scripts\tuileavedialogasync.script
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\leavedialog_armv5.ini \tswi\tuiscriptadaptors\scripts\leavedialog.ini
@@ -343,6 +351,7 @@ data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.ini \
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini \tswi\tuiscriptadaptors\scripts\testdevicelanguages.ini
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testdevicelanguages.script \tswi\tuiscriptadaptors\scripts\testdevicelanguages.script
 #ifdef __SECURITY_NORMAL_SWICERTSTORE__
+
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_h2.script \tswi\tuiscriptadaptors\scripts\testpreinstalled.script
 #else
 data = \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script \tswi\tuiscriptadaptors\scripts\testpreinstalled_delete.script
@@ -676,6 +685,16 @@ data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_01.sis \tswi\trevocatio
 data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_02.sis \tswi\trevocation\data\ocsp_02.sis 
 data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_03.sis \tswi\trevocation\data\ocsp_03.sis
 data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsp_04.sis \tswi\trevocation\data\ocsp_04.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedval.sis \tswi\trevocation\data\certifiedsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedVeriSignval.sis \tswi\trevocation\data\certifiedsignedVeriSignval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\expresssignedval.sis \tswi\trevocation\data\expresssignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\allsignedval.sis \tswi\trevocation\data\allsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\selfsignedval.sis \tswi\trevocation\data\selfsignedval.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedrev.sis \tswi\trevocation\data\certifiedsignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\certifiedsignedVeriSignrev.sis \tswi\trevocation\data\certifiedsignedVeriSignrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\expresssignedrev.sis \tswi\trevocation\data\expresssignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\allsignedrev.sis \tswi\trevocation\data\allsignedrev.sis
+data = \epoc32\winscw\c\tswi\trevocation\data\armv5\selfsignedrev.sis \tswi\trevocation\data\selfsignedrev.sis
 data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsprevocation.sis \tswi\trevocation\data\ocsprevocation.sis
 data = \epoc32\winscw\c\tswi\trevocation\data\armv5\ocsprevocation-sub1.sis \tswi\trevocation\data\ocsprevocation-sub1.sis
 #endif

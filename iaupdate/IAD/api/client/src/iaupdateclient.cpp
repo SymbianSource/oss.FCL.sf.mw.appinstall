@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:   This module contains the implementation of RIAUpdateClient
+* Description:   This module contains the implementation of IAUpdateClient
 *                class member functions.
 *
 */
@@ -22,390 +22,406 @@
 #include <eikenv.h>
 #include <apgcli.h>
 #include <e32math.h>
+#include <iaupdateparameters.h>
+#include <iaupdateresult.h>
+#include <xqservicerequest.h>
+#include <xqserviceutil.h>
+#include <xqrequestinfo.h>
+
 #include "iaupdateclient.h"
 #include "iaupdateclientdefines.h"
-#include "iaupdatetools.h"
 #include "iaupdatedebug.h"
 
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::RIAUpdateClient
+// IAUpdateClient::IAUpdateClient
 // 
 // -----------------------------------------------------------------------------
 // 
-RIAUpdateClient::RIAUpdateClient() 
-: iPtr1( NULL, 0 ),
-  iPtr2( NULL, 0 ),
-  iPtr3( NULL, 0 )
+IAUpdateClient::IAUpdateClient(MIAUpdateObserver& observer):
+    mObserver(observer)
     {
+    mServiceRequest = NULL;
+    mCurrentRequestType = NoOperation;
     }
 
-
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::Open
+// IAUpdateClient::~IAUpdateClient
 // 
 // -----------------------------------------------------------------------------
 // 
-TInt RIAUpdateClient::Open()
+IAUpdateClient::~IAUpdateClient() 
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Open() begin");
-    TInt error( KErrNone );
-    
-    if ( !iConnected )
+    if ( mServiceRequest)
         {
-        TRAP( error, ConnectNewAppL( ServiceUid() ) );
-        if ( error == KErrNone ) 
-            {
-            iConnected = ETrue;
-            CEikonEnv* eikEnv = CEikonEnv::Static();
-            if ( eikEnv )
-                {
-            	RWindowGroup owngroup;
-		        iOwnWgId = eikEnv->RootWin().Identifier(); 
-		        
-	            TPckg<TInt> wgId( iOwnWgId );
-	            delete iData;
-	            iData = NULL;
-	             TRAP_IGNORE( iData = wgId.AllocL() );
-	            
-                TIpcArgs args;
-                args.Set( 0, iData );
-                SendReceive( IAUpdateClientDefines::EIAUpdateServerSendWgId, args );    
-	            } 
-            }
+        delete mServiceRequest;
         }
-    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::Open() end error code: %d", error );
-    return error;
     }
 
+
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::OpenToBackroundAsync
+// IAUpdateClient::initRequest
 // 
 // -----------------------------------------------------------------------------
-//
-TInt RIAUpdateClient::OpenToBackroundAsync( TRequestStatus& aStatus )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::OpenToBackroundAsync() begin");
-    TInt error( KErrNone );
-    if ( !iConnected )
+// 
+int IAUpdateClient::initRequest(const CIAUpdateParameters* updateParameters, const QString& message, bool toBackground)
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::initRequest() begin");
+    int error(KErrNone);
+    if (mCurrentRequestType != NoOperation) 
         {
-        TRAP( error, StartNewAppToBackgroundL( ServiceUid(), aStatus ) );
+        error = KErrServerBusy;
         }
-    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::OpenToBackroundAsync() end error code: %d", error );
-    return error;
-    }
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::ConnectToApp
-// 
-// -----------------------------------------------------------------------------
-//
-TInt RIAUpdateClient::ConnectToApp()
+    else if (!mServiceRequest)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::ConnectToApp() begin");
-    TInt error( KErrNone );
-    TName serverName;
-    ServerName(serverName, ServiceUid(), iDifferentiator);
-    TRAP( error,ConnectExistingByNameL( serverName ) );
-    
-    if ( error == KErrNone ) 
+        mServiceRequest = new XQServiceRequest("com.nokia.services.swupdate.swupdate_interface", message, false);
+        if (mServiceRequest)
+        {    
+            connect(mServiceRequest, SIGNAL(requestCompleted(QVariant)), this, SLOT(requestCompleted(QVariant)));
+            connect(mServiceRequest, SIGNAL(requestError(int)), this, SLOT(requestError(int)));
+        }
+        else
         {
-        iConnected = ETrue;
+            error = KErrNoMemory;
+        }
+    }
+    else
+    {
+        mServiceRequest->setMessage(message);
+    }
+    
+    
+    if (error == KErrNone)
+    {    
+        XQRequestInfo requestInfo;
+        requestInfo.setBackground(toBackground);
+        mServiceRequest->setInfo(requestInfo); 
+        int wgId = 0;
         CEikonEnv* eikEnv = CEikonEnv::Static();
         if ( eikEnv )
-            {
+        {
             RWindowGroup owngroup;
-            iOwnWgId = eikEnv->RootWin().Identifier(); 
-                    
-            TPckg<TInt> wgId( iOwnWgId );
-            delete iData;
-            iData = NULL;
-            TRAP_IGNORE( iData = wgId.AllocL() );
-                    
-            TIpcArgs args;
-            args.Set( 0, iData );
-            SendReceive( IAUpdateClientDefines::EIAUpdateServerSendWgId, args );    
-            } 
+            wgId = eikEnv->RootWin().Identifier();
         }
-    IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::ConnectToApp() end error code: %d", error );
-    return error; 
-    }
-
-
-
+        IAUPDATE_TRACE_1("IAUpdateClient::initRequest() wgId: %d", wgId);
+        QString stringWgid;
+        stringWgid.setNum(wgId);
+        *mServiceRequest << stringWgid;  
+        if (updateParameters)
+        {    
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() UID: %d", updateParameters->Uid().iUid);
+            QString stringUid; 
+            stringUid.setNum(updateParameters->Uid().iUid);
+            *mServiceRequest << stringUid;
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() searchcriteria: %S", &updateParameters->SearchCriteria());
+            *mServiceRequest << qStringFromTDesC(updateParameters->SearchCriteria());
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() executable: %S", &updateParameters->CommandLineExecutable());
+            *mServiceRequest << qStringFromTDesC(updateParameters->CommandLineExecutable());
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() arguments: %S8", &updateParameters->CommandLineArguments());
+            *mServiceRequest << qStringFromTDesC8(updateParameters->CommandLineArguments());
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() show progress: %d", updateParameters->ShowProgress());
+            QString stringShowProgress;
+            stringShowProgress.setNum(updateParameters->ShowProgress());
+            *mServiceRequest << stringShowProgress;
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() importance: %d", updateParameters->Importance());
+            QString stringImportance;
+            stringImportance.setNum(updateParameters->Importance());
+            *mServiceRequest << stringImportance;
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() type: %d", updateParameters->Type());
+            QString stringType;
+            stringType.setNum(updateParameters->Type());
+            *mServiceRequest << stringType;
+                
+            IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() refresh: %d", updateParameters->Refresh());
+            QString stringRefresh;
+            stringRefresh.setNum(updateParameters->Refresh());
+            *mServiceRequest << stringRefresh;
+        }
+    }                 
+     
+    
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::initRequest() error code: %d", error );
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::initRequest() end");
+    return error;
+}
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::Close
+// IAUpdateClient::checkUpdates
 // 
 // -----------------------------------------------------------------------------
 //
-void RIAUpdateClient::Close()
+void IAUpdateClient::checkUpdates(const CIAUpdateParameters& updateParameters)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Close() begin");
-    // Let the parent handle closing.
-    RAknAppServiceBase::Close();
-    iConnected = EFalse;
-    delete iData;
-    iData = NULL;
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Close() end");
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::checkUpdates()");
+    QString message("checkUpdates(QString,QString,QString,QString,QString,QString,QString,QString,QString)");
+    //QString message("checkUpdates(int,int)");
+    int ret = initRequest(&updateParameters,message,!updateParameters.ShowProgress());
+    if (ret == KErrNone)
+        {
+        if (mServiceRequest->send()) 
+            {
+            mCurrentRequestType = CheckUpdates;
+            }
+        else
+            {
+            mObserver.CheckUpdatesComplete(ret,0);        
+            }
+        }
     }
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::CheckUpdates
+// IAUpdateClient::showUpdates
 // 
 // -----------------------------------------------------------------------------
 //
-TInt RIAUpdateClient::CheckUpdates( const CIAUpdateParameters& aUpdateParameters,
-                                    TInt& aAvailableUpdates, 
-                                    TRequestStatus& aStatus )
+void IAUpdateClient::showUpdates(const CIAUpdateParameters& updateParameters)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::CheckUpdates()");
-    // Inform the caller about the success of the request initializing.
-    return SendCheckUpdatesRequest( IAUpdateClientDefines::EIAUpdateServerCheckUpdates,
-                                    aUpdateParameters,
-                                    aAvailableUpdates,
-                                    aStatus );
-    }
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::ShowUpdates
-// 
-// -----------------------------------------------------------------------------
-//
-TInt RIAUpdateClient::ShowUpdates( const CIAUpdateParameters& aUpdateParameters,
-                                   TInt& aNumberOfSuccessfullUpdates,
-                                   TInt& aNumberOfFailedUpdates,
-                                   TInt& aNumberOfCancelledUpdates,
-                                   TRequestStatus& aStatus )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::ShowUpdates()");
-    // Inform the caller about the success of the request initializing.
-    return SendUpdateRequest( IAUpdateClientDefines::EIAUpdateServerShowUpdates,
-                              aUpdateParameters,
-                              aNumberOfSuccessfullUpdates,
-                              aNumberOfFailedUpdates,
-                              aNumberOfCancelledUpdates,
-                              aStatus );
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::showUpdates()");
+    QString message("showUpdates(QString,QString,QString,QString,QString,QString,QString,QString,QString)");
+    int ret = initRequest(&updateParameters, message, false);
+    if (ret == KErrNone)
+        {
+        if (mServiceRequest->send())
+            {
+            mCurrentRequestType = ShowUpdates;
+            }
+        else
+            {
+            mObserver.UpdateComplete(ret,NULL);
+            }
+        }
     }
     
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::UpdateQuery
+// IAUpdateClient::updateQuery
 // 
 // -----------------------------------------------------------------------------
 //    
-TInt RIAUpdateClient::UpdateQuery( TBool& aUpdateNow, TRequestStatus& aStatus )
+void IAUpdateClient::updateQuery()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::updateQuery() begin");
+    QString message("updateQuery(QString)");
+    CIAUpdateParameters* nullParameters = NULL;
+    int ret = initRequest(nullParameters, message, false);
+    if (ret == KErrNone)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::UpdateQuery() begin");
-	TPckg<TBool> updateNow( aUpdateNow );
-	iPtr1.Set( updateNow );
-	            
-    TIpcArgs args;
-    args.Set( 1, &iPtr1 );
-    
-	SendReceive( IAUpdateClientDefines::EIAUpdateServerShowUpdateQuery, 
-	             args, 
-	             aStatus );    
-	IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::UpdateQuery() begin");    
-    return KErrNone;
-    }
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::BroughtToForeground
-// 
-// -----------------------------------------------------------------------------
-//
-void RIAUpdateClient::BroughtToForeground()
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::BroughtToForeground() begin");
-    if ( iConnected )
+        if (mServiceRequest->send()) 
         {
-    	SendReceive( IAUpdateClientDefines::EIAUpdateServerToForeground );
+            mCurrentRequestType = UpdateQuery;
         }
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::BroughtToForeground() end");
-    }
-
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::CancelAsyncRequest
-// 
-// -----------------------------------------------------------------------------
-//
-void RIAUpdateClient::CancelAsyncRequest()
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::CancelAsyncRequest() begin");
-    // We suppose that an active object will
-    // wait for the cancellation to complete.
-    // So, let the server know that operation is cancelled.
-    // The server should set the correct status and complete
-    // the request of the active object. So, the cancellation 
-    // can proceed to the end.
-    if ( iConnected )
+        else
         {
-    	SendReceive( IAUpdateClientDefines::EIAUpdateServerCancel ); 
+            mObserver.UpdateQueryComplete(ret,false);
         }
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::CancelAsyncRequest() end");
     }
-
-
+	IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::updateQuery() end");    
+}
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::ServiceUid()
+// IAUpdateClient::update
+// 
+// -----------------------------------------------------------------------------
+// 
+void IAUpdateClient::update()
+{
+    mObserver.UpdateComplete(KErrNotSupported,NULL);
+}
+
+// -----------------------------------------------------------------------------
+// IAUpdateClient::broughtToForeground
 // 
 // -----------------------------------------------------------------------------
 //
-TUid RIAUpdateClient::ServiceUid() const
+void IAUpdateClient::broughtToForeground()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::broughtToForeground() begin");
+    if (mServiceRequest)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::ServiceUid()");
-    return IAUpdateClientDefines::KIAUpdateServiceUid;    
-    }
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::SendCheckUpdatesRequest
-// 
-// -----------------------------------------------------------------------------
-//
-TInt RIAUpdateClient::SendCheckUpdatesRequest( TInt aUpdateFunction,
-                                               const CIAUpdateParameters& aUpdateParameters,
-                                               TInt& aCount,
-                                               TRequestStatus& aStatus )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::SendCheckUpdatesRequest() begin");
-    
-    aStatus = KRequestPending;
-
-    delete iData;
-    iData = NULL;   
-    
-    TInt error( KErrNone );
-    TRAP( error, 
-          IAUpdateTools::ExternalizeParametersL( iData, 
-                                                 aUpdateParameters ) );
-    IAUPDATE_TRACE_1("[IAUPDATE] error code: %d", error );
-
-    // Because this function does not leave,
-    // use error value to check if request can be done.
-    if ( error == KErrNone )
+        QString message("broughtToForeground(int)");
+        CIAUpdateParameters* nullParameters = NULL;
+        int ret = initRequest(nullParameters, message, false);
+        if (ret == KErrNone)
         {
-        TPckg<TInt> count( aCount );
-	    iPtr1.Set( count );
-	            
-        TIpcArgs args;
-        args.Set( 0, iData );
-        args.Set( 1, &iPtr1 );
-              
-        // Start the asynchronous operation in the server side.
-        SendReceive( aUpdateFunction, args, aStatus );        
+            if (mServiceRequest->send())
+            {
+                mCurrentRequestType = BroughtToForeground;
+            }
         }
-
-    // Inform the caller about the success of the request initializing.
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::SendCheckUpdatesRequest() begin");
-    return error;
-    }
+    } 
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::broughtToForeground() end");
+}
 
 // -----------------------------------------------------------------------------
-// RIAUpdateClient::SendUpdateRequest
+// IAUpdateClient::requestCompleted
 // 
 // -----------------------------------------------------------------------------
 //
-TInt RIAUpdateClient::SendUpdateRequest( TInt aUpdateFunction,
-                                         const CIAUpdateParameters& aUpdateParameters,
-                                         TInt& aNumberOfSuccessfullUpdates,
-                                         TInt& aNumberOfFailedUpdates,
-                                         TInt& aNumberOfCancelledUpdates,
-                                         TRequestStatus& aStatus )
+void IAUpdateClient::requestCompleted(const QVariant& value)
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::requestCompleted() begin");
+    RequestType requestType = mCurrentRequestType;
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::requestCompleted()request type: %d", requestType );
+    QList<QVariant> resultlist = value.toList();
+    int errorCode = resultlist.at(0).toInt();
+    CIAUpdateResult* updateResult(NULL);
+            
+    if ( requestType == ShowUpdates )
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::SendUpdateRequest() begin");
-    aStatus = KRequestPending;
-
-    delete iData;
-    iData = NULL;   
-    
-    TInt error( KErrNone );
-    TRAP( error, 
-          IAUpdateTools::ExternalizeParametersL( iData, 
-                                                 aUpdateParameters ) );
-    IAUPDATE_TRACE_1("[IAUPDATE] error code: %d", error );
-    // Because this function does not leave,
-    // use error value to check if request can be done.
-    if ( error == KErrNone )
+        // Update result object is required.
+        // Notice that the ownership is transferred later.
+        // So, this function does not need to delete updateResult object.
+        TRAPD( trapError, updateResult = CIAUpdateResult::NewL() );
+        if ( updateResult )
         {
-        TPckg<TInt> successCount( aNumberOfSuccessfullUpdates );
-	    iPtr1.Set( successCount );
-
-        TPckg<TInt> failCount( aNumberOfFailedUpdates );
-	    iPtr2.Set( failCount );
-
-        TPckg<TInt> cancelCount( aNumberOfCancelledUpdates );
-	    iPtr3.Set( cancelCount );
-	    	            
-        TIpcArgs args;
-        args.Set( 0, iData );
-        args.Set( 1, &iPtr1 );
-        args.Set( 2, &iPtr2 );
-        args.Set( 3, &iPtr3 );
-      
-        // Start the asynchronous operation in the server side.
-        SendReceive( aUpdateFunction, args, aStatus );        
+            updateResult->SetSuccessCount(resultlist.at(1).toInt());
+            updateResult->SetFailCount(resultlist.at(2).toInt());
+            updateResult->SetCancelCount(resultlist.at(3).toInt());
         }
-
-    // Inform the caller about the success of the request initializing.
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::SendUpdateRequest() end");
-    return error;
-    }    
-
-// -----------------------------------------------------------------------------
-// RIAUpdateClient::StartNewAppToBackgroundL
-// 
-// -----------------------------------------------------------------------------
-//
-void RIAUpdateClient::StartNewAppToBackgroundL( TUid aAppUid, TRequestStatus& aStatus )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::StartNewAppToBackgroundL() begin");
-    TName notUsed;
-    iDifferentiator = GenerateServerDifferentiatorAndName(notUsed, aAppUid);
-       
-    RApaLsSession apa;
-    User::LeaveIfError(apa.Connect());
-    CleanupClosePushL(apa);
-    
-    TApaAppInfo info;
-    User::LeaveIfError(apa.GetAppInfo(info, aAppUid));
-    
-    CApaCommandLine* cmdLine = CApaCommandLine::NewLC();
-    cmdLine->SetExecutableNameL(info.iFullName);
-    cmdLine->SetServerRequiredL( iDifferentiator );
-    cmdLine->SetCommandL(EApaCommandBackground);
-         
-    TThreadId notUsedId;
-    User::LeaveIfError(apa.StartApp(*cmdLine, notUsedId, &aStatus));
-          
-    CleanupStack::PopAndDestroy(2, &apa);   // cmdLine and apa
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::StartNewAppToBackgroundL() end");
-    }
-
-
-
-void RIAUpdateClient::ServerName(TName& aServerName, TUid aAppServerUid, TUint aServerDifferentiator)
-    {
-    _LIT(KServerNameFormat, "%08x_%08x_AppServer");
-    aServerName.Format(KServerNameFormat, aServerDifferentiator, aAppServerUid);
-    }
-    
-TUint RIAUpdateClient::GenerateServerDifferentiatorAndName(TName& aServerName, TUid aAppServerUid)
-    {
-    TUint r;
-    FOREVER
+        else
         {
-        r = Math::Random();
-        if (r==0)
-            continue;
-        ServerName(aServerName, aAppServerUid, r);
-        TFindServer find(aServerName);
-        TFullName fullName;
-        if (find.Next(fullName) == KErrNone)
-            continue;
+            // Something went wrong when creating update result object.
+            // Update the error code accordingly.
+            errorCode = trapError;
+        }
+            // Let's assume that connection is not needed anymore
+        if (mServiceRequest)
+        {
+            delete mServiceRequest;
+            mServiceRequest= NULL;
+        }
+    }
+        
+    // Inform that no operation is going on anymore.
+    // This is required for busy check.
+    mCurrentRequestType = NoOperation;
+        
+    // Use the request type of the ongoing operation to check what callback
+    // function to call.
+    int countOfUpdates = 0;
+    bool updateNow = false;
+    switch (requestType)
+    {
+        case CheckUpdates:
+        countOfUpdates = resultlist.at(1).toInt();    
+        if (countOfUpdates == 0)
+        {
+            // Let's assume that connection is not needed anymore
+            delete mServiceRequest;  
+            mServiceRequest= NULL;
+        }
+        IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::requestCompleted() count of updates: %d", countOfUpdates );
+        mObserver.CheckUpdatesComplete(errorCode, countOfUpdates);
         break;
-        }       
-    return r;
+
+        case ShowUpdates:
+        // Notice that ownership of result object is transferred here.
+        IAUPDATE_TRACE_3("[IAUPDATE] IAUpdateClient::requestCompleted() success count: %d failed count: %d cancelled count: %d", updateResult->SuccessCount(), updateResult->FailCount(), updateResult->CancelCount() );
+        mObserver.UpdateComplete(errorCode, updateResult);
+        break;
+                
+        case UpdateQuery:
+        updateNow = resultlist.at(1).toBool();      
+        if ( !updateNow )
+        {
+            // Let's assume that connection is not needed anymore
+            delete mServiceRequest;
+            mServiceRequest= NULL;
+        }    
+        IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateClient::requestCompleted() update now: %d", updateNow );
+        mObserver.UpdateQueryComplete(errorCode, updateNow);
+        break;
+             
+        default:
+        // Should not ever come here.
+        break;
     }
+            
+    // Do not anything else than return after callback function is called because 
+    // this instance can be deleted by a client in a callback function
+    // 
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::requestCompleted() end");
+}
+
+// -----------------------------------------------------------------------------
+// IAUpdateClient::requestError
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateClient::requestError(int /*err*/)
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::requestError() begin");
+    if ( mServiceRequest)
+        {
+            delete mServiceRequest;
+            mServiceRequest= NULL;
+        }
+    RequestType requestType = mCurrentRequestType;
+    mCurrentRequestType = NoOperation;
+    // because this method is called also when iaupdate is closed normally, error code is not passed to a client   
+    CIAUpdateResult* updateResult(NULL);
+    switch (requestType)
+    {
+        case CheckUpdates:
+        mObserver.CheckUpdatesComplete(0, 0);
+        break;
+
+        case ShowUpdates:
+        // Notice that ownership of result object is transferred here.
+        TRAP_IGNORE( updateResult = CIAUpdateResult::NewL() );    
+        mObserver.UpdateComplete(0, updateResult);
+        break;
+                    
+        case UpdateQuery:
+        mObserver.UpdateQueryComplete(0, false);
+        break;
+                 
+        default:
+        // Should not ever come here.
+        break;
+    }
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateClient::requestError() end");
+}     
+
+// -----------------------------------------------------------------------------
+// IAUpdateClient::qStringFromTDesC16
+// 
+// -----------------------------------------------------------------------------
+//
+QString IAUpdateClient::qStringFromTDesC16( const TDesC16& aDes16 )             
+{
+    return QString::fromUtf16( aDes16.Ptr(), aDes16.Length() );
+}
+
+// -----------------------------------------------------------------------------
+// IAUpdateClient::qStringFromTDesC8
+// 
+// -----------------------------------------------------------------------------
+//
+QString IAUpdateClient::qStringFromTDesC8( const TDesC8& aDes8 )                
+{
+    return QString::fromUtf8( reinterpret_cast<const char*>( aDes8.Ptr() ), aDes8.Length() );
+}
+
+// -----------------------------------------------------------------------------
+// IAUpdateClient::qStringFromTDesC
+// 
+// -----------------------------------------------------------------------------
+//
+QString IAUpdateClient::qStringFromTDesC( const TDesC& aDes )                    
+{
+#if defined(_UNICODE)
+    return qStringFromTDesC16( aDes );
+#else
+    return qStringFromTDesC8( aDes );
+#endif
+}
+
+
+

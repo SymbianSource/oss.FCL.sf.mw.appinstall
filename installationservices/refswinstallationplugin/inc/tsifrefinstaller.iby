@@ -1,0 +1,47 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef TSIFREFINSTALLER_IBY
+#define TSIFREFINSTALLER_IBY
+
+REM Tests for SIF Reference Installer
+
+define ZDRIVE EPOCROOT##epoc32\data\Z
+
+data=ZDRIVE\tusif\tsifrefinstaller\data\base.sifrefbinpkg					\tusif\tsifrefinstaller\data\base.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\base3.sifrefbinpkg					\tusif\tsifrefinstaller\data\base3.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\upgrade.sifrefbinpkg				\tusif\tsifrefinstaller\data\upgrade.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid2.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid2.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid3.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid3.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid4.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid4.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid5.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid5.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid6.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid6.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid7.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid7.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid8.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid8.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid9.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid9.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid10.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid10.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid11.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid11.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\invalid12.sifrefbinpkg				\tusif\tsifrefinstaller\data\invalid12.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\homogeneouscompound.sifrefbinpkg	\tusif\tsifrefinstaller\data\homogeneouscompound.sifrefbinpkg
+data=ZDRIVE\tusif\tsifrefinstaller\data\fileinusetest.sifrefbinpkg	\tusif\tsifrefinstaller\data\fileinusetest.sifrefbinpkg
+
+REM executables used by integration tests
+file=ABI_DIR\BUILD_DIR\siftestintegrationlockfile.exe					\sys\bin\siftestintegrationlockfile.exe
+
+#endif

@@ -218,10 +218,6 @@ private: // New functions
      */
     TAknSkinSrvSkinPackageLocation SkinLocationFromPath( const TDesC& aPath );
     
-#ifdef GET_DEVICE_ID_FROM_USERAGENT    
-    HBufC8* UserAgentL() const;
-#endif    
-    
     void GetPhoneLC( RTelServer& aServer, RPhone& aPhone );
 
     void GetSubscriberId();

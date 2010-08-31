@@ -1,0 +1,52 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+* STS Server 
+*
+*/
+
+TARGET				softwaretransactionservices.exe
+TARGETTYPE			exe
+
+UID					0x0 0x10285BCD
+EPOCHEAPSIZE    0x4000 0x0200000
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+USERINCLUDE			../inc
+USERINCLUDE			../inc_private
+USERINCLUDE			../../swinstallationfw/common/inc
+
+SOURCEPATH			../source/server
+
+SOURCE				startup.cpp
+SOURCE				stsserver.cpp
+SOURCE				stsserversession.cpp
+
+SOURCE				integrityservices.cpp
+SOURCE              integritytree.cpp
+SOURCE              journal.cpp
+SOURCE              journalfile.cpp
+SOURCE              operationfunctions.cpp
+SOURCE              transactionwrapper.cpp
+
+CAPABILITY			ProtServ TCB AllFiles
+
+VENDORID			0x70000001
+
+LIBRARY				euser.lib
+LIBRARY				scsserver.lib efsrv.lib
+LIBRARY				estor.lib
+LIBRARY				sectcbutil.lib
+LIBRARY				securityutils.lib 
+SMPSAFE

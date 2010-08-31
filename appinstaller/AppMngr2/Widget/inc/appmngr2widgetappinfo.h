@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -47,13 +47,12 @@ protected:  // new functions
 
 private:    // new functions
     void ShowDetailsL();
-
+    
 private:    // data
     TUid iWidgetUid;
     HBufC* iName;
     HBufC* iDetails;
     SwiUI::RSWInstLauncher* iSWInstLauncher;
-    HBufC8* iMimeType;
     };
 
 #endif // C_APPMNGR2WIDGETAPPINFO_H

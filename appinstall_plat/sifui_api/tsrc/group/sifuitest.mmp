@@ -1,0 +1,47 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* 
+* Description:  SifUi API test code
+*
+*/
+
+#include <platform_paths.hrh>
+
+TARGET          sifuitest.dll
+TARGETTYPE      dll
+UID             0x1000008D 0x101FB3E7
+
+VENDORID        VID_DEFAULT
+CAPABILITY      ALL -TCB
+
+USERINCLUDE     ../inc 
+MW_LAYER_SYSTEMINCLUDE
+
+SOURCEPATH      ../src
+SOURCE          sifuitest.cpp
+SOURCE          sifuitestcases.cpp
+
+LIBRARY         euser.lib                           // Base
+LIBRARY         efsrv.lib                           // File server
+LIBRARY         ws32.lib                            // Window server
+LIBRARY         bafl.lib                            // CDesC16ArrayFlat
+LIBRARY         stiftestinterface.lib               // STIF Framework
+LIBRARY         stiftestengine.lib                  // STIF Framework
+LIBRARY         sifui.lib                           // CSifUi
+LIBRARY         estor.lib                           // RBufWriteStream
+LIBRARY         uissclient.lib                      // Swi::CCertificateInfo
+LIBRARY         x509.lib                            // CX509Certificate
+LIBRARY         apgrfx.lib                          // RApaLsSession 
+
+SMPSAFE
+

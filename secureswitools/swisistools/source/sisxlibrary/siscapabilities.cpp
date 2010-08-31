@@ -83,6 +83,7 @@ void CSISCapabilities::ExtractCapabilities(const std::wstring& aFileName)
 	nulStderr = fopen("NUL:", "w");
 	#endif
 
+
 	CSISException::ThrowIf(nulStderr == NULL, CSISException::EFileProblem, "Failed in redirection operation");
 
 	CSISException::ThrowIf(_dup2(_fileno(nulStderr), 2) == -1, CSISException::EFileProblem, "Failed in redirection operation");

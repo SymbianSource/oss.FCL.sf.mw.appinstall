@@ -77,4 +77,7 @@ EXPORTS
 	?IsDeviceMatchingLanguage@CApplication@Swi@@QBEHH@Z @ 76 NONAME ; int Swi::CApplication::IsDeviceMatchingLanguage(int) const
 	?SetSisHelper@CApplication@Swi@@QAEXABVRSisHelper@2@@Z @ 77 NONAME ; void Swi::CApplication::SetSisHelper(class Swi::RSisHelper const &)
 	?GetSisHelper@CApplication@Swi@@QAEAAVRSisHelper@2@XZ @ 78 NONAME ; class Swi::RSisHelper & Swi::CApplication::GetSisHelper(void)
+	?GetAffectedApps@CPlan@Swi@@QBEXAAV?$RArray@VTAppUpdateInfo@Swi@@@@@Z @ 79 NONAME ; void Swi::CPlan::GetAffectedApps(class RArray<class Swi::TAppUpdateInfo> &) const
+	?ResetAffectedApps@CPlan@Swi@@QAEXXZ @ 80 NONAME ; void Swi::CPlan::ResetAffectedApps(void)
+	?SetAffectedApps@CPlan@Swi@@QAEXAAV?$RArray@VTAppUpdateInfo@Swi@@@@@Z @ 81 NONAME ; void Swi::CPlan::SetAffectedApps(class RArray<class Swi::TAppUpdateInfo> &)
 

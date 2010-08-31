@@ -1,0 +1,41 @@
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN,GE
+
+; List of localised vendor names.
+%{"Symbian Software Ltd", "Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English and German
+#{"interpretsis_eng_testcase", "interpretsis_german_testcase_PU"}, (0xE8000108), 1,0,0,TYPE=PU
+
+; Language-neutral files to be installed
+;"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_08.exe"-"!:\sys\bin\interpretsis_testcase_08.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_10_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_10_reg.rsc"
+
+; Lists of language-specific resource files, of which only those files will be installed
+; which are supported by the device. 
+
+if supported_language=01 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_10.r01"		-"!:\resource\apps\interpretsis_testcase_10.r01"
+endif	
+if supported_language=03
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase_10.r03"		-"!:\resource\apps\interpretsis_testcase_10.r03"
+endif
+
+
+
+if supported_language=01 
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase01_08.mbm"		-"!:\resource\apps\interpretsis_testcase01_08.mbm"
+endif
+if supported_language=03
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\resource\apps\interpretsis_testcase03_08.mbm"		-"!:\resource\apps\interpretsis_testcase03_08.mbm"
+endif
+

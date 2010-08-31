@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -365,6 +365,67 @@ TInt CIAUpdateNode::Depth() const
     return iDepth;
     }
 
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetUiState()
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetUiState( MIAUpdateNode::TUIUpdateState aState )
+    {
+    iUiUpdateState = aState;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::UiState()
+// 
+// ---------------------------------------------------------------------------
+//
+MIAUpdateNode::TUIUpdateState CIAUpdateNode::UiState() const
+    {
+    return iUiUpdateState;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetProgress
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetProgress( TInt aProgress )
+    {
+    iProgress = aProgress; 
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Progress
+// 
+// ---------------------------------------------------------------------------
+//
+TInt CIAUpdateNode::Progress() const
+    {
+    return iProgress;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::SetTotal
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateNode::SetTotal( TInt aTotal )
+    {
+    iTotal = aTotal; 
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateNode::Total
+// 
+// ---------------------------------------------------------------------------
+//
+TInt CIAUpdateNode::Total() const
+    {    
+    return iTotal;
+    }
+    
 
 // ---------------------------------------------------------------------------
 // CIAUpdateNode::NodeType

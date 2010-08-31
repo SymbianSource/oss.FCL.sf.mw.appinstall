@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,8 +22,6 @@
 #include "appmngr2installedview.h"      // CAppMngr2InstalledView
 #include "appmngr2packagesview.h"       // CAppMngr2PackagesView
 #include "appmngr2.hrh"                 // Command IDs
-#include "appmngr2exittimer.h"          // Exit Timer
-
 #include <appmngr2runtime.h>            // CAppMngr2Runtime
 #include <appmngr2driveutils.h>         // TAppMngr2DriveUtils
 #include <appmngr2debugutils.h>         // FLOG macros
@@ -32,11 +30,6 @@
 #include <featmgr.h>                    // FeatureManager
 #include <e32property.h>                // RProperty
 #include <hlplch.h>                     // HlpLauncher
-#include <StringLoader.h>               // StringLoader
-#include <appmngr2.rsg>                 // Resource IDs
-#include <AknGlobalNote.h>              // WaitNote
-#include <avkon.rsg>
-
 
 _LIT( KSWInstCommonUIResourceFileName, "SWInstCommonUI.rsc" );
 
@@ -56,25 +49,16 @@ void CAppMngr2AppUi::ConstructL()
     wsSession.ComputeMode( RWsSession::EPriorityControlDisabled );
 
     FeatureManager::InitializeLibL();
-
+    
     TFileName* fullName = TAppMngr2DriveUtils::NearestResourceFileLC(
             KSWInstCommonUIResourceFileName, iEikonEnv->FsSession() );
     FLOG( "CAppMngr2AppUi::ConstructL, opening %S", fullName );
     iResourceFileOffset = iEikonEnv->AddResourceFileL( *fullName );
     CleanupStack::PopAndDestroy( fullName );
 
-    // Let's start global wait note so user can see that 
-    // App. Mngr is scanning memory.
-    HBufC* string = StringLoader::LoadLC( R_QTN_AM_SCANNING_MEMORY );  
-    CAknGlobalNote* note = CAknGlobalNote::NewLC();
-    note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );    
-    FLOG( "CAppMngr2AppUi::ConstructL: ShowNoteL EAknGlobalWaitNote " );
-    iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
-    CleanupStack::PopAndDestroy( 2, string );
-                
     FLOG( "CAppMngr2AppUi::ConstructL, creting model" );
     iModel = CAppMngr2Model::NewL( iEikonEnv->FsSession(), *this );
-
+   
     FLOG( "CAppMngr2AppUi::ConstructL, creting views" );
     CAppMngr2InstalledView* installedView = CAppMngr2InstalledView::NewL();
     AddViewL( installedView );  // takes ownership
@@ -108,13 +92,10 @@ void CAppMngr2AppUi::ConstructL()
         {
         ActivateLocalViewL( KInstalledViewId );
         }
-
+    
     FLOG( "CAppMngr2AppUi::ConstructL, starting delayed construct" );
     iIdle = CIdle::NewL( CActive::EPriorityStandard );
     iIdle->Start( TCallBack( &CAppMngr2AppUi::DelayedConstructL, this ) );
-    
-    FLOG( "CAppMngr2AppUi::ConstructL, iExitTimer = NULL" );
-    iExitTimer = NULL;    
     }
 
 // ---------------------------------------------------------------------------
@@ -124,23 +105,13 @@ void CAppMngr2AppUi::ConstructL()
 CAppMngr2AppUi::~CAppMngr2AppUi()
     {
     FLOG( "CAppMngr2AppUi::~CAppMngr2AppUi" );
-    
-    if( iNoteId )
-        {
-        // If appmngr is closed for some reason let's make sure 
-        // the note is closed.
-        TRAP_IGNORE( CancelNoteL() );
-        }
-    
     delete iIdle;
     delete iModel;
-    
     if( iResourceFileOffset > 0 )
         {
         iEikonEnv->DeleteResourceFile( iResourceFileOffset );
         }
-    FeatureManager::UnInitializeLib();    
-    delete iExitTimer;   
+    FeatureManager::UnInitializeLib();
     }
 
 // ---------------------------------------------------------------------------
@@ -163,9 +134,6 @@ void CAppMngr2AppUi::InstalledAppsChanged( TInt aMoreRefreshesExpected )
         {
         CAppMngr2ListView* view = static_cast<CAppMngr2ListView*>( iView );
         TRAP_IGNORE( view->RefreshL( aMoreRefreshesExpected ) );
-        
-        // Let's close global wait note since memory scanning is ready.      
-        TRAP_IGNORE( CancelNoteL() );
         }
     }
 
@@ -180,9 +148,6 @@ void CAppMngr2AppUi::InstallationFilesChanged( TInt aMoreRefreshesExpected )
         {
         CAppMngr2ListView* view = static_cast<CAppMngr2ListView*>( iView );
         TRAP_IGNORE( view->RefreshL( aMoreRefreshesExpected ) );
-        
-        // Let's close global wait note since memory scanning is ready. 
-        TRAP_IGNORE( CancelNoteL() );
         }
     }
 
@@ -215,20 +180,35 @@ TInt CAppMngr2AppUi::DelayedConstructL( TAny* aSelf )
         CAppMngr2AppUi* self = static_cast<CAppMngr2AppUi*>( aSelf );
         FLOG( "CAppMngr2AppUi::DelayedConstructL, step %d",
                 self->iDelayedConstructionStep );
-
-        // Only necessary part of the model is constructed. AppMngr2 runs
-        // as embedded application in Control panel. It is started either
-        // to display installed applications, or installation files.
-        if( self->iConstructInstallationFilesFirst )
+        switch( self->iDelayedConstructionStep )
             {
-            self->iModel->StartFetchingInstallationFilesL();
-            }
-        else
-            {
-            self->iModel->StartFetchingInstalledAppsL();
-            }
+            case EFirstStep:
+                if( self->iConstructInstallationFilesFirst )
+                    {
+                    self->iModel->StartFetchingInstallationFilesL();
+                    }
+                else
+                    {
+                    self->iModel->StartFetchingInstalledAppsL();
+                    }
+                self->iDelayedConstructionStep = ESecondStep;
+                return ETrue; // call DelayedConstruct again
 
-        self->iDelayedConstructionStep = EAllDone;
+            case ESecondStep:
+                if( self->iConstructInstallationFilesFirst )
+                    {
+                    self->iModel->StartFetchingInstalledAppsL();
+                    }
+                else
+                    {
+                    self->iModel->StartFetchingInstallationFilesL();
+                    }
+                self->iDelayedConstructionStep = EAllDone;
+                break;
+                
+            default:
+                break;
+            }
         }
     return EFalse; // all done
     }
@@ -243,28 +223,6 @@ void CAppMngr2AppUi::HandleCommandL( TInt aCommand )
     switch ( aCommand )
         {
         case EEikCmdExit:
-            if ( iModel->IsUninstall() && iModel->IsActive() )
-                {
-                // In case we have uninstall process ongoing we need to
-                // start delay timer for Exit. This is because in some cases 
-                // like VPN plug-in the GS is closed and app.mngr exit may come 
-                // just when SWInstLauncer is completing req. in RunL (long 
-                // running task). CActive do not return from Cancel and 
-                // AppMngr2Model's destructor jams.                             
-                if ( !iExitTimer )
-                    {
-                    // If there is not exit timer already let's make one.                    
-                    iExitTimer = CAppMngr2ExitTimer::NewL( this );                       
-                    iExitTimer->StartExitTimer();                    
-                    } 
-                }
-            else
-                {
-                // if we do not have uninstall request let's do Exit now.
-                Exit();
-                }
-            break;
-            
         case EAknCmdExit:
         case EAknSoftkeyExit:
             Exit();
@@ -282,22 +240,5 @@ void CAppMngr2AppUi::HandleCommandL( TInt aCommand )
         default:
             break;
         }
-    }
-
-// ---------------------------------------------------------------------------
-// CAppMngr2AppUi::CancelNoteL()
-// ---------------------------------------------------------------------------
-//
-void CAppMngr2AppUi::CancelNoteL()
-    {
-    FLOG( "CAppMngr2AppUi::CancelNoteL: iNoteId = %d", iNoteId );
-     if ( iNoteId )
-         {         
-         CAknGlobalNote* note = CAknGlobalNote::NewLC();
-         FLOG( "CAppMngr2AppUi::CancelNoteL: note->CancelNoteL" );
-         note->CancelNoteL( iNoteId );         
-         CleanupStack::PopAndDestroy();       
-         iNoteId = 0;
-         }        
     }
 

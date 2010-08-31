@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -20,7 +20,7 @@
 #include "appmngr2widgetruntime.h"      // KAppMngr2WidgetUid
 #include "appmngr2widgetinfoiterator.h" // CAppMngr2WidgetInfoIterator
 #include "appmngr2widget.hrh"           // Widget command IDs
-#include <widgetregistrydata.h>         // CWidgetInfo
+#include <WidgetRegistryData.h>         // CWidgetInfo
 #include <appmngr2driveutils.h>         // TAppMngr2DriveUtils
 
 
@@ -49,7 +49,6 @@ CAppMngr2WidgetAppInfo::~CAppMngr2WidgetAppInfo()
     CancelCommand();
     delete iName;
     delete iDetails;
-    delete iMimeType;
     }
 
 // ---------------------------------------------------------------------------
@@ -117,7 +116,7 @@ void CAppMngr2WidgetAppInfo::HandleCommandL( TInt aCommandId, TRequestStatus& aS
                 CleanupStack::Pop( swInstLauncher );
                 iSWInstLauncher = swInstLauncher;
                 }
-            iSWInstLauncher->Uninstall( aStatus, iWidgetUid, *iMimeType );
+            iSWInstLauncher->Uninstall( aStatus, iWidgetUid, KDataTypeWidget );
             return;     // async operation started
 
         default:
@@ -178,16 +177,13 @@ CAppMngr2WidgetAppInfo::CAppMngr2WidgetAppInfo( CAppMngr2Runtime& aRuntime,
 void CAppMngr2WidgetAppInfo::ConstructL( const CWidgetInfo& aWidget )
     {
     CAppMngr2AppInfo::ConstructL();
-
+    
     iWidgetUid = aWidget.iUid;
     iName = aWidget.iBundleName->AllocL();
     iDetails = SizeStringWithUnitsL( aWidget.iFileSize );
 
     iLocationDrive = TDriveUnit( *aWidget.iDriveName );
     iLocation = TAppMngr2DriveUtils::LocationFromDriveL( iLocationDrive, iFs );
-
-    CAppMngr2WidgetRuntime& runtime( static_cast<CAppMngr2WidgetRuntime&>( Runtime() ) );
-    iMimeType = runtime.GetMimeTypeL( iWidgetUid );
     }
 
 // ---------------------------------------------------------------------------

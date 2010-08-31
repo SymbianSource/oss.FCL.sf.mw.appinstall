@@ -26,7 +26,7 @@
 #include "serialisable.h"
 #include "cardinality.h"
 #include "ucmp.h"
-#include "utf8.h"
+#include "utf8_wrapper.h"
 #include "is_utils.h"
 
 #pragma warning (disable: 4800)

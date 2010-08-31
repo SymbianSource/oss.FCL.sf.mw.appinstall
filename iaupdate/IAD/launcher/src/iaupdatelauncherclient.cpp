@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:   This module contains the implementation of RIAUpdateLauncherClient
+* Description:   This module contains the implementation of IAUpdateLauncherClient
 *                class member functions.
 *
 */
@@ -19,107 +19,66 @@
 
 
 //INCLUDES
+#include <qapplication.h>
+#include <xqservicerequest.h>
+#include <xqserviceutil.h>
+#include <xqrequestinfo.h>
+
 #include "iaupdatelauncherclient.h"
-#include "iaupdateclientdefines.h"
 #include "iaupdatedebug.h"
 
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::RIAUpdateLauncherClient
-// 
-// -----------------------------------------------------------------------------
-// 
-RIAUpdateLauncherClient::RIAUpdateLauncherClient() 
-: iPtr1( NULL, 0 )
-    {
-    }
-
-
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::Open
-// 
-// -----------------------------------------------------------------------------
-// 
-TInt RIAUpdateLauncherClient::Open()
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::Open() begin");
-        
-    TInt error = KErrNone;
-    if ( !iConnected )
-        {
-        TRAP( error, ConnectChainedAppL( ServiceUid() ) );
-        if ( error == KErrNone )
-            {
-            iConnected = ETrue;
-            }
-        }	
-    IAUPDATE_TRACE_1("[IAUPDATE] error code: %d", error );
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::Open() end");
-    return error;
-    }
-
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::Close
-// 
-// -----------------------------------------------------------------------------
-//
-void RIAUpdateLauncherClient::Close()
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::Close() begin");
-    // Let the parent handle closing.
-    RAknAppServiceBase::Close();
-    iConnected = EFalse;
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::Close() end");
-    }
-
-
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::ShowUpdates()
-// 
-// -----------------------------------------------------------------------------
-//
-void RIAUpdateLauncherClient::ShowUpdates( TBool& aRefreshFromNetworkDenied, 
-                                           TRequestStatus& aStatus )
-    {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::ShowUpdates() begin");
-    if ( iConnected )
-        {
-        TPckg<TBool> refreshFromNetworkDenied( aRefreshFromNetworkDenied );
-	    iPtr1.Set( refreshFromNetworkDenied );
-	    TIpcArgs args;
-        args.Set( 0, &iPtr1 );
-    	SendReceive( IAUpdateClientDefines::EIAUpdateServerStartedByLauncher, 
-    	             args,
-    	             aStatus );
-        }
  
-        
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::ShowUpdates() end");
-    }
 
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::CancelAsyncRequest()
-// 
-// -----------------------------------------------------------------------------
-//    
-void RIAUpdateLauncherClient::CancelAsyncRequest()
+IAUpdateLauncherClient::IAUpdateLauncherClient()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::IAUpdateLauncherClient()");
+    mServiceRequest = NULL;
+}
+
+IAUpdateLauncherClient::~IAUpdateLauncherClient()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::~IAUpdateLauncherClient() begin");
+    if ( mServiceRequest)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::CancelAsyncRequest() begin");
-    if ( iConnected )
-        {
-    	SendReceive( IAUpdateClientDefines::EIAUpdateServerCancel ); 
-        }
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::CancelAsyncRequest() end");
+       delete mServiceRequest;
     }
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::~IAUpdateLauncherClient() end");
+}
 
-
-// -----------------------------------------------------------------------------
-// RIAUpdateLauncherClient::ServiceUid()
-// 
-// -----------------------------------------------------------------------------
-//
-TUid RIAUpdateLauncherClient::ServiceUid() const
+void IAUpdateLauncherClient::launch()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::launch() begin");
+    mServiceRequest = new XQServiceRequest("com.nokia.services.swupdate.swupdate_interface","startedByLauncher(QString)",false);
+    
+    XQRequestInfo requestInfo;
+    requestInfo.setEmbedded(true);
+    mServiceRequest->setInfo(requestInfo);
+    QString stringRefreshFromNetworkDenied("0");
+    *mServiceRequest << stringRefreshFromNetworkDenied;   
+    bool ret = mServiceRequest->send();   
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateLauncherClient::launch() ret %d", ret );
+    if (!ret)
     {
-    IAUPDATE_TRACE("[IAUPDATE] RIAUpdateLauncherClient::ServiceUid()");
-    return IAUpdateClientDefines::KIAUpdateServiceUid;    
+        IAUPDATE_TRACE("[IAUPDATE] send failed");
+        qApp->quit();
     }
+    else
+    {
+        connect(mServiceRequest, SIGNAL(requestCompleted(QVariant)), this, SLOT(requestCompleted(QVariant)));
+        connect(mServiceRequest, SIGNAL(requestError(int)), this, SLOT(requestError(int)));
+    }    
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::launch() end");
+}
+
+void IAUpdateLauncherClient::requestCompleted(const QVariant& /*value*/)
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateLauncherClient::requestCompleted()");
+    qApp->quit();
+}
+
+void IAUpdateLauncherClient::requestError(int err)
+{
+    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateLauncherClient::requestError() %d", err );
+    qApp->quit();
+}
 

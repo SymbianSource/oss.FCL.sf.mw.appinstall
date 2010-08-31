@@ -24,7 +24,6 @@
 #include <SWInstApi.h>                  // SwiUI::RSWInstLauncher
 #include <CUIDetailsDialog.h>           // SwiUI::CommonUI::CCUICertificateInfo
 #include <f32file.h>                    // TDriveUnit
-#include <swi/sisregistrysession.h>     // RSisRegistrySession
 
 
 class CAppMngr2SisxAppInfo : public CAppMngr2AppInfo
@@ -56,7 +55,6 @@ private:    // new functions
     void ShowDetailsL();
     void ReadCertificatesL();
     void HandleUninstallL( TRequestStatus& aStatus );
-    void CheckDRMContentL();
     
 private:    // data
     TUid iAppUid;
@@ -75,8 +73,6 @@ private:    // data
     RPointerArray<SwiUI::CommonUI::CCUICertificateInfo> iCertificates;
     TBool iCertsRead;
     TInt iCommandId;
-    TBool iRegSessionOpen;
-    Swi::RSisRegistrySession iSisRegSession;
     };
 
 #endif // C_APPMNGR2SISXAPPINFO_H

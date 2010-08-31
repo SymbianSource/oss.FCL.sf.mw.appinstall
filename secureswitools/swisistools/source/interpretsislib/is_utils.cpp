@@ -79,10 +79,18 @@ void ConvertToPlatformSpecificPath( TUint16* aIn, TUint32 len )
 {
     while( len-- > 0 )
     {
+	#ifdef __TOOLS2_LINUX__
     	if( *aIn == '\\' )
     	{
     		*aIn = '/';
     	}
+	#else
+    	if( *aIn == '/' )
+    	{
+    		*aIn = '\\';
+    	}
+	#endif
+		
     	aIn++;
     }
 }

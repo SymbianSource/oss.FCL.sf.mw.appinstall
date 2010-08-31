@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -64,7 +64,7 @@ CAppMngr2ListContainer::~CAppMngr2ListContainer()
 TKeyResponse CAppMngr2ListContainer::OfferKeyEventL(
         const TKeyEvent& aKeyEvent, TEventCode aType )
     {
-    TKeyResponse response = iListBox->OfferKeyEventL( aKeyEvent, aType );
+    TKeyResponse response = iListBox->OfferKeyEventL( aKeyEvent, aType ); 
     if( aKeyEvent.iCode == EKeyUpArrow || aKeyEvent.iCode == EKeyDownArrow )
         {
         iView.UpdateMiddleSoftkeyCommandL();
@@ -178,9 +178,8 @@ void CAppMngr2ListContainer::HandleGenericCommandL( TInt aCommand )
 void CAppMngr2ListContainer::RefreshL( TBool aPreserveSelectedItem,
         TBool& aSelectedItemChanged, TInt aMoreRefreshesExpected )
     {
-    FLOG( "CAppMngr2ListContainer::RefreshL( %d %d %d ) begin",
-            aPreserveSelectedItem, aSelectedItemChanged, aMoreRefreshesExpected );
-
+    FLOG( "CAppMngr2ListContainer::RefreshL( %d )", aPreserveSelectedItem );
+    
     // Record the item text of the current item if selection must be preserved in
     // the current item. The item text is used to identify the item later, so that
     // it can be selected again.
@@ -196,7 +195,7 @@ void CAppMngr2ListContainer::RefreshL( TBool aPreserveSelectedItem,
     CreateItemArrayL();                         // resets the item array
     PopulateItemArrayL();                       // fills in new items
     iListBox->HandleItemAdditionL();            // re-calculates size and scrollbar
-
+    
     // If selection must be preserved, search the item in new item array
     // and select it again. Make sure to delete itemText if it was allocated.
     TBool currentItemSet = EFalse;
@@ -213,7 +212,7 @@ void CAppMngr2ListContainer::RefreshL( TBool aPreserveSelectedItem,
             }
         CleanupStack::PopAndDestroy( itemText );
         }
-
+    
     // If item is not found (it may have been deleted), then tell to the
     // caller that the selected item was changed and select another item
     // from the same row number than the previously selected item.
@@ -233,8 +232,6 @@ void CAppMngr2ListContainer::RefreshL( TBool aPreserveSelectedItem,
             iListBox->SetCurrentItemIndex( currentItemIndex );
             }
         }
-
-    FLOG( "CAppMngr2ListContainer::RefreshL() end" );
     }
 
 // ---------------------------------------------------------------------------
@@ -249,19 +246,19 @@ void CAppMngr2ListContainer::ConstructL( const TRect& aRect )
     iListBox->SetContainerWindowL( *this );
     iListBox->ConstructL( this, EAknListBoxSelectionList );
     iListBox->SetListBoxObserver( this );
-
+    
     // Dont display default "(no data)" empty text
     iListBox->View()->SetListEmptyTextL( KNullDesC );
 
     LoadIconsL();
     CreateItemArrayL();
     PopulateItemArrayL();
-
+    
     iListBox->CreateScrollBarFrameL();
     iListBox->ScrollBarFrame()->SetScrollBarVisibilityL(
             CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto );
     iListBox->SetRect( aRect.Size() );
-
+    
     // Enable marquee effect
     iListBox->ItemDrawer()->ColumnData()->EnableMarqueeL( ETrue );
     }
@@ -314,10 +311,10 @@ void CAppMngr2ListContainer::CreateItemArrayL()
 void CAppMngr2ListContainer::PopulateItemArrayL()
     {
     FLOG( "CAppMngr2ListContainer::PopulateItemArrayL()" );
-
+    
     CArrayPtr<CGulIcon>* iconArray = iListBox->ItemDrawer()->ColumnData()->IconArray();
     DeleteItemSpecificIcons( *iconArray );
-
+    
     TInt count = ItemCount();
     for( TInt index = 0; index < count; index++ )
         {
@@ -332,10 +329,10 @@ void CAppMngr2ListContainer::PopulateItemArrayL()
         TInt iconIndexMax;
         Model().GetIconIndexesL( appInfo.Runtime().RuntimeUid(),
                 iconIndexBase, iconIndexMax );
-
+        
         // Get list icon index from plugin
         TInt iconIndex = appInfo.IconIndex();
-
+        
         // Convert index into the range of 0 .. (icons - 1)
         if( iconIndex == EAppMngr2UseSpecificIcon )
             {
@@ -369,7 +366,7 @@ void CAppMngr2ListContainer::PopulateItemArrayL()
                 iconIndex = EAppMngr2IconIndex_QgnPropUnknown;
                 }
             }
-        // Sanity check - index must be in range, otherwise list panics
+        // Sanity check - index must be in range, otherwise list panics 
         if( iconIndex < 0 || iconIndex >= iconArray->Count() )
             {
             iconIndex = EAppMngr2IconIndex_QgnPropUnknown;
@@ -377,7 +374,7 @@ void CAppMngr2ListContainer::PopulateItemArrayL()
 
         // Get indicator icon index from plugin
         TInt indIconIndex = appInfo.IndicatorIconIndex();
-
+        
         // Convert indicator icon index into the range of 0 .. (icons-1) or
         // leave special value EAppMngr2NoIndicatorIcon in it
         if( indIconIndex == EAppMngr2UseSpecificIcon )

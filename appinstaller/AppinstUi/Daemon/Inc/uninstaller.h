@@ -137,6 +137,12 @@ class CSisPkgUninstaller : public CActive
          * @since 3.2 
          */       
         void ExitUninstaller();
+        
+        /**
+          * Calculate precent value for universal indicator.
+          * This precent value show how many packages has been uninstalled.
+          */              
+        void CalcPercentValue();
                                              
     private:
                 
@@ -163,7 +169,9 @@ class CSisPkgUninstaller : public CActive
         // Uninstaller dialog.        
         CDialogWrapper* iDialogs;
         // Descriptor for mime type.
-        HBufC8* iMime;                 
+        HBufC* iMime;  
+        // Percent value for universal indicator.
+        TReal iPercentValue;
     };      
 
 } //namespace Swi

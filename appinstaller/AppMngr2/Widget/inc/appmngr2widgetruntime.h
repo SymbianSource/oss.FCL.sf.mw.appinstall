@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -20,7 +20,7 @@
 #define C_APPMNGR2WIDGETRUNTIME_H
 
 #include <appmngr2runtime.h>            // CAppMngr2Runtime
-#include <widgetregistryclient.h>       // RWidgetRegistryClientSession
+#include <WidgetRegistryClient.h>       // RWidgetRegistryClientSession 
 
 class CAppMngr2PackageInfo;
 class CAknIconArray;
@@ -28,8 +28,7 @@ class CAknIconArray;
 const TInt KAppMngr2WidgetUidValue = 0x20016BFA;
 const TUid KAppMngr2WidgetUid = { KAppMngr2WidgetUidValue };
 
-_LIT8( KDataTypeWgzWidget, "application/x-nokia-widget" );
-_LIT8( KDataTypeWgtWidget, "application/widget" );
+_LIT8( KDataTypeWidget, "application/x-nokia-widget" );
 
 
 class CAppMngr2WidgetRuntime : public CAppMngr2Runtime
@@ -38,7 +37,7 @@ public:     // constructor and destructor
     static CAppMngr2WidgetRuntime* NewL( MAppMngr2RuntimeObserver& aObserver );
     ~CAppMngr2WidgetRuntime();
 
-public:     // from CAppMngr2Runtime
+public:     // new CAppMngr2Runtime
     void LoadIconsL( CAknIconArray& aIconArray );
     void GetSupportedDataTypesL( CDataTypeArray& aDataTypeArray );
     void GetInstallationFilesL( RPointerArray<CAppMngr2PackageInfo>& aPackageInfos,
@@ -48,9 +47,6 @@ public:     // from CAppMngr2Runtime
     void GetInstalledAppsL( RPointerArray<CAppMngr2AppInfo>& aApps,
                 RFs& aFsSession, TRequestStatus& aStatus );
     void CancelGetInstalledApps();
-
-public:     // new functions
-    HBufC8* GetMimeTypeL( const TUid& aWidgetUid );
 
 private:    // new functions
     CAppMngr2WidgetRuntime( MAppMngr2RuntimeObserver& aObserver );

@@ -18,9 +18,12 @@
 
 #include "catalogsaccesspointmanagerimpl.h"
 
+#ifdef _0
 #include <ApUtils.h>
 #include <ApSelect.h> 
 #include <ApDataHandler.h>
+#endif
+
 #include <badesca.h>
 
 #include "catalogsaccesspoint.h"
@@ -61,6 +64,7 @@ _LIT(KDownloadAccessPoint, "downloadingAccessPoint");
 _LIT(KBrowseAccessPoint, "browsingAccessPoint");
 _LIT(KPurchaseAccessPoint, "purchasingAccessPoint");
 
+#ifdef _0
 // literals used for access point settings in client configuration protocol (in alphabetical order)
 _LIT(KApName, "name");
 
@@ -152,7 +156,7 @@ _LIT(KApWlanIpNetMask, "EApWlanIpNetMask");
 
 _LIT(KWapWspOptionConnectionless, "EWapWspOptionConnectionless");
 _LIT(KWapWspOptionConnectionOriented, "EWapWspOptionConnectionOriented");
-
+#endif
 
 CCatalogsAccessPointManager::CCatalogsAccessPointManager(
     CNcdGeneralManager& aGeneralManager ) :
@@ -565,6 +569,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
     TUint32& aAccessPointId) 
     {
     DLTRACEIN((_L("Namespace: %S, CatalogId: %S, Action: %d, clientUid: %d"), &aNameSpace, &aCatalogId, aAction, aClientUid.iUid));
+    
     CCatalogsAccessPoint* accessPoint( NULL );
     CCatalogsClientAccessPointData* apData( NULL );
     TInt err = GetAccessPoint( accessPoint, apData );
@@ -593,7 +598,7 @@ TInt CCatalogsAccessPointManager::AccessPointIdL(
     DLTRACEIN((_L("Namespace: %S, NodeId: %S, Action: %d, clientUid: %d"),
                &aNodeIdentifier.NodeNameSpace(), &aNodeIdentifier.NodeId(), aAction,
                aClientUid.iUid));
-
+    
     CCatalogsAccessPoint* accessPoint( NULL );
     CCatalogsClientAccessPointData* apData( NULL );
     TInt err = GetAccessPoint( accessPoint, apData );
@@ -711,14 +716,17 @@ CCatalogsAccessPoint* CCatalogsAccessPointManager::FindAccessPointL(
     }
             
     
-TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* aAccessPoint )
+TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* /* aAccessPoint */ )
     {
     DLTRACEIN((""));
+    
 #ifdef __WINS__
     // Comms database is not accessible in emulator.
     return EFalse;
 #endif
-    CCommsDatabase *commdb = CCommsDatabase::NewL( /*EDatabaseTypeIAP*/ );
+
+#ifdef _0
+    CCommsDatabase *commdb = CCommsDatabase::NewL( /* EDatabaseTypeIAP */);
     CleanupStack::PushL( commdb );
     CApSelect*  select;
     select = CApSelect::NewLC(
@@ -765,18 +773,22 @@ TBool CCatalogsAccessPointManager::ValidateAccessPointL( CCatalogsAccessPoint* a
             
     // Someone has altered the access point settings.
     CleanupStack::PopAndDestroy(4);
+#endif
+    
     return EFalse;
     }
 
-TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSettings& aSettings, TUint32& aId )
+TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSettings& /* aSettings */, TUint32& /* aId */)
     {
     DLTRACEIN(_L("Checking comms DB for matching access point"));
+    
 #ifdef __WINS__
     // Comms database is not accessible in emulator.
     return EFalse;
 #endif
     
-    CCommsDatabase *commdb = CCommsDatabase::NewL( /*EDatabaseTypeIAP*/ );
+#ifdef _0
+    CCommsDatabase *commdb = CCommsDatabase::NewL( /* EDatabaseTypeIAP */ );
     CleanupStack::PushL( commdb );
     CApSelect*  select;
     select = CApSelect::NewLC(
@@ -816,17 +828,22 @@ TBool CCatalogsAccessPointManager::MatchInCommsDbL( const CCatalogsAccessPointSe
         
     CleanupStack::PopAndDestroy( 4, commdb ); // util, handler, select, commdb
     DLTRACEOUT(("Matching AP not found"));
+#endif
+    
     return EFalse;
     }
 
-void CCatalogsAccessPointManager::CreateApToCommsDBL( const CCatalogsAccessPoint& aSettings, TUint32& aId )
+void CCatalogsAccessPointManager::CreateApToCommsDBL( const CCatalogsAccessPoint& /* aSettings */, TUint32& /* aId */ )
     {
     DLTRACEIN(_L("Creating AP to comms DB"));
+    
 #ifdef __WINS__
     // Comms database is not accessible in emulator.
     return;
 #endif
-    CCommsDatabase *commdb = CCommsDatabase::NewL( /*EDatabaseTypeIAP*/ );
+
+#ifdef _0
+    CCommsDatabase *commdb = CCommsDatabase::NewL( /*EDatabaseTypeIAP */);
     CleanupStack::PushL( commdb );
     
     CApDataHandler*     handler = CApDataHandler::NewLC( *commdb );        
@@ -896,9 +913,12 @@ void CCatalogsAccessPointManager::CreateApToCommsDBL( const CCatalogsAccessPoint
     CApUtils* util = CApUtils::NewLC( *commdb );
     aId = util->IapIdFromWapIdL( wapId );
     CleanupStack::PopAndDestroy( 4, commdb ); // commDb, handler, newAp, util
+    
+#endif
     DLTRACEOUT(("Access point created to comms DB"));
     }
 
+#ifdef _0
 HBufC16* CCatalogsAccessPointManager::ReadText16L( CApAccessPointItem* aItem, const TApMember& aApMember )
     {
     TInt length = aItem->ReadTextLengthL( aApMember );
@@ -926,7 +946,7 @@ HBufC8* CCatalogsAccessPointManager::ReadText8L( CApAccessPointItem* aItem, cons
     CleanupStack::Pop(); // buffer
     return buffer;
     }
-
+#endif
 
 void CCatalogsAccessPointManager::RemoveAccessPointsFromCommsDbL(
     TBool aAddShutdownOperation )
@@ -980,9 +1000,10 @@ void CCatalogsAccessPointManager::RemoveAccessPointsL()
     iClientAccessPointData = NULL;
     }
 
-void CCatalogsAccessPointManager::RemoveApFromCommsDatabaseL( const TUint32& aId )
+void CCatalogsAccessPointManager::RemoveApFromCommsDatabaseL( const TUint32& /* aId */ )
     {
-    DLTRACEIN(("aId: %u", aId ));
+    
+#ifdef _0
     CCommsDatabase *commdb = CCommsDatabase::NewL( EDatabaseTypeIAP );
     CleanupStack::PushL( commdb );
     CApDataHandler* dataHandler = CApDataHandler::NewLC( *commdb );
@@ -991,6 +1012,7 @@ void CCatalogsAccessPointManager::RemoveApFromCommsDatabaseL( const TUint32& aId
     dataHandler->RemoveAPL( wapId );
     
     CleanupStack::PopAndDestroy( 3, commdb ); // util, dataHandler, commdb
+#endif
     }
 
     
@@ -1056,7 +1078,7 @@ void CCatalogsAccessPointManager::SaveToStorageL()
     item->SaveL();    
     }
 
-    
+#ifdef _0   
 TBool CCatalogsAccessPointManager::MatchingSettingsL(
     const CCatalogsAccessPointSettings& aSettings, CApAccessPointItem& aItem) 
     {
@@ -1188,11 +1210,13 @@ TBool CCatalogsAccessPointManager::MatchingSettingsL(
     DLTRACEOUT(("Matching settings"));
     return ETrue;
     }
-    
+#endif   
     
 void CCatalogsAccessPointManager::SetApDetailL(
-    CCatalogsAccessPoint& aAp, const TDesC& aKey, const TDesC& aValue ) 
+    CCatalogsAccessPoint& /* aAp */, const TDesC& /* aKey */, const TDesC& /* aValue */ ) 
     {
+    
+#ifdef _0
     DLTRACEIN((""));
     TBool value = EFalse;
     
@@ -1583,6 +1607,7 @@ void CCatalogsAccessPointManager::SetApDetailL(
         {
         DLWARNING(( _L("Unknown access point detail: %S"), &aKey));
         }
+#endif
     }
     
 

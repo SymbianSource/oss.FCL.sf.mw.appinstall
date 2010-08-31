@@ -39,7 +39,7 @@ CNcdSilentInstallOperationProxy* CNcdSilentInstallOperationProxy::NewLC(
     CNcdNodeManagerProxy* aNodeManager,
     MNcdInstallOperationObserver* aObserver,
     MNcdInstallationService& aInstallationService,
-    const SwiUI::TInstallOptions& aInstallOptions )
+    Usif::COpaqueNamedParams* aInstallOptions )
     {
     CNcdSilentInstallOperationProxy* self =
         new( ELeave ) CNcdSilentInstallOperationProxy( aInstallationService, 
@@ -59,14 +59,13 @@ CNcdSilentInstallOperationProxy* CNcdSilentInstallOperationProxy::NewLC(
 //
 CNcdSilentInstallOperationProxy::CNcdSilentInstallOperationProxy( 
     MNcdInstallationService& aInstallationService,
-    const SwiUI::TInstallOptions& aInstallOptions )
+    /*const*/ Usif::COpaqueNamedParams* aInstallOptions )
 : CNcdInstallOperationProxy( aInstallationService )
     {
     // Copy all the install options into the buffer that will be used
     // when silent installation is delegated to the installer.
-    iInstallOptionsPackage = aInstallOptions;
+    iInstallOptions = aInstallOptions;
     }
-
 
 // ---------------------------------------------------------------------------
 // Destructor
@@ -75,6 +74,9 @@ CNcdSilentInstallOperationProxy::CNcdSilentInstallOperationProxy(
 CNcdSilentInstallOperationProxy::~CNcdSilentInstallOperationProxy()
     {
     DLTRACEIN(( "" ));
+    
+    delete iInstallOptions;
+    
     // Cancel must be called here because base class will only call its own
     // DoCancel()
     Cancel();
@@ -190,7 +192,7 @@ void CNcdSilentInstallOperationProxy::UseInstallServiceL( const CNcdFileInfo& aF
                 iFileHandle, 
                 aFile.MimeType(), 
                 aFile.Purpose(), 
-                SilentInstallOptionsPackage() );
+                SilentInstallOptions() ); 
             break;
             }
         
@@ -201,7 +203,7 @@ void CNcdSilentInstallOperationProxy::UseInstallServiceL( const CNcdFileInfo& aF
                 iFileHandle, 
                 aFile.MimeType(), 
                 aFile.Data(),
-                SilentInstallOptionsPackage() );             
+                SilentInstallOptions() );             
             break;
             }            
 
@@ -212,7 +214,7 @@ void CNcdSilentInstallOperationProxy::UseInstallServiceL( const CNcdFileInfo& aF
             {
             Installer().SilentInstallWidgetL(
                     iFileHandle, 
-                    SilentInstallOptionsPackage() );
+                    SilentInstallOptions() );
    
             break;
             }
@@ -227,9 +229,8 @@ void CNcdSilentInstallOperationProxy::UseInstallServiceL( const CNcdFileInfo& aF
     DLTRACEOUT((""));   
     }
 
-
-const SwiUI::TInstallOptionsPckg& CNcdSilentInstallOperationProxy::SilentInstallOptionsPackage() const
+const Usif::COpaqueNamedParams* CNcdSilentInstallOperationProxy::SilentInstallOptions() const
     {
     DLTRACEIN((""));
-    return iInstallOptionsPackage;
+    return iInstallOptions;
     }

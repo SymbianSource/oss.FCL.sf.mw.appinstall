@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2003-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -28,8 +28,6 @@
 #include <appmngr2debugutils.h>         // FLOG macros
 #include <x509cert.h>                   // CX509Certificate
 #include <swi/sisregistrypackage.h>     // CSisRegistryPackage
-#include <DRMHelper.h>
-#include <drmutility.h>
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -62,11 +60,6 @@ CAppMngr2SisxAppInfo::~CAppMngr2SisxAppInfo()
     delete iDetails;
     delete iVendor;
     iCertificates.ResetAndDestroy();
-    
-    if ( iRegSessionOpen )
-        {
-        iSisRegSession.Close();
-        }
     }
 
 // ---------------------------------------------------------------------------
@@ -242,14 +235,13 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
     {
     FLOG( "CAppMngr2SisxAppInfo::ConstructL()" );
     CAppMngr2AppInfo::ConstructL();     // base construct
-
+    
     iAppUid = aEntry.UidL();
     FLOG( "CAppMngr2SisxAppInfo::ConstructL, iAppUid = 0x%08x", iAppUid.iUid );
     iName = aEntry.PackageNameL();
     FLOG( "CAppMngr2SisxAppInfo::ConstructL, iName = %S", iName );
     iDetails = SizeStringWithUnitsL( aEntry.SizeL() );
-    FLOG( "CAppMngr2SisxAppInfo::ConstructL, aEntry.SizeL() = %Ld, iDetails = %S",
-            aEntry.SizeL(), iDetails );
+    FLOG( "CAppMngr2SisxAppInfo::ConstructL, iDetails = %S", iDetails );
 
     TUint drivesMask = aEntry.InstalledDrivesL();
     if( drivesMask )
@@ -271,7 +263,7 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
 
     iVersion = aEntry.VersionL();
     iVendor = aEntry.LocalizedVendorNameL();
-
+    
     iIsAugmentation = aEntry.IsAugmentationL();
     if( iIsAugmentation )
         {
@@ -280,17 +272,37 @@ void CAppMngr2SisxAppInfo::ConstructL( Swi::RSisRegistryEntry& aEntry )
         delete pkg;
         }
 
-    Swi::TSisPackageTrust trustLevel = aEntry.TrustL();
+    Swi::TSisPackageTrust trustLevel = aEntry.TrustL();  
     if( trustLevel >= Swi::ESisPackageCertificateChainValidatedToTrustAnchor )
         {
         iIsTrusted = ETrue;
-        }   
-    
-    iRegSessionOpen = EFalse;    
-    // iProtectedFile is allocated only in ShowDetails function.
-    iProtectedFile = NULL;                                                                         
-         
-    
+        }
+
+    // If installed SIS package is DRM protected, find the protected file and
+    // save it's full name in iProtectedFile member variable for later use.
+    // Full name of the protected file is needed in ShowDetailsL() function
+    // to show the licence information.
+    RPointerArray<HBufC> files;
+    TRAPD( err, aEntry.FilesL( files ) );
+    if( err == KErrNone )
+        {
+        CleanupResetAndDestroyPushL( files );
+        for( TInt fileIndex = 0; fileIndex < files.Count() && !iIsDRMProtected; fileIndex++ )
+            {
+            HBufC* fileName = files[ fileIndex ];
+            iIsDRMProtected = TAppMngr2DRMUtils::IsDRMProtected( *fileName );
+            if( iIsDRMProtected )
+                {
+                FLOG( "CAppMngr2SisxAppInfo::ConstructL, protected file %S", fileName );
+                iProtectedFile = fileName;  // takes ownership
+                files.Remove( fileIndex );
+                iIsRightsObjectMissingOrExpired = 
+                    TAppMngr2DRMUtils::IsDRMRightsObjectExpiredOrMissingL( *fileName ); 
+                }
+            }
+        CleanupStack::PopAndDestroy( &files );
+        }
+
     FLOG( "CAppMngr2SisxAppInfo::ConstructL, loc=%d, aug=%d, trust=%d, drm=%d, RO=%d",
             iLocation, iIsAugmentation, iIsTrusted, iIsDRMProtected,
             iIsRightsObjectMissingOrExpired );
@@ -304,43 +316,21 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
     {
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL()" );
     TRAP_IGNORE( ReadCertificatesL() );
-
-    CAppMngr2SisxInfoIterator* iterator = 
-            CAppMngr2SisxInfoIterator::NewL( *this,
-                                             EAppMngr2StatusInstalled );
+    
+    CAppMngr2SisxInfoIterator* iterator = CAppMngr2SisxInfoIterator::NewL( *this,
+            EAppMngr2StatusInstalled );
     CleanupStack::PushL( iterator );
     
-    // Let's check if installed SIS package is DRM protected.
-    // This check has been in constructor but it takes long time to check all 
-    // files for all installed packages so overall delay in UI is too long. 
-    // So we have move the DRM check into here.   
-    CheckDRMContentL();
-    
-
+    SwiUI::CommonUI::CCUIDetailsDialog* details = SwiUI::CommonUI::CCUIDetailsDialog::NewL();
     FLOG( "CAppMngr2SisxAppInfo::ShowDetailsL, isDRM %d, noRightsObj %d, CertCount %d",
             iIsDRMProtected, iIsRightsObjectMissingOrExpired, iCertificates.Count() );
-
-    RFile fileHandle;
-    TInt fileOpenError = KErrNone;
+    
     if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired )
         {
-        if ( iProtectedFile )
-            {
-            FLOG( "ShowDetailsL, iProtecteFile %S", iProtectedFile );
-            fileOpenError = fileHandle.Open( iFs, 
-                                            *iProtectedFile, 
-                                            EFileShareReadersOnly | EFileRead );
-            FLOG( "ShowDetailsL, fileOpenError %d", fileOpenError );
-            if( !fileOpenError )
-                {
-                CleanupClosePushL( fileHandle );
-                }
-            }
-        }
-
-    SwiUI::CommonUI::CCUIDetailsDialog* details = SwiUI::CommonUI::CCUIDetailsDialog::NewL();
-    if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired && !fileOpenError )
-        {
+        RFile fileHandle;
+        TInt err = fileHandle.Open( iFs, *iProtectedFile, EFileShareReadersOnly | EFileRead );
+        CleanupClosePushL( fileHandle );
+        
         if( iCertificates.Count() )
             {
             details->ExecuteLD( *iterator, iCertificates, fileHandle );
@@ -349,6 +339,8 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             {
             details->ExecuteLD( *iterator, fileHandle );
             }
+
+        CleanupStack::PopAndDestroy( &fileHandle );
         }
     else
         {
@@ -361,11 +353,7 @@ void CAppMngr2SisxAppInfo::ShowDetailsL()
             details->ExecuteLD( *iterator );
             }
         }
-
-    if( iIsDRMProtected && !iIsRightsObjectMissingOrExpired && !fileOpenError )
-        {
-        CleanupStack::PopAndDestroy( &fileHandle );
-        }
+    
     CleanupStack::PopAndDestroy( iterator );
     }
 
@@ -378,7 +366,7 @@ void CAppMngr2SisxAppInfo::ReadCertificatesL()
     if( !iCertsRead )
         {
         FLOG_PERF_STATIC_BEGIN( SisxAppInfo_ReadCerts );
-
+        
         Swi::RSisRegistrySession regSession;
         CleanupClosePushL( regSession );
         User::LeaveIfError( regSession.Connect() );
@@ -412,7 +400,7 @@ void CAppMngr2SisxAppInfo::ReadCertificatesL()
         CleanupStack::PopAndDestroy( &entry );
         CleanupStack::PopAndDestroy( &regSession );
         iCertsRead = ETrue;
-
+        
         FLOG_PERF_STATIC_END( SisxAppInfo_ReadCerts )
         }
     }
@@ -436,14 +424,14 @@ void CAppMngr2SisxAppInfo::HandleUninstallL( TRequestStatus& aStatus )
         {
         User::Leave( KErrInUse );
         }
-
+    
     if( iIsAugmentation )
         {
         FLOG( "CAppMngr2SisxAppInfo::HandleUninstallL, is augmentation" );
         SwiUI::TOpUninstallIndexParam params;
         params.iUid = iAppUid;
         params.iIndex = iAugmentationIndex;
-
+        
         SwiUI::TOpUninstallIndexParamPckg pckg( params );
         if( iSWInstLauncherCustomUninstallParams )
             {
@@ -464,143 +452,4 @@ void CAppMngr2SisxAppInfo::HandleUninstallL( TRequestStatus& aStatus )
         iSWInstLauncher->Uninstall( aStatus, iAppUid, SwiUI::KSisxMimeType() );
         }
     }
-
-// ---------------------------------------------------------------------------
-// CAppMngr2SisxAppInfo::CheckDRMContentL()
-// ---------------------------------------------------------------------------
-//
-void CAppMngr2SisxAppInfo::CheckDRMContentL()
-    {
-    FLOG( "CAppMngr2SisxAppInfo::CheckDRMContentL");
-    TInt err = KErrNone;
-        
-    if ( !iRegSessionOpen )
-        {
-        err = iSisRegSession.Connect(); 
-        FLOG( "CheckDRMContentL, iSisRegSession.Connect err %d", err );
-        if ( err )
-            {
-            iRegSessionOpen = EFalse;
-            }
-        else
-            {
-            iRegSessionOpen = ETrue;
-            }        
-        }
-    
-    FLOG( "CheckDRMContentL, iRegSessionOpen = %d", err );
-    
-    if ( iRegSessionOpen )
-        {               
-        Swi::RSisRegistryEntry entry;                                     
-        err = entry.Open( iSisRegSession, iAppUid );
-        FLOG( "CheckDRMContentL, entry.Open err = %d", err );
-        
-        if ( !err )
-            {
-            CleanupClosePushL( entry );
-            
-            RPointerArray<HBufC> files;         
-            TRAP( err, entry.FilesL( files ) );
-            FLOG( "CheckDRMContentL, entry.FilesL err = %d", err );
-                                     
-            if( !err )
-                {
-                CleanupResetAndDestroyPushL( files );
-                
-                // Use DRMUtility for DRM check. Utility class is much faster
-                // then IsDRMProtected function.        
-                DRM::CDrmUtility* utility = DRM::CDrmUtility::NewLC();
-                                             
-                for ( TInt index = 0; index < files.Count(); index++ )
-                    {   
-                    RFile fileHandle;
-                    TInt error = fileHandle.Open( iFs, 
-                                                  *files[ index ], 
-                                                  EFileRead );
-                    FLOG( "CheckDRMContentL, File open error %d", error );
-                               
-                    if ( error == KErrNone )
-                        {                
-                        CleanupClosePushL( fileHandle );                
-                        err = KErrNone;
-                        // We need to tarp this function since it may leave with
-                        // some files which do not have enough data. If ConstrucL 
-                        // leaves package is not shown in UI.
-                        TRAP( err, iIsDRMProtected = 
-                                utility->IsProtectedL( fileHandle ) );
-                   
-                        if ( err )
-                            {
-                            // If we have leave let's handle this as not DRM 
-                            // procteded.
-                            iIsDRMProtected = EFalse;
-                            FLOG("CheckDRMContentL, IsProtectedL err %d",err);
-                            }
-                        
-                        CleanupStack::PopAndDestroy( &fileHandle ); 
-                        
-                        if ( iIsDRMProtected )
-                            { 
-                            FLOG("CheckDRMContentL: File is DRM protected");
-                        
-                            HBufC* fileName = files[ index ];                              
-                            // Let's alloc this only when DRM package is found.
-                            // KMaxFileName (256) sould be enoug for all 
-                            // file names.
-                            if ( iProtectedFile == NULL )
-                                {
-                                iProtectedFile = HBufC::NewL( KMaxFileName );    
-                                }
-                            // Let's copy filename to member because we dont know
-                            // for sure that pointer to sis registry entry is valid
-                            // after entry delete.
-                            if ( iProtectedFile )    
-                                {
-                                TPtr ptr = iProtectedFile->Des();
-                                ptr.Copy( *fileName );                                
-                                }  
-                            FLOG( "CheckDRMContentL: iProtecteFile %S", 
-                                    iProtectedFile );
-                            
-                            files.Remove( index );                    
-                            
-                            CDRMHelper* helper = CDRMHelper::NewLC();                    
-                            CDRMHelperRightsConstraints* playconst = NULL;
-                            CDRMHelperRightsConstraints* dispconst = NULL;
-                            CDRMHelperRightsConstraints* execconst = NULL;
-                            CDRMHelperRightsConstraints* printconst = NULL;            
-                            TBool sendingallowed = EFalse;
-                                            
-                            FLOG( "CheckDRMContentL: GetRightsDetailsL" );
-                            error = KErrNone;
-                            TRAP( error, helper->GetRightsDetailsL( 
-                                               *fileName, 
-                                               ContentAccess::EView, 
-                                               iIsRightsObjectMissingOrExpired, 
-                                               sendingallowed, 
-                                               playconst, 
-                                               dispconst, 
-                                               execconst, 
-                                               printconst ) );                     
-                            FLOG( "GetRightsDetailsL TRAP err = %d", error );
-                            FLOG( "iIsRightsObjectMissingOrExpired = %d", 
-                                    iIsRightsObjectMissingOrExpired );                            
-                            delete playconst;
-                            delete dispconst;
-                            delete execconst;
-                            delete printconst;                            
-                            CleanupStack::PopAndDestroy( helper );                                                                                      
-                            }
-                        }
-                    }                
-                CleanupStack::PopAndDestroy( utility );
-                CleanupStack::PopAndDestroy( &files );
-                }
-            CleanupStack::PopAndDestroy( &entry );
-            }                
-        }           
-    }
-
-// EOF
 

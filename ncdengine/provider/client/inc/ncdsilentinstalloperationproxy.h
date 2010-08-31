@@ -22,7 +22,7 @@
 #include <e32cmn.h>
 
 // For silent install options and options package
-#include <SWInstDefs.h>
+#include <usif/sif/sifcommon.h>
 
 #include "ncdinstalloperationproxy.h"
 
@@ -51,7 +51,7 @@ public:
                         CNcdNodeManagerProxy* aNodeManager,
                         MNcdInstallOperationObserver* aObserver,
                         MNcdInstallationService& aInstallationService,
-                        const SwiUI::TInstallOptions& aInstallOptions );
+                        Usif::COpaqueNamedParams* aInstallOptions );
 
 
 protected: // CActive
@@ -70,7 +70,7 @@ protected:
      * @see NewLC
      */
     CNcdSilentInstallOperationProxy( MNcdInstallationService& aInstallationService,
-                                     const SwiUI::TInstallOptions& aInstallOptions );
+                                     Usif::COpaqueNamedParams* aInstallOptions );
     
     virtual ~CNcdSilentInstallOperationProxy();
 
@@ -99,10 +99,10 @@ protected:
     virtual void UseInstallServiceL( const CNcdFileInfo& aFile );
     
     /**
-     * @return const SwiUI::TInstallOptionsPckg& Contains the install options 
+     * @return const Usif::COpaqueNamedParams* Contains the install options 
      * for silent install in a data buffer.
      */
-    const SwiUI::TInstallOptionsPckg& SilentInstallOptionsPackage() const;
+    const Usif::COpaqueNamedParams* SilentInstallOptions() const;
     
     
 private: // new methods
@@ -114,8 +114,9 @@ private: // new methods
 
 private: // data
 
+    
     // This will contain the install options for silent install in a data buffer.
-    SwiUI::TInstallOptionsPckg iInstallOptionsPackage;
+    Usif::COpaqueNamedParams* iInstallOptions;
 
     };
 

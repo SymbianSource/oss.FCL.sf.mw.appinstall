@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -18,7 +18,8 @@
 PRINT Run all SWIS capability tests
 
 LOAD_SUITE aprcaptestframework
-
+LOAD_SUITE tuiscriptadaptors
+LOAD_SUITE tscr // To delete the SCR DB
 
 //! @SYMTestCaseID 		API-SEC-SWI-CapTests-I-0001
 //! @SYMTestCaseDesc 		Runs the whole suite of test cases for SWI interfaces. Both negtive and positive tests are included
@@ -28,13 +29,21 @@ LOAD_SUITE aprcaptestframework
 //! @SYMTestExpectedResults 	KErrPermissionDenied received on calls which should fail
 //! @SYMDevelopedForRelease 	Yankee
 
-
 START_TESTCASE API-SEC-SWI-CapTests-I-0001
 
 RUN_UTILS MkDir c:\tswi\
 RUN_UTILS MkDir c:\tswi\swicaptests
 RUN_UTILS MkDir c:\tswi\swicaptests\data
 RUN_UTILS CopyFile z:\tswi\swicaptests\data\testdoc.txt c:\tswi\swicaptests\data\testdoc.txt
+
+// Delete the existing DB and install a test pacakage (so that ComponentId of 1 is valid)
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\swicaptests\scripts\swicaptests.ini simple
+
 RUN_TEST_STEP 100 aprcaptestframework RunThoroughCapabilityChecks z:\tswi\swicaptests\scripts\swicaptests.ini swicaptests
+
+// Uninstall the test pacakage and delete the DB so that it does not interfere with remaining tests
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\swicaptests\scripts\swicaptests.ini u_simple
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
 
 END_TESTCASE API-SEC-SWI-CapTests-I-0001

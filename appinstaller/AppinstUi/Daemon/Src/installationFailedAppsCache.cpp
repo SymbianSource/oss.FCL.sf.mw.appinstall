@@ -23,14 +23,13 @@
 #include "sisregistrysession.h"
 #include "sisregistryentry.h"
 #include "sisregistrypackage.h"
+#include "installationFailedAppsCache.h"
+#include "SWInstDebug.h"
 
 using namespace Swi;
 
-#include "installationFailedAppsCache.h"
-
 _LIT(KInstFaildeApps, "c:\\private\\10202DCE\\instFailedAppsCache.dat");
 
-#include "SWInstDebug.h"
 
 // ----------------------------
 // Borrowed from cleanuputils.h:-
@@ -75,6 +74,10 @@ inline void CleanupResetAndDestroyPushL(T& aRef)
 // End of code from swi/inc/cleanuputils.h
 
 
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//    
 CInstallationFailedAppsCache *CInstallationFailedAppsCache::NewL()
 	{
 	FLOG( _L("Daemon: CInstallationFailedAppsCache::NewL") ); 
@@ -86,26 +89,37 @@ CInstallationFailedAppsCache *CInstallationFailedAppsCache::NewL()
 	return self;
 	}
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 CInstallationFailedAppsCache::~CInstallationFailedAppsCache()
 	{
 	iUidsArray.Reset();
 	}
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 void CInstallationFailedAppsCache::AddPackageUID( TUid aUid )
 	{
-	FLOG( _L("Daemon: CInstallationFailedAppsCache::AddPackageUID") );
+    FLOG( _L("Daemon: CInstallationFailedAppsCache::AddPackageUID") );
+    FLOG_1( _L("Daemon: AddPackageUID: Add UID = 0x%x"), aUid.iUid );
 	
 	(void)iUidsArray.InsertInSignedKeyOrder( aUid );
 	// New UID added to array. Let's write cache to disk.
 	iNewUID = ETrue;		
 	}
 
-
-TBool CInstallationFailedAppsCache::HasPreviousInstallationFailed( TUid aUid )
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
+TBool CInstallationFailedAppsCache::HasPreviousInstallationFailed( 
+        TUid aUid )
 	{
-	FLOG( _L("Daemon: CInstallationFailedAppsCache::HasPreviousInstallationFailed") );
+	FLOG( _L("Daemon: FailedAppsCache::HasPreviousInstallationFailed") );
 	
 	if ( iUidsArray.FindInSignedKeyOrder( aUid ) == KErrNotFound )
 		{
@@ -117,17 +131,25 @@ TBool CInstallationFailedAppsCache::HasPreviousInstallationFailed( TUid aUid )
 	return ETrue;
 	}
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 CInstallationFailedAppsCache::CInstallationFailedAppsCache()
 	{
 	}
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 void CInstallationFailedAppsCache::ConstructL()
 	{
 	User::LeaveIfError( iFs.Connect() );
 	TInt drive = 0;
-    iFs.CharToDrive( TParsePtrC( PathInfo::PhoneMemoryRootPath() ).Drive()[0], drive );
+    iFs.CharToDrive( TParsePtrC( 
+            PathInfo::PhoneMemoryRootPath() ).Drive()[0], drive );
+    
     iFs.CreatePrivatePath( drive );
     
     iNewUID = EFalse;
@@ -136,7 +158,10 @@ void CInstallationFailedAppsCache::ConstructL()
 	TRAP_IGNORE( InitFromCacheFileL() );
 	}
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 void CInstallationFailedAppsCache::InitFromCacheFileL()
 	{
 	FLOG( _L("Daemon: CInstallationFailedAppsCache::InitFromCacheFileL") );	
@@ -144,7 +169,9 @@ void CInstallationFailedAppsCache::InitFromCacheFileL()
 	// Read in existing cache file.
 	RFile cacheFile;
 	
-	TInt err = cacheFile.Open( iFs, KInstFaildeApps, EFileStream|EFileRead );
+	TInt err = cacheFile.Open( iFs, 
+	                           KInstFaildeApps, 
+	                           EFileStream|EFileRead );
 	
 	if ( err != KErrNone )
 		{
@@ -174,7 +201,10 @@ void CInstallationFailedAppsCache::InitFromCacheFileL()
 	CleanupStack::PopAndDestroy(&cacheFile);
     }
 
-
+// -----------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------
+//   
 void CInstallationFailedAppsCache::FlushToDiskL()
 	{
     FLOG( _L("Daemon: CInstallationFailedAppsCache::FlushToDiskL") );		
@@ -184,13 +214,17 @@ void CInstallationFailedAppsCache::FlushToDiskL()
     	{
     	FLOG( _L("Daemon: Write cache to disk") );
     	RFile cacheFile;
-    	TInt err = cacheFile.Open( iFs, KInstFaildeApps, EFileStream|EFileWrite );
+    	TInt err = cacheFile.Open( iFs, 
+    	                           KInstFaildeApps, 
+    	                           EFileStream|EFileWrite );
     	
     	// If cache was not found, create cache file.
     	if ( err != KErrNone )
     		{
     		FLOG( _L("Daemon: Create cache file.") );
-    	    User::LeaveIfError( cacheFile.Create( iFs, KInstFaildeApps, EFileStream|EFileWrite ) );
+    	    User::LeaveIfError( cacheFile.Create( iFs, 
+    	                                          KInstFaildeApps, 
+    	                                          EFileStream|EFileWrite ) );
     		}
     	
     	CleanupClosePushL(cacheFile);

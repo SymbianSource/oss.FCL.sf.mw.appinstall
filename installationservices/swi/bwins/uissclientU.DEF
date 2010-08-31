@@ -97,7 +97,7 @@ EXPORTS
 	?UpdateProgressBarL@RUiHandler@Swi@@QAEXABVTAppInfo@2@H@Z @ 96 NONAME ; void Swi::RUiHandler::UpdateProgressBarL(class Swi::TAppInfo const &, int)
 	?NewL@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 97 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewL(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
 	?NewLC@CDisplayText@Swi@@SAPAV12@ABVTAppInfo@2@W4TFileTextOption@2@ABVTDesC8@@@Z @ 98 NONAME ; class Swi::CDisplayText * Swi::CDisplayText::NewLC(class Swi::TAppInfo const &, enum Swi::TFileTextOption, class TDesC8 const &)
-	?UpdateProgressBarValueL@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 99 NONAME ; void Swi::CProgressBarValuePublisher::UpdateProgressBarValueL(int)
+	?UpdateProgressBarValueL@CProgressBarValuePublisher@Swi@@QAEHH@Z @ 99 NONAME ; void Swi::CProgressBarValuePublisher::UpdateProgressBarValueL(int)
 	?SetFinalProgressBarValue@CProgressBarValuePublisher@Swi@@QAEXH@Z @ 100 NONAME ; void Swi::CProgressBarValuePublisher::SetFinalProgressBarValue(int)
 	?SetProgressBarValuePublisher@RUiHandler@Swi@@QAEXPAVCProgressBarValuePublisher@2@@Z @ 101 NONAME ; void Swi::RUiHandler::SetProgressBarValuePublisher(class Swi::CProgressBarValuePublisher *)
 	?NewL@CProgressBarValuePublisher@Swi@@SAPAV12@XZ @ 102 NONAME ; class Swi::CProgressBarValuePublisher * Swi::CProgressBarValuePublisher::NewL(void)
@@ -107,4 +107,10 @@ EXPORTS
 	?ExternalizeL@CNativeComponentInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 106 NONAME ; void Swi::CNativeComponentInfo::ExternalizeL(class RWriteStream &) const
 	?InternalizeL@CNativeComponentInfo@Swi@@QAEXAAVRReadStream@@@Z @ 107 NONAME ; void Swi::CNativeComponentInfo::InternalizeL(class RReadStream &)
 	?GetComponentInfo@RUissSession@Swi@@QAEXABVTDesC8@@AAVTDes8@@AAVTRequestStatus@@@Z @ 108 NONAME ; void Swi::RUissSession::GetComponentInfo(class TDesC8 const &, class TDes8 &, class TRequestStatus &)
+	?IconFileName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 109 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::IconFileName(void) const
+	?GroupName@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 110 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::GroupName(void) const
+	?AppUid@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTUid@@XZ @ 111 NONAME ; class TUid const & Swi::CNativeComponentInfo::CNativeApplicationInfo::AppUid(void) const
+	?Name@CNativeApplicationInfo@CNativeComponentInfo@Swi@@QBEABVTDesC16@@XZ @ 112 NONAME ; class TDesC16 const & Swi::CNativeComponentInfo::CNativeApplicationInfo::Name(void) const
+	??1CNativeApplicationInfo@CNativeComponentInfo@Swi@@UAE@XZ @ 113 NONAME ; Swi::CNativeComponentInfo::CNativeApplicationInfo::~CNativeApplicationInfo(void)
+	?NewLC@CNativeApplicationInfo@CNativeComponentInfo@Swi@@SAPAV123@ABVTUid@@ABVTDesC16@@11@Z @ 114 NONAME ; class Swi::CNativeComponentInfo::CNativeApplicationInfo * Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(class TUid const &, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
 

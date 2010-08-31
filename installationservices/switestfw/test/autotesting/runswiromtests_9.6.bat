@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -27,7 +27,7 @@ REM Run test
 testexecute z:\tswi\tuiscriptadaptors\scripts\tsilent_h2.script
 
 REM Run test
-testexecute z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub_h2.script
+REM testexecute z:\tswi\tuiscriptadaptors\scripts\tswidaemonstub_h2.script
 
 REM Run test
 testexecute z:\tswi\tuiscriptadaptors\scripts\inc098114_h2.script
@@ -52,7 +52,7 @@ del /s c:\USBLoader\*
 
 # Save Silent Install, cleanupinfrastructure and tpropagation test results
 move c:\logs\testexecute\tsilent_h2.htm e:\testresults\tsilent_h2.htm
-move c:\logs\testexecute\tswidaemonstub_h2.htm e:\testresults\tswidaemonstub_h2.htm
+REM move c:\logs\testexecute\tswidaemonstub_h2.htm e:\testresults\tswidaemonstub_h2.htm
 move c:\logs\testexecute\inc098114_h2.htm e:\testresults\inc098114_h2.htm
 move c:\logs\testexecute\tcleanupinfrastructure.htm e:\testresults\tcleanupinfrastructure.htm
 move c:\logs\testexecute\tpropagation_arm.htm e:\testresults\tpropagation_arm.htm
@@ -61,6 +61,9 @@ move c:\logs\testexecute\test_pa_sapropagated_notdelete.htm e:\testresults\test_
 REM SISREgistry performance tests
 testexecute z:\tswi\tsisregistrytest\scripts\tsisregistry_performance.script
 move c:\logs\testexecute\tsisregistry_performance.htm e:\testresults\tsisregistry_performance.htm
+
+testexecute z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors_app_performance.script
+move c:\logs\testexecute\tuiscriptadaptors_app_performance.htm e:\testresults\tuiscriptadaptors_app_performance.htm
 
 REM Run recognizer tests
 md c:\trecog
@@ -140,8 +143,8 @@ move c:\logs\testexecute\tbackuptrestore_exploratory.htm e:\testresults\tbackupt
 testexecute z:\tswi\trevocation\scripts\trevocation.script
 move c:\logs\testexecute\trevocation.htm e:\testresults\trevocation.htm
 
-testexecute z:\tswi\tdaemon\scripts\tdaemon.script
-move c:\logs\testexecute\tdaemon.htm e:\testresults\tdaemon.htm
+REM testexecute z:\tswi\tdaemon\scripts\tdaemon.script
+REM move c:\logs\testexecute\tdaemon.htm e:\testresults\tdaemon.htm
 
 testexecute z:\tswi\tuiscriptadaptors\scripts\testlocations.script
 move c:\logs\testexecute\testlocations.htm e:\testresults\testlocations.htm
@@ -324,6 +327,9 @@ copy c:\logs\testexecute\adornedfilenames.htm e:\testresults\adornedfilenames.ht
 REM Tests for Post manufacture installation of a Layered Execution Environment
 testexecute z:\tswi\tuiscriptadaptors\scripts\tswtype.script
 move c:\logs\testexecute\tswtype.htm e:\testresults\tswtype.htm
+
+testexecute z:\tswi\tuiscriptadaptors\scripts\tswiappregintegration.script
+move c:\logs\testexecute\tswiappregintegration.htm e:\testresults\tswiappregintegration.htm
 
 del c:\temp\*.*
 attrib c:\tswi\*.* -r

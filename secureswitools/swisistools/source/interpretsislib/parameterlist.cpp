@@ -40,6 +40,17 @@ CParameterList::~CParameterList()
 	{
 	}
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void CParameterList::SetResourceFilePath(const std::string& aFilePath)
+	{
+	iResourceFilePath = StringUtils::FixPathDelimiters(aFilePath);
+	if (!IsDirectory(iResourceFilePath))
+		{
+		throw EParamInvalidDir;
+		}
+	iFlags |= EFlagsResourceFilePathSet;
+	}
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 void CParameterList::SetSystemDrive(const std::string& aFilePath)
 	{

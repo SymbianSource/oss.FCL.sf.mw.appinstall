@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -21,7 +21,8 @@
  @test
  @internalTechnology
 */
- 
+
+#include <e32svr.h>
 #include <test/testexecutelog.h>
 #include <test/testexecutestepbase.h>
 #include "sessionstep.h"
@@ -37,6 +38,7 @@
 #include "sisregistrylog.h"
 #include <s32file.h>
 
+#include <centralrepository.h>
 
 /////////////////////////////////////////////////////////////////////
 // defs, Constants used by test steps
@@ -44,6 +46,8 @@
 
 _LIT(KNoUid, "nouid");
 _LIT(KUid, "uid");
+_LIT(KCenRepKey, "cenrepkey");
+_LIT(KCenRepValue, "cenrepvalue");
 _LIT(KDrivebitmapcount, "drivebitmapcout");
 _LIT(KSid, "sid");
 _LIT(KPackage, "package");
@@ -134,10 +138,9 @@ TVerdict CEmbeddingPackageStep::doTestStepL()
 	    return TestStepResult();
 	    }
 	CleanupClosePushL(entry);
-	
-	entry.EmbeddingPackagesL(packages);
+
 	CleanupResetAndDestroyPushL(packages);
-	
+	entry.EmbeddingPackagesL(packages);
 	
 	if(packages.Count() != embeddingPkgCount)
 		{
@@ -653,6 +656,60 @@ TVerdict CIsUidInstalledStep::doTestStepL()
 	return TestStepResult();
 	}
 	
+
+/////////////////////////////////////////////////////////////////////
+// CSetCenRepSettingStep - Set Central Reposatory Value
+/////////////////////////////////////////////////////////////////////
+CSetCenRepSettingStep::CSetCenRepSettingStep()
+    {
+    SetTestStepName(KSetCenRepSetting);
+    }
+
+TVerdict CSetCenRepSettingStep::doTestStepL()
+    {        
+    SetTestStepResult(EPass);
+    TUid repUid;
+    if(!GetUidFromConfig(ConfigSection(), KUid, repUid))
+        {
+        ERR_PRINTF1(_L("Package UID is missing in the configuration file!"));
+        SetTestStepResult(EFail);
+        return TestStepResult();
+        }
+    
+    TInt cenRepKey;
+    if(!GetIntFromConfig(ConfigSection(), KCenRepKey, cenRepKey))
+        {
+        ERR_PRINTF1(_L("Central Reposatory Key is missing in the configuration file!"));
+        SetTestStepResult(EFail);
+        return TestStepResult();
+        }
+    
+    TInt cenRepValue;
+    if(!GetIntFromConfig(ConfigSection(), KCenRepValue, cenRepValue))
+        {
+        ERR_PRINTF1(_L("Central Reposatory Value is missing in the configuration file!"));
+        SetTestStepResult(EFail);
+        return TestStepResult();
+        }
+    
+    CRepository* rep = CRepository::NewLC(repUid);
+    TInt err = rep->Set(cenRepKey, cenRepValue);
+        
+    if( err == KErrNone )
+    {
+        INFO_PRINTF4(_L("Setting Central Reposatory  0x%08x  , key = %d, value = %d"),repUid,cenRepKey,cenRepValue);
+    }
+    else
+    {
+        SetTestStepResult(EFail);
+        ERR_PRINTF4(_L("Failed Setting Central Reposatory  0x%08x  , key = %d, value = %d"),repUid,cenRepKey,cenRepValue);
+    }
+    
+    CleanupStack::PopAndDestroy(rep); 
+    return TestStepResult();
+    }
+
+
 /////////////////////////////////////////////////////////////////////
 // CIsPackageInstalledStep - checks if packages are registered
 /////////////////////////////////////////////////////////////////////

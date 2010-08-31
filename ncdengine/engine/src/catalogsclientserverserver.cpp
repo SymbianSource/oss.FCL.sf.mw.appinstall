@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -15,6 +15,7 @@
 *
 */
 
+#include <QCoreApplication>
 
 #include "catalogsclientserverserver.h"
 #include "catalogsclientserverserversession.h"
@@ -56,6 +57,16 @@ static _LIT_SECURITY_POLICY_C2(
 // ======== MEMBER FUNCTIONS ========
 
 
+// ---------------------------------------------------------------------------
+// 
+// ---------------------------------------------------------------------------
+// 
+CCatalogsClientServerServer* CCatalogsClientServerServer::NewL()
+    {
+    CCatalogsClientServerServer* self = CCatalogsClientServerServer::NewLC();
+    CleanupStack::Pop( self );
+    return self;
+    }
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
@@ -201,7 +212,7 @@ void CCatalogsClientServerServer::DecrementSessions()
     // No more clients, shutdown
     if ( iSessionCount <= 0 )
         {
-        CActiveScheduler::Stop();
+        QCoreApplication::exit(0);
         }
     }
     
@@ -292,78 +303,6 @@ void CCatalogsClientServerServer::AddObjectToContainerL( CObject* aObject )
         }
     }
 
-// ---------------------------------------------------------------------------
-// 
-// ---------------------------------------------------------------------------
-// 
-void CCatalogsClientServerServer::ThreadFunctionL()
-    {
-    DLTRACEIN((""));
-    DCHECK_HEAP
-    // Construct an active scheduler for the server
-
-    DLINFO(( "Creating active schduler" ));
-    CActiveScheduler* activeScheduler = new (ELeave) CActiveScheduler;
-    CleanupStack::PushL( activeScheduler );
-
-    // Install active scheduler
-    // No need to check whether an active scheduler is already installed
-    // as this is a new thread, so there won't be one
-    DLINFO(( "Installing active schduler" ));
-    CActiveScheduler::Install( activeScheduler );
-
-    // Construct our server
-    CCatalogsClientServerServer::NewLC(); // anonymous
-
-    DLINFO(( "Opening semaphore" ));
-    RSemaphore semaphore;
-    User::LeaveIfError(
-        semaphore.OpenGlobal( KCatalogsServerSemaphoreName ));
-    
-    DLINFO(( "Signalling and closing semaphore" ));
-    // Semaphore opened ok
-    semaphore.Signal();
-    semaphore.Close();
-
-    // Start handling requests, operation will stop here until
-    // the server dies
-    CActiveScheduler::Start();
-
-    DLINFO(("Server has shut down"));
-
-    // The server has been shut down, clean up
-    CleanupStack::PopAndDestroy( 2, activeScheduler );
-    DLTRACEOUT((""));
-    }
-
-// ---------------------------------------------------------------------------
-// 
-// ---------------------------------------------------------------------------
-// 
-TInt CCatalogsClientServerServer::ThreadFunction( TAny* /*aNone*/ )
-    {
-#ifdef CATALOGS_BUILD_CONFIG_HEAP_MARKS    
-    __UHEAP_MARK;
-#endif    
-    DLINIT;
-    
-    DLTRACEIN((""));
-    
-    CTrapCleanup* cleanupStack = CTrapCleanup::New();
-    TRAPD( err, ThreadFunctionL() );
-    
-    DLTRACE(( "err: %d", err ));
-    delete cleanupStack;
-    cleanupStack = NULL;
-    
-    DLTRACEOUT((""));
-
-    DLUNINIT;
-#ifdef CATALOGS_BUILD_CONFIG_HEAP_MARKS    
-    __UHEAP_MARKEND; 
-#endif    
-    return err;    
-    }
 
 // ---------------------------------------------------------------------------
 // 
@@ -440,17 +379,48 @@ EXPORT_C TInt WinsMain()
 	{
 	// WINS DLL entry-point. Just return the real thread function 
     // cast to TInt
-	return reinterpret_cast<TInt>( 
-	    &CCatalogsClientServerServer::ThreadFunction );
+	return 0;
 	}
 
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
 // 
-GLDEF_C TInt E32Main()
+int main(int argc, char *argv[])
     {
-    return CCatalogsClientServerServer::ThreadFunction( NULL );
+    DLINIT;
+    DCHECK_HEAP
+    int err = KErrNone;
+#ifdef CATALOGS_BUILD_CONFIG_HEAP_MARKS    
+    __UHEAP_MARK;
+#endif 
+        {
+        QCoreApplication app(argc, argv);
+        CCatalogsClientServerServer* server = NULL;
+        TRAP( err, server = CCatalogsClientServerServer::NewL() );
+        if ( err == KErrNone )
+            {
+            DLINFO(( "Opening semaphore" ));
+            RSemaphore semaphore;
+            err = semaphore.OpenGlobal( KCatalogsServerSemaphoreName );
+            if (err == KErrNone )
+                {
+                DLINFO(( "Signalling and closing semaphore" ));
+                // Semaphore opened ok
+                semaphore.Signal();
+                semaphore.Close();
+                err = app.exec();
+                }
+            delete server;
+            }
+    
+        DLINFO(("Server has shut down"));
+        }
+#ifdef CATALOGS_BUILD_CONFIG_HEAP_MARKS    
+    __UHEAP_MARKEND; 
+#endif
+    DLUNINIT;
+    return err;
     }
 
 

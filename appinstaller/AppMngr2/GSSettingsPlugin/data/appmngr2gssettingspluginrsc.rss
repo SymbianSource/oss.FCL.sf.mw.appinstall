@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -64,7 +64,7 @@ RESOURCE MENU_PANE r_appmngr2_settings_menu
             {
             command = EAppMngr2CmdChange;
             txt = qtn_options_change;
-            flags = EEikMenuItemAction;
+            flags = EEikMenuItemSpecific;
             },
         MENU_ITEM
             {
@@ -231,6 +231,6 @@ RESOURCE TBUF r_am_note_locked_settigs
 
 RESOURCE TBUF r_am_set_ocsp_none
     {
-    buf = qtn_am_set_ocsp_url_none;
+    buf = qtn_selec_sett_val_field_none;
     } 
 

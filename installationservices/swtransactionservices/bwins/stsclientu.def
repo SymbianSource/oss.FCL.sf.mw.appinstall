@@ -1,0 +1,18 @@
+EXPORTS
+	?RegisterTemporaryL@RStsSession@Usif@@QAEXABVTDesC16@@@Z @ 1 NONAME ; void Usif::RStsSession::RegisterTemporaryL(class TDesC16 const &)
+	?CommitL@RStsSession@Usif@@QAEXXZ @ 2 NONAME ; void Usif::RStsSession::CommitL(void)
+	?CreateTransactionL@RStsSession@Usif@@QAEKXZ @ 3 NONAME ; unsigned long Usif::RStsSession::CreateTransactionL(void)
+	?RollBackL@RStsSession@Usif@@QAEXXZ @ 4 NONAME ; void Usif::RStsSession::RollBackL(void)
+	?RollbackAllPendingL@RStsRecoverySession@Usif@@QAEXXZ @ 5 NONAME ; void Usif::RStsRecoverySession::RollbackAllPendingL(void)
+	?Close@RStsSession@Usif@@QAEXXZ @ 6 NONAME ; void Usif::RStsSession::Close(void)
+	?TransactionIdL@RStsSession@Usif@@QAEKXZ @ 7 NONAME ; unsigned long Usif::RStsSession::TransactionIdL(void)
+	??0RStsRecoverySession@Usif@@QAE@XZ @ 8 NONAME ; Usif::RStsRecoverySession::RStsRecoverySession(void)
+	?OverwriteL@RStsSession@Usif@@QAEXABVTDesC16@@AAVRFile@@I@Z @ 9 NONAME ; void Usif::RStsSession::OverwriteL(class TDesC16 const &, class RFile &, unsigned int)
+	?RemoveL@RStsSession@Usif@@QAEXABVTDesC16@@@Z @ 10 NONAME ; void Usif::RStsSession::RemoveL(class TDesC16 const &)
+	?Close@RStsRecoverySession@Usif@@QAEXXZ @ 11 NONAME ; void Usif::RStsRecoverySession::Close(void)
+	?CreateTemporaryL@RStsSession@Usif@@QAEXABVTDesC16@@AAVRFile@@I@Z @ 12 NONAME ; void Usif::RStsSession::CreateTemporaryL(class TDesC16 const &, class RFile &, unsigned int)
+	?OpenTransactionL@RStsSession@Usif@@QAEXK@Z @ 13 NONAME ; void Usif::RStsSession::OpenTransactionL(unsigned long)
+	?CreateNewL@RStsSession@Usif@@QAEXABVTDesC16@@AAVRFile@@I@Z @ 14 NONAME ; void Usif::RStsSession::CreateNewL(class TDesC16 const &, class RFile &, unsigned int)
+	?RegisterNewL@RStsSession@Usif@@QAEXABVTDesC16@@@Z @ 15 NONAME ; void Usif::RStsSession::RegisterNewL(class TDesC16 const &)
+	??0RStsSession@Usif@@QAE@XZ @ 16 NONAME ; Usif::RStsSession::RStsSession(void)
+

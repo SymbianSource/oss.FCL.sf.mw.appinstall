@@ -32,17 +32,20 @@ USERINCLUDE         ../inc
 USERINCLUDE         ../../ui/inc
 USERINCLUDE         ../../firmwareupdate/inc
 
+SYSTEMINCLUDE     /epoc32/include/mw/hb
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbcore 
+SYSTEMINCLUDE     /epoc32/include/mw/hb/hbwidgets
+
 MW_LAYER_SYSTEMINCLUDE
 
 SOURCEPATH          ../src
 SOURCE              iaupdatebgmain.cpp
 SOURCE              iaupdatebgrefreshtimer.cpp
-SOURCE              iaupdatebgremindertimer.cpp
 SOURCE              iaupdatebgcontrollerfile.cpp
 SOURCE              iaupdatebgfirsttimehandler.cpp
 SOURCE              iaupdatebginternalfilehandler.cpp
-SOURCE              iaupdatebgsoftnotification.cpp
-
+SOURCE              iaupdatebgsoftnotification.cpp 
+SOURCE              iaupdatbgnotifyhandler.cpp
 
 
 LIBRARY             euser.lib 
@@ -61,6 +64,10 @@ LIBRARY             AknDynamicSoftNote.lib
 LIBRARY             commonengine.lib
 LIBRARY             sysversioninfo.lib
 LIBRARY             FeatMgr.lib
+
+LIBRARY             hbcore.lib
+LIBRARY             hbwidgets.lib
+
 DEBUGLIBRARY 	    flogger.lib
 
 SMPSAFE

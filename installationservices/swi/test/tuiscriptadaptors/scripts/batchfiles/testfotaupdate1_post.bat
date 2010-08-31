@@ -18,3 +18,15 @@ REM Remove the files added by this script
 del /s /f /q \epoc32\release\winscw\udeb\z\system\install\fota_stub_v1.sis
 del /s /f /q \epoc32\release\winscw\urel\z\system\install\fota_stub_v1.sis
 
+del /s /f /q \epoc32\release\winscw\udeb\z\system\install\fotaupdatestubapp1.sis
+del /s /f /q \epoc32\release\winscw\urel\z\system\install\fotaupdatestubapp1.sis
+
+del /s /f /q \epoc32\release\winscw\udeb\z\private\10003a3f\apps\fotaupdatestubapp1_reg.rsc
+del /s /f /q \epoc32\release\winscw\urel\z\private\10003a3f\apps\fotaupdatestubapp1_reg.rsc
+
+del /s /f /q \epoc32\release\winscw\udeb\z\private\10003a3f\apps\fotaupdateapp1_reg.rsc
+del /s /f /q \epoc32\release\winscw\urel\z\private\10003a3f\apps\fotaupdateapp1_reg.rsc
+
+del /s /f /q \epoc32\winscw\c\private\10003a3f\apps\fotaupdateUDA1_reg.rsc
+
+del /s /f /q \epoc32\winscw\c\private\10003a3f\import\apps\fotaupdateUDA2_reg.rsc

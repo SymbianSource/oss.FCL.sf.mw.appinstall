@@ -68,7 +68,12 @@ private:
 
 	void UninstallPkg(const SisFile& aSis); // Uninstall the same package (if found)
 											// prior to installation
-
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	void Backup(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
+	void RemoveBackup(const SisFile& aFile, InstallableFiles& aInstallable);
+	void Restore(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
+	void RestoreAll(const SisFile& aFile, InstallableFiles& aInstallable, TBool& aBackupFlag);
+#endif
 	bool DependenciesOk(const SisFile& aFile);			// Check to see if the sis file
 														// meets it's dependencies
 
@@ -92,7 +97,7 @@ private:
 	const SisRegistryObject& AddRegistry(const SisFile& aFile,	// Create the registry entries for
 		const InstallableFiles& aInstalled, const bool aSUFlag);	// the installed sis file
 
-	void RemoveHashForFile(const std::wstring& aFile);
+	//void RemoveHashForFile(const std::wstring& aFile);
 
 	bool CheckDependency(const CSISDependency* aDep);	
 

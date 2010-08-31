@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -42,11 +42,9 @@
 #include <usif/usifcommon.h>
 #include <swi/sisregistrylog.h>
 #include <scs/streamingarray.h>
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifdef SYMBIAN_ENABLE_SPLIT_HEADERS
 #include "screntries_internal.h"
 #endif //SYMBIAN_ENABLE_SPLIT_HEADERS
-#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 using namespace Swi;
 
@@ -118,6 +116,21 @@ void ScrHelperUtil::AddComponentL(Usif::RSoftwareComponentRegistry& aScrSession,
 	WriteToScrL(aScrSession, aCompId, aObject.TrustStatus());
 	ExternalizeChainIndexArrayL(aScrSession, aCompId, aObject.InstallChainIndicies());
 	}
+
+void ScrHelperUtil::AddApplicationEntryL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId, const Usif::CApplicationRegistrationData& aApplicationRegistrationData)
+    {
+    aScrSession.AddApplicationEntryL(aCompId, aApplicationRegistrationData);
+    }
+
+void ScrHelperUtil::DeleteApplicationEntriesL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId)
+    {
+    aScrSession.DeleteApplicationEntriesL(aCompId);
+    }
+
+void ScrHelperUtil::DeleteApplicationEntryL(Usif::RSoftwareComponentRegistry& aScrSession, const TUid& aAppUId)
+    {
+    aScrSession.DeleteApplicationEntryL(aAppUId);
+    }
 
 void ScrHelperUtil::WriteToScrL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId, CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType)
 	{
@@ -410,7 +423,7 @@ void ScrHelperUtil::ExternalizeFileDescriptionsArrayL(Usif::RSoftwareComponentRe
 		TPtrC fileTargetPtr(fileTarget);
 		if (filenamesArray.SpecificFindInOrder(fileTargetPtr, descriptorsComparator, EArrayFindMode_First) != KErrNotFound)
 			continue; // Skip duplicates
-		filenamesArray.InsertInOrder(fileTargetPtr, descriptorsComparator);
+		filenamesArray.InsertInOrderL(fileTargetPtr, descriptorsComparator);
 		
 		if (IsWildcardFile(fileTarget))
 			{

@@ -1,0 +1,130 @@
+//
+// Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+// Sif Notifier test cases.
+
+LOAD_SUITE tUsifSuite 
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0001
+//! @SYMTestCaseDesc 		Start only one subscriber.  
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0001
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key1
+END_TESTCASE API-SEC-USIF-NOTIFIER-0001
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0002
+//! @SYMTestCaseDesc 		Start one subscriber, publisher  
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0002
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key3
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_one
+END_TESTCASE API-SEC-USIF-NOTIFIER-0002
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0003
+//! @SYMTestCaseDesc 		Start one subscriber subscribed to start/end notification and one publisher
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0003
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key4
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_one
+END_TESTCASE API-SEC-USIF-NOTIFIER-0003
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0004
+//! @SYMTestCaseDesc 		One publisher, 2 subscribers .. 1st subscriber subscribes for progress, second does not
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0004
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key5
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key4
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_one
+END_TESTCASE API-SEC-USIF-NOTIFIER-0004
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0005
+//! @SYMTestCaseDesc 	      One subscriber 2 publishers
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0005
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key6
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_twoconcurrentinstall
+END_TESTCASE API-SEC-USIF-NOTIFIER-0005
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0006
+//! @SYMTestCaseDesc 	      One subscriber, 2 publishers ... the second publisher starts after the first finishes.
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0006
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key7
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_twoconsecutiveinstall
+END_TESTCASE API-SEC-USIF-NOTIFIER-0006
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0007
+//! @SYMTestCaseDesc 	      2 publishers, 2 subscribers
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0007
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key8
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key9
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_twoconsecutiveinstall
+END_TESTCASE API-SEC-USIF-NOTIFIER-0007
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0008
+//! @SYMTestCaseDesc 		Start one subscriber, publisher with large start data.
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0008
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key3
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_one_large
+END_TESTCASE API-SEC-USIF-NOTIFIER-0008
+
+
+
+//! @SYMTestCaseID 		API-SEC-USIF-NOTIFIER-0009
+//! @SYMTestCaseDesc 		Start one subscriber, publisher. Print details
+//!					
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-NOTIFIER-0009
+CONCURRENT
+RUN_TEST_STEP 100 tUsifSuite SifSubscribeStep z:\tusif\tsif\tnotifier.ini Key10
+RUN_TEST_STEP 100 tUsifSuite SifPublishStep z:\tusif\tsif\tnotifier.ini publish_details
+END_TESTCASE API-SEC-USIF-NOTIFIER-0009
+

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -78,10 +78,12 @@ public:
 	 */
 	void PlanUninstallationL(CSisRegistryPackage& aPackage);
 
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/**
 	 * @return The final progress bar value from the plan.
 	 */
 	TInt32 FinalProgressBarValue() const;
+#endif
 	
 	/**
 	 * Produces an uninstallation plan

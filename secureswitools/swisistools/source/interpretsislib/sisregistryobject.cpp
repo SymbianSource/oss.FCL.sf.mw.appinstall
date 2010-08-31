@@ -124,8 +124,12 @@ SisRegistryObject::SisRegistryObject(const SisFile& aSis,
 {
 	for( InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
-		InstallableFile* installableFile= *curr;		
+		InstallableFile* installableFile= *curr;	
+		#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		FileDescription* f = new FileDescription(*installableFile->FileDescription() , installableFile->Sid(), aTargetDrive, installableFile->GetTarget());
+		#else
+		FileDescription* f = new FileDescription(*installableFile->FileDescription() , installableFile->Sid(), aTargetDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
+		#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		iFileDescriptions.push_back(f);
 	}
 
@@ -380,8 +384,11 @@ SisRegistryObject::SisRegistryObject(CSISController& aSisController,
 					aSids.push_back(aSid);
 				}
 			}
-
+			#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK //Just to ignore compiler
+			FileDescription* aFileDescription = new FileDescription(fileDesc, aSid, L'Z', fileDesc.Target().GetString(), fileDesc.Target().GetString());
+			#else
 			FileDescription* aFileDescription = new FileDescription(fileDesc, aSid, L'Z', fileDesc.Target().GetString());
+			#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 			iFileDescriptions.push_back(aFileDescription);
 		}
 		SetSids(aSids);
@@ -724,7 +731,11 @@ void SisRegistryObject::AddFiles(const InstallableFiles& aFiles)
 	{	
 		InstallableFile* installableFile= *curr;
 		TUint32 sid = installableFile->Sid();
+		#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, iSelectedDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
+		#else
 		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, iSelectedDrive, installableFile->GetTarget());
+		#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		iFileDescriptions.push_back(f);
 
 		// If the SID is there already there is no reason to add it again
@@ -745,8 +756,13 @@ void SisRegistryObject::RemoveFiles(const InstallableFiles& aFiles)
 	{	
 		InstallableFile* installableFile= *curr;
 		TUint32 sid = installableFile->Sid();
+		#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		FileDescription f = FileDescription(*installableFile->FileDescription(), sid,
-											iSelectedDrive, installableFile->GetTarget());
+											iSelectedDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
+		#else
+		FileDescription f = FileDescription(*installableFile->FileDescription(), sid,
+										iSelectedDrive, installableFile->GetTarget());
+		#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		
 		FileDescriptions::const_iterator end = iFileDescriptions.end();
 		for (FileDescriptions::iterator curr2 = iFileDescriptions.begin();

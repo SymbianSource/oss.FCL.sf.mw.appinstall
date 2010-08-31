@@ -18,6 +18,9 @@
 #include <f32file.h>
 #include <s32file.h>
 #include <pathinfo.h>
+#include <usif/scr/scr.h>
+#include <usif/scr/scrcommon.h>
+#include <usif/scr/screntries.h>
 
 #include "sisregistrysession.h"
 #include "sisregistryentry.h"
@@ -79,7 +82,10 @@ inline void CleanupResetAndDestroyPushL(T& aRef)
 // End of code from swi/inc/cleanuputils.h
 // ----------------------------
 
-
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::NewL
+// -----------------------------------------------------------------------
+//  
 CPreviouslyInstalledAppsCache *CPreviouslyInstalledAppsCache::NewL()
 	{
 	CPreviouslyInstalledAppsCache *self = new(ELeave)CPreviouslyInstalledAppsCache;
@@ -89,122 +95,172 @@ CPreviouslyInstalledAppsCache *CPreviouslyInstalledAppsCache::NewL()
 	return self;
 	}
 
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::~CPreviouslyInstalledAppsCache
+// -----------------------------------------------------------------------
+//  
 CPreviouslyInstalledAppsCache::~CPreviouslyInstalledAppsCache()
 	{
 	iPrevPkgUids.Reset();
 	}
 
-
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::UpdateAllL
+// -----------------------------------------------------------------------
+//  
 void CPreviouslyInstalledAppsCache::UpdateAllL()
 	{
+    FLOG( _L("Daemon: CPreviouslyInstalledAppsCache::UpdateAllL ") );
+    
 	RThread ourThread; // nb. Default constructor gives handle to current thread.
-	if(!ourThread.HasCapability(ECapabilityReadUserData, 0))
+	
+	if( !ourThread.HasCapability(ECapabilityReadUserData, 0) )
 		{
 		// Have not got ReadUserData - if we try and enumerate package
 		// UIDs the registry server will panic us!
 		User::Leave(KErrAccessDenied);
 		}
 	ourThread.Close();
-	
 
-	RSisRegistrySession registrySession;
-	User::LeaveIfError(registrySession.Connect());
-	CleanupClosePushL(registrySession);
-	
-	RPointerArray<CSisRegistryPackage> packages;
-	registrySession.InstalledPackagesL(packages);
-   	CleanupResetAndDestroy<RPointerArray<CSisRegistryPackage> >::PushL(packages);
-
-	for (TInt i=0; i< packages.Count(); ++i)
-		{
-		(void)iPrevPkgUids.InsertInSignedKeyOrder(packages[i]->Uid());
-		}
-	
-	CleanupStack::PopAndDestroy(&packages);
-	CleanupStack::PopAndDestroy(&registrySession);
+	// Let's use SisRegistry in this case since in SCR there is no
+	// simple way to retriev sisx pacakge UIDs in one call.
+    RSisRegistrySession registrySession;
+    User::LeaveIfError( registrySession.Connect() );
+    CleanupClosePushL( registrySession );
+    
+    RPointerArray<CSisRegistryPackage> packages;
+    registrySession.InstalledPackagesL( packages );
+    CleanupResetAndDestroy< 
+           RPointerArray<CSisRegistryPackage> >::PushL( packages );
+    
+    for ( TInt i = 0; i < packages.Count(); ++i )
+        {
+        (void)iPrevPkgUids.InsertInSignedKeyOrder( packages[i]->Uid() );
+        
+        FLOG_1( _L("Daemon: UpdateAllL: Add UID = 0x%x"), 
+                packages[i]->Uid().iUid );
+        }
+    
+    CleanupStack::PopAndDestroy( &packages );
+    CleanupStack::PopAndDestroy( &registrySession );
 	}
 
-void CPreviouslyInstalledAppsCache::UpdateAddL(TUid aUid)
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::UpdateAddL
+// -----------------------------------------------------------------------
+//  
+void CPreviouslyInstalledAppsCache::UpdateAddL( TUid aUid )
 	{
-	RSisRegistrySession registrySession;
-	User::LeaveIfError(registrySession.Connect());
-	CleanupClosePushL(registrySession);
-	
-	RSisRegistryEntry registryEntry;
-	TInt err = registryEntry.Open(registrySession, aUid);
-	if( err == KErrNone )
-		{
-		registryEntry.Close();
-		(void)iPrevPkgUids.InsertInSignedKeyOrder(aUid);
-		}
-
-	FLOG_1( _L("Daemon: UpdateAddL: UID add error = %d"), err );
-	
-	CleanupStack::PopAndDestroy(&registrySession);
+    FLOG( _L("Daemon: CPreviouslyInstalledAppsCache::UpdateAddL ") );
+ 
+    // Let's use SisRegistry in this case since in SCR there is no
+    // simple way to open entry with given package UIDs.
+    RSisRegistrySession registrySession;
+    User::LeaveIfError( registrySession.Connect() );
+    CleanupClosePushL( registrySession );
+    
+    RSisRegistryEntry registryEntry;
+    TInt err = registryEntry.Open( registrySession, aUid );
+    
+    if( err == KErrNone )
+        {
+        // Ok close entry and add UID to cache.
+        registryEntry.Close();
+        (void)iPrevPkgUids.InsertInSignedKeyOrder( aUid );
+        FLOG_1( _L("Daemon: UpdateAddL: Add UID = 0x%x"), aUid.iUid );
+        }
+           
+    CleanupStack::PopAndDestroy( &registrySession );
 	}
 
-TBool CPreviouslyInstalledAppsCache::HasBeenPreviouslyInstalled(TUid aPackageUid) const
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::HasBeenPreviouslyInstalled
+// -----------------------------------------------------------------------
+//  
+TBool CPreviouslyInstalledAppsCache::HasBeenPreviouslyInstalled( 
+    TUid aPackageUid ) const
 	{
-	if(iPrevPkgUids.FindInSignedKeyOrder(aPackageUid) == KErrNotFound)
+	if ( iPrevPkgUids.FindInSignedKeyOrder( aPackageUid ) == KErrNotFound )
 		{
 		return EFalse;
 		}
 	return ETrue;
 	}
 
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::CPreviouslyInstalledAppsCache
+// -----------------------------------------------------------------------
+//  
 CPreviouslyInstalledAppsCache::CPreviouslyInstalledAppsCache()
 	{
 	}
 
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::ConstructL
+// -----------------------------------------------------------------------
+//  
 void CPreviouslyInstalledAppsCache::ConstructL()
 	{
+    FLOG( _L("Daemon: CPreviouslyInstalledAppsCache::ConstructL ") );
 	User::LeaveIfError(iFs.Connect());
 	TInt drive = 0;
-    iFs.CharToDrive( TParsePtrC( PathInfo::PhoneMemoryRootPath() ).Drive()[0], drive );
+    iFs.CharToDrive( 
+            TParsePtrC( PathInfo::PhoneMemoryRootPath() ).Drive()[0], 
+            drive );
+    
     iFs.CreatePrivatePath( drive );
 
 	// Read cache file
 	TRAP_IGNORE(InitFromCacheFileL());
-		
-    TRAPD( err, UpdateAllL() );
-    if(err == KErrNone)
-        {
-        // If we managed to scan the registry, and update the cache, flush to disk.
-        TRAP_IGNORE(FlushToDiskL());
-        }	
+	
+//TODO: Test if this is really needed. Let's not do updateall 2 time in boot.		
+   // TRAPD( err, UpdateAllL() );
+   // if(err == KErrNone)
+   //     {        
+   //     TRAP_IGNORE(FlushToDiskL());
+   //     }	
 
 	}
 
-
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::InitFromCacheFileL
+// -----------------------------------------------------------------------
+//  
 void CPreviouslyInstalledAppsCache::InitFromCacheFileL()
 	{
 	// Read in existing cache file.
 	RFile cacheFile;
-	TInt err = cacheFile.Open(iFs, KPreInstalledApps, EFileStream|EFileRead);
-	if(err != KErrNone)
+	TInt err = cacheFile.Open( iFs, 
+                               KPreInstalledApps, 
+                               EFileStream|EFileRead);
+	if ( err != KErrNone )
 		{
 			return; // No existing cache file to read.
 		}
-	CleanupClosePushL(cacheFile);
+	CleanupClosePushL( cacheFile );
 	
 	// Now read the cache
-	RFileReadStream cacheReadStream(cacheFile);
+	RFileReadStream cacheReadStream( cacheFile );
 	cacheReadStream.PushL();
 
 	iPrevPkgUids.Reset();
-	TInt32 count(cacheReadStream.ReadInt32L());
+	TInt32 count( cacheReadStream.ReadInt32L() );
 
-	for (TInt i = 0; i < count; i++)
+	for ( TInt i = 0; i < count; i++ )
 		{
 		TUid packageId;
 		packageId.iUid = cacheReadStream.ReadInt32L();
-		(void)iPrevPkgUids.InsertInSignedKeyOrder(packageId);
+		(void)iPrevPkgUids.InsertInSignedKeyOrder( packageId );
 		}	
 	
 	CleanupStack::PopAndDestroy(&cacheReadStream);
 	CleanupStack::PopAndDestroy(&cacheFile);
 }
 
+// -----------------------------------------------------------------------
+// CPreviouslyInstalledAppsCache::FlushToDiskL
+// -----------------------------------------------------------------------
+//  
 void CPreviouslyInstalledAppsCache::FlushToDiskL()
 	{
 	// Write to disk

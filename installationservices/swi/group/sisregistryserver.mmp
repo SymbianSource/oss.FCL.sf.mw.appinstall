@@ -41,6 +41,7 @@ USERINCLUDE ../source/sisregistry/common
 USERINCLUDE ../source/plan
 USERINCLUDE ../inc/swi 
 USERINCLUDE ../inc
+USERINCLUDE ../source/swis/server
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 USERINCLUDE ../../swtransactionservices/inc
 USERINCLUDE ../../swcomponentregistry/inc

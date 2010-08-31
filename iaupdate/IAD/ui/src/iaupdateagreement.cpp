@@ -18,18 +18,15 @@
 
 
 //INCLUDES
+#include <hbaction.h>
+#include <hbtextitem.h>
+#include <centralrepository.h>
 
 #include "iaupdateagreement.h"
 #include "iaupdatefirsttimeinfo.h"
-#include "iaupdatedialogutil.h"
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
 
-#include <avkon.rsg>
-#include <iaupdate.rsg>
-#include <aknmessagequerydialog.h>      // CAknMessageQueryDialog
-#include <StringLoader.h>
-#include <AknUtils.h>
 
 // ================= MEMBER FUNCTIONS =======================
 
@@ -110,11 +107,6 @@ TBool CIAUpdateAgreement::AcceptAgreementL()
             accepted = ETrue;
             firstTimeInfo->SetAgreementAcceptedL();
             }
-        else if ( ShowDialogL( R_IAUPDATE_SOFTKEYS_ACCEPT_DECLINE__ACCEPT ) == EAknSoftkeyYes )
-            {
-     	    accepted = ETrue;
-     	    firstTimeInfo->SetAgreementAcceptedL();
-            }
         }
     CleanupStack::PopAndDestroy( firstTimeInfo );
     return accepted;
@@ -134,18 +126,6 @@ void CIAUpdateAgreement::SetAgreementAcceptedL()
 
 
 
-
-
-// ---------------------------------------------------------------------------
-// CIAUpdateAgreement::ShowAgreementL
-// 
-// ---------------------------------------------------------------------------
-//
-void CIAUpdateAgreement::ShowAgreementL()
-    {
-    ShowDialogL( R_AVKON_SOFTKEYS_OK_EMPTY );	
-    }
-
 // ---------------------------------------------------------------------------
 // CIAUpdateAgreement::AgreementAcceptedL
 // 
@@ -159,14 +139,9 @@ TBool CIAUpdateAgreement::AgreementAcceptedL()
 	return ret;
     }
     
-// ---------------------------------------------------------------------------
-// CIAUpdateAgreement::ShowDialogL
-// 
-// ---------------------------------------------------------------------------
-//
-TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
-    {
-    HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );
+
+    
+    /*HBufC* text_1 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_1 );
     HBufC* text_2 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_2 );
     HBufC* text_3 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_3 );
     HBufC* text_4 = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_TEXT_4 );
@@ -180,7 +155,7 @@ TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
     CleanupStack::PushL( numberArray );
     numberArray->AppendL( 2007 ); 
     numberArray->AppendL( 2009 );
-    HBufC* text_copyright = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_COPYRIGHT, *numberArray );
+    //HBufC* text_copyright = StringLoader::LoadLC( R_IAUPDATE_AGREEMENT_DIALOG_COPYRIGHT, *numberArray );
     TPtr ptr = text_copyright->Des();
     AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr );
     
@@ -230,7 +205,8 @@ TInt CIAUpdateAgreement::ShowDialogL( TInt aCbaResourceId )
 
 	TInt ret = dlg->RunLD();
 	
-    return ret;
-    }
+    return ret;*/
+    //return KErrNone;
+
     
 // End of File  

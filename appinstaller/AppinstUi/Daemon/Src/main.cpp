@@ -43,7 +43,7 @@ void MainL()
     FLOG( _L("Daemon: Rename thread to SWI Daemon") );
     // Rename thread as SWI Daemon.
     User::RenameThread( KSWIDaemonInstaller );  
-  
+
     // For uninstaller
     // Set status to installing just to be sure that uninstaller 
     // do not run before installing in complete.

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -24,6 +24,7 @@
 #include "sislauncherclient.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include "swtypereginfo.h"
+#include "sislauncherclient.h"
 #endif
 #include <e32def.h>
 
@@ -32,7 +33,7 @@ _LIT(KSwiLauncherCapTestName, "Swi Launcher capability test");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KSwiLauncherInstallServerUtilCapTestName, "Swi Launcher Utils for InstallServer capability test");
 _LIT(KSwiLauncherSisRegistryServerUtilCapTestName, "Swi Launcher Utils for SisRegistryServer capability test");
-
+_LIT(KSisLauncherSwiSidCapTest, "Sis Launcher API's which require SWI Sid");
 const TUid KInstallServerUid = {0x101F7295};
 const TUid KSisRegistryServerUid = {0x10202DCA};
 #endif
@@ -160,7 +161,7 @@ void CSwiLauncherInstallServerUtilCapTest::RunTestL()
 	
 	User::LeaveIfError(file.Open(fs, testDocFileOnSysDrive , EFileShareExclusive|EFileRead));
 	
-	RCPointerArray<Swi::CSoftwareTypeRegInfo> regInfoArray;
+	RCPointerArray<Usif::CSoftwareTypeRegInfo> regInfoArray;
 	CleanupClosePushL(regInfoArray);
 	
 	TRAP(err, launcher.ParseSwTypeRegFileL(file, regInfoArray));
@@ -202,6 +203,8 @@ void CSwiLauncherSisRegistryServerUtilCapTest::RunTestL()
 	Swi::RSisLauncherSession launcher;
 	CleanupClosePushL(launcher);
 	
+	const RArray<Swi::TAppUpdateInfo> appUpdateInfo;
+	
 	if (launcher.Connect() != KErrNone)
 		{
 		CleanupStack::PopAndDestroy(&launcher);
@@ -215,7 +218,50 @@ void CSwiLauncherSisRegistryServerUtilCapTest::RunTestL()
 	
 	TRAP(err, launcher.UnregisterSifLauncherMimeTypesL(mimeTypes));
 	CheckFailL(err, _L("UnregisterSifLauncherMimeTypesL"));
+    
+    TRAP(err, launcher.NotifyNewAppsL(appUpdateInfo));
+    CheckFailL(err, _L("NotifyNewAppsL - update apparc"));
 	
 	CleanupStack::PopAndDestroy(2, &launcher); // mimeTypes
 	}
+
+//CSisLauncherSwiSidTest----------------------------------------------------------------------------------------------------------------------------------
+
+CSisLauncherSwiSidTest* CSisLauncherSwiSidTest::NewL()
+    {
+    CSisLauncherSwiSidTest* self = new (ELeave) CSisLauncherSwiSidTest();
+    CleanupStack::PushL(self);
+    self->ConstructL();
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+CSisLauncherSwiSidTest::CSisLauncherSwiSidTest()
+    {
+    SetCapabilityRequired(ECapabilityTCB);
+    SetSidRequired(KInstallServerUid);
+    }
+    
+void CSisLauncherSwiSidTest::ConstructL()
+    {
+    SetNameL(KSisLauncherSwiSidCapTest);
+    }
+
+void CSisLauncherSwiSidTest::RunTestL()
+    {
+    Swi::RSisLauncherSession launcher;
+    CleanupClosePushL(launcher);
+    const RPointerArray<Usif::CApplicationRegistrationData> appRegData;
+    TInt err = launcher.Connect();
+    if (err != KErrNone)
+        {
+        CleanupStack::PopAndDestroy(&launcher);
+        return;
+        }
+    err=KErrNone;
+    TRAP(err, launcher.NotifyNewAppsL(appRegData));
+    CheckFailL(err, _L("NotifyNewAppsL - force registration"));
+    CleanupStack::PopAndDestroy(&launcher);
+    }
+
 #endif

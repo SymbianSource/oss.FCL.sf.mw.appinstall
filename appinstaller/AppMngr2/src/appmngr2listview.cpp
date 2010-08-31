@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -36,6 +36,7 @@
 #include <eikmenup.h>                   // CEikMenuPaneItem
 #include <akntitle.h>                   // CAknTitlePane
 #include <StringLoader.h>               // StringLoader
+#include <AknInfoPopupNoteController.h> // CAknInfoPopupNoteController
 #include <appmngr2.rsg>                 // Resource IDs
 
 const TUid KStatusPaneUid = { EEikStatusPaneUidTitle };
@@ -44,29 +45,30 @@ const TUid KStatusPaneUid = { EEikStatusPaneUidTitle };
 // ======== MEMBER FUNCTIONS ========
 
 // ---------------------------------------------------------------------------
-// CAppMngr2ListView::ConstructL()
+// CAppMngr2ListView::ConstructL() 
 // ---------------------------------------------------------------------------
 //
 void CAppMngr2ListView::ConstructL( TInt aResourceId )
     {
     FLOG( "CAppMngr2ListView::ConstructL( 0x%08x )", aResourceId );
-
+    
     BaseConstructL( aResourceId );
     }
 
 // ---------------------------------------------------------------------------
-// CAppMngr2ListView::~CAppMngr2ListView()
+// CAppMngr2ListView::~CAppMngr2ListView() 
 // ---------------------------------------------------------------------------
 //
 CAppMngr2ListView::~CAppMngr2ListView()
     {
     FLOG( "CAppMngr2ListView::~CAppMngr2ListView" );
-
+    
     if( iContainer )
         {
         AppUi()->RemoveFromViewStack( *this, iContainer );
         delete iContainer;
         }
+    delete iInfoPopup;
     }
 
 // ---------------------------------------------------------------------------
@@ -77,8 +79,6 @@ void CAppMngr2ListView::RefreshL( TInt aMoreRefreshesExpected )
     {
     if( iContainer )
         {
-        FLOG( "CAppMngr2ListView::RefreshL( %d ) begin", aMoreRefreshesExpected );
-
         TBool selectedItemChanged = EFalse;
         iContainer->RefreshL( iMaintainFocus, selectedItemChanged, aMoreRefreshesExpected );
         if( selectedItemChanged )
@@ -87,8 +87,14 @@ void CAppMngr2ListView::RefreshL( TInt aMoreRefreshesExpected )
             StopDisplayingMenuBar();
             iMaintainFocus = EFalse;
             }
-            
-        FLOG( "CAppMngr2ListView::RefreshL() end" );
+
+        // Close progress note used in application startup
+        if( iInfoPopup && !aMoreRefreshesExpected )
+            {
+            iInfoPopup->HideInfoPopupNote();
+            delete iInfoPopup;
+            iInfoPopup = NULL;
+            }
         }
     }
 
@@ -99,7 +105,7 @@ void CAppMngr2ListView::RefreshL( TInt aMoreRefreshesExpected )
 void CAppMngr2ListView::UpdateMiddleSoftkeyCommandL()
     {
     FLOG_PERF_STATIC_BEGIN( UpdateMiddleSoftkeyCommandL );
-
+    
     if( iContainer && !iContainer->IsListEmpty() )
         {
         // add item-specific MSK if the current item has one
@@ -127,7 +133,7 @@ void CAppMngr2ListView::UpdateMiddleSoftkeyCommandL()
             }
         SetDefaultMiddleSoftkeyCommandL();
         }
-
+    
     FLOG_PERF_STATIC_END( UpdateMiddleSoftkeyCommandL )
     }
 
@@ -159,7 +165,7 @@ void CAppMngr2ListView::HandleViewRectChange()
 void CAppMngr2ListView::HandleCommandL( TInt aCommand )
     {
     FLOG( "CAppMngr2ListView::HandleCommandL( %d )", aCommand );
-
+    
     switch( aCommand )
         {
         case EAknSoftkeyBack:
@@ -195,12 +201,12 @@ void CAppMngr2ListView::DynInitMenuPaneL( TInt aResourceId,
     if( aResourceId == R_APPMNGR2_INSTALLED_MENU
             || aResourceId == R_APPMNGR2_PACKAGES_MENU )
         {
-        if( !FeatureManager::FeatureSupported( KFeatureIdHelp ) )
+        if( !FeatureManager::FeatureSupported( KFeatureIdHelp ) ) 
             {
             aMenuPane->SetItemDimmed( EAknCmdHelp, ETrue );
             }
 
-        // Keep the currently selected item focused in forthcoming list refreshes.
+        // Keep the currently selected item focused in forthcoming list refreshes. 
         iMaintainFocus = ETrue;
         }
     }
@@ -213,11 +219,11 @@ void CAppMngr2ListView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
         TUid /*aCustomMessageId*/, const TDesC8& /*aCustomMessage*/ )
     {
     FLOG( "CAppMngr2ListView::DoActivateL, id 0x%08x", Id().iUid );
-
+    
     CAknTitlePane* titlePane = NULL;
     titlePane = static_cast<CAknTitlePane*>( StatusPane()->ControlL( KStatusPaneUid ) );
     SetTitleL( *titlePane );
-
+    
     if( iContainer == NULL )
         {
         iContainer = CreateContainerL();
@@ -227,7 +233,16 @@ void CAppMngr2ListView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
         }
     UpdateMiddleSoftkeyCommandL();
 
-    // Note Infopopup is removed and replaced with wait dialog.         
+    if( iInfoPopup == NULL )
+        {
+        iInfoPopup = CAknInfoPopupNoteController::NewL();
+        iInfoPopup->SetTimePopupInView( 0 );
+        iInfoPopup->HideWhenAppFaded( EFalse );
+        HBufC* noteText = StringLoader::LoadLC( R_QTN_AM_SCANNING_MEMORY );
+        iInfoPopup->SetTextL( *noteText );
+        CleanupStack::PopAndDestroy( noteText );
+        iInfoPopup->ShowInfoPopupNote();
+        }
     }
 
 // ---------------------------------------------------------------------------
@@ -237,12 +252,17 @@ void CAppMngr2ListView::DoActivateL( const TVwsViewId& /*aPrevViewId*/,
 void CAppMngr2ListView::DoDeactivate()
     {
     FLOG( "CAppMngr2ListView::DoDeactivate, id 0x%08x", Id().iUid );
-
+    
     if( iContainer )
         {
         AppUi()->RemoveFromViewStack( *this, iContainer );
         delete iContainer;
         iContainer = NULL;
+        }
+    if( iInfoPopup )
+        {
+        delete iInfoPopup;
+        iInfoPopup = NULL;
         }
     }
 
@@ -265,12 +285,12 @@ void CAppMngr2ListView::AddDynamicMenuItemsL( CAppMngr2InfoBase& aCurrentItem,
     if( aMenuPane )
         {
         FLOG_PERF_STATIC_BEGIN( AddDynamicMenuItemsL );
-
+        
         TInt position = 0;
         if( aMenuPane->MenuItemExists( EAppMngr2PlaceForPluginSpecificCmds, position ) )
             {
             aMenuPane->DeleteMenuItem( EAppMngr2PlaceForPluginSpecificCmds );
-
+    
             RPointerArray<CEikMenuPaneItem::SData> menuItems;
             CleanupResetAndDestroyPushL( menuItems );
 
@@ -287,7 +307,7 @@ void CAppMngr2ListView::AddDynamicMenuItemsL( CAppMngr2InfoBase& aCurrentItem,
 
             CleanupStack::PopAndDestroy( &menuItems );
             }
-
+        
         FLOG_PERF_STATIC_END( AddDynamicMenuItemsL )
         }
     }
@@ -308,7 +328,7 @@ void CAppMngr2ListView::SetMiddleSoftkeyCommandL( TInt aResourceId, TInt aComman
                     iMiddleSoftkeyCommandId );
             }
         HBufC* middleSoftkeyLabel = StringLoader::LoadLC( aResourceId );
-        cba->AddCommandToStackL( CEikButtonGroupContainer::EMiddleSoftkeyPosition,
+        cba->AddCommandToStackL( CEikButtonGroupContainer::EMiddleSoftkeyPosition, 
                 aCommandId, *middleSoftkeyLabel );
         CleanupStack::PopAndDestroy( middleSoftkeyLabel );
         iMiddleSoftkeyCommandId = aCommandId;

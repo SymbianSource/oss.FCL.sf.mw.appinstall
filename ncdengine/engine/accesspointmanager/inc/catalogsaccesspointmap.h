@@ -17,6 +17,13 @@
 
 
 #include <e32base.h>
+
+#ifdef _0
+#include "catalogsaccesspointmanagerimpl.h"
+#endif
+
+#include <s32strm.h>
+
 #include "catalogsaccesspointmanagerimpl.h"
 
 class CCatalogsAccessPointMap : public CBase

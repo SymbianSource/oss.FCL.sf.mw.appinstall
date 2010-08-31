@@ -28,6 +28,9 @@
 #include "interpretsis.h"
 #include "logger.h"
 #include "../common/exception.h"
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#include "dirparse.h"
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 
 #ifndef _WIN32
@@ -47,6 +50,9 @@ extern "C"
 
 int main(int argc, const char* argv[])
 	{
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	std::string dbpath;
+#endif	
 	bool pauseWhenDone = false;
 
 	int result= SUCCESS;
@@ -76,10 +82,37 @@ int main(int argc, const char* argv[])
 
 		CInterpretSIS interpretSis(paramList);
 		
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		//Parsing Preprovisioned Resource file in not done if RegistryVersionExists
+		if(!paramPtr->RegistryVersionExists())
+		{
+			if ( paramPtr->IsFlagSet(CParameterList::EFlagsResourceFilePathSet)) 
+			{
+				ParseResourceDir(paramPtr, interpretSis);
+
+				if (NULL != logFile)
+				{
+					bool val = logFile->is_open();
+					logFile->close();
+					delete logFile;
+				}
+				return result;
+			}
+			else
+			{
+				ParseResourceDir(paramPtr, interpretSis);
+			}
+		}
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
+	
 		result = interpretSis.Install();
-		
+
 		// Uninstall the sis files
 		interpretSis.Uninstall();
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+		if(result != 0)
+			dbpath=GetDbPath(paramPtr);
+#endif
 		}
     catch( CCommandParser::CmdLineException err )
 		{
@@ -98,6 +131,14 @@ int main(int argc, const char* argv[])
 		e.Display();
 		result = CONFIG_ERROR;
     	}
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	catch(const CResourceFileException& aObject)
+		{
+		LERROR(L"Resource File Parsing Error - ");
+		aObject.Display();
+		result = RSC_PARSING_ERROR;
+		}
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
     catch(const RomManagerException& e)
     	{
 		LERROR(L"ROM Manager Error - ");
@@ -134,13 +175,31 @@ int main(int argc, const char* argv[])
 		result = UNKNOWN_EXCEPTION;
 		LERROR(L"Unknown Error" << std::endl);
 		}
-	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	//Restore Database in case of installation error for SA over SA and PU case
+	if(result != 0)
+	{
+		std::string BackupDb(dbpath);
+		BackupDb.append("_backup");
+		if (FileExists(string2wstring(BackupDb)))
+		{	
+			#ifdef __TOOLS2_LINUX__
+				std::string command = "mv " + BackupDb + " " + dbpath;
+			#else
+				std::string command = "move " + BackupDb + " " + dbpath;
+			#endif
+			int err = system(command.c_str());
+			if (err != 0)
+				LERROR(L"Failed to Restore src.db ");
+		}
+	}
+#endif
 	if (NULL != logFile)
-		{
+	{
 		bool val = logFile->is_open();
 		logFile->close();
 		delete logFile;
-		}
+	}
 
 	return result;
-	}
+}

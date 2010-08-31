@@ -31,10 +31,13 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
+
 #ifdef _WIN32
 #include <windows.h>
 #endif // _WIN32
-#include "utf8.h"
+
+
+#include "utf8_wrapper.h"
 
 static const TUint32 CrcTab32[256] =
      {
@@ -212,9 +215,10 @@ DllExport int Util::WideCharToInteger(const wchar_t* aWideChar)
 
 TInt64 Util::WideCharToInt64(const wchar_t* aWideChar)
 	{
-	TInt64 i64 = 0;
-	swscanf(aWideChar, L"%I64d", &i64);
-	return i64;
+	TInt64 value=0;
+	std::wstringstream str(aWideChar);
+	str >> value;
+	return value;
 	}
 
 DllExport const std::wstring Util::IntegerToWideString(int aInt)
@@ -243,22 +247,30 @@ std::string Util::Base64Encode( const std::string& aBinaryData )
 
 std::string Util::Base64Decode( const std::string& aEncodedData )
 	{
-	BIO *mem = BIO_new(BIO_s_mem());
-	BIO_write(mem, aEncodedData.c_str(), aEncodedData.length());
+	unsigned char* pIn = aEncodedData.c_str();
+	int inLen = aEncodedData.length();
+	unsigned char* pOut = new unsigned char[inLen];
 
-	BIO* b64 = BIO_new(BIO_f_base64());
-	mem = BIO_push(b64, mem);
-	int inlen = 0;
-	char inbuf[40]={0};
+	int outLen;
+	std::string aDecodeData;
+		
+    // create a memory buffer containing base64 encoded data
+    BIO* bmem = BIO_new_mem_buf((void*)pIn, inLen);
 
-	inlen = BIO_read(b64, inbuf, aEncodedData.length());
-    BIO_write(mem, inbuf, inlen);
-	std::string decodedData = inbuf;
-	
-	BIO_free_all(mem);
-	return decodedData;
+    // push a Base64 filter so that reading from buffer decodes it
+    BIO *bioCmd = BIO_new(BIO_f_base64());
+    // we don't want newlines
+    BIO_set_flags(bioCmd, BIO_FLAGS_BASE64_NO_NL);
+    bmem = BIO_push(bioCmd, bmem);
+
+    int finalLen = BIO_read(bmem, (void*)pOut, outLen);
+
+	aDecodeData.assign(pOut, pOut+finalLen);
+	delete pOut;
+    BIO_free_all(bmem);
+
+	return aDecodeData;
 	}
-
 
 TUint32 Util::Crc32(const void* aPtr, TInt aLength)
 	{
@@ -269,3 +281,7 @@ TUint32 Util::Crc32(const void* aPtr, TInt aLength)
 	 crc = (crc >> 8) ^ CrcTab32[(crc ^ *p++) & 0xff];
 	return crc;
 	}
+
+
+
+

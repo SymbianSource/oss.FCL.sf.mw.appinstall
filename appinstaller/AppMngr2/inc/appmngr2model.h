@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -52,16 +52,15 @@ public:     // constructor and destructor
 
 public:     // new functions
     TInt AppInfoCount() const;
-    CAppMngr2AppInfo& AppInfo( TInt aIndex ) const;
+    CAppMngr2AppInfo& AppInfo( TInt aIndex ) const; 
     TInt PackageInfoCount() const;
-    CAppMngr2PackageInfo& PackageInfo( TInt aIndex ) const;
+    CAppMngr2PackageInfo& PackageInfo( TInt aIndex ) const; 
     void LoadIconsL( CAknIconArray& aIconArray );
     void GetIconIndexesL( TUid aUid, TInt& aIconIndexBase, TInt& aIconIndexMax ) const;
     void HandleCommandL( CAppMngr2InfoBase& aInfo, TInt aCommand );
     void StartFetchingInstallationFilesL();
     void StartFetchingInstalledAppsL();
-    TBool IsUninstall();
-
+    
 protected:  // from CActive
     void DoCancel();
     void RunL();
@@ -69,7 +68,7 @@ protected:  // from CActive
 public:     // from MAppMngr2RuntimeObserver
     void RefreshInstalledApps();
     void RefreshInstallationFiles();
-
+    
 public:     // from MAppMngr2ScannerObserver
     void ScanningResultL( RPointerArray<CAppMngr2RecognizedFile>& aResult );
     void ScanningComplete();
@@ -88,7 +87,7 @@ public:     // from MAppMngr2InfoMakerObserver
 
 public:     // from MAppMngr2InfoArrayObserver
     void ArrayContentChanged( CAppMngr2InfoArray* aArray, TInt aMoreRefreshesExpected );
-
+    
 private:    // new functions
     CAppMngr2Model( RFs& aFsSession, MAppMngr2ModelObserver& aObserver );
     void ConstructL();
@@ -111,9 +110,7 @@ private:    // data
     CAppMngr2InfoBase* iActiveItem; // not owned
     TInt iActiveCommand;
     TBool iClosing;
-    TBool iFetchingInstallationFiles;
-    TBool iFetchingInstalledApps;
-
+    
     FLOG_PERF_DEFINE( FetchInstallationFiles )
     FLOG_PERF_DEFINE( FetchInstalledApps )
     };

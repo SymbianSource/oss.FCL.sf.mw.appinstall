@@ -1,0 +1,51 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+TARGET			tusifsuite.exe
+TARGETTYPE		exe
+UID				0x1000007A 0x10285BCC
+
+CAPABILITY		ReadUserData TrustedUI writeDeviceData
+
+//Please add any change under here
+SOURCEPATH		../source
+SOURCE			tsifsuiteserver.cpp
+SOURCE			tsifsuitestepbase.cpp
+SOURCE			tsifoperationstep.cpp
+SOURCE			tsifcommonverificationstep.cpp
+SOURCE			tsifgenericbrowserinstallstep.cpp
+SOURCE			tsifcommonunitteststep.cpp
+SOURCE			tsifnotifierteststep.cpp
+
+USERINCLUDE		../source
+USERINCLUDE		../../../../swcomponentregistry/inc_private
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+//Please add your system include under here. 
+LIBRARY			euser.lib
+LIBRARY			efsrv.lib
+LIBRARY			testexecuteutils.lib 
+LIBRARY			testexecutelogclient.lib
+LIBRARY			scsclient.lib
+
+//Please add your libraries under here. For example:
+LIBRARY			sif.lib estor.lib apgrfx.lib apparc.lib sifnotification.lib
+
+LIBRARY			scrclient.lib sisregistryclient.lib scrdatabase.lib oomtestbase.lib
+SMPSAFE

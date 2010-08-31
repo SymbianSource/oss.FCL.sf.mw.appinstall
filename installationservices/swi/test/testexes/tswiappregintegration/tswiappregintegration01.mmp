@@ -1,0 +1,75 @@
+/*
+* Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* 
+* Description:
+* swiappregintegration01.mmp for swi application reg integration testing
+*
+*/
+
+TARGET			swiappregintegration.exe
+TARGETTYPE		exe
+
+UID			0x10000007 0x90000003
+VENDORID		0x0
+
+SOURCEPATH		.
+SOURCE			swiappregintegration.cpp
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
+START RESOURCE	case01/swiappregintegration01_loc.rss
+HEADER
+TARGETPATH		tswi/tuiscriptadaptors/data/swiappregintegration01
+LANG  SC 01 03 24	
+END
+
+// Application exe registration resource file
+START RESOURCE 	case01/swiappregintegration01_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data/swiappregintegration01
+END
+
+
+// Icons for UK language version
+START BITMAP	swiappregintegration.mbm
+TARGETPATH		tswi/tuiscriptadaptors/data/swiappregintegration01
+SOURCEPATH		.
+SOURCE			c8,1 icon3m.bmp
+END
+
+START RESOURCE 	fotaupdateapp1_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdateapp2_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdatestubapp1_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdatestubapp2_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdateUDA1_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+START RESOURCE 	fotaupdateUDA2_reg.rss
+TARGETPATH	tswi/tuiscriptadaptors/data
+END
+
+LIBRARY			euser.lib
+SMPSAFE
+

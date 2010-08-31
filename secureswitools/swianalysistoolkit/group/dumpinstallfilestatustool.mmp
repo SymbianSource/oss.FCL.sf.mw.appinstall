@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* This mmp file is used to replace calling makefile directly.
+*
+*/
+
+
+TARGET			dumpinstallfilestatustool.exe
+TARGETTYPE		exe
+
+
+USERINCLUDE 			../source/chainvalidityandinstallfilestatustools/dumpinstallfilestatustool
+USERINCLUDE 			../source/chainvalidityandinstallfilestatustools/common
+USERINCLUDE 			../source/common
+USERINCLUDE 			../../swisistools/source/makesis
+USERINCLUDE 			../../swisistools/source/common
+
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+SYSTEMINCLUDE 			../../openssllib/import/inc 
+
+SOURCEPATH			../source/chainvalidityandinstallfilestatustools
+
+SOURCE				./dumpinstallfilestatustool/dumpinstallfilestatustool.cpp
+SOURCE				./dumpinstallfilestatustool/sisfiledata.cpp
+SOURCE				./dumpinstallfilestatustool/options.cpp
+SOURCE				./common/certificatechain.cpp
+SOURCE				./common/dumpchainvaliditytool.cpp
+SOURCE				./common/launchprocess.cpp
+SOURCE				./common/siscertificatechain.cpp
+SOURCE				./common/swicertstore.cpp
+SOURCE				../common/osinterface.cpp
+
+#ifndef TOOLS2_LINUX
+	MACRO			_UNICODE _CONSOLE _STLP_THREADS _WIN32 GENERATE_ERRORS DUMPINSTALLFILESTATUSTOOL //UNICODE
+#else
+	MACRO			_UNICODE _CONSOLE UNICODE GENERATE_ERRORS DUMPINSTALLFILESTATUSTOOL	
+#endif
+
+STATICLIBRARY			eay32 
+
+// Link to mingw libs: shlwapi.a 
+APPLY				tools2_shlwapi
+
+OPTION				GCC -w
+OPTION				GCC -fno-stack-check
+OPTION				GCC -fpermissive
+

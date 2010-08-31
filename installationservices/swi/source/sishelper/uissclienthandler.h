@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -28,10 +28,7 @@
 #include "swi/msisuihandlers.h"
 #include "swi/launcher.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-namespace Usif
-	{
-	class CComponentInfo;
-	}
+#include <usif/sif/sifcommon.h>
 #include "swi/nativecomponentinfo.h"
 #endif
 
@@ -166,7 +163,6 @@ private:
 	MUiHandler& iUiHandler;        ///< UI implementation
 	MCancelHandler* iCancelHandler;///< Internal cancel handler
 	HBufC8* iBuf;                  ///< Command buffer
-	HBufC8* iBufLogger;            ///< Command buffer
 	TPtr8 iPtrIntoBuf;
 	RUissSession iUissSession;     ///< UISS session
 
@@ -187,7 +183,7 @@ private:
 	void AllocCompInfoBufL(TInt aBufSize);
 	void ConstructCompInfoFromBufferL();
 	Usif::CComponentInfo::CNode* MapToComponentInfoL(CNativeComponentInfo& aNativeComponentInfo);
-	
+	void MapToApplicationInfoL(RCPointerArray<Swi::CNativeComponentInfo::CNativeApplicationInfo>& aNativeApplicationsInfo, RPointerArray<Usif::CComponentInfo::CApplicationInfo>& aApplicationsInfo);
 	HBufC8* iCompInfoBuffer;		//< Component Information storage buffer
 	TPtr8   iCompInfoBufPtr;
 	

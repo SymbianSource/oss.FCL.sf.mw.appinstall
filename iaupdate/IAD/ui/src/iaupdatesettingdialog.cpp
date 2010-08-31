@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2010-2011 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,695 +11,396 @@
 *
 * Contributors:
 *
-* Description:    
+* Description:   This module contains the implementation of IAUpdateSettingDialog 
+*                class member functions.
 *
 */
 
-
-
-
-// INCLUDE FILES
+#include <hbdataform.h>
+#include <hbdataformmodel.h>
+#include <centralrepository.h>
+#include <cmconnectionmethoddef.h>
+#include <cmdestination.h>
+#include <xqconversions.h>
+#include <hbaction.h> 
 
 #include "iaupdatesettingdialog.h"
-#include "iaupdateaccesspointhandler.h"  
-#include "iaupdatestatuspanehandler.h"
-#include "iaupdateapplication.h"
-#include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
-#include "iaupdatedebug.h"
-#include <iaupdate.rsg>
-
-#include <centralrepository.h>
-#include <featmgr.h> 
-#include <hlplch.h>
+#include "iaupdate.hrh"
 
 
-_LIT( KSWUPDATE_HLP_SETTINGS, "SWUPDATE_HLP_SETTINGS" ); 
+const TInt KAutoUpdateOn( 0 );
+const TInt KAutoUpdateOff( 1 );
+const TInt KAutoUpdateOnInHomeNetwork( 2 );
 
-
-
-
-// cenrep in emulator:
-// copy 2000F85A.txt to '\epoc32\release\winscw\udeb\Z\private\10202be9\'
-// delete 2000F85A.txt from 'epoc32\winscw\c\private\10202be9\persists'
-//
-// cenrep in hardware:
-// copy 2000F85A.txt to '\epoc32\data\Z\private\10202be9'
-//
-
-
-
-/******************************************************************************
- * class CIAUpdateSettingDialog
- ******************************************************************************/
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::ShowDialogL
-// 
-// -----------------------------------------------------------------------------
-TBool CIAUpdateSettingDialog::ShowDialogL()
-	{
-	//__UHEAP_MARK;
-	
-	CIAUpdateSettingDialog* dialog = CIAUpdateSettingDialog::NewL();
-
-	TBool ret = dialog->ExecuteLD( R_IAUPDATE_SETTING_DIALOG );
-
-   	//__UHEAP_MARKEND;
-   	
-    return ret;
-	}
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::NewL
-//
-// -----------------------------------------------------------------------------
-CIAUpdateSettingDialog* CIAUpdateSettingDialog::NewL()
+/*
+Constructor. It creates a formwidget on the view. 
+*/
+CIAUpdateSettingDialog::CIAUpdateSettingDialog(QGraphicsItem* parent):HbView(parent)
     {
-    CIAUpdateSettingDialog* self = new ( ELeave ) CIAUpdateSettingDialog();
-    CleanupStack::PushL( self );
-    self->ConstructL();
-    CleanupStack::Pop( self );
-
-    return self;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::CIAUpdateSettingDialog
-// 
-// -----------------------------------------------------------------------------
-//
-CIAUpdateSettingDialog::CIAUpdateSettingDialog()
-	{
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::ConstructL
-//
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::ConstructL()
-    {
- 	CAknDialog::ConstructL( R_IAUPDATE_SETTING_DIALOG_MENU );
     
-    // get previous title so it can be restored
-	iStatusPaneHandler = CIAUpdateStatusPaneHandler::NewL( iAvkonAppUi );
-	iStatusPaneHandler->StoreOriginalTitleL();
-    } 
+    //setTitle("Software update");
+    
+    mSettingsForm = new HbDataForm(this);
+            
 
+    // open connection manager 
+    TRAPD(err,  mCmManager.OpenL()); 
+    qt_symbian_throwIfError(err);
+    
+    // destination field flag inititializations 
+    mSetByNwQuery = false; // dest set by user/by destination query
+    mConnected = false;    // already connected to query
+    mInitialized = false;  // field initialized ?
+    
+    // Initialize view
+    initializeView();
+    
+    //setWidget(mSettingsForm);
+    setWidget(mSettingsForm);
+    
+    // Create application settings ui
+    mApplSett = new CmApplSettingsUi(this);
 
-// ----------------------------------------------------------------------------
-// Destructor
-//
-// ----------------------------------------------------------------------------
-//
+    // Create a back key action and set it as the default navigation
+    // action once the back key is pressed
+    mBackKey = new HbAction(Hb::BackNaviAction, this);
+    this->setNavigationAction(mBackKey);
+
+    connect(mBackKey, SIGNAL(triggered()), this, SLOT(showPreviousView()));
+
+    }
+
+/*
+Destructor
+*/
 CIAUpdateSettingDialog::~CIAUpdateSettingDialog()
     {
-	delete iStatusPaneHandler;
-	
-    if (iAvkonAppUi)
-    	{
-    	iAvkonAppUi->RemoveFromStack( this );
-    	}
+    // close connection manager 
+    mCmManager.Close();
     }
 
-
-// ---------------------------------------------------------
-// CIAUpdateSettingDialog::CreateCustomControlL
-// ---------------------------------------------------------
+// ----------------------------------------------------------------------------
+// CIAUpdateSettingDialog::toggleChange
+// 
+// ----------------------------------------------------------------------------
 //
-SEikControlInfo CIAUpdateSettingDialog::CreateCustomControlL( TInt aControlType )
-    {
-    SEikControlInfo controlInfo;
-    controlInfo.iControl = NULL;
-    controlInfo.iTrailerTextId = 0;
-    controlInfo.iFlags = 0;
-    
-    switch ( aControlType )
+void CIAUpdateSettingDialog::toggleChange(QModelIndex startIn, QModelIndex /*endIn*/)
+{
+    // HLa: this should work
+    HbDataFormModelItem *itm = mModel->itemFromIndex(startIn);
+
+    // Destination ?
+    if ( startIn.row() == 0 )
         {
-        case EAknCtLastControlId:
+        // no query when initializing fields
+        if ( mInitialized )
             {
-            controlInfo.iControl = new (ELeave) CIAUpdateSettingItemList();
-            break;
+            // no query if field value set by destination query
+            if (!mSetByNwQuery )
+                {
+                queryDestination();
+                mSetByNwQuery = true;
+                }
+                else
+                {
+                mSetByNwQuery = false;
+                }
             }
-
-        default:
+        else
             {
-            break;
+            mInitialized = true;
             }
+           
         }
-    return controlInfo;
-    }
-
-
-//------------------------------------------------------------------------------
-// CIAUpdateSettingDialog::ActivateL
-//
-// Called by system when dialog is activated.
-//------------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::ActivateL()
-	{
-    CAknDialog::ActivateL();
-
-	// this cannot be in ConstructL which is executed before dialog is launched
-	iAvkonAppUi->AddToStackL(this);
-    }
-
-
-//------------------------------------------------------------------------------
-// CIAUpdateSettingDialog::GetHelpContext
-//
-//------------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::GetHelpContext( TCoeHelpContext& aContext ) const
-	{
-	aContext.iMajor = KUidIAUpdateApp;
-    aContext.iContext = KSWUPDATE_HLP_SETTINGS;        
-	}
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::HandleListBoxEventL
-// 
-// -----------------------------------------------------------------------------
-void CIAUpdateSettingDialog::HandleListBoxEventL( CEikListBox* /*aListBox*/,
-                                                  TListBoxEvent /*aEventType*/ )
-    {
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::PreLayoutDynInitL
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::PreLayoutDynInitL()
-    {
-    iList = (CIAUpdateSettingItemList*) ControlOrNull ( EIAUpdateSettingDialogList );
-    
-    iList->LoadSettingsL(); // from CAknSettingItemList
-    
-	iStatusPaneHandler->SetTitleL( R_IAUPDATE_SETTING_DIALOG_TITLE );
-	iStatusPaneHandler->SetNaviPaneTitleL(KNullDesC);
-    }
-
-
-//------------------------------------------------------------------------------
-// CIAUpdateSettingDialog::DynInitMenuPaneL
-//
-// Called by system before menu is shown.
-//------------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::DynInitMenuPaneL(TInt aResourceID, CEikMenuPane* aMenuPane )
-	{
-    if( aResourceID == R_IAUPDATE_SETTING_DIALOG_MENU_PANE ) 
+    // Auto update ?
+    if ( startIn.row() == 1 )
         {
-        if ( !FeatureManager::FeatureSupported( KFeatureIdHelp ) )
+         int currentIndex = mAutoUpdateItem->contentWidgetData(QString("currentIndex")).toInt();
+        }
+}
+// ----------------------------------------------------------------------------
+// CIAUpdateSettingDialog::queryDestination
+// 
+// ----------------------------------------------------------------------------
+//
+void CIAUpdateSettingDialog::queryDestination()
+  {
+        QFlags<CmApplSettingsUi::SelectionDialogItems> listItems;
+        QSet<CmApplSettingsUi::BearerTypeFilter> filter;
+        
+        // Show only destinations
+       listItems |= CmApplSettingsUi::ShowDestinations;
+       // listItems |= CmApplSettingsUi::ShowConnectionMethods;
+
+        mApplSett->setOptions(listItems, filter);
+        mApplSett->setSelection(mSelection);
+        
+        // Connect finished(uint) signal and handle result via it
+        if (!mConnected)
             {
-            aMenuPane->SetItemDimmed( EAknCmdHelp, ETrue );
+            connect(mApplSett, SIGNAL(finished(uint)), this, SLOT(showResults(uint)));
+            mConnected = true;
             }
-        }
+        
+        // Start CmApplSettingsUi
+        mApplSett->open();
+
+  }
+// ----------------------------------------------------------------------------
+// CIAUpdateSettingDialog::showResults
+// 
+// ----------------------------------------------------------------------------
+//
+void CIAUpdateSettingDialog::showResults(uint retval)
+{
+    if (retval == CmApplSettingsUi::ApplSettingsErrorNone) {
+        mSelection = mApplSett->selection();
+        
+        uint destinationId = mSelection.id;
+        
+        QString idString;
+        
+        TRAPD( err, getDestinationNameL( destinationId, idString ) );
+        qt_symbian_throwIfError(err);
+
+        // Destination changed ?
+        if ( idString != mCurrentDest )
+            {
+            mCurrentDest = idString;
+            }
     }
-
-
-//------------------------------------------------------------------------------
-// CIAUpdateSettingDialog::ProcessCommandL
-//
-// Handle commands from menu.
-//------------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::ProcessCommandL(TInt aCommandId)
-	{
-    if ( MenuShowing() ) 
-        {
-        HideMenu();
-        }
-
-
-	switch ( aCommandId )
-		{
-		case EAknCmdHelp:
-			{
-			HlpLauncher::LaunchHelpApplicationL( 
-			                     iEikonEnv->WsSession(), 
-			                     iEikonEnv->EikAppUi()->AppHelpContextL() );
-		    break;
-			}
- 
-		case EAknCmdOpen:
-			{
-			EditItemL();
-			break;
-			}
-		    
-        case EAknCmdExit:
-        case EEikCmdExit:
-			{
-			// close dialog and exit calling application
-			iAvkonAppUi->ProcessCommandL( EAknCmdExit );
-			break;
-			}
-
-		default:			
-		    break;
-		}
-	}
-
-
-//------------------------------------------------------------------------------
-// CIAUpdateSettingDialog::OkToExitL
-//
-//------------------------------------------------------------------------------
-//
-TBool CIAUpdateSettingDialog::OkToExitL(TInt aButtonId)
-	{
-	if ( aButtonId == EEikBidCancel )
-		{
-		TRAP_IGNORE( SaveSettingsL() );  //potential leave trapped 
-		                                 //because IAD is not closed if SaveSettingsL() leaves 
-		return ETrue; // close dialog
-		}
-
-	if ( aButtonId == EAknSoftkeyOpen )
-		{
-		EditItemL();
-
-		return EFalse; // leave dialog open
-		}
-
-	if ( aButtonId == EAknSoftkeyBack )
-        {
-		SaveSettingsL();
-		
-		return ETrue; // close dialog
-		}
-
-	return CAknDialog::OkToExitL(aButtonId);
-	}
-
-
-
-// ----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::OfferKeyEventL
-// 
-// ----------------------------------------------------------------------------
-//
-TKeyResponse CIAUpdateSettingDialog::OfferKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType)
-	{
-	if (aType == EEventKey)
-		{
-		switch (aKeyEvent.iCode)
-			{
-			case EKeyEscape:  // framework calls this when dialog must shut down
-				{
-				return CAknDialog::OfferKeyEventL(aKeyEvent, aType);
-        		}
-			case EKeyUpArrow:
-			case EKeyDownArrow:
-			    {
-    		    break;
-			    }
-            default:
-				{
-			    break;
-				}
-			}
-		}
-
-	return CAknDialog::OfferKeyEventL( aKeyEvent, aType);
-	}
-
-
-// ----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::HandleResourceChange
-// 
-// ----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::HandleResourceChange(TInt aType)
-    {   
-    if (aType == KEikDynamicLayoutVariantSwitch) //Handle change in layout orientation
-        {
-        TRect mainPaneRect;
-        AknLayoutUtils::LayoutMetricsRect( AknLayoutUtils::EMainPane, mainPaneRect );
-        SetRect( mainPaneRect );
-    
-        iList->HandleResourceChange( aType );
-    
-        CCoeControl::HandleResourceChange( aType );
-		DrawDeferred();
-	    return;
-		}
-		
-    if ( aType == KAknsMessageSkinChange )
-        {
-        }
-		
-    CCoeControl::HandleResourceChange( aType );
-    }
-
-
-// ----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::EditItemL
-// 
-// ----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::EditItemL()
-	{
-	TInt currentIndex = iList->ListBox()->CurrentItemIndex();
-	TBool calledFromMenu = ETrue;
-	
-	iList->EditItemL( currentIndex, calledFromMenu );
-	}
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingDialog::SetVisibility
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::SetVisibility()
-	{
-	}
-
-
-// -----------------------------------------------------------------------------
-// CAspContentDialog::SetAllReadOnly
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingDialog::SetAllReadOnly()
-	{
-	}
-
+   // inform toggleChange that change is not made by user
+    mSetByNwQuery = true;
+    mDestinationItem->setContentWidgetData(QString("text"), mCurrentDest);
+}
 
 // ----------------------------------------------------------------------------
 // CIAUpdateSettingDialog::SaveSettingsL
 // 
 // ----------------------------------------------------------------------------
 //
-void CIAUpdateSettingDialog::SaveSettingsL()
-	{
-    iList->StoreSettingsL();  // from CAknSettingItemList
-    
+void CIAUpdateSettingDialog::saveSettingsL()
+    {
     CRepository* cenrep = CRepository::NewLC( KCRUidIAUpdateSettings );
     TInt err = cenrep->StartTransaction( CRepository::EReadWriteTransaction );
     User::LeaveIfError( err );
-    cenrep->CleanupCancelTransactionPushL();
-
     
-    TInt num = iList->Attribute( EAccessPoint );
-    if ( num == 0 )
-        {
-        // O means default destination. Let's save it as -1 so that we know later on 
-        // whether cenrep really contained the default or just nothing.
-        num = -1;
-        }
-    err = cenrep->Set( KIAUpdateAccessPoint, num );
+    cenrep->CleanupCancelTransactionPushL();
+    
+    // Set destination
+    TInt value = mSelection.id;
+    err = cenrep->Set( KIAUpdateAccessPoint, value ) ;
     User::LeaveIfError( err );
-
-    num = iList->Attribute( EAutoUpdateCheck );
-    err = cenrep->Set( KIAUpdateAutoUpdateCheck, num );
+    
+    // Set auto update check
+    value = mAutoUpdateItem->contentWidgetData(QString("currentIndex")).toInt();
+    
+    // Convert ist index index to setting value
+    switch ( value )
+         {
+         case KAutoUpdateOn:
+             value = EIAUpdateSettingValueDisableWhenRoaming;
+             break;
+         case KAutoUpdateOff:
+             value = EIAUpdateSettingValueDisable;
+             break;
+         case KAutoUpdateOnInHomeNetwork:
+             value = EIAUpdateSettingValueEnable;
+             break;
+         default: 
+             break;
+         }
+    err = cenrep->Set( KIAUpdateAutoUpdateCheck, value ); 
+    
     User::LeaveIfError( err );
-           
+    
     TUint32 ignore = KErrNone;
     User::LeaveIfError( cenrep->CommitTransaction( ignore ) );
     CleanupStack::PopAndDestroy(); // CleanupCancelTransactionPushL()
     CleanupStack::PopAndDestroy( cenrep );
-	}
-	
-	
-
-
-
-/******************************************************************************
- * class CIAUpdateSettingItemList
- ******************************************************************************/
+    }
 
 
 // -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::CreateSettingItemL
-// 
+// CIAUpdateSettingDialog::initializeFieldsL
 // -----------------------------------------------------------------------------
 //
-CAknSettingItem* CIAUpdateSettingItemList::CreateSettingItemL( TInt aSettingId )
+void CIAUpdateSettingDialog::initializeFieldsL()
     {
-    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateSettingItemList::CreateSettingItemL begin");
     CRepository* cenrep = CRepository::NewLC( KCRUidIAUpdateSettings );
-    CAknSettingItem* item = NULL;
+    int destId = 0;
     
-    switch ( aSettingId )
-        {
-        case EIAUpdateSettingAccessPoint:
-            {
-            User::LeaveIfError( cenrep->Get( KIAUpdateAccessPoint, iAccessPoint ) );
-            IAUPDATE_TRACE_1("[IAUPDATE] CIAUpdateSettingItemList::CreateSettingItemL iAccessPoint: %d", iAccessPoint);
-            if ( iAccessPoint == -1 )
-                {
-                // -1 was just our private representation in cenrep of the default destination  
-                // Let's handle it as it was 0
-                iAccessPoint = 0;
-                }
-            item = CIAUpdateAccessPointSettingItem::NewL( aSettingId, iAccessPoint );
-            break;
-            }
-
-        case EIAUpdateSettingAutoUpdateCheck:
-            {
-            User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, iAutoUpdateCheck ) );
-            item = new (ELeave) CAknEnumeratedTextPopupSettingItem
-                               ( aSettingId, iAutoUpdateCheck );
-            break;
-            }
-
-        default:
-            {
-            item = new (ELeave) CAknSettingItem( aSettingId );
-            break;
-            }
-        }
-    CleanupStack::PopAndDestroy( cenrep ); 
-    IAUPDATE_TRACE("[IAUPDATE] CIAUpdateSettingItemList::CreateSettingItemL end");
-    return item;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::LoadSettingsL
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingItemList::LoadSettingsL()
-    {
-    CAknSettingItemList::LoadSettingsL();
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::EditItemL
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingItemList::EditItemL( TInt aIndex, TBool aCalledFromMenu )
-    {
-    CAknSettingItemList::EditItemL( aIndex, aCalledFromMenu );
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::SetAttribute
-// 
-// -----------------------------------------------------------------------------
-//
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::Attribute
-// 
-// -----------------------------------------------------------------------------
-//
-TInt CIAUpdateSettingItemList::Attribute( TInt aKey )
-    {
-    TInt ret = KErrNotFound;
+    // get access point id
+    User::LeaveIfError( cenrep->Get( KIAUpdateAccessPoint, destId ) );
     
-    switch ( aKey )
+    // save id
+    mSelection.id = destId;
+    
+    // On first time: show internet access point
+    if ( mSelection.id == 0 )
         {
-        case CIAUpdateSettingDialog::EAccessPoint:
-            {
-            ret = iAccessPoint;
-            break;
-            }
-        case CIAUpdateSettingDialog::EAutoUpdateCheck:
-            {
-            ret = iAutoUpdateCheck;
-            break;
-            }
-        default:
-            {
-            IAUpdateDialogUtil::Panic( KErrNotSupported );
-            break;
-            }
+        User::LeaveIfError(mSelection.id = getInternetSnapIdL());
         }
-        
-    return ret;
-    }
 
-
-// -----------------------------------------------------------------------------
-// CIAUpdateSettingItemList::CheckSettings
-// 
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateSettingItemList::CheckSettings()
-    {
-    if ( iAutoUpdateCheck != EIAUpdateSettingValueDisable &&
-         iAutoUpdateCheck != EIAUpdateSettingValueDisableWhenRoaming &&
-         iAutoUpdateCheck != EIAUpdateSettingValueEnable )
-        {
-        iAutoUpdateCheck = EIAUpdateSettingValueEnable;
-        }
-    }
-
-
-
-/******************************************************************************
- * class CIAUpdateAccessPointSettingItem
- ******************************************************************************/
-
-// -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::NewL
-//
-// -----------------------------------------------------------------------------
-//
-CIAUpdateAccessPointSettingItem* CIAUpdateAccessPointSettingItem::NewL(
-                   TInt aSettingId, TInt& aAccessPointId )
-    {
-    CIAUpdateAccessPointSettingItem* item = 
-    new (ELeave) CIAUpdateAccessPointSettingItem( aSettingId, aAccessPointId );
-    CleanupStack::PushL(item);
-    item->ConstructL();
-    CleanupStack::Pop(item);
-    return item;
-	}
-
-// -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::CIAUpdateAccessPointSettingItem
-//
-// -----------------------------------------------------------------------------
-//
-CIAUpdateAccessPointSettingItem::CIAUpdateAccessPointSettingItem( 
-                                 TInt aSettingId, TInt& aAccessPointId )
-:   CAknSettingItem( aSettingId ), 
-    iAccessPointId ( aAccessPointId )
-    {
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::~CIAUpdateAccessPointSettingItem
-// 
-// -----------------------------------------------------------------------------
-//
-CIAUpdateAccessPointSettingItem::~CIAUpdateAccessPointSettingItem()
-    {
-    delete iSettingText;
-    delete iApHandler;
-    }
-
-
-// -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::ConstructL
-//
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateAccessPointSettingItem::ConstructL()
-    {
-    iApHandler = CIAUpdateAccessPointHandler::NewL();
-     
-    if ( iAccessPointId == 0 )
-        {
-    	iApHandler->GetDefaultConnectionLabelL( iSettingText );
+    // set destination name
+    TRAPD( err, getDestinationNameL( mSelection.id, mCurrentDest ) );
+   
+    if ( err == KErrNotFound )
+        { 
+        mSelection.id = 0;
         }
     else
         {
-        TRAPD( err, iApHandler->GetApNameL( iAccessPointId, iSettingText ) );
-        if ( err == KErrNotFound )
-            { // destination stored by IAD may be removed
-            iAccessPointId = 0;
-            iApHandler->GetDefaultConnectionLabelL( iSettingText );
-            }
-        else
-            {
-            User::LeaveIfError( err );
-            }
+         // nothing to do ?
+         User::LeaveIfError( err );
         }
+    mDestinationItem->setContentWidgetData(QString("text"), mCurrentDest);
+    
+    // set auto update value
+    int value = 0;
+    User::LeaveIfError( cenrep->Get( KIAUpdateAutoUpdateCheck, value ) );
+    
+    // map cenrep value to index
+    switch ( value )
+         {
+         case EIAUpdateSettingValueEnable:
+             value = KAutoUpdateOn; // On 
+             break;
+         case EIAUpdateSettingValueDisable:
+             value = KAutoUpdateOff; // Off
+             break;
+         case EIAUpdateSettingValueDisableWhenRoaming:
+             value = KAutoUpdateOnInHomeNetwork; // On in home network
+             break;
+         default: 
+             break;
+         }
+    
+    mAutoUpdateItem->setContentWidgetData("currentIndex", value);
+    
+   
+    CleanupStack::PopAndDestroy( cenrep ); 
+
     } 
 
 
 // -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::EditItemL
-// 
+// CIAUpdateSettingDialog::getDestinationNameL
+//
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateAccessPointSettingItem::EditItemL( TBool /*aCalledFromMenu*/ )
+void CIAUpdateSettingDialog::getDestinationNameL( uint aItemUid, QString& aItemName )
     {
-    EditAccessPointItemL();
+    
+    if ( aItemUid == 0 )
+        {
+        aItemUid = getInternetSnapIdL();
+        }
+
+    RCmDestination dest = mCmManager.DestinationL( aItemUid );
+    CleanupClosePushL( dest );
+    HBufC* temp = dest.NameLC();    
+    CleanupStack::Pop( temp );
+    CleanupStack::PopAndDestroy( &dest ); 
+    
+    aItemName = XQConversions::s60DescToQString( temp->Des() );
+
+    if ( aItemName.size() == 0 ) 
+        {
+        User::Leave(KErrNotFound);
+        }
     }
 
-
 // -----------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::SettingTextL
-// 
+// ActionView::initializeView
 // -----------------------------------------------------------------------------
 //
-const TDesC& CIAUpdateAccessPointSettingItem::SettingTextL()
+void CIAUpdateSettingDialog::initializeView()
     {
-    if ( !iSettingText )
+    
+    setTitle("Software update"); // txt_software_title_software_update
+    mSettingsForm->setHeading("Settings"); // txt_software_subhead_settings
+
+     //create a model class
+     HbDataFormModel *mModel = new HbDataFormModel();
+
+     // add Destination item
+     mDestinationItem = mModel->appendDataFormItem(
+         HbDataFormModelItem::ToggleValueItem, QString("Network connection")); // txt_software_formlabel_access_point
+
+     // add auto update item
+     mAutoUpdateItem = mModel->appendDataFormItem(
+        HbDataFormModelItem::ComboBoxItem, QString("Auto-check for updates")); // txt_software_setlabel_autocheck_for_updates
+     
+     // auto update selection values
+     QStringList list;
+     list.insert(0, QString("On")); // txt_software_setlabel_val_on
+     list.append(QString("Off")); // txt_software_setlabel_val_off
+     list.append(QString("On in home network")); // txt_software_setlabel_val_on_in_home_network
+     mAutoUpdateItem->setContentWidgetData("items", list);
+
+     // connect data changes for launching the access point selection dialog
+     connect(mModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), 
+                 this, SLOT(toggleChange(QModelIndex, QModelIndex)));
+
+     // connect to function called when data items are displayed
+     connect(mSettingsForm, SIGNAL(activated(QModelIndex)), 
+                      this, SLOT(activated(QModelIndex)));
+     
+     mSettingsForm->setModel(mModel);
+         
+     // set values for items
+     TRAPD(err, initializeFieldsL());
+     qt_symbian_throwIfError(err);
+}
+
+// -----------------------------------------------------------------------------
+// ActionView::getInternetSnapIdL
+// -----------------------------------------------------------------------------
+//
+uint CIAUpdateSettingDialog::getInternetSnapIdL()
+    {
+    TUint internetSnapId( 0 );
+    
+    RArray<TUint32> destinationIdArray;
+    mCmManager.AllDestinationsL( destinationIdArray );
+    
+    for ( TInt i = 0; i < destinationIdArray.Count(); i++ )
         {
-    	return CAknSettingItem::SettingTextL();
-        }
-    else if ( iSettingText->Length() == 0 )
-        {
-        return CAknSettingItem::SettingTextL();
-        }
+        RCmDestination destination = mCmManager.DestinationL( destinationIdArray[i] );
+        CleanupClosePushL( destination );
         
-    return *iSettingText;
+        TUint32 metadata = destination.MetadataL( CMManager::ESnapMetadataPurpose );
+        if ( metadata == CMManager::ESnapPurposeInternet )
+            {
+            internetSnapId = destinationIdArray[i];
+            // Get the destination name with destination.NameLC() if need.
+            CleanupStack::PopAndDestroy( &destination );
+            break;
+            }
+        CleanupStack::PopAndDestroy( &destination );
+        }
+    destinationIdArray.Close();
+    
+    return internetSnapId;
+    
     }
 
+void CIAUpdateSettingDialog::showPreviousView()
+{
+    // Save settings    
+    TRAPD(err,  saveSettingsL()); 
+    qt_symbian_throwIfError(err);
+    
+    // Switch view
+    emit toMainView();
+}
 
-//------------------------------------------------------------------------------
-// CIAUpdateAccessPointSettingItem::EditAccessPointItemL
-//
-//------------------------------------------------------------------------------
-//	
-TBool CIAUpdateAccessPointSettingItem::EditAccessPointItemL()
-    {
-	TInt itemUid = iAccessPointId;
-	
-	TInt ret = KErrNone;
-	
-	delete iSettingText;
-	iSettingText = NULL;
-	TRAPD( err, ret = iApHandler->ShowApSelectDialogL( itemUid, iSettingText ) );
-	
-	if ( err != KErrNone )
-	    {
-	    iAccessPointId = KErrNotFound;
-	    UpdateListBoxTextL(); // from CAknSettingItem
-	    return EFalse;
-	    }
-	
-	if ( ret == CIAUpdateAccessPointHandler::EDialogSelect )
-		{
-		iAccessPointId = itemUid;
- 	    UpdateListBoxTextL(); // from CAknSettingItem
-	    return ETrue;
-		}
-		
-	return EFalse;
-    }
+void CIAUpdateSettingDialog::activated(const QModelIndex& index)
+{
+    if ( this->isActiveWindow() && index.row() == 0 )
+        {
+        }
 
-	
-//  End of File  
+}

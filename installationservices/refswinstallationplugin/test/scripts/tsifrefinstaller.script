@@ -1,0 +1,168 @@
+//
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of the License "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description: 
+//
+//
+
+PRINT Run SIF reference plugin tests
+
+// Delete the SCR Database file
+LOAD_SUITE tscr
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file 
+
+LOAD_SUITE tUsifSuite
+
+// Test GetComponentInfo and Install (use Uninstall)
+// !@file
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-0001
+//! @SYMTestStatus		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-0001
+
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileNameForUninstalledComponent
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyBasePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileHandleForInstalledComponent
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileHandleForUninstalledUpgrade
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallFilelessByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyFilelessPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallFilelessByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyFilelessPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-0001
+
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-0002
+//! @SYMTestStatus		3. Released
+// Test InstallInactive, Activate, InstallUpgrade, Uninstall (use GetComponentInfo)
+
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-0002
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallInactiveByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyInactiveBasePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileHandleForInstalledInactiveComponent
+// Activate-deactivate the package
+RUN_TEST_STEP 100 tUsifSuite SifActivateStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini ActivateByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileHandleForActivatedComponent
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyBasePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifDeactivateStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini DeactivateByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyInactiveBasePackageExistence
+// And activate again
+RUN_TEST_STEP 100 tUsifSuite SifActivateStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini ActivateByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallUpgradeByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileHandleForInstalledUpgrade
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyUpgradePackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileNameForUninstalledComponent
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-0002
+
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-0003
+//! @SYMTestStatus		3. Released
+// Test CancelOperation
+
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-0003
+
+RUN_TEST_STEP !Result=-3 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini AsynchronousCancelInstallByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-0003
+
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-0004
+//! @SYMTestStatus		3. Released
+// Test InstallInvalidPackage
+
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-0004
+
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalidPackage
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid2Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid3Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid4Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid5Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid6Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid7Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid8Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid9Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid10Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid11Package
+RUN_TEST_STEP !Result=-20 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini  InstallInvalid12Package
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-0004
+
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-B-0004
+//! @SYMTestStatus		3. Released
+
+// Test GetComponentInfo for homogeneous compound package with installed child
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-B-0004
+
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallFilelessByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyFilelessPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini GetComponentInfoByFileNameForHomogeneousCompoundPartiallyInstalledComponent
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallFilelessByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyFilelessPackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-B-0004
+
+
+//! @SYMTestCaseID		API-SEC-USIF-tsifrefinstaller-0005
+//! @SYMTestStatus		3. Released
+
+// Test Install for homogeneous compound packages
+START_TESTCASE API-SEC-USIF-tsifrefinstaller-0005
+
+// by file name
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallHomogeneousCompoundByFileName
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootChild0ByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootChild1ByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageNonExistence
+// by file handle
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini InstallHomogeneousCompoundByFileHandle
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageExistence
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootChild0ByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini UninstallRootChild1ByNameAndVendor
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootPackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild0PackageNonExistence
+RUN_TEST_STEP 100 tUsifSuite SifCommonVerificationStep z:\tusif\tsifrefinstaller\tsifrefinstaller.ini VerifyRootChild1PackageNonExistence
+
+END_TESTCASE API-SEC-USIF-tsifrefinstaller-0005
+
+// Wait 3 seconds in order to let the SIF server shutdown itself
+DELAY 3000
+
+PRINT Complate_te_Sif_Tests

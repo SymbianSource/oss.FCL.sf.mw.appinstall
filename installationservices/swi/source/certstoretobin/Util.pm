@@ -251,6 +251,8 @@ sub invoke(@)
     my $self = shift;
     die "self not defined\n" if (not defined($self));
 
+	my $sbsflag = index("@_", "sbs");
+	
     $self->info("Invoking: @_\n");
 
     # Redirect stderr into stdout.
@@ -266,9 +268,7 @@ sub invoke(@)
 
     my @warnstrings = ();
 
-    my $BuildSystemVersion = $ENV{'SBS_VERSION'};
- 
- 	if ($BuildSystemVersion == 2) 
+  	if($sbsflag != -1)
  	{
  		foreach (@out)
  		{

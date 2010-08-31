@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -53,6 +53,7 @@ _LIT(KDaemonRegistryCapTestName, "Registry daemon interface capability test");
 _LIT(KRevocationRegistryCapTestName, "Registry revocation interface capability test");
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 _LIT(KSifServerRegistryCapTestName, "Registry SIF interface security test");
+_LIT(KSisRegistryTCBCapTestName, "Sis Registry interface requiring TCB security test");
 #endif
 
 CPublicRegistryCapTest* CPublicRegistryCapTest::NewL()
@@ -411,7 +412,7 @@ void CPrivateRegistryCapTest::RunTestL()
 		CheckFailL(err, _L("UpdateEntryL"));
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-		RCPointerArray<CSoftwareTypeRegInfo> regInfoArray;
+		RCPointerArray<Usif::CSoftwareTypeRegInfo> regInfoArray;
 		CleanupClosePushL(regInfoArray);
 		
 		TRAP(err, session.AddEntryL(*app, *buffer, regInfoArray, id));
@@ -492,6 +493,19 @@ void CDaemonRegistryCapTest::RunTestL()
 
 	TRAP(err, session.RecoverL());
 	CheckFailL(err, _L("RecoverL"));
+	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	TRAP(err, session.SetComponentPresenceL(1, EFalse));
+	CheckFailL(err, _L("SetComponentPresenceL"));
+	
+	// Negative tests
+	//TRAP(err, session.SetComponentPresenceL(1234, EFalse));
+	//CheckFailL(err, _L("SetComponentPresenceL Negative 1"));
+    //TRAP(err, session.SetComponentPresenceL(0, EFalse));
+    //CheckFailL(err, _L("SetComponentPresenceL Negative 2"));    
+    //TRAP(err, session.SetComponentPresenceL(-1, EFalse));
+    //CheckFailL(err, _L("SetComponentPresenceL Negative 3"));
+#endif
 
 	CleanupStack::PopAndDestroy(&session);
 	}
@@ -594,6 +608,47 @@ void CSifServerRegistryCapTest::RunTestL()
 
 	CleanupStack::PopAndDestroy(&session);
 	}
+
+CSisRegistryTCBCapTest* CSisRegistryTCBCapTest::NewL()
+    {
+    CSisRegistryTCBCapTest* self=new(ELeave) CSisRegistryTCBCapTest();
+    CleanupStack::PushL(self);
+    self->ConstructL();
+    CleanupStack::Pop(self);
+    return self;
+    }
+
+CSisRegistryTCBCapTest::CSisRegistryTCBCapTest()
+    {
+    SetCapabilityRequired(ECapabilityTCB); //API requires TCB capability, so giving it
+    }
+    
+void CSisRegistryTCBCapTest::ConstructL()
+    {
+    SetNameL(KSisRegistryTCBCapTestName);
+    }
+
+void CSisRegistryTCBCapTest::RunTestL()
+    {
+    Swi::RSisRegistrySession registrySession;
+    CleanupClosePushL(registrySession);
+    _LIT(regFileName,"c:\\private\\10003a3f\\import\\apps\\dummy_reg.rsc");
+    TInt err = registrySession.Connect();
+    if (KErrNone != err)
+        {
+        SetFail();
+        CleanupStack::PopAndDestroy(&registrySession);
+        return;
+        }
+
+    TRAP(err, registrySession.AddAppRegInfoL(regFileName));
+    CheckFailL(err, _L("AddAppRegInfoL"));
+    
+    TRAP(err, registrySession.RemoveAppRegInfoL(regFileName));
+    CheckFailL(err, _L("RemoveAppRegInfoL"));
+
+    CleanupStack::PopAndDestroy(&registrySession);
+    }
 #endif
 
 

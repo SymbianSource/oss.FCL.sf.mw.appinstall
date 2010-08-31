@@ -1,0 +1,5 @@
+EXPORTS
+	_Z21CapabilityTestFactoryv @ 1 NONAME
+	_ZTI23CSifSecurityContextTest @ 2 NONAME
+	_ZTV23CSifSecurityContextTest @ 3 NONAME
+

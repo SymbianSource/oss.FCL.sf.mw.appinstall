@@ -60,8 +60,6 @@ LIBRARY                 apmime.lib                  // TDataType
 LIBRARY                 avkon.lib                   // AknTextUtils
 LIBRARY                 x509.lib                    // CX509Certificate
 LIBRARY                 egul.lib                    // CGulIcon
-LIBRARY                 drmhelper.lib               // DRM Helper
-LIBRARY                 drmutility.lib              // DRM Utility
 
 DEBUGLIBRARY            flogger.lib                 // RFileLogger
 

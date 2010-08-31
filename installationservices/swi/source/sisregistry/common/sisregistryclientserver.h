@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -69,11 +69,13 @@ enum TSisRegistryMessages
 	EInstalledDrives,			 
 	ERemoveWithLastDependent,
 	ESetRemoveWithLastDependent,
-	EGetMatchingSupportedLanguages,					
+	EGetMatchingSupportedLanguages,		
 	// daemon interface
 	EAddDrive,
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	ERemoveDrive,
+#else
+	ESetComponentPresence,
 #endif
 
 	// all clients
@@ -121,7 +123,7 @@ enum TSisRegistryMessages
 	EloggingFile,	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
 	EIsFileRegistered, 
-	EComponentIdForUid,
+	EComponentIdForUid,	
 #endif
 	// NOTE : The security policy range ESeparatorMinimumWriteUserData-
 	// ESeparatorMinimumTCB also requires NetworkServices as well as
@@ -144,6 +146,8 @@ enum TSisRegistryMessages
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	EAddSoftwareTypeEntry,
 	EUpdateSoftwareTypeEntry,
+    EAddAppRegEntry,
+    EUpdateAppRegEntry,
 #endif
 
 	// Additional RegistryWritableSession clients 
@@ -153,6 +157,7 @@ enum TSisRegistryMessages
 #endif
 	// All clients 
 	ERegistryFiles = 128,
+	
 	// Additional ReadUserData calls
 	ESeparatorMinimumReadUserData2 = 256,
 	ERemovablePackages,	
@@ -165,7 +170,12 @@ enum TSisRegistryMessages
 	ESignedBySuCert,
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	ESetComponentState, //SIF only
+	EComponentIdForPackage,
+	EAppUidsForComponent,  
+	EComponentIdsForPackageUid,
+	ESetComponentState = 300, //SIF only
+	EAddAppRegInfo = 320,    //requires TCB
+	ERemoveAppRegInfo,       //requires TCB 
 #endif
 	ESeparatorEndAll
 	

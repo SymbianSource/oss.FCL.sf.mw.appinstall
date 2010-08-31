@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2003-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -236,9 +236,4 @@
 // l: list_double_large_graphic_pane_t2_cp2
 // r: 5.1
 #define qtn_swins_lsh2_untrusted "Untrusted"
-
-// d: Setting field value for OCSP URL when there is no data.
-// l: set_value_pane_t1
-// r: 9.2
-#define qtn_am_set_ocsp_url_none "None"
 

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of the License "Eclipse Public License v1.0"
@@ -806,27 +806,6 @@ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scri
 END_TESTCASE API-SEC-DEF076366-0001
 
 
-//! @SYMTestCaseID 		API-SEC-DEF082510-0001
-//! @SYMTestCaseDesc		Import ECOM plugins for apparc SidChecker interface - required by INC069526
-//! @SYMDEF			DEF082510
-//! @SYMTestPriority		High
-//! @SYMTestType		CIT
-//! @SYMTestStatus		3. Released
-//! @SYMTestActions 		Verify Sid presence query via plugni works.
-//! @SYMTestExpectedResults	Present when present, absent when absent
-//! @SYMDevelopedForRelease	Mike
-
-START_TESTCASE API-SEC-DEF082510-0001
-
-RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_absent
-RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe
-RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_present
-RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_exe
-RUN_TEST_STEP 100 tuiscriptadaptors QuerySidViaApparcPlugin z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini exe_absent
-
-END_TESTCASE API-SEC-DEF082510-0001
-
-
 //! @SYMTestCaseID 		API-SEC-BOGUS_LOGO-0001
 //! @SYMTestCaseDesc		Installs a SIS file with a bogus logo
 //! @SYMDEF			DEF087165 
@@ -1326,7 +1305,7 @@ RUN_TEST_STEP_RESULT 0  100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptada
 
 END_TESTCASE API-SEC-SWIREG-Hidden-0004
 
-//! @SYMTestCaseID SEC-cyclicDependency-def145326
+//! @SYMTestCaseID SEC-cyclicDependency-PDEF145405
 //! @SYMTestCaseDesc User installs a package(A) with dependency on package (B), then installs package B with dependency on A, then unistalls pkg B
 //! @SYMDEF  INC
 //! @SYMTestPriority High
@@ -1340,6 +1319,5 @@ RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\script
 RUN_TEST_STEP 100 tuiscriptadaptors RemoveWithLastDependent z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_Uid
 RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini cyclicDependency_U_B
 END_TESTCASE cyclicDependency
-
 // Ensure that SWIS shuts down after the above tests to make sure heap checks run
 RUN_TEST_STEP 5 tuiscriptadaptors SwisNotRunning

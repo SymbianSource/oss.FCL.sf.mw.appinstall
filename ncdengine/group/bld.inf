@@ -41,7 +41,7 @@ PRJ_EXPORTS
 // This allows eclipsing the ROM base installation with normal SIS
 //****************************************************************************
 
-../rom/altair-engine-stub.sis   /epoc32/data/z/system/install/altair-engine-stub.SIS
+altair-engine-stub.SIS        /epoc32/data/z/system/install/altair-engine-stub.SIS
 //altair-pcd-adapter-stub.SIS   /epoc32/data/z/system/install/altair-pcd-adapter-stub.SIS
 
 //****************************************************************************

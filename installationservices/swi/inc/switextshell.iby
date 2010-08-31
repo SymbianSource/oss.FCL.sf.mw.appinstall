@@ -30,7 +30,9 @@ define ROMDRIVE EPOCROOT##epoc32\data\Z
 #include <ocsp.iby>
 
 // This iby file also includes the http libraries needed for ocsp testing
+#ifndef __APPARC_IBY__
 #include <http.iby>
+#endif
 #include "hash.iby"
 
 #include "ups.iby" // Security utilities 9.5
@@ -61,49 +63,60 @@ data = \epoc32\winscw\c\tswi\certstore\swicertstore.dat resource\swicertstore.da
 data=ROMDRIVE\resource\swicertstore.dat		\resource\swicertstore.dat  attrib=r
 #endif
 
+#ifndef __SWI_IBY__  
 // Core SWI code
 file=ABI_DIR\BUILD_DIR\installserver.exe			sys\bin\installserver.exe
-file=ABI_DIR\BUILD_DIR\plan.dll 				sys\bin\plan.dll
 file=ABI_DIR\BUILD_DIR\sishelper_tshell.dll			sys\bin\sishelper.dll
-file=ABI_DIR\BUILD_DIR\swidataprovider.dll 			sys\bin\swidataprovider.dll 
 file=ABI_DIR\BUILD_DIR\sisxfile.dll 				sys\bin\sisxfile.dll 
-file=ABI_DIR\BUILD_DIR\siscontroller.dll 			sys\bin\siscontroller.dll 
 file=ABI_DIR\BUILD_DIR\sisresult.dll				sys\bin\sisresult.dll
 file=ABI_DIR\BUILD_DIR\uiss.dll					sys\bin\uiss.dll
+
+#ifndef __APPARC_IBY__
+file=ABI_DIR\BUILD_DIR\plan.dll 				sys\bin\plan.dll
+file=ABI_DIR\BUILD_DIR\swidataprovider.dll 			sys\bin\swidataprovider.dll 
+file=ABI_DIR\BUILD_DIR\siscontroller.dll 			sys\bin\siscontroller.dll 
 file=ABI_DIR\BUILD_DIR\uissclient.dll 				sys\bin\uissclient.dll 
 
 file=ABI_DIR\BUILD_DIR\sisregistryclient.dll			sys\bin\sisregistryclient.dll
 file=ABI_DIR\BUILD_DIR\sisregistryserver.exe			sys\bin\sisregistryserver.exe
 file=ABI_DIR\BUILD_DIR\sislauncherclient.dll			sys\bin\sislauncherclient.dll
 file=ABI_DIR\BUILD_DIR\sislauncherserver_tshell.exe		sys\bin\sislauncherserver.exe
+#endif
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#ifndef __APPARC_IBY__
+file=ABI_DIR\BUILD_DIR\apprscparser.dll			sys\bin\apprscparser.dll
 file=ABI_DIR\BUILD_DIR\swtypereginfo.dll		sys\bin\swtypereginfo.dll
+#endif
 #endif
 
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 file=ABI_DIR\BUILD_DIR\integrityservices.dll			sys\bin\integrityservices.dll
 #endif
 
+#ifndef __APPARC_IBY__
 file=ABI_DIR\BUILD_DIR\ocspsupport.exe				sys\bin\ocspsupport.exe
 file=ABI_DIR\BUILD_DIR\ocspsupportclient.dll 			sys\bin\ocspsupportclient.dll 
 file=ABI_DIR\BUILD_DIR\devinfosupportcommon.dll			sys\bin\devinfosupportcommon.dll
 file=ABI_DIR\BUILD_DIR\devinfosupport.exe			sys\bin\devinfosupport.exe
 file=ABI_DIR\BUILD_DIR\devinfosupportclient.dll 		sys\bin\devinfosupportclient.dll 
 file=ABI_DIR\BUILD_DIR\securitymanager.dll			sys\bin\securitymanager.dll
+#endif
+
 file=ABI_DIR\BUILD_DIR\backuprestore.dll			sys\bin\backuprestore.dll
 file=ABI_DIR\BUILD_DIR\cafdataprovider.dll			sys\bin\cafdataprovider.dll
 file=ABI_DIR\BUILD_DIR\pkgremover.dll				sys\bin\pkgremover.dll
-file=ABI_DIR\BUILD_DIR\swiutils.dll			sys\bin\swiutils.dll
+file=ABI_DIR\BUILD_DIR\swiutils.dll				sys\bin\swiutils.dll
 
 // Core SWI - 9.5
 REM Including swiplugin.iby instead explicitly mentioning the files to avoid duplicate includes 
 #include "swiplugin.iby"
+#ifndef __APPARC_IBY__
 file=ABI_DIR\BUILD_DIR\swiobserverclient.dll 			sys\bin\swiobserverclient.dll
 file=ABI_DIR\BUILD_DIR\swiobserver.exe 				sys\bin\swiobserver.exe
+#endif
 
-
-
+#endif //__SWI_IBY__
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	//Universal Software Install Framework production
 	#include "scr.iby" // Software Component Registry

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<relnotes name="Software Install Framework">
+  <purpose>
+    Provides a uniform framework for managing software under Symbian OS.
+  </purpose>
+ 
+   <defect number="DEF136782" title="CBR errors related to sif in M04892 v9.6 build " revision="013">
+    CBR errors related to sif in M04892 v9.6 build  are fixed.
+  </defect>
+  
+    <deliverystep number="1140" name="PREQ1269: Crypto Services: Reference Native Installer provision" osproject="Diran" revision="012">
+    <milestone project="GT0433" number="MS3.3"/>
+    <preq number="1269" title="Universal Software Install Framework">
+      Delivers the set of features for the Preq1269 Phase III. Changes has been done for Reference Native Installer.
+    </preq>
+  </deliverystep>
+  
+  <defect number="DEF133526" title="KERN-EXEC 3 panic in sifserver.exe when changing the SCOMO state " revision="011">
+    Panic is resolved.
+  </defect>
+
+  <defect number="DEF132132" title="PREQ1269: SIFLauncher's configuration should be split into production and test" revision="010">
+    SIFLauncher's configuration has been splitted into production and test. 
+  </defect>
+
+   <defect number="DEF131621" title="tsif failures under CS2 " revision="009">
+	Changed SIS file generation in SIF tests to use permanent certificates.
+  </defect>
+
+   <defect number="DEF131412" title="checklocationofcertificateslog fails in ONB " revision="008">
+    Added deletion of temporary certificates added by createsis. 
+  </defect>
+
+  <defect number="DEF131880" title="RVCT3.1 error in security/usif/sif/inc/siftransporttask.h " revision="007">
+    Added IMPORT_C where required. 
+  </defect>
+
+  <defect number="DEF131875" title="SMPSAFE MMP file updates for SWI and USIF" revision="006">
+    updated MMP files for SWI and USIF components to declare them SMPSAFE 
+  </defect>
+
+  <defect number="DEF130796" title="PREQ1269: Can set the component size negative" revision="005"> 
+	 The API wasn't changed to Uint, as this would require the DB also to support unsigned values in the relevant column, and I couldn't see an option for doing it without disrupting the schema. 
+  </defect> 
+
+  <deliverystep number="1430" name="PREQ1269: Indication of executable code" osproject="Diran" revision="004">
+	  <milestone project="GT0433" number="3.15"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  Incudes changes to enable the installer to indicate that the software component has an executable, before the installation takes place.
+	  </preq>
+  </deliverystep>
+
+  <deliverystep number="1117" name="PREQ1269: Crypto Services: Plugin management and highly desirable features
+ (Phase 2)" osproject="Diran" revision="003">
+	  <milestone project="GT0433" number="3.2"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		  1) Post-manufacture plugin management 2) Complex queries in the SCR
+			3) Additional smaller requirements and changes and 4) Improved security in the SCR
+	  </preq>
+  </deliverystep>
+
+  <defect number="DEF128672" title="PREQ1269: SIFSERVER.EXE crashing with panic KERN-EXEC 3" revision="002">
+	Parameter handling (filename, file handle, component id) in CSifServerTask::SelectAndLoadPluginL() for different types of task (install, uninstall, get component info, activate, deactivate) has been fixed.
+  </defect>
+
+  <deliverystep number="1116" name="PREQ1269: Security and Data Privacy: Universal Software Install Framework (Phase 1)" osproject="Diran" revision="001">
+	  <milestone project="GT0433" number="3.1"/>
+	  <preq number="1269" title="Universal Software Install Framework">
+		   Delivers the main set of features for the Diran Early Phase. Includes the new components (SCR, SIF and STS), migration of the native installer to use the new components and most reference code.
+			Excludes non-mandatory features and post-production plugin management.
+	  </preq>
+  </deliverystep>
+
+</relnotes>

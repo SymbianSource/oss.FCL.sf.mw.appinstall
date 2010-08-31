@@ -29,7 +29,6 @@ SOURCE        refswiobsplugin.cpp
 
 USERINCLUDE   ../inc
 USERINCLUDE   ../../../../inc
-USERINCLUDE   ../../../../../../../../mw/appinstall/installationservices/swi/inc
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_ESTLIB_SYSTEMINCLUDE  

@@ -91,6 +91,8 @@ LIBRARY	    hal.lib
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 LIBRARY		swtypereginfo.lib
+LIBRARY		scrclient.lib
+library		ipcstream.lib
 #else
 LIBRARY         scsclient.lib
 LIBRARY		integrityservices.lib

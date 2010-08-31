@@ -83,4 +83,7 @@ EXPORTS
 	_ZNK3Swi12CApplication24IsDeviceMatchingLanguageEi @ 82 NONAME
 	_ZN3Swi12CApplication12SetSisHelperERKNS_10RSisHelperE @ 83 NONAME
 	_ZN3Swi12CApplication12GetSisHelperEv @ 84 NONAME
+	_ZN3Swi5CPlan15SetAffectedAppsER6RArrayINS_14TAppUpdateInfoEE @ 85 NONAME
+	_ZN3Swi5CPlan17ResetAffectedAppsEv @ 86 NONAME
+	_ZNK3Swi5CPlan15GetAffectedAppsER6RArrayINS_14TAppUpdateInfoEE @ 87 NONAME
 

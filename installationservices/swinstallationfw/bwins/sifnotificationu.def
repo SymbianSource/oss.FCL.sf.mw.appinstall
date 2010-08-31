@@ -1,0 +1,58 @@
+EXPORTS
+	?Total@CSifOperationProgressData@Usif@@QBEHXZ @ 1 NONAME ; int Usif::CSifOperationProgressData::Total(void) const
+	?PublishCompletionL@CPublishSifOperationInfo@Usif@@QAEXAAVCSifOperationEndData@2@@Z @ 2 NONAME ; void Usif::CPublishSifOperationInfo::PublishCompletionL(class Usif::CSifOperationEndData &)
+	?ComponentName@CSifOperationStartData@Usif@@QBEABVHBufC16@@XZ @ 3 NONAME ; class HBufC16 const & Usif::CSifOperationStartData::ComponentName(void) const
+	?NewLC@CSifOperationEndData@Usif@@SAPAV12@ABVTDesC16@@W4TErrorCategory@2@H00@Z @ 4 NONAME ; class Usif::CSifOperationEndData * Usif::CSifOperationEndData::NewLC(class TDesC16 const &, enum Usif::TErrorCategory, int, class TDesC16 const &, class TDesC16 const &)
+	?GlobalComponentId@CSifOperationProgressData@Usif@@QBEABVHBufC16@@XZ @ 5 NONAME ; class HBufC16 const & Usif::CSifOperationProgressData::GlobalComponentId(void) const
+	?ErrorMessageDetails@CSifOperationEndData@Usif@@QBEABVHBufC16@@XZ @ 6 NONAME ; class HBufC16 const & Usif::CSifOperationEndData::ErrorMessageDetails(void) const
+	?ApplicationIcons@CSifOperationStartData@Usif@@QBEABV?$RPointerArray@VHBufC16@@@@XZ @ 7 NONAME ; class RPointerArray<class HBufC16> const & Usif::CSifOperationStartData::ApplicationIcons(void) const
+	?ExternalizeL@CSifOperationProgressData@Usif@@QBEXAAVRWriteStream@@@Z @ 8 NONAME ; void Usif::CSifOperationProgressData::ExternalizeL(class RWriteStream &) const
+	?ErrorCode@CSifOperationEndData@Usif@@QBEHXZ @ 9 NONAME ; int Usif::CSifOperationEndData::ErrorCode(void) const
+	?NewL@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000@Z @ 10 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewL(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
+	?ExternalizeL@CSifOperationStartData@Usif@@QBEXAAVRWriteStream@@@Z @ 11 NONAME ; void Usif::CSifOperationStartData::ExternalizeL(class RWriteStream &) const
+	?NewLC@CSifNotifierBase@Usif@@SAPAV12@AAVMSifOperationsHandler@2@IW4TNotifierType@12@@Z @ 12 NONAME ; class Usif::CSifNotifierBase * Usif::CSifNotifierBase::NewLC(class Usif::MSifOperationsHandler &, unsigned int, enum Usif::CSifNotifierBase::TNotifierType)
+	?IconPath@CSifOperationStartData@Usif@@QBEABVHBufC16@@XZ @ 13 NONAME ; class HBufC16 const & Usif::CSifOperationStartData::IconPath(void) const
+	?ApplicationNames@CSifOperationStartData@Usif@@QBEABV?$RPointerArray@VHBufC16@@@@XZ @ 14 NONAME ; class RPointerArray<class HBufC16> const & Usif::CSifOperationStartData::ApplicationNames(void) const
+	?NewLC@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000@Z @ 15 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewLC(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &)
+	?Phase@CSifOperationProgressData@Usif@@QBE?AW4TSifOperationPhase@2@XZ @ 16 NONAME ; enum Usif::TSifOperationPhase Usif::CSifOperationProgressData::Phase(void) const
+	?NewLC@CSifOperationKey@Usif@@SAPAV12@XZ @ 17 NONAME ; class Usif::CSifOperationKey * Usif::CSifOperationKey::NewLC(void)
+	?NewL@CSifOperationKey@Usif@@SAPAV12@XZ @ 18 NONAME ; class Usif::CSifOperationKey * Usif::CSifOperationKey::NewL(void)
+	??1CSifOperationEndData@Usif@@UAE@XZ @ 19 NONAME ; Usif::CSifOperationEndData::~CSifOperationEndData(void)
+	?NewLC@CSifOperationProgressData@Usif@@SAPAV12@ABVTDesC16@@W4TSifOperationPhase@2@W4TSifOperationSubPhase@2@HH@Z @ 20 NONAME ; class Usif::CSifOperationProgressData * Usif::CSifOperationProgressData::NewLC(class TDesC16 const &, enum Usif::TSifOperationPhase, enum Usif::TSifOperationSubPhase, int, int)
+	?PublishStartL@CPublishSifOperationInfo@Usif@@QAEXAAVCSifOperationStartData@2@@Z @ 21 NONAME ; void Usif::CPublishSifOperationInfo::PublishStartL(class Usif::CSifOperationStartData &)
+	?SubPhase@CSifOperationProgressData@Usif@@QBE?AW4TSifOperationSubPhase@2@XZ @ 22 NONAME ; enum Usif::TSifOperationSubPhase Usif::CSifOperationProgressData::SubPhase(void) const
+	?CancelSubscribeL@CSifOperationsNotifier@Usif@@QAEXXZ @ 23 NONAME ; void Usif::CSifOperationsNotifier::CancelSubscribeL(void)
+	?ComponentIcon@CSifOperationStartData@Usif@@QBEABVHBufC16@@XZ @ 24 NONAME ; class HBufC16 const & Usif::CSifOperationStartData::ComponentIcon(void) const
+	?NewLC@CSifOperationsNotifier@Usif@@SAPAV12@AAVMSifOperationsHandler@2@@Z @ 25 NONAME ; class Usif::CSifOperationsNotifier * Usif::CSifOperationsNotifier::NewLC(class Usif::MSifOperationsHandler &)
+	?NewL@CSifOperationStartData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 26 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewL(class RReadStream &)
+	?ComponentSize@CSifOperationStartData@Usif@@QBEHXZ @ 27 NONAME ; int Usif::CSifOperationStartData::ComponentSize(void) const
+	?SoftwareType@CSifOperationStartData@Usif@@QBEABVHBufC16@@XZ @ 28 NONAME ; class HBufC16 const & Usif::CSifOperationStartData::SoftwareType(void) const
+	?NewL@CPublishSifOperationInfo@Usif@@SAPAV12@XZ @ 29 NONAME ; class Usif::CPublishSifOperationInfo * Usif::CPublishSifOperationInfo::NewL(void)
+	?NewL@CSifNotifierBase@Usif@@SAPAV12@AAVMSifOperationsHandler@2@IW4TNotifierType@12@@Z @ 30 NONAME ; class Usif::CSifNotifierBase * Usif::CSifNotifierBase::NewL(class Usif::MSifOperationsHandler &, unsigned int, enum Usif::CSifNotifierBase::TNotifierType)
+	?ErrorCategory@CSifOperationEndData@Usif@@QBE?AW4TErrorCategory@2@XZ @ 31 NONAME ; enum Usif::TErrorCategory Usif::CSifOperationEndData::ErrorCategory(void) const
+	?ExternalizeL@CSifOperationEndData@Usif@@QBEXAAVRWriteStream@@@Z @ 32 NONAME ; void Usif::CSifOperationEndData::ExternalizeL(class RWriteStream &) const
+	?GlobalComponentId@CSifOperationStartData@Usif@@QBEABVHBufC16@@XZ @ 33 NONAME ; class HBufC16 const & Usif::CSifOperationStartData::GlobalComponentId(void) const
+	??1CSifOperationStartData@Usif@@UAE@XZ @ 34 NONAME ; Usif::CSifOperationStartData::~CSifOperationStartData(void)
+	?CancelSubscribeL@CSifOperationsNotifier@Usif@@QAEXI@Z @ 35 NONAME ; void Usif::CSifOperationsNotifier::CancelSubscribeL(unsigned int)
+	?Key@CSifNotifierBase@Usif@@QAEIXZ @ 36 NONAME ; unsigned int Usif::CSifNotifierBase::Key(void)
+	?CurrentProgess@CSifOperationProgressData@Usif@@QBEHXZ @ 37 NONAME ; int Usif::CSifOperationProgressData::CurrentProgess(void) const
+	?NewL@CSifOperationProgressData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 38 NONAME ; class Usif::CSifOperationProgressData * Usif::CSifOperationProgressData::NewL(class RReadStream &)
+	?PublishProgressL@CPublishSifOperationInfo@Usif@@QAEXAAVCSifOperationProgressData@2@@Z @ 39 NONAME ; void Usif::CPublishSifOperationInfo::PublishProgressL(class Usif::CSifOperationProgressData &)
+	??1CSifNotifierBase@Usif@@UAE@XZ @ 40 NONAME ; Usif::CSifNotifierBase::~CSifNotifierBase(void)
+	?NewL@CSifOperationEndData@Usif@@SAPAV12@ABVTDesC16@@W4TErrorCategory@2@H00@Z @ 41 NONAME ; class Usif::CSifOperationEndData * Usif::CSifOperationEndData::NewL(class TDesC16 const &, enum Usif::TErrorCategory, int, class TDesC16 const &, class TDesC16 const &)
+	??1CSifOperationsNotifier@Usif@@UAE@XZ @ 42 NONAME ; Usif::CSifOperationsNotifier::~CSifOperationsNotifier(void)
+	?GlobalComponentId@CSifOperationEndData@Usif@@QBEABVHBufC16@@XZ @ 43 NONAME ; class HBufC16 const & Usif::CSifOperationEndData::GlobalComponentId(void) const
+	?NewL@CSifOperationEndData@Usif@@SAPAV12@AAVRReadStream@@@Z @ 44 NONAME ; class Usif::CSifOperationEndData * Usif::CSifOperationEndData::NewL(class RReadStream &)
+	?SubscribeL@CSifOperationsNotifier@Usif@@QAEXIH@Z @ 45 NONAME ; void Usif::CSifOperationsNotifier::SubscribeL(unsigned int, int)
+	?ExternalizeL@CSifOperationKey@Usif@@QBEXAAVRWriteStream@@@Z @ 46 NONAME ; void Usif::CSifOperationKey::ExternalizeL(class RWriteStream &) const
+	?NewLC@CPublishSifOperationInfo@Usif@@SAPAV12@XZ @ 47 NONAME ; class Usif::CPublishSifOperationInfo * Usif::CPublishSifOperationInfo::NewLC(void)
+	?ErrorMessage@CSifOperationEndData@Usif@@QBEABVHBufC16@@XZ @ 48 NONAME ; class HBufC16 const & Usif::CSifOperationEndData::ErrorMessage(void) const
+	?NewL@CSifOperationsNotifier@Usif@@SAPAV12@AAVMSifOperationsHandler@2@@Z @ 49 NONAME ; class Usif::CSifOperationsNotifier * Usif::CSifOperationsNotifier::NewL(class Usif::MSifOperationsHandler &)
+	??1CSifOperationProgressData@Usif@@UAE@XZ @ 50 NONAME ; Usif::CSifOperationProgressData::~CSifOperationProgressData(void)
+	?NewL@CSifOperationProgressData@Usif@@SAPAV12@ABVTDesC16@@W4TSifOperationPhase@2@W4TSifOperationSubPhase@2@HH@Z @ 51 NONAME ; class Usif::CSifOperationProgressData * Usif::CSifOperationProgressData::NewL(class TDesC16 const &, enum Usif::TSifOperationPhase, enum Usif::TSifOperationSubPhase, int, int)
+	??1CPublishSifOperationInfo@Usif@@UAE@XZ @ 52 NONAME ; Usif::CPublishSifOperationInfo::~CPublishSifOperationInfo(void)
+	?NewL@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000W4TSifOperationPhase@2@@Z @ 53 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewL(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TSifOperationPhase)
+	?NewLC@CSifOperationStartData@Usif@@SAPAV12@ABVTDesC16@@0ABV?$RPointerArray@VHBufC16@@@@1H000W4TSifOperationPhase@2@@Z @ 54 NONAME ; class Usif::CSifOperationStartData * Usif::CSifOperationStartData::NewLC(class TDesC16 const &, class TDesC16 const &, class RPointerArray<class HBufC16> const &, class RPointerArray<class HBufC16> const &, int, class TDesC16 const &, class TDesC16 const &, class TDesC16 const &, enum Usif::TSifOperationPhase)
+	?OperationPhase@CSifOperationStartData@Usif@@QBE?AW4TSifOperationPhase@2@XZ @ 55 NONAME ; enum Usif::TSifOperationPhase Usif::CSifOperationStartData::OperationPhase(void) const
+	?CurrentProgress@CSifOperationProgressData@Usif@@QBEHXZ @ 56 NONAME ; int Usif::CSifOperationProgressData::CurrentProgress(void) const
+

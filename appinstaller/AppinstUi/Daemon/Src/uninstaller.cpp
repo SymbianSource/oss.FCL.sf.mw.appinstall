@@ -34,6 +34,7 @@
 using namespace Swi;
 
 const static TInt KWaitTime = 3000000; // 2 secs
+const TInt KMimeTextLength = 64;
 
 // -----------------------------------------------------------------------
 // Two phased construction
@@ -114,9 +115,13 @@ void CSisPkgUninstaller::ConstructL(
     iFs.ShareProtected();
     iUidArrayIndex = 0;
     iSilentUninstaller = NULL;
-    iState = EUninstallerStateIdle;      
-    // Alloc descriptor for mime type sis/sisx
-    iMime = SwiUI::KSisxMimeType().AllocL();      
+    iState = EUninstallerStateIdle;   
+    
+    // Alloc descriptor for mime type sis/sisx    
+    iMime = HBufC::NewL( KMimeTextLength );
+    TPtr iMimePtr = iMime->Des();
+    iMimePtr.Copy( SwiUI::KSisxMimeType );
+         
     // Note this will create new instance for dialog class and
     // also new dialog watcher AO for uninstaller.
     // Since uninstaller is used rarely this is not big issue.
@@ -276,6 +281,20 @@ void CSisPkgUninstaller::RunL()
                      // Display installing note for user.
                      iDialogs->ShowWaitingNoteForUninstallerL(); 
                      
+                     if ( iUidArrayIndex == 0 )
+                         {
+                         // Set uninstall mode for universal indicator and
+                         // set percent value to 0%.
+                         iDialogs->SetModeToIndicatorL( KSWIDaemonUninstallerMode );
+                         }
+                     else
+                         {
+                         // Calculate current percent value to iPercentValue. 
+                         CalcPercentValue();
+                         // Activate new value to universal indicator.
+                         iDialogs->ActivateIndicatorL( iPercentValue );
+                         }
+                     
                      FLOG_1( _L("[SISUninstaller] Run uninstall index = %d"), 
                              iUidArrayIndex ); 
                      
@@ -342,6 +361,8 @@ TInt CSisPkgUninstaller::RunError( TInt aError )
 void CSisPkgUninstaller::UninstallationCompleted( TInt /*aResult*/ )
     {
     FLOG( _L("[SISUninstaller] UninstallationCompleted") );
+    // Update indicator value last time and show 100% to user.
+    iDialogs->ActivateIndicatorL( 100 );
     
     if ( EStateUninstalling == iProgramStatus->GetProgramStatus() )
          {   
@@ -353,7 +374,9 @@ void CSisPkgUninstaller::UninstallationCompleted( TInt /*aResult*/ )
     iState = EUninstallerStateIdle; 
           
     // Cancel waiting note.
-    TRAP_IGNORE( iDialogs->CancelWaitingNoteL() );       
+    TRAP_IGNORE( iDialogs->CancelWaitingNoteForUninstaller());
+    // Close indicator.
+    iDialogs->CancelIndicatorL();
     }  
 
 
@@ -367,6 +390,40 @@ void CSisPkgUninstaller::ExitUninstaller()
     // Uninstall is completed and we do not need uninstaller anymore.
     // Call revisor's destructor.
     iRevisor->Exit();
+    }
+
+// -----------------------------------------------------------------------
+// CSisInstaller::CalcPrecentValue
+// -----------------------------------------------------------------------
+//
+void CSisPkgUninstaller::CalcPercentValue()
+    {     
+    FLOG( _L("[SISUninstaller] CalcPercentValue") );
+    FLOG_1( _L("[SISUninstaller] iUidArrayIndex = %d"), iUidArrayIndex ); 
+    // Let's calculate indicator value for UI now.
+    TInt packageUidCount = iPkgUidArray.Count();
+    FLOG_1( _L("[SISUninstaller] pkg UID count = %d"), packageUidCount ); 
+    
+    iPercentValue = 0;
+
+    if ( iUidArrayIndex && packageUidCount )
+        {
+        // Let's calculate new precent value.     
+        if ( iUidArrayIndex <= packageUidCount )
+            {
+            TReal32 realArrayIndex = iUidArrayIndex;
+            TReal32 realPkgCount = packageUidCount;
+            iPercentValue = (realArrayIndex/realPkgCount)*100;                                   
+            }
+        else
+            {
+            // Most probably all is uninstalled if index is bigger then
+            // filen count. Let's not show over 100% to user.           
+            iPercentValue = 100;
+            }
+        }
+            
+    FLOG_1( _L("[SISUninstaller] percent value = %d"), (TInt)iPercentValue );
     }
 
 //EOF

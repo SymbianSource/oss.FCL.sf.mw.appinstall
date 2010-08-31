@@ -43,7 +43,12 @@ public:
 	Constructor
 	*/
 	FileDescription () {};
+	#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	FileDescription (const CSISFileDescription& aFile, TInt aSid, const TInt aTargetDrive, const std::wstring& aFileName);
+	#else
+	FileDescription (const CSISFileDescription& aFile, TInt aSid, 
+						const TInt aTargetDrive, const std::wstring& aFileName, const std::wstring& aLocalName);
+	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 	virtual ~FileDescription ();
 
@@ -98,8 +103,21 @@ public:
 	void SetTarget(const std::wstring& aTarget)
 	{ iTarget = aTarget; }
 
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	const std::wstring& GetLocalFile() const
+	{ return iLocalFile; }
+
+	void SetLocalFile(const std::wstring& aLocalFile)
+	{ iLocalFile = aLocalFile; }
+	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
 private:
 	std::wstring  iTarget;
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	// Full file name to the PC location
+	std::wstring iLocalFile;
+	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	
 	std::wstring  iMimeType;
 	TInt        iOperation;
 	TInt        iOperationOptions;

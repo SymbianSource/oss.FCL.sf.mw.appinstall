@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -93,13 +93,15 @@ void CRestoreController::ConstructL(TDesC8& aController)
 			application->UserSelections().SetDrive(iInstallDrive);		
 			
 			//if there are macthing languages then populate iMatchingDeviceLanguages array of application object
-			if ( noOfMatchingLanguages )
-				{
+			if (noOfMatchingLanguages)
+				{				
 				while( iMatchingSupportedLanguagesArray[matchingLanguageCount] != ELangNone)
-					{
-					application->PopulateMatchingDeviceLanguagesL(iMatchingSupportedLanguagesArray[matchingLanguageCount++]);
-					}
+					{		
+					DEBUG_PRINTF2(_L8("Device matching language for Restore - %d"),iMatchingSupportedLanguagesArray[matchingLanguageCount]);
+					application->PopulateMatchingDeviceLanguagesL(iMatchingSupportedLanguagesArray[matchingLanguageCount++]);					
+					}				
 				}
+			++matchingLanguageCount;
  			break;
  		
  		case EInstPartialUpgrade:
@@ -128,13 +130,16 @@ void CRestoreController::ConstructL(TDesC8& aController)
 			application->UserSelections().SetDrive(iAugmentationDrives[augmentationIndex++]);
 			
 			//if there are macthing languages then populate iMatchingDeviceLanguages array of application object
-			if ( noOfMatchingLanguages )
-				{
+			if ( noOfMatchingLanguages)
+				{				
 				while( iMatchingSupportedLanguagesArray[matchingLanguageCount] != ELangNone)
 					  {
-					   application->PopulateMatchingDeviceLanguagesL(iMatchingSupportedLanguagesArray[matchingLanguageCount++]);
-					  }
+					  DEBUG_PRINTF2(_L8("Device matching language for Restore - %d"),iMatchingSupportedLanguagesArray[matchingLanguageCount]);
+					  application->PopulateMatchingDeviceLanguagesL(iMatchingSupportedLanguagesArray[matchingLanguageCount++]);
+					   
+					  }				
 				}
+			++matchingLanguageCount;
 			break;
  			
  		default:

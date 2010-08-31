@@ -6,27 +6,31 @@
 		<localizedName language="31">testSwTypeLoc31</localizedName>
 		<mimeType>text/sif-testpkg1</mimeType>
 		<sifPluginUid>A02866EF</sifPluginUid>
-		<installerSecureId>A0285BCB</installerSecureId>
-		<executionLayerSecureId>A0285DE0</executionLayerSecureId>
+		<CustomAcess SecureId="A0285BCB" AccessMode="1"/>
+		<CustomAcess SecureId="A0285DE0" AccessMode="1"/>
+		<launcherExecutable>testExevalid3a</launcherExecutable>
 	</softwareType>
 	<softwareType name="testSoftwareType2">
 		<mimeType>text/sif-testpkg2</mimeType>
 		<sifPluginUid>B02866EF</sifPluginUid>
-		<installerSecureId>B0285BCB</installerSecureId>
-		<executionLayerSecureId>B0285DE0</executionLayerSecureId>
+		<CustomAcess SecureId="B0285BCB" AccessMode="1"/>
+		<CustomAcess SecureId="B0285DE0" AccessMode="1"/>
+		<launcherExecutable>testExevalid3b</launcherExecutable>
 	</softwareType>
 	<softwareType name="testSoftwareType3">
 		<mimeType>text/sif-testpkg3</mimeType>
 		<sifPluginUid>C02866EF</sifPluginUid>
-		<installerSecureId>C0285BCB</installerSecureId>
-		<executionLayerSecureId>C0285DE0</executionLayerSecureId>
+		<CustomAcess SecureId="C0285BCB" AccessMode="1"/>
+		<CustomAcess SecureId="C0285DE0" AccessMode="1"/>
+		<launcherExecutable>testExevalid3c</launcherExecutable>
 	</softwareType>
 	<softwareType name="testSoftwareType4">
 		<localizedName language="5">testSwTypeLoc5</localizedName>
 		<localizedName language="3">testSwTypeLoc3</localizedName>
 		<mimeType>text/sif-testpkg4</mimeType>
 		<sifPluginUid>D02866EF</sifPluginUid>
-		<installerSecureId>D0285BCB</installerSecureId>
-		<executionLayerSecureId>D0285DE0</executionLayerSecureId>
+		<CustomAcess SecureId="D0285BCB" AccessMode="1"/>
+		<CustomAcess SecureId="D0285DE0" AccessMode="1"/>
+		<launcherExecutable>testExevalid3d</launcherExecutable>
 	</softwareType>
 </LayeredExecutionEnvironments>

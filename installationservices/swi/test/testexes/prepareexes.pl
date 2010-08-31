@@ -150,7 +150,7 @@ mkdir($builddir);
 print "Processing files in directory: $builddir\n\n";
 MakeSISFiles($packagedir,"yes");
 MakeSISFiles($non_iby_packagedir,"no");
-MakeSISFiles($packages_interpretsis_testcase,"yes");
+MakeSISFiles($packages_interpretsis_testcase,"no");
 
 
 # Copy emulator version of preinstalled exes to location script expects.
@@ -881,6 +881,8 @@ SignFile("tswtype_native_invalid1.sis", "tswtype_native_invalid1_root5.sis", "ro
 SignFile("tswtype_valid1_upgrade.sis", "tswtype_valid1_upgrade_root5.sis", "root5ca", \*iby);
 SignFile("tswtype_valid1_invalidupgrade.sis", "tswtype_valid1_invalidupgrade_root5.sis", "root5ca", \*iby);
 
+# SWI applicaiton registration integreation
+SignFile("swiappregintegration_base02_ru.sis", "swiappregintegration_base02_ru_root5.sis", "root5ca", \*iby);
 EndNormalFiles(\*iby);
 
 close iby;

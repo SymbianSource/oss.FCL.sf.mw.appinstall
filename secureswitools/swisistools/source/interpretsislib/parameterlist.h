@@ -116,7 +116,11 @@ public: // Enumerations
         EFlagsSysDriveSet           = 0x0010,
         EFlagsStubDirectorySet      = 0x0020,
         EFlagsConfigIniSet          = 0x0040,
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		EFlagsResourceFilePathSet   = 0x0100,
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		EFlagsDisableZDriveChecksSet= 0x0080
+
         };
 
 public: // Constructors & destructor
@@ -135,6 +139,13 @@ public:
 	 * @param aError type of error.
 	 */
 	static void DisplayError(TParamException aError);
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	/**
+	 * Set the path which represent the system drive.
+	 * @param File-system path which represents system drive
+	 */
+	void SetResourceFilePath(const std::string& aFilePath);
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/**
 	 * Set the path which represent the system drive.
 	 * @param File-system path which represents system drive
@@ -239,6 +250,12 @@ public:
 	 * Get the system drive path.
 	 */
 	inline const std::wstring&	SystemDrivePath() const;
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	/**
+	 * Get the Resource File path.
+	 */
+	inline const std::wstring&	ResourceFilePath() const;
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/**
 	 * Gets the ROM drive (Z) path in the file-system.
 	 */
@@ -291,7 +308,10 @@ private:
 	SISFileList				iFileNames;
     OptionList				iRomLogFiles;
 	OptionList				iPkgUIDs;
-	std::wstring			iSystemDrivePath; 
+	std::wstring			iSystemDrivePath;
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	std::wstring			iResourceFilePath;
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	std::wstring			iZDrive; 
     std::wstring			iConfigFile;
     std::wstring			iSisStubPath;
@@ -326,6 +346,13 @@ inline const std::wstring& CParameterList::SystemDrivePath() const
 	{
 	return iSystemDrivePath;
 	}
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+inline const std::wstring& CParameterList::ResourceFilePath() const
+	{
+	return iResourceFilePath;
+	}
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 inline const std::wstring& CParameterList::RomDrivePath() const
 	{

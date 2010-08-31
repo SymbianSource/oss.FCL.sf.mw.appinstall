@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -32,6 +32,17 @@ makesis ocsp_02.pkg
 makesis ocsp_03.pkg
 makesis ocsp_04.pkg
 makesis ocsp_05.pkg
+makesis signingtest.pkg  certifiedsignedval.sis
+makesis signingtest.pkg  certifiedsignedVeriSignval.sis
+makesis signingtest.pkg  expresssignedval.sis
+makesis signingtest.pkg  allsignedval.sis
+makesis signingtest.pkg  selfsignedval.sis
+makesis signingtest.pkg  certifiedsignedrev.sis
+makesis signingtest.pkg  certifiedsignedVeriSignrev.sis
+makesis signingtest.pkg  expresssignedrev.sis
+makesis signingtest.pkg  allsignedrev.sis
+makesis signingtest.pkg  selfsignedrev.sis
+
 
 REM Embedded Package file
 makesis ocsprevocation-sub1.pkg
@@ -54,6 +65,16 @@ makesis ocsp_01.pkg
 makesis ocsp_02.pkg
 makesis ocsp_03.pkg
 makesis ocsp_04.pkg
+makesis signingtest.pkg  certifiedsignedval.sis
+makesis signingtest.pkg  certifiedsignedVeriSignval.sis
+makesis signingtest.pkg  expresssignedval.sis
+makesis signingtest.pkg  allsignedval.sis
+makesis signingtest.pkg  selfsignedval.sis
+makesis signingtest.pkg  certifiedsignedrev.sis
+makesis signingtest.pkg  certifiedsignedVeriSignrev.sis
+makesis signingtest.pkg  expresssignedrev.sis
+makesis signingtest.pkg  allsignedrev.sis
+makesis signingtest.pkg  selfsignedrev.sis
 
 REM Embedded Package file
 makesis ocsprevocation-sub1.pkg

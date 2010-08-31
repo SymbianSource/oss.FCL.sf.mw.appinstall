@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -33,8 +33,11 @@
 #include "sisuid.h"
 #include "cleanuputils.h"
 #include "arrayutils.h"
+#include "installtypes.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include "swtypereginfo.h"
+#include "ipcutil.h"
+#include "sisregistrypackage.h"
 #endif
 
 using namespace Swi;
@@ -103,7 +106,7 @@ EXPORT_C void RSisRegistryWritableSession::AddEntryL(const CApplication& aApplic
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisRegistryWritableSession::AddEntryL(const CApplication& aApplication,
 													 const TDesC8& aController,
-													 const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
+													 const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
 													 TInt64 aTransactionID)
 	{
 	RBuf8 serializedArray;
@@ -116,6 +119,31 @@ EXPORT_C void RSisRegistryWritableSession::AddEntryL(const CApplication& aApplic
 
 	CleanupStack::PopAndDestroy(&serializedArray);
 	}
+
+EXPORT_C void RSisRegistryWritableSession::AddEntryL(const Usif::CApplicationRegistrationData& aApparcRegFileData,
+                                                     const CSisRegistryPackage& aSisRegistryPackage)
+    {
+    TIpcArgs ipcArgs;
+    
+    Usif::TComponentId componentUid = GetComponentIdForPackageL(aSisRegistryPackage.Name(),aSisRegistryPackage.Vendor()); 
+    ipcArgs.Set(0, componentUid);
+
+    TInt objectSize = 0;
+    objectSize = GetObjectSizeL(&aApparcRegFileData);
+    
+    HBufC8* appRegData = HBufC8::NewMaxLC(objectSize);
+    TPtr8 appRegDataDes = appRegData->Des();
+
+    RDesWriteStream ipcstream(appRegDataDes);
+    CleanupClosePushL(ipcstream);
+    
+    ipcstream << aApparcRegFileData;
+    ipcstream.CommitL();
+    ipcArgs.Set(1, &appRegDataDes);
+    
+    User::LeaveIfError(SendReceive(EAddAppRegEntry, ipcArgs));
+    CleanupStack::PopAndDestroy(2, appRegData);
+    }
 #endif
 
 void RSisRegistryWritableSession::UpdateEntryImplL(TInt aMessage,
@@ -195,7 +223,7 @@ EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApp
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApplication, 
 														const TDesC8& aController,
-														const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
+														const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray,
 														TInt64 aTransactionID)
 	{
 	RBuf8 serializedArray;
@@ -208,6 +236,41 @@ EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApp
 	
 	CleanupStack::PopAndDestroy(&serializedArray);
 	}
+
+EXPORT_C void RSisRegistryWritableSession::UpdateEntryL(const CApplication& aApplication, 
+                                                        const Usif::CApplicationRegistrationData& aApparcRegFileData,
+                                                        const CSisRegistryPackage& aSisRegistryPackage) 
+    {
+    TIpcArgs ipcArgs;
+    Usif::TComponentId componentUid = 0;  
+
+    TRAPD(err,componentUid = GetComponentIdForPackageL(aSisRegistryPackage.Name(),aSisRegistryPackage.Vendor());)
+
+	if (err != KErrNone && err != KErrNotFound)
+        {
+        User::Leave(err);
+        }
+    else if (err == KErrNotFound) // Possible only in PU and SA.
+        {
+        componentUid = GetComponentIdForUidL(aApplication.ControllerL().Info().Uid().Uid());
+        }
+
+    ipcArgs.Set(0, componentUid);
+    
+    TInt objectSize = 0;
+    objectSize = GetObjectSizeL(&aApparcRegFileData);
+    HBufC8* appRegData=HBufC8::NewMaxLC(objectSize);
+    TPtr8 appRegDataDes = appRegData->Des();
+
+    RDesWriteStream ipcstream(appRegDataDes);
+    CleanupClosePushL(ipcstream);
+    
+    ipcstream << aApparcRegFileData;
+    ipcstream.CommitL();
+    ipcArgs.Set(1, &appRegDataDes);
+    User::LeaveIfError(SendReceive(EUpdateAppRegEntry, ipcArgs));
+    CleanupStack::PopAndDestroy(2, appRegData);
+    }
 #endif
 
 EXPORT_C void RSisRegistryWritableSession::DeleteEntryL(const CSisRegistryPackage& aPackage, TInt64 aTransactionID)
@@ -332,4 +395,11 @@ void RSisRegistryWritableSession::SetComponentStateL(TComponentId aComponentId, 
 	TInt returnCode = SendReceive(ESetComponentState, TIpcArgs(&packageComponentId, &packageState));
 	User::LeaveIfError(returnCode);
 	}
+
+EXPORT_C void RSisRegistryWritableSession::SetComponentPresenceL(TComponentId aComponentId, TBool aState)
+    {
+    TPckgC<TComponentId> componentId(aComponentId);
+    TPckgC<TBool> componentPresence(aState);   
+    User::LeaveIfError(SendReceive(ESetComponentPresence, TIpcArgs(&componentId, &componentPresence)));
+    }
 #endif

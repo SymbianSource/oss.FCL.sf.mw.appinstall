@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -172,6 +172,10 @@ void CUninstallMachine::TConfirmationState::EnterL()
 	iUninstallMachine.CompleteSelf();
 	iUninstallMachine.SetActive();
 	
+	// The user hasn't cancelled so mark the un-installation as confirmed. This
+	// will allow the registry cache to be regenerated further on during the
+	// un-installation process.
+	iUninstallMachine.iOperationConfirmed = ETrue;
 	}
 
 // The next state will be planning uninstallation.
@@ -218,8 +222,9 @@ void CUninstallMachine::TPlanUninstallationState::EnterL()
 	// the UI sothat we don't need to display anything (cancellation is not an
 	// error). See RunError() for more details.
 	iUninstallMachine.iPlanner->PlanUninstallationL(*iUninstallMachine.iPackage);
-	TInt finalProgressBarValue = iUninstallMachine.iPlanner->FinalProgressBarValue();
-	iUninstallMachine.SetFinalProgressBarValue(finalProgressBarValue);
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
+	iUninstallMachine.SetFinalProgressBarValue(iUninstallMachine.iPlanner->FinalProgressBarValue());
+#endif	
 	iUninstallMachine.iPlan=iUninstallMachine.iPlanner->TransferPlanOwnership();
 	iUninstallMachine.CompleteSelf();
 	iUninstallMachine.SetActive();
@@ -229,10 +234,6 @@ void CUninstallMachine::TPlanUninstallationState::EnterL()
 CUninstallMachine::TState* CUninstallMachine::TPlanUninstallationState::CompleteL()
 	{
 	DEBUG_PRINTF(_L8("Uninstall Machine - Completed Uninstallation Planning State"));
-	// The user hasn't cancelled so mark the un-installation as confirmed. This
-    // will allow the registry cache to be regenerated further on during the
-    // un-installation process.
-    iUninstallMachine.iOperationConfirmed = ETrue;
 	return static_cast<TState*>(&iUninstallMachine.iIntegritySupportState);
 	}
 
@@ -417,3 +418,34 @@ void CUninstallMachine::SignalCompletedL()
 	HandleInstallationEventL(iPlan, EEventCompletedUnInstall);
 	}
 	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+void CUninstallMachine::PostJournalFinalizationL(TInt)
+    {    
+    if (!iPlan)
+        {
+        return;
+        }
+    
+    DEBUG_PRINTF(_L8("Uninstall Machine - PostJournalFinalization"));
+    RSisLauncherSession launcher;
+        
+    if (launcher.Connect() != KErrNone)
+        {
+        DEBUG_PRINTF(_L8("Uninstall Machine - Failed to connect to SisLauncher"));
+        return;
+        }
+    CleanupClosePushL(launcher);
+        
+    //Notify apparc for the the change in the Applications
+    RArray<TAppUpdateInfo> affectedApps;
+    CleanupClosePushL(affectedApps);
+    iPlan->GetAffectedApps(affectedApps);
+    if (affectedApps.Count() > 0)
+        {
+        launcher.NotifyNewAppsL(affectedApps);
+        }
+    affectedApps.Close();
+    CleanupStack::PopAndDestroy(2, &launcher);  //affectedApps
+    }
+#endif
+

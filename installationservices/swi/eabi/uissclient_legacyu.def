@@ -148,8 +148,8 @@ EXPORTS
 	_ZN3Swi10RUiHandler18UpdateProgressBarLERKNS_8TAppInfoEi @ 147 NONAME
 	_ZN3Swi12CDisplayText4NewLERKNS_8TAppInfoENS_15TFileTextOptionERK6TDesC8 @ 148 NONAME
 	_ZN3Swi12CDisplayText5NewLCERKNS_8TAppInfoENS_15TFileTextOptionERK6TDesC8 @ 149 NONAME
-	_ZN3Swi10RUiHandler28SetProgressBarValuePublisherEPNS_26CProgressBarValuePublisherE @ 150 NONAME 
-	_ZN3Swi26CProgressBarValuePublisher25CalculateProgressBarValueEi @ 151 NONAME 
-	_ZN3Swi26CProgressBarValuePublisher24SetFinalProgressBarValueEi @ 152 NONAME 
-	_ZN3Swi26CProgressBarValuePublisher4NewLEv @ 153 NONAME 
+	_ZN3Swi10RUiHandler28SetProgressBarValuePublisherEPNS_26CProgressBarValuePublisherE @ 150 NONAME ABSENT
+	_ZN3Swi26CProgressBarValuePublisher23UpdateProgressBarValueLEi @ 151 NONAME ABSENT
+	_ZN3Swi26CProgressBarValuePublisher24SetFinalProgressBarValueEi @ 152 NONAME ABSENT
+	_ZN3Swi26CProgressBarValuePublisher4NewLEv @ 153 NONAME ABSENT
 

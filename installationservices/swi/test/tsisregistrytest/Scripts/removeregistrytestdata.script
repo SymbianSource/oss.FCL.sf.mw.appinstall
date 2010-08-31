@@ -193,7 +193,7 @@ END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0010
 
 START_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0011
 
-RUN_TEST_STEP 2000 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_1500files
+RUN_TEST_STEP 4000 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_1500files
 
 END_TESTCASE API-SEC-SISREGISTRYREMOVETESTDATA-0011
 
