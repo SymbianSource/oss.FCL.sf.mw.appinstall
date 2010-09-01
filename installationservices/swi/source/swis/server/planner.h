@@ -124,6 +124,7 @@ private:
 
 	// Registry Session
 	RSisRegistryWritableSession iRegistrySession;
+	
 	};
 
 // inline functions from CPlanner

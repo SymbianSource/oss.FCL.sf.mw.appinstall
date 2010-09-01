@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -23,6 +23,7 @@
 
 #include "adornedutilities.h"
 #include "log.h"
+#include "cleanuputils.h"
 
 _LIT(KAdornedWildCharString, "{????????}");
 const TInt Swi::FileNameUnadornedPartLength = 10;
@@ -75,6 +76,7 @@ TBool Swi::IsAdornedVariationOfL(const TDesC& aFileName1, const TDesC& aFileName
 
 void Swi::FindAllAdornedVariantsL(RFs& aFs, const TDesC& aSearchNameWild, const TDesC& aSearchPath, RPointerArray<HBufC>& aAdornedFileNamesFound)
 	{
+	CleanupResetAndDestroyPushL(aAdornedFileNamesFound);
 	TFindFile finder(aFs);
 	CDir* dirList=0;
 	TBool matchFound = (finder.FindWildByDir( aSearchNameWild, aSearchPath, *&dirList) == KErrNone);
@@ -104,6 +106,7 @@ void Swi::FindAllAdornedVariantsL(RFs& aFs, const TDesC& aSearchNameWild, const 
 		CleanupStack::PushL(dirList);
 		}
 	CleanupStack::PopAndDestroy(dirList);
+	CleanupStack::Pop(&aAdornedFileNamesFound);
 	}
 
 void Swi::GenerateSearchNameWildL(const TDesC& aFileName, TDes& aSearchNameWild)

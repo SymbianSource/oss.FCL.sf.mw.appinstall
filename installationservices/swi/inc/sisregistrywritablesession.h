@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -30,12 +30,9 @@
 #include "sisregistrysession.h"
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <usif/usifcommon.h>
-#include <usif/scr/appregentries.h>
-#include <usif/scr/screntries_platform.h>
 #endif
 namespace Swi
 {
-
 class CApplication;
 class CSisRegistryPackage;
 
@@ -180,18 +177,6 @@ public:
 	*
 	*/
 	IMPORT_C void DeactivateComponentL(TComponentId aComponentId);
-	
-	/**
-    * Sets the component presence property for a given component id (If a package contains files 
-    * installed to a removable media, the package is considered as not fully present if the same
-    * media is not present. This property will be used to filter out applications, that are not
-    * fully present, from being diaplayed in the AppLib Menu.).
-    *
-    * @param aComponentId       Identifies a installed component
-    * @param aState             True, if the component is fully present, else False.
-    *
-    */
-	IMPORT_C void SetComponentPresenceL(TComponentId aComponentId, TBool aState);
 
 	/**
 	 * Adds a registry entry representing a package containing a Layered Execution Environment
@@ -202,7 +187,7 @@ public:
 	 * @param aTransactionID The TransactionID for IntegrityServices provided by Swis of TInt64 type
 	 *
 	 */
-	IMPORT_C void AddEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
+	IMPORT_C void AddEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
 
 	/**
 	 * Updates the registry entry representing a package containing a Layered Execution Environment.
@@ -216,13 +201,10 @@ public:
 	 * @param aTransactionID The TransactionID for IntegrityServices provided by Swis of TInt64 type
 	 *
 	 */
-	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
+	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const TDesC8& aController, const RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray, TInt64 aTransactionID);
 
-	IMPORT_C void AddEntryL(const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);
-	IMPORT_C void UpdateEntryL(const CApplication& aApplication, const Usif::CApplicationRegistrationData& aApparcRegFileData, const CSisRegistryPackage& aSisRegistryPackage);
 private:
 	void SetComponentStateL(TComponentId aComponentId, TScomoState aState);
-	TInt UserSelectedLanguageIndexL(const CApplication& aApplication) const;
 #endif
 	void AddEntryImplL(TInt aMessage, const CApplication& aApplication, const TDesC8& aController, TInt64 aTransactionID, TIpcArgs& aIpcArgs);
 	void UpdateEntryImplL(TInt aMessage, const CApplication& aApplication, const TDesC8& aController, TInt64 aTransactionID, TIpcArgs& aIpcArgs);

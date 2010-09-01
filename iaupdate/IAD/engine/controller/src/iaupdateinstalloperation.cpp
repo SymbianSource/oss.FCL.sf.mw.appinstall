@@ -205,10 +205,8 @@ MNcdOperation* CIAUpdateInstallOperation::InstallL()
         {
         // Install interface was available.
         // So, start installing with silent install operation.
-        // Get silent install parameters 
-        Usif::COpaqueNamedParams * options = Usif::COpaqueNamedParams::NewLC();
-
-        IAUpdateUtils::UsifSilentInstallOptionsL ( options );
+        SwiUI::TInstallOptions options(
+            IAUpdateUtils::SilentInstallOptionsL( Node() ) );
         
         operation = install->SilentInstallL( *this, options );
 
@@ -218,7 +216,7 @@ MNcdOperation* CIAUpdateInstallOperation::InstallL()
             IAUPDATE_TRACE("[IAUPDATE] ERROR Could not create the operation.");
             User::Leave( KErrGeneral );
             }
-        CleanupStack::Pop( options );
+        
         CleanupStack::PopAndDestroy( install );
         }
     else

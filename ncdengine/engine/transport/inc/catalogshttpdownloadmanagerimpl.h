@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,19 +19,13 @@
 #ifndef C_CATALOGSHTTPDOWNLOADMANAGER_H
 #define C_CATALOGSHTTPDOWNLOADMANAGER_H
 
-// #include <DownloadMgrClient.h>
+#include <downloadmgrclient.h>
 
 #include "catalogstransportoperationid.h"
 #include "catalogshttpsession.h"    // RCatalogsHttpOperationArray
 #include "catalogshttpsessionmanager.h"
-
 #include "catalogsconnectionmethod.h"
 #include "catalogsaccesspointobserver.h"
-#include <download.h>
-#include <downloadmanager.h>
-#include <QObject>
-
-#include <f32file.h> //HLa
 
 class MCatalogsHttpConfig;
 class CCatalogsHttpConfig;
@@ -44,22 +38,16 @@ class CCatalogsHttpConnectionManager;
 class CCatalogsHttpSession;
 class CCatalogsConnection;
 class CCatalogsNetworkManager;
-class CCatalogsHttpQTDownloadManager;
-using namespace WRT;
-
-const TInt KNCDEngineAppID = 0X2002E685;
-
 
 /**
  * HTTP file download manager
  *
  */
 class CCatalogsHttpDownloadManager :       
-
     public CActive, 
+    public MHttpDownloadMgrObserver,
     public MCatalogsAccessPointObserver  
     {
-  
     public: // Constructors and destructor
     
         /**
@@ -81,7 +69,7 @@ class CCatalogsHttpDownloadManager :
         * Destructor
         */
         virtual ~CCatalogsHttpDownloadManager();
-         
+        
     public: // New methods
     
 	    /**
@@ -171,7 +159,7 @@ class CCatalogsHttpDownloadManager :
 
         void AddRef();
 
-		DownloadManager* GetDownloadManager();
+
         TInt Release();    
         
         void SetConnectionMethodL( 
@@ -214,9 +202,15 @@ class CCatalogsHttpDownloadManager :
         
         TInt NewDownloadId();
         
-       WRT::Download& CreatePlatformDownloadL( const TDesC8& aUrl );
-      void downloadMgrEventRecieved(DownloadManagerEvent* dlmEvent);
-
+        RHttpDownload& CreatePlatformDownloadL( const TDesC8& aUrl );
+    
+    public: // From MHttpDownloadMngrObserver
+     
+        /**
+        * Handles events from Download manager 
+        */
+        virtual void HandleDMgrEventL( RHttpDownload& aDownload,
+			THttpDownloadEvent aEvent );    
 
 
     public: // from MCatalogsAccessPointObserver
@@ -265,12 +259,11 @@ class CCatalogsHttpDownloadManager :
         * @param aArray Array to search from
         * @param aDownload Download to find
         * @return Index to the download in iDownloads
-        */
-        /* HLa
+        */      
         TInt FindInDownloads( 
             const RCatalogsHttpOperationArray& aArray,
             RHttpDownload* aDownload ) const;
-        */
+
 
         /**
         * Searches for the given download from the given array and returns
@@ -290,7 +283,6 @@ class CCatalogsHttpDownloadManager :
         /**
          * Download events
          */
-        /* HLa
         class TDownloadEvent        
             {
         public:
@@ -303,7 +295,7 @@ class CCatalogsHttpDownloadManager :
 			        {
 			        }
             };
-          */
+
 
         /**
          * Sets this object active if event queue has unhandled events
@@ -314,19 +306,18 @@ class CCatalogsHttpDownloadManager :
          * Removes events from event queue that belong to the same 
          * RHttpDownload as aEvent
          */
-        /*
         void RemoveUnhandledEvents( 
             const TDownloadEvent& aEvent );
 
         void RemoveUnhandledProgressEvents( 
             const TDownloadEvent& aEvent );
-        */
-        
+
         /**
          * Deletes downloads that have not been paused by the user
          */
         void DeleteHangingDownloads();
-
+        
+        
     private:
     
         MCatalogsHttpSessionManager& iManager;
@@ -335,9 +326,8 @@ class CCatalogsHttpDownloadManager :
         CCatalogsHttpConnectionManager& iConnectionManager;
         CCatalogsNetworkManager* iNetworkManager; // Not owned
         TInt32 iSessionId;
-        DownloadManager *iDmgr;
-        CCatalogsHttpQTDownloadManager* iQTmgr;
-        WRT::Download* iDownload;           // Platform download
+        RHttpDownloadMgr iDmgr;
+        
         // All downloads except those that are in Restored
         RCatalogsHttpOperationArray iDownloads;
         RCatalogsHttpOperationArray iRestoredDownloads;
@@ -350,22 +340,8 @@ class CCatalogsHttpDownloadManager :
         RFs iFs;
         TCatalogsConnectionMethod iCurrentAp;
 
-        // RArray<TDownloadEvent> iEventQueue;  //HLa
+        RArray<TDownloadEvent> iEventQueue;
         TInt iCurrentDlId; // id of the last created download
     };
 
-
-
-class  CCatalogsHttpQTDownloadManager: public QObject
-	{
-		 Q_OBJECT
-		 	public:
-		 		CCatalogsHttpQTDownloadManager(CCatalogsHttpDownloadManager* aDownloadManager,DownloadManager* aDmgr);
-	    public slots:
-    	void downloadMgrEventRecieved(DownloadManagerEvent*);
-	    public:
-	    	CCatalogsHttpDownloadManager* iDownloadManager;
-	    	DownloadManager* iDmgr ;
-	};
-	
-	#endif // C_CATALOGSHTTPDOWNLOADMANAGER_H
+#endif // C_CATALOGSHTTPDOWNLOADMANAGER_H

@@ -182,8 +182,8 @@ EXPORTS
 	?RollbackTransactionL@RSisRegistryWritableSession@Swi@@QAEXXZ @ 181 NONAME ; void Swi::RSisRegistryWritableSession::RollbackTransactionL(void)
 	?SerializedSize@CSisRegistryFileDescription@Swi@@QBEKXZ @ 182 NONAME ; unsigned long Swi::CSisRegistryFileDescription::SerializedSize(void) const
 	?IsFileRegisteredL@RSisRegistrySession@Swi@@QAEHABVTDesC16@@@Z @ 183 NONAME ; int Swi::RSisRegistrySession::IsFileRegisteredL(class TDesC16 const &)
-	?UpdateEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@_J@Z @ 184 NONAME ; void Swi::RSisRegistryWritableSession::UpdateEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, long long)
-	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@_J@Z @ 185 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, long long)
+	?UpdateEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@_J@Z @ 184 NONAME ; void Swi::RSisRegistryWritableSession::UpdateEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, long long)
+	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVTDesC8@@ABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@_J@Z @ 185 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Swi::CApplication const &, class TDesC8 const &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, long long)
 	?GetComponentIdForUidL@RSisRegistrySession@Swi@@QAEHABVTUid@@@Z @ 186 NONAME ; int Swi::RSisRegistrySession::GetComponentIdForUidL(class TUid const &)
 	?SetNameL@CSisRegistryPackage@Swi@@QAEXABVTDesC16@@@Z @ 187 NONAME ; void Swi::CSisRegistryPackage::SetNameL(class TDesC16 const &)
 	??0RSisRegistryHelper@Swi@@QAE@XZ @ 188 NONAME ABSENT ; Swi::RSisRegistryHelper::RSisRegistryHelper(void)
@@ -192,12 +192,4 @@ EXPORTS
 	?GetEquivalentLanguagesL@RSisRegistryHelper@Swi@@QAEXW4TLanguage@@AAV?$RArray@W4TLanguage@@@@@Z @ 191 NONAME ABSENT ; void Swi::RSisRegistryHelper::GetEquivalentLanguagesL(enum TLanguage, class RArray<enum TLanguage> &)
 	?GetMatchingSupportedLanguagesL@RSisRegistryWritableEntry@Swi@@QAEXAAV?$RArray@W4TLanguage@@@@@Z @ 192 NONAME ; void Swi::RSisRegistryWritableEntry::GetMatchingSupportedLanguagesL(class RArray<enum TLanguage> &)
 	?RegistryFilesL@RSisRegistryEntry@Swi@@QAEXAAV?$RPointerArray@VHBufC16@@@@@Z @ 193 NONAME ; void Swi::RSisRegistryEntry::RegistryFilesL(class RPointerArray<class HBufC16> &)
-	?GetComponentIdsForUidL@RSisRegistrySession@Swi@@QAEXAAVTUid@@AAV?$RArray@H@@@Z @ 194 NONAME ; void Swi::RSisRegistrySession::GetComponentIdsForUidL(class TUid &, class RArray<int> &)
-	?UpdateEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplication@2@ABVCApplicationRegistrationData@Usif@@ABVCSisRegistryPackage@2@@Z @ 195 NONAME ; void Swi::RSisRegistryWritableSession::UpdateEntryL(class Swi::CApplication const &, class Usif::CApplicationRegistrationData const &, class Swi::CSisRegistryPackage const &)
-	?GetAppUidsForComponentL@RSisRegistrySession@Swi@@QAEXAAHAAV?$RArray@VTUid@@@@@Z @ 196 NONAME ; void Swi::RSisRegistrySession::GetAppUidsForComponentL(int &, class RArray<class TUid> &)
-	?GetComponentIdForPackageL@RSisRegistrySession@Swi@@QBEHABVTDesC16@@0@Z @ 197 NONAME ; int Swi::RSisRegistrySession::GetComponentIdForPackageL(class TDesC16 const &, class TDesC16 const &) const
-	?AddEntryL@RSisRegistryWritableSession@Swi@@QAEXABVCApplicationRegistrationData@Usif@@ABVCSisRegistryPackage@2@@Z @ 198 NONAME ; void Swi::RSisRegistryWritableSession::AddEntryL(class Usif::CApplicationRegistrationData const &, class Swi::CSisRegistryPackage const &)
-	?SetComponentPresenceL@RSisRegistryWritableSession@Swi@@QAEXHH@Z @ 199 NONAME ; void Swi::RSisRegistryWritableSession::SetComponentPresenceL(int, int)
-	?RemoveAppRegInfoL@RSisRegistrySession@Swi@@QAEXABVTDesC16@@@Z @ 200 NONAME ; void Swi::RSisRegistrySession::RemoveAppRegInfoL(class TDesC16 const &)
-	?AddAppRegInfoL@RSisRegistrySession@Swi@@QAEXABVTDesC16@@@Z @ 201 NONAME ; void Swi::RSisRegistrySession::AddAppRegInfoL(class TDesC16 const &)
 

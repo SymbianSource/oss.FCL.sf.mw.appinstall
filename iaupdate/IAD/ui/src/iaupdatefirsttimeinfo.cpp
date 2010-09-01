@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -20,6 +20,7 @@
 
 //INCLUDES
 #include "iaupdatefirsttimeinfo.h"
+#include "iaupdatefirsttimedatefile.h"
 
 #include <bautils.h>  // bafl.lib 
 #include <s32file.h>  // estor.lib
@@ -107,8 +108,19 @@ void CIAUpdateFirstTimeInfo::SetAgreementAcceptedL()
     iAgreementAccepted = ETrue;
     WriteDataL();
     }
-  
-       
+    
+// ---------------------------------------------------------------------------
+// CIAUpdateFirstTimeInfo::SetAgreementAskedL
+// Set Nokia agreement as asked (prompted) to an user
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateFirstTimeInfo::SetAgreementAskedL()
+    {
+    ReadDataL();
+    iAgreementAsked = ETrue;
+    WriteDataL();
+    }
+        
 // ---------------------------------------------------------------------------
 // CIAUpdateFirstTimeInfo::SetAutomaticUpdatesAskedL
 // Set automatic update checks as prompted to an use
@@ -119,6 +131,26 @@ void CIAUpdateFirstTimeInfo::SetAutomaticUpdatesAskedL()
 	ReadDataL();
 	iAutomaticUpdateChecksAsked = ETrue;
     WriteDataL();
+    }
+    
+// ---------------------------------------------------------------------------
+// CIAUpdateFirstTimeInfo::SetFirstTimeIfNotSetL
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateFirstTimeInfo::SetFirstTimeIfNotSetL()
+    {
+	if ( !AutomaticUpdateChecksAskedL() )
+	    {
+		CIAUpdateFirstTimeDateFile* firstTimeDateFile = 
+		      CIAUpdateFirstTimeDateFile::NewLC( KIAUpdateFirstTimeDateFile );
+		if ( firstTimeDateFile->FirstTime().Int64() == 0 )
+		    {
+			firstTimeDateFile->SetCurrentFirstTime();
+			firstTimeDateFile->WriteDataL();
+		    }
+		CleanupStack::PopAndDestroy( firstTimeDateFile );   
+	    }
     }
 
 // ---------------------------------------------------------------------------
@@ -132,6 +164,18 @@ TBool CIAUpdateFirstTimeInfo::AgreementAcceptedL()
     return iAgreementAccepted;
     }
 
+
+// ---------------------------------------------------------------------------
+// CIAUpdateFirstTimeInfo::AgreementAskedL
+// Is Nokia agreement of Application Update already asked 
+// ---------------------------------------------------------------------------
+//
+TBool CIAUpdateFirstTimeInfo::AgreementAskedL()
+    {
+	ReadDataL();
+	return iAgreementAsked;
+    }
+
 // ---------------------------------------------------------------------------
 // CIAUpdateFirstTimeInfo::AutomaticUpdateChecksAskedL
 // Is activation for automatic update cheks from network already asked 
@@ -143,6 +187,37 @@ TBool CIAUpdateFirstTimeInfo::AutomaticUpdateChecksAskedL()
     return iAutomaticUpdateChecksAsked;
     }
 
+// ---------------------------------------------------------------------------
+// CIAUpdateFirstTimeInfo::FirstTimeDelayL
+// 
+// ---------------------------------------------------------------------------
+//    
+TBool CIAUpdateFirstTimeInfo::FirstTimeDelayL()
+    {
+    TBool firstTimeDelay = EFalse;
+    if ( !AutomaticUpdateChecksAskedL() )
+	    {
+		CIAUpdateFirstTimeDateFile* firstTimeDateFile = 
+		      CIAUpdateFirstTimeDateFile::NewL( KIAUpdateFirstTimeDateFile );
+    
+        TTime firstTime( firstTimeDateFile->FirstTime() );
+  
+        delete firstTimeDateFile;
+  
+        TTime expireTime( firstTime );
+
+        expireTime += KFirstTimeDelayInDays;
+    
+        TTime universalTime;
+        universalTime.UniversalTime();
+
+        if ( universalTime < expireTime && universalTime >= firstTime )
+            {
+        	firstTimeDelay = ETrue;
+            }
+	    }
+    return firstTimeDelay;	
+    }
 
 // -----------------------------------------------------------------------------
 // CIAUpdateFirstTimeInfo::ReadDataL
@@ -156,6 +231,7 @@ void CIAUpdateFirstTimeInfo::ReadDataL()
     if ( err == KErrNotFound )
     	{
     	iAgreementAccepted = EFalse;
+	    iAgreementAsked = EFalse;
 	    iAutomaticUpdateChecksAsked = EFalse; 
     	}
     else
@@ -206,6 +282,7 @@ void CIAUpdateFirstTimeInfo::WriteDataL()
 void CIAUpdateFirstTimeInfo::InternalizeL( RReadStream& aStream )
 	{
 	iAgreementAccepted = aStream.ReadInt32L();
+	iAgreementAsked = aStream.ReadInt32L();
 	iAutomaticUpdateChecksAsked = aStream.ReadInt32L();
 	}
 
@@ -218,6 +295,7 @@ void CIAUpdateFirstTimeInfo::InternalizeL( RReadStream& aStream )
 void CIAUpdateFirstTimeInfo::ExternalizeL( RWriteStream& aStream )
 	{
 	aStream.WriteInt32L( iAgreementAccepted );
+	aStream.WriteInt32L( iAgreementAsked );	
 	aStream.WriteInt32L( iAutomaticUpdateChecksAsked );
 	}
     

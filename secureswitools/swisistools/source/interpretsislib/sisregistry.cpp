@@ -23,6 +23,7 @@
 #include "dbhelper.h"
 #include "dblayer.h"
 #include "dbconstants.h"
+#include "is_utils.h"
 #include "xmlgenerator.h"
 #include "xmlparser.h"
 #include "util.h"
@@ -30,10 +31,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <iostream>
-#include "dirparse.h"
-#include "parse.h"
-#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 // constants 
 #define IGNORE_FORMATTING -1
 #define ENABLE 1
@@ -1466,22 +1465,13 @@ void SisRegistry::SetOriginVerification(XmlDetails::TScrPreProvisionDetail::TCom
 void SisRegistry::UpdateInstallationInformation(XmlDetails::TScrPreProvisionDetail aScrPreProvisionDetail)
 	{
 	CXmlGenerator xmlGenerator;
-
-	#ifndef __TOOLS2_LINUX__
-		char* tmpFileName = tmpnam(NULL);	
-	#else
-		char tmpFileName[] = "/tmp/interpretsis_XXXXXX";	
-		int temp_fd;
-		temp_fd=mkstemp(tmpFileName); 
-		fclose(fdopen(temp_fd,"w"));
-	#endif
-
+	char* tmpFileName = tmpnam(NULL);	
 	std::wstring filename(string2wstring(tmpFileName));
 
 	int isRomApplication = 0;
 	xmlGenerator.WritePreProvisionDetails(filename , aScrPreProvisionDetail, isRomApplication);
 
-	#ifdef __TOOLS2_LINUX__
+	#ifdef __LINUX__
 	std::string executable = "scrtool";
 	#else
 	std::string executable = "scrtool.exe";
@@ -1497,11 +1487,11 @@ void SisRegistry::UpdateInstallationInformation(XmlDetails::TScrPreProvisionDeta
 		LERROR(L"Temporary file removal failed.");
 
 	if(error != 0)
-	{
+		{
 		std::string err = "Scrtool failed to upload the database registry entry.";
 		LERROR(L"Scrtool failed to upload the database registry entry.");
 		throw InterpretSisError(err, DATABASE_UPDATE_FAILED);
-	}
+		}
 	}
 
 std::string SisRegistry::GetDbPath()
@@ -1527,7 +1517,7 @@ std::string SisRegistry::GetDbPath()
 
 std::string SisRegistry::GetEpocRoot()
 	{
-	const char* epocRoot = getenv("EPOCROOT");	
+	const char* epocRoot = getenv("EPOCROOT");
 	if(NULL == epocRoot)
 		{
 		std::string err = "EPOCROOT environment variable not specified. Please specify it as part of your environment variable." \
@@ -1550,8 +1540,7 @@ std::wstring SisRegistry::GetGlobalId( TUint32 aUid , TInt aInstallType, std::ws
 #else		
 		swprintf(textGlobalId,20,L"%08x",aUid);
 #endif
-		
-
+	
 	std::wstring globalId = textGlobalId;
 	
 	if( aInstallType == CSISInfo::EInstAugmentation || aInstallType == CSISInfo::EInstPreInstalledPatch )
@@ -1610,11 +1599,7 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 	    {
 		if (*currFile != L"." && *currFile != L"..")
 		    {
-			#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-				int pos = 0;
-				if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
-			#endif
-					RemoveFile(path + *currFile);
+			RemoveFile(path + *currFile);
 		    }
 
 		++currFile;
@@ -1645,11 +1630,7 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 				{
 				if (*currFile != L"." && *currFile != L"..")
 					{
-					#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-						int pos = 0;
-						if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
-					#endif
-							RemoveFile(path + *currFile);
+					RemoveFile(path + *currFile);
 					}
 				++currFile;
 				}
@@ -1664,91 +1645,6 @@ void SisRegistry::RemovePkgWithScr(TUint32 aUid, bool aSkipRomStub)
 		iDbHelper->RemoveEntry(*compIter);
 		}
 	}
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-void SisRegistry::BackupCtl(TUint32 aUid)
-{
-	std::list<std::wstring> regDirFiles;
-	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
-    GetDirContents(path, regDirFiles);
-	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
-
-	std::wstring  path1 = FixPathDelimiterstap(path);
-	// Backup all .ctl files in the system drive for this package
-	while (currFile != regDirFiles.end())
-	{
-		if (*currFile != L"." && *currFile != L"..")
-	    {
-			std::string ifile = wstring2string(path1 +*currFile);
-			std::string ibackupfile(ifile);
-			ibackupfile.append("_backup");
-
-			int err=FileCopyA(ifile.c_str(),ibackupfile.c_str(),0);
-			if (err != 0)
-				LERROR(L"Failed to Backup .ctl ");
-		}
-		++currFile;
-    }
-}
-
-void SisRegistry::RestoreCtl(TUint32 aUid, TBool& aBackupFlag)
-{
-	std::list<std::wstring> regDirFiles;
-	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
-    GetDirContents(path, regDirFiles);
-	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
-
-	// Restore all .ctl files in the system drive for this package
-	while (currFile != regDirFiles.end())
-	{
-		if (*currFile != L"." && *currFile != L"..")
-	    {
-			if(aBackupFlag)
-			{
-				int pos =0;
-				if((pos = currFile->find(L".ctl_backup", 0)) == std::wstring::npos)
-				{
-					std::string ifile = wstring2string(path +*currFile);
-					std::string ibackupfile(ifile);
-					ibackupfile.append("_backup");
-
-					RemoveFile(path + *currFile);
-				 	int err = FileMoveA(ibackupfile.c_str(),ifile.c_str());
-					if (err != 0)
-						LERROR(L"Failed to Restore .ctl ");
-				}
-			}
-			else
-			{
-				RemoveFile(path + *currFile);
-			}
-		}
-		++currFile;
-    }
-}
-
-void SisRegistry::RemoveCtlBackup(TUint32 aUid)
-{
-	std::list<std::wstring> regDirFiles;
-	std::wstring path = GetRegistryDir( iParamList.SystemDrivePath(), aUid );
-    GetDirContents(path, regDirFiles);
-	std::list<std::wstring>::iterator currFile = regDirFiles.begin();
-	
-	// Remove all .ctl backup files in the system drive for this package
-	while (currFile != regDirFiles.end())
-	{
-		if (*currFile != L"." && *currFile != L"..")
-	    {
-			std::wstring ifile(path +*currFile);
-			ifile.append(L"_backup");
-			
-			if (FileExists(ifile))
-				RemoveFile(ifile);
-		}
-		++currFile;
-    }
-}
-#endif
 
 TUint32 SisRegistry::GetUid(TUint32 aSid) const
 	{
@@ -1785,9 +1681,6 @@ XmlDetails::TScrPreProvisionDetail::TComponent SisRegistry::CreateRegistryEntry(
 	AddEmbeddedPackages(component, aSisRegistryObject.GetEmbeddedPackages());
 	AddProperties(component, aSisRegistryObject.GetProperties());
 	AddFileDescription(component, aSisRegistryObject.GetFileDescriptions());
-	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	AddApplicationRegistrationInfoL(component, aSisRegistryObject.GetFileDescriptions(), aSisRegistryObject.GetInRom());
-	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	
 	// inROM
 	if(DbConstants::KDefaultIsInRom != aSisRegistryObject.GetInRom())
@@ -2092,7 +1985,6 @@ void SisRegistry::AddFileDescription(XmlDetails::TScrPreProvisionDetail::TCompon
 		// add the location in the component files table
 		XmlDetails::TScrPreProvisionDetail::TComponentFile componentFile;
 		componentFile.iLocation = (*filedesIter)->GetTarget();
-
 		AddFileDescriptionAsFileProperty(componentFile, *filedesIter);
 		aComponent.iComponentFiles.push_back(componentFile);
 		}
@@ -2100,86 +1992,6 @@ void SisRegistry::AddFileDescription(XmlDetails::TScrPreProvisionDetail::TCompon
 	if (DbConstants::KDefaultWildCardFileCount != wildcardFileCount)
 		AddComponentProperty(aComponent, DbConstants::CompWildCardFileCount, wildcardFileCount, IGNORE_FORMATTING);	
 	}
-
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-void SisRegistry::AddApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, const std::vector<FileDescription*>& aFileDescription, int aInRom )
-{
-	std::vector<FileDescription*>::const_iterator filedesIter;
-	std::wstring iLocalFile;
-	std::string RegistrationFileName;
-	
-	//Find Registration File from list of filelist
-	for(filedesIter = aFileDescription.begin() ; filedesIter != aFileDescription.end(); ++filedesIter)
-	{
-		// if it has wild card characters then donot process. Continue.
-		if( IsFileWideCard((*filedesIter)->GetLocalFile()) )
-		{
-			continue;
-		}
-
-		iLocalFile = (*filedesIter)->GetLocalFile();
-		RegistrationFileName = wstring2string(iLocalFile);
-
-		std::string iRomPath = wstring2string(iParamList.RomDrivePath());
-		if(aInRom)
-		{
-			std::string localpath = FullNameWithoutDrive(RegistrationFileName);
-			RegistrationFileName = iRomPath + localpath;
-		}
-
-		size_t found=RegistrationFileName.rfind(".rsc");
-		if(found==string::npos)
-			continue;
-
-		//Return 0 for Registration file else 1
-		TInt err = FindRegistrationResourceFileL(RegistrationFileName);
-
-		if(err)
-			continue;
-
-		std::string folder;
-		#ifdef __LINUX__
-		const char *privateFolder = "private/10003a3f/";
-		#else
-		const char *privateFolder = "private\\10003a3f\\";
-		#endif
-
-		found=RegistrationFileName.find(privateFolder);
-
-		if( found != string::npos ) 
-			folder = RegistrationFileName.substr(0,found); 
-		else
-			folder = RegistrationFileName; 
-
-		CAppInfoReader* appInfoReader = NULL;
-		appInfoReader = CAppInfoReader::NewL(RegistrationFileName, NullUid, folder); 
-		if (!appInfoReader)
-		{
-			std::string errMsg= "Error in Reading File. Memory Allocation Failed";
-			throw CResourceFileException(errMsg);
-		}
-		else
-		{
-			TBool readSuccessful=EFalse;
-
-			readSuccessful= appInfoReader->ReadL(aFileDescription, iRomPath, aInRom);
-		
-			if (readSuccessful)
-			{
-				CreateApplicationRegistrationInfoL(aComponent,appInfoReader);
-			}
-			else
-			{
-				delete appInfoReader;
-				std::string errMsg= "Reading Resource File failed.";
-				throw CResourceFileException(errMsg);
-			}
-		}
-		delete appInfoReader;
-	}
-}
-#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 void SisRegistry::AddFileDescriptionAsFileProperty	(	XmlDetails::TScrPreProvisionDetail::TComponentFile& aComponentFile, 
 												const FileDescription* aFileDescription

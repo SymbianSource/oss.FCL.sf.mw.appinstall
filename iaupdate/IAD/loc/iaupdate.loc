@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -303,6 +303,11 @@
 // d: Firmware
 // l: None
 #define qtn_swupdate_main_device_fw "DEVICE SOFTWARE" 
+
+// d: Second row in double graphic style list
+// d: Firmware update with PC
+// l: list_double_graphic_pane_t2
+#define qtn_swupdate_update_with_pc "Use your PC to update"
 
 
 //HISTORY VIEW LIST

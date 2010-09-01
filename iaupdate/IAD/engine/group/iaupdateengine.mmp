@@ -114,7 +114,7 @@ LIBRARY         sysutil.lib
 LIBRARY         platformenv.lib
 LIBRARY         platformver.lib     // System version info
 LIBRARY         etel3rdparty.lib
-//LIBRARY         swinstcli.lib
+LIBRARY         swinstcli.lib
 LIBRARY         apmime.lib
 LIBRARY         ecom.lib            // For the NCD Engine ECOM session closing.
 LIBRARY         sysversioninfo.lib
@@ -125,9 +125,7 @@ LIBRARY         etelmm.lib          // RMobilePhone
 LIBRARY         iaupdaterfiles.lib
 
 // widget registry API library
-LIBRARY         sif.lib // SIF installer
-LIBRARY         scrclient.lib  //Registry client
-//LIBRARY         widgetregistryclient.lib
+LIBRARY         widgetregistryclient.lib
 
 // NCD Engine
 LIBRARY         ncdengine_20019119.lib

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -47,19 +47,8 @@ enum TSisLauncherMessages
 	EQueueStartByMimeByHandle,
 	EExecuteQueue,
 	EKillQueue,
-	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	//Function Id's to be accessed by Installserver
-	EParseSwTypeRegFile = 30,
+	EParseSwTypeRegFile,
 	ERegisterSifLauncherMimeTypes,
-	ENotifyNewAppsData,                                                     //Notify Apparc about application data
-	//Function Id's to be accessed by SisRegistryServer
-	EUnregisterSifLauncherMimeTypes = 60,
-	//Function Id's to be accessed by Installserver and SisRegistryServer
-	ENotifyApparcForApps = 90,                                              //Notify Apparc about updated applications
-	//Function Id's to be accessed by all clients
-    EAsyncParseResourceFileSize = 120,                                      //Parse registration resource file, Async Function
-    EAsyncParseResourceFileData,                                            //Return parsed resource data
-    #endif
+	EUnregisterSifLauncherMimeTypes,
 	ESeparatorEndAll	
-   
 	};

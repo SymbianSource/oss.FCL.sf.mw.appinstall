@@ -19,7 +19,7 @@
 #ifndef T_CATALOGSHTTPTYPES_H
 #define T_CATALOGSHTTPTYPES_H
 
-// #include <HttpDownloadMgrCommon.h>  // HLa: DLMgr remove
+#include <httpdownloadmgrcommon.h>
 
 class MCatalogsHttpOperation;
 
@@ -342,7 +342,6 @@ enum TCatalogsHttpHeaderMode
 /**
 * Maximum length for content types
 */
-const TUint KMaxContentTypeLength = 256; // HLa: DLMgr remove
 const TUint KCatalogsHttpMaxContentTypeLength = KMaxContentTypeLength;
 
 

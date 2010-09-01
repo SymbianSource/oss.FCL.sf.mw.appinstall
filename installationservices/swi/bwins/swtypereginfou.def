@@ -1,7 +1,19 @@
 EXPORTS
-	?UnserializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABVTDesC16@@AAV?$RArray@VTPtrC16@@@@@Z @ 1 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeUniqueSwTypeNamesL(class TDesC16 const &, class RArray<class TPtrC16> &)
-	?SerializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAVRBuf8@@@Z @ 2 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeArrayL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RBuf8 &)
-	?ExtractMimeTypesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAV?$RPointerArray@VHBufC8@@@@@Z @ 3 NONAME ; void Swi::SoftwareTypeRegInfoUtils::ExtractMimeTypesL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RPointerArray<class HBufC8> &)
-	?SerializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@AAVRBuf16@@@Z @ 4 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeUniqueSwTypeNamesL(class RPointerArray<class Usif::CSoftwareTypeRegInfo> const &, class RBuf16 &)
-	?UnserializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXAAVRReadStream@@AAV?$RPointerArray@VCSoftwareTypeRegInfo@Usif@@@@@Z @ 5 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeArrayL(class RReadStream &, class RPointerArray<class Usif::CSoftwareTypeRegInfo> &)
+	?SetLocalizedSoftwareTypeNameL@CSoftwareTypeRegInfo@Swi@@QAEXW4TLanguage@@ABVTDesC16@@@Z @ 1 NONAME ; void Swi::CSoftwareTypeRegInfo::SetLocalizedSoftwareTypeNameL(enum TLanguage, class TDesC16 const &)
+	?UnserializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABVTDesC16@@AAV?$RArray@VTPtrC16@@@@@Z @ 2 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeUniqueSwTypeNamesL(class TDesC16 const &, class RArray<class TPtrC16> &)
+	??1CLocalizedSoftwareTypeName@Swi@@UAE@XZ @ 3 NONAME ; Swi::CLocalizedSoftwareTypeName::~CLocalizedSoftwareTypeName(void)
+	?ExternalizeL@CLocalizedSoftwareTypeName@Swi@@QBEXAAVRWriteStream@@@Z @ 4 NONAME ; void Swi::CLocalizedSoftwareTypeName::ExternalizeL(class RWriteStream &) const
+	?SerializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@AAVRBuf8@@@Z @ 5 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeArrayL(class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, class RBuf8 &)
+	?NewL@CLocalizedSoftwareTypeName@Swi@@SAPAV12@AAVRReadStream@@@Z @ 6 NONAME ; class Swi::CLocalizedSoftwareTypeName * Swi::CLocalizedSoftwareTypeName::NewL(class RReadStream &)
+	?SerializeUniqueSwTypeNamesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@AAVRBuf16@@@Z @ 7 NONAME ; void Swi::SoftwareTypeRegInfoUtils::SerializeUniqueSwTypeNamesL(class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, class RBuf16 &)
+	??1CSoftwareTypeRegInfo@Swi@@UAE@XZ @ 8 NONAME ; Swi::CSoftwareTypeRegInfo::~CSoftwareTypeRegInfo(void)
+	?UnserializeArrayL@SoftwareTypeRegInfoUtils@Swi@@SAXAAVRReadStream@@AAV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@@Z @ 9 NONAME ; void Swi::SoftwareTypeRegInfoUtils::UnserializeArrayL(class RReadStream &, class RPointerArray<class Swi::CSoftwareTypeRegInfo> &)
+	?NewL@CLocalizedSoftwareTypeName@Swi@@SAPAV12@ABVTDesC16@@W4TLanguage@@@Z @ 10 NONAME ; class Swi::CLocalizedSoftwareTypeName * Swi::CLocalizedSoftwareTypeName::NewL(class TDesC16 const &, enum TLanguage)
+	?NewL@CSoftwareTypeRegInfo@Swi@@SAPAV12@ABVTDesC16@@@Z @ 11 NONAME ; class Swi::CSoftwareTypeRegInfo * Swi::CSoftwareTypeRegInfo::NewL(class TDesC16 const &)
+	?NewL@CSoftwareTypeRegInfo@Swi@@SAPAV12@AAVRReadStream@@@Z @ 12 NONAME ; class Swi::CSoftwareTypeRegInfo * Swi::CSoftwareTypeRegInfo::NewL(class RReadStream &)
+	?ExtractMimeTypesL@SoftwareTypeRegInfoUtils@Swi@@SAXABV?$RPointerArray@VCSoftwareTypeRegInfo@Swi@@@@AAV?$RPointerArray@VHBufC8@@@@@Z @ 13 NONAME ; void Swi::SoftwareTypeRegInfoUtils::ExtractMimeTypesL(class RPointerArray<class Swi::CSoftwareTypeRegInfo> const &, class RPointerArray<class HBufC8> &)
+	?ExternalizeL@CSoftwareTypeRegInfo@Swi@@QBEXAAVRWriteStream@@@Z @ 14 NONAME ; void Swi::CSoftwareTypeRegInfo::ExternalizeL(class RWriteStream &) const
+	?NewLC@CLocalizedSoftwareTypeName@Swi@@SAPAV12@ABVTDesC16@@W4TLanguage@@@Z @ 15 NONAME ; class Swi::CLocalizedSoftwareTypeName * Swi::CLocalizedSoftwareTypeName::NewLC(class TDesC16 const &, enum TLanguage)
+	?SetMimeTypeL@CSoftwareTypeRegInfo@Swi@@QAEXABVTDesC16@@@Z @ 16 NONAME ; void Swi::CSoftwareTypeRegInfo::SetMimeTypeL(class TDesC16 const &)
+	?ExternalizedSize@CSoftwareTypeRegInfo@Swi@@QBEHXZ @ 17 NONAME ; int Swi::CSoftwareTypeRegInfo::ExternalizedSize(void) const
 

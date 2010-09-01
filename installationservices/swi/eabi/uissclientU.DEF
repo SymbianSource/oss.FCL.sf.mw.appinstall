@@ -162,14 +162,4 @@ EXPORTS
 	_ZTIN3Swi20CNativeComponentInfoE @ 161 NONAME
 	_ZTVN3Swi20CNativeComponentInfoE @ 162 NONAME
 	_ZN3Swi12RUissSession16GetComponentInfoERK6TDesC8R5TDes8R14TRequestStatus @ 163 NONAME
-	_ZN3Swi20CNativeComponentInfo22CNativeApplicationInfo5NewLCERK4TUidRK7TDesC16S7_S7_ @ 164 NONAME
-	_ZN3Swi20CNativeComponentInfo22CNativeApplicationInfoD0Ev @ 165 NONAME
-	_ZN3Swi20CNativeComponentInfo22CNativeApplicationInfoD1Ev @ 166 NONAME
-	_ZN3Swi20CNativeComponentInfo22CNativeApplicationInfoD2Ev @ 167 NONAME
-	_ZNK3Swi20CNativeComponentInfo22CNativeApplicationInfo12IconFileNameEv @ 168 NONAME
-	_ZNK3Swi20CNativeComponentInfo22CNativeApplicationInfo4NameEv @ 169 NONAME
-	_ZNK3Swi20CNativeComponentInfo22CNativeApplicationInfo6AppUidEv @ 170 NONAME
-	_ZNK3Swi20CNativeComponentInfo22CNativeApplicationInfo9GroupNameEv @ 171 NONAME
-	_ZTIN3Swi20CNativeComponentInfo22CNativeApplicationInfoE @ 172 NONAME
-	_ZTVN3Swi20CNativeComponentInfo22CNativeApplicationInfoE @ 173 NONAME
 

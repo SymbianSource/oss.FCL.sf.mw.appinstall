@@ -50,8 +50,4 @@ EXPORTS
 	_ZTI40CSwiLauncherSisRegistryServerUtilCapTest @ 49 NONAME
 	_ZTV36CSwiLauncherInstallServerUtilCapTest @ 50 NONAME
 	_ZTV40CSwiLauncherSisRegistryServerUtilCapTest @ 51 NONAME
-	_ZTI22CSisLauncherSwiSidTest @ 52 NONAME
-	_ZTI22CSisRegistryTCBCapTest @ 53 NONAME
-	_ZTV22CSisLauncherSwiSidTest @ 54 NONAME
-	_ZTV22CSisRegistryTCBCapTest @ 55 NONAME
 

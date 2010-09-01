@@ -26,7 +26,6 @@
 #define __PLAN_H__
 
 #include <e32base.h>
-#include "sislauncherclient.h"
 
 namespace Swi
 {
@@ -147,12 +146,7 @@ public:
 	 * Resets the list of app arc registration files that have yet to be processed
 	 * */
 	IMPORT_C void ResetAppArcRegFiles();
-	
-    #ifdef  SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
-	IMPORT_C void  SetAffectedApps(RArray<TAppUpdateInfo>& aAppInfo);	
-	IMPORT_C void  GetAffectedApps(RArray<TAppUpdateInfo>& aAppInfo) const;
-	IMPORT_C void  ResetAffectedApps();
-    #endif	
+		
 private:
 	CPlan();
 	/// Information about the application being installed or uninstalled, used by the UI
@@ -175,11 +169,7 @@ private:
 	/// is true if the plan contains ECOM plug-ins
 	TBool iContainsPlugins;
 	/// the list of AppArc registration files that haven't been processed
-	RPointerArray<TDesC> iAppArcRegFiles;	
-    #ifdef  SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
-	/// the list of apps affected by insatllation/upgrade, used to notify apparc
-	RArray<TAppUpdateInfo> iAffectedApps;
-    #endif
+	RPointerArray<TDesC> iAppArcRegFiles;
 	};
 
 // inline functions

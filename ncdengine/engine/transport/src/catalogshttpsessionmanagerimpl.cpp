@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -126,7 +126,7 @@ TInt CCatalogsHttpSessionManager::Release()
 // ---------------------------------------------------------------------------
 //	
 TInt CCatalogsHttpSessionManager::StartOperation( 
-    MCatalogsHttpOperation* aOperation, TBool aConnect )
+    MCatalogsHttpOperation* aOperation )
     {
     DLTRACEIN((""));
     DLINFO( ("Operation ID: %i, Type: %i", 
@@ -140,26 +140,25 @@ TInt CCatalogsHttpSessionManager::StartOperation(
         
     // Make sure the download is removed from queue
     RemoveFromQueue( aOperation );
-       
+    
+    TBool isRunning = EFalse;
 
     // Check if the operation can connect either by using the current AP
     // or by opening a new one
-    if ( aConnect )
+    TRAPD( err, isRunning = ConnectL( *aOperation ) );
+    if ( err != KErrNone ) 
         {
-        TBool isRunning = EFalse;
-        TRAPD( err, isRunning = ConnectL( *aOperation ) );
-        if ( err != KErrNone )  
-            {
-            DLTRACEOUT(("Error: %d, err"));
-            return err;
-            }
-        if ( !isRunning ) 
-            {
-            DLTRACEOUT(("Not running, adding to queue"));
-            return AddToQueue( aOperation );
-            }
+        DLTRACEOUT(("Error: %d, err"));
+        return err;
         }
-     // Check whether operation belongs to general queue or not
+        
+    if ( !isRunning ) 
+        {
+        DLTRACEOUT(("Not running, adding to queue"));
+        return AddToQueue( aOperation );
+        }
+        
+    // Check whether operation belongs to general queue or not
     if ( aOperation->Config().Priority() > ECatalogsPriorityQueued )
         {        
         // non-general queues

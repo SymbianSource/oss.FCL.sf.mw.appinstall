@@ -21,21 +21,21 @@
 #include <bautils.h>
 #include <eikenv.h>
 #include <StringLoader.h>
-//#include <AknQueryDialog.h> 
+#include <AknQueryDialog.h>
 #include <eikprogi.h>
-//#include <aknnotewrappers.h>
+#include <aknnotewrappers.h>
 #include <data_caging_path_literals.hrh>
 #include <SWInstCommonUI.rsg>
-//#include <aknmessagequerydialog.h>
+#include <aknmessagequerydialog.h>
 #include <hlplch.h>
-//#include <csxhelp/am.hlp.hrh>
+#include <csxhelp/am.hlp.hrh>
 #include <coehelp.h>
 #include <featmgr.h>
 #include <sysutil.h>
 #ifdef RD_MULTIPLE_DRIVE
 #include <driveinfo.h>
 #endif //RD_MULTIPLE_DRIVE
-//#include <akninputblock.h>
+#include <akninputblock.h>
  
 #include "CUIDialogs.h"
 #include "CUIDriveUtils.h"
@@ -80,8 +80,8 @@ void CCUIDialogs::ConstructL()
     fileName.Append( KCUIResourceFileName );
     iResourceFileOffset = CUIUtils::LoadResourceFileL( fileName, iCoeEnv );    
 
-//    iAbsorber = CAknInputBlock::NewLC();
-//    CleanupStack::Pop( iAbsorber );
+    iAbsorber = CAknInputBlock::NewLC();
+    CleanupStack::Pop( iAbsorber );
     
     FeatureManager::InitializeLibL(); 
     }
@@ -112,7 +112,7 @@ EXPORT_C CCUIDialogs::~CCUIDialogs()
         iCoeEnv->DeleteResourceFile( iResourceFileOffset );
         }
 
-//    delete iAbsorber;
+    delete iAbsorber;
 
     FeatureManager::UnInitializeLib();
     }
@@ -285,7 +285,7 @@ EXPORT_C TBool CCUIDialogs::ShowConfirmationQueryL( const TDesC& aDisplayString,
                                                     TInt aSoftkeyResourceId ) const
     {
     TBool response( EFalse );
-/*
+
     CAknQueryDialog* note = 
         CAknQueryDialog::NewL( CAknQueryDialog::EConfirmationTone );
 
@@ -297,7 +297,7 @@ EXPORT_C TBool CCUIDialogs::ShowConfirmationQueryL( const TDesC& aDisplayString,
         {
         response = ETrue;
         }   
-*/
+
     return response;    
     }
 
@@ -312,10 +312,9 @@ EXPORT_C TInt CCUIDialogs::ShowDriveSelectionDialogL(
     const RArray<TDriveUnit>& aDriveUnits,
     const RArray<TInt64>& aDriveSpaces,
     TInt& aSelectionResult )
-    {  
-    
+    {   
     TInt result( KErrNone );
-/*
+
     // Sanity check
     if ( aSize <= 0 )
         {
@@ -440,7 +439,7 @@ EXPORT_C TInt CCUIDialogs::ShowDriveSelectionDialogL(
         }    
     
     CleanupStack::PopAndDestroy( driveUtils );
-*/
+
     return result;
     }
 
@@ -451,10 +450,9 @@ EXPORT_C TInt CCUIDialogs::ShowDriveSelectionDialogL(
 // -----------------------------------------------------------------------------
 //
 EXPORT_C TBool CCUIDialogs::ShowSecurityWarningDialogL()
-    { 
-    
+    {   
     TBool result( EFalse );
-    /*
+    
     // Load resources
     HBufC* text = StringLoader::LoadLC( R_SWCOMMON_SECURITY_WARNING );
     HBufC* linkText = NULL;
@@ -492,7 +490,7 @@ EXPORT_C TBool CCUIDialogs::ShowSecurityWarningDialogL()
         }    
     
     CleanupStack::PopAndDestroy( 3, text ); // message, linkText, text
-     */
+
     return result;    
     }
  
@@ -517,10 +515,8 @@ EXPORT_C void CCUIDialogs::ShowErrorNoteL( TInt aResourceId ) const
 //
 EXPORT_C void CCUIDialogs::ShowErrorNoteL( const TDesC& aErrorText ) const
     {
-    /*
     CAknErrorNote* note = new (ELeave) CAknErrorNote( ETrue );
     note->ExecuteLD( aErrorText );
-    */
     }
 
 // -----------------------------------------------------------------------------
@@ -601,7 +597,6 @@ EXPORT_C TBool CCUIDialogs::ShowInstallationCompleteQueryL(
                                         TInt& aIndexOfAppToBeStarted ) const
            
     {
-    /*
     aIndexOfAppToBeStarted = KErrNotFound;
     
     // Prepare for showing the installation complete query
@@ -680,9 +675,7 @@ EXPORT_C TBool CCUIDialogs::ShowInstallationCompleteQueryL(
     	aIndexOfAppToBeStarted = KErrNotFound;	
     	}    
 
-    return appIsStarted;
-    */
-    return EFalse;
+    return appIsStarted;	
     }   
     
 // -----------------------------------------------------------------------------
@@ -696,7 +689,6 @@ EXPORT_C TBool CCUIDialogs::ShowUninstallConfirmationForSeveralAppsL(
                                 const MDesCArray& aApplicationArray,
                                 TInt aSoftkeyResourceId ) const
 	{
-    /*
     HBufC* appList = HBufC::NewLC( 0 ); 
     TInt count = aApplicationArray.MdcaCount();   
     for ( TInt i = 0; i < count; i++ )
@@ -739,8 +731,6 @@ EXPORT_C TBool CCUIDialogs::ShowUninstallConfirmationForSeveralAppsL(
         }
     CleanupStack::PopAndDestroy( message );
     return response; 
-    */
-    return EFalse;
 	}                                
                                      
 
@@ -782,7 +772,7 @@ void CCUIDialogs::SetProgressDialogCallback( MCUIWaitDialogCallback* aCallback )
 //
 TInt CCUIDialogs::ShowSecurityWarningHelp( TAny* aPtr )
     {
-    //TRAP_IGNORE( reinterpret_cast<CCUIDialogs*>(aPtr)->LaunchHelpL( KAM_HLP_INSTALL_UNTRUSTED ) );    
+    TRAP_IGNORE( reinterpret_cast<CCUIDialogs*>(aPtr)->LaunchHelpL( KAM_HLP_INSTALL_UNTRUSTED ) );    
 
     return KErrNone;    
     }

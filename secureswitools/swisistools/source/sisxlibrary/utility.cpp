@@ -374,8 +374,8 @@ int FirstInvalidDirSeparatorSize(std::wstring& aPath, std::wstring::size_type& a
 
 std::wstring FixPathDelimiters( const std::wstring& aString )
     {
+
     std::wstring ret = aString;
-	
     std::wstring::size_type idx = 0;
     int len = 0;
 	while(len = FirstInvalidDirSeparatorSize(ret, idx))

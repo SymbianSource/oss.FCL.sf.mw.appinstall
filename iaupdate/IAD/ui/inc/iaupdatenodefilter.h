@@ -93,16 +93,6 @@ public:
     void SetDependenciesSelectedL( MIAUpdateNode& aNode,
                         const RPointerArray<MIAUpdateNode>& aAllNodes);
     
-    void StoreNodeListL( const RPointerArray< MIAUpdateNode >& aNodes);  
-    
-    void RestoreNodeListL( RPointerArray< MIAUpdateNode >& aNodes) const;
-    
-    void SortSelectedNodesFirstL( const RPointerArray<MIAUpdateNode>& aSelectedNodes, 
-                                 RPointerArray< MIAUpdateNode >& aNodes );
-    
-    void SortThisNodeFirstL( const MIAUpdateNode* aFirstNode, RPointerArray< MIAUpdateNode >& aNodes);
-
-    
 private:
 
     CIAUpdateNodeFilter();
@@ -145,8 +135,6 @@ private: // data
     TBool iDmSupportAsked;
     
     TBool iDmSupport;
-    
-    RPointerArray< MIAUpdateNode > iStoredNodes;
 
     };
 

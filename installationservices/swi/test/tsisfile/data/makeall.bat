@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -23,8 +23,6 @@ if not exist \epoc32\drive_d\system\install  		 mkdir \epoc32\drive_d\system\ins
 if not exist \epoc32\winscw\c\system		 	 mkdir \epoc32\winscw\c\system
 if not exist \epoc32\winscw\c\system\install 		 mkdir \epoc32\winscw\c\system\install
 if not exist \epoc32\winscw\c\PlatformTest	 	 mkdir \epoc32\winscw\c\PlatformTest
-
-call /epoc32/tools/createsis create -pass 1234 files\2-2selfsigneddata.pkg
 
 ECHO Running makesis on all package files and copying them to their destination
 perl -S makeandsign.pl

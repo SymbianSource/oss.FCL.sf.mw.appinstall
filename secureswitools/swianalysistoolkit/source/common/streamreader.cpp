@@ -225,7 +225,7 @@ char* StreamReader::UTF16toUTF8Convert(wchar_t* aSource, int aSrcLength)
 	// This memory will be freed by the caller of this function
 	char *ptrUtf8 = new char[targetLength + 1];
 	
-	UTF16* sourceStart = reinterpret_cast<UTF16*>(aSource);
+	UTF16* sourceStart = static_cast<UTF16*>(aSource);
 	UTF16* sourceEnd = sourceStart + aSrcLength; 
 	UTF8* targetStart = reinterpret_cast<UTF8*>(ptrUtf8);
 	UTF8* targetEnd;

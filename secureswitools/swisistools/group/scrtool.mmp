@@ -27,7 +27,7 @@ USERINCLUDE 		../../swianalysistoolkit/source/common/utf8
 USERINCLUDE 		../source/xmlparser
 USERINCLUDE 		../source/dbmanager
 USERINCLUDE 		../source/dbmanager/sqlite
-USERINCLUDE			../source/sisxlibrary
+USERINCLUDE		../source/sisxlibrary
 
 SYSTEMINCLUDE 		../source/xmlparser/xerces/include
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN

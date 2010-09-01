@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:   This file contains the header file of the IAUpdateWaitDialog class.
+* Description:   This file contains the header file of the CIAUpdateWaitDialog class.
 *
 */
 
@@ -21,13 +21,10 @@
 #define IAUPDATEWAITDIALOG_H
 
 // INCLUDES
-#include <QObject>
-
-#include "iaupdatewaitdialog.h"
+#include <AknWaitDialog.h>
 
 
 // FORWARD DECLARATIONS
-class HbProgressDialog;
 class MIAUpdateWaitDialogObserver;
 
 // CLASS DECLARATION
@@ -35,36 +32,34 @@ class MIAUpdateWaitDialogObserver;
 /**
 * Wait dialog for IA Update client
 */
-class IAUpdateWaitDialog : public QObject
-{
-    Q_OBJECT
+class CIAUpdateWaitDialog : public CAknWaitDialog
+    {
 
-public: // Constructors and destructor
+    public: // Constructors and destructor
 
-    /**
-    * Constructor
-    */
-    IAUpdateWaitDialog();
+        /**
+        * Constructor
+        */
+        CIAUpdateWaitDialog( CEikDialog** aSelfPtr, TBool aVisibilityDelayOff );
 
-    ~IAUpdateWaitDialog();
+        virtual ~CIAUpdateWaitDialog();
 
-public:  // New functions
-    
-    int showDialog(const QString& text);
+    public:
         
-    void SetCallback(MIAUpdateWaitDialogObserver* callback );  
-    
-    void close();
-    
-public slots:
+        /**
+        * From CEikDialog, respond to softkey inputs.
+        * @para aButtonId, type of pressed Button or Softkey
+        * @return TBool, ETrue if exit the dialog, otherwise EFalse.
+        */
+        TBool OkToExitL( TInt aButtonId );
 
-    void dialogCancelled();
+    public:  // New functions
+        void SetCallback( MIAUpdateWaitDialogObserver* aCallback );        
 
-private: //data
-    
-    HbProgressDialog *mWaitDialog;
-    MIAUpdateWaitDialogObserver *mCallback;        
-};
+    private: //data
+
+        MIAUpdateWaitDialogObserver* iCallback;        
+    };
 
 
 #endif // IAUPDATEWAITDIALOG_H

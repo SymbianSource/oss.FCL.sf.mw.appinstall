@@ -142,8 +142,7 @@ void CDialogWatcher::RunL()
             {
             FLOG( _L("[CDialogWatcher] RunL: PSKey true -> Cancel notes ") ); 
             // If key is true, cancel all dialogs.
-            iDialogWrapper->CancelWaitingNote(); 
-            iDialogWrapper->CancelWaitingNoteForUninstaller();
+            iDialogWrapper->CancelWaitingNoteL(); 
             iDialogWrapper->SetUIFlag( psKey );
             // Issue new request.
             StartWatcher();
@@ -174,8 +173,7 @@ void CDialogWatcher::RunL()
         FLOG( _L("[CDialogWatcher] RunL: Cancel notes") ); 
         // If we can not read the the PS Key, let's close dialogs, 
         // so we do not block the start applications.
-        iDialogWrapper->CancelWaitingNote(); 
-        iDialogWrapper->CancelWaitingNoteForUninstaller();
+        iDialogWrapper->CancelWaitingNoteL(); 
         iDialogWrapper->SetUIFlag( ETrue );
         // Issue new request.
         StartWatcher();

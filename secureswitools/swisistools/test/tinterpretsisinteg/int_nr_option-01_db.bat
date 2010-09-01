@@ -24,7 +24,6 @@ if not exist .\romdrive mkdir .\romdrive > NUL
 if not exist .\cdrive\Documents mkdir .\cdrive\Documents > NUL
 if not exist .\romdrive\system\ mkdir .\romdrive\system\ > NUL
 if not exist .\romdrive\system\install\ mkdir .\romdrive\system\install\ > NUL
-if exist .\backup\romdrive\sys\install\scr\provisioned\scr.db del .\backup\romdrive\sys\install\scr\provisioned\scr.db > NUL
 REM Remove installation files from any previous tests
 if exist  .\cdrive\Documents\InstTest\Equivalent*.txt  del .\cdrive\Documents\InstTest\Equivalent*.txt  > NUL
 

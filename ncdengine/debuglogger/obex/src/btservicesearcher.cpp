@@ -27,14 +27,11 @@ CBTServiceSearcher::CBTServiceSearcher()
 
 CBTServiceSearcher::~CBTServiceSearcher()
 {
-#ifdef _0
     if (iIsDeviceSelectorConnected)
 	{
         iDeviceSelector.CancelNotifier(KDeviceSelectionNotifierUid);
         iDeviceSelector.Close();
 	}
-#endif
-    
     delete iSdpSearchPattern;
     iSdpSearchPattern = NULL;
 	
@@ -49,14 +46,11 @@ CBTServiceSearcher::~CBTServiceSearcher()
 
 void CBTServiceSearcher::Cancel() {
 
-#ifdef _0
     if (iIsDeviceSelectorConnected)
 	{
         iDeviceSelector.CancelNotifier(KDeviceSelectionNotifierUid);
     
 	}
-#endif
-    
     delete iSdpSearchPattern;
     iSdpSearchPattern = NULL;
 	
@@ -72,28 +66,23 @@ void CBTServiceSearcher::Cancel() {
 
 }
 
-void CBTServiceSearcher::SelectDeviceByDiscoveryL(TRequestStatus& /* aObserverRequestStatus */)
+void CBTServiceSearcher::SelectDeviceByDiscoveryL(TRequestStatus& aObserverRequestStatus)
     {
-    
-#ifdef _0
     if (!iIsDeviceSelectorConnected)
         {
         User::LeaveIfError(iDeviceSelector.Connect());
         iIsDeviceSelectorConnected = ETrue;
         }
-#endif
 
     //  Request a device selection 
     TBTDeviceSelectionParamsPckg selectionFilter;
     selectionFilter().SetUUID(ServiceClass());
-    
-#ifdef _0
+
     iDeviceSelector.StartNotifierAndGetResponse(
         aObserverRequestStatus, 
         KDeviceSelectionNotifierUid, 
         selectionFilter, 
         iResponse);
-#endif
     }
 
 

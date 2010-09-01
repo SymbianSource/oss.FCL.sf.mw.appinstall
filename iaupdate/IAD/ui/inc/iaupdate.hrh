@@ -14,13 +14,35 @@
 * Description:    
 *
 */
+
+
+
 #ifndef __IAUPDATE_HRH__
 #define __IAUPDATE_HRH__
 
+/** iaupdate enumerate command codes */
+enum TIAUpdateCommandId
+    {
+    EIAUpdateCmdDummy = 0x6000,
+    EIAUpdateCmdStartUpdate,
+    EIAUpdateCmdUpdateWithPC,
+    EIAUpdateCmdUpdateDetails,
+    EIAUpdateCmdMarkedUpdateDetails,
+    EIAUpdateCmdUpdateHistory,
+    EIAUpdateCmdSettings,
+    EIAUpdateCmdDisclaimer,
+    EIAUpdateCmdHistoryViewExit,
+    EIAUpdateSoftkeyNow,
+    EIAUpdateSoftkeyLater
+    };
+    
 
-
-
-
+/** IAUpdate views */
+enum TIAUpdateViewId 
+    {
+    EIAUpdateMainViewId = 0,
+    EIAUpdateHistoryViewId
+    };
 
 enum TIAUpdateSettingDialog 
     {

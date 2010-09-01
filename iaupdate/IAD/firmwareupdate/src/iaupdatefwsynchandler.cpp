@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -19,23 +19,26 @@
 
 
 // INCLUDES
+#include <aknnotewrappers.h>
+#include <AknWaitDialog.h>
 #include <StringLoader.h>
 #include <e32property.h>
 #include <data_caging_path_literals.hrh>  // for resource and bitmap directories
 #include <SyncMLErr.h>      // sync error codes
+#include <iaupdate.rsg>
+#include <AknsUtils.h>
 #include <DevManInternalCRKeys.h>
 #include <centralrepository.h>
 #include <rconnmon.h>
 #include <es_enum.h>
 
-#include <cmconnectionmethod.h>
+#include <cmconnectionmethodext.h>
 #include <cmconnectionmethoddef.h>
 #include <cmpluginpacketdatadef.h>
-
-#include <cmdestination.h>
+#include <cmconnectionmethoddef.h>
+#include <cmconnectionmethodext.h>
+#include <cmdestinationext.h>
 #include <cmmanagerdef.h>
-
-#include <uikon.hrh>
 
 #include "iaupdateconnectionmethod.h"
 #include "iaupdateprivatecrkeys.h"
@@ -79,11 +82,11 @@ CIAUpdateFWSyncHandler* CIAUpdateFWSyncHandler::NewL( RSyncMLSession* aSyncSessi
 //
 CIAUpdateFWSyncHandler::~CIAUpdateFWSyncHandler()
     {
-    /*if ( iWaitDialog )
+    if ( iWaitDialog )
         {
         TRAP_IGNORE( iWaitDialog->ProcessFinishedL() );
         iWaitDialog = NULL;
-        }*/
+        }
     
 	delete iState;
 	delete iActiveCaller;
@@ -331,12 +334,12 @@ void CIAUpdateFWSyncHandler::SynchronizeCompletedL( TInt aError )
 	iSyncRunning = EFalse;
 	iSyncError = aError;
 
-    /*if ( iWaitDialog )
+    if ( iWaitDialog )
         {
         
         iWaitDialog->ProcessFinishedL();
         iWaitDialog = NULL;
-        }*/
+        }
 
 	iUseFotaProgressNote = EFalse;
     iSyncJob.Close();
@@ -426,16 +429,16 @@ TUint32 CIAUpdateFWSyncHandler::SelectConnectionMethodL()
     CleanupStack::PopAndDestroy( cenrep ); 
     cenrep = NULL;
 
-    RCmManager cmManager;
-    cmManager.OpenL();
-    CleanupClosePushL( cmManager );
+    RCmManagerExt cmManagerExt;
+    cmManagerExt.OpenL();
+    CleanupClosePushL( cmManagerExt );
     
     if ( connMethodId == -1 )
         {
         //check what is the default connection by users     
         
         TCmDefConnValue DCSetting;
-        cmManager.ReadDefConnL( DCSetting );
+        cmManagerExt.ReadDefConnL( DCSetting );
        
         
         switch ( DCSetting.iType )
@@ -444,13 +447,13 @@ TUint32 CIAUpdateFWSyncHandler::SelectConnectionMethodL()
             case ECmDefConnAskOnce:
                 {
                 //go with the best IAP under internet snap
-                connectionMethodId = GetBestIAPInInternetSNAPL( cmManager );
+                connectionMethodId = GetBestIAPInInternetSNAPL( cmManagerExt );
                 break;
                 }
             case ECmDefConnDestination:
                 {
                 //go with the best IAP under this snap
-                connectionMethodId = GetBestIAPInThisSNAPL( cmManager, DCSetting.iId );
+                connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, DCSetting.iId );
                 break;
                 }
             case ECmDefConnConnectionMethod:
@@ -464,16 +467,16 @@ TUint32 CIAUpdateFWSyncHandler::SelectConnectionMethodL()
     else if ( connMethodId == 0 )
         {
         //no choice from user, we go with the best IAP under Internent SNAP
-        connectionMethodId = GetBestIAPInInternetSNAPL( cmManager );
+        connectionMethodId = GetBestIAPInInternetSNAPL( cmManagerExt );
         }
     else
         {
 
         // It was some SNAP value
-        connectionMethodId = GetBestIAPInThisSNAPL( cmManager, connMethodId );
+        connectionMethodId = GetBestIAPInThisSNAPL( cmManagerExt, connMethodId );
         }
 
-    CleanupStack::PopAndDestroy( &cmManager ); 
+    CleanupStack::PopAndDestroy( &cmManagerExt ); 
     
     return connectionMethodId;
               
@@ -484,15 +487,15 @@ TUint32 CIAUpdateFWSyncHandler::SelectConnectionMethodL()
 // CIAUpdateFWSyncHandler::GetBestIAPInInternetSNAPL
 // -----------------------------------------------------------------------------
 //
-TUint32 CIAUpdateFWSyncHandler::GetBestIAPInInternetSNAPL( RCmManager& aCmManager )
+TUint32 CIAUpdateFWSyncHandler::GetBestIAPInInternetSNAPL( RCmManagerExt& aCmManagerExt  )
     {
     //select IAP from Internet SNAP
     RArray<TUint32> destIdArray;
-    aCmManager.AllDestinationsL( destIdArray );
+    aCmManagerExt.AllDestinationsL( destIdArray );
     TUint32 InternetSNAPID = 0;
     for ( TInt i = 0; i< destIdArray.Count(); i++ )
         {
-        RCmDestination dest = aCmManager.DestinationL( destIdArray[i] );
+        RCmDestinationExt dest = aCmManagerExt.DestinationL( destIdArray[i] );
         CleanupClosePushL( dest );
                                      
         if ( dest.MetadataL( CMManager::ESnapMetadataInternet ) )
@@ -505,7 +508,7 @@ TUint32 CIAUpdateFWSyncHandler::GetBestIAPInInternetSNAPL( RCmManager& aCmManage
          }
     destIdArray.Reset();
     
-    return GetBestIAPInThisSNAPL( aCmManager, InternetSNAPID );
+    return GetBestIAPInThisSNAPL( aCmManagerExt, InternetSNAPID );
     }
 
 
@@ -514,7 +517,7 @@ TUint32 CIAUpdateFWSyncHandler::GetBestIAPInInternetSNAPL( RCmManager& aCmManage
 // CIAUpdateFWSyncHandler::GetBestIAPInThisSNAPL
 // -----------------------------------------------------------------------------
 //
-TUint32 CIAUpdateFWSyncHandler::GetBestIAPInThisSNAPL( RCmManager& aCmManager, TUint32 aSNAPID  )
+TUint32 CIAUpdateFWSyncHandler::GetBestIAPInThisSNAPL( RCmManagerExt& aCmManagerExt, TUint32 aSNAPID  )
     {
     //get all usable IAPs
     TConnMonIapInfoBuf iapInfo;
@@ -530,13 +533,13 @@ TUint32 CIAUpdateFWSyncHandler::GetBestIAPInThisSNAPL( RCmManager& aCmManager, T
     
     CleanupStack::PopAndDestroy( &connMon ); 
     
-    RCmDestination dest = aCmManager.DestinationL( aSNAPID );
+    RCmDestinationExt dest = aCmManagerExt.DestinationL( aSNAPID );
     CleanupClosePushL( dest );
     
     // Check whether the SNAP contains any IAP.
     for  (TInt i = 0; i < dest.ConnectionMethodCount(); i++ )
         {
-        RCmConnectionMethod cm =  dest.ConnectionMethodL( i );
+        RCmConnectionMethodExt cm =  dest.ConnectionMethodL( i );
         CleanupClosePushL( cm );
         
         TUint32 iapid= cm.GetIntAttributeL( CMManager::ECmIapId );
@@ -713,10 +716,10 @@ void CIAUpdateFWSyncHandler::HandleSyncErrorL()
 //
 void CIAUpdateFWSyncHandler::ShowProgressDialogL( )
 	{
-        //iWaitDialog = new ( ELeave ) CAknWaitDialog(
-        //    ( REINTERPRET_CAST( CEikDialog**, &iWaitDialog ) ) );
-        //iWaitDialog->ExecuteLD( R_FOTA_CHECK_WAIT_NOTE );
-        //iWaitDialog->SetCallback( this );
+        iWaitDialog = new ( ELeave ) CAknWaitDialog(
+            ( REINTERPRET_CAST( CEikDialog**, &iWaitDialog ) ) );
+        iWaitDialog->ExecuteLD( R_FOTA_CHECK_WAIT_NOTE );
+        iWaitDialog->SetCallback( this );
 	}
 
 // -----------------------------------------------------------------------------
@@ -725,11 +728,11 @@ void CIAUpdateFWSyncHandler::ShowProgressDialogL( )
 //
 void CIAUpdateFWSyncHandler::HideProgressDialogL()
     {
-    /*if ( iWaitDialog )
+    if ( iWaitDialog )
         {
         iWaitDialog->ProcessFinishedL();
         iWaitDialog = NULL;
-        }*/
+        }
     }
 
 // -----------------------------------------------------------------------------

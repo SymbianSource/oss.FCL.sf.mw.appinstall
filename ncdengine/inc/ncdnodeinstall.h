@@ -32,11 +32,17 @@ class MNcdInstallOperationObserver;
 class MDesCArray;
 class MNcdInstalledContent;
 
-// Forward declaration for Usif::TInstallOptions
-namespace Usif
+// Forward declaration for SwiUI::TInstallOptions
+// SwiUI namespace contains install options 
+// that are used for the silent install.
+// #include <SWInstDefs.h> 
+// is required when SwiUI::TInstallOptions is created 
+// in the implementation code.
+namespace SwiUI
     {
-    class COpaqueNamedParams;    
+    class TInstallOptions;    
     }
+
 
 /**
  *  Provides functions that can be used to install the node object.
@@ -77,6 +83,7 @@ public:
      */
     virtual MNcdInstallOperation* InstallL( MNcdInstallOperationObserver& aObserver ) = 0;
 
+
     /**
      * Starts the silent installing operation of the node object.
      * Because installation is silent, normal installation query dialogs are not shown.
@@ -89,7 +96,7 @@ public:
      * function of the operation should be called when operation is not needed anymore.
      * 
      * @note Requires TrustedUI capabilities
-     * @note Only SIS packages and Java archives and widgets are installed silently, other content
+     * @note Only SIS packages and Java archives are installed silently, other content
      * is installed exactly like with InstallL
      * 
      * @param aObserver Observer for the operation.
@@ -102,9 +109,9 @@ public:
      * Leaves with KNcdErrorParallelOperationNotAllowed if a parallel client is running
      *  an operation for the same metadata. See MNcdOperation for full explanation.
      */
-    virtual MNcdInstallOperation* SilentInstallL( 
-                MNcdInstallOperationObserver& aObserver,
-                Usif::COpaqueNamedParams* aInstallOptions ) = 0;
+    virtual MNcdInstallOperation* SilentInstallL( MNcdInstallOperationObserver& aObserver,
+                                                  const SwiUI::TInstallOptions& aInstallOptions ) = 0;
+
 
     /**
      * Checks if the item content has already been installed and is currently present in the

@@ -19,8 +19,6 @@
 #include "ncdsilentinstallactiveobserver.h"
 #include "ncdasyncsilentinstallobserver.h"
 
-#include <usif/scr/scr.h>
-
 
 CNcdSilentInstallActiveObserver* CNcdSilentInstallActiveObserver::NewL( MNcdAsyncSilentInstallObserver& aObserver )
     {
@@ -51,9 +49,6 @@ CNcdSilentInstallActiveObserver::CNcdSilentInstallActiveObserver( MNcdAsyncSilen
 
 void CNcdSilentInstallActiveObserver::ConstructL()
     {
-    
-    iResults = 0;
-    
     CActiveScheduler::Add( this );
     }
 
@@ -65,9 +60,6 @@ CNcdSilentInstallActiveObserver::~CNcdSilentInstallActiveObserver()
     // cancel install operation and closes the silent installer. 
     // If no operation is going on, the installer is already closed. 
     // So, no need to close the silent launcher here separately.
-    
-    delete (iResults);
-
     CancelAsyncOperation();
     }
 
@@ -80,13 +72,12 @@ void CNcdSilentInstallActiveObserver::DoCancel()
     // Notice, that we do not call the callback functions of the observer here
     // because we suppose that the observer has started the cancel operation itself
     // or the caller will inform the observer itself.
-    
-    SilentLauncher().CancelOperation();
+    SilentLauncher().CancelAsyncRequest( iCancelCode );
     }
 
 
 void CNcdSilentInstallActiveObserver::StartToObserveL( const TDesC& aFileName,
-                                                       const Usif::COpaqueNamedParams* aSilentInstallOptions )
+                                                       const SwiUI::TInstallOptionsPckg& aSilentInstallOptionsPckg )
     {
     // For silent installation
     // Notice that if the user does not have TrustedUI capabilities
@@ -95,22 +86,19 @@ void CNcdSilentInstallActiveObserver::StartToObserveL( const TDesC& aFileName,
     // because the launcher will be shown in the application list.
     // So, it would not be nice to connect in the ConstructL and to show
     // the icon in the list all the time.
-    // User::LeaveIfError( SilentLauncher().Connect() );
     User::LeaveIfError( SilentLauncher().Connect() );
     
-    if (!iResults)
-        {
-        iResults = Usif::COpaqueNamedParams::NewL();
-        }
-    
-    iInstaller.Install( aFileName, *aSilentInstallOptions, *iResults, iStatus ); 
-        
+    iCancelCode = SwiUI::ERequestSilentInstall;
+    SilentLauncher().SilentInstall( iStatus,
+                                    aFileName,
+                                    aSilentInstallOptionsPckg );
 
+    SetActive();
     }
 
 
 void CNcdSilentInstallActiveObserver::StartToObserveL( RFile& aFile,
-                                                       const Usif::COpaqueNamedParams* aSilentInstallOptions )
+                                                       const SwiUI::TInstallOptionsPckg& aSilentInstallOptionsPckg )
     {
     // For silent installation
     // Notice that if the user does not have TrustedUI capabilities
@@ -119,16 +107,13 @@ void CNcdSilentInstallActiveObserver::StartToObserveL( RFile& aFile,
     // because the launcher will be shown in the application list.
     // So, it would not be nice to connect in the ConstructL and to show
     // the icon in the list all the time.
-
     User::LeaveIfError( SilentLauncher().Connect() );
     
-    if (!iResults)
-        {
-        iResults = Usif::COpaqueNamedParams::NewL();
-        }
-    
-    iInstaller.Install( aFile, *aSilentInstallOptions, *iResults, iStatus ); 
-    
+    iCancelCode = SwiUI::ERequestSilentInstallHandle;
+    SilentLauncher().SilentInstall( iStatus,
+                                    aFile,
+                                    aSilentInstallOptionsPckg );
+
     SetActive();
     }
 
@@ -155,15 +140,6 @@ void CNcdSilentInstallActiveObserver::RunL()
     // Close the installer. 
     // The launcher is shown in the application list.
     // So, it would not be nice to leave it there after operation is completed.
-    
-   
-    TInt ErrCategory = 0;
-    TInt ErrCode = 0;
-    TInt ExtendedErrCode =0;
-    
-    TBool ret = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCategory, ErrCategory);
-    ret = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCode, ErrCode);
-    ret = iResults->GetIntByNameL(Usif::KSifOutParam_ExtendedErrCode, ExtendedErrCode);
     SilentLauncher().Close();
 
     TInt errorCode( ConvertErrorCode( iStatus.Int() ) );
@@ -178,15 +154,34 @@ MNcdAsyncSilentInstallObserver& CNcdSilentInstallActiveObserver::AsyncObserver()
     return iObserver;
     }
 
-Usif::RSoftwareInstall& CNcdSilentInstallActiveObserver::SilentLauncher()
+
+SwiUI::RSWInstSilentLauncher& CNcdSilentInstallActiveObserver::SilentLauncher()
     {
-    // return iSilentLauncher;
-    return iInstaller;
+    return iSilentLauncher;
     }
 
 
 TInt CNcdSilentInstallActiveObserver::ConvertErrorCode( TInt aErrorCode )
     {
+    switch ( aErrorCode )
+        {
+        case SwiUI::KSWInstErrUserCancel:
+            // To simplify the cancel response and cancel handling,
+            // convert the error code to normal cancel error code.
+            aErrorCode = KErrCancel;
+            break;
+
+        case SwiUI::KSWInstErrInsufficientMemory:
+            // To simplify the insufficient memory response and its handling,
+            // convert the error code to normal no memory code.
+            aErrorCode = KErrNoMemory;
+            break;
+                    
+        default:
+            // Nothing to do here.
+            break;
+        }
+
     return aErrorCode;
     }
 

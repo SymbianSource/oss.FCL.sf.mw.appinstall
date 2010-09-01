@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -31,10 +31,12 @@
 #include <usif/scr/scr.h>
 #include <usif/scr/screntries.h>
 #include <usif/sts/sts.h>
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifdef SYMBIAN_ENABLE_SPLIT_HEADERS
 #include "stsrecovery.h"
 #include "screntries_internal.h"
 #endif //SYMBIAN_ENABLE_SPLIT_HEADERS
+#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <swi/swiobserverclient.h>
 #include "sisregistryclientserver.h"
 #include "sisregistryserver.h"
@@ -86,8 +88,6 @@ public:
 	TInt GetAugmentationCountL(const TUid& aUid);
 	TBool IdentifyControllerL(Usif::TComponentId aComponentId, const TDesC& aFileName); // Used by CSisRegistrySubSession
 
-	CSisRegistrySession(TSecureId aClientSid);
-	
 private:
 	~CSisRegistrySession();
 	
@@ -118,11 +118,7 @@ private:
 	void RequestRegistryEntryL(const RMessage2& aMessage);
 	void IsFileRegisteredL(const RMessage2& aMessage);
 	void GetComponentIdForUidL(const RMessage2& aMessage);
-	void AddAppRegInfoL(const RMessage2& aMessage);
-    void RemoveAppRegInfoL(const RMessage2& aMessage);
-    void ValidateAndParseAppRegFileL(const TDesC& aRegFileName, Usif::CApplicationRegistrationData*& aAppRegData, TBool aInternal);
-    void ReRegisterAppRegFileL(const TDesC& aRegFileDrivePath, const TUid& aAppUid);
-	
+
 	// Subsession handling
 	void OpenRegistryUidEntryL(const RMessage2& aMessage);
 	void OpenRegistryPackageEntryL(const RMessage2& aMessage);
@@ -140,17 +136,7 @@ private:
 	void RollbackTransactionL(const RMessage2& aMessage);
 
 	void RegisterEntryL(const RMessage2& aMessage, TBool aNewEntry, TBool aRegisterSoftwareTypes);
-	void AppRegInfoEntryL(const RMessage2& aMessage);
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	void RegisterAllAppL(RBuf& aApparcRegFolder);
-    void GetComponentIdForPackageL(const RMessage2& aMessage);
-    void GetAppUidsForComponentL(const RMessage2& aMessage);
-    void GetComponentIdsForUidL(const RMessage2& aMessage);
-#endif
-
 	void DeleteEntryL(const RMessage2& aMessage);
-	void DeleteEntryL(const CSisRegistryObject& aObject, TInt64 aTransactionId, TBool aCleanupRequired = ETrue);
 	void AddSoftwareTypeL(const RMessage2& aMessage);
 	void AddDriveL(const RMessage2& aMessage);
 
@@ -166,14 +152,12 @@ private:
 
 	//sets a particular component's state to the requested value
 	void SetComponentStateL(const RMessage2& aMessage);
-	void SetComponentPresenceL(const RMessage2& aMessage);
 
 	// Helper methods
 	TBool IsRegisteredL(const TUid& aUid);
 	TBool IsRegisteredL(const CHashContainer& aHashContainer);
 	TBool IsRegisteredL(const TUid& aUid, const TDesC& aPackageName);
 
-	void RemoveEntryL(const Usif::TComponentId aCompId);
 	void RemoveEntryL(const CSisRegistryPackage& aPackage);
 	void RemoveCleanupInfrastructureL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession);
 	TBool RemoveControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, TInt aDrive);
@@ -181,7 +165,6 @@ private:
 	TUint FixedDrivesL() const;
 	Usif::TComponentId AddRegistryEntryL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aController, Usif::TScrComponentOperationType aOpType);
 	Usif::TComponentId AddEntryL(CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
-	void AddAppsFromStubL(Usif::TComponentId aCompId, const TDesC& aFileName);
 	void AddControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive);
 	void AddCleanupInfrastructureL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aControllerBuffer);
 	TUint CreateSubsessionHandleL(const TUid& aPackageUid);
@@ -194,8 +177,7 @@ private:
 	void ProcessRemovableDriveL(TInt aDrive);
 	void DiscoverControllersL(const TDesC& aRegistryPath, const TDesC& aDirectoryName);
 	void ExecuteUninstallLogL(const TDesC& aUninstallLogFile, const TDesC& aControllerFile);
-	void GetComponentIdsForSidL(TUid aSid, RArray<Usif::TComponentId>& aComponentIds);
-	HBufC* SidToFileNameL(TUid aSid, Usif::TComponentId& aComponentId, TInt aExpectedDrive);
+	void GetCompIdAndCompSidIndexL(const TUid& aSid, Usif::TComponentId& aComponentId, TInt& aIndex, TInt aExpectedDrive = -1);
 	TBool ModifiableL(const TDesC& aFileName);
 	CHashContainer* HashL(const TDesC& aFileName);
 	void RemovablePackageListL(RPointerArray<CSisRegistryPackage>& aPackages);
@@ -203,15 +185,12 @@ private:
 	void RegisterInRomControllerL(const TDesC& aFileName);
 	void RegisterSoftwareTypesL(Usif::TComponentId aComponentId, const RMessage2& aMessage);
 	void UnregisterSoftwareTypesL(Usif::TComponentId aComponentId);
+
 	
-	void ProcessRomStubsL();
-	void ProcessApplicationsL();
-	TBool IsFirmwareUpdatedL();	 
+	TBool IsFirmwareUpdatedL();
+	 
 	void  UpdateRecentFWVersionL(); 
-	void GetStubFileInfoL(TUid aUid, TStubExtractionMode aMode, TInt aStartingFileNo, TInt& aFileCount, RPointerArray<HBufC>& aFileNames);
-	void GetStubFilesL(const TDesC& aFileName, RPointerArray<HBufC>& aFileNames);
-	void DriveFormatDetectedL(TDriveUnit aDrive);
-	
+
 private:
     friend class CSisRevocationManager;
 
@@ -228,9 +207,7 @@ private:
 	// Session handle to Software Component Registry
 	Usif::RSoftwareComponentRegistry iScrSession;
 
-	TSecureId iClientSid;
-	TBool iIsFwUpdated;
-	TBool iIsFirstInit;
+	TBool isFwUpdated;
 	};
 
 inline RFs& CSisRegistrySession::Fs()
@@ -248,12 +225,6 @@ inline Usif::RSoftwareComponentRegistry& CSisRegistrySession::ScrSession()
 	{
 	return iScrSession;
 	}
-
-inline CSisRegistrySession::CSisRegistrySession(TSecureId aClientSid)
-    :CSession2()
-    {
-    iClientSid = aClientSid;
-    }
 
 } //namespace
 

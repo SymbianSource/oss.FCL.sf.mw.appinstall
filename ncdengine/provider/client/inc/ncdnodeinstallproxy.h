@@ -125,12 +125,14 @@ public: // MNcdNodeInstall
      */ 
     MNcdInstallOperation* InstallL( MNcdInstallOperationObserver& aObserver );
 
+
     /**
      * @see MNcdNodeInstall::SilentInstallL()
      */ 
-    MNcdInstallOperation* SilentInstallL( 
-                MNcdInstallOperationObserver& aObserver,
-                Usif::COpaqueNamedParams* aInstallOptions );
+    MNcdInstallOperation* SilentInstallL( MNcdInstallOperationObserver& aObserver,
+                                          const SwiUI::TInstallOptions& aInstallOptions );
+    
+
     /**
      * @see MNcdNodeInstall::IsInstalledL()
      */ 

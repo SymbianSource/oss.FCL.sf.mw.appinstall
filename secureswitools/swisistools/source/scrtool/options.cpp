@@ -24,12 +24,12 @@
 #include <string>
 #include <algorithm>
 
-std::string COptions::iCurrentVersion = "Registry Database Generator Version 1, 0, 2";
+std::string COptions::iCurrentVersion = "Registry Database Generator Version 1, 0, 1";
 
 std::string COptions::iDescription =	"A utility for generating and updating the Software Component Registry database which stores "
 							"information for all installed software components.";
 
-std::string COptions::iCopyright = "Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.";
+std::string COptions::iCopyright = "Copyright (c) 2008 Symbian Software Ltd. All rights reserved.";
 
 std::string COptions::iUsage	=	
 						"Usage : scrtool [-h|-?] [-v] [-l] [-w] -c or -d [DB name] -f [Environment XML file] -p [Pre-provision XML file]"

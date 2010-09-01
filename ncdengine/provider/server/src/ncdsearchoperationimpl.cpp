@@ -724,48 +724,53 @@ void CNcdSearchOperation::DoItemDataL(
         delete metaIdentifier;
         metaIdentifier = NULL;
         }
-
-    // set iParentIdentifier as parent if not set otherwise, this would be the case of a
-    // normal top-level node from a content source
-    if ( ! parentIdentifier ) 
+    if( addMetaData )
         {
-        parentIdentifier = CNcdNodeIdentifier::NewLC( *iParentIdentifier );
-        }
-    
-    // Get the node reference from the data handler.
-    // The node has the given parent and its metadata
-    // will be internalized with the given data.
-    CNcdNode& node =
-    iNodeManager->DataHandlerL( *parentIdentifier, *aData, iClientUid );
-    
-    CleanupStack::PopAndDestroy( parentIdentifier );
-
-    // Notice that the loaded nodes should contain the actual node identifier
-    // instead of metadata identifier, because the identifiers are returned to
-    // the proxy side after operation completes.
-    CNcdNodeIdentifier* loadedNodeId = 
-        CNcdNodeIdentifier::NewLC( node.Identifier() );
-    iLoadedNodes.AppendL( loadedNodeId );
-    CleanupStack::Pop( loadedNodeId );        
-
-    // If the data contains icon id and datablock id, they are stored until
-    // the datablock arrives later.
-    const MNcdPreminetProtocolIcon* icon = aData->Icon();
-    if ( icon != NULL ) 
-        {
-        const TDesC& iconId = icon->Id();
-        const TDesC& dataBlockId = icon->DataBlock();
-        if ( iconId != KNullDesC && dataBlockId != KNullDesC ) 
+        // set iParentIdentifier as parent if not set otherwise, this would be the case of a
+        // normal top-level node from a content source
+        if ( ! parentIdentifier ) 
             {
-            // The node metadata was created by using the DataHandlerL
-            // and inserted for the node.
-            // So, the metadata can be asked from the node now.
-            MapIconIdForDataBlockL(iconId, dataBlockId, 
-                                   node.NodeMetaDataL().Identifier() );
-            node.NodeMetaDataL().IconL().SetIconDataReady( EFalse );
+            parentIdentifier = CNcdNodeIdentifier::NewLC( *iParentIdentifier );
+            }
+        
+        // Get the node reference from the data handler.
+        // The node has the given parent and its metadata
+        // will be internalized with the given data.
+        CNcdNode& node =
+            iNodeManager->DataHandlerL( *parentIdentifier, *aData, iClientUid );
+            
+        CleanupStack::PopAndDestroy( parentIdentifier );
+
+        // Notice that the loaded nodes should contain the actual node identifier
+        // instead of metadata identifier, because the identifiers are returned to
+        // the proxy side after operation completes.
+        CNcdNodeIdentifier* loadedNodeId = 
+            CNcdNodeIdentifier::NewLC( node.Identifier() );
+        iLoadedNodes.AppendL( loadedNodeId );
+        CleanupStack::Pop( loadedNodeId );        
+
+        // If the data contains icon id and datablock id, they are stored until
+        // the datablock arrives later.
+        const MNcdPreminetProtocolIcon* icon = aData->Icon();
+        if ( icon != NULL ) 
+            {
+            const TDesC& iconId = icon->Id();
+            const TDesC& dataBlockId = icon->DataBlock();
+            if ( iconId != KNullDesC && dataBlockId != KNullDesC ) 
+                {
+                // The node metadata was created by using the DataHandlerL
+                // and inserted for the node.
+                // So, the metadata can be asked from the node now.
+                MapIconIdForDataBlockL(iconId, dataBlockId, 
+                                       node.NodeMetaDataL().Identifier() );
+                node.NodeMetaDataL().IconL().SetIconDataReady( EFalse );
+                }
             }
         }
-    
+    else if ( parentIdentifier )
+        {
+        CleanupStack::PopAndDestroy( parentIdentifier );
+        }
     DLTRACEOUT((""));
     }
     

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -53,7 +53,7 @@ class CMakeKeys
 	public:
 		CMakeKeys();
 		
-		int  Run(const int argc, const _TCHAR *argv[]);
+		int  Run(const int argc, const _TCHAR *argv[], const _TCHAR *envp[]);
 			
 	public: 
 		CKeyGenerator* m_KeyGen;

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -450,7 +450,7 @@ string CertificateChain ::ExtractCapabilities(const ASN1_BIT_STRING* aString)
 						capabilities.append("Unknown"+capability);
 						}
 				
-					iDevCapabilities += pow((double)2,capability);
+					iDevCapabilities += pow(2,capability);
 					}
 				capability++;
 				}
@@ -540,7 +540,7 @@ string CertificateChain::ExtractDeviceConstaints(const ASN1_BIT_STRING* aString)
 				buf[j] = *(buffer++);
 				}
 
-			deviceId.assign(buf,(KDeviceIdLength-2));
+			deviceId.append(buf);
 			deviceId.append("\n");
 			}
 		}

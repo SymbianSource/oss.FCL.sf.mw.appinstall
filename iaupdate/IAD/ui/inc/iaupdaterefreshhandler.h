@@ -23,7 +23,6 @@
 // INCLUDES
 #include <e32base.h>
 #include <eikenv.h>
-#include <e32property.h>
 
 // FORWARD DECLARATIONS
 class MIAUpdateRefreshObserver;

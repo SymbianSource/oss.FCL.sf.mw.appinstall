@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -24,27 +24,32 @@
 #include <e32base.h>
 #include <f32file.h>
 #include <barsc.h>
-
-#include <hbdeviceprogressdialogsymbian.h>
+#include <AknGlobalNote.h>
 
 // FORWARD DECLARATIONS
 class MIAUpdaterCancelObserver;
+
 /**
 * Class for showing the global note dialog when installing self update.
+* 
+*  @code   
+*  @endcode
+*  @lib 
+*  @since S60 
 */
-class CIAUpdaterDialog : public CBase,
-                         public MHbDeviceProgressDialogObserver
+class CIAUpdaterDialog : public CActive
     {
 public:  
         
     /**
      * Two-phased constructor.
      */
-    static CIAUpdaterDialog* NewL( MIAUpdaterCancelObserver& aObserver );
+    static CIAUpdaterDialog* NewL( RFs& aFs, MIAUpdaterCancelObserver& aObserver ); 
+
     /**
      * Two-phased constructor.
      */
-    static CIAUpdaterDialog* NewLC( MIAUpdaterCancelObserver& aObserver );
+    static CIAUpdaterDialog* NewLC( RFs& aFs, MIAUpdaterCancelObserver& aObserver );
 
             
     /**
@@ -69,59 +74,60 @@ public:
      */
     void CancelWaitingNoteL();
 
-    /**
-     * From base class MHbDeviceProgressDialogObserver
-     */
-    void ProgressDialogCancelled(
-        const CHbDeviceProgressDialogSymbian* aProgressDialog);
-    
-    /**
-    * From base class MHbDeviceProgressDialogObserver
-    */
-    void ProgressDialogClosed(
-         const CHbDeviceProgressDialogSymbian* aProgressDialog);
-
-
 
 private:
 
     /**
      * Constructor.
      */  
-    CIAUpdaterDialog( MIAUpdaterCancelObserver& aObserver );
+    CIAUpdaterDialog( RFs& aFs, MIAUpdaterCancelObserver& aObserver );
      
     /**
      * 2nd phase constructor.
      */
     void ConstructL();
 
-    
+
     /**
-     * Destroy wait note.
+     * Read resource string.
+     * @since 
+     * @param aResourceId Id of the resource.
+     * @return Resource buffer.
      */
-    void CIAUpdaterDialog::DestroyGlobalWaitNote();
-    
+    HBufC* ReadResourceLC( TInt aResourceId );    
+        
+private: // from CActive
+
+    /**
+     * Cancels async request 
+     * @see CActive::DoCancel
+     *
+     */
+    void DoCancel();
+
+    /**
+     * When the server side has finished operation, the CActive object will
+     * be informed about it, and as a result RunL will be called. This function
+     * well inform the observer that the operation has been completed.
+     * @see CActive::RunL
+     *
+     */
+    void RunL();
 
 private: // data
 
-    /**
-     * Not owned, install observer.
-     */
-    MIAUpdaterCancelObserver* iObserver; 
-    /**
-    * Own, Global wait note.
-    */
-    CHbDeviceProgressDialogSymbian* iGlobalWaitNote;
+    // Resource file.
+    RResourceFile iResourceFile;
+
+    // File server handle.        
+    RFs& iFs;        
+                   
+    CAknGlobalNote* iNote;
     
-    /**
-    * Own, resouce of global note.
-    */
-    HBufC* iGlobalResource;
-    
-    /**
-     * Check Load Success .ts file successfully or not
-     */
-    TBool iIsResolverSuccess;
+    // Dialog id for canceling dialog. 
+    TInt iNoteId;
+        
+    MIAUpdaterCancelObserver* iObserver; //not owned
         
     };
 

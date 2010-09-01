@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -37,7 +37,7 @@ int main (int argc, char** argv)
 
 	try
 		{
-		const char* epocRoot = getenv("EPOCROOT");		
+		const char* epocRoot = getenv("EPOCROOT");
 		if(NULL == epocRoot)
 			{
 			throw CException("EPOCROOT environment variable not specified.", ExceptionCodes::EEnvNotSpecified);
@@ -49,23 +49,13 @@ int main (int argc, char** argv)
 		std::string logFileName(options.GetLogFileName());
 		std::auto_ptr<CLogger> logger(new CLogger(logFileName, options.GetLogLevel()));
 		
-   #ifdef __LINUX__
-  	  	 std::string dllPath = "sqlite-3.6.1.so";
-   #else
- 	       std::string dllPath = "sqlite3.dll";
-   #endif
-  	  	 	 
+		std::string dllPath = "sqlite3.dll";
 		std::auto_ptr<CDbLayer> db( new CDbLayer(dllPath, options.GetDbFileName()));
 		std::auto_ptr<CScrXmlParser> xmlParser( new CScrXmlParser());
 
 		if(options.IsDbAbsent())
 			{
-		  #ifdef __LINUX__ 		  
-			std::string dbFileName = epocRootStr + "epoc32/tools/create_db.xml";
-			#else
 			std::string dbFileName = epocRootStr + "epoc32\\tools\\create_db.xml";
-			#endif
-			
 			std::auto_ptr<SchemaDetails> schema(xmlParser->ParseDbSchema(dbFileName));
 			db->CreateScrDatabase(*schema);
 			}

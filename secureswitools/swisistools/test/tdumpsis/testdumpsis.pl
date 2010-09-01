@@ -1519,6 +1519,7 @@ sub TestNRFlag
 	use Cwd;
 	$dir = cwd;
 	chdir $dir.$DumpsisGenPkgPath;
+	
 	open($pkgcontent,$TestNRflagpkg);
 	foreach (<$pkgcontent>) 
 	{
@@ -1529,7 +1530,7 @@ sub TestNRFlag
 		}
 	}
 	close($pkgcontent);
-
+	
 	chdir $dir;
 	$NumberOfTests++;
 	if ($result == 0 && $result1 == 0 && $result2 == 1) 

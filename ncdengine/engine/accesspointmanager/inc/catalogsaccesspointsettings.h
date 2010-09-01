@@ -20,14 +20,7 @@
 #define C_CATALOGSACCESSPOINTSETTINGS_H
 
 #include <e32base.h>
-
-#ifdef _0
 #include <ApAccessPointItem.h>
-#endif
-
-#include <s32strm.h>
-
-
 #include <badesca.h>
 
 
@@ -39,7 +32,6 @@ public:
     
     virtual ~CCatalogsAccessPointSettings();
     
-#ifdef _0
     void SetLongTextParameterL(const TApMember& aKey, const TDesC16& aValue);
     void SetText16ParameterL(const TApMember& aKey, const TDesC16& aValue);
     void SetText8ParameterL(const TApMember& aKey, const TDesC8& aValue);
@@ -62,7 +54,6 @@ public:
         TInt aIndex, TApMember& aKey, TUint32& aValue) const;
     void BoolParameter(
         TInt aIndex, TApMember& aKey, TBool& aValue) const;
-#endif
     
 protected:
     CCatalogsAccessPointSettings();
@@ -71,13 +62,11 @@ protected:
     void InternalizeL(RReadStream& aStream);
 
 private:
-#ifdef _0
     RArray<TApMember> iLongTextMembers;
     RArray<TApMember> iText16Members;
     RArray<TApMember> iText8Members;
     RArray<TApMember> iUintMembers;
     RArray<TApMember> iBoolMembers;
-#endif
     
     CDesC16ArrayFlat* iLongTextData;
     CDesC16ArrayFlat* iText16Data;

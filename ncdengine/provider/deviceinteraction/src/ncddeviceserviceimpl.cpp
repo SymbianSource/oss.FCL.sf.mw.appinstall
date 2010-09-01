@@ -38,7 +38,7 @@
 #endif
 
 #ifdef GET_DEVICE_ID_FROM_USERAGENT
-    #include <sysversioninfo.h>
+    #include <cuseragent.h>
 #endif
 
 #include "catalogs_device_config.h"
@@ -681,16 +681,30 @@ HBufC* CNcdDeviceService::DeviceIdentificationLC()
     return KCatalogsOverrideDeviceId().AllocLC();
 #endif    
 
-#ifdef GET_DEVICE_ID_FROM_USERAGENT  
-    
-    // Get model version.
-    TBuf< KSysVersionInfoTextLength > modelVersion;
-    User::LeaveIfError( SysVersionInfo::GetVersionInfo(
-        SysVersionInfo::EModelVersion, modelVersion ) );
-    
-    // Create buffer.
-    HBufC* devId = HBufC::NewLC( modelVersion.Length() );
-    devId->Des().Append( modelVersion );
+#ifdef GET_DEVICE_ID_FROM_USERAGENT    
+    // Assume the device id begins with "Nokia" and ends with "/"
+    HBufC8* userAgent = UserAgentL();
+    CleanupStack::PushL( userAgent );
+    TInt offset = userAgent->Find( _L8( "Nokia" ));
+    if ( offset == KErrNotFound )
+        {
+        DLTRACEOUT(("No Nokia"));
+        CleanupStack::PopAndDestroy( userAgent );
+        return KNullDesC().AllocLC();
+        }
+    TPtrC8 id = userAgent->Des().Mid( offset );
+    offset = id.Locate( '/' );
+    if ( offset == KErrNotFound )
+        {
+        DLTRACEOUT(("no /"));
+        CleanupStack::PopAndDestroy( userAgent );
+        return KNullDesC().AllocLC();
+        }
+    TPtrC8 id2 = id.Left( offset );
+    HBufC* devId = HBufC::NewL( id2.Length() );
+    devId->Des().Copy( id2 );
+    CleanupStack::PopAndDestroy( userAgent );
+    CleanupStack::PushL( devId );
     DLTRACEOUT(( _L("devId: %S"), devId ));
     return devId;
     
@@ -737,16 +751,36 @@ const TDesC& CNcdDeviceService::DeviceModelL()
     
     if ( !iDeviceModel )
         {
-        // Get model version.
-        TBuf< KSysVersionInfoTextLength > modelVersion;
-        User::LeaveIfError( SysVersionInfo::GetVersionInfo(
-            SysVersionInfo::EModelVersion, modelVersion ) );
-    
-        // Create buffer.
-        iDeviceModel = HBufC::NewL( modelVersion.Length() );
-        iDeviceModel->Des().Append( modelVersion );
-        }
+        // Get manufacturer 
+        HBufC8* manufacturer = Des16ToDes8LC( DeviceManufacturerL() );
         
+        HBufC8* userAgent = UserAgentL();
+        CleanupStack::PushL( userAgent );
+        
+        TInt offset = userAgent->FindF( *manufacturer ); 
+        if ( offset == KErrNotFound )
+            {
+            DLTRACEOUT(("Device manufacturer not found"));
+            CleanupStack::PopAndDestroy( 2, manufacturer ); // manufacturer, useragent
+            return KNullDesC();
+            }
+        
+        // Strip manufacturer of the string    
+        TPtrC8 id = userAgent->Des().Mid( offset + manufacturer->Length() );
+        
+        // Locate the end of the device model
+        offset = id.Locate( '/' );
+        if ( offset == KErrNotFound )
+            {
+            DLTRACE(("no /"));
+            CleanupStack::PopAndDestroy( 2, manufacturer ); // manufacturer, useragent
+            return KNullDesC();
+            }
+        TPtrC8 id2 = id.Left( offset );
+        iDeviceModel = Des8ToDes16L( id2 );                        
+        
+        CleanupStack::PopAndDestroy( 2, manufacturer ); // manufacturer, useragent
+        }
     DLTRACEOUT(( _L("device model: %S"), iDeviceModel ));
     return *iDeviceModel;
 #endif // CATALOGS_OVERRIDE_MODEL   
@@ -819,6 +853,30 @@ TAknSkinSrvSkinPackageLocation
         }
     return EAknsSrvPhone;
     }
+    
+
+// ---------------------------------------------------------------------------
+// On SDK 3.0 UA looks like this:
+// Mozilla/4.0 ( compatible; MSIE 5.0; Series60/3.0 Nokia6630/4.06.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 ) 
+// ---------------------------------------------------------------------------
+#ifdef GET_DEVICE_ID_FROM_USERAGENT
+
+HBufC8* CNcdDeviceService::UserAgentL() const
+    {
+    DLTRACEIN((""));
+#ifndef CATALOGS_OVERRIDE_USERAGENT    
+    CUserAgent* ua = CUserAgent::NewL();
+    CleanupStack::PushL( ua );
+    HBufC8* uas = ua->UserAgentL();
+    CleanupStack::PopAndDestroy( ua );
+    DLTRACEOUT(("UserAgent: %S", uas));
+    return uas;
+#else // CATALOGS_OVERRIDE_USERAGENT
+    return KCatalogsOverrideUserAgent().AllocL(); 
+#endif    
+    }
+
+#endif    
 
 // ---------------------------------------------------------------------------
 // GetPhoneLC

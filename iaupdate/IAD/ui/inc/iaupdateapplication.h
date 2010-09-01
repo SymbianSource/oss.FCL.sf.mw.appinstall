@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,30 +11,56 @@
 *
 * Contributors:
 *
-* Description:   This file contains the header file of the IAUpdateApplication
+* Description:   This file contains the header file of the CIAUpdateApplication
 *                class 
 *
 */
 
-#ifndef IAUPDATEAPPLICATION_H_
-#define IAUPDATEAPPLICATION_H_
 
-#include <QSharedPointer>
-#include <hbapplication.h>
 
-// forward declarations
-class IAUpdateEngine;
-class IAUpdateMainWindow;
+#ifndef __IAUPDATE_APPLICATION_H__
+#define __IAUPDATE_APPLICATION_H__
 
-class IAUpdateApplication : public HbApplication
+// INCLUDES
+#include <aknapp.h>
+
+#include "iaupdateuids.h"
+
+// CONSTANTS
+// UID for the application, this should correspond to the uid defined in the mmp file
+static const TUid KUidIAUpdateApp = { KIAUpdateUiUid };
+
+
+/**
+* CAppMngrApp application class.
+* Provides factory to create concrete document object and
+* application server object
+*/
+class CIAUpdateApplication : public CAknApplication
     {
-public:
-    IAUpdateApplication(int argc, char* argv[]);
-    virtual ~IAUpdateApplication();
     
-private:
-    IAUpdateEngine *mEngine;         // owned
-    QSharedPointer<IAUpdateMainWindow> mMainWindow; // owned
-    };
+private:  // from CAknApplication
 
-#endif /* IAUPDATEAPPLICATION_H_ */
+    /**
+    * Returns application's UID 
+    * @return The UID value 
+    */
+    TUid AppDllUid() const;
+
+    /**
+    * From CApaApplication, creates CAppMngrDocument document object.
+    * @return A pointer to the created document object.
+    */
+    CApaDocument* CreateDocumentL();
+    
+    /**
+    * Creates application server.
+    * @param aAppServer Instance of application server class
+    */
+    void NewAppServerL( CApaAppServer*& aAppServer );
+    };
+    
+
+#endif // __IAUPDATE_APPLICATION_H__
+
+// End of File

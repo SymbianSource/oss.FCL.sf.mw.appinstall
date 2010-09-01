@@ -40,13 +40,11 @@ CCUIProgressDialog::CCUIProgressDialog( CEikDialog** aSelfPtr,
 // Destructor
 CCUIProgressDialog::~CCUIProgressDialog()
     {
-    
     if (iSelfPtr) 
         {
         *iSelfPtr = NULL;
         iSelfPtr = NULL;
         }
-    
     }
 
 // ---------------------------------------------------------------------------

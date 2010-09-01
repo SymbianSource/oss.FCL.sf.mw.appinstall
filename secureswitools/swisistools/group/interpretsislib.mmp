@@ -28,8 +28,8 @@ USERINCLUDE 	../source/common
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 USERINCLUDE		../source/xmlparser
+USERINCLUDE 	../source/common
 USERINCLUDE 	../source/dbmanager
-USERINCLUDE 	../source/rscparser
 #endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
@@ -75,27 +75,10 @@ SOURCE			dbconstants.cpp
 SOURCE			xmlgenerator.cpp
 SOURCE			dbhelper.cpp
 
-
 SOURCEPATH		../source/common
 SOURCE			util.cpp
 
-SOURCEPATH		../source/rscparser
-SOURCE			barsc2.cpp
-SOURCE			barscimpl.cpp
-SOURCE			dictionarycompression.cpp
-SOURCE			commontypes.cpp
-SOURCE			barsread2.cpp
-SOURCE			barsreadimpl.cpp
-SOURCE			parse.cpp
-SOURCE			apmstd.cpp
-SOURCE			apaid.cpp
-SOURCE			aplapplistitem.cpp
-SOURCE			aplappinforeader.cpp
-SOURCE			uidtype.cpp
-SOURCE			dirparse.cpp
-SOURCE			apsecutils.cpp
-
-#endif
+#endif 
 SOURCEPATH		../../swianalysistoolkit/source/common/utf8
 SOURCE			utf8.cpp
 

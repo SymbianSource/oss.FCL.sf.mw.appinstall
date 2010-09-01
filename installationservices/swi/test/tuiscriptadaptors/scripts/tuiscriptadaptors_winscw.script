@@ -23,12 +23,13 @@ LOAD_SUITE tuiscriptadaptors
 //! @SYMDEF			DEF094747
 //! @SYMTestPriority		Medium
 //! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Unique Vendor Name" exceeding descriptor's max length during AppendFormatList operation. 
-//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMTestExpectedResults	The SIS file installs successfully.
 //! @SYMDevelopedForRelease	Argus
 
 START_TESTCASE API-SEC-DEF094747-0001
 
-RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow1
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow1
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow1
 
 END_TESTCASE API-SEC-DEF094747-0001
 
@@ -38,12 +39,13 @@ END_TESTCASE API-SEC-DEF094747-0001
 //! @SYMDEF			DEF094747
 //! @SYMTestPriority		Medium
 //! @SYMTestActions		Install a SIS file , which would throw User::11 panic due to "Package Name" exceeding descriptor's max length during AppendFormatList operation. 
-//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMTestExpectedResults	The SIS file installs successfully.
 //! @SYMDevelopedForRelease	Argus
 
 START_TESTCASE API-SEC-DEF094747-0002
 
-RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow2
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow2
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow2
 
 END_TESTCASE API-SEC-DEF094747-0002
 
@@ -53,12 +55,13 @@ END_TESTCASE API-SEC-DEF094747-0002
 //! @SYMDEF			DEF094747
 //! @SYMTestPriority		Medium
 //! @SYMTestActions		Install a SIS file , which would otherwise throw User::11 panic due to "Vendor Name" exceeding descriptor's max length during AppendFormatList operation.
-//! @SYMTestExpectedResults	The SIS file doesn't install successfully. Throws -6 as the descriptor is exceeding length
+//! @SYMTestExpectedResults	The SIS file installs successfully.
 //! @SYMDevelopedForRelease	Argus
 
 START_TESTCASE API-SEC-DEF094747-0003
 
-RUN_TEST_STEP_RESULT -6 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow3
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini handle_BufferOverflow3
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.ini u_handle_BufferOverflow3
 
 END_TESTCASE API-SEC-DEF094747-0003
 

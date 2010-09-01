@@ -23,7 +23,6 @@
 
 //  INCLUDES
 #include <fotaengine.h>
-#include <badesca.h>
 
 // FORWARD DECLARATIONS
 
@@ -51,6 +50,16 @@ class CIAUpdateFWFotaModel : public CBase
 
     public: // New functions
         
+        /**
+        * Retrieves the human readable name of the profile.
+        * @since Series 60 3.1
+        * @param aProfileId Profile identifier
+        * @param aProfileId Human readable name of the profile, or KNullDesC if not found.
+        * @return None
+        */
+        void GetProfileNameL( const TInt aProfileId,
+                                    HBufC* aProfileName ) const;
+
         /**
         * Retrieves the default fota profile identifier from
         * the central repository.

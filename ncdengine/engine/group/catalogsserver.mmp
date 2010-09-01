@@ -376,7 +376,11 @@ USERINCLUDE   ../../engine/accesspointmanager/inc
 
 
 // System include paths
+#ifndef __SERIES60_30__
 APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE   /epoc32/include
+#endif
 
 SYSTEMINCLUDE   /epoc32/include/libc
 SYSTEMINCLUDE   /epoc32/include/ecom
@@ -439,6 +443,7 @@ LIBRARY         inetprotutil.lib
 LIBRARY         gsmu.lib    // SMS
 LIBRARY         smcm.lib    // SMS
 LIBRARY         msgs.lib    // SMS
+LIBRARY         apengine.lib
 
 #ifndef __SERIES60_31__
 LIBRARY         cmmanager.lib // CMManager and other SNAP/APN classes

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -48,7 +48,6 @@ const TInt CSisRegistryServer::iRanges[KPolicyRanges] =
 	ESeparatorMinimumTCB, 			// accessible by TCB clients only
 	ESeparatorMinimumReadUserData2, 	// accessible by ReadUserData clients only
 	ESetComponentState,             // requests coming from SIF
-	EAddAppRegInfo,                 // TCB only
 	ESeparatorEndAll,     			// not supported from there on
 	};
 
@@ -65,7 +64,6 @@ const TUint8 CSisRegistryServer::iElementsIndex[iRangeCount] =
 	2,	// Used by SWIS only, so TCB is needed - check on cap and SID.
 	1,  // ReadUserData clients only
 	5,   // requests coming from SIF
-	6,  // all clients having TCB
 	CPolicyServer::ENotSupported,  
 	};
 
@@ -77,7 +75,6 @@ const CPolicyServer::TPolicyElement CSisRegistryServer::iPolicyElements[] =
 	{_INIT_SECURITY_POLICY_S0(KDaemonSecureId), CPolicyServer::EFailClient}, 
 	{_INIT_SECURITY_POLICY_C2(ECapabilityWriteUserData, ECapabilityNetworkServices), CPolicyServer::EFailClient},
 	{_INIT_SECURITY_POLICY_S0(KSifServerSecureId), CPolicyServer::EFailClient},
-	{_INIT_SECURITY_POLICY_C1(ECapabilityTCB), CPolicyServer::EFailClient},
 	};
 
 const CPolicyServer::TPolicy CSisRegistryServer::iPolicy =
@@ -124,14 +121,14 @@ CSisRegistryServer::~CSisRegistryServer()
 	iShutdown = NULL; //required in case the server dies before the session
 	}
 
-CSession2* CSisRegistryServer::NewSessionL(const TVersion& aClientVersion, const RMessage2& aMessage) const
+CSession2* CSisRegistryServer::NewSessionL(const TVersion& aClientVersion, const RMessage2&) const
 //
 // Create a new client session. This should really check the version number.
 //
 	{
 	if (aClientVersion == TVersion(1,0,0))
 		{
-		return new(ELeave) CSisRegistrySession(aMessage.SecureId());
+		return new(ELeave) CSisRegistrySession();	
 		}
 	else
 		{

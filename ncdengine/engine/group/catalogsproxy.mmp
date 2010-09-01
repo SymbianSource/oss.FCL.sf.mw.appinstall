@@ -169,7 +169,11 @@ USERINCLUDE   ../../provider/protocol/inc
 USERINCLUDE   ../../provider/deviceinteraction/inc
 
 // System include paths
-MW_LAYER_SYSTEMINCLUDE
+#ifndef __SERIES60_30__
+APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE /epoc32/include
+#endif
 
 SYSTEMINCLUDE /epoc32/include/libc
 

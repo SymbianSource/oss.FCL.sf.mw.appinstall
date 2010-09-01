@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -20,8 +20,11 @@
 
 // INCLUDES
 #include <SyncMLTransportProperties.h>
+#include <eikenv.h>
+#include <bautils.h>
 #include <collate.h>
-
+#include <StringLoader.h>
+#include <avkon.rsg>
 
 #include "iaupdatefwsyncutil.h"
 #include "iaupdatefwdebug.h"
@@ -153,10 +156,10 @@ HBufC* TUtil::SyncTimeLC( TTime aLastSync )
 		FLOG( "[OMADM] TUtil::SyncTimeLC time" );
 		
 		TBuf<KBufSize> timeFormat;
-		/*HBufC* buf = StringLoader::LoadLC( R_QTN_TIME_USUAL_WITH_ZERO );
+		HBufC* buf = StringLoader::LoadLC( R_QTN_TIME_USUAL_WITH_ZERO );
 		TUtil::StrCopy( timeFormat, *buf );
 		CleanupStack::PopAndDestroy( buf );
-		homeTime.FormatL( ptr, timeFormat );*/
+		homeTime.FormatL( ptr, timeFormat );
 		
 		FLOG( "[OMADM] TUtil::SyncTimeLC time done" );
 		}
@@ -165,10 +168,10 @@ HBufC* TUtil::SyncTimeLC( TTime aLastSync )
 		FLOG( "[OMADM] TUtil::SyncTimeLC date" );
 		
 		TBuf<KBufSize> dateFormat;
-        /*HBufC* buf = StringLoader::LoadLC( R_QTN_DATE_USUAL_WITH_ZERO );
+        HBufC* buf = StringLoader::LoadLC( R_QTN_DATE_USUAL_WITH_ZERO );
         TUtil::StrCopy( dateFormat, *buf );
         CleanupStack::PopAndDestroy( buf );
-		homeTime.FormatL(ptr, dateFormat);*/
+		homeTime.FormatL(ptr, dateFormat);
 		
 		FLOG( "[OMADM] TUtil::SyncTimeLC date done" );
 		}
@@ -235,12 +238,12 @@ TBool TUtil::IsToday(TTime aTime)
 // TUtil::GetDateTextL
 // -----------------------------------------------------------------------------
 //
-void TUtil::GetDateTextL(TDes& /*aText*/, TTime aDateTime)
+void TUtil::GetDateTextL(TDes& aText, TTime aDateTime)
 	{
 	TTime homeTime = ConvertUniversalToHomeTime( aDateTime );
-	//HBufC* hBuf = StringLoader::LoadLC( R_QTN_DATE_USUAL_WITH_ZERO );
-    //homeTime.FormatL( aText, *hBuf );
-    //CleanupStack::PopAndDestroy( hBuf );
+	HBufC* hBuf = StringLoader::LoadLC( R_QTN_DATE_USUAL_WITH_ZERO );
+    homeTime.FormatL( aText, *hBuf );
+    CleanupStack::PopAndDestroy( hBuf );
 	}
 
 
@@ -248,12 +251,12 @@ void TUtil::GetDateTextL(TDes& /*aText*/, TTime aDateTime)
 // TUtil::GetTimeTextL
 // -----------------------------------------------------------------------------
 //
-void TUtil::GetTimeTextL( TDes& /*aText*/, TTime aDateTime )
+void TUtil::GetTimeTextL( TDes& aText, TTime aDateTime )
 	{
 	TTime homeTime = ConvertUniversalToHomeTime( aDateTime );
-	//HBufC* hBuf = StringLoader::LoadLC( R_QTN_TIME_USUAL_WITH_ZERO );
-    //homeTime.FormatL( aText, *hBuf );
-    //CleanupStack::PopAndDestroy( hBuf );
+	HBufC* hBuf = StringLoader::LoadLC( R_QTN_TIME_USUAL_WITH_ZERO );
+    homeTime.FormatL( aText, *hBuf );
+    CleanupStack::PopAndDestroy( hBuf );
 	}
 
 

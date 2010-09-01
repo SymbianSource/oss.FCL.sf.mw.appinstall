@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -126,10 +126,6 @@ CTestStep* CTestSisRegistry::CreateTestStep(const TDesC& aStepName)
 		{
 		name = new CInRomNonRemovablePackage;
 		}
-    if (strippedStepName == KSetCenRepSetting)
-        {
-        name = new CSetCenRepSettingStep; 
-        }
 	if (strippedStepName == KInstalledDrives)
 		{
 		name = new CInstalledDrives;
@@ -354,18 +350,7 @@ CTestStep* CTestSisRegistry::CreateTestStep(const TDesC& aStepName)
 		{
 		name = new CChangeLocaleStep;
 		}
-	else if (aStepName == KCAddAppRegInfoStep)
-	    {
-        name = new CAddAppRegInfoStep;
-	    }
-	else if (aStepName == KCRemoveAppRegInfoStep)
-        {
-        name = new CRemoveAppRegInfoStep;
-        }
-	else if (aStepName == KCheckAppRegData)
-	    {
-        name = new CheckAppRegData;
-	    }
+
 	if(performanceStep && name)
 		{
 		CSisRegistryTestStepBase *baseTestStep = dynamic_cast<CSisRegistryTestStepBase*>(name);

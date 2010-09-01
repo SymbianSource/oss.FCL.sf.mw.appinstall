@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -193,47 +193,6 @@ public:
 	 * Returns the SCR component id for the base component (i.e. not an SP package/augmentation) with the given UID. 
 	 */
 	IMPORT_C Usif::TComponentId GetComponentIdForUidL(const TUid& aUid);	
-	
-	/**
-     * Returns the SCR component id for the component with the given packagename and vendor name
-     * @param aPackageName package name of the existing component 
-     * @param aVendorName vendor name of the existing component 
-     */
-	IMPORT_C Usif::TComponentId GetComponentIdForPackageL(const TDesC& aPackageName, const TDesC& aVendorName) const;
-	
-	 /**
-     * Gets the array of application uids associated with a given component Id
-     * @param aCompId component Id of the component whose associated applications need to be fetched
-     * @param aAppUids array of application uids associated with the component
-     */
-	IMPORT_C void GetAppUidsForComponentL(Usif::TComponentId& aCompId, RArray<TUid>& aAppUids);
-	
-	/**
-     * Gets the array of Component Ids associated with a given package.
-     * @param aPackageUid package uid of the component
-     * @param aComponentIds array of component id's associated with the package uid
-     */
-	IMPORT_C void GetComponentIdsForUidL(TUid& aPackageUid, RArray<Usif::TComponentId>& aComponentIds);
-	
-	/**
-    * Adds application registration information to the Software Component Registry
-    * Note that if the SCR already contains registration information for the given app this will be replaced
-    *
-    * @param aAppRegFile application's registration resource file name(with full path)
-    * @capability Tcb
-    */
-    IMPORT_C void AddAppRegInfoL(const TDesC& aAppRegFile);
-	    
-    /**
-     *  Removes application registration information from the Software Component Registry.
-     *  Note that this API should be called before the file is actually deleted
-    
-     *  @param aAppRegFile application's registration resource file name(with full path)
-     *  @capability Tcb
-     */
-    IMPORT_C void RemoveAppRegInfoL(const TDesC& aAppRegFile);
-
-		
 #endif
 
 protected:

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -45,8 +45,6 @@
 #include "hashcontainer.h"
 #include "sisregistryproperty.h"
 
-#include <centralrepository.h>
-#include "sisregistryaccess_client.h"
 const TInt KDefaultBufferSize		= 2048;
 /////////////////////////////////////////////////////////////////////
 // defs, Constants used by test steps
@@ -54,8 +52,6 @@ const TInt KDefaultBufferSize		= 2048;
 
 _LIT(KNoUid, "nouid");
 _LIT(KUid, "uid");
-_LIT(KCenRepKey, "cenrepkey");
-_LIT(KCenRepValue, "cenrepvalue");
 _LIT(KDrivebitmapcount, "drivebitmapcout");
 _LIT(KSid, "sid");
 _LIT(KPackage, "package");
@@ -173,8 +169,8 @@ TVerdict CEmbeddingPackageStep::doTestStepL()
 	RPointerArray<Swi::CSisRegistryPackage> packages;
 	//StartTimer again to ignore time taken to read from config file
 	StartTimer();
-	CleanupResetAndDestroyPushL(packages);
 	iRegistryEntry.EmbeddingPackagesL(packages);
+	CleanupResetAndDestroyPushL(packages);
 	
 	if(packages.Count() != embeddingPkgCount)
 		{
@@ -243,8 +239,6 @@ CModifiableFileStep::CModifiableFileStep()
 
 TVerdict CModifiableFileStep::doTestStepL()
 	{
-
-    
 	RArray<TPtrC> theFileNames;
 	CleanupClosePushL(theFileNames);
 	GetStringArrayFromConfigL(ConfigSection(), KModFileName, theFileNames);
@@ -683,59 +677,6 @@ TVerdict CIsUidInstalledStep::doTestStepL()
 	return TestStepResult();
 	}
 	
-/////////////////////////////////////////////////////////////////////
-// CSetCenRepSettingStep - Set Central Reposatory Value
-/////////////////////////////////////////////////////////////////////
-CSetCenRepSettingStep::CSetCenRepSettingStep()
-    {
-    SetTestStepName(KSetCenRepSetting);
-    }
-
-TVerdict CSetCenRepSettingStep::doTestStepL()
-    {        
-    SetTestStepResult(EPass);
-    TUid repUid;
-    if(!GetUidFromConfig(ConfigSection(), KUid, repUid))
-        {
-        ERR_PRINTF1(_L("Package UID is missing in the configuration file!"));
-        SetTestStepResult(EFail);
-        return TestStepResult();
-        }
-    
-    TInt cenRepKey;
-    if(!GetIntFromConfig(ConfigSection(), KCenRepKey, cenRepKey))
-        {
-        ERR_PRINTF1(_L("Central Reposatory Key is missing in the configuration file!"));
-        SetTestStepResult(EFail);
-        return TestStepResult();
-        }
-    
-    TInt cenRepValue;
-    if(!GetIntFromConfig(ConfigSection(), KCenRepValue, cenRepValue))
-        {
-        ERR_PRINTF1(_L("Central Reposatory Value is missing in the configuration file!"));
-        SetTestStepResult(EFail);
-        return TestStepResult();
-        }
-    
-    CRepository* rep = CRepository::NewLC(repUid);
-    TInt err = rep->Set(cenRepKey, cenRepValue);
-        
-    if( err == KErrNone )
-    {
-        INFO_PRINTF4(_L("Setting Central Reposatory  0x%08x  , key = %d, value = %d"),repUid,cenRepKey,cenRepValue);
-    }
-    else
-    {
-        SetTestStepResult(EFail);
-        ERR_PRINTF4(_L("Failed Setting Central Reposatory  0x%08x  , key = %d, value = %d"),repUid,cenRepKey,cenRepValue);
-    }
-    
-    CleanupStack::PopAndDestroy(rep); 
-    return TestStepResult();
-    }
-
-
 /////////////////////////////////////////////////////////////////////
 // CIsPackageInstalledStep - checks if packages are registered
 /////////////////////////////////////////////////////////////////////
@@ -2778,158 +2719,3 @@ TVerdict CSisApplicationManagerStep::doTestStepL()
 	SetTestStepResult(EPass);
 	return TestStepResult();	
 	}
-
-////////////////////////////////////////////////////////////////////////////
-// CAddAppRegInfoStep 
-////////////////////////////////////////////////////////////////////////////
-CAddAppRegInfoStep::CAddAppRegInfoStep()
-    {
-    SetTestStepName(KIsFileRegisteredStep);
-    }
-
-TVerdict CAddAppRegInfoStep::doTestStepL()
-    {
-    TPtrC regFileName;
-    if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
-        {
-        ERR_PRINTF1(_L("Reg File Name was not found in ini"));
-        User::Leave(KErrNotFound);
-        }
-    
-    RSisRegistryAccessSession sisRegistryAccessSessionSession;
-    User::LeaveIfError(sisRegistryAccessSessionSession.Connect());
-    CleanupClosePushL(sisRegistryAccessSessionSession);
-    
-    TInt res = sisRegistryAccessSessionSession.AddAppRegInfoL(regFileName, iTimeMeasuredExternally );
-   
-    if(res != KErrNone)
-        {
-        ERR_PRINTF2(_L("Application Registration data not added successfuly , error %d"),res);
-        User::Leave(res);
-        }
-    CleanupStack::Pop(&sisRegistryAccessSessionSession);
-    SetTestStepResult(EPass);
-    return TestStepResult();
-    }
-
-////////////////////////////////////////////////////////////////////////////
-// CRemoveAppRegInfoStep 
-////////////////////////////////////////////////////////////////////////////
-
-CRemoveAppRegInfoStep::CRemoveAppRegInfoStep()
-    {
-    SetTestStepName(KIsFileRegisteredStep);
-    }
-
-TVerdict CRemoveAppRegInfoStep::doTestStepL()
-    {
-    TPtrC regFileName;
-    if(!GetStringFromConfig(ConfigSection(), _L("regFileName"), regFileName))
-        {
-        ERR_PRINTF1(_L("Reg File Name was not found in ini"));
-        User::Leave(KErrNotFound);
-        }
-    
-    RSisRegistryAccessSession sisRegistryAccessSessionSession;
-    User::LeaveIfError(sisRegistryAccessSessionSession.Connect());
-    CleanupClosePushL(sisRegistryAccessSessionSession);
-    
-    TInt res = sisRegistryAccessSessionSession.RemoveAppRegInfoL(regFileName, iTimeMeasuredExternally );
-    
-    if(res != KErrNone)
-        {
-        ERR_PRINTF2(_L("Application Registration data not added successfuly , error %d"),res);
-        User::Leave(res);
-        }
-    CleanupStack::PopAndDestroy(&sisRegistryAccessSessionSession);
-    SetTestStepResult(EPass);
-    return TestStepResult();
-    }
-
-//////////////////////
-//////CheckAppRegData
-/////////////////////
-
-CheckAppRegData::CheckAppRegData()
-    {
-    SetTestStepName(KIsFileRegisteredStep);
-    }
-
-TVerdict CheckAppRegData::doTestStepL()
-    {
-    SetTestStepResult(EPass);
-    // Verify if the reg data is removed properly or not
-    TBool isAppDataExists(EFalse);
-    Usif::RSoftwareComponentRegistry scrSession;            
-    User::LeaveIfError(scrSession.Connect());
-    CleanupClosePushL(scrSession);
-    GetBoolFromConfig(ConfigSection(), _L("appDataExists"), isAppDataExists);
-    if(isAppDataExists)
-        {
-        TPtrC appFileName;
-        if(GetStringFromConfig(ConfigSection(), _L("appFileName"), appFileName))
-            {
-            TUid appUid;
-            TInt intAppUid(0);
-            if(!GetHexFromConfig(ConfigSection(), _L("appUid"), intAppUid))
-                {
-                User::Leave(KErrNotFound);
-                }
-            
-            appUid = TUid::Uid(intAppUid);
-            RArray<TUid> appUidArray;
-            CleanupClosePushL(appUidArray);
-            appUidArray.AppendL(appUid);
-            
-            //check if we have rolled back to the reg in rom after removal            
-            Usif::RApplicationInfoView appRegistryView;
-            CleanupClosePushL(appRegistryView);
-            Usif::CAppInfoFilter* appInfoFilter = Usif::CAppInfoFilter::NewLC();
-            appInfoFilter->SetAllApps();
-            appRegistryView.OpenViewL(scrSession, appInfoFilter);
-            RPointerArray<Usif::TAppRegInfo> appInfo;
-            CleanupClosePushL(appInfo);
-            appRegistryView.GetNextAppInfoL(5, appInfo);
-        
-            for(TInt i = 0; i < 5 ; ++i)
-                {
-                if(appInfo[i]->Uid() == appUid)
-                    {
-                    if(appInfo[i]->FullName().Compare(appFileName) != 0)
-                        {
-                        SetTestStepResult(EFail);
-                        CleanupStack::Pop(&appInfo);
-                        appInfo.ResetAndDestroy();
-                        CleanupStack::PopAndDestroy(4, &scrSession); // appInfoFilter, appRegistryView, appUid, scrSession
-                        return TestStepResult();
-                        }
-                    break;
-                    }
-                }
-            CleanupStack::Pop(&appInfo);
-            appInfo.ResetAndDestroy();
-            CleanupStack::PopAndDestroy(3, &appUidArray); // appInfoFilter, appRegistryView, 
-            }  
-        }
-    else
-        {
-        TUid appUid = TUid::Uid(0);
-        TInt intAppUid(0);
-        if(!GetHexFromConfig(ConfigSection(), _L("appUid"), intAppUid))
-            {
-            User::Leave(KErrNotFound);
-            }
-        appUid = TUid::Uid(intAppUid);
-        
-        TRAPD(err, scrSession.GetComponentIdForAppL(appUid));
-        if(err != KErrNotFound)
-            {
-            SetTestStepResult(EFail);
-            CleanupStack::PopAndDestroy(&scrSession);
-            return TestStepResult();
-            }
-        }
-
-    CleanupStack::PopAndDestroy(&scrSession);
-    return TestStepResult();
-    }

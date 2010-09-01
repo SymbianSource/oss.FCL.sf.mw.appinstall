@@ -22,7 +22,6 @@
 */
 
 #include "tpropagation/bld.inf"
-#include "tswiappregintegration/bld.inf"
 
 PRJ_TESTMMPFILES
 createprivatefile.mmp
@@ -143,15 +142,6 @@ adornedfilenametestingdll_v10_0.mmp
 adornedfilenametestingdll_v10_1.mmp
 adornedfilenametestingdll_v10_2.mmp
 safemodetest.mmp
+
 non_stubbed_exe.mmp
 
-interpretsis_testcase/interpretsis_testcase_01.mmp
-interpretsis_testcase/interpretsis_testcase_02.mmp
-interpretsis_testcase/interpretsis_testcase_03.mmp
-interpretsis_testcase/interpretsis_testcase_04.mmp
-interpretsis_testcase_05/interpretsis_testcase_05.mmp
-interpretsis_testcase_06/interpretsis_testcase_06.mmp
-interpretsis_testcase_07/interpretsis_testcase_07.mmp
-interpretsis_testcase_08/interpretsis_testcase_08.mmp
-interpretsis_testcase_09/interpretsis_testcase_09.mmp
-interpretsis_testcase_10/interpretsis_testcase_10.mmp

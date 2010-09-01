@@ -154,9 +154,6 @@ protected:
 	virtual TState* ErrorOnStateEntryL(TInt aError);
 
 	virtual void SignalCompletedL();
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	virtual void PostJournalFinalizationL(TInt aError);
-#endif
 
 private:
 	// States

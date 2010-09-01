@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -36,8 +36,8 @@ _LIT_SECURE_ID(KDaemonSecureId, 0x10202DCE);
 _LIT_SECURE_ID(KSwisSecureId, 0x101F7295);	
 _LIT_SECURE_ID(KSifServerSecureId, 0x10285BCB);	
 
-const TInt KPolicyRanges= 13;
-const TInt KPolicyElements = 7;
+const TInt KPolicyRanges= 12;
+const TInt KPolicyElements = 6;
 
 class CSisRegistrySession;
 

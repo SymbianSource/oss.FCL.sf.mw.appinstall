@@ -184,7 +184,7 @@ namespace Swi
 		
 		for (TInt i = 0; i < augmentationCount; ++i)
 			{			
-			RSisRegistryWritableEntry augmentation;
+			RSisRegistryEntry augmentation;
 			augmentation.OpenL(iSession, *packages[i]);
 			CleanupClosePushL(augmentation);
 			
@@ -212,7 +212,7 @@ namespace Swi
 			// were backed up.
 			augmentationDrives.AppendL(augmentation.SelectedDriveL());
 			// Get the matching supported languages
-			augmentation.GetMatchingSupportedLanguagesL(matchingSupportedLanguagesArray);
+			entry.GetMatchingSupportedLanguagesL(matchingSupportedLanguagesArray);
 
 			// Appending ELangNone at the end as marker for the end of the language IDs
 			// as we also append the language ID's from other Augmentations

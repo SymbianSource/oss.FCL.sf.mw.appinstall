@@ -35,7 +35,6 @@ userinclude 	../source/sislauncher/server
 userinclude		../source/sisregistry/common
 userinclude 	../inc/swi
 userinclude 	../inc
-userinclude 	../source/apprscparser
 
 sourcepath	../source/sislauncher/server
 
@@ -43,10 +42,10 @@ source		sislauncherserver.cpp
 source		sislaunchersession.cpp
 source		sislauncherstartup.cpp
 source		threadmonitor.cpp
-source		queueprocessor.cpp
+source      queueprocessor.cpp
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-SOURCE		swtypereginfoparser.cpp
+SOURCE swtypereginfoparser.cpp
 #endif
 
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
@@ -56,14 +55,9 @@ library		efsrv.lib
 library		estor.lib
 library		ecom.lib
 library		securitymanager.lib
-
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 LIBRARY		xmlframework.lib
 LIBRARY		bafl.lib
 LIBRARY		swtypereginfo.lib
-library		apprscparser.lib
-library		ipcstream.lib
-library		scrclient.lib
-library 	sislauncherclient.lib
 #endif
 

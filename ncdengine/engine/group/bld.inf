@@ -20,7 +20,7 @@ PRJ_MMPFILES
 catalogsdebug.mmp
 ncdutils.mmp
 ncddevicemgmt.mmp
-//catalogsserver.mmp
+catalogsserver.mmp
 catalogsengine.mmp
 catalogsproxy.mmp
 catalogsundertaker.mmp
@@ -43,8 +43,10 @@ backup_registration.xml         /epoc32/release/winscw/udeb/z/private/20019119/b
 // (and perhaps pkg references).
 backup_registration.xml         z:/private/20019119/backup_registration.xml
 
+
 // Config file
 config.xml                      z:/private/20019119/config.xml
+
 
 // Variant config file
 config_variant.xml                      z:/private/20019119/config_variant.xml

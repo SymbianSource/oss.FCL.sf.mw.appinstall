@@ -442,7 +442,7 @@ CNcdInstallOperationProxy* CNcdOperationManagerProxy::CreateInstallOperationL(
 CNcdSilentInstallOperationProxy* CNcdOperationManagerProxy::CreateSilentInstallOperationL(
     CNcdNodeProxy& aNode,
     MNcdInstallOperationObserver* aObserver,
-    Usif::COpaqueNamedParams* aInstallOptions )
+    const SwiUI::TInstallOptions& aInstallOptions )
     {
    DLTRACEIN((""));
 

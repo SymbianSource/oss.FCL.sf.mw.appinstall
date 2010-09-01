@@ -35,17 +35,17 @@ RESOURCE APP_REGISTRATION_INFO
 
     datatype_list= 
         {
-        DATATYPE { priority=EDataTypePriorityLow; type="x-epoc/x-sisx-app"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="application/vnd.symbian.install"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="x-epoc/x-app268436505"; },  /* x-epoc/x-app + Decimal value of 0x10000049 (UID3 of legacy sis files) */
-        DATATYPE { priority=EDataTypePriorityLow; type="text/vnd.sun.j2me.app-descriptor"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="application/java-archive"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="application/x-java-archive"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="application/java"; },
-        DATATYPE { priority=EDataTypePriorityLow; type="application/x-pip"; }
+        DATATYPE { priority=EDataTypePrioritySystem; type="x-epoc/x-sisx-app"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="application/vnd.symbian.install"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="x-epoc/x-app268436505"; },  /* x-epoc/x-app + Decimal value of 0x10000049 (UID3 of legacy sis files) */
+        DATATYPE { priority=EDataTypePrioritySystem; type="text/vnd.sun.j2me.app-descriptor"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="application/java-archive"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="application/x-java-archive"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="application/java"; },
+        DATATYPE { priority=EDataTypePrioritySystem; type="application/x-pip"; }
 #ifdef __WEB_WIDGETS
-        , DATATYPE { priority=EDataTypePriorityLow; type="application/x-nokia-widget"; }
-        , DATATYPE { priority=EDataTypePriorityLow; type="application/widget"; }
+        , DATATYPE { priority=EDataTypePrioritySystem; type="application/x-nokia-widget"; }
+        , DATATYPE { priority=EDataTypePrioritySystem; type="application/widget"; }
 #endif
         };  
     }

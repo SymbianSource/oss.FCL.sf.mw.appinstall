@@ -57,6 +57,37 @@ CIAUpdateFWFotaModel::~CIAUpdateFWFotaModel()
 
 
 // -----------------------------------------------------------------------------
+// CIAUpdateFWFotaModel::GetProfileName
+// Changes aProfileName to KNullDesC if the profile identifier is
+// not found.
+// -----------------------------------------------------------------------------
+//
+void CIAUpdateFWFotaModel::GetProfileNameL( const TInt   aProfileId,
+                                              HBufC* aProfileName ) const
+    {
+    FLOG( "[IAUPDATEFW] CIAUpdateFWFotaModel::GetProfileNameL() - not implemented" );
+
+/*KNST
+    TInt index( 0 );
+    aProfileName->Des().Copy( KNullDesC );
+    
+    iDocument->RefreshProfileListL( ETrue ); // Include hidden profile
+    CArrayFixFlat<TNSmlDMProfileItem>* profileList = iDocument->ProfileList( index );
+    
+    for ( index = 0; index < profileList->Count(); index++ )
+        {
+        if ( ( *profileList )[index].iProfileId == aProfileId )
+            {
+            aProfileName->Des().Copy( ( *profileList )[index].iProfileName );
+            }
+        }
+*/
+    FTRACE( FPrint( _L(
+        "[IAUPDATEFW] CIAUpdateFWFotaModel::GetProfileNameL(): aProfileId = %d, ProfileName = \"%S\"" ),
+         aProfileId, aProfileName ) );
+    }
+
+// -----------------------------------------------------------------------------
 // CIAUpdateFWFotaModel::DefaultFotaProfileIdL
 // -----------------------------------------------------------------------------
 //

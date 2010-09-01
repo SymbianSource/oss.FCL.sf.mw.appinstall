@@ -24,12 +24,14 @@
 #include <f32file.h>
 #include <SWInstApi.h>
 
-#include <usif/sif/sif.h>
-
 
 /**
  * Class that handles the launching of silent installation.
  *
+ *  @code   
+ *  @endcode
+ *  @lib 
+ *  @since S60 
  */ 
 class CIAUpdaterSilentLauncher : public CBase
     {
@@ -79,13 +81,13 @@ private:
      * @return SwiUI::TInstallOptions Options that are used for
      * silent installation.
      */
-    void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
+    SwiUI::TInstallOptions SilentInstallOptionsL() const;
 
 private: //  Data
+        
+    SwiUI::RSWInstSilentLauncher iLauncher;   
     
-    Usif::RSoftwareInstall iLauncher;
-    Usif::COpaqueNamedParams* iOptionsPckg; 
-    Usif::COpaqueNamedParams* iResults;
+    SwiUI::TInstallOptionsPckg iOptionsPckg;   
 
     RFs& iFs;        
     

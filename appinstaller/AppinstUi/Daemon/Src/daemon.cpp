@@ -19,24 +19,12 @@
 #include "drivewatcher.h"
 #include "SWInstDebug.h"
 #include "securitypolicy.h"
-
-//#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-#include <e32property.h>
-#include <connect/sbdefs.h>
-#include "../../../../installationservices/swtransactionservices/inc/stsrecovery.h"
-#include "swiobserverclient.h"
-//#else
-//#include "sisregistrysession.h"
-//#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+#include "sisregistrysession.h"
 
 namespace Swi
 {
 // CDaemon
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 /*static*/ CDaemon* CDaemon::NewL(MDaemonBehaviour& aBehaviour)
     {
     CDaemon* self=NewLC(aBehaviour);
@@ -44,10 +32,6 @@ namespace Swi
     return self;
     }
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 /*static*/ CDaemon* CDaemon::NewLC(MDaemonBehaviour& aBehaviour)
     {
     CDaemon* self=new(ELeave) CDaemon(aBehaviour);
@@ -55,11 +39,7 @@ namespace Swi
     self->ConstructL();
     return self;
     }
-
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//       
+  
 CDaemon::~CDaemon()
     { 
     iPolicyLockFile.Close();
@@ -68,19 +48,11 @@ CDaemon::~CDaemon()
     iFs.Close();
     }
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 CDaemon::CDaemon(MDaemonBehaviour& aBehaviour)
     : iBehaviour(aBehaviour)
     {
     }
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 void CDaemon::ConstructL()
     {
     User::LeaveIfError(iFs.Connect());
@@ -92,10 +64,6 @@ void CDaemon::ConstructL()
     StartWatchersL();
     }
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 void CDaemon::StartWatchersL()
     {
     FLOG( _L("Daemon: Start watchers") );        
@@ -184,10 +152,6 @@ void CDaemon::StartWatchersL()
     } // StartWatchersL()
 
 
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
 void CDaemon::LockSensitiveFiles()
     {
     TInt err = iPolicyLockFile.Open( 
@@ -198,41 +162,6 @@ void CDaemon::LockSensitiveFiles()
     FLOG_1( _L("Daemon: Policy file lock error = %d."), err );  
     }
 
-//#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-
-// -----------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------
-//     
-void CDaemon::StartRecoveryL()
-    {
-    FLOG( _L("Daemon: StartRecoveryL: Check to see if a recovery is needed.") );
-
-    // Check to see if a backup is in progress...
-    TInt backup = 0;
-    User::LeaveIfError( RProperty::Get( KUidSystemCategory, conn::KUidBackupRestoreKey,backup ) );
-
-    // if no backup or restore is in progress...
-    if( backup == conn::EBURUnset || ( backup == ( conn::EBURNormal | conn::ENoBackup ) ) )
-        {
-        // no recovery attempt is made during backup/restore as recovery may seriously affect
-        // the file system, which might impact backup/restore, recovery will be made at next bootup
-        Usif::RStsRecoverySession stsRecoverySession;
-        // A recovery failure should not affect Daemon start up.
-        TRAPD( err, stsRecoverySession.RollbackAllPendingL() );
-        if( err != KErrNone )
-            {
-            FLOG_1( _L("CDaemon::StartRecoveryL() - STS server failed to recover transactions. Error code: %d"), err );
-            }
-        // Start SWI Observer so that it can process the log files left from the previous session.
-        RSwiObserverSession swiObserver;
-        swiObserver.ProcessLogsL( iFs );
-        swiObserver.Close();
-        }
-    }
-
-/*
-//#else
   
 void CDaemon::StartRecoveryL()
     { 
@@ -248,8 +177,5 @@ void CDaemon::StartRecoveryL()
   
     FLOG( _L("Daemon: StartRecoveryL: Recovery check finished.") ); 
     } // StartRecoveryL()
-
-#endif  // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-*/
 
 } // namespace Swi

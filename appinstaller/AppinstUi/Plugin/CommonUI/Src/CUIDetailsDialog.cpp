@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -18,16 +18,16 @@
 
 
 // INCLUDE FILES
-//#include <aknmessagequerydialog.h>
-//#include <aknlistquerydialog.h> // remove
-//#include <StringLoader.h>
+#include <aknmessagequerydialog.h>
+#include <aknlistquerydialog.h> // remove
+#include <StringLoader.h>
 #include <bautils.h>
 #include <eikenv.h>
 #include <data_caging_path_literals.hrh>
 #include <SWInstCommonUI.rsg>
 #include <pathinfo.h>
-//#include <avkon.rsg>
-#include <DRMHelper.h>
+#include <avkon.rsg>
+#include <drmuihandling.h>                  // DRM::CDrmUiHandling
 
 #include "CUIDetailsDialog.h"
 #include "CUICertificateDetailsDialog.h"
@@ -49,7 +49,7 @@ _LIT( KLinkTagClose, "</AknMessageQuery Link>" );
 // -----------------------------------------------------------------------------
 //
 CCUIDetailsDialog::CCUIDetailsDialog()
-//    : iCbaResourceId( R_AVKON_SOFTKEYS_OK_EMPTY )
+    : iCbaResourceId( R_AVKON_SOFTKEYS_OK_EMPTY )
     {
     }
 
@@ -233,7 +233,7 @@ EXPORT_C TInt CCUIDetailsDialog::ExecuteLD( MCUIInfoIterator& aIterator,
 TInt CCUIDetailsDialog::ShowDialogL( MCUIInfoIterator& aIterator )
     {
     TInt result( 0 );
-/*
+
     CleanupStack::PushL( this );
 
     PopulateArrayL( aIterator );
@@ -279,7 +279,7 @@ TInt CCUIDetailsDialog::ShowDialogL( MCUIInfoIterator& aIterator )
     
     result = dlg->RunLD();
     CleanupStack::PopAndDestroy( 2 ); // message, this
-*/
+
     return result;    
     }
 
@@ -344,7 +344,6 @@ void CCUIDetailsDialog::PopulateArrayL( MCUIInfoIterator& aIterator )
 //
 HBufC* CCUIDetailsDialog::GetMessageDescriptorLC()
     {
-    /*
     TInt size( 0 ); 
     TInt index( 0 );
 
@@ -381,10 +380,8 @@ HBufC* CCUIDetailsDialog::GetMessageDescriptorLC()
     CleanupStack::Pop( message );
     CleanupStack::PopAndDestroy( 2, type );
     CleanupStack::PushL( message );    
-   
-    return message;
-    */
-    return NULL;
+
+    return message;    
     }
 
 // -----------------------------------------------------------------------------
@@ -395,7 +392,6 @@ HBufC* CCUIDetailsDialog::GetMessageDescriptorLC()
 //
 void CCUIDetailsDialog::AddCertificatesLC( HBufC*& aMessage )
     {
-    /*
     HBufC* certHeading = StringLoader::LoadLC( R_SWCOMMON_DETAIL_CERTIFICATES );
     HBufC* certificateLink = LoadLinkLC( R_SWCOMMON_DETAIL_VALUE_VIEW_CERT );
     HBufC* newString = HBufC::NewL( certHeading->Length() + 
@@ -415,7 +411,6 @@ void CCUIDetailsDialog::AddCertificatesLC( HBufC*& aMessage )
   
     aMessage = newString;
     CleanupStack::PushL( aMessage ); 
-    */
     }
 
 // -----------------------------------------------------------------------------
@@ -426,7 +421,6 @@ void CCUIDetailsDialog::AddCertificatesLC( HBufC*& aMessage )
 //
 void CCUIDetailsDialog::AddDrmLC( HBufC*& aMessage )
     {
-    /*
     HBufC* drmHeading = StringLoader::LoadLC( R_SWCOMMON_DETAIL_DRM );
     HBufC* drmLink = LoadLinkLC( R_SWCOMMON_DETAIL_VALUE_VIEW_DRM );
     HBufC* newString = HBufC::NewL( drmHeading->Length() + 
@@ -446,7 +440,6 @@ void CCUIDetailsDialog::AddDrmLC( HBufC*& aMessage )
   
     aMessage = newString;
     CleanupStack::PushL( aMessage ); 
-    */
     }
 
 // -----------------------------------------------------------------------------
@@ -485,7 +478,6 @@ TInt CCUIDetailsDialog::ShowDrm( TAny* ptr )
 //
 void CCUIDetailsDialog::DoShowCertificatesL()
     {
-    /*
     if ( iCommonCertificates.Count() > 1 )
         {
         CDesCArrayFlat *itemArray = new( ELeave ) CDesCArrayFlat( 2 );
@@ -528,8 +520,7 @@ void CCUIDetailsDialog::DoShowCertificatesL()
             CCUICertificateDetailsDialog::NewL();
                 
         certDlg->ExecuteLD( *( iCommonCertificates[0] ) );    
-        }  
-    */      
+        }    
     }
 
 // -----------------------------------------------------------------------------
@@ -540,9 +531,9 @@ void CCUIDetailsDialog::DoShowCertificatesL()
 //
 void CCUIDetailsDialog::DoShowDrmL()
     {
-    CDRMHelper* helper = CDRMHelper::NewLC( *iCoeEnv );
-    helper->LaunchDetailsViewEmbeddedL( iFile );   
-    CleanupStack::PopAndDestroy( helper );    
+    DRM::CDrmUiHandling *drmUiHandler = DRM::CDrmUiHandling::NewLC();
+    drmUiHandler->ShowDetailsViewL( iFile );
+    CleanupStack::PopAndDestroy( drmUiHandler );
     }
 
 // -----------------------------------------------------------------------------
@@ -553,7 +544,6 @@ void CCUIDetailsDialog::DoShowDrmL()
 //
 HBufC* CCUIDetailsDialog::LoadLinkLC( TInt aResourceId )
     {
-    /*
     HBufC* link = StringLoader::LoadLC( aResourceId );
     HBufC* tmp = link->ReAllocL( link->Length() + KLinkTagOpen().Length() + KLinkTagClose().Length() );
     
@@ -564,9 +554,7 @@ HBufC* CCUIDetailsDialog::LoadLinkLC( TInt aResourceId )
     link->Des().Insert(0, KLinkTagOpen);
     link->Des().Append( KLinkTagClose );   
 
-    return link;   
-    */ 
-    return NULL;
+    return link;    
     }
 
 //  End of File  

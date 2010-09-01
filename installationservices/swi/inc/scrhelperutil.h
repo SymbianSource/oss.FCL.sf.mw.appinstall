@@ -132,9 +132,6 @@ namespace ScrHelperUtil
 	HBufC8* GetLogInfoLC(const Usif::RSoftwareComponentRegistry& aScrSession, TInt aMaxLogEntries);
 	
 	void WriteToScrL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId, CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
-	void AddApplicationEntryL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId, const Usif::CApplicationRegistrationData& aApplicationRegistrationData);
-	void DeleteApplicationEntriesL(Usif::RSoftwareComponentRegistry& aScrSession, Usif::TComponentId& aCompId);
-	void DeleteApplicationEntryL(Usif::RSoftwareComponentRegistry& aScrSession, const TUid& aAppUId);
 	
 	} // End of name space ScrHelperUtil
 	

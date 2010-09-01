@@ -22,8 +22,6 @@ Decide what to do with Copyrighted Nokia code */
 
 #include "ObjectExchangeClient.h"
 #include "ObjectExchangeServiceSearcher.h"
-
-#include "obexconstantsinternal.h"
 #include "BTObjectExchange.pan"
 
 #include <e32svr.h>

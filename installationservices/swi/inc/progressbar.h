@@ -30,7 +30,7 @@ namespace Swi
 	/// How many increments to update the bar on the uninstall of a file
 	const static TInt KProgressBarUninstallAmount=1;
 	
-	/// How many bytes to copy before updating the progress bar by one increment
+	/// How many bytes to copy before updating the progress bar by one increment.
 	const static TInt KProgressBarInstallChunkSize=1048576;  //1MB
 
 	/// The extra increment we add onto the end to make there always be some progress.

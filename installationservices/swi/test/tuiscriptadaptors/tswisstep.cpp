@@ -907,10 +907,6 @@ CSwisInstallStep::CSwisInstallStep(TInstallType aInstallType, TBool aDoCancelTes
 		case EUseFileName:
 			SetTestStepName(KSwisInstallStep);
 			break;
-			
-		case ECheckInstallPerformance:
-		    SetTestStepName(KSwisInstallPerformanceStep);
-		    break;
 		
 		case EUseCAF:
 			SetTestStepName(KSwisInstallCAFStep);
@@ -1216,13 +1212,6 @@ TVerdict CSwisInstallStep::doTestStepL()
 	return TestStepResult();
 	}
 
-void CSwisInstallStep::PrintPerformanceLog(TTime aTime)
-    {
-    _LIT(KPerformanceTestInfo, "PERFORMANCE_LOG_INFORMATION");
-    TDateTime timer = aTime.DateTime();
-    INFO_PRINTF6(_L("%S,%d:%d:%d:%d"), &KPerformanceTestInfo(), timer.Hour(), timer.Minute(), timer.Second(), timer.MicroSecond());
-    }
-
 TInt CSwisInstallStep::DoInstallL(CInstallPrefs& aInstallPrefs)
 	{
 	switch (iInstallType)
@@ -1237,51 +1226,6 @@ TInt CSwisInstallStep::DoInstallL(CInstallPrefs& aInstallPrefs)
 			return error;
 			}
 
-		case ECheckInstallPerformance:
-		    {
-		    _LIT(KMaxDurationName, "MaxDuration");
-            _LIT(KMaxTestCaseDuration, "TEST_CASE_MAXIMUM_ALLOWED_DURATION");
-            _LIT(KActualTestCaseDuration, "TEST_CASE_ACTUAL_DURATION");
-            
-            TInt maxDuration = 0;
-            if(!GetIntFromConfig(ConfigSection(), KMaxDurationName, maxDuration))
-                {
-                ERR_PRINTF2(_L("%S could not be found in configuration."), &KMaxDurationName());
-                User::Leave(KErrNotFound);
-                }
-            
-		    TInt error;
-		    TTime startTime, endTime;
-		    startTime.HomeTime(); // Set the start time
-		    PrintPerformanceLog(startTime);
-		    
-            if (iUseDeviceLanguages)
-                error = Launcher::Install(*iUi, iSisFileName, aInstallPrefs, iDeviceLanguages);
-            else
-                error = Launcher::Install(*iUi, iSisFileName, aInstallPrefs);
-            
-            // Calculate the time taken for installation in milliseconds
-            endTime.HomeTime();
-            PrintPerformanceLog(endTime);            
-            TTimeIntervalMicroSeconds duration = endTime.MicroSecondsFrom(startTime);
-            TInt actualDuration = I64INT(duration.Int64())/1000;
-            
-            INFO_PRINTF3(_L("%S,%d"), &KMaxTestCaseDuration(), maxDuration);
-            INFO_PRINTF3(_L("%S,%d"), &KActualTestCaseDuration(), actualDuration);
-                        
-            if(actualDuration <= maxDuration)
-                {
-                INFO_PRINTF2(_L("This test meets performance requirement (Duration=%d)."), actualDuration);
-                }
-            else
-                {
-                ERR_PRINTF2(_L("This test does not meet performance requirement (Duration=%d)."), actualDuration);
-                error = KErrGeneral;
-                SetTestStepResult(EFail);
-                }
-                
-            return error;
-		    }
 
 		case EUseOpenFileName:
 		// open the file as a shared for readers only
@@ -2079,13 +2023,11 @@ CSwisMmcStep::CSwisMmcStep(TMmcOperation aOperation)
 
 CSwisMmcStep::~CSwisMmcStep()
 	{
-	#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	#ifndef SWI_TEXTSHELL_ROM
 	if (iBootMode != KTextShell)
 		{
 		delete iSwiSidChecker;
 		}
-	#endif
 	#endif
 	}
 
@@ -2093,7 +2035,6 @@ TVerdict CSwisMmcStep::doTestStepPreambleL()
 	{
 	// Get the System Startup Mode
 	User::LeaveIfError(RProperty::Get(KUidSystemCategory, KSystemStartupModeKey, iBootMode));
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
 #ifndef SWI_TEXTSHELL_ROM
 	if (iBootMode != KTextShell)
 		{
@@ -2109,9 +2050,6 @@ TVerdict CSwisMmcStep::doTestStepPreambleL()
 #else
 	// Since in Textshell ROM SSCForStartupMode1_target.rsc was replaces as SSCForStartupMode0.rsc
 	// we always get the boot mode as 0 , reset the value to 1.
-	iBootMode = KTextShell;
-#endif
-#else
 	iBootMode = KTextShell;
 #endif
 
@@ -2404,7 +2342,6 @@ TVerdict CSwisMmcStep::doTestStepL()
 						}
 			
 					TInt presentMatchingDrives = 0;
-					#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 					for(TInt drive=EDriveA; drive<=EDriveZ; ++drive)
 						{
 							if(iSwiSidChecker->AppRegisteredAt(sid, drive))
@@ -2414,7 +2351,7 @@ TVerdict CSwisMmcStep::doTestStepL()
 								INFO_PRINTF2(_L("AppRegisteredAt returned true for drive: %d"), drive);
 								}  
 						}
-					#endif
+			
 					if(presentMatchingDrives != expectMatchingDrives)
 						{
 						WARN_PRINTF4(_L("Matching drives mismatch for exe, SID = 0x%x - expected %d got %d"), 
@@ -3019,7 +2956,6 @@ TVerdict CCheckScrCompPropertyStep::doTestStepL()
 // to duplicate it here so we can load the apparc plugin to be able to test it.
 //
 //const TUid KAppSidCheckerInterfaceUid = {0x10281FBB};
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #ifndef SWI_TEXTSHELL_ROM
 const TUid KAppSidCheckerInterfaceUidv2 = {0x20007D8C};
 
@@ -3037,7 +2973,7 @@ CAppSidChecker* CAppSidChecker::CheckerForAppType(TUid aAppTypeUid)
 	return reinterpret_cast<CAppSidChecker*>(ptr);
 	}
 #endif
-#endif
+
 /////
 //Step to Set RemoveWithLastDependent property
 /////

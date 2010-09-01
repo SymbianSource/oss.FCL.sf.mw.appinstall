@@ -23,8 +23,8 @@ NAME COUI
 #include <avkon.rh>
 #include <avkon.mbg>
 #include <avkon.loc>
-//#include <CommonDialogs.hrh> 
-//#include <CommonDialogs.rh> 
+#include <CommonDialogs.hrh> 
+#include <CommonDialogs.rh> 
 
 #include <appinstui.loc>
 
@@ -237,13 +237,11 @@ RESOURCE DIALOG r_swcommon_details_dialog
 //    Defines a memory selection dialog
 //
 //------------------------------------------------------------------------------
-/*
 RESOURCE MEMORYSELECTIONDIALOG r_swcommon_memory_selection_dialog
     {
     softkey_1 = text_softkey_select;
     softkey_2 = text_softkey_cancel;
     }
-*/
 
 //------------------------------------------------------------------------------
 //

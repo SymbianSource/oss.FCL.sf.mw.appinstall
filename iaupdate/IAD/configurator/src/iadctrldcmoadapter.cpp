@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). 
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). 
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -17,6 +17,8 @@
 
 #include <featmgr.h>
 #include <featurecontrol.h>
+#include <iadctrl.rsg>
+#include <stringresourcereader.h> 
 #include <f32file.h> 
 #include <data_caging_path_literals.hrh>
 #include "iadctrldcmoadapter.h"
@@ -211,15 +213,15 @@ TDCMOStatus CiadCtrlDCMOAdapter::SetDCMOPluginStrAttributeValueL( TDCMONode /*aI
 // CiadCtrlDCMOAdapter::GetLocalizedNameL
 // Returns the localized name of IAD plug-in Adapter.
 // ----------------------------------------------------------------------------------------
-void CiadCtrlDCMOAdapter::GetLocalizedNameL( HBufC*& /*aLocName*/ )
+void CiadCtrlDCMOAdapter::GetLocalizedNameL( HBufC*& aLocName )
 {
 	TFileName myFileName;
     TParse parseObj;
     parseObj.Set( KRuntimeResourceFileName(), &KDC_RESOURCE_FILES_DIR,NULL );
     myFileName = parseObj.FullName();
-/*	CStringResourceReader* test = CStringResourceReader::NewLC( myFileName );
+	CStringResourceReader* test = CStringResourceReader::NewLC( myFileName );
 	TPtrC buf;
 	buf.Set(test->ReadResourceString( R_SWUPDATE_CONFIGURING_TITLE ) ); 
 	aLocName = buf.AllocL() ; 
-	CleanupStack::PopAndDestroy( test );*/
+	CleanupStack::PopAndDestroy( test );
 }

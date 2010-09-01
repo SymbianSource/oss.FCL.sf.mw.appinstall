@@ -32,6 +32,7 @@
 #include "sisregistryobject.h"
 #include "logger.h"
 #include "version.h"
+#include "is_utils.h"
 
 // ExpressionResult
 using namespace Utils;
@@ -360,7 +361,7 @@ bool ExpressionEnvironment::FindFile( const std::wstring& aFileName, bool aLogIn
 		std::ostringstream stream;
 		stream << "\tIF EXISTS(\'" << narrowFileName << "\') => " << fileExists;
 		std::string msg = stream.str();
-    std::wstring finalMessage = string2wstring( msg );
+		std::wstring finalMessage = string2wstring( msg );
 		LINFO( finalMessage );
 		}
     //
@@ -425,7 +426,7 @@ int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
 					std::ostringstream stream;
 					stream << "Input language " << result << " is not supported by SIS file. Using first language " <<firstLanguage;
 					std::string msg = stream.str();
-				std::wstring finalMessage = string2wstring( msg );
+					std::wstring finalMessage = string2wstring( msg );
 					LWARN( finalMessage );	
 					}
 				result = firstLanguage;
@@ -436,7 +437,7 @@ int ExpressionEnvironment::Variable( int aVariableId, bool aLogInfo )
 			std::ostringstream stream;
 			stream << "\tIF " << attributeName << " ... where [" << attributeName << " = " << result << "]";
 			std::string msg = stream.str();
-        std::wstring finalMessage = string2wstring( msg );
+			std::wstring finalMessage = string2wstring( msg );
 			LINFO( finalMessage );
 			}
         }

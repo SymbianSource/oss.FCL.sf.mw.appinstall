@@ -19,7 +19,7 @@
 #include "appmngr2infobase.h"           // CAppMngr2InfoBase
 #include "appmngr2runtime.h"            // CAppMngr2Runtime
 #include "appmngr2common.hrh"           // Default icon indexes
-//#include <appmngr2.rsg>                 // Resource IDs
+#include <appmngr2.rsg>                 // Resource IDs
 #include <AknUtils.h>                   // DisplayTextLanguageSpecificNumberConversion
 #include <StringLoader.h>               // StringLoader
 #include <barsread.h>                   // TResourceReader
@@ -165,26 +165,17 @@ EXPORT_C HBufC* CAppMngr2InfoBase::SizeStringWithUnitsL( TInt64 aSizeInBytes )
     if( aSizeInBytes <= KMegaByte )
         {
         TInt kiloBytes = DivideAndReturnRoundedInt( aSizeInBytes, KKiloByte );
-        // Temporary fix until appmngr2pluginapi is removed
-        // dispString = StringLoader::LoadLC( R_SWINS_UNIT_KILOBYTE, kiloBytes );
-        _LIT( KKiloByte, "%N kB" );
-        dispString = KKiloByte().AllocLC();
+        dispString = StringLoader::LoadLC( R_SWINS_UNIT_KILOBYTE, kiloBytes );
         }
     else if( aSizeInBytes <= KGigaByte )
         {
         TInt megaBytes = DivideAndReturnRoundedInt( aSizeInBytes, KMegaByte );
-        // Temporary fix until appmngr2pluginapi is removed
-        // dispString = StringLoader::LoadLC( R_SWINS_UNIT_MEGABYTE, megaBytes );
-        _LIT( KMegaByte, "%N MB" );
-        dispString = KMegaByte().AllocLC();
+        dispString = StringLoader::LoadLC( R_SWINS_UNIT_MEGABYTE, megaBytes );
         }
     else // aSizeInBytes > KGigaByte
         {
         TInt gigaBytes = DivideAndReturnRoundedInt( aSizeInBytes, KGigaByte );
-        // Temporary fix until appmngr2pluginapi is removed
-        // dispString = StringLoader::LoadLC( R_SWINS_UNIT_GIGABYTE, gigaBytes );
-        _LIT( KGigaByte, "%N GB" );
-        dispString = KGigaByte().AllocLC();
+        dispString = StringLoader::LoadLC( R_SWINS_UNIT_GIGABYTE, gigaBytes );
         }
     
     TPtr ptr = dispString->Des();

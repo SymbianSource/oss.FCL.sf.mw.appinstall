@@ -33,7 +33,6 @@
 
 namespace Swi
 {
-
 /**
  * Static class containing Security Manager's utility functions
  * @released

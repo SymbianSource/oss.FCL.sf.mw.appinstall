@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -74,28 +74,6 @@ namespace DbConstants
 	extern std::wstring	CompWildCardFileCount;
 	extern std::wstring	CompSidFileName;
 
-	// file description - Registration File Properties
-	extern std::wstring	CompAppFile;
-	extern std::wstring	CompAppUid;
-	extern std::wstring CompTypeId;
-	extern std::wstring	CompAttributes;
-	extern std::wstring	CompHidden;
-	extern std::wstring	CompEmbeddable;
-	extern std::wstring	CompNewfile;
-	extern std::wstring	CompLaunch;
-	extern std::wstring	CompDefaultScreenNumber;
-	extern std::wstring	CompOpaqueData;
-
-	// file description - Localization File Properties
-	extern std::wstring	CompShortCaption;
-	extern std::wstring	CompCaption;
-	extern std::wstring	CompNumberOfIcons;
-	extern std::wstring	CompLocale;
-	extern std::wstring	CompIconFile;
-	extern std::wstring	CompGroupName;
-	extern std::wstring	CompUID;
-	extern std::wstring	CompScreenMode;
-	
 	// inROM
 	extern std::wstring	CompInRom;
 	extern std::wstring	CompIsSigned;

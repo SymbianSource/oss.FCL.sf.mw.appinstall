@@ -6,17 +6,15 @@
 		<localizedName language="31">testSwTypeLoc31</localizedName>
 		<mimeType>text/sif-testpkg</mimeType>
 		<sifPluginUid>102866EF</sifPluginUid>
-		<CustomAcess SecureId="10285BCB" AccessMode="1"/>
-		<CustomAcess SecureId="80285DE0" AccessMode="1"/>
-		<launcherExecutable>testExeinvalid3a</launcherExecutable>
+		<installerSecureId>10285BCB</installerSecureId>
+		<executionLayerSecureId>80285DE0</executionLayerSecureId>
 	</softwareType>
 	<softwareType name="testSoftwareType">
 		<localizedName language="15">testSwTypeLoc15</localizedName>
 		<localizedName language="31">testSwTypeLoc31</localizedName>
 		<mimeType>text/sif-testpkg2</mimeType>
 		<sifPluginUid>C02866EF</sifPluginUid>
-		<CustomAcess SecureId="C0285BCB" AccessMode="1"/>
-		<CustomAcess SecureId="C0285DE0" AccessMode="1"/>
-		<launcherExecutable>testExeinvalid3b</launcherExecutable>
+		<installerSecureId>C0285BCB</installerSecureId>
+		<executionLayerSecureId>C0285DE0</executionLayerSecureId>
 	</softwareType>
 </LayeredExecutionEnvironments>

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -28,7 +28,7 @@
 
 #include "utils.h"
 #include <wchar.h>
-#include "utf8_wrapper.h"
+#include "utf8.h"
 #include "utility_interface.h"
 
 #define TMP_FILE_STUB	L"~si"

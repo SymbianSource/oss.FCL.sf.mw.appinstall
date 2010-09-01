@@ -2745,28 +2745,6 @@ call interpretsis -z .\romdrive -c .\cdrive -x 0x81111105 -w info -l \epoc32\win
 if not %errorlevel%==0 GOTO LAST
 GOTO PASS_CLEAN
 
-:TestElseIF
-call makesis \epoc32\winscw\c\tswi\tinterpretsisinteg\testelseifdata\testelseif.pkg \epoc32\winscw\c\tswi\tinterpretsisinteg\sisfiles\testelseif.sis > NUL
-call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/testelseif.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness_db.txt 
-if not %errorlevel%==0 GOTO LAST
-
-set exist_file=.\cdrive\data\First_first.txt
-if exist %exist_file% GOTO FAIL_FOUND
-
-set exist_file=.\cdrive\data\First_second.txt
-if exist %exist_file% GOTO FAIL_FOUND
-
-set exist_file=.\cdrive\data\First_third.txt
-if exist %exist_file% GOTO FAIL_FOUND
-
-set exist_file=.\cdrive\data\First_fifth.txt
-if exist %exist_file% GOTO FAIL_FOUND
-
-set exist_file=.\cdrive\data\First_fourth.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-
 REM Tests for native registry > NUL
 
 :PASS_CLEAN

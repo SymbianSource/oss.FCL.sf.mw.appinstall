@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -22,17 +22,13 @@
 
 // INCLUDES
 #include <e32base.h>
-#include "iaupdatedialogobserver.h"
 
-class HbAction;
-class IAUpdateDialogUtil;
 // CLASS DECLARATION
 /**
 *
 */
 
-class CIAUpdateAutomaticCheck : public CBase,
-                                public IAUpdateDialogObserver
+class CIAUpdateAutomaticCheck : public CBase
     {
 public:
 
@@ -63,7 +59,7 @@ public: // new functions
     * @return True value if automatic update connections are allowed, EFalse if not allowed.
     *         Returns always true if this function is called after first time
     */
-    void AcceptAutomaticCheckL();
+    TBool AcceptAutomaticCheckL();
     
     TBool AutoUpdateCheckEnabledL();
         
@@ -83,15 +79,10 @@ private:
     * Enables automatic updates cheks
     */
     void EnableAutoUpdateCheckL( TBool aEnable );
-
-private: // From IAUpdateDialogObserver     
-         
-     void dialogFinished(HbAction *action);       
     
         
 private: //data
-    IAUpdateDialogUtil *mDialogUtil;
-    HbAction *mPrimaryAction;
+    
     };
 
 

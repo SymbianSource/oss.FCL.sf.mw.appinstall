@@ -20,6 +20,7 @@
 #include "appmngr2infobase.h"           // CAppMngr2InfoBase
 #include <badesca.h>                    // CDesC8Array
 #include <StringLoader.h>               // StringLoader
+#include <appmngr2.rsg>                 // Resource IDs
 #include <SWInstCommonUI.rsg>           // Resource IDs
 
 const TInt KGranularity = 8;

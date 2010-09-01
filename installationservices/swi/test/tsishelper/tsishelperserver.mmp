@@ -48,8 +48,5 @@ LIBRARY			efsrv.lib
 LIBRARY			testexecutelogclient.lib
 LIBRARY			sishelper.lib
 LIBRARY			flogger.lib
-LIBRARY 		estor.lib
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-LIBRARY scrclient.lib
-#endif
+LIBRARY 			estor.lib
 SMPSAFE

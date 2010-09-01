@@ -15,6 +15,7 @@
 //
 
 LOAD_SUITE tdaemon
+LOAD_SUITE tuiscriptadaptors
 //! @file
 //! @SYMTestCaseID 		API-SEC-TDAEMON-0001
 //! @SYMTestStatus 		3. Released
@@ -25,3 +26,5 @@ RUN_TEST_STEP 100 tdaemon DriveWatcherStep z:\tswi\tdaemon\scripts\tdaemon.ini D
 RUN_TEST_STEP 100 tdaemon DaemonStep z:\tswi\tdaemon\scripts\tdaemon.ini Daemon
 
 END_TESTCASE API-SEC-TDAEMON-0001
+
+

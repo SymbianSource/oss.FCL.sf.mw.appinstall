@@ -25,10 +25,7 @@
 
 #include <e32base.h>
 #include "sislauncherserver.h"
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK  
-#include <usif/scr/appregentries.h>
-#include "nativecomponentinfo.h"
-#endif
+
 namespace Swi
 {
 class CSisRegistryFileDescription;
@@ -53,8 +50,6 @@ private:
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	void ParseSwTypeRegFileL(const RMessage2& aMessage);
-    TInt AsyncParseResourceFileSizeL(const RMessage2& aMessage);
-    void AsyncParseResourceFileDataL(const RMessage2& aMessage);    
 #endif
 
 #ifndef SWI_TEXTSHELL_ROM
@@ -62,7 +57,6 @@ private:
 	void RegisterSifLauncherMimeTypesL(const RMessage2& aMessage);
 	void UnregisterSifLauncherMimeTypesL(const RMessage2& aMessage);
 	void RegisterSifLauncherMimeTypesImplL(const RMessage2& aMessage, TBool aRegister);
-	void NotifyApparcForAppsL(const RMessage2& aMessage);
 #endif
 #endif
 	void DoRunExecutableL(const RMessage2& aMessage);
@@ -75,10 +69,6 @@ private:
 private:
 	RMessagePtr2 iReceiveMsg;
 	TInt iReceiveLen;
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
-    Usif::CApplicationRegistrationData* iCurrentAppRegData;
-    TBool iInAsyncParseResourceFile;
-#endif
 
 	};
 

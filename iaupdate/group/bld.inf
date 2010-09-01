@@ -11,11 +11,9 @@
 *
 * Contributors:
 *
-* Description:    Build information file for SWUpdate Client 
+* Description:    Build information file for IA Update Client and NCD engine
 *
 */
-
-#ifdef FF_IAUPDATE
 
 #include <platform_paths.hrh>
 
@@ -31,13 +29,6 @@ PRJ_MMPFILES
 #include "../help/group/bld.inf"
 
 PRJ_EXPORTS
-// backup registration
-backup_registration.xml        /epoc32/release/winscw/udeb/z/private/2000F85A/backup_registration.xml
-backup_registration.xml        /epoc32/release/winscw/urel/z/private/2000F85A/backup_registration.xml
-backup_registration.xml        /epoc32/data/z/private/2000F85A/backup_registration.xml
-
-// ROM sis stubs
-
 ../rom/iaupdate_stub.SIS     /epoc32/data/z/system/install/iaupdate_stub.sis
 ../rom/iaupdater_stub.SIS    /epoc32/data/z/system/install/iaupdater_stub.sis
 
@@ -45,6 +36,5 @@ backup_registration.xml        /epoc32/data/z/private/2000F85A/backup_registrati
 ../rom/iaupdate.iby            CORE_MW_LAYER_IBY_EXPORT_PATH( iaupdate.iby )
 ../rom/iaupdateresources.iby   LANGUAGE_MW_LAYER_IBY_EXPORT_PATH( iaupdateresources.iby )
 
-#endif //FF_IAUPDATE
 
 

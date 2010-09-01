@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -33,11 +33,9 @@ namespace
 	_LIT8(KNodeLocalizedName, "localizedName");
 	_LIT8(KNodeMimeType, "mimeType");
 	_LIT8(KNodeSifPluginUid, "sifPluginUid");
-    _LIT8(KNodeCustomAcess, "CustomAcess");
-    _LIT8(KNodeSecureId, "SecureId");
-    _LIT8(KNodeAccessMode, "AccessMode");
-    _LIT8(KNodeLauncherExecutable, "launcherExecutable");
-    
+	_LIT8(KNodeInstallerSecureId, "installerSecureId");
+	_LIT8(KNodeExecutionLayerSecureId, "executionLayerSecureId");
+	
 	_LIT8(KAttrSoftwareTypeName, "name");
 	_LIT8(KAttrLanguage, "language");
 
@@ -120,7 +118,7 @@ CSoftwareTypeRegInfoParser::~CSoftwareTypeRegInfoParser()
 	iNodes.Close();
 	}
 
-void CSoftwareTypeRegInfoParser::ParseL(const TDesC8& aDocument, RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray)
+void CSoftwareTypeRegInfoParser::ParseL(const TDesC8& aDocument, RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray)
 	{
 	iSwTypeRegInfoArray = &aSwTypeRegInfoArray;
 	
@@ -177,7 +175,7 @@ void CSoftwareTypeRegInfoParser::OnStartElementL(const Xml::RTagInfo& aElement, 
 			{
 			PushNodeL(ENodeSoftwareType, ENodeSoftwareTypeRegistrationData);
 			HBufC* softwareTypeName = AttributeLC(aAttributes, KAttrSoftwareTypeName);
-			Usif::CSoftwareTypeRegInfo* regInfo = Usif::CSoftwareTypeRegInfo::NewL(*softwareTypeName);
+			CSoftwareTypeRegInfo* regInfo = CSoftwareTypeRegInfo::NewL(*softwareTypeName);
 			CleanupStack::PushL(regInfo);
 			iSwTypeRegInfoArray->AppendL(regInfo);
 			CleanupStack::Pop();
@@ -204,28 +202,16 @@ void CSoftwareTypeRegInfoParser::OnStartElementL(const Xml::RTagInfo& aElement, 
 			ASSERT(iSwTypeRegInfoArray->Count() > 0);
 			PushNodeL(ENodeSifPluginUid, ENodeSoftwareType);
 			break;
-			
-		case ENodeCustomAccess:
-		    {
-		    ASSERT(iSwTypeRegInfoArray->Count() > 0);
-		    PushNodeL(ENodeCustomAccess, ENodeSoftwareType);
-		    HBufC* secureId = AttributeLC(aAttributes, KNodeSecureId);
-		    secureId->Des().TrimAll();
-		    iSecureId = TUid::Uid(Str2IntL(*secureId, EHex));
-		    CleanupStack::PopAndDestroy(secureId);
-		    
-		    HBufC* accessMode = AttributeLC(aAttributes, KNodeAccessMode);
-		    iAccessMode = static_cast<TInt>(Str2IntL(*accessMode));
-		    CleanupStack::PopAndDestroy(accessMode);
-		    }
-		    break;
-		   
-		case ENodeLauncherExecutable:
-		    {
-		    ASSERT(iSwTypeRegInfoArray->Count() > 0);
-		    PushNodeL(ENodeLauncherExecutable, ENodeSoftwareType);
-		    }
-		    break;
+		
+		case ENodeInstallerSecureId:
+			ASSERT(iSwTypeRegInfoArray->Count() > 0);
+			PushNodeL(ENodeInstallerSecureId, ENodeSoftwareType);
+			break;
+		
+		case ENodeExecutionLayerSecureId:
+			ASSERT(iSwTypeRegInfoArray->Count() > 0);
+			PushNodeL(ENodeExecutionLayerSecureId, ENodeSoftwareType);
+			break;
 
 		default:
 			User::Leave(KErrInvalidSoftwareTypeRegistrationFile);
@@ -251,13 +237,13 @@ void CSoftwareTypeRegInfoParser::OnEndElementL(const Xml::RTagInfo& aElement, TI
 		}
 	iNodes.Remove(lastIdx);
 
-	RPointerArray<Usif::CSoftwareTypeRegInfo>& infoArray = *iSwTypeRegInfoArray;
+	RPointerArray<CSoftwareTypeRegInfo>& infoArray = *iSwTypeRegInfoArray;
 	switch (node)
 		{
 		case ENodeLocalizedName:
 			{
 			ASSERT(iSwTypeRegInfoArray->Count() > 0);
-			Usif::CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
+			CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
 			HBufC* name = ConvertBufferTo16bitL(*iContentChunks);
 			CleanupStack::PushL(name);
 			name->Des().TrimAll();
@@ -269,7 +255,7 @@ void CSoftwareTypeRegInfoParser::OnEndElementL(const Xml::RTagInfo& aElement, TI
 		case ENodeMimeType:
 			{
 			ASSERT(iSwTypeRegInfoArray->Count() > 0);
-			Usif::CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
+			CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
 			HBufC* mimeType = ConvertBufferTo16bitL(*iContentChunks);
 			CleanupStack::PushL(mimeType);
 			mimeType->Des().TrimAll();
@@ -282,31 +268,28 @@ void CSoftwareTypeRegInfoParser::OnEndElementL(const Xml::RTagInfo& aElement, TI
 			{
 			ASSERT(iSwTypeRegInfoArray->Count() > 0);
 			iContentChunks->Des().TrimAll();
-			Usif::CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
+			CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
 			regInfo.SetSifPluginUid(Str2UidL(*iContentChunks));
 			}
 			break;
-
-		case ENodeCustomAccess:
-		    {
-		    ASSERT(iSwTypeRegInfoArray->Count() > 0);
-		    iContentChunks->Des().TrimAll();
-		    Usif::CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
-		    regInfo.SetCustomAccessL(iSecureId, static_cast<Usif::TAccessMode>(iAccessMode));
-		    }
-		    break;
-		    
-		case ENodeLauncherExecutable:
-		    {
-		    ASSERT(iSwTypeRegInfoArray->Count() > 0);
-		    Usif::CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
-		    HBufC* launcherExecutable = ConvertBufferTo16bitL(*iContentChunks);
-		    CleanupStack::PushL(launcherExecutable);
-		    launcherExecutable->Des().TrimAll();
-		    regInfo.SetLauncherExecutableL(*launcherExecutable);
-		    CleanupStack::PopAndDestroy(launcherExecutable);        
-		    }
-		    break;
+		
+		case ENodeInstallerSecureId:
+			{
+			ASSERT(iSwTypeRegInfoArray->Count() > 0);
+			iContentChunks->Des().TrimAll();
+			CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
+			regInfo.SetInstallerSecureId(Str2UidL(*iContentChunks));
+			}
+			break;
+		
+		case ENodeExecutionLayerSecureId:
+			{
+			ASSERT(iSwTypeRegInfoArray->Count() > 0);
+			iContentChunks->Des().TrimAll();
+			CSoftwareTypeRegInfo& regInfo = *infoArray[infoArray.Count()-1];
+			regInfo.SetExecutionLayerSecureId(Str2UidL(*iContentChunks));
+			}
+			break;
 		}
 	
 	if (iContentChunks != NULL)
@@ -329,8 +312,8 @@ void CSoftwareTypeRegInfoParser::OnContentL(const TDesC8& aBytes, TInt aErrorCod
 		case ENodeLocalizedName:
 		case ENodeMimeType:
 		case ENodeSifPluginUid:
-		case ENodeCustomAccess:  
-		case ENodeLauncherExecutable:
+		case ENodeInstallerSecureId:
+		case ENodeExecutionLayerSecureId:
 			AddContentChunkL(aBytes);
 			break;
 
@@ -387,6 +370,14 @@ CSoftwareTypeRegInfoParser::TXmlNode CSoftwareTypeRegInfoParser::ElementNameToNo
 		{
 		return ENodeSifPluginUid;
 		}
+	else if (aName == KNodeInstallerSecureId)
+		{
+		return ENodeInstallerSecureId;
+		}
+	else if (aName == KNodeExecutionLayerSecureId)
+		{
+		return ENodeExecutionLayerSecureId;
+		}
 	else if (aName == KNodeSoftwareType)
 		{
 		return ENodeSoftwareType;
@@ -395,14 +386,6 @@ CSoftwareTypeRegInfoParser::TXmlNode CSoftwareTypeRegInfoParser::ElementNameToNo
 		{
 		return ENodeSoftwareTypeRegistrationData;
 		}
-	else if (aName == KNodeCustomAcess)
-	    {
-	    return ENodeCustomAccess;
-	    }
-	else if (aName == KNodeLauncherExecutable)
-	    {
-	    return ENodeLauncherExecutable;
-	    }
 	else
 		{
 		return ENodeNone;

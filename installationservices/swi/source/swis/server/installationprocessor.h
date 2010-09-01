@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -34,9 +34,6 @@
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include "registrywrapper.h"
-#include "appregextractor.h"
-#include <swi/sisregistrypackage.h>
-#include <swi/sisregistryentry.h>
 #else
 #include "sisregistrywritablesession.h"
 #endif
@@ -56,9 +53,7 @@ class CPlan;
 class CFileExtractor;
 class CSidCache;
 class MSisDataProvider;
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-class CAppRegFileData;
-#endif
+
 /**
  * This class processes a CApplication created by the installation planner
  * @released
@@ -276,14 +271,6 @@ private:
 	virtual TBool DoStateVerifyPathsL();
 	virtual TBool DoStateInstallFilesL();
 	virtual TBool DoStateDisplayFilesL();
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-	virtual TBool DoParseApplicationRegistrationFilesL();
-	TBool ParseRegistrationResourceFileL(const TDesC& aTargetFileName);
-	TBool GetComponentIdL(const Usif::RSoftwareComponentRegistry& aScrSession, const TUid& aPackageUid, const TInt aPackageIndex, Usif::TComponentId& aComponentId);	
-	void AddAppArcRegResourceFilesL();
-	void AddAppArcRegResourceFilesForRegEntryL( RSisRegistryEntry& aEntry);
-	TInt UserSelectedLanguageIndexL(const CApplication& aApplication) const;
-#endif	
 	virtual TBool DoStateUpdateRegistryL();
 	virtual TBool DoStateProcessFilesL();
 	virtual TBool DoStateProcessSkipFilesL();
@@ -319,7 +306,6 @@ private:
 
 	/// @return true if aFilename is an Apparc registration file 
 	bool FileIsApparcReg(const TDesC& aFilename) const;
-	
 private:
 	/// Security Manager provided by SWIS
 	CSecurityManager& iSecurityManager;
@@ -348,7 +334,7 @@ private:
 	 * running an exe.
 	 */
 	RPointerArray<TDesC> iApparcRegFiles;
-    
+	
 	RLoader iLoader;
 	
 	/**
@@ -359,33 +345,10 @@ private:
 	
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	/** The list of the software types to be registered read from the XML registration file. */
-	RCPointerArray<Usif::CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
-	RPointerArray<Usif::CApplicationRegistrationData> iApparcRegFileData;
-   /**
-     * The list of Apparc registration files to parse to populate SCR
-     */ 
-    RPointerArray<CAppRegFileData> iApparcRegFilesForParsing;
-    
-    CAppRegExtractor *iAppRegExtractor;  
-        
+	RCPointerArray<CSoftwareTypeRegInfo> iSoftwareTypeRegInfoArray;
 #endif
 	};
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-class CAppRegFileData:public CBase
-    {
-public:
-    static CAppRegFileData* NewLC(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage); 
-    static CAppRegFileData* NewL(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage);
-    TDesC& GetAppRegFile();
-    CSisRegistryPackage& GetSisRegistryPackage();
-    ~CAppRegFileData();
-private:
-    CAppRegFileData();
-    void ConstructL(const TDesC& aAppRegFile, const CSisRegistryPackage& aSisRegistryPackage);
-    HBufC *iAppRegFile;
-    CSisRegistryPackage *iSisRegistryPackage;
-    };
-#endif
+
 	
 // inline functions
 

@@ -22,8 +22,7 @@
 // SwiUI namespace contains install options 
 // and install options package definitions
 // that are used for the silent install.
-//#include <SWInstDefs.h>
-#include <usif/sif/sifcommon.h>
+#include <SWInstDefs.h>
 
 #include "ncditempurpose.h"
 
@@ -125,7 +124,7 @@ public: // New functions
     virtual void SilentInstallL( RFile& aFile,
                                  const TDesC& aMimeType,
                                  const TNcdItemPurpose& aPurpose ,
-                                 const Usif::COpaqueNamedParams* aInstallOptionsPckg ) = 0;
+                                 const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg ) = 0;
 
 
     /**
@@ -135,13 +134,13 @@ public: // New functions
     virtual void SilentInstallJavaL( RFile& aFile,
                                      const TDesC& aMimeType,
                                      const TDesC8& aDescriptorData,
-                                     const Usif::COpaqueNamedParams* aInstallOptionsPckg ) = 0;
+                                     const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg ) = 0;
     
     /*
      * Use SWI API to install widget silently. 
      */     
     virtual void SilentInstallWidgetL(RFile& aFile,
-                                      const Usif::COpaqueNamedParams* aInstallOptionsPckg ) = 0;
+                                      const SwiUI::TInstallOptionsPckg& aInstallOptionsPckg ) = 0;
 
     /**
      * Cancels the silent installation if it is going on.

@@ -31,7 +31,7 @@
 #include "dumpsis.h"
 #include "siscontroller.h"
 #include "exception.h"
-#include "utf8_wrapper.h"
+#include "utf8.h"
 
 CDumpSis::CDumpSis(const std::wstring& aSISFileName, bool aVerbose)
 		: 	iController(NULL),

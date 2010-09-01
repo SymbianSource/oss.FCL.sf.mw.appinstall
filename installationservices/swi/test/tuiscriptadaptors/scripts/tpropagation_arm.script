@@ -17,8 +17,6 @@
 // SWIS unit (integration) tests
 PRINT Propagation tests running...
 LOAD_SUITE tuiscriptadaptors
-LOAD_SUITE tscrapparc
-LOAD_SUITE tscr
 
 //! @SYMTestCaseID 		API-SEC-Propagation-HW-0001
 //! @SYMTestCaseDesc 		Tests that a propagation will install correctly with a modified version of one of the files listed in the stub file.
@@ -258,36 +256,4 @@ RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scri
 END_TESTCASE API-SEC-SWI-PREQ1912-MP-HW-0002
 
 
-//! @SYMTestCaseID 		APPINS-SWI-PROP-HW-0001
-//! @SYMTestCaseDesc 		Tests that a propagation will install as per required and the SCR db is populated correctly
-//! @SYMTestPriority 		Medium
-//! @SYMTestActions 		Simulate a propagation installation and verify the contents retrieved from SCR db.
-//! @SYMTestExpectedResults 	Required application's details correctly retrieved from the db.
 
-START_TESTCASE APPINS-SWI-PROP-HW-0001
-
-RUN_TEST_STEP_RESULT -21 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
-DELAY 2000
-RUN_TEST_STEP 100 tuiscriptadaptors MmcFormatStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
-
-RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_test_appreg_entries_armv5
-RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini verify_case06_base_armv5
-RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini backup_files_armv5_test_appreg_entries
-RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_test_appreg_entries_armv5
-
-RUN_TEST_STEP 100 tuiscriptadaptors SwiCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini copy_to_mmc_armv5_test_appreg_entries
-RUN_TEST_STEP 100 tuiscriptadaptors SwiDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini cleanup_backup_armv5_test_appreg_entries
-
-RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
-DELAY 2000
-RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini E
-DELAY 2000
-
-RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini install_stub_armv5_test_appreg_entries
-RUN_TEST_STEP 100 tscrapparc ScrGetApplicationRegistrationView z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini verify_case06_base_armv5
-RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini uninstall_armv5_test_appreg_entries
-
-END_TESTCASE APPINS-SWI-PROP-HW-0001
-
-// Deleting the temporary files, but not the SCR DB. Here we are reusing the step to delete something under resource\apps
-RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tswi\tuiscriptadaptors\scripts\tpropagation.ini temp_files

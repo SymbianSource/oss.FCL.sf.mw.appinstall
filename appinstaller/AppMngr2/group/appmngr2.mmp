@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2003-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -20,6 +20,7 @@
 #include <data_caging_paths.hrh>
 
 TARGET              appmngr2.exe
+EPOCHEAPSIZE        0x1000 0x200000     // min 4kB (default), max 2MB (2*default)
 EPOCSTACKSIZE       0x5000
 TARGETTYPE          exe
 UID                 0x100039CE 0x101F8512
@@ -52,6 +53,7 @@ SOURCE              appmngr2log.cpp
 SOURCE              appmngr2logpopuplist.cpp
 SOURCE              appmngr2logdatabase.cpp
 SOURCE              appmngr2logdatabaseentry.cpp
+SOURCE              appmngr2exittimer.cpp
 
 START RESOURCE      ../data/appmngr2.rss
 HEADER
@@ -91,6 +93,7 @@ LIBRARY             platformenv.lib                 // DriveInfo
 LIBRARY             appmngr2pluginapi.lib           // AppMngr2 Runtime API
 LIBRARY             ecom.lib                        // ECom
 LIBRARY             caf.lib                         // Content Access Framework
+LIBRARY             aknnotify.lib					// GlobalNote
 
 DEBUGLIBRARY        flogger.lib                     // RFileLogger
 

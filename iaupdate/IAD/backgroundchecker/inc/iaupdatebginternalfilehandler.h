@@ -52,9 +52,21 @@ public:
 
     void SetLastTimeShowNewFeatureDialog( TInt64 aTime );
 
+    //void SetCurrentRefreshTime();
+
     TBool UserRejectNewFeatureDialog() const;
     
     void SetUserRejectNewFeatureDialog( TBool aUserDecision );
+    
+    TBool ReminderOn();
+    
+    void SetReminder( TBool aOn );
+    
+    TTime NextRemindTime();
+    
+    void SetNextRemindTime( TTime aNextRemindTime );
+    
+    void SetNextRemindTime( TInt64 aNextRemindTime );
     
     void SetMode( TIAUpdateBGMode aMode );
     
@@ -71,11 +83,7 @@ public:
     TInt RetryTimes();
     
     void SetRetryTimes( TInt aRetry );
-    
-    TInt NrOfIndicatorEntries();
-    
-    void  SetNrOfIndicatorEntries( TInt aEntries );
-    
+
 protected:
 
     CIAUpdateBGInternalFileHandler();
@@ -105,8 +113,13 @@ private: // data
 
     // Time when the content was refreshed.
     TTime iLastTimeShowNewFeatureDialog;
+
     
     TBool iUserRejectNewFeatureDialog;
+    
+    TTime iNextRemindTime;
+    
+    TBool iIsReminderOn;
     
     TIAUpdateBGMode iMode;
     
@@ -115,9 +128,7 @@ private: // data
     TInt iSNID;
     
     TInt iRetryTimes;
-    
-    TInt iNrOfIndicatiorEntries;
-    
+     
     };
         
 #endif // IAUPDATEBGINTERNAL_FILE_HANDLER

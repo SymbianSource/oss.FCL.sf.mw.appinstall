@@ -281,27 +281,17 @@ sub make(@)
     
     chdir "$output_dir" or$util->error("chdir $output_dir failed");
     
-    my $RVCTVersion = $ENV{'ARMV5VER'};
-    if((index($RVCTVersion, "RVCT4.0") != -1) && ($platform eq "armv5"))
-    {
-        my $platformConfig = "arm."."v5."."$variant".".rvct4_0";
-        $util->info($platformConfig);
-        $util->invoke("sbs -b bld.inf -c $platformConfig");
-    }
-    else
-    {	
-        if ($BuildSystemVersion == "2") 
-        {
-            my $platformConfig = "$platform"."_"."$variant";
-            $util->invoke("sbs -c $platformConfig");
-        }
-        else
-        {
-            $util->invoke("bldmake bldfiles");
-            $util->invoke("abld build $platform $variant");
-            $util->invoke("abld -check build $platform $variant");
-        }
-    }
+ 	if ($BuildSystemVersion == "2") 
+ 	{
+ 		my $platformConfig = "$platform"."_"."$variant";
+ 		$util->invoke("sbs -c $platformConfig");
+ 	}
+ 	else
+ 	{
+ 		$util->invoke("bldmake bldfiles");
+ 		$util->invoke("abld build $platform $variant");
+ 		$util->invoke("abld -check build $platform $variant");
+ 	}
  	
    
     chdir "$whence" or $util->error("chdir $whence failed");

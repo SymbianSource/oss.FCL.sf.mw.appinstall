@@ -17,7 +17,6 @@
 // SWIS unit (integration) tests for upgrades
 PRINT Run all SWIS tests
 LOAD_SUITE tuiscriptadaptors
-LOAD_SUITE tdaemon
 
 //! @SYMTestCaseID 		API-SEC-UISA-PreInstalledTest-I-0001
 //! @SYMTestCaseDesc 		Test pre-installed media
@@ -455,50 +454,47 @@ END_TESTCASE API-SEC-MissingSisRegistry-0001
 //! @SYMTestExpectedResults 	No installation
 //! @SYMDevelopedForRelease 	Sphinx
 
-//Commenting the testcase because tdaemon is removed from code base. To be restored later.
-
-//START_TESTCASE API-SEC-Controller-0001
+START_TESTCASE API-SEC-Controller-0001
 
 // Install the full TEXTFILE.SIS file
-//RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile
+RUN_TEST_STEP 100 tuiscriptadaptors InstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile
 
 // Check that the registry is present
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_present
 
 // Save the .ctl file
-//RUN_UTILS CopyFile x:\sys\install\sisregistry\80000001\00000000_0000.ctl x:\00000000_0000.ctl
+RUN_UTILS CopyFile x:\sys\install\sisregistry\80000001\00000000_0000.ctl x:\00000000_0000.ctl
 
 // Delete the x:\sys\install\sisregistry\80000001\00000000_0000.ctl file
-//RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_textfile_ctlfile
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_textfile_ctlfile
 
 // Copy another package .ctl file to x:\sys\install\sisregistry\80000001\00000000_0000.ctl
-//RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini copy_textfile_ctlfile
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini copy_textfile_ctlfile
 
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
 
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
-//RUN_TEST_STEP 100 tdaemon AddDriveStep z:\tswi\tdaemon\scripts\tdaemon.ini AddDriveX
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
 
 // Check that the registry is not present
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_absent
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_absent
 
 // Restore the original .ctl file to x:\sys\install\sisregistry\80000001\00000000_0000.ctl
-//RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_textfile_ctlfile
-//RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini copy_textfile_ctlfile2
+RUN_TEST_STEP 10 tuiscriptadaptors MmcDeleteFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini delete_textfile_ctlfile
+RUN_TEST_STEP 10 tuiscriptadaptors MmcCopyFilesStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini copy_textfile_ctlfile2
 
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcUnMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
 
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
+RUN_TEST_STEP 100 tuiscriptadaptors MmcMountStep z:\tswi\tuiscriptadaptors\scripts\drives.ini X
 
 // Check that the registry is okay now.
-//RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_present
+RUN_TEST_STEP 100 tuiscriptadaptors MmcAskRegistry z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini textfile_present
 
 // Uninstall TEXTFILE.SIS
-//RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_textfile
+RUN_TEST_STEP 100 tuiscriptadaptors UninstallStep z:\tswi\tuiscriptadaptors\scripts\testpreinstalled.ini u_textfile
 
-//RUN_UTILS DeleteFile x:\00000000_0000.ctl
+RUN_UTILS DeleteFile x:\00000000_0000.ctl
 
-//END_TESTCASE API-SEC-Controller-0001
+END_TESTCASE API-SEC-Controller-0001
 
 
 //! @SYMTestCaseID 		API-SEC-Controller-0002

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -32,13 +32,6 @@ PRJ_EXPORTS
 ../swi/swipolicy.ini /epoc32/release/winscw/udeb/z/system/data/swipolicy.ini
 ../swi/swipolicy.ini /epoc32/release/winscw/urel/z/system/data/swipolicy.ini
 ../swi/swipolicy.ini /epoc32/data/z/system/data/swipolicy.ini
-../swi/2002cff6.txt /epoc32/release/winscw/udeb/z/private/10202be9/2002cff6.txt
-../swi/2002cff6.txt /epoc32/release/winscw/urel/z/private/10202be9/2002cff6.txt
-../swi/2002cff6.txt /epoc32/data/z/system/data/2002cff6.txt
-
-// ConfML Files
-../conf/appinstallconfig.confml            OS_LAYER_EXPORTS_CONFML(appinstallconfig.confml)
-../conf/appinstallconfig_2002cff6.crml	 OS_LAYER_EXPORTS_CRML(appinstallconfig_2002cff6.crml)
 #endif
 
 ../swi/swiconfig.iby /epoc32/rom/include/swiconfig.iby
@@ -58,11 +51,6 @@ PRJ_EXPORTS
 ../usif/scr/scr.db /epoc32/release/winscw/urel/z/sys/install/scr/provisioned/scr.db
 // Export iby file for SifLauncher configuration
 ../usif/siflauncher/siflauncherconfig.iby /epoc32/rom/include/siflauncherconfig.iby
-
-//Exporting SCR's Cenrep configuration file to EPOC.
-../usif/scr/10285bc0.txt /epoc32/release/winscw/udeb/z/private/10202be9/10285bc0.txt
-../usif/scr/10285bc0.txt /epoc32/release/winscw/urel/z/private/10202be9/10285bc0.txt
-
 #endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 PRJ_TESTEXPORTS

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -400,6 +400,7 @@ TCapabilitySet CSWICertStoreTool::ParseCapabilitiesL(const CTestConfigSection& a
 
 void CSWICertStoreTool::ParseApplicationsL(const CTestConfigSection& aSection, RArray<TUid>& aApplications)
 	{
+	CleanupClosePushL(aApplications);
 	for (TInt index = 0 ; ; ++index)
 		{
 		const CTestConfigItem* item = aSection.Item(KItemApplication, index);
@@ -424,6 +425,7 @@ void CSWICertStoreTool::ParseApplicationsL(const CTestConfigSection& aSection, R
 		LogL(KLogNoApplications);
 		User::Leave(KErrArgument);
 		}
+	CleanupStack::Pop(&aApplications);
 	}
 
 void CSWICertStoreTool::OpenInputFileL(const TDesC& aInputFile)

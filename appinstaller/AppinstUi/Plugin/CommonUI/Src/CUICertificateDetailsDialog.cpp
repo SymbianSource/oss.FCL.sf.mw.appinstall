@@ -18,10 +18,10 @@
 
 
 // INCLUDE FILES
-//#include <aknmessagequerydialog.h>
-//#include <StringLoader.h>
+#include <aknmessagequerydialog.h>
+#include <StringLoader.h>
 #include <SWInstCommonUI.rsg>
-//#include <AknUtils.h>
+#include <AknUtils.h>
 #include <hash.h>                  
 
 #include "CUICertificateDetailsDialog.h"
@@ -88,7 +88,6 @@ void CCUICertificateDetailsDialog::AddFieldLC( HBufC*& aMessage,
                                                TInt aHeaderResourceId,
                                                const TDesC& aValue )
     {
-    /*
     HBufC* headerString = StringLoader::LoadLC( aHeaderResourceId );
     HBufC* newMessage;
     
@@ -120,8 +119,7 @@ void CCUICertificateDetailsDialog::AddFieldLC( HBufC*& aMessage,
     CleanupStack::PopAndDestroy( aMessage );  
   
     aMessage = newMessage;    
-    CleanupStack::PushL( aMessage );
-    */  
+    CleanupStack::PushL( aMessage );  
     }
 
 // -----------------------------------------------------------------------------
@@ -132,7 +130,6 @@ void CCUICertificateDetailsDialog::AddFieldLC( HBufC*& aMessage,
 //
 void CCUICertificateDetailsDialog::ExecuteLD( const CCUICertificateInfo& aCertInfo )
     {
-    /*
     CleanupStack::PushL( this );
     
     // Valid from
@@ -187,7 +184,6 @@ void CCUICertificateDetailsDialog::ExecuteLD( const CCUICertificateInfo& aCertIn
     dlg->RunLD();
 
     CleanupStack::PopAndDestroy( 7 );  // message, fingerprint_md, fingerprint, serial, validTo, validFrom
-    */
     }
 
 // -----------------------------------------------------------------------------
@@ -198,7 +194,6 @@ void CCUICertificateDetailsDialog::ExecuteLD( const CCUICertificateInfo& aCertIn
 //
 HBufC* CCUICertificateDetailsDialog::DateToStringLC( const TDateTime& aDate )
     {
-    /*
     // Create date descriptors.
     // We use Avkon date format string to format the date into correct format.
     HBufC* dateFormatString = StringLoader::LoadLC( R_QTN_DATE_USUAL_WITH_ZERO );
@@ -213,9 +208,7 @@ HBufC* CCUICertificateDetailsDialog::DateToStringLC( const TDateTime& aDate )
     TPtr ptr = tmp->Des();
     AknTextUtils::DisplayTextLanguageSpecificNumberConversion( ptr ); 
 
-    return tmp;   
-    */
-    return NULL;
+    return tmp;    
     }
 
 // -----------------------------------------------------------------------------

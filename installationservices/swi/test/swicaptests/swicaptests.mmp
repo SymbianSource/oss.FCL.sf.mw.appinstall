@@ -88,9 +88,6 @@ LIBRARY			uissclient.lib
 LIBRARY			sisregistryclient.lib
 LIBRARY			plan.lib
 LIBRARY			swidataprovider.lib
-LIBRARY			siscontroller.lib 
+LIBRARY			siscontroller.lib
 LIBRARY			aprcaptestframeworkutil.lib
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-LIBRARY scrclient.lib
-#endif
 SMPSAFE

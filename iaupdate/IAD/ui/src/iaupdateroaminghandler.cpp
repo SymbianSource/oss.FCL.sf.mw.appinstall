@@ -20,13 +20,16 @@
 
 //INCLUDES
 #include <centralrepository.h>
+#include <avkon.hrh>
+#include <avkon.rsg>
+#include <iaupdate.rsg>
 
 #include "iaupdateroaminghandler.h"
 #include "iaupdateroaminghandlerobserver.h"
 #include "iaupdatenetworkregistration.h"
 #include "iaupdateprivatecrkeys.h"
-
-
+#include "iaupdatedialogutil.h"
+#include "iaupdate.hrh"
 
 // ================= MEMBER FUNCTIONS =======================
 

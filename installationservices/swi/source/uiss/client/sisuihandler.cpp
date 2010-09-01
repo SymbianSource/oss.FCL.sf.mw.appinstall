@@ -61,13 +61,10 @@ EXPORT_C void RUiHandler::UpdateProgressBarL(const TAppInfo& aAppInfo, TInt aAmo
 		{
 		return;
 		}
-	TInt progressAmount = aAmount;
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	
 	_LIT(KProgressorPanicDescriptor, "UISSCLIENT:The progress bar value publisher has not been set!");
 	__ASSERT_ALWAYS(iPublisher, User::Panic(KProgressorPanicDescriptor,KErrAbort));
-	progressAmount = iPublisher->UpdateProgressBarValueL(aAmount);	
-#endif	
+	TInt progressAmount = iPublisher->CalculateProgressBarValue(aAmount);	
 	
 	if (progressAmount != 0)
 	    {
@@ -81,12 +78,13 @@ EXPORT_C void RUiHandler::UpdateProgressBarL(const TAppInfo& aAppInfo, TInt aAmo
 	    CleanupStack::PopAndDestroy(event);
 	    }
 	}
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+
+
 EXPORT_C void RUiHandler::SetProgressBarValuePublisher(CProgressBarValuePublisher* aPublisher)
 	{
 	iPublisher = aPublisher;
 	}
-#endif
+
 
 // CUissCmd
 
@@ -121,7 +119,6 @@ EXPORT_C void CUissCmd::UnmarshallArgumentsL()
 	// default base class version which does not do any unmarshalling
 	}
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 // CProgressBarValuePublisher
 CProgressBarValuePublisher::CProgressBarValuePublisher()
 	{
@@ -145,8 +142,8 @@ EXPORT_C CProgressBarValuePublisher* CProgressBarValuePublisher::NewL()
 
 void CProgressBarValuePublisher::ConstructL()
 	{
-	// Initialize the value of the install progress bar property
-	User::LeaveIfError(RProperty::Set(KUidInstallServerCategory, KUidSwiProgressBarValueKey, 0));
+	iLastPercentCompletion = 0;
+	iLastProgressValue = 0;
 	}
 
 EXPORT_C void CProgressBarValuePublisher::SetFinalProgressBarValue(TInt aValue)
@@ -154,7 +151,7 @@ EXPORT_C void CProgressBarValuePublisher::SetFinalProgressBarValue(TInt aValue)
 	iFinalProgressValue = aValue;
 	}
 
-EXPORT_C TInt CProgressBarValuePublisher::UpdateProgressBarValueL(TInt aValue)
+EXPORT_C TInt CProgressBarValuePublisher::CalculateProgressBarValue(TInt aValue)
 	{
 	iCurrentProgressValue += aValue;
 	TUint percentage = (iFinalProgressValue <= 0) ? 100 : (iCurrentProgressValue * 100) / iFinalProgressValue;
@@ -162,11 +159,8 @@ EXPORT_C TInt CProgressBarValuePublisher::UpdateProgressBarValueL(TInt aValue)
 	    {
 	    TInt amountCompleted = iCurrentProgressValue - iLastProgressValue; 
 	    iLastProgressValue = iCurrentProgressValue;
-		iLastPercentCompletion = percentage;
-		User::LeaveIfError(RProperty::Set(KUidInstallServerCategory, KUidSwiProgressBarValueKey, percentage));
 	    return amountCompleted;
 	    }
 	return 0;
 	}	 
-#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 } // namespace Swi

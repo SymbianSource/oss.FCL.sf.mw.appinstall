@@ -202,13 +202,14 @@ MNcdInstallOperation* CNcdNodeInstallProxy::InstallL(
     return op;
     }
 
+
 // ---------------------------------------------------------------------------
 // Creates an install operation
 // ---------------------------------------------------------------------------
 //
 MNcdInstallOperation* CNcdNodeInstallProxy::SilentInstallL( 
     MNcdInstallOperationObserver& aObserver,
-    Usif::COpaqueNamedParams* aInstallOptions )
+    const SwiUI::TInstallOptions& aInstallOptions )
     {
     DLTRACEIN((""));
 
@@ -218,12 +219,9 @@ MNcdInstallOperation* CNcdNodeInstallProxy::SilentInstallL(
     // observer.
     // Notice that TrustedUI capabilites are checked when silent install operation is
     // created in the server side.
-    
     CNcdInstallOperationProxy* op = 
         Metadata().Node().OperationManager().CreateSilentInstallOperationL(
         Metadata().Node(), this, aInstallOptions );
-    
-    
     iOperationObserver = &aObserver;
        
     DLTRACEOUT((""));    

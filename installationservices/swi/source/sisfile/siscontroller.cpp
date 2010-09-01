@@ -115,12 +115,10 @@ EXPORT_C CController::~CController()
 	delete iPrerequisites;
 	delete iDataIndex;
 	delete iTrustStatus;
-	delete iCertChainConstraints;	
-	iCertChainIndices.Close();
-    iSignatureCertificateChains.ResetAndDestroy();
-	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	iApplicationInfo.ResetAndDestroy();
-	#endif
+	delete iCertChainConstraints;
+    
+    iCertChainIndices.Close();
+    iSignatureCertificateChains.ResetAndDestroy(); 
 	}
 
 void CController::ConstructL(MSisDataProvider& aDataProvider, TInt64& aBytesRead, TReadTypeBehaviour aTypeReadBehaviour)

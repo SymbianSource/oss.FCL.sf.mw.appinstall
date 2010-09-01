@@ -19,9 +19,8 @@
 #ifndef C_CATALOGSHTTPDOWNLOAD_H
 #define C_CATALOGSHTTPDOWNLOAD_H
 
-// HLA: #include <DownloadMgrClient.h>
-#include <download.h>
-#include <downloadevent.h>
+#include <downloadmgrclient.h>
+
 #include <s32file.h>
 
 #include "catalogshttpoperation.h"
@@ -34,8 +33,7 @@ class CCatalogsHttpConfig;
 class CCatalogsHttpHeaders;
 class CCatalogsKeyValuePair;
 class CCatalogsHttpDownloadManager;
-class CCatalogsHttpQTDownload;
-using namespace WRT;
+
 /**
 * HTTP file download implementation
 *
@@ -79,7 +77,7 @@ public: // Constructors & destructor
     */
     static CCatalogsHttpDownload* NewLC( 
         CCatalogsHttpDownloadManager& aOwner, 
-        Download* aDownload,
+        RHttpDownload* aDownload,
         const CCatalogsHttpConfig& aConfig );
 
 
@@ -240,8 +238,7 @@ public: // MCatalogsHttpOperation
      */
     TInt StatusCode() const;        
     
-    TDownloadDeleteState GetStatusState();
-    Download* GetDownload();
+    
     /**
      * Not supported
      * @see MCatalogsHttpOperation::StatusText()
@@ -285,9 +282,7 @@ public: // From MCatalogsHttpObserver
         
     TBool HandleHttpError( MCatalogsHttpOperation& aOperation, 
         TCatalogsHttpError aError );
-
-     void HandledownloadEventL(DownloadEvent& aEvent);   
-              
+            
 public:     
 
     /**
@@ -295,9 +290,8 @@ public:
     *
     * @param aEvent Download Manager event
     */
-     /* HLa
     void HandleEventL( THttpDownloadEvent aEvent );
-    */
+    
     
     /**
      * Set file server session
@@ -327,7 +321,7 @@ protected:
     */
     CCatalogsHttpDownload( 
         CCatalogsHttpDownloadManager& aOwner, 
-        Download* aDownload );
+        RHttpDownload* aDownload );
     
     /**
     * 2nd phase constructor
@@ -350,10 +344,9 @@ private: // New methods
     /**
     * Handles event progress
     * @param aEvent The event that has progressed
-    */
-    /* HLa
+    */            
     void HandleEventProgressL( const THttpDownloadEvent& aEvent );
-    */
+
     
     /**
     * Updates the target filename from Content-Disposition -header
@@ -489,7 +482,7 @@ private: // New methods
     /**
      *  Replace current extension at aName with extension given (eExt).
      */
-    void ReplaceExtension( TDes& aName, const TDesC& aExt );
+    void CCatalogsHttpDownload::ReplaceExtension( TDes& aName, const TDesC& aExt );
     
     /**
      * Checks the preset content-type and forces HEAD request if
@@ -516,22 +509,19 @@ private:
 
     CCatalogsHttpDownloadManager& iOwner;
     TCatalogsTransportOperationId iId;  // Operation id
-    Download* iDownload;           // Platform download
+    RHttpDownload* iDownload;           // Platform download
     CCatalogsHttpConfig* iConfig;       // Configuration
     MCatalogsHttpObserver* iObserver;   // Observer        
     TCatalogsHttpEvent iState;          // State of the download
     HBufC8* iUri;                       // Current URI
     HBufC8* iEncodedUri;                // Current URI as encoded
     CCatalogsHttpHeaders* iResponseHeaders; // Headers from HTTP response
-    CCatalogsHttpQTDownload* iQTDownload;
     
     // added request headers not supported by DL man
     HBufC8* iAddedRequestHeaders;       
     TInt iRefCount;        
     TBool iNormalDelete;
-
-    // HLa: TBuf8<KMaxContentTypeLength> iContentType;
-    TBuf8<256> iContentType;
+    TBuf8<KMaxContentTypeLength> iContentType;
         
     // Transaction for retrieving all of the response headers
     MCatalogsHttpOperation* iTransaction;
@@ -565,7 +555,7 @@ private:
     // For managing async pause with dlmgr.
     TBool iPausePending;
     TBool iQueuedResume;
-    TDownloadDeleteState iStatus;
+    
 protected:
 
     // Grant access to UpdateContentType
@@ -573,18 +563,4 @@ protected:
     
     };
 
-class  CCatalogsHttpQTDownload: public QObject
-	{
-		 Q_OBJECT
-		 	public:
-		 		CCatalogsHttpQTDownload(CCatalogsHttpDownload* aHttpDownload,Download* aDownload);
-	    public slots:
-    	void downloadEventHandler(DownloadEvent*);
-    	void downloadErrorHandler(Error);
-	    public:
-	    	CCatalogsHttpDownload* iCatalogsHttpDownload;
-	    	Download* iDownload;           // Platform download
-	};
-	
-	
 #endif // C_CATALOGSHTTPDOWNLOAD_H

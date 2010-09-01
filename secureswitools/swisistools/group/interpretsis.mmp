@@ -28,11 +28,6 @@ USERINCLUDE 		../source/common
 USERINCLUDE 		../../swianalysistoolkit/source/common
 USERINCLUDE 		../../swianalysistoolkit/source/common/utf8
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-USERINCLUDE 		../source/rscparser
-USERINCLUDE		../source/xmlparser
-#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 SYSTEMINCLUDE 		../../openssllib/import/inc/openssl 
 SYSTEMINCLUDE 		../../openssllib/import/inc
@@ -56,8 +51,7 @@ STATICLIBRARY		dbmanager
 #ifndef TOOLS2_LINUX
 STATICLIBRARY		eay32 zlib seclib
 #else
-STATICLIBRARY		crypto zlib seclib dl
-LIBRARY c
+STATICLIBRARY		crypto zlib seclib 
 #endif
 
 OPTION			GCC -w

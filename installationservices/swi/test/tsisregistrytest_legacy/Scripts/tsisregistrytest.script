@@ -221,7 +221,7 @@ RUN_TEST_STEP 100 tSisRegistryTest RegistryFiles z:\tswi\tsisregistrytest\script
 END_TESTCASE API-SEC-SISREGISTRY-B-0010
 
 //! @file
-//! @SYMTestCaseID		API-SEC-SISREGISTRY-B-0011
+//! @SYMTstCaseID		API-SEC-SISREGISTRY-B-0011
 //! @SYMTestCaseDesc		Gets the Registry Files(reg, clt and hash) for the package
 //! @SYMTestPriority		Medium
 //! @SYMTestActions		Installs the PU package over existing SA and Requests the Regisrty files.
@@ -278,7 +278,7 @@ RUN_TEST_STEP 100 tSisRegistryTest RegistryFiles z:\tswi\tsisregistrytest\script
 END_TESTCASE API-SEC-SISREGISTRY-B-0014
 
 
-//! @file
+//! @fie
 //! @SYMTestCaseID		API-SEC-SISREGISTRY-B-0015
 //! @SYMTestCaseDesc		Gets the Registry Files(reg, clt and hash) for the package.
 //! @SYMTestPriority		Medium

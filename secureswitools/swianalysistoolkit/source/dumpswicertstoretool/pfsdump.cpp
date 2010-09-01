@@ -206,8 +206,7 @@ void StoreFile::LoadToc()
 Stream StoreFile::RootStream()
 	{
 	Toc::Head const& head=iToc.Header();
-	Handle hndl = static_cast<Handle>(head.Root());
-	return FindStream(hndl);
+	return FindStream(head.Root());
 	}
 
 Stream StoreFile::FindStream(Handle& aHandle)

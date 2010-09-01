@@ -1,4 +1,4 @@
-	/*
+/*
 * Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
@@ -51,42 +51,17 @@
 #include <ocsp.h>
 #include "secutils.h"
 #include "sislauncherclient.h"
-#include "swicenrep.h"
-// Security settings.
-#include <x509certext.h>
-#include <pkixvalidationresult.h>
-#include <secsettings/secsettingsclient.h>
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include "swi/sisversion.h"
 #include "swi/nativecomponentinfo.h"
 #include <usif/usifcommon.h>
-#include <usif/scr/appregentries.h>
 #include "scrdbconstants.h"
 #endif
 
 using namespace Swi;
 using namespace Swi::Sis;
 
-_LIT(KExpressSignedOID, "1.2.826.0.1.1796587.1.1.2.1"); 
-_LIT(KCertifiedSignedOID, "1.2.826.0.1.1796587.1.1.2.2"); 
-_LIT(KCertifiedSignedWithVerisignOID, "1.2.826.0.1.1796587.1.1.2.3"); 
-
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-
-void DeRegisterForceRegisteredAppsL()
-	{
-	// Deregister the force registered applications from AppArc
-	DEBUG_PRINTF(_L8("Deregistering the force registered applications with AppArc"));
-	RSisLauncherSession launcher;
-	CleanupClosePushL(launcher);
-	User::LeaveIfError(launcher.Connect());
-	RArray<TAppUpdateInfo> emptyAppRegDataArray;
-	launcher.NotifyNewAppsL(emptyAppRegDataArray);
-	CleanupStack::PopAndDestroy(&launcher);
-	}
-
-#endif
 
 //
 // TInstallState
@@ -387,10 +362,6 @@ void CInstallMachine::TConfirmationState::EnterL()
 	iInstallMachine.CompleteSelf();
 	iInstallMachine.SetActive();
 	
-	// user hasn't cancelled so mark the installation as confirmed. This
-	// will allow the registry cache to be regenerated further on during the
-	// installation process.
-	iInstallMachine.iOperationConfirmed = ETrue;	
 	}
 
 CInstallMachine::TState* CInstallMachine::TConfirmationState::CompleteL()
@@ -518,7 +489,6 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 			}
 		
 		case ESignatureSelfSigned:	
-		    {
 			iInstallMachine.SetTrust(ESisPackageCertificateChainNoTrustAnchor);
 		    iInstallMachine.SetValidationStatus(EValidated);
 		    
@@ -527,39 +497,11 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 			if(iInstallMachine.IsInInfoMode())
 				break;
 			#endif
-			
-            TBool allowSelfSigned(ETrue);
-	          
-	        // Session to access Install Central Repository Server.
-	        SecuritySettingsServer::RSecSettingsSession secSettingsSession;
-
-	        // Connect to the Central Repository server.
-	        User::LeaveIfError(secSettingsSession.Connect());
-
-            CleanupClosePushL(secSettingsSession);
-	             
-            // Read-in the values of the settings - KAllowSelfSignedInstallKey. 
-            // These will retain the default values if any error occurs.
-	        TRAPD(err, (allowSelfSigned = secSettingsSession.SettingValueL(KUidInstallationRepository , KAllowSelfSignedInstallKey)));
-            if (err == KErrNone || err == KErrSettingNotFound || err == KErrNotFound || err == KErrCorrupt)
-                {
-                if (err == KErrCorrupt)
-                    {
-                    DEBUG_PRINTF(_L8("Install Machine - CenRep file 2002cff6.txt is corrupt. Using Default Value to Install."));
-                    }
-                
-                if (!allowSelfSigned || !SecurityAlertL(ETrue))
-                    {
-                    User::Leave(KErrCancel);
-                    }
-                }
-            else
-                {
-                User::Leave(err);
-                }
-            CleanupStack::PopAndDestroy(&secSettingsSession);    	         			
-			break;
-		    }		   
+			if (!SecurityAlertL(ETrue))
+		    	User::Leave(KErrCancel);			
+		    break;
+		    
+		   
         case ECertificateValidationError:
 		case ENoCertificate:
 		case ENoCodeSigningExtension:
@@ -630,12 +572,11 @@ CInstallMachine::TState* CInstallMachine::TVerifyControllerState::CompleteL()
 		}		
 		
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	// Forcibly skip the OCSP & prerequisites checking and directly go to the plan installation state when the 
-	// machine runs in component information collection mode. OCSP would introduce latency which is not expected 
-	// when retrieving component info.
+	// Forcibly skip the OCSP check and directly go to the prerequisites checking state when the 
+	// machine runs in component information collection mode. OCSP would introduce latency which is not expected when retrieving component info
 	if(iInstallMachine.IsInInfoMode())
 		{	
-		return static_cast<TState*>(&iInstallMachine.iPlanInstallationState);
+		return static_cast<TState*>(&iInstallMachine.iCheckPrerequisitesState);
 		}
 	#endif
 
@@ -691,104 +632,24 @@ void CInstallMachine::TOcspState::EnterL()
 	
 	if ((iInstallMachine.iCertificates.Count()) && iNeedOcsp)
 		{
-		TInt checkOCSPForExpressSignedPkg = 1;
-		TInt checkOCSPForSelfSignedPkg = 1;
-		TInt checkOCSPForCertifiedSignedPkg = 1;
-		TInt checkOCSPForCertifiedWithVeriSignPkg = 1;
+		// We haven't done the planning phase so we need to use the default
+		TAppInfo appInfo(iInstallMachine.iCurrentContentProvider->DefaultLanguageAppInfoL());
 
-		// Session to access Security Central Repository Server.
-		SecuritySettingsServer::RSecSettingsSession secSettingsSession;
-
-		// Connect to the Security Central Repository server.
-		User::LeaveIfError(secSettingsSession.Connect());
-
-		CleanupClosePushL(secSettingsSession);
-    
-		// Read-in the values of the settings from the Install Central Repository. 
-		// These will retain the default values if any error occurs.
-		TRAPD(err, checkOCSPForExpressSignedPkg = secSettingsSession.SettingValueL(KUidInstallationRepository, KCheckOCSPForExpressedSignedPkgKey));
-		TRAP(err, checkOCSPForSelfSignedPkg = secSettingsSession.SettingValueL(KUidInstallationRepository, KCheckOCSPForSelfSignedPkgKey));
-		TRAP(err, checkOCSPForCertifiedSignedPkg = secSettingsSession.SettingValueL(KUidInstallationRepository, KCheckOCSPForCertifiedSignedPkgKey));
-		TRAP(err, checkOCSPForCertifiedWithVeriSignPkg = secSettingsSession.SettingValueL(KUidInstallationRepository, KCheckOCSPForCertifiedWithVeriSignPkgKey));
+		// Signal OCSP check starting
+		CHandleCancellableInstallEvent* cmd = CHandleCancellableInstallEvent::NewLC(appInfo, EEventOcspCheckStart, 0, KNullDesC);
+		iInstallMachine.UiHandler().ExecuteL(*cmd);
+		CleanupStack::PopAndDestroy(cmd);
 		
-		CleanupStack::PopAndDestroy(&secSettingsSession);
+		// Start OCSP check.
+		TBuf8<256> ocspUri(iInstallMachine.iInstallPrefs->RevocationServerUri());
+		iInstallMachine.iSecurityManager->PerformOcspL(ocspUri, iInstallMachine.iIap,
+			&iInstallMachine.iOcspMsg,iInstallMachine.iOcspOutcomes,
+			iInstallMachine.iCertificates,iInstallMachine.iStatus);
 
-		TBool makeOcspCheck = (checkOCSPForExpressSignedPkg == 1) && (checkOCSPForSelfSignedPkg == 1) && (checkOCSPForCertifiedSignedPkg == 1) && (checkOCSPForCertifiedWithVeriSignPkg == 1);
-	
-		//Find the OID of the certificate and make ocsp check based on settings retreived from cenrep
-		for (TInt i=0; i<iInstallMachine.iCertificates.Count(); ++i)
-		    {
-		    if(makeOcspCheck)//Could be true if set in the previous iCertificates.
-		        {
-		        break;
-		        }
-		    CX509Certificate* cert = iInstallMachine.iCertificates[i];
-		    const CX509CertExtension* certExt =  cert->Extension(KCertPolicies);
-			if (certExt == NULL)
-				{
-				makeOcspCheck = ETrue;
-				continue;
-				}
-		    CX509CertPoliciesExt* policyExt = CX509CertPoliciesExt::NewLC(certExt->Data());
-		    const CArrayPtrFlat<CX509CertPolicyInfo>& policies = policyExt->Policies();
-		    if(policies.Count() == 0)
-				{
-		        makeOcspCheck = ETrue;
-				}
-			for(TInt j=0; j<policies.Count(); ++j)
-				{
-				HBufC* oid = (policies[j])->Id().AllocLC();
-				if (oid->Compare(KExpressSignedOID) == 0)
-					{
-					makeOcspCheck = (checkOCSPForExpressSignedPkg==1);   
-					}
-				else if(oid->Compare(KCertifiedSignedOID) == 0)
-					{
-					makeOcspCheck = (checkOCSPForCertifiedSignedPkg==1); 
-					}
-				else if(oid->Compare(KCertifiedSignedWithVerisignOID) == 0)
-					{
-					makeOcspCheck = (checkOCSPForCertifiedWithVeriSignPkg==1);   
-					}
-				else if(iInstallMachine.iSigValidationResult == ESignatureSelfSigned)
-					{
-					makeOcspCheck = (checkOCSPForSelfSignedPkg==1);
-					}
-				CleanupStack::PopAndDestroy(oid);
-				if(makeOcspCheck)
-					{
-					break;
-					}                
-				}
-		    CleanupStack::PopAndDestroy(policyExt);       
-			}
-		
-		if (makeOcspCheck)
-		    {
-            // We haven't done the planning phase so we need to use the default
-            TAppInfo appInfo(iInstallMachine.iCurrentContentProvider->DefaultLanguageAppInfoL());
-    
-            // Signal OCSP check starting
-            CHandleCancellableInstallEvent* cmd = CHandleCancellableInstallEvent::NewLC(appInfo, EEventOcspCheckStart, 0, KNullDesC);
-            iInstallMachine.UiHandler().ExecuteL(*cmd);
-            CleanupStack::PopAndDestroy(cmd);
-            
-            // Start OCSP check.
-            TBuf8<256> ocspUri(iInstallMachine.iInstallPrefs->RevocationServerUri());
-            iInstallMachine.iSecurityManager->PerformOcspL(ocspUri, iInstallMachine.iIap,
-                &iInstallMachine.iOcspMsg,iInstallMachine.iOcspOutcomes,
-                iInstallMachine.iCertificates,iInstallMachine.iStatus);
-    
-            TTime time;
-            time.UniversalTime();
-            TSisTrustStatus& trustStatus =  iInstallMachine.iController->TrustStatus();
-            trustStatus.SetLastCheckDate(time);
-		    }
-        else
-            {
-            iNeedOcsp = EFalse;
-            iInstallMachine.CompleteSelf();
-            }
+        TTime time;
+        time.UniversalTime();
+        TSisTrustStatus& trustStatus =  iInstallMachine.iController->TrustStatus();
+        trustStatus.SetLastCheckDate(time);
 		}
 	else
 		{
@@ -1040,6 +901,11 @@ void CInstallMachine::TPlanInstallationState::EnterL()
 	//contains any executable(.exe or .dll).
 	if (iInstallMachine.IsInInfoMode())
 		{
+		TCapabilitySet userGrantableCaps;
+		userGrantableCaps.SetEmpty();
+		iInstallMachine.GetRequestedCapabilities(userGrantableCaps, filesToCapabilityCheck);
+		iInstallMachine.SetUserGrantableCapabilities(userGrantableCaps);
+		
 		Sis::CController& controller = const_cast <Sis::CController&>(iInstallMachine.iPlanner->CurrentController());
 		controller.SetHasExecutable(EFalse);
 		TInt noOfFiles = filesToCapabilityCheck.Count();		
@@ -1168,6 +1034,10 @@ CInstallMachine::TState* CInstallMachine::TCheckPostrequisitesState::CompleteL()
 	DEBUG_PRINTF(_L8("Install Machine - Completed Postrequisites Check State"));
 	// Inform UI of final progress bar value.
 	iInstallMachine.SetProgressBarFinalValueL();
+	// user hasn't cancelled so mark the installation as confirmed. This
+	// will allow the registry cache to be regenerated further on during the
+	// installation process.
+	iInstallMachine.iOperationConfirmed = ETrue;	
 	return static_cast<TState*>(&iInstallMachine.iIntegritySupportState);
 	}
 	
@@ -1235,11 +1105,6 @@ CInstallMachine::TState* CInstallMachine::TIntegritySupportState::ErrorL(
 void CInstallMachine::TIntegritySupportState::Cancel()
 	{
 	DEBUG_PRINTF(_L8("Install Machine - Cancelling Integrity Support State"));
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	DeRegisterForceRegisteredAppsL();
-#endif
-
 	if (iInstallMachine.iProcessor)
 		{
 		iInstallMachine.iProcessor->Cancel();
@@ -1322,43 +1187,24 @@ void CInstallMachine::PublishPropertiesL()
 void CInstallMachine::PostJournalFinalizationL(TInt aError)
 	{
 	DEBUG_PRINTF(_L8("Install Machine - PostJournalFinalization"));
-   
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	// Do nothing in info mode
 	if(IsInInfoMode())
 		{
 		return;
-		}	    
+		}
 #endif
-	
 	if (!iPlan)
 		{
 		return;
 		}
 	const RPointerArray<CSisRegistryFileDescription>& filesToRun = iPlan->FilesToRunAfterInstall();
-    RSisLauncherSession launcher;	        
-    if (launcher.Connect() != KErrNone)
-        {
-        DEBUG_PRINTF(_L8("Install Machine - Failed to connect to SisLauncher"));
-        return;
-        }
-    CleanupClosePushL(launcher);
-	 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-	//Notify apparc for the the change in the Applications
-    RArray<TAppUpdateInfo> affectedApps;
-    iPlan->GetAffectedApps(affectedApps);
-    if (affectedApps.Count() > 0)
-        {
-        launcher.NotifyNewAppsL(affectedApps);
-        }
-    affectedApps.Close();
-#endif
-	    
-	TInt numFiles = filesToRun.Count();	
+
+	TInt numFiles = filesToRun.Count();
+	
 	if (aError != KErrNone || numFiles <= 0)
 		{
-		CleanupStack::PopAndDestroy(&launcher);
 		return;
 		}
 	
@@ -1372,12 +1218,17 @@ void CInstallMachine::PostJournalFinalizationL(TInt aError)
 		return;
 		}
 	
-	DEBUG_PRINTF(_L8("Install Machine - Processing files to run after install"));	
-
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK		
+	DEBUG_PRINTF(_L8("Install Machine - Processing files to run after install"));
+	RSisLauncherSession launcher;
 	
+	if (launcher.Connect() != KErrNone)
+		{
+		DEBUG_PRINTF(_L8("Install Machine - Failed to connect to SisLauncher, continuing..."));
+		return;
+		}
+	CleanupClosePushL(launcher);
 	launcher.NotifyNewAppsL(iPlan->AppArcRegFiles());
-#endif
+
 	if (iPlan->ContainsPlugins())
 
 		{
@@ -1427,7 +1278,7 @@ void CInstallMachine::PostJournalFinalizationL(TInt aError)
 			}
 		}
 	
-    iInstallMachine.CompleteSelf();
+	iInstallMachine.CompleteSelf();
 	iInstallMachine.SetActive();
 	}
     
@@ -1447,9 +1298,6 @@ CInstallMachine::TState* CInstallMachine::TFinalState::ErrorL(
 
 void CInstallMachine::TFinalState::Cancel()
 	{
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	DeRegisterForceRegisteredAppsL();
-#endif
 	}
 
 //
@@ -1713,19 +1561,17 @@ void CInstallMachine::CheckAndGrantCapabilitiesL(RPointerArray<CFileDescription>
 	// Check if any of them are system capabilities. If so, bail out.
   	TCapabilitySet requiredExtraSysCaps(requestedCaps);
   	SecurityCheckUtil::RemoveUserCaps(requiredExtraSysCaps, *iSecurityManager);
-		
+	TAppInfo appInfo(iCurrentContentProvider->DefaultLanguageAppInfoL()); 
+	
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	// Report the error to the user only when machine not runs in info collection mode
 	if(IsInInfoMode())
 		{
-		TCapabilitySet requiredUserCaps(requestedCaps);
-		requiredUserCaps.Remove(requiredExtraSysCaps);
-		SetUserGrantableCapabilities(requiredUserCaps);
+		SetUserGrantableCapabilities(requestedCaps);
 		return;
 		}
 	#endif
 
-	TAppInfo appInfo(iCurrentContentProvider->DefaultLanguageAppInfoL());
 	if (SecurityCheckUtil::NotEmpty(requiredExtraSysCaps)||(SecurityCheckUtil::NotEmpty(requestedCaps) && EFalse==iSecurityManager->SecurityPolicy().AllowGrantUserCaps()))
 		{
 		// Report error to the user. Include the list of capabilities that are left in requestedCaps.
@@ -1874,9 +1720,7 @@ const Sis::CController& CInstallMachine::MainController()
 void CInstallMachine::SetProgressBarFinalValueL()
 	{
 	HandleInstallationEventL(iPlan, EEventSetProgressBarFinalValue, iPlan->FinalProgressBarValue());
-	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
 	SetFinalProgressBarValue(iPlan->FinalProgressBarValue());
-	#endif
 	}
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
@@ -1964,20 +1808,6 @@ void CInstallMachine::TFinalState::PopulateNativeComponentInfoL(const CControlle
 	
 	//Setting the HasExecutable flag
 	aNativeComponentInfo->iHasExe = controller.HasExecutable();
-	
-	//Setting the drive selection requird flag
-	aNativeComponentInfo->iIsDriveSelectionRequired = controller.DriveSelectionRequired();
-	
-	//Populate ApplicationInfo, copy the app info from controller's iApplicationInfo  to install machines's iApplicationInfo 
-	RCPointerArray<CNativeComponentInfo::CNativeApplicationInfo> applications;
-	applications = const_cast<CController&>(aController).GetApplicationInfo();
-	for(TInt i = 0 ; i < applications.Count() ; i++)
-	    {
-	    CNativeComponentInfo::CNativeApplicationInfo*  appInfo = NULL;
-	    appInfo = CNativeComponentInfo::CNativeApplicationInfo::NewLC(applications[i]->AppUid(), applications[i]->Name(), applications[i]->GroupName(), applications[i]->IconFileName());
-	    aNativeComponentInfo->iApplications.AppendL(appInfo);
-	    CleanupStack::Pop(appInfo);
-	    }	
 	
 	const RPointerArray<CController>& embeddedControllers = aController.InstallBlock().EmbeddedControllers();
 	TInt totalEmbeddedControllers = embeddedControllers.Count();

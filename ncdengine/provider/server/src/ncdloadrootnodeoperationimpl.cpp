@@ -1018,11 +1018,6 @@ void CNcdLoadRootNodeOperation::ParseCatalogBundleL(
     // Create folder for catalog bundle.
     DASSERT( bundleId );
     
-    if (!bundleId)
-        {
-        User::Leave(KErrNotFound);
-        }
-    
     CNcdNodeIdentifier* metaDataId = CNcdNodeIdentifier::NewLC(
         aDetail.Value(), *bundleId, iPendingMessage->Session().Context().FamilyId() );
     DLINFO((_L("Bundle metaid ns: %S, id: %S"), 

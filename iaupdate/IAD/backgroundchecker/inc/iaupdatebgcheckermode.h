@@ -25,11 +25,11 @@ enum TIAUpdateBGMode
     {
     ESleepMode,
     EFirstTimeMode,
-//    EFirstTimeMode2,
     EFirstTimeMode2,
+    EFirstTimeMode3,
     ENormalMode,
-    ERetryMode
-//    EFirstTimeRemindMode
+    ERetryMode,
+    EFirstTimeRemindMode
     };
 
 #endif //IAUPDATEBGCHECKERMODE_H

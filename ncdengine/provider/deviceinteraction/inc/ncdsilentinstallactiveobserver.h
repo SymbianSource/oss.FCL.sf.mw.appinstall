@@ -23,9 +23,7 @@
 #include <e32base.h>
 #include <f32file.h>
 // For silent install
-#include <usif/sif/sif.h>
-
-
+#include <SWInstApi.h> 
 
 class MNcdAsyncSilentInstallObserver;
 
@@ -70,20 +68,20 @@ public:
      * Sets this object active for observing a silent install operation.
      * 
      * @param aFileName Installation file name.
-     * @param aSilentInstallOptions Silent installation options.
+     * @param aSilentInstallOptionsPckg Silent installation options.
      */
     void StartToObserveL( const TDesC& aFileName,
-                          const Usif::COpaqueNamedParams* aSilentInstallOptions );
+                          const SwiUI::TInstallOptionsPckg& aSilentInstallOptionsPckg );
 
 
     /**
      * Sets this object active for observing a silent install operation.
      * 
      * @param aFile Installation file handle.
-     * @param aSilentInstallOptions Silent installation options.
+     * @param aSilentInstallOptionsPckg Silent installation options.
      */
     void StartToObserveL( RFile& aFile,
-                          const Usif::COpaqueNamedParams* aSilentInstallOptions );
+                          const SwiUI::TInstallOptionsPckg& aSilentInstallOptionsPckg );
 
 
     /**
@@ -149,7 +147,8 @@ protected:
      * that handles the installation operations that this
      * class object observes. Ownerhsip is not transferred.
      */
-    Usif::RSoftwareInstall& SilentLauncher();
+    SwiUI::RSWInstSilentLauncher& SilentLauncher();
+
 
     /**
      * Converts the given error code if necessary.
@@ -177,11 +176,10 @@ private: // data
 
     // The silent launcher handles the install operations that
     // this class object observes. 
-    // SwiUI::RSWInstSilentLauncher iSilentLauncher;
-    Usif::RSoftwareInstall iInstaller;
-    Usif::COpaqueNamedParams* iResults;
-    Usif::COpaqueNamedParams* iArguments;
+    SwiUI::RSWInstSilentLauncher iSilentLauncher;
     
+    SwiUI::TServerRequest iCancelCode;
+
 };
 
 #endif // NCD_SILENT_INSTALL_ACTIVE_OBSERVER_H

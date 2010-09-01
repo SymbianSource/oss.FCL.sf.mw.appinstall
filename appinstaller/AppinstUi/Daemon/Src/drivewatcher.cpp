@@ -19,106 +19,64 @@
 #include "drivewatcher.h"
 #include "SWInstDebug.h"
 
-using namespace Swi;
-
+namespace Swi
+{
 // CDriveWatcher
 _LIT(KNotificationDirectory,"mediachange\\");
 
-
-// -----------------------------------------------------------------------
-// CDriveWatcher::NewL
-// -----------------------------------------------------------------------
-//    
-/*static*/ 
-CDriveWatcher* CDriveWatcher::NewL( RFs& aFs, 
-                                    TInt aDrive, 
-                                    MDriveObserver& aObserver,
-                                    TInt aPriority )
+/*static*/ CDriveWatcher* CDriveWatcher::NewL(RFs& aFs, TInt aDrive, 
+												MDriveObserver& aObserver,
+							 					TInt aPriority)
 	{
-	CDriveWatcher* self = NewLC( aFs, aDrive, aObserver, aPriority );
+	CDriveWatcher* self=NewLC(aFs, aDrive, aObserver, aPriority);
 	CleanupStack::Pop(self);
 	return self;
 	}
-
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-// 
-/*static*/ 
-CDriveWatcher* CDriveWatcher::NewLC( RFs& aFs, 
-                                     TInt aDrive, 
-                                     MDriveObserver& aObserver,
-                                     TInt aPriority )
+	
+/*static*/ CDriveWatcher* CDriveWatcher::NewLC(RFs& aFs, TInt aDrive, 
+												MDriveObserver& aObserver,
+							 					TInt aPriority)
 	{
-	CDriveWatcher* self = new(ELeave) CDriveWatcher( aFs, 
-	                                                 aDrive, 
-	                                                 aObserver, 
-	                                                 aPriority );
-	CleanupStack::PushL( self );
+	CDriveWatcher* self=new(ELeave) CDriveWatcher(aFs, aDrive, aObserver, aPriority);
+	CleanupStack::PushL(self);
 	self->ConstructL();
 	return self;	
 	}
-
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
+	
 CDriveWatcher::~CDriveWatcher()
 	{
 	Cancel();
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
-CDriveWatcher::CDriveWatcher( RFs& aFs, 
-                              TInt aDrive, 
-                              MDriveObserver& aObserver,
-                              TInt aPriority )
-                              : CActive(aPriority), 
-                                iFs(aFs), 
-                                iDrive(aDrive), 
-                                iObserver(aObserver)
+CDriveWatcher::CDriveWatcher(RFs& aFs, TInt aDrive, MDriveObserver& aObserver,
+							 TInt aPriority)
+	: CActive(aPriority), iFs(aFs), iDrive(aDrive), iObserver(aObserver)
 	{
 	CActiveScheduler::Add(this);
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
 void CDriveWatcher::ConstructL()
 	{
-	// Notify observer of media change since we're beginning 
-    // from an unknown state
+	// Notify observer of media change since we're beginning from an unknown state
 	NotifyMediaChange();
 	
 	// Start watching for changes
 	WaitForChangeL();
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
 void CDriveWatcher::DoCancel()
 	{
 	iFs.NotifyChangeCancel(iStatus);
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
 TBool CDriveWatcher::IsMediaPresentL()
 	{
-    FLOG_1( _L("Daemon: Checking media presence for drive %d"), iDrive );
+        FLOG_1( _L("Daemon: Checking media presence for drive %d"), iDrive );
         
 	TVolumeInfo volumeInfo;
-	TInt err = iFs.Volume( volumeInfo, iDrive );
+	TInt err=iFs.Volume(volumeInfo, iDrive);
 	
-	switch ( err )
+	switch (err)
 		{
 		case KErrNotReady: // No Media present
 			{
@@ -131,33 +89,22 @@ TBool CDriveWatcher::IsMediaPresentL()
 			}
 		}
 
-	User::Leave( err );	
+	User::Leave(err);	
 	return ETrue;	// Will never get here.
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
 void CDriveWatcher::NotifyMediaChange()
 	{
-    FLOG( _L("Daemon: NotifyMediaChange") );        
+        FLOG( _L("Daemon: NotifyMediaChange") );        
 	// Unsuccessful media change is not fatal, so handle here
-	TRAPD( err, iObserver.MediaChangeL( iDrive, 
-	                                    IsMediaPresentL() 
-	                                    ? MDriveObserver::EMediaInserted : 
-                                        MDriveObserver::EMediaRemoved));
+	TRAPD(err,iObserver.MediaChangeL(iDrive, IsMediaPresentL() ? MDriveObserver::EMediaInserted : MDriveObserver::EMediaRemoved));
 
 	if (err != KErrNone)
 		{
-        FLOG_1(_L("Daemon: MediaChangeL TRAP err = %d"), err );
+                FLOG_1(_L("Daemon: MDriveObserver::MediaChangeL left while processing media notification %d"),err);
 		}              
 	}
-
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//	
+	
 void CDriveWatcher::RunL()
 	{
 	NotifyMediaChange();
@@ -165,29 +112,22 @@ void CDriveWatcher::RunL()
 	WaitForChangeL();
 	}
 
-// -----------------------------------------------------------------------
-// 
-// -----------------------------------------------------------------------
-//
 void CDriveWatcher::WaitForChangeL()
 	{
 	TChar drive;
-	User::LeaveIfError( iFs.DriveToChar( iDrive, drive ) );
+	User::LeaveIfError(iFs.DriveToChar(iDrive, drive));
 	TUint driveChar(drive); // Can't pass TChar to Format().
 	
 	TPath notificationPath;
 	TPath privatePath;
 	_LIT(KNotificationPathFormat,"%c:%S%S");
-	User::LeaveIfError( iFs.PrivatePath( privatePath ) );
+	User::LeaveIfError(iFs.PrivatePath(privatePath));
 
-	notificationPath.Format( KNotificationPathFormat, 
-	                         driveChar, 
-	                         &privatePath, 
-	                         &KNotificationDirectory );	
+	notificationPath.Format(KNotificationPathFormat, driveChar, &privatePath, &KNotificationDirectory);	
 	
-	iFs.NotifyChange( ENotifyEntry, iStatus, notificationPath );
+	iFs.NotifyChange(ENotifyEntry, iStatus, notificationPath);
 
 	SetActive();
 	}
 	
-//EOF
+}

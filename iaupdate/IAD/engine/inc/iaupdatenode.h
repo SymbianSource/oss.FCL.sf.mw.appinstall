@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -78,20 +78,6 @@ public:
        
         };
 
-    /**
-    * For UI during update process
-    **/
-    
-    enum TUIUpdateState
-        {
-        ENormal,
-        EDownloading,
-        EInstalling,
-        EUpdated,
-        EFailed,
-        EDownloaded        
-        };
-    
 
     /**
      * @return TPackageType The type of this node content.
@@ -183,20 +169,6 @@ public:
      */
     virtual TInt Depth() const = 0;
 
-    virtual void SetUiState( TUIUpdateState aState ) = 0;
-    
-    virtual TUIUpdateState UiState() const = 0;
-    
-    // for progress bar in UI
-    virtual void SetProgress( TInt aProgress ) = 0;
-    
-    virtual TInt Progress() const = 0; 
-    
-    virtual void SetTotal( TInt aTotal ) = 0;
-    
-    virtual TInt Total() const = 0; 
-    
-       
 
 protected:
 

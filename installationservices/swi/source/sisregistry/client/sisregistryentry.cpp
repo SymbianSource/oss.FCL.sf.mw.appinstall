@@ -317,6 +317,7 @@ EXPORT_C void RSisRegistryEntry::AugmentationsL(RPointerArray<HBufC>& aPackageNa
 	{
 	CleanupResetAndDestroyPushL(aPackageNames);
     CleanupResetAndDestroyPushL(aVendorNames);
+    
 	HBufC8* buffer = RSisRegistryEntry::SendReceiveBufferLC(EPackageAugmentations);
 	
 	// create a stream based on the buffer
@@ -342,6 +343,7 @@ EXPORT_C void RSisRegistryEntry::AugmentationsL(RPointerArray<HBufC>& aPackageNa
 		CleanupStack::Pop(2, vendor);	//vendor package, 
 		}
 	CleanupStack::PopAndDestroy(3, buffer);// buffer, stream, packages
+	
 	CleanupStack::Pop(2, &aPackageNames);
 	}
 

@@ -28,27 +28,7 @@
 FileDescription::~FileDescription ()
 	{
 	}
-	
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-FileDescription::FileDescription(const CSISFileDescription& aFile, TInt aSid, const TInt aTargetDrive, const std::wstring& aFileName, const std::wstring& aLocalName)
-	: iTarget(aFileName),
-	iLocalFile(aLocalName),
-	iMimeType(aFile.MimeType().GetString()),
-	iOperation(aFile.Operation()),
-	iOperationOptions(aFile.OperationOptions()),
-	iUncompressedLength(aFile.UncompressedLength()),
-	iIndex(aFile.FileIndex()),
-	iSid(aSid)
-{
-	const unsigned char* data = aFile.Hash().Blob().Data();
-	TUint32 len = aFile.Hash().Blob().Size();
 
-	std::string hashData((char*)data, len);
-
-	iHash.SetData(hashData);
-	iHash.SetHashId(HashContainer::EHashSHA);
-}
-#else
 FileDescription::FileDescription(const CSISFileDescription& aFile, TInt aSid, const TInt aTargetDrive, const std::wstring& aFileName)
 	: iTarget(aFileName),
 	iMimeType(aFile.MimeType().GetString()),
@@ -66,7 +46,6 @@ FileDescription::FileDescription(const CSISFileDescription& aFile, TInt aSid, co
 	iHash.SetData(hashData);
 	iHash.SetHashId(HashContainer::EHashSHA);
 }
-#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 void FileDescription::Internalize(Deserialiser& des)
 	{

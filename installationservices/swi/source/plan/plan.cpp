@@ -38,9 +38,6 @@ EXPORT_C CPlan::~CPlan()
 	iFilesToRunBeforeShutdown.ResetAndDestroy();
 	iFilesToRunAfterInstall.ResetAndDestroy();
 	iAppArcRegFiles.ResetAndDestroy();
-#ifdef  SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	
-	iAffectedApps.Close();
-#endif
 	}
 
 EXPORT_C CPlan* CPlan::NewL()
@@ -155,28 +152,5 @@ EXPORT_C void CPlan::ResetAppArcRegFiles()
 	{
 	iAppArcRegFiles.ResetAndDestroy();
 	}
+	
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK 
-EXPORT_C void CPlan::SetAffectedApps(RArray<TAppUpdateInfo>& aAppInfo)
-    {
-    TInt count = aAppInfo.Count();
-    for(TInt i = 0 ; i< count ; i++)
-        {
-        iAffectedApps.Append(aAppInfo[i]);
-        }
-    }
-    
-EXPORT_C void CPlan::GetAffectedApps(RArray<TAppUpdateInfo>& aAppInfo) const
-    {
-    TInt count = iAffectedApps.Count();
-    for(TInt i = 0 ; i< count ; i++)
-        {
-        aAppInfo.Append(iAffectedApps[i]);
-        }
-    }
-
-EXPORT_C void CPlan::ResetAffectedApps()
-    {
-    iAffectedApps.Reset();    
-    }
-#endif

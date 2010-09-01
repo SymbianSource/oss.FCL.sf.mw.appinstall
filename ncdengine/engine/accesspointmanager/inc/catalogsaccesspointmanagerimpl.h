@@ -20,14 +20,7 @@
 #define C_CATALOGSACCESSPOINTMANAGERIMPL_H
 
 #include <e32def.h>
-#include <e32base.h> // HLa: DLMgr remove
-
-#ifdef _0
 #include <ApAccessPointItem.h>
-#endif
-
-#include <e32cmn.h>
-
 #include "catalogsaccesspointmanager.h"
 #include "catalogsaccesspointobserver.h"
 
@@ -197,11 +190,10 @@ private:
      */
     void RemoveAccessPointsL();
         
-#ifdef _0
+    
     HBufC16* ReadText16L( CApAccessPointItem* aItem, const TApMember& aApMember );
 
     HBufC8* ReadText8L( CApAccessPointItem* aItem, const TApMember& aApMember );
-#endif 
     
     TBool MatchInCommsDbL( const CCatalogsAccessPointSettings& aSettings, TUint32& aId );
 
@@ -214,9 +206,7 @@ private:
     void SaveToStorageL();
     
         
-#ifdef _0
     TBool MatchingSettingsL(const CCatalogsAccessPointSettings& aSettings, CApAccessPointItem& aItem);
-#endif
     
     void SetApDetailL( CCatalogsAccessPoint& aAp, const TDesC& aKey, const TDesC& aValue );
 

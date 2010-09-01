@@ -143,7 +143,7 @@ const string SwiCertStoreMetaData ::ExtractCapabilities(char* aCapability, int a
    				capability.append("Unknown"+unknownIndex);
    				unknownIndex++;
    				}
-  			cap += pow((double)2,j);
+  			cap += pow(2,j);
    			}
    		else
    			{

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -99,14 +99,3 @@ TInt RSisRegistryAccessSession::DeleteEntryL(Swi::CSisRegistryPackage& aPackage,
 	return SendReceive(EDeleteEntry, TIpcArgs(index, &packageUid, &time));
 	}
 
-TInt RSisRegistryAccessSession::AddAppRegInfoL(const TDesC& aAppRegFile, TInt& aSpentTimeInMillisecond)
-    {
-    TPckg<TInt> time(aSpentTimeInMillisecond);
-    return SendReceive(EAddAppRegInfo, TIpcArgs(&aAppRegFile, &time));
-    }
-
-TInt RSisRegistryAccessSession::RemoveAppRegInfoL(const TDesC& aAppRegFile, TInt& aSpentTimeInMillisecond)
-    {
-    TPckg<TInt> time(aSpentTimeInMillisecond);
-    return SendReceive(ERemoveAppRegInfo, TIpcArgs(&aAppRegFile, &time));
-    }

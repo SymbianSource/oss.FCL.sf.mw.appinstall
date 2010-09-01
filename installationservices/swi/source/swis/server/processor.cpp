@@ -259,22 +259,10 @@ void CProcessor::RunL()
 	case EInstallFiles:
 		if (DoStateInstallFilesL())
 			{
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK			
-			SwitchState(EParseApplicationRegistrationFiles);
-#else
 			SwitchState(EUpdateRegistry);
-#endif			
 			}
 		break;
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	case EParseApplicationRegistrationFiles:
-	    if (DoParseApplicationRegistrationFilesL())
-	        {
-	        SwitchState(EUpdateRegistry);
-	        }
-	    break;
-#endif		
-	    
+
 	case EUpdateRegistry:
 		if (DoStateUpdateRegistryL())
 			{
@@ -789,11 +777,30 @@ void CProcessor::RemoveFileL(const CSisRegistryFileDescription& aFileDescription
 		// for transaction service RemoveL().
 		if (fileToRemove.Length() > 3)
 			{
-			err = RemoveWithRetryAttemptL(fileToRemove);
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+			TRAP(err, TransactionSession().RemoveL(fileToRemove));
+#else
+			TRAP(err, IntegrityServices().RemoveL(fileToRemove));
+#endif
+			// Display error dialog and leave if the file cannot be removed,
+			// ignoring missing files, media cards not present or corrupt media
+
+			TInt noOfDetletionAttempts=1;
+			while ((err == KErrInUse ||err==KErrAccessDenied )&& noOfDetletionAttempts <= KMaxNoOfDeletionAttempts )
+			    {
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+			    TRAP(err, TransactionSession().RemoveL(fileToRemove));
+#else
+			    TRAP(err, IntegrityServices().RemoveL(fileToRemove));
+#endif
+                DEBUG_PRINTF2(_L8("Deletion attempt %d"), noOfDetletionAttempts);
+                noOfDetletionAttempts++;
+                User::After(KRetryInterval);
+			    }
 
 			if(err !=KErrNone && err != KErrNotFound && err != KErrPathNotFound	&& err != KErrNotReady && err != KErrCorrupt)
 				{
-				CDisplayError* displayCannotDelete=CDisplayError::NewLC(iPlan.AppInfoL(), EUiCannotDelete, fileToRemove);
+        		CDisplayError* displayCannotDelete=CDisplayError::NewLC(iPlan.AppInfoL(), EUiCannotDelete, fileToRemove);
 				iUiHandler.ExecuteL(*displayCannotDelete);
 				CleanupStack::PopAndDestroy(displayCannotDelete);
 				User::Leave(err);
@@ -835,8 +842,25 @@ void CProcessor::RemovePrivateDirectoryL(TUid aSid)
 					TChar driveLetter;
 					User::LeaveIfError(iFs.DriveToChar(drive, driveLetter));
 					privatePath[0] =  static_cast<TText> (driveLetter);
+					// try to remove the private directory, ignore if it can't be found
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+					TRAP(err, TransactionSession().RemoveL(privatePath));
+#else
+					TRAP(err, IntegrityServices().RemoveL(privatePath));
+#endif
 
-					err = RemoveWithRetryAttemptL(privatePath);
+		            TInt noOfDetletionAttempts=1;
+		            while ((err == KErrInUse ||err==KErrAccessDenied )&& noOfDetletionAttempts <= KMaxNoOfDeletionAttempts )
+		                {
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		                TRAP(err, TransactionSession().RemoveL(privatePath));
+#else
+		                TRAP(err, IntegrityServices().RemoveL(privatePath));
+#endif
+		                DEBUG_PRINTF2(_L8("Deletion attempt %d"), noOfDetletionAttempts);
+		                noOfDetletionAttempts++;
+		                User::After(KRetryInterval);
+		                }
 
 					if (err != KErrNone && err != KErrNotReady &&
 						err != KErrNotFound && err != KErrPathNotFound && err != KErrCorrupt)
@@ -884,23 +908,5 @@ void CProcessor::RunBeforeShutdown()
 		// not block uninstallation.Retaining the RunRemove behaviour. 
 		TRAP_IGNORE(RunFileL(fileName->Target(), fileName->MimeType(), fileName->OperationOptions()));
 		}	
-	}
-
-TInt CProcessor::RemoveWithRetryAttemptL(TDesC& aFileToRemove)
-	{
-	TInt err = KErrNone;
-	TInt noOfDetletionAttempts=1;
-			
-	do {
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	    TRAP(err, TransactionSession().RemoveL(aFileToRemove));
-#else
-	    TRAP(err, IntegrityServices().RemoveL(aFileToRemove));
-#endif
-        DEBUG_PRINTF2(_L8("Deletion attempt %d"), noOfDetletionAttempts);
-        noOfDetletionAttempts++;
-        User::After(KRetryInterval);
-		} while ((err == KErrInUse ||err==KErrAccessDenied )&& noOfDetletionAttempts <= KMaxNoOfDeletionAttempts );
-	return err;
 	}
 

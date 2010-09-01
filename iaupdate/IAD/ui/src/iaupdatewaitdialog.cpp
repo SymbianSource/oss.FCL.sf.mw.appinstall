@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -11,7 +11,7 @@
 *
 * Contributors:
 *
-* Description:   This file contains the implementation of IAUpdateWaitDialog
+* Description:   This file contains the implementation of CIAUpdateWaitDialog
 *                class member functions.
 *
 */
@@ -19,8 +19,6 @@
 
 
 // INCLUDE FILES
-#include <hbprogressdialog.h>
-
 #include "iaupdatewaitdialog.h"
 #include "iaupdatewaitdialogobserver.h"
 
@@ -29,66 +27,51 @@
 // ========================= MEMBER FUNCTIONS ================================
 
 // -----------------------------------------------------------------------------
-// IAUpdateWaitDialog::IAUpdateWaitDialog
+// CIAUpdateDialogs::CIAUpdateDialogs
+// C++ default constructor can NOT contain any code, that
+// might leave.
 // -----------------------------------------------------------------------------
 //
-IAUpdateWaitDialog::IAUpdateWaitDialog() 
-{
-    mCallback = NULL;
-    mWaitDialog = NULL;
-}
+CIAUpdateWaitDialog::CIAUpdateWaitDialog( CEikDialog** aSelfPtr, 
+                                TBool aVisibilityDelayOff )
+    :CAknWaitDialog( aSelfPtr, aVisibilityDelayOff )
+    {
+    }
 
 // -----------------------------------------------------------------------------
-// IAUpdateWaitDialog::~IAUpdateWaitDialog
+// CIAUpdateDialogs::~CIAUpdateDialogs
 // Destructor
 // -----------------------------------------------------------------------------
 //
-IAUpdateWaitDialog::~IAUpdateWaitDialog()
-{
-    if (mWaitDialog)
+CIAUpdateWaitDialog::~CIAUpdateWaitDialog()
     {
-        //mWaitDialog->close();  //TODO: is there need to close/delete progressdialog, it's selfdeleted in close()
     }
-}
 
 // ---------------------------------------------------------------------------
-// IAUpdateWaitDialog::showDialog()
+// CIAUpdateWaitDialog::OkToExitL()
+// called by framework when the Softkey is pressed. 
+// On cancel either stop installation or exit 
 // ---------------------------------------------------------------------------
 //
-int IAUpdateWaitDialog::showDialog(const QString& text)
-{
-    if (!mWaitDialog)
+TBool CIAUpdateWaitDialog::OkToExitL( TInt aButtonId )
     {
-        mWaitDialog = new HbProgressDialog(HbProgressDialog::WaitDialog);
-        connect(mWaitDialog, SIGNAL(cancelled()), this, SLOT(dialogCancelled()));
+    TBool result( ETrue );
+    
+    if ( iCallback )
+        {
+        result = iCallback->HandleDialogExitL( aButtonId );
+        }
+
+    return result;
     }
-    mWaitDialog->setText(text);
-    mWaitDialog->setTimeout(HbPopup::NoTimeout);
-    mWaitDialog->show();
-    return 0;
-}
+
 // ---------------------------------------------------------------------------
-// IAUpdateWaitDialog::SetCallback
+// CIAUpdateWaitDialog::SetCallback
 // ---------------------------------------------------------------------------
 //
-void IAUpdateWaitDialog::SetCallback(MIAUpdateWaitDialogObserver* callback)
-{
-    mCallback = callback;
-}
-
-void IAUpdateWaitDialog::close()
-{
-    if (mWaitDialog)  
+void CIAUpdateWaitDialog::SetCallback( MIAUpdateWaitDialogObserver* aCallback )
     {
-       mWaitDialog->close();     
+    iCallback = aCallback;
     }
-}
 
-void IAUpdateWaitDialog::dialogCancelled()
-{
-    if (mCallback)
-    {
-        mCallback->HandleWaitDialogCancel();        
-    }
-}
 // End of File

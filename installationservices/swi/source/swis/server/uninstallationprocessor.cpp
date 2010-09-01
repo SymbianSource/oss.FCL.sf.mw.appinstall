@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1997-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -44,8 +44,7 @@
 #include "sislauncherclient.h"
 #include "sisinfo.h"
 #include "sisuid.h"
-#include "plan.h"
-#include "sisregistrypackage.h"
+
 
 using namespace Swi;
 
@@ -194,126 +193,13 @@ TBool CUninstallationProcessor::DoStateProcessSkipFilesL()
 	return ETrue;	// Nothing to do
 	}
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-TBool CUninstallationProcessor::DoParseApplicationRegistrationFilesL()
-    {
-    return ETrue;   // Nothing to do
-    }
-#endif
-
 TBool CUninstallationProcessor::DoStateUpdateRegistryL()
 	{
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	 
-    const CApplication& application = ApplicationL();
-    RArray<TAppUpdateInfo> affectedApps;    
-    CleanupClosePushL(affectedApps);	    
-    RArray<Usif::TComponentId> componentIds;
-    CleanupClosePushL(componentIds);
-    RArray<TUid> existingAppUids;
-    CleanupClosePushL(existingAppUids);
-    RArray<TUid> newAppUids;    
-    CleanupClosePushL(newAppUids);
-    
-    TAppUpdateInfo existingAppInfo, newAppInfo;     
-    TUid packageUid = application.PackageL().Uid();
-    
-    // Get all existing componentsIds for the package to to be uninstalled
-    TRAPD(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
-    TInt count = componentIds.Count();
-    if(0 == count)
-        {
-        DEBUG_PRINTF(_L("ComponentIDs not found for the base package"));
-        User::Leave(KErrNotFound);
-        }
-    
-    //Get the apps for CompIds and mark them as to be uninstalled     
-    for(TInt i = 0 ; i < count; i++)
-        {
-        existingAppUids.Reset();                    
-        TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids)); 
-      
-        for(TInt i = 0 ; i < existingAppUids.Count(); i++)
-            {
-            existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);
-            affectedApps.Append(existingAppInfo);                   
-            }
-        }        
-    
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	// Now that we are ready to make changes to the registry so we start a transaction
-	// Note that the commit/rollback action is subsequently taken by the later steps of the state machine	
+	// Note that the commit/rollback action is subsequently taken by the later steps of the state machine
 	iRegistryWrapper.StartMutableOperationsL();
-	iRegistryWrapper.RegistrySession().DeleteEntryL(ApplicationL().PackageL(), TransactionSession().TransactionIdL()); 
-    
-    componentIds.Reset();
-    TRAP(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
-    TInt currentComponentCount = componentIds.Count();        
-    
-    //If there is no component assosiated with this app in the scr and there are affected apps then mark all of them as deleted. 
-    RArray<TAppUpdateInfo> apps;  
-    CleanupClosePushL(apps);
-    Plan().GetAffectedApps(apps);
-    TInt appCount = apps.Count();    
-    
-    //If the there is no component assosiated with the package uid(ie it has been completely deleted) and we have affected apps 
-    //then compare the apps of the package currently being processed with the existing affected apps if alredy exists then
-    //update else add it to the list.
-    if(currentComponentCount == 0 && appCount)
-        {            
-        TInt count = affectedApps.Count();        
-        for(TInt i = 0 ; i < appCount; ++i)
-           {    
-           TUid appUid = apps[i].iAppUid;
-           TBool found = EFalse;
-           for(TInt index = 0; index < count ; ++index)
-             {
-             if(appUid == affectedApps[index].iAppUid)
-                 {                       
-                 existingAppInfo = TAppUpdateInfo(appUid, EAppUninstalled);
-                 affectedApps.Remove(index);
-                 affectedApps.Append(existingAppInfo); 
-                 found = ETrue;     
-                 break;
-                 }               
-             }
-          if(!found)
-             {
-             existingAppInfo = TAppUpdateInfo(appUid,EAppUninstalled);
-             affectedApps.Append(existingAppInfo);
-             }   
-           } 
-        }
-    else
-        {
-        // mark the apps in the affected list as upgraded if they are still in scr
-        for(TInt i = 0 ; i < currentComponentCount; i++)
-           {
-           newAppUids.Reset();                    
-           TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], newAppUids));          
-           for(TInt i = 0 ; i < newAppUids.Count(); i++)
-               {
-               existingAppInfo = TAppUpdateInfo(newAppUids[i], EAppUninstalled);
-               TInt index = 0;
-               index = affectedApps.Find(existingAppInfo);
-               if(KErrNotFound != index)
-                   {
-                   affectedApps.Remove(index);
-                   existingAppInfo = TAppUpdateInfo(newAppUids[i],EAppInstalled);
-                   affectedApps.Append(existingAppInfo);    
-                   }                           
-               }        
-           } 
-        }
-    CleanupStack::PopAndDestroy(&apps);
-    for(TInt i = 0; i < affectedApps.Count(); i++)
-        {
-        DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
-        DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
-        }   
-            
-    const_cast<CPlan&>(Plan()).ResetAffectedApps();
-    const_cast<CPlan&>(Plan()).SetAffectedApps(affectedApps);
-    
-    CleanupStack::PopAndDestroy(4, &affectedApps);    
+	iRegistryWrapper.RegistrySession().DeleteEntryL(ApplicationL().PackageL(), TransactionSession().TransactionIdL());
 #else
 	RSisRegistryWritableSession session;
 	User::LeaveIfError(session.Connect());
@@ -333,6 +219,4 @@ CUninstallationProcessor& CUninstallationProcessor::EmbeddedProcessorL()
 		}
 	return *iEmbeddedProcessor;
 	}
-
-
 

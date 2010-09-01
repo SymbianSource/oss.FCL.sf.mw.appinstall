@@ -48,9 +48,7 @@ class DbHelper
 	{
 	public:
 		DbHelper( const std::wstring& aDrivePath, bool aIsSystemDrive);
-		~DbHelper();
 		TBool IsInstalled(TInt32 aUid) const;
-		TBool IsAppUidInstalled(TUint32 aAppUid) const;
 		bool InternalizeIfExists(SisRegistryObject& aSisRegistryObject, const TUint32 aUid ) const;
 		
 		bool GetIsRemovable( TInt32 aComponentId ) const;
@@ -75,11 +73,6 @@ class DbHelper
 		TInt GetIndex( TUint32 aPackageUid) const;
 
 	private:
-		std::vector<TInt32> GetAppRegistrationInfoAppUid(TInt32 aComponentId) const;
-		std::vector<TInt32> GetServiceInfoServiceID(TInt32 aAppUid) const;
-		std::vector<TInt32> GetLocalAppInfoID(TInt32 aAppUid) const;
-		std::vector<TInt32> GetLocalCaptionAndIconID(TInt32 aAppUid) const;
-		std::vector<TInt32> GetViewDataCaptionAndIconID(TInt32 aLocalAppInfoID) const;
 		TInt32 GetComponentPropertyIntValue( TInt32 aComponentId, std::wstring aComponentPropertyName, TInt32 aDefaultValue = DbHelper::Absent ) const;
 		TInt32 GetComponentPropertyIntFormattedValue(TInt32 aComponentId, std::wstring aComponentPropertyName, TInt32 aIntFormatter) const;
 		std::wstring GetComponentPropertyStrValue(TInt32 aComponentId, std::wstring aComponentPropertyName, TInt32 aIntFormatter) const;

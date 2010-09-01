@@ -61,7 +61,12 @@ USERINCLUDE   ../../provider/inc
 USERINCLUDE   ../../provider/server/inc
 
 // System include paths
-MW_LAYER_SYSTEMINCLUDE
+#ifndef __SERIES60_30__
+APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE /Epoc32/include
+#endif
+
 
 LIBRARY euser.lib estor.lib 
 LIBRARY bafl.lib charconv.lib efsrv.lib  // needed for ARMV5 building

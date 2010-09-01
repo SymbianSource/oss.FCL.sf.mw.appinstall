@@ -28,7 +28,6 @@
 #define INSTALLSWTYPEHELPER_H
 
 #include <e32std.h>
-#include <usif/scr/screntries_platform.h>
 
 namespace Swi 
 	{
@@ -50,14 +49,14 @@ namespace Swi
 		@param aFileName The file name of an XML file to be parsed.
 		@param aInfoArray The output array of registration info objects read from the aFileName.
 		*/
-		void ParseRegFileL(RFs& aFs, const TDesC& aFileName, RPointerArray<Usif::CSoftwareTypeRegInfo>& aInfoArray);
+		void ParseRegFileL(RFs& aFs, const TDesC& aFileName, RPointerArray<CSoftwareTypeRegInfo>& aInfoArray);
 
 		/**
 		Registers software type MIME types to the AppArc. Each Layered Execution Environment must register its
 		MIME types so the SifLauncher may handle installation requests.
 		@param aInfoArray The array of registration info objects describing new software types to be registered.
 		*/
-		void RegisterMimeTypesL(const RPointerArray<Usif::CSoftwareTypeRegInfo>& aInfoArray);
+		void RegisterMimeTypesL(const RPointerArray<CSoftwareTypeRegInfo>& aInfoArray);
 		}
 	}
 

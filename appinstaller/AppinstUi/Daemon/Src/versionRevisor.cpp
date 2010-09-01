@@ -110,11 +110,6 @@ namespace Swi
         FLOG( _L("[VersionRev] StartProcessL start") );        
         TInt err = KErrNone;
         
-//#ifdef _DEBUG        
-//FLOG( _L("[VersionRev] FOR TESTING: STARTUP REASON = Firmwareupdate ! ! !") );          
-//iStartupReason = EFirmwareUpdate;
-//#endif
-
         // If firmware update is done, start scan process.
          if( iStartupReason == EFirmwareUpdate )
               {                             

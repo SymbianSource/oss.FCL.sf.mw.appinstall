@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -21,13 +21,16 @@
 //INCLUDES
 
 #include "iaupdateautomaticcheck.h"
+#include "iaupdatedialogutil.h"
 #include "iaupdatefirsttimeinfo.h"
 #include "iaupdate.hrh"
 #include "iaupdateprivatecrkeys.h"
-#include "iaupdatedialogutil.h"
+#include "iaupdateapplication.h"
 
+#include <avkon.rsg>
+#include <avkon.hrh>
+#include <iaupdate.rsg>
 #include <centralrepository.h> 
-#include <hbaction.h>
 
 
 // ---------------------------------------------------------------------------
@@ -80,10 +83,6 @@ CIAUpdateAutomaticCheck::CIAUpdateAutomaticCheck()
 //
 CIAUpdateAutomaticCheck::~CIAUpdateAutomaticCheck()
     {
-    if ( mDialogUtil )
-        {
-        delete mDialogUtil;
-        }
     }
 
 
@@ -92,8 +91,9 @@ CIAUpdateAutomaticCheck::~CIAUpdateAutomaticCheck()
 // 
 // ---------------------------------------------------------------------------
 //
-void CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
+TBool CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
     {
+    TBool acceptChecks = ETrue;
 	CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
 	if ( !firstTimeInfo->AutomaticUpdateChecksAskedL() )
 	    {
@@ -104,21 +104,18 @@ void CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
 	        }
 	    else
 	        {
-	        if ( !mDialogUtil )
-	            {
-	        	mDialogUtil = new IAUpdateDialogUtil(NULL, this);
+	        TInt ret = IAUpdateDialogUtil::ShowConfirmationQueryL( 
+	                                          R_IAUPDATE_TURN_ON_AUTOUPD_CHECKS, 
+	                                          R_AVKON_SOFTKEYS_YES_NO );    
+	        firstTimeInfo->SetAutomaticUpdatesAskedL();
+	        if ( ret == EAknSoftkeyYes )
+                {
+	            EnableAutoUpdateCheckL( ETrue );
 	            }
-	        if ( mDialogUtil )
-	            {
-	            mPrimaryAction = NULL;
-	            mPrimaryAction = new HbAction("Yes");
-	            HbAction *secondaryAction = NULL;
-	            secondaryAction = new HbAction("No");
-	            mDialogUtil->showQuestion(QString("Turn on setting for Automatic update checks?"), mPrimaryAction, secondaryAction);
-	            }
- 	        }
+	        }
 	    }
 	CleanupStack::PopAndDestroy( firstTimeInfo ); 
+    return acceptChecks;
     }
 
 // ---------------------------------------------------------------------------
@@ -172,19 +169,5 @@ void CIAUpdateAutomaticCheck::EnableAutoUpdateCheckL( TBool aEnable )
     CleanupStack::PopAndDestroy( cenrep );
     }
 
-// ---------------------------------------------------------------------------
-// CIAUpdateAutomaticCheck::dialogFinished
-// 
-// ---------------------------------------------------------------------------
-//
-void CIAUpdateAutomaticCheck::dialogFinished(HbAction *action)
-    {
-    if ( action == mPrimaryAction )
-        {
-        EnableAutoUpdateCheckL( ETrue ); 
-        }
-    CIAUpdateFirstTimeInfo* firstTimeInfo = CIAUpdateFirstTimeInfo::NewLC();
-    firstTimeInfo->SetAutomaticUpdatesAskedL();
-    CleanupStack::PopAndDestroy( firstTimeInfo );
-    }
+    
 // End of File  

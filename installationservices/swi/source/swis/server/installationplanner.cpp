@@ -67,7 +67,6 @@
 #include "sisregistryserverconst.h"
 #include "dessisdataprovider.h"
 #include "adornedutilities.h"
-#include "sislauncherclient.h"
 
 using namespace Swi;
 using namespace Swi::Sis;
@@ -983,6 +982,16 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 	// Size of this controller only!!
 	TInt64 size = iContentProvider.TotalSizeL(aController.InstallBlock(), iExpressionEvaluator, EFalse);
 
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	// Invoke the drive selection part when the planner is not in info collection mode. Otherwise do not.
+	if (IsInInfoCollectionMode())
+		{
+		// for GetInfo purposes we select an existing system drive. We need to make sure that a valid drive is selected for installation planning,  and in any case no files will get copied there, 
+		application->UserSelections().SetDrive(iSystemDriveChar);
+		}
+	else
+		{
+	#endif
 		// If the package is partial upgrade, extract drive from the registry, and dont
 		// display the drive selection option except where we are upgrading a ROM stub
 		if(error == KErrNone && aController.Info().InstallType() == EInstPartialUpgrade && !registryEntry.IsInRomL())
@@ -994,32 +1003,20 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 				// any assumptions about where to install the upgrade
 				// we need to ask the user where they would like to install 
 				// this upgrade
-			    #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-			        if(IsInInfoCollectionMode())
-			            {
-			            application->UserSelections().SetDrive(iSystemDriveChar);
-			            const_cast <Sis::CController&>(aController).SetDriveSelectionRequired(ETrue);
-			            }
-			        else
-			            {
-			    #endif			            
-				ChooseDriveDialogL(*content, *application, size);				
-                #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK                    
-                        }
-                #endif								
+				ChooseDriveDialogL(*content, *application, size);	
 				}
 			else
 				{
 				// install partial upgrade on the same drive as base package
 				application->UserSelections().SetDrive(drive);
 				}
-			}		       		
+			}
 		else if(error == KErrNotFound && aController.Info().InstallType() == EInstPartialUpgrade &&
-		        iCurrentController > 0 && iFilesFromPlannedControllers[baseControllerIndex]->Drive() != TChar(KNoDriveSelected) )
+				iFilesFromPlannedControllers[baseControllerIndex]->Drive() != TChar(KNoDriveSelected))
 				{
 				//Use the base package's drive
 				application->UserSelections().SetDrive(iFilesFromPlannedControllers[baseControllerIndex]->Drive());			
-				}		
+				}
 		else if((aController.Info().InstallType() == EInstInstallation
 				|| aController.Info().InstallType() == EInstAugmentation)
 				&& iIsPropagated)
@@ -1041,21 +1038,11 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 		else if (IsUserDriveSelectionRequiredL(aController.InstallBlock()))
 			{
 			// User needs to choose which drive will be used for the installation
-            #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-                if(IsInInfoCollectionMode())
-                   {
-                   application->UserSelections().SetDrive(iSystemDriveChar);
-                   const_cast <Sis::CController&>(aController).SetDriveSelectionRequired(ETrue);
-                   }
-                else
-                   {
-            #endif                  
-            ChooseDriveDialogL(*content, *application, size);                  
-            #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK                   
-                   }
-            #endif
+	 		ChooseDriveDialogL(*content, *application, size);	
 			}
-		
+	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+		}
+	#endif
 	CleanupStack::PopAndDestroy(content);
 
 	// To accurately display the space avaialble for next controller 
@@ -1081,7 +1068,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 			
 	// Process the actual controller, then return the application
 	ProcessInstallBlockL(aController.InstallBlock(), *application, aFilesToCapabilityCheck, *filesList);
-
+	
 	//Publishing the UID of the associated package.
 	TUid publishUid = aController.Info().Uid().Uid();
 	if(!(Swi::SecUtils::IsPackageUidPresent(publishUid, iUidList)))
@@ -1105,322 +1092,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             User::Leave(err);
 	        }
 	    }
-		
-	// Filtering of rsc files from the set of files to be copied and using parser to 
-	// extract app uid,foldername,filename and iconfilename 
-    #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-    if(IsInInfoCollectionMode())
-       {        
-        _LIT(KApparcRegDir, "\\private\\10003a3f\\import\\apps\\");	
-        _LIT(KApparcRegistrationFileExtn,".rsc");
-        
-        //Getting the list of files to be added from CApplication Object
-        RPointerArray<CSisRegistryFileDescription> listOfFilesToBeAdded = application->FilesToAdd();
-        //Stores the registration resource files which are passed to the apparc parser
-        RPointerArray<TDesC> regFilesArray;	  
-        CleanupResetAndDestroyPushL(regFilesArray);
-        RPointerArray<CSisRegistryFileDescription> listOfFilesToBeExtracted;  
-        CleanupClosePushL(listOfFilesToBeExtracted);
-        RFs fs;	
-        RArray<TChar> drives;                               // Array of system drives    
-        RArray<TInt64> driveSpaces;                         // Space available on each drive
-        CleanupClosePushL(drives);
-        CleanupClosePushL(driveSpaces);
-        TInt64 currentAvailableDriveSpace = 0 ;         
-        TInt64 totalApplicationDataSize = 0;
-        CSisRegistryFileDescription* currentFileDescription = NULL;
-     
-        //Obtain the disk space available on the drives
-        iSisHelper.FillDrivesAndSpacesL(drives, driveSpaces);
-        TChar systemDrive = RFs::GetSystemDriveChar();
-        TInt driveIndex = drives.Find(systemDrive);
-        currentAvailableDriveSpace = driveSpaces[driveIndex];            //first drive is 'C' drive only
-    
-        //Opening a file server session
-        User::LeaveIfError(fs.Connect());
-        CleanupClosePushL(fs);
-        User::LeaveIfError(fs.ShareProtected());
-    
-        TInt noOfFilesToBeAdded = listOfFilesToBeAdded.Count();
-        // Processing each file and checking if a file is an resource file(*_reg.rsc or *.rsc or *.r%d)
-        for(TInt i=0 ; i < noOfFilesToBeAdded ; i++)
-            {
-            HBufC* targetFileName;	    	   	
-            targetFileName = listOfFilesToBeAdded[i]->Target().Alloc();	   
-            CleanupStack::PushL(targetFileName);
-            TParsePtrC filename(*targetFileName);	    	   
-            TBool isApparcFile = EFalse;
-            HBufC* extension = TParsePtrC(*targetFileName).Ext().AllocLC();
-            
-            if(!extension->Compare(KApparcRegistrationFileExtn)) // for resource files *_reg.rsc or *.rsc
-                {
-                isApparcFile = ETrue;
-                }
-            else
-                {
-                TInt extnLength = extension->Length();
-                HBufC* extn;
-                if(extnLength == 4)                            //for localizable resource files with extn like .r01
-                    {
-                    extn = extension->Right(2).AllocLC();
-                    }
-                else if(extnLength == 5)
-                    {
-                    extn = extension->Right(3).AllocLC();       //for localizable resource files with extn like .r101	            
-                    }
-                else
-                    {   
-                    CleanupStack::PopAndDestroy(2, targetFileName);  //extension
-                    continue;
-                    }
-    
-                //Check to find if the extension is of valid localizable resource files 
-                TInt value = 0;
-                // Declare the variable
-                TLex lex(*extn);
-                // Convert the descriptor into the integer number
-                TInt err = lex.Val(value);
-                if(err == KErrNone)
-                  {
-                  isApparcFile = ETrue;    
-                  }	        
-                CleanupStack::PopAndDestroy(extn);	        
-                }
-            
-            //If its an apparc file(rsc) file then add its size to the total application size
-            if(isApparcFile)
-                {	        
-                listOfFilesToBeExtracted.AppendL(listOfFilesToBeAdded[i]);
-                totalApplicationDataSize += listOfFilesToBeAdded[i]->UncompressedLength();
-                }	    
-            CleanupStack::PopAndDestroy(2, targetFileName);  //extension	    
-            }                   
-            
-        //Here we do extraction of rsc files ,before extracting files we check if there is an enough space on the disk(C drive)
-        //to extract the files then extract the file to a temporary location and
-        //check if it is a registration resource file(using target path) then store it into an array.     
-        TInt noOfFilesToBeExtracted = listOfFilesToBeExtracted.Count();            
-        DEBUG_PRINTF2(_L("Total number resource files (registration/localizable)to be extracted is %d"), noOfFilesToBeExtracted);            
-        if(0 != noOfFilesToBeExtracted)
-            {	
-            
-            //Check if there is enough space to extract the resource (registration or localizable) files    
-            if(totalApplicationDataSize > currentAvailableDriveSpace)
-                {
-                //No memory to extract the file
-                User::LeaveIfError(KErrDiskFull);
-                }
-            
-            //Extraction of rsc file to a temporary location and if it is a reg resource filr append t to an array for parsing
-            for (TInt i = 0 ; i < noOfFilesToBeExtracted ; i++)
-                {
-                TFileName resourceFileName;    
-                _LIT(KResourceFileNameFmt, "%c:\\resource\\install\\temp\\0x%08x\\%S"); // Pakage Uid  
-                TFileName finalToBeExtracted = TParsePtrC(listOfFilesToBeExtracted[i]->Target()).NameAndExt();              	             	                 
-                resourceFileName.Format(KResourceFileNameFmt, TUint(systemDrive), aController.Info().Uid().Uid().iUid,
-                        &finalToBeExtracted);
-                
-                 TInt err = fs.MkDirAll(resourceFileName);
-                 if (err!= KErrNone && err != KErrAlreadyExists)
-                     User::LeaveIfError(err);                                           
-                              
-                 RFile resourceFile;    
-                 User::LeaveIfError(resourceFile.Replace(fs, resourceFileName, 
-                     EFileStream|EFileWrite|EFileRead|EFileShareExclusive));
-                 CleanupClosePushL(resourceFile);	         	         
-                 
-                 // Extract resource file to a temporary file.
-                 DEBUG_PRINTF2(_L("Current resource file (registration/localizable) to be extraced is %S"), &resourceFileName);
-                 User::LeaveIfError(iSisHelper.ExtractFileL(fs, resourceFile,
-                         listOfFilesToBeExtracted[i]->Index(), application->AbsoluteDataIndex(), UiHandler()));	 
-                 
-                 CleanupStack::PopAndDestroy(&resourceFile);
-                                  
-                 // If target of the file is apparc's private folder then it is registration resource file for an app
-                 TParsePtrC filename(listOfFilesToBeExtracted[i]->Target());
-                 if (filename.Path().Left(KApparcRegDir().Length()).CompareF(KApparcRegDir) == 0)
-                     {
-                     HBufC* regResourceFileName = resourceFileName.AllocL();
-                     
-                     regFilesArray.AppendL(regResourceFileName);   	             
-                     }   
-                 }
-            //Since the files have been extracted the available disk space is reduced
-            currentAvailableDriveSpace -= totalApplicationDataSize;                
-            }            
-    
-        DEBUG_PRINTF(_L8("Finished extracting all resource files (registration/localizable) successfuly"));
-        //Pass each registration resource file to the parser to fetch the app info  and then if icon file is present fetch the icon file
-        //to a temporary location.
-            
-        TInt noOfRegFilesToBeParsed = regFilesArray.Count();        
-        DEBUG_PRINTF2(_L("Total number Registration Resource files to be parsed is %d"), noOfRegFilesToBeParsed);        
-        for(TInt i = 0 ; i < noOfRegFilesToBeParsed ; i++)
-            {	   	    
-            Usif::CApplicationRegistrationData *appData = NULL;	    	    
-            CNativeComponentInfo::CNativeApplicationInfo* applicationInfo = NULL;
-            RArray<TLanguage> languages;	 
-            TFileName iconFile;	    
-            // Calling the apparc parser to fetch the app info from the resouce files	
-            
-            DEBUG_PRINTF2(_L("Current Registration Resource file to be parsed is %S"), regFilesArray[i]);
-            
-            // Ask the launcher to parse the registration resource file 
-            RSisLauncherSession launcher;
-            CleanupClosePushL(launcher);
-            User::LeaveIfError(launcher.Connect());
-            RFile file;
-            User::LeaveIfError(file.Open(fs, *regFilesArray[i], EFileRead));
-            RArray<TLanguage> appLanguages;
-            CleanupClosePushL(appLanguages);
-            TRAPD(err,appData=launcher.SyncParseResourceFileL(file, appLanguages));
-            CleanupStack::PopAndDestroy(&appLanguages);
-            file.Close();
-            CleanupStack::PopAndDestroy(&launcher);            // popping and destroying as it is not reqd further.
-            
-            DEBUG_PRINTF2(_L("Finished Parsing Registration Resource file %S successfuly"), regFilesArray[i]);
-            if(KErrCorrupt == err)	        
-                {	                                       
-                continue;
-                }
-            else if(KErrNone != err)
-                {	                                             
-                User::Leave(err);
-                }
-            
-            CleanupStack::PushL(appData);
-            TUid appuid = appData->AppUid();            
-            HBufC* finalAppName = TParsePtrC(appData->AppFile()).NameAndExt().AllocLC();
-            const RPointerArray<Usif::CLocalizableAppInfo> aLocalizableAppInfoList = appData->LocalizableAppInfoList();
-            HBufC* groupName = NULL;
-            HBufC* iconFileName = NULL;
-            TInt fileSize = 0 ;
-            
-            //If localizable info for an app is present get the localized group name, else get it from app registration data 
-            if(0 == aLocalizableAppInfoList.Count())
-                {
-                if(appData->GroupName().Length())
-                    {
-                    groupName = appData->GroupName().AllocLC();
-                    DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
-                    }
-                //Since locale does not exists no need to extract, create CNativeApplicationInfo without iconFileName
-                applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), _L(""));  
-                }
-            else
-                {
-                Usif::CLocalizableAppInfo* localizedInfo = NULL;
-                const Usif::CCaptionAndIconInfo* captionAndIconInfo = NULL;
-                localizedInfo = aLocalizableAppInfoList[0];
-                if(localizedInfo->GroupName().Length())
-                    {
-                    groupName = localizedInfo->GroupName().AllocLC();
-                    }
-                captionAndIconInfo = localizedInfo->CaptionAndIconInfo();
-                //Check if caption and icon info for an app is present or not, if present extract the icon file.
-                if(captionAndIconInfo)
-                    {
-                    if(captionAndIconInfo->IconFileName().Length())
-                        iconFileName = captionAndIconInfo->IconFileName().AllocLC();
-                    
-                    if(iconFileName != NULL)
-                        {                        
-                        HBufC* finalIconFileName = TParsePtrC(*iconFileName).NameAndExt().AllocLC();
-                        
-                        _LIT(KIconFileNameFmt, "%c:\\resource\\install\\icon\\0x%08x\\%S");     // Applicaiton Uid
-                        iconFile.Format(KIconFileNameFmt, TUint(systemDrive), appuid.iUid,
-                        finalIconFileName);
-                        
-                        TInt err = fs.MkDirAll(iconFile);
-                        if (err!= KErrNone && err != KErrAlreadyExists)
-                        User::LeaveIfError(err);
-                        
-                        //Find from the list of files to be copied , the file description of the icon file returned by the parser
-                        for(TInt k = 0; k < listOfFilesToBeAdded.Count() ; k++)
-                            {                      
-                            currentFileDescription = listOfFilesToBeAdded[k];
-                            if(TParsePtrC(currentFileDescription->Target()).NameAndExt().Compare(*finalIconFileName))
-                                {
-                                break;
-                                }
-                            }	              
-                        //Check if there is enough space to extract the icon file           
-                        fileSize = currentFileDescription->UncompressedLength();
-                        if(currentAvailableDriveSpace <  fileSize)
-                            {
-                            //No memory to extract the file
-                            User::LeaveIfError(KErrDiskFull);
-                            }
-                        
-                        //Extracting the icon file to a temp location
-                        RFile tempIconFile;
-                        TInt index = 1;
-                        TBuf<10>  integerAppendStr;
-                        // Check if file already exists, if yes then create file with another name (e.g. *_1 or *_2)
-                        while(1)
-                            {	                  
-                            err = tempIconFile.Create(fs, iconFile, EFileStream|EFileWrite|EFileRead|EFileShareExclusive);
-                            if(err == KErrAlreadyExists)
-                                {	                     
-                                integerAppendStr.TrimAll();
-                                integerAppendStr.Format(_L("%d"), index++);
-                                TInt pos = iconFile.Length()-TParsePtrC(iconFile).Ext().Length();
-                                iconFile.Insert(pos,integerAppendStr);	                      
-                                }
-                            else if(err == KErrNone)
-                                {
-                                //Everthing is fine, proceed	                      
-                                break;               
-                                }
-                            else
-                                {
-                                tempIconFile.Close();
-                                User::Leave(err);
-                                }
-                            }
-                        CleanupClosePushL(tempIconFile);  
-                        
-                        DEBUG_PRINTF2(_L("Icon file to be extraced is %S"), &iconFile);
-                        User::LeaveIfError(iSisHelper.ExtractFileL(fs, tempIconFile, listOfFilesToBeAdded[i]->Index(), application->AbsoluteDataIndex(), UiHandler())); 	              
-                        DEBUG_PRINTF(_L8("Finished extracting Icon file successfuly"));
-                        //After copy the available disk space is reduced
-                        currentAvailableDriveSpace -= fileSize;                        
-                        CleanupStack::PopAndDestroy(3,iconFileName);  //file,finalIconFileName,iconFileSize
-                        
-                        //Create CNativeApplicationInfo with iconFileName
-                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), iconFile);                                          
-                        }
-                    else
-                        {
-                        //Since iconFileName does not exists no need to extract, create CNativeApplicationInfo without iconName
-                        applicationInfo = Swi::CNativeComponentInfo::CNativeApplicationInfo::NewLC(appuid, *finalAppName, groupName?*groupName:_L(""), _L(""));  
-                        }
-                    }
-                }	    
 
-            DEBUG_PRINTF2(_L("Application Uid 0x%08x"), appuid);
-            DEBUG_PRINTF2(_L("Application Name %S"), finalAppName);
-            if(groupName)
-                DEBUG_PRINTF2(_L("Application Group Name %S"), groupName);
-            if(iconFile.Length())
-                DEBUG_PRINTF2(_L("Application Icon File Name %S"), &iconFile);
-                             
-            const_cast <Sis::CController&>(aController).AddApplicationInfoL(applicationInfo);
-            CleanupStack::Pop(applicationInfo);
-            if(groupName)
-                CleanupStack::PopAndDestroy(3, appData);	//groupName,finalAppName,appData
-            else
-                CleanupStack::PopAndDestroy(2, appData);    //finalAppName,appData
-            languages.Close();	    
-            }
-              
-        CleanupStack::PopAndDestroy(3,&drives);  //fs,driveSpaces,drives
-        CleanupStack::Pop(&listOfFilesToBeExtracted);
-        listOfFilesToBeExtracted.Close(); 
-        CleanupStack::PopAndDestroy(&regFilesArray);  
-      }       
-    #endif    
-    
 	//Append planned controllers list
 	iFilesFromPlannedControllers.AppendL(filesList);
 	CleanupStack::Pop(filesList);
@@ -1429,7 +1101,7 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
 	// Some files may need to be questioned of overwrite only when the planner is not in info collection mode.
 	if (!IsInInfoCollectionMode())	
 	#endif
-	//Some files may need to be questioned of overwrite
+	 //Some files may need to be questioned of overwrite
 		WarnEclipseOverWriteL(*application);
  	
  	// Reset the file list array for next controller use
@@ -1442,7 +1114,8 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
   	CleanupStack::Pop(application); 
 	return application;
 	}
-	
+
+
 // Prepare the eclipsable files list from the right source according to the upgrade.	
 void CInstallationPlanner::PrepareEclipsableFilesListL(const Sis::CController& aController)
 	{

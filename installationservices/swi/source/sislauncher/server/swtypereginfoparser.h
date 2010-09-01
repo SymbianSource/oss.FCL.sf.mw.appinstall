@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -38,7 +38,7 @@ namespace Swi
 		static CSoftwareTypeRegInfoParser* NewL();
 		virtual ~CSoftwareTypeRegInfoParser();
 		
-		void ParseL(const TDesC8& aDocument, RPointerArray<Usif::CSoftwareTypeRegInfo>& aSwTypeRegInfoArray);
+		void ParseL(const TDesC8& aDocument, RPointerArray<CSoftwareTypeRegInfo>& aSwTypeRegInfoArray);
 
 	private:
 		// From MContentHandler
@@ -58,11 +58,9 @@ namespace Swi
 	private:
 		CSoftwareTypeRegInfoParser();
 		
-		RPointerArray<Usif::CSoftwareTypeRegInfo>* iSwTypeRegInfoArray;
+		RPointerArray<CSoftwareTypeRegInfo>* iSwTypeRegInfoArray;
 		HBufC8* iContentChunks;
 		TLanguage iLocalizedNameLanguage;
-		TSecureId iSecureId;
-		TInt iAccessMode;
 		
 		enum TXmlNode
 			{
@@ -72,8 +70,8 @@ namespace Swi
 			ENodeLocalizedName,
 			ENodeMimeType,
 			ENodeSifPluginUid,
-			ENodeCustomAccess,
-			ENodeLauncherExecutable
+			ENodeInstallerSecureId,
+			ENodeExecutionLayerSecureId
 			};
 		RArray<TXmlNode> iNodes;
 		

@@ -22,7 +22,9 @@
 PRJ_PLATFORMS
 DEFAULT
 
+
 PRJ_EXPORTS
+
 
 PRJ_MMPFILES
 ./iaupdatebg.mmp

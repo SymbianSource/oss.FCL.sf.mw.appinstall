@@ -58,7 +58,11 @@ END
 USERINCLUDE     ../inc ../obex/inc
 
 // System include paths
-MW_LAYER_SYSTEMINCLUDE
+#ifndef __SERIES60_30__
+APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE     /epoc32/include
+#endif
 
 LIBRARY         euser.lib
 LIBRARY         apparc.lib

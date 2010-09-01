@@ -24,6 +24,7 @@
 
 class CAppMngr2Model;
 class CIdle;
+class CAppMngr2ExitTimer;
 
 
 class CAppMngr2AppUi : public CAknViewAppUi, public MAppMngr2ModelObserver
@@ -43,9 +44,10 @@ public:     // from MAppMngr2ModelObserver
     
 private:    // new functions
     static TInt DelayedConstructL( TAny* aSelf );
+    void CancelNoteL();
     
 private:    // from CAknViewAppUi
-    void HandleCommandL( TInt aCommand );
+    void HandleCommandL( TInt aCommand );    
 
 private:    // data
     CAppMngr2Model* iModel;
@@ -58,6 +60,9 @@ private:    // data
         EAllDone
         } iDelayedConstructionStep;
     TBool iConstructInstallationFilesFirst;
+    CAppMngr2ExitTimer* iExitTimer;
+           
+    TInt iNoteId;
     };
 
 #endif  // C_APPMNGR2APPUI_H

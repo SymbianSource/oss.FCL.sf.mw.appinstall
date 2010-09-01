@@ -20,7 +20,7 @@
 
 // INCLUDES
 #include <f32file.h>
-//#include <WidgetRegistryClient.h>  //HLa: Widget registry remove
+#include <widgetregistryclient.h>
 #include "catalogsutils.h"
 
 // CONSTANTS
@@ -44,9 +44,7 @@ class CExtendedWidgetInfo : public CBase
         inline CExtendedWidgetInfo()
             {
             iUid = TUid::Uid(0);
-            //HLa: Widget registry remove
-            //iVersion = HBufC::New( KWidgetRegistryVal + 1 );
-            iVersion = HBufC::New( KMaxFileName + 1 ); 
+            iVersion = HBufC::New( KWidgetRegistryVal + 1 );
             
             }
         /**

@@ -38,8 +38,6 @@
 
 // common interface for Windows and Linux
 
-const int commandLength = 512;
-
 wchar_t** CommandLineArgs(int &argc , char *argv[]);
 
 void cleanup(int argc, wchar_t **argv);
@@ -102,33 +100,28 @@ int ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTa
 int ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage = 0);
 
 /*
- * Copies an existing file to a new file. 
- *
- * @Parameters aSrc					The name of an existing file.  
- * @Parameters aDest				The name of the new file. 
- * @Parameters aFailIfExistsFlag    If this parameter is TRUE and the new file specified by aDest already exists, 
- *									the function fails. If this parameter is FALSE and the new file already exists, 
- *									the function overwrites the existing file and succeeds.
- * @return 
- *									If the function succeeds, the return value is zero.
- *									If the function fails, the return value is non-zero.
- */
+Copies an existing file to a new file.
+@Parameters aSrc : The name of an existing file. 
+@Parameters aDest : The name of the new file. 
+@Parameters aFlag : (only for windows) If this parameter is TRUE and the new file specified by aDest already exists, the function fails. If this parameter is FALSE and the new file already exists, the function overwrites the existing file and succeeds.
 
-int FileCopyA(const char* aSrc, const char* aDest, bool aFailIfExistsFlag);
+Return Value
+If the function succeeds, the return value is zero.
+If the function fails, the return value is nonzero.
+*/
+
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag);
 
 
 /*
- * Moves an existing file or a directory, including its children.
- *
- * @Parameters aSrc					The current name of the file or directory on the local computer. 
- * @Parameters aDest				The new name for the file or directory. The new name must not already exist. 
- *									A new file may be on a different file system or drive. A new directory must be 
- *									on the same drive. 
- *
- * @return
- *									If the function succeeds, the return value is zero.
- *									If the function fails, the return value is non-zero.
- */
+Moves an existing file or a directory, including its children
+@Parameters aSrc : The current name of the file or directory on the local computer. 
+@Parameters aDest : The new name for the file or directory. The new name must not already exist. A new file may be on a different file system or drive. A new directory must be on the same drive. 
+
+Return Value
+If the function succeeds, the return value is zero.
+If the function fails, the return value is nonzero.
+*/
 
 int FileMoveA(const char* aSrc, const char* aDest);
 

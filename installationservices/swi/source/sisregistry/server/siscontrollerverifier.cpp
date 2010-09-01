@@ -96,11 +96,9 @@ void CSisControllerVerifier::RunL()
 void CSisControllerVerifier::CompleteRequestL()
 	{
 	TPckg<TBool> packageResult(isVerified);
-	if ( !iMessage.IsNull() )
-		{
-		iMessage.WriteL(EIpcArgument0, packageResult);
-		iMessage.Complete(KErrNone);
-		}
+
+	iMessage.WriteL(EIpcArgument0, packageResult);
+	iMessage.Complete(KErrNone);
 	}
 	
 TInt CSisControllerVerifier::RunError(TInt)

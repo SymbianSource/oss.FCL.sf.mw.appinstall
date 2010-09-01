@@ -627,19 +627,12 @@ int ConvertMultiByteToWideChar(const char* aSource, int /*aSourceLen*/, wchar_t*
 	}
 
 
-int FileCopyA(const char* aSrc, const char* aDest, bool aFailIfExistsFlag)
+int FileCopyA(const char* aSrc, const char* aDest, size_t aFlag)
 	{
 		int err= 0;
-
-		char cmd[ commandLength ] = "";
-		if( aFailIfExistsFlag )
-		{
-			strcpy(cmd, "cp ");
-		}
-		else
-		{
-			strcpy(cmd, "cp -f ");
-		}
+		const int len = 512;
+		// Overwrites the orphaned file(if any).
+		char cmd[ len ] = "cp -f ";
 		strcat(cmd, aSrc);
 		strcat(cmd, " ");
 		strcat(cmd, aDest);
@@ -649,12 +642,13 @@ int FileCopyA(const char* aSrc, const char* aDest, bool aFailIfExistsFlag)
 
 		return err;
 	}
+	
 int FileMoveA(const char* aSrc, const char* aDest)
 	{
 		int err= 0;
 
 		// Overwrites the orphaned file(if any).
-		char cmd[ commandLength ] = "mv -f ";
+		char cmd[ 512 ] = "mv -f ";
 		strcat(cmd, aSrc);
 		strcat(cmd, " ");
 		strcat(cmd, aDest);

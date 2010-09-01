@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -102,9 +102,6 @@ copy z:\auto_broken.cfg c:\
 
 testexecute z:\tswi\tuiscriptadaptors\scripts\tuiscriptadaptors.script
 move c:\logs\testexecute\tuiscriptadaptors.htm e:\testresults\tuiscriptadaptors.htm
-
-testexecute z:\tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script
-move c:\logs\testexecute\nonusiftuiscriptadaptors.htm e:\testresults\nonusiftuiscriptadaptors.htm
 
 testexecute z:\tswi\tuiscriptadaptors\scripts\tuninstallpkgs_h4.script
 move c:\logs\testexecute\tuninstallpkgs_h4.htm e:\testresults\tuninstallpkgs_h4.htm
