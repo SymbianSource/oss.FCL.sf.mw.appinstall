@@ -161,6 +161,9 @@ const TInt KCatalogsDlMgrConnectRetryInterval = 100000;
 // File extension for widget
 _LIT( KWidgetExtension, ".wgz" );
 
+// File extension for native packages
+_LIT( KNativeExtension, ".sis" );
+
 // Default widget version number
 _LIT( KDefVersion, "000" );
 

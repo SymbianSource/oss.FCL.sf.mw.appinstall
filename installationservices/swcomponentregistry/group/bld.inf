@@ -21,7 +21,7 @@
  @file
 */
 
-#include "../sqlite_secure/GROUP/BLD.INF"
+#include "../sqlite_secure/group/bld.inf"
 
 PRJ_PLATFORMS
 DEFAULT

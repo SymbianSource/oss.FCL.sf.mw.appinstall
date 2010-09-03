@@ -332,22 +332,26 @@ EXPORT_C void TCatalogsDebug::Print( TRefByValue<const TDesC16> aFmt, ... )
     VA_LIST list;
     VA_START( list, aFmt );
 
+    HBufC8* buffer = NULL;
+    HBufC* buffer16 = NULL;
+    HBufC8* buffer16to8  = NULL;
+
     if( iOutput & EOutputExtLogger )
         if( !DebugHeap()->IsEnabled( iType ) ) return;
 
     // Disable debug heap (if installed) to prevent infinite recursion.
     TBool debugHeapActive = RCatalogsDebugHeap::Activate( EFalse );
 
-    HBufC8* buffer = HBufC8::New( KCatalogsDebugBufferSize );
+    buffer = HBufC8::New( KCatalogsDebugBufferSize );
     if ( buffer == NULL ) goto exit1;
 
     PrintGeneral( buffer->Des() );
     
-    HBufC* buffer16 = HBufC::New( KCatalogsDebugBufferSize );
+    buffer16 = HBufC::New( KCatalogsDebugBufferSize );
     if ( buffer16 == NULL ) goto exit2;
     buffer16->Des().AppendFormatList( aFmt, list );
 
-    HBufC8* buffer16to8 = HBufC8::New( buffer16->Length() );
+    buffer16to8 = HBufC8::New( buffer16->Length() );
     if ( buffer16to8 == NULL ) goto exit3;
     buffer16to8->Des().Copy( *buffer16 );
 

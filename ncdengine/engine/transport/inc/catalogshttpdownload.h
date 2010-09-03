@@ -481,7 +481,7 @@ private: // New methods
     TBool ContainsData( const HBufC* aDes ) const;
     
     /**
-     * Gets the correct extension for iTempFilename by using dochandler
+     * Gets the correct extension for iTempFilename 
      * and ContentType() and sets it to iConfig
      */
     void UpdateExtensionL();

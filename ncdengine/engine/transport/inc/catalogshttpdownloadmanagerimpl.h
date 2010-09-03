@@ -209,8 +209,6 @@ class CCatalogsHttpDownloadManager :
     
 
         CCatalogsHttpConnectionManager& ConnectionManager();
-                
-        CDocumentHandler& DocumentHandler();
         
         TInt NewDownloadId();
         

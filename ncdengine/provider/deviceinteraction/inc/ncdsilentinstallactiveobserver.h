@@ -145,7 +145,7 @@ protected:
 
 
     /**
-     * @return SwiUI::RSWInstSilentLauncher& The launcher
+     * @return Usif::RSoftwareInstall& The launcher
      * that handles the installation operations that this
      * class object observes. Ownerhsip is not transferred.
      */
@@ -177,7 +177,6 @@ private: // data
 
     // The silent launcher handles the install operations that
     // this class object observes. 
-    // SwiUI::RSWInstSilentLauncher iSilentLauncher;
     Usif::RSoftwareInstall iInstaller;
     Usif::COpaqueNamedParams* iResults;
     Usif::COpaqueNamedParams* iArguments;

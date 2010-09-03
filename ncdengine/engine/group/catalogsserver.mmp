@@ -445,7 +445,6 @@ LIBRARY         cmmanager.lib // CMManager and other SNAP/APN classes
 #endif
 
 LIBRARY         apmime.lib // TDataType
-LIBRARY         commonui.lib // CDocumentHandler
 
 START WINS
 //DEFFILE ../BWINS/catalogsserverwins.def

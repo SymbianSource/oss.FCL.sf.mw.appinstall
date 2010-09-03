@@ -44,12 +44,13 @@ private slots:
     void silentRemoveCheckChanged(int state);
     void rfileCheckChanged(int state);
     void ocspCheckChanged(int state);
+    void cancelInstallingChanged(int state);
+    void cancelRemovingChanged(int state);
     void installableDirChanged(int index);
     void installableFileChanged(int index);
     void installUsingNewApi();
     void installUsingOldApi();
     void installByOpeningFile();
-    void cancelInstalling();
     void removeUsingNewApi();
     void removeUsingOldApi();
     void handleComplete();
@@ -57,8 +58,12 @@ private slots:
     void closeApp();
     void fileOpenOk(const QVariant &result);
     void fileOpenFailed(int errorCode, const QString &errorMsg);
+    void cancelInstalling();
+    void cancelRemoving();
 
 private:    // functions
+    void createInstallView();
+    void createRemoveView();
     void getInstallDirs(QStringList& dirList);
     void changeDir(const QString& dirPath);
     void getRemovableApps();
@@ -78,6 +83,8 @@ private:    // data
     bool         mUseSilentUninstall;
     bool         mUseRFileInstall;
     bool         mOcsp;
+    bool         mCancelInstallShortly;
+    bool         mCancelRemoveShortly;
     HbComboBox   *mInstallDirectories;
     HbComboBox   *mInstallableFiles;
     HbComboBox   *mRemovableApps;

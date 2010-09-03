@@ -20,7 +20,6 @@
 
 // INCLUDES
 #include <centralrepository.h>
-#include <SWInstDefs.h>
 #include <featurecontrol.h>
 #include <cmmanager.h>
 #include <qapplication.h>
@@ -1452,7 +1451,7 @@ void CIAUpdateUiController::InstallComplete( MIAUpdateNode& aNode,
     iState = EIdle;
     //CIAUpdateAppUi* appUi = static_cast<CIAUpdateAppUi*>( iEikEnv->EikAppUi() );
     //appUi->StopWGListChangeMonitoring();
-    if ( aError == SwiUI::KSWInstErrFileInUse )
+    if ( aError == KErrInUse )
         {
     	iFileInUseError = ETrue;
         }

@@ -32,16 +32,14 @@
 // NewL
 // ---------------------------------------------------------------------------
 //
-CCatalogsTransport* CCatalogsTransport::NewL( CDocumentHandler& aDocHandler )
+CCatalogsTransport* CCatalogsTransport::NewL()
     {
     CCatalogsTransport* self = new( ELeave ) CCatalogsTransport();
     CleanupStack::PushL( self );
-    self->ConstructL( aDocHandler );
+    self->ConstructL();
     CleanupStack::Pop( self );
     return self;    
     }
-
-
 // ---------------------------------------------------------------------------
 // Destructor
 // ---------------------------------------------------------------------------
@@ -244,10 +242,10 @@ void CCatalogsTransport::RemoveSession( MCatalogsTransportSession* aSession )
 // ---------------------------------------------------------------------------
 // 2nd phase constructor
 // ---------------------------------------------------------------------------
-//			
-void CCatalogsTransport::ConstructL( CDocumentHandler& aDocHandler )
+//	
+void CCatalogsTransport::ConstructL()
     {
     DLTRACEIN( ( "" ) );
-    iHttpSessionManager = CCatalogsHttpSessionManager::NewL( aDocHandler );
+    iHttpSessionManager = CCatalogsHttpSessionManager::NewL();
     DLTRACEOUT( ( "" ) );
     }

@@ -192,8 +192,6 @@ private:
     MNcdStorageManager& iStorageManager;       
     
 protected:
-
-    class CNcdTemporaryFavorites;
     
     CNcdFavoriteManager( CNcdGeneralManager& aGeneralManager );
     

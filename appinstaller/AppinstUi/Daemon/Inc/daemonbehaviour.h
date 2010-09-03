@@ -27,6 +27,7 @@
 #include "daemoninstaller.h"
 #include "programstatus.h"   //For uninstaller
 #include "swidaemonplugin.h" //For SWI plugin support
+#include "sisregistrywritablesession.h"
 
 class CSwiDaemonPlugin;
 
@@ -141,7 +142,10 @@ private:
     // Contains inserted drives.
     RArray<TInt> iDriveArray;   
     // General program status. Note this do not affect to plug-in.
-    TInt iGeneralProcessStatus; //For uninstaller   
+    TInt iGeneralProcessStatus; //For uninstaller  
+    
+    Swi::RSisRegistryWritableSession iRegistrySession;
+    TBool iRegSessionConnected;
     };
 
 } // namespace Swi

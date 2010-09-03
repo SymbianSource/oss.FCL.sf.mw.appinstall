@@ -44,6 +44,17 @@
 _LIT8( KRefreshFromNetworkDenied, "1" );
 _LIT(KIAUpdateLauncherExe, "iaupdatelauncher.exe" );
 
+// translator
+_LIT(KPath, "z:/resource/qt/translations/"); 
+_LIT(KFileName, "swupdate_");
+
+// loc texts
+_LIT(KTitleFirstTime, "txt_software_dpophead_update_checking");
+_LIT(KTitleOneUpdate, "txt_software_dpophead_update_available");
+_LIT(KTitleSeveralUpdates, "txt_software_dpophead_updates_available");
+_LIT(KSecondRow, "txt_software_dpopinfo_tap_to_view");
+
+
 //CONSTANTS
 const TUint KIADUpdateLauncherUid( 0x2001FE2F );
 
@@ -82,14 +93,12 @@ void CIAUpdateBGTimer::ConstructL()
     
     iIndicatorNotifyHandler = CIAUpdateBGNotifyHandler::NewL();
     
-    // loc: initialize localisation text loader
-    /*
-    TBool res = HbTextResolverSymbian::Init(KLocFile, KLocFilePath);
+    // initialize localisation text loader
+    TBool res = HbTextResolverSymbian::Init(KFileName, KPath);
     if ( res != KErrNone )
         {
         // nothing to do
         }
-    */
     }
     
 // ----------------------------------------------------------
@@ -1294,129 +1303,39 @@ TIAUpdateBGMode CIAUpdateBGTimer::CurrentMode()
 // ----------------------------------------------------------
 void CIAUpdateBGTimer::LaunchNotificationL( const int aNrOfUpdates )
     {
-   
-    _LIT( KFirstTimeText, "Update checking" );
-    _LIT( KNormalText, "Updates available" );
-    _LIT( KSecondText, "Tap to view" );
-
-    // loc:
-    /*
-    _LIT( KIcon, "z:\\resource\\iaupdate\\qgn_note_swupdate_notification.svg" );
-    _LIT(KLocFile, "Text_Map_Swupdate_");
-    _LIT(KLocFilePath, "z:\\resource\\iaupdate\\");
-    
-    _LIT(KTitleFirstTime, "txt_software_dpophead_update_checking");
-    _LIT(KTitleOneUpdate, "txt_software_dpophead_update_available");
-    _LIT(KTitleSeveralUpdates, "txt_software_dpophead_updates_available");
-    
-    
-    _LIT(KSecondFirstTime, "txt_software_dpopinfo_tap_to_view");
-    _LIT(KSecondOneUpdate, "txt_software_dpopinfo_tap_to_view");
-    _LIT(KSecondSeveralUpdates, "txt_software_dpopinfo_tap_to_view");
-   */
     
     FLOG("[bgchecker] LaunchNotificationL ");
         
     iMode = ModeL();
     
-    // loc: initialize localisation text loader
-    /*
-    TBool res = HbTextResolverSymbian::Init(KLocFile, KLocFilePath);
-    if ( res != KErrNone )
-        {
-        // nothing to do
-        }
-    */
-    
-    
-    // loc: Resolve title text
-    /*
+    // Resolve title text
     HBufC*  titleText;
     if ( aNrOfUpdates == 0 )
         {
         // First time case
-        titleText = HbTextResolverSymbian::LoadL( KTitleFirstTime );
+        titleText = HbTextResolverSymbian::LoadLC( KTitleFirstTime );
         }
     else if ( aNrOfUpdates == 1 )
         {
         // one update available
-        titleText = HbTextResolverSymbian::LoadL( KTitleOneUpdate );
+        titleText = HbTextResolverSymbian::LoadLC( KTitleOneUpdate );
         }
     else
         {
         // several updates available
-        titleText = HbTextResolverSymbian::LoadL( KTitleSeveralUpdates );
+        titleText = HbTextResolverSymbian::LoadLC( KTitleSeveralUpdates );
         }
     
     // Resolve second text
     HBufC*  secondText;
-    if ( aNrOfUpdates == 0 )
-        {
-        // First time case
-        secondText = HbTextResolverSymbian::LoadL( KSecondFirstTime );
-        }
-    else if ( aNrOfUpdates == 1 )
-        {
-        // one update available
-        secondText = HbTextResolverSymbian::LoadL( KSecondOneUpdate, aNrOfUpdates );
-        }
-    else
-        {
-        // several updates available
-        // loc: text.append(hbTrId("txt_software_dblist_updates_available"));
-        secondText = HbTextResolverSymbian::LoadL( KSecondSeveralUpdates, aNrOfUpdates );
-        }
-     */
+    secondText = HbTextResolverSymbian::LoadLC( KSecondRow );
     
-    // loc: Load title and second line
-    // HBufC* titleText = HbTextResolverSymbian::LoadL(KTextTitle);
-    // CleanupStack::PushL( titleText );
-    // HBufC* secondText3 = HbTextResolverSymbian::LoadL(KTextSecond);
-    // CleanupStack::PushL( titleText );
-    
-    
-    TBuf<128> titleText;
-    TBuf<128> secondText;
-    
-    //title text (normal/first time)
-    if ( iMode == ENormalMode )
-        {
-        titleText.Append(KNormalText);
-        }
-    else
-        {
-        titleText.Append(KFirstTimeText);
-        }
-    
-    //text for 2nd line
-    secondText.Append(KSecondText);
-            
-    // icon
-    /* HLa-->
-    if ( iMode == ENormalMode )
-        {
-        TFileName path;
-        TInt err = GetPrivatePathL( path ); 
-        
-        if ( err == KErrNone )
-            {
-            iSoftNotification->SetImagePathL( path );
-            //HBufC8* image = LoadFileLC( path );   
-            //iSoftNotification->SetImageL( *image );
-            //CleanupStack::PopAndDestroy( image );
-            }
-        }
-    */
-    // loc: set image path
-    // iSoftNotification->SetImagePathL( KIcon );
-  
     // Set texts
-    // loc: iSoftNotification->SetTextL( titleText->Des(), secondText->Des() );
-    iSoftNotification->SetTextL( titleText, secondText );
+    iSoftNotification->SetTextL( titleText->Des(), secondText->Des() );
     
-    // loc: delete text buffers
-    // CleanupStack::PopAndDestroy( titleText );
-    // CleanupStack::PopAndDestroy( titleText );
+    // delete text buffers
+    CleanupStack::PopAndDestroy( secondText );
+    CleanupStack::PopAndDestroy( titleText );
     
     // Set number of updates for dialog and internal file
     iSoftNotification->SetNrOfUpdates( aNrOfUpdates );

@@ -62,6 +62,7 @@ class CSifUiPrivate : public CActive, public MHbDeviceDialogObserver,
         TInt ShowSelectLanguageL( const RArray<TLanguage>& aLanguages );
         TBool ShowSelectOptionsL( const MDesCArray& aSelectableItems,
                 RArray<TInt>& aSelectedIndexes );
+        void CancelDialogs();
 
     protected:  // from CActive
         void DoCancel();

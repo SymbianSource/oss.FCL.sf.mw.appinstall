@@ -79,8 +79,7 @@ void CNcdProviderManager::ConstructL()
     iEngineRootPath = WritableEnginePathL( CNcdProviderUtils::FileSession() );                        
     
     // Create transport
-    iTransport = CCatalogsTransport::NewL( 
-        CNcdProviderUtils::InstallationServiceL().DocumentHandler() );
+    iTransport = CCatalogsTransport::NewL();
     
     iStorageManager = CNcdStorageManager::NewL( 
         CNcdProviderUtils::FileSession(), *iEngineRootPath );

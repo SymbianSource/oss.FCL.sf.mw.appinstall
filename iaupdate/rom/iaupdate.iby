@@ -37,7 +37,12 @@ file=ABI_DIR\BUILD_DIR\iaupdaterfiles.dll        SHARED_LIB_DIR\iaupdaterfiles.d
 file=ABI_DIR\BUILD_DIR\iaupdatebg.exe            SHARED_LIB_DIR\iaupdatebg.exe 
 file=ABI_DIR\BUILD_DIR\iaupdatefwupdate.dll      SHARED_LIB_DIR\iaupdatefwupdate.dll
 
+#ifdef _IMAGE_TYPE_RND
+data=ZPRIVATE\2000F85A\iaupdateengineconfig_testing.xml  PRIVATE\2000F85A\iaupdateengineconfig.xml
+#else
 data=ZPRIVATE\2000F85A\iaupdateengineconfig.xml  PRIVATE\2000F85A\iaupdateengineconfig.xml
+#endif //_IMAGE_TYPE_RND
+
 data=ZPRIVATE\2000F85A\backup_registration.xml   PRIVATE\2000F85A\backup_registration.xml
 
 data=ZSYSTEM\install\iaupdate_stub.sis           system\install\iaupdate_stub.sis

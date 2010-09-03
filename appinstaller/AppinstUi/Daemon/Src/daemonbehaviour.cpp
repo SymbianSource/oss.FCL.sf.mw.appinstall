@@ -65,7 +65,9 @@ void CDaemonBehaviour::ConstructL( CProgramStatus& aMainStatus )
     // For uninstaller
     iSisInstaller = CSisInstaller::NewL( this, aMainStatus );
     // Create plugin
-    TRAP_IGNORE( iSwiDaemonPlugin = CSwiDaemonPlugin::NewL() );   
+    TRAP_IGNORE( iSwiDaemonPlugin = CSwiDaemonPlugin::NewL() ); 
+    
+    iRegSessionConnected = EFalse;
     }
 
 // -----------------------------------------------------------------------
@@ -82,7 +84,12 @@ CDaemonBehaviour::~CDaemonBehaviour()
     delete iSisInstaller;
     iSisInstaller = NULL;
     iFs.Close();                
-    iDriveArray.Close();        
+    iDriveArray.Close(); 
+    
+    if ( iRegSessionConnected )
+        {   
+        iRegistrySession.Close();        
+        }
     }
 
 // -----------------------------------------------------------------------
@@ -102,12 +109,13 @@ TBool CDaemonBehaviour::StartupL()
 void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
     {
     FLOG_1( _L("Daemon: MediaChangeL: Media change %d"), aDrive );
-    RSisRegistryWritableSession registrySession;
-    
-    User::LeaveIfError( registrySession.Connect() );
-    CleanupClosePushL( registrySession );
-    
-    
+        
+    if ( !iRegSessionConnected )
+        {   
+        User::LeaveIfError( iRegistrySession.Connect() );
+        iRegSessionConnected = ETrue;
+        }
+            
     if ( aChangeType==EMediaInserted )
         {
         FLOG( _L("Daemon: MediaChangeL: Media inserted") ); 
@@ -119,7 +127,7 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
         // We need call sis registry since this call will
         // activate sis registry to clean uninstalled components
         // from inserted media.
-        registrySession.AddDriveL( aDrive );
+        iRegistrySession.AddDriveL( aDrive );
                                                 
         // Scan directory on the card and run pre-installed through SWIS
         FLOG( _L("Daemon: MediaChangeL: Process preinstalled files") );
@@ -185,8 +193,9 @@ void CDaemonBehaviour::MediaChangeL(TInt aDrive, TChangeType aChangeType)
                 }                
             }                      
         }
-    
-    CleanupStack::PopAndDestroy(&registrySession);
+        
+    iRegistrySession.Close();
+    iRegSessionConnected = EFalse;
     }
 
 // -----------------------------------------------------------------------
@@ -475,6 +484,22 @@ void CDaemonBehaviour::UpdateStatusL(
         // Check if component or part of it is in the media.
         if ( isInTargetDrive )
             {
+            // Update SCR status for the component. Note SCR 
+            // needs to be updated because AppArc will check 
+            // status from SCR.                                             
+            FLOG( _L("Daemon: Set component status to SCR") );
+                        
+            if ( aChangeType == EMediaInserted )
+                {  
+                FLOG( _L("Daemon: Set component presence = TRUE") );                                                                                              
+                iRegistrySession.SetComponentPresenceL( aComponentId, ETrue );                                                            
+                }
+            else if ( aChangeType == EMediaRemoved )
+                {
+                FLOG( _L("Daemon: Set component presence = FALSE") ); 
+                iRegistrySession.SetComponentPresenceL( aComponentId, EFalse );                                                                                                               
+                }                        
+                                                                      
             // We need to update applications status to AppArc when
             // there is some media change. AppArc needs application
             // UID (not package UID) so we need to get all app. UIDs
@@ -510,23 +535,7 @@ void CDaemonBehaviour::UpdateStatusL(
                 
                 aAppInfoArray.Append( appInfo );   
                 }                           
-            CleanupStack::PopAndDestroy(&appUidArray);
-// Set do not work, it will leave.
-/*            
-            FLOG( _L("Daemon: Set component status to SCR") );
-            // Update component flag to SCR. 
-            if ( aChangeType == EMediaInserted )
-                {  
-                FLOG( _L("Daemon: Set component present = TRUE") );                                  
-                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, ETrue ) );                                                                            
-                }
-            else if ( aChangeType==EMediaRemoved )
-                {
-                FLOG( _L("Daemon: Set component present = FALSE") );                              
-                TRAP( err, aScrServer.SetIsComponentPresentL( aComponentId, EFalse ) );                                                                               
-                }            
-            FLOG_1( _L("Daemon: SetIsComponentPresentL TRAP err = %d"), err );
-*/                                                          
+            CleanupStack::PopAndDestroy(&appUidArray);       
             }   // if isInTargetDrive        
         }   // if err
     

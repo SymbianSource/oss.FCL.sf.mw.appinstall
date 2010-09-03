@@ -46,6 +46,7 @@ namespace Usif
         virtual void DisplayPreparingInstallL( const TDesC& aFileName ) = 0;
         virtual void DisplayCompleteL() = 0;
         virtual void DisplayFailedL( const CSisxSifPluginErrorHandler& aError ) = 0;
+        virtual void CancelDialogs() = 0;
 
     public:     // new functions
         void SetInstallParamsL( const CSisxSifPluginInstallParams& aInstallParams );
@@ -54,8 +55,8 @@ namespace Usif
         TBool IsOcspMandatoryL() const;
 
         // functions to publish operation progress
-        void PublishStartL( const CComponentInfo::CNode& aRootNode );
-        void PublishStartL( const CComponentEntry& aEntry );
+        void PublishStartL( const CComponentInfo::CNode& aRootNode, TSifOperationPhase aPhase );
+        void PublishStartL( const CComponentEntry& aEntry, TSifOperationPhase aPhase );
         void PublishProgressL( TSifOperationSubPhase aSubPhase );
         void PublishCompletionL();
 
@@ -66,6 +67,10 @@ namespace Usif
         void SetOcspErrorL( Swi::TRevocationDialogMessage aMessage );
         TBool ShowQuestionL( const TDesC& aText ) const;
         void ShowQuestionWithContinueL( const TDesC& aText ) const;
+        static TBool CompareDriveLetters( const TChar& aDriveFirst, const TChar& aDriveSecond );
+
+    private:    // new functions
+        void SetLocalisedErrorMessageText( const TDesC& aLogicalName );
 
     protected:	// data
         RFs& iFs;

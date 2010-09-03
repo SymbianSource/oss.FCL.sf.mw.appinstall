@@ -61,6 +61,7 @@ LIBRARY         pkixcertbase.lib        // CPKIXValidationResultBase
 LIBRARY         x509.lib                // TValidationStatus
 LIBRARY         centralrepository.lib   // CRepository
 LIBRARY         HbWidgets.lib           // CHbDeviceMessageBoxSymbian
+LIBRARY         HbCore.lib              // HbTextResolverSymbian
 LIBRARY         syslangutil.lib         // GetInstalledLanguages
 
 SMPSAFE

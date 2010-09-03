@@ -18,7 +18,6 @@
 
 
 #include "iaupdatersilentlauncher.h"
-#include "SWInstDefs.h"
 #include "iaupdaterdefs.h"
 #include "iaupdatedebug.h"
 
@@ -45,7 +44,6 @@ void CIAUpdaterSilentLauncher::ConstructL()
     {
     
     iOptionsPckg = Usif::COpaqueNamedParams::NewL();
-    iResults = Usif::COpaqueNamedParams::NewL();
     
     UsifSilentInstallOptionsL( iOptionsPckg );    
 
@@ -75,7 +73,6 @@ CIAUpdaterSilentLauncher::~CIAUpdaterSilentLauncher()
     iLauncher.Close();
     
     delete iOptionsPckg;
-    delete iResults;
     
     }
 
@@ -84,7 +81,8 @@ CIAUpdaterSilentLauncher::~CIAUpdaterSilentLauncher()
 // Perform installation.
 // -----------------------------------------------------------------------------
 //
-void CIAUpdaterSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aStatus )
+void CIAUpdaterSilentLauncher::InstallL ( const TDesC& aFile, 
+        TRequestStatus& aStatus, Usif::COpaqueNamedParams* aResults  )
     {
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::InstallL() begin"); 
         
@@ -97,7 +95,7 @@ void CIAUpdaterSilentLauncher::InstallL( const TDesC& aFile, TRequestStatus& aSt
 
     // Launch the installation   
     IAUPDATE_TRACE("[IAUpdater] Launch silent install");                    
-    iLauncher.Install( aFile, *iOptionsPckg, *iResults, aStatus );
+    iLauncher.Install( aFile, *iOptionsPckg, *aResults, aStatus );
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterSilentLauncher::InstallL() end"); 
     }
@@ -162,13 +160,18 @@ void  CIAUpdaterSilentLauncher::UsifSilentInstallOptionsL(
     aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
     
     // Where to save.
-    //aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
+    // Notice! Here we use always the same drive for the IAD.
+    // So, this will not change automatically according to the disk spaces 
+    // and when new memory cards are inserted into the phone. 
+    // TODO: remove comment when parameter buffer increased in USIF
+    TDriveUnit driveUnit(IAUpdaterDefs::KIAUpdaterDrive);
+    //aOptions->AddIntL( Usif::KSifInParam_Drive, driveUnit );
     
     // Choose the phone language.
+    // TODO: remove comment when parameter buffer increased in USIF
     TLanguage lang = User::Language();
-    //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
+    //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); 
     
-    //aOptions->AddIntL( Usif::KSifInParam_Drive, IAUpdateUtils::DriveToInstallL( aUid, aSize ) );
     }
 
 

@@ -20,11 +20,12 @@
 #include <apacmdln.h>
 #include <xqservicerequest.h>
 
-#include <hb/hbcore/hbtranslator.h>
-
 #include <hbicon.h>
 
 #include "bgcindicator.h" 
+
+const char KTranslatorFileName[] = "swupdate";
+const char KIconName[] = "qtg_large_swupdate";
 
 //----------------------------------------------------------------------
 
@@ -37,8 +38,12 @@ BgcIndicator::BgcIndicator(const QString &indicatorType) :
 HbIndicatorInterface(indicatorType,
         HbIndicatorInterface::NotificationCategory,
         InteractionActivated), 
-        mNrOfUpdates(0)
+        mNrOfUpdates(0),
+        mTranslator(0)
     {
+  
+    HbTranslator* mTranslator = new HbTranslator(KTranslatorFileName);
+    
     }
 
 // ----------------------------------------------------------------------------
@@ -47,6 +52,11 @@ HbIndicatorInterface(indicatorType,
 // ----------------------------------------------------------------------------
 BgcIndicator::~BgcIndicator()
     {
+    if (mTranslator) 
+        {
+        delete mTranslator;
+        mTranslator = 0;
+        }
     }
 
 // ----------------------------------------------------------------------------
@@ -77,10 +87,8 @@ bool BgcIndicator::handleInteraction(InteractionType type)
 // ----------------------------------------------------------------------------
 QVariant BgcIndicator::indicatorData(int role) const
 {
-    // use iaupdate's translate file
-    // loc: HbTranslator trans("z:\\resource\\iaupdate\\","Text_Map_Swupdate_");
         
-switch(role)
+    switch(role)
     {
     case PrimaryTextRole: 
         {
@@ -88,20 +96,17 @@ switch(role)
         if ( mNrOfUpdates == 0 )
             {
             // First time case
-            // loc: text.append(hbTrId("txt_software_dblist_update_checking"));
-            text.append(QString("Update checking"));
+            text.append(hbTrId("txt_software_dblist_update_checking"));
             }
         else if ( mNrOfUpdates == 1 )
             {
             // one update available
-            // loc: text.append(hbTrId("txt_software_dblist_update_available"));
-            text.append(QString("Update available"));
+            text.append(hbTrId("txt_software_dblist_update_available"));
             }
         else
             {
             // several updates available
-            // loc: text.append(hbTrId("txt_software_dblist_updates_available"));
-            text.append(QString("Updates available"));
+            text.append(hbTrId("txt_software_dblist_updates_available"));
             }
         return text;        
         }
@@ -111,28 +116,20 @@ switch(role)
         if ( mNrOfUpdates == 0 )
             {
             // First time case
-            // loc: QString text(hbTrId("txt_software_dblist_val_not_activated"));
-            text.append(QString("Not activated"));
+            text.append(hbTrId("txt_software_dblist_val_not_activated"));
             }
-        else if ( mNrOfUpdates == 1 )
+        else 
             {
-            // one update available
-            // loc: QString text(hbTrId("txt_software_dblist_1_val_ln_update"));
-            text.append(QString("%Ln updates").arg(mNrOfUpdates));
+            // update(s) available
+            text.append(hbTrId("txt_software_dblist_val_ln_update", mNrOfUpdates));
             }
-        else
-            {
-            // several updates available
-            // loc: QString text(hbTrId("txt_software_dblist_1_val_ln_update"));
-            text.append(QString("%%Ln updates").arg(mNrOfUpdates));
-            }
+
         return text; 
         }
     case DecorationNameRole:
     case MonoDecorationNameRole:
         {
-        QString iconName("");
-        return iconName;
+        return QString(KIconName);
         }
     default: 
         return QVariant();      

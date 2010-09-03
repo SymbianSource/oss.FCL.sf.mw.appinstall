@@ -18,7 +18,6 @@
 
 #include "ncdinstallationserviceimpl.h"
 
-#include <DocumentHandler.h>
 #include <apmstd.h>
 #include <apmrec.h>
 #include <bautils.h>
@@ -100,7 +99,6 @@ CNcdInstallationService::~CNcdInstallationService()
     DLTRACEIN((""));
     delete iSilentInstallActiveObserver;
     iSilentInstallActiveObserver = NULL;
-    delete iDocHandler;
     iRegistrySession.Close();
     iFs.Close();
     iAknsSrv.Close();
@@ -146,9 +144,6 @@ void CNcdInstallationService::ConstructL()
     
     iResults = 0;
     iArguments = 0;
-    
-    iDocHandler = CDocumentHandler::NewL();
-    iDocHandler->SetExitObserver( this );
     
     User::LeaveIfError( iFs.Connect() );
     User::LeaveIfError( iFs.ShareProtected() );
@@ -878,17 +873,6 @@ HBufC* CNcdInstallationService::WriteJadL(
     return jadFileName;
     }
 
-
-// ---------------------------------------------------------------------------
-// Documenthandler getter
-// ---------------------------------------------------------------------------
-//
-CDocumentHandler& CNcdInstallationService::DocumentHandler()
-    {
-    return *iDocHandler;
-    }
-
-
 // ---------------------------------------------------------------------------
 // Callback function of MNcdAsyncOperationObserver interface
 // This is called when an async operation has finished.
@@ -1293,8 +1277,6 @@ void CNcdInstallationService::InstallL( RFile& aFile,
     {
     DLTRACEIN(( _L("iBusy=%d, MIME: %S"),iBusy, &aMimeType ));    
     DASSERT( iObserver );
-    DASSERT( iDocHandler );
-
     
     // Check if some installation is already in progress.
     if ( iBusy )
@@ -1389,7 +1371,6 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             {
             DLINFO(("Normal install"));
             InitializeInstallerL();
-            //iCancelCode = SwiUI::ERequestInstallHandle;
             
             if ( !iArguments )
                 {
@@ -1403,7 +1384,7 @@ void CNcdInstallationService::InstallL( RFile& aFile,
             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
             
             iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
-            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
+
             iInstallStatusObserver->StartToObserve();            
             }
         else
@@ -1424,55 +1405,12 @@ void CNcdInstallationService::InstallL( RFile& aFile,
         DLINFO(("Installing content"));
         // File is some common format.
         iInstallType = EFileInstall;
-        TDataType dataType;
-    
-        if ( aMimeType != KNullDesC )
-            {
-            // If mime type is given, it will be used in document handler.
-            HBufC8* tempBuf = Des16ToDes8LC( aMimeType );
-            dataType = TDataType( *tempBuf );
-            CleanupStack::PopAndDestroy( tempBuf );
-            DLINFO(("DataType: %S", &dataType.Des8() ));
-            }
-                
-        TInt docHandlerError( KErrNone );
         
-        DLINFO(("Normal install"));
-        // Have to use CopyL since MoveL works only with filepaths
-        // We can't use SilentMoveL either
-        docHandlerError = 
-            iDocHandler->CopyL( aFile, 
-                                KNullDesC(),
-                                dataType, 
-                                KEntryAttNormal );            
-
-        DLTRACE(("After move"));
-        if( docHandlerError != KErrNone )
-            {
-            DLINFO(("error=%d",docHandlerError));
-            
-            // Use KErrAbort for user cancellation
-            if ( docHandlerError == KUserCancel ) 
-                {
-                docHandlerError = KErrAbort;
-                }
-            iObserver->InstallationCompleteL( KNullDesC, KNullUid, docHandlerError );
-            }
-        else
-            { 
-            DLTRACE(("Installation successful"));
-            
-            RBuf installFileName;
-            CleanupClosePushL( installFileName );
-            
-            installFileName.CreateL( KMaxPath );
-                        
-            User::LeaveIfError( iDocHandler->GetPath( installFileName ) );
-            iObserver->InstallationCompleteL( installFileName, KNullUid, KErrNone );
-            CleanupStack::PopAndDestroy( &installFileName );            
-
-            }
+        // content not supported
+        iObserver->InstallationCompleteL( KNullDesC, KNullUid, KErrNotSupported );
+        
         }
+
     DLTRACEOUT((""));    
     }
 
@@ -1527,7 +1465,6 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
             {
             DLTRACE(("Installing JAD+JAR"));
             // JAD+JAR install
-            //iCancelCode = SwiUI::ERequestInstall;
             if ( !iArguments )
                 {
                 iArguments = Usif::COpaqueNamedParams::NewL();
@@ -1540,13 +1477,11 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
              iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
                         
             iInstaller.Install( *iJadFileName, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
-            //iInstaller.Install( iInstallStatusObserver->iStatus, *iJadFileName );
             }
         else
             {
             DLTRACE(("Installing JAR"));
             // JAR install
-            //iCancelCode = SwiUI::ERequestInstallHandle;
             if ( !iArguments )
                 {
                 iArguments = Usif::COpaqueNamedParams::NewL();
@@ -1560,7 +1495,6 @@ void CNcdInstallationService::InstallJavaL( RFile& aFile,
              
              iInstaller.Install( aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus ); 
             
-            //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
             }
         
         iInstallStatusObserver->StartToObserve();
@@ -1620,7 +1554,6 @@ void CNcdInstallationService::InstallWidgetL(
         {
         DLINFO(("Normal install"));
         InitializeInstallerL();
-        //iCancelCode = SwiUI::ERequestInstallHandle;
         if ( !iArguments )
             {
             iArguments = Usif::COpaqueNamedParams::NewL();
@@ -1633,7 +1566,6 @@ void CNcdInstallationService::InstallWidgetL(
         iArguments->AddIntL( Usif::KSifInParam_InstallSilently, EFalse );
         iInstaller.Install(aFile, *iArguments, *iResults, iInstallStatusObserver->iStatus  );
          
-        //iInstaller.Install( iInstallStatusObserver->iStatus, aFile );
         iInstallStatusObserver->StartToObserve();            
         }
     else
@@ -1661,12 +1593,6 @@ void CNcdInstallationService::InitializeInstallerL()
     iInstallStatusObserver = CNcdActiveOperationObserver::NewL( *this );
     
     User::LeaveIfError( iInstaller.Connect() );
-    /*
-    if ( !iInstaller.Handle() ) 
-        {
-        User::LeaveIfError( iInstaller.Connect() );
-        }
-    */
     }
     
 
@@ -1677,13 +1603,11 @@ void CNcdInstallationService::InitializeInstallerL()
 void CNcdInstallationService::CancelInstall()
     {
     DLTRACEIN((""));
-    //if ( iInstallStatusObserver &&
-    //     iInstaller.Handle() ) 
+    
     if ( iInstallStatusObserver )
         {
         DLTRACE(("Cancelling installation"));
         iInstaller.CancelOperation();
-        //iInstaller.CancelAsyncRequest( iCancelCode );
         }
     
     DeletePtr( iInstallStatusObserver );

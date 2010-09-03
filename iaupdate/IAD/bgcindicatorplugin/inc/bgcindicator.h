@@ -21,6 +21,7 @@
 #include <QObject>
 
 #include <hbindicatorinterface.h>
+#include <hbtranslator.h>
 
 /**
  * Message indicator class. 
@@ -63,9 +64,15 @@ private:
     
 private:
     /**
-     * Nr of updates
+     * Owned
      */
     int mNrOfUpdates;
+    /**
+      * Owned
+      */
+    HbTranslator *mTranslator;
+
+    
     
 };
 

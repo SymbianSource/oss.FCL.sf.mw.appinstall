@@ -16,12 +16,13 @@
 */
 
 
-
 #include "iaupdaterinstaller.h"
 #include "iaupdatermngr.h"
 #include "iaupdatersilentlauncher.h"
 #include "iaupdaterdefs.h"
 #include "iaupdatedebug.h"
+
+#include <usif/usiferror.h>
 
 
 // ======== LOCAL FUNCTIONS =========
@@ -81,6 +82,8 @@ CIAUpdaterInstaller::~CIAUpdaterInstaller()
             
     iFilesToInstall.ResetAndDestroy();
     delete iInstallLauncher;
+    
+    delete iResults;
 
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterInstaller::~CIAUpdaterInstaller end");
     }
@@ -95,6 +98,7 @@ void CIAUpdaterInstaller::ConstructL()
     {
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterInstaller::ConstructL begin");       
     User::LeaveIfError( iTimer.CreateLocal() );
+    iResults = Usif::COpaqueNamedParams::NewL();
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterInstaller::ConstructL end");
     }
 
@@ -247,8 +251,12 @@ void CIAUpdaterInstaller::RunL()
         case EDSisInstallerStateInstalling:
             { 
             IAUPDATE_TRACE("[IAUpdater] RunL() Sis Inst. state INSTALLING");                    
-                                                                                     
-            if ( iStatus.Int() == SwiUI::KSWInstErrBusy )
+            
+            // Get error category
+            TInt errCategory = iResults->GetIntByNameL
+                    (Usif::KSifOutParam_ErrCategory, errCategory);
+            
+            if ( errCategory == Usif::EInstallerBusy )
                 {
                 IAUPDATE_TRACE("[IAUpdater] RunL() SWInstaller Busy"); 
                 
@@ -260,10 +268,10 @@ void CIAUpdaterInstaller::RunL()
                 SetActive();                        
                 break;                        
                 }                
-            else if ( (iStatus.Int() == SwiUI::KSWInstErrSecurityFailure && 
+            else if ( (errCategory == Usif::ESecurityError && 
                 iInstallErr == KErrNone) ||
                 (iStatus.Int() != KErrNone && 
-                iStatus.Int() != SwiUI::KSWInstErrSecurityFailure) )
+                 iStatus.Int() != errCategory == Usif::ESecurityError) )
                 {
                 IAUPDATE_TRACE("[IAUpdater] RunL() Ins. err or sec. failure"); 
                 
@@ -296,7 +304,7 @@ void CIAUpdaterInstaller::RunL()
                 ++iFileIndex;
 
                 IAUPDATE_TRACE_1("[IAUpdater] RunL() Start install %S", &iSisFile ); 
-                iInstallLauncher->InstallL( iSisFile, iStatus );                
+                iInstallLauncher->InstallL( iSisFile, iStatus, iResults );                
                 iState = EDSisInstallerStateInstalling;                    
                 SetActive();
                 }
@@ -312,7 +320,7 @@ void CIAUpdaterInstaller::RunL()
             IAUPDATE_TRACE("[IAUpdater] RunL() Sis Inst. state INSTALLER BUSY");  
             IAUPDATE_TRACE_1("[IAUpdater] RunL() Start install for %S", &iSisFile ); 
                         
-            iInstallLauncher->InstallL( iSisFile, iStatus );
+            iInstallLauncher->InstallL( iSisFile, iStatus, iResults );
             iState = EDSisInstallerStateInstalling;
 
             SetActive();                 

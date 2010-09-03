@@ -27,6 +27,7 @@
 #include <hbmessagebox.h>
 #include <QGraphicsLinearLayout>
 #include <QDir>
+#include <QTimer>
 #include <xqappmgr.h>                       // XQApplicationManager
 #include <usif/scr/scr.h>                   // RSoftwareComponentRegistry
 
@@ -39,113 +40,24 @@ using namespace Usif;
 #define INSTALLS_PATH_5 "E:\\"
 #define INSTALLS_PATH_6 "F:\\"
 
+const int KCancelInstallDelay = 30000;  // milliseconds
+const int KCancelRemoveDelay = 5000;    // milliseconds
+
 
 TestInstaller::TestInstaller(int& argc, char* argv[]) : HbApplication(argc, argv),
     mMainWindow(0), mInstallView(0), mRemoveView(0),
     mUseSilentInstall(false), mUseSilentUninstall(false), mUseRFileInstall(false), mOcsp(false),
+    mCancelInstallShortly(false), mCancelRemoveShortly(false),
     mInstallDirectories(0), mInstallableFiles(0), mRemovableApps(0),
     mCurrentDirPath(), mCurrentFile(), mRunner(0)
 {
     mMainWindow = new HbMainWindow();
 
-    // Install view
-    mInstallView = new HbView();
-    mInstallView->setTitle(tr("Test Installer"));
-
-    QGraphicsLinearLayout *installLayout = new QGraphicsLinearLayout(Qt::Vertical);
-
-    HbLabel *installTitle = new HbLabel(tr("Install:"));
-    installLayout->addItem(installTitle);
-
-    mInstallDirectories = new HbComboBox;
-    mInstallDirectories->setEditable(false);
-    QStringList dirList;
-    getInstallDirs(dirList);
-    mInstallDirectories->setItems(dirList);
-    connect(mInstallDirectories, SIGNAL(currentIndexChanged(int)),
-        this, SLOT(installableDirChanged(int)));
-    installLayout->addItem(mInstallDirectories);
-
-    mInstallableFiles = new HbComboBox;
-    mInstallableFiles->setEditable(false);
-    connect(mInstallableFiles, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(installableFileChanged(int)));
-    installLayout->addItem(mInstallableFiles);
-
-    QGraphicsLinearLayout *checkboxesLayout = new QGraphicsLinearLayout(Qt::Horizontal);
-    HbCheckBox *silentInstallCheckBox = new HbCheckBox;
-    silentInstallCheckBox->setText(tr("Silent"));
-    connect(silentInstallCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(silentInstallCheckChanged(int)));
-    checkboxesLayout->addItem(silentInstallCheckBox);
-    HbCheckBox *rfileCheckBox = new HbCheckBox;
-    rfileCheckBox->setText(tr("Use RFile"));
-    connect(rfileCheckBox, SIGNAL(stateChanged(int)), this, SLOT(rfileCheckChanged(int)));
-    checkboxesLayout->addItem(rfileCheckBox);
-    HbCheckBox *ocspCheckBox = new HbCheckBox;
-    ocspCheckBox->setText(tr("OCSP"));
-    connect(ocspCheckBox, SIGNAL(stateChanged(int)), this, SLOT(ocspCheckChanged(int)));
-    checkboxesLayout->addItem(ocspCheckBox);
-    installLayout->addItem(checkboxesLayout);
-    installLayout->addStretch();
-
-    HbPushButton *installNew = new HbPushButton(tr("Install using new API"));
-    installLayout->addItem(installNew);
-    HbPushButton *installOld = new HbPushButton(tr("Install using old API"));
-    installLayout->addItem(installOld);
-    HbPushButton *launchApp = new HbPushButton(tr("Install by opening file"));
-    installLayout->addItem(launchApp);
-    HbPushButton *cancelInstall = new HbPushButton(tr("Cancel installing"));
-    installLayout->addItem(cancelInstall);
-    installLayout->addStretch();
-    connect(installNew, SIGNAL(clicked()), this, SLOT(installUsingNewApi()));
-    connect(installOld, SIGNAL(clicked()), this, SLOT(installUsingOldApi()));
-    connect(launchApp, SIGNAL(clicked()), this, SLOT(installByOpeningFile()));
-    connect(cancelInstall, SIGNAL(clicked()), this, SLOT(cancelInstalling()));
-
-    HbToolBar *installToolBar = new HbToolBar();
-    installToolBar->addAction(tr("RemoveView"), this, SLOT(removeViewActivated()));
-    installToolBar->addAction(tr("Exit"), this, SLOT(closeApp()));
-    mInstallView->setToolBar(installToolBar);
-
-    mInstallView->setLayout(installLayout);
+    createInstallView();
     mMainWindow->addView(mInstallView);
 
-    // Remove view
-    mRemoveView = new HbView();
-    mRemoveView->setTitle(tr("Test Uninstaller"));
-
-    QGraphicsLinearLayout *removeLayout = new QGraphicsLinearLayout(Qt::Vertical);
-
-    HbLabel *uninstallTitle = new HbLabel(tr("Uninstall:"));
-    removeLayout->addItem(uninstallTitle);
-
-    mRemovableApps = new HbComboBox;
-    mRemovableApps->setEditable(false);
-    removeLayout->addItem(mRemovableApps);
-
-    HbCheckBox *silentRemoveCheckBox = new HbCheckBox;
-    silentRemoveCheckBox->setText(tr("Silent"));
-    connect(silentRemoveCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(silentCheckChanged(int)));
-    removeLayout->addItem(silentRemoveCheckBox);
-    removeLayout->addStretch();
-
-    HbPushButton *removeNew = new HbPushButton(tr("Remove using new API"));
-    removeLayout->addItem(removeNew);
-    HbPushButton *removeOld = new HbPushButton(tr("Remove using old API"));
-    removeLayout->addItem(removeOld);
-    removeLayout->addStretch();
-    connect(removeNew, SIGNAL(clicked()), this, SLOT(removeUsingNewApi()));
-    connect(removeOld, SIGNAL(clicked()), this, SLOT(removeUsingOldApi()));
-
-    mRemoveView->setLayout(removeLayout);
+    createRemoveView();
     mMainWindow->addView(mRemoveView);
-
-    HbToolBar *removeToolBar = new HbToolBar();
-    removeToolBar->addAction(tr("InstallView"), this, SLOT(installViewActivated()));
-    removeToolBar->addAction(tr("Exit"), this, SLOT(closeApp()));
-    mRemoveView->setToolBar(removeToolBar);
 
     mMainWindow->setCurrentView(mInstallView);
     mMainWindow->show();
@@ -196,6 +108,18 @@ void TestInstaller::ocspCheckChanged(int state)
     mOcsp = (s == Qt::Checked);
 }
 
+void TestInstaller::cancelInstallingChanged(int state)
+{
+    Qt::CheckState s = static_cast<Qt::CheckState>(state);
+    mCancelInstallShortly = (s == Qt::Checked);
+}
+
+void TestInstaller::cancelRemovingChanged(int state)
+{
+    Qt::CheckState s = static_cast<Qt::CheckState>(state);
+    mCancelRemoveShortly = (s == Qt::Checked);
+}
+
 void TestInstaller::installableDirChanged(int /*index*/)
 {
     if (mInstallDirectories) {
@@ -229,17 +153,6 @@ void TestInstaller::installByOpeningFile()
 {
     if (mInstallableFiles) {
         doOpenFile(mCurrentFile);
-    }
-}
-
-void TestInstaller::cancelInstalling()
-{
-    if (mRunner) {
-        delete mRunner;
-        mRunner = 0;
-        HbMessageBox::warning(tr("Running operation deleted"));
-    } else {
-        HbMessageBox::warning(tr("No operation running"));
     }
 }
 
@@ -295,6 +208,132 @@ void TestInstaller::fileOpenOk(const QVariant &/*result*/)
 void TestInstaller::fileOpenFailed(int errorCode, const QString &errorMsg)
 {
     HbMessageBox::warning(tr("Open failed: %1: %2").arg(errorCode).arg(errorMsg));
+}
+
+void TestInstaller::cancelInstalling()
+{
+    HbMessageBox::warning(tr("Timeout, cancelling"));
+    delete mRunner;
+    mRunner = 0;
+    HbMessageBox::warning(tr("Installing cancelled"));
+}
+
+void TestInstaller::cancelRemoving()
+{
+    HbMessageBox::warning(tr("Timeout, cancelling"));
+    delete mRunner;
+    mRunner = 0;
+    HbMessageBox::warning(tr("Removing cancelled"));
+}
+
+void TestInstaller::createInstallView()
+{
+    Q_ASSERT( mInstallView == 0 );
+    mInstallView = new HbView();
+    mInstallView->setTitle(tr("Test Installer"));
+
+    QGraphicsLinearLayout *installLayout = new QGraphicsLinearLayout(Qt::Vertical);
+
+    HbLabel *installTitle = new HbLabel(tr("Install:"));
+    installLayout->addItem(installTitle);
+
+    mInstallDirectories = new HbComboBox;
+    mInstallDirectories->setEditable(false);
+    QStringList dirList;
+    getInstallDirs(dirList);
+    mInstallDirectories->setItems(dirList);
+    connect(mInstallDirectories, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(installableDirChanged(int)));
+    installLayout->addItem(mInstallDirectories);
+
+    mInstallableFiles = new HbComboBox;
+    mInstallableFiles->setEditable(false);
+    connect(mInstallableFiles, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(installableFileChanged(int)));
+    installLayout->addItem(mInstallableFiles);
+
+    QGraphicsLinearLayout *checkboxesLayout = new QGraphicsLinearLayout(Qt::Horizontal);
+    HbCheckBox *silentInstallCheckBox = new HbCheckBox;
+    silentInstallCheckBox->setText(tr("Silent"));
+    connect(silentInstallCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(silentInstallCheckChanged(int)));
+    checkboxesLayout->addItem(silentInstallCheckBox);
+    HbCheckBox *rfileCheckBox = new HbCheckBox;
+    rfileCheckBox->setText(tr("Use RFile"));
+    connect(rfileCheckBox, SIGNAL(stateChanged(int)), this, SLOT(rfileCheckChanged(int)));
+    checkboxesLayout->addItem(rfileCheckBox);
+    HbCheckBox *ocspCheckBox = new HbCheckBox;
+    ocspCheckBox->setText(tr("OCSP"));
+    connect(ocspCheckBox, SIGNAL(stateChanged(int)), this, SLOT(ocspCheckChanged(int)));
+    checkboxesLayout->addItem(ocspCheckBox);
+    installLayout->addItem(checkboxesLayout);
+    installLayout->addStretch();
+
+    HbCheckBox *cancelInstall = new HbCheckBox;
+    cancelInstall->setText(tr("Cancel after %1 seconds").arg(KCancelInstallDelay/1000));
+    connect(cancelInstall, SIGNAL(stateChanged(int)), this, SLOT(cancelInstallingChanged(int)));
+    installLayout->addItem(cancelInstall);
+
+    HbPushButton *installNew = new HbPushButton(tr("Install using new API"));
+    installLayout->addItem(installNew);
+    HbPushButton *installOld = new HbPushButton(tr("Install using old API"));
+    installLayout->addItem(installOld);
+    HbPushButton *launchApp = new HbPushButton(tr("Install by opening file"));
+    installLayout->addItem(launchApp);
+    installLayout->addStretch();
+    connect(installNew, SIGNAL(clicked()), this, SLOT(installUsingNewApi()));
+    connect(installOld, SIGNAL(clicked()), this, SLOT(installUsingOldApi()));
+    connect(launchApp, SIGNAL(clicked()), this, SLOT(installByOpeningFile()));
+
+    HbToolBar *installToolBar = new HbToolBar();
+    installToolBar->addAction(tr("RemoveView"), this, SLOT(removeViewActivated()));
+    installToolBar->addAction(tr("Exit"), this, SLOT(closeApp()));
+    mInstallView->setToolBar(installToolBar);
+
+    mInstallView->setLayout(installLayout);
+}
+
+void TestInstaller::createRemoveView()
+{
+    Q_ASSERT( mRemoveView == 0 );
+    mRemoveView = new HbView();
+    mRemoveView->setTitle(tr("Test Uninstaller"));
+
+    QGraphicsLinearLayout *removeLayout = new QGraphicsLinearLayout(Qt::Vertical);
+
+    HbLabel *uninstallTitle = new HbLabel(tr("Uninstall:"));
+    removeLayout->addItem(uninstallTitle);
+
+    mRemovableApps = new HbComboBox;
+    mRemovableApps->setEditable(false);
+    removeLayout->addItem(mRemovableApps);
+
+    HbCheckBox *silentRemoveCheckBox = new HbCheckBox;
+    silentRemoveCheckBox->setText(tr("Silent"));
+    connect(silentRemoveCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(silentCheckChanged(int)));
+    removeLayout->addItem(silentRemoveCheckBox);
+    removeLayout->addStretch();
+
+    HbCheckBox *cancelRemove = new HbCheckBox;
+    cancelRemove->setText(tr("Cancel after %1 seconds").arg(KCancelRemoveDelay/1000));
+    connect(cancelRemove, SIGNAL(stateChanged(int)), this, SLOT(cancelRemovingChanged(int)));
+    removeLayout->addItem(cancelRemove);
+
+    HbPushButton *removeNew = new HbPushButton(tr("Remove using new API"));
+    removeLayout->addItem(removeNew);
+    HbPushButton *removeOld = new HbPushButton(tr("Remove using old API"));
+    removeLayout->addItem(removeOld);
+    removeLayout->addStretch();
+    connect(removeNew, SIGNAL(clicked()), this, SLOT(removeUsingNewApi()));
+    connect(removeOld, SIGNAL(clicked()), this, SLOT(removeUsingOldApi()));
+
+    HbToolBar *removeToolBar = new HbToolBar();
+    removeToolBar->addAction(tr("InstallView"), this, SLOT(installViewActivated()));
+    removeToolBar->addAction(tr("Exit"), this, SLOT(closeApp()));
+    mRemoveView->setToolBar(removeToolBar);
+
+    mRemoveView->setLayout(removeLayout);
 }
 
 void TestInstaller::getInstallDirs(QStringList& dirList)
@@ -404,6 +443,10 @@ bool TestInstaller::createRunner(bool useSif)
         mRunner = new ActiveRunner(useSif);
         connect(mRunner, SIGNAL(opCompleted()), this, SLOT(handleComplete()));
         connect(mRunner, SIGNAL(opFailed(int)), this, SLOT(handleError(int)));
+
+        if (mCancelInstallShortly) {
+            QTimer::singleShot(KCancelInstallDelay, this, SLOT(cancelInstalling()));
+        }
     } else {
         HbMessageBox::warning(tr("Already running"));
         return false;
@@ -450,6 +493,10 @@ void TestInstaller::removeSelectedUsingNewApi()
         int index = mRemovableApps->currentIndex();
         const TComponentId &compId(mRemovableComponentIds.at(index));
         mRunner->remove(compId, mUseSilentUninstall);
+
+        if (mCancelRemoveShortly) {
+            QTimer::singleShot(KCancelRemoveDelay, this, SLOT(cancelRemoving()));
+        }
     }
 }
 

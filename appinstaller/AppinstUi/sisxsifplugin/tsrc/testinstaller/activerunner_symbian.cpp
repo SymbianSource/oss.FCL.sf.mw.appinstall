@@ -155,9 +155,23 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bo
         iResults = NULL;
         iResults = Usif::COpaqueNamedParams::NewL();
 
+        RArray<TInt> driveArray;
+        CleanupClosePushL( driveArray );
+        RArray<TInt> languageArray;
+        CleanupClosePushL( languageArray );
+
         if( aSilent )
             {
             iArguments->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
+
+            driveArray.AppendL( EDriveE );
+            driveArray.AppendL( EDriveC );
+            iArguments->AddIntArrayL( Usif::KSifInParam_Drive, driveArray );
+
+            languageArray.AppendL( ELangFinnish );
+            languageArray.AppendL( ELangSwedish );
+            languageArray.AppendL( ELangEnglish );
+            iArguments->AddIntArrayL( Usif::KSifInParam_Languages, languageArray );
             }
         if( aOcsp )
             {
@@ -173,6 +187,9 @@ void ActiveRunnerPrivate::DoInstallL( const QString& aFileName, bool aSilent, bo
             {
             iSoftwareInstall.Install( fileName, *iArguments, *iResults, iStatus );
             }
+
+        CleanupStack::PopAndDestroy( &languageArray );
+        CleanupStack::PopAndDestroy( &driveArray );
         }
     else
         {

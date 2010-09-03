@@ -20,7 +20,6 @@
 #define C_NCD_INSTALLATION_SERVICE_IMPL_H
 
 #include <e32base.h>
-#include <AknServerApp.h>
 #include <AknsSrvClient.h>
 #include <swi/sisregistrysession.h>
 #include <swi/sisregistryentry.h>
@@ -36,8 +35,6 @@
 
 #include "ncdwidgetregistrydata.h"
 
-class CDocumentHandler;
-
 class MNcdInstallationServiceObserver;
 class TCatalogsVersion;
 class CNcdActiveOperationObserver;
@@ -49,7 +46,6 @@ class CNcdSilentInstallActiveObserver;
  */
 class CNcdInstallationService : public CBase,
                                 public MNcdInstallationService,
-                                public MAknServerAppExitObserver,
                                 public MNcdAsyncOperationObserver,
                                 public MNcdAsyncSilentInstallObserver
     {
@@ -219,12 +215,7 @@ public: // From MNcdInstallationService
      * @see MNcdInstallationService::WriteJadL()
      */
     HBufC* WriteJadL( const TDesC& aJarFileName, const TDesC8& aJad  );
-
-    
-    /**
-     * @see MNcdInstallationService::DocumentHandler()
-     */
-    CDocumentHandler& DocumentHandler();
+   
     
 public: // From MNcdAsyncOperationObserver
 
@@ -403,7 +394,6 @@ private:
 private: // Data
 
     TBool iBusy;
-    CDocumentHandler* iDocHandler;
     MNcdInstallationServiceObserver* iObserver;
     // Registry session 
     Swi::RSisRegistrySession iRegistrySession;
@@ -446,7 +436,6 @@ private: // Data
     
     CNcdActiveOperationObserver* iInstallStatusObserver;
 
-    //SwiUI::RSWInstLauncher iInstaller;
     Usif::RSoftwareInstall iInstaller;
     Usif::COpaqueNamedParams* iArguments; 
     Usif::COpaqueNamedParams* iResults;

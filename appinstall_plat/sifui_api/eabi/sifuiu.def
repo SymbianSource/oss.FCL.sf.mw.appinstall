@@ -42,4 +42,5 @@ EXPORTS
 	_ZTV15CSifUiErrorInfo @ 41 NONAME
 	_ZTV21CSifUiCertificateInfo @ 42 NONAME
 	_ZTV6CSifUi @ 43 NONAME
+	_ZN6CSifUi13CancelDialogsEv @ 44 NONAME
 

@@ -91,6 +91,7 @@ namespace Usif
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
         void DisplayFailedL( const CSisxSifPluginErrorHandler& aError );
+        void CancelDialogs();
 
     public:     // new functions
         void SetDriveSelectionRequired( TBool aIsRequired );

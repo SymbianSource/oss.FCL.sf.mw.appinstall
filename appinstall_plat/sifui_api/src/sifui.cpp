@@ -183,6 +183,15 @@ EXPORT_C TBool CSifUi::ShowSelectOptionsL( const MDesCArray& aSelectableItems,
     return iPrivate->ShowSelectOptionsL( aSelectableItems, aSelectedIndexes );
     }
 
+// ---------------------------------------------------------------------------
+// CSifUi::CancelDialogs()
+// ---------------------------------------------------------------------------
+//
+EXPORT_C void CSifUi::CancelDialogs()
+    {
+    iPrivate->CancelDialogs();
+    }
+
 
 // ---------------------------------------------------------------------------
 // DEPRECATED: CSifUi::ShowFailedL()

@@ -45,7 +45,7 @@ SOURCE              iaupdatebgcontrollerfile.cpp
 SOURCE              iaupdatebgfirsttimehandler.cpp
 SOURCE              iaupdatebginternalfilehandler.cpp
 SOURCE              iaupdatebgsoftnotification.cpp 
-SOURCE              iaupdatbgnotifyhandler.cpp
+SOURCE              iaupdatebgnotifyhandler.cpp
 
 
 LIBRARY             euser.lib 
@@ -53,14 +53,11 @@ LIBRARY             centralrepository.lib
 LIBRARY             iaupdateapi.lib 
 LIBRARY             ws32.lib 
 LIBRARY             apgrfx.lib 
-LIBRARY             Aknnotify.lib 
-LIBRARY             AknNotifyPlugin.lib
 LIBRARY             efsrv.lib	
 LIBRARY             bafl.lib 
 LIBRARY             estor.lib
 LIBRARY             CenRepNotifHandler.lib
 LIBRARY             apparc.lib 
-LIBRARY             AknDynamicSoftNote.lib
 LIBRARY             commonengine.lib
 LIBRARY             sysversioninfo.lib
 LIBRARY             FeatMgr.lib

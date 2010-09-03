@@ -57,11 +57,10 @@ static TInt ResumeOperationCallback( TAny* aData )
 // NewL
 // ---------------------------------------------------------------------------
 //	
-CCatalogsHttpSessionManager* CCatalogsHttpSessionManager::NewL(
-    CDocumentHandler& aDocHandler )
+CCatalogsHttpSessionManager* CCatalogsHttpSessionManager::NewL()
     {
     CCatalogsHttpSessionManager* self = new( ELeave ) 
-        CCatalogsHttpSessionManager( aDocHandler );
+        CCatalogsHttpSessionManager();
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop( self );
@@ -328,16 +327,6 @@ CCatalogsNetworkManager& CCatalogsHttpSessionManager::NetworkManagerL()
     return *iNetworkManager;
     }
 
-
-// ---------------------------------------------------------------------------
-// 
-// ---------------------------------------------------------------------------
-//  
-CDocumentHandler& CCatalogsHttpSessionManager::DocumentHandler()
-    {
-    return iDocHandler;
-    }
-
 // ---------------------------------------------------------------------------
 // 
 // ---------------------------------------------------------------------------
@@ -411,16 +400,13 @@ TInt CCatalogsHttpSessionManager::RunError( TInt aError )
 // CCatalogsHttpSessionManager
 // ---------------------------------------------------------------------------
 //	
-CCatalogsHttpSessionManager::CCatalogsHttpSessionManager(
-    CDocumentHandler& aDocHandler ) : 
+CCatalogsHttpSessionManager::CCatalogsHttpSessionManager() : 
     CActive( CActive::EPriorityStandard ),
     iRefCount( 1 ),
-    iResumeQueued( ETrue ),
-    iDocHandler( aDocHandler )
+    iResumeQueued( ETrue )
     {
     CActiveScheduler::Add( this );
     }
-
 
 // ---------------------------------------------------------------------------
 // ResumeOperation
