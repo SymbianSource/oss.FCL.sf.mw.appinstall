@@ -31,4 +31,11 @@
  */
 #define KIAUpdateFamilyUid KIAUpdateUiUid
 
+/**
+ * Id:s  for informing background checker about main list refresh
+ */
+#define KIAUpdateBgcUid1 0x200211f4    // Bg checker UID; P&S Category
+const TUid KPSUidBgc = { KIAUpdateBgcUid1 };
+const TUint32 KIAUpdateBGNotifyIndicatorRemove = 0x00000003; // P&S Category
+
 #endif // IA_UPDATE_UIDS_H

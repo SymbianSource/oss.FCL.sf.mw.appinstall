@@ -78,12 +78,10 @@ LIBRARY         cafutils.lib            // Rights object
 LIBRARY         sisregistryclient.lib   // SIS Registry
 LIBRARY         cone.lib
 LIBRARY         apmime.lib
-LIBRARY         commonui.lib
 LIBRARY         centralrepository.lib
 LIBRARY         webutils.lib            // CUserAgent
 LIBRARY         sysutil.lib
 LIBRARY         apparc.lib
-LIBRARY         avkon.lib
 LIBRARY         etel3rdparty.lib 
 LIBRARY         apgrfx.lib
 

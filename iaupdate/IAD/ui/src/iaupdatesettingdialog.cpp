@@ -306,6 +306,8 @@ void CIAUpdateSettingDialog::getDestinationNameL( uint aItemUid, QString& aItemN
     
     aItemName = XQConversions::s60DescToQString( temp->Des() );
 
+    delete temp;
+    
     if ( aItemName.size() == 0 ) 
         {
         User::Leave(KErrNotFound);
@@ -319,40 +321,49 @@ void CIAUpdateSettingDialog::getDestinationNameL( uint aItemUid, QString& aItemN
 void CIAUpdateSettingDialog::initializeView()
     {
     
-    setTitle("Software update"); // txt_software_title_software_update
-    mSettingsForm->setHeading("Settings"); // txt_software_subhead_settings
+    setTitle("Software update"); 
+    //setTitle(hbTrId("txt_software_title_software_update")); 
+    
+    mSettingsForm->setHeading("Settings"); 
+    //mSettingsForm->setHeading(hbTrId("txt_software_subhead_settings"));
+    
+    //create a model class
+    HbDataFormModel *mModel = new HbDataFormModel();
 
-     //create a model class
-     HbDataFormModel *mModel = new HbDataFormModel();
+    // add Destination item
+    mDestinationItem = mModel->appendDataFormItem(
+        HbDataFormModelItem::ToggleValueItem, QString("Network connection"));
+        //HbDataFormModelItem::ToggleValueItem, hbTrId("txt_software_formlabel_network_connection"));
 
-     // add Destination item
-     mDestinationItem = mModel->appendDataFormItem(
-         HbDataFormModelItem::ToggleValueItem, QString("Network connection")); // txt_software_formlabel_access_point
-
-     // add auto update item
-     mAutoUpdateItem = mModel->appendDataFormItem(
-        HbDataFormModelItem::ComboBoxItem, QString("Auto-check for updates")); // txt_software_setlabel_autocheck_for_updates
-     
-     // auto update selection values
-     QStringList list;
-     list.insert(0, QString("On")); // txt_software_setlabel_val_on
-     list.append(QString("Off")); // txt_software_setlabel_val_off
-     list.append(QString("On in home network")); // txt_software_setlabel_val_on_in_home_network
-     mAutoUpdateItem->setContentWidgetData("items", list);
+    // add auto update item
+    mAutoUpdateItem = mModel->appendDataFormItem(
+       HbDataFormModelItem::ComboBoxItem, QString("Auto-check for updates"));
+       //HbDataFormModelItem::ComboBoxItem, hbTrId("txt_software_setlabel_autocheck_for_updates"));
+    
+    // auto update selection values
+    QStringList list;
+    list.insert(0, QString("On"));
+    //list.insert(0, hbTrId("txt_software_setlabel_val_on"));
+    list.append(QString("Off")); 
+    //list.append(hbTrId("txt_software_setlabel_val_off"));
+    list.append(QString("On in home network"));
+    //list.append(hbTrId("txt_software_setlabel_val_on_in_home_network"));
+    
+    mAutoUpdateItem->setContentWidgetData("items", list);
 
      // connect data changes for launching the access point selection dialog
-     connect(mModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), 
-                 this, SLOT(toggleChange(QModelIndex, QModelIndex)));
+    connect(mModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), 
+                this, SLOT(toggleChange(QModelIndex, QModelIndex)));
 
-     // connect to function called when data items are displayed
-     connect(mSettingsForm, SIGNAL(activated(QModelIndex)), 
-                      this, SLOT(activated(QModelIndex)));
-     
-     mSettingsForm->setModel(mModel);
-         
-     // set values for items
-     TRAPD(err, initializeFieldsL());
-     qt_symbian_throwIfError(err);
+    // connect to function called when data items are displayed
+    connect(mSettingsForm, SIGNAL(activated(QModelIndex)), 
+                this, SLOT(activated(QModelIndex)));
+    
+    mSettingsForm->setModel(mModel);
+    
+    // set values for items
+    TRAPD(err, initializeFieldsL());
+    qt_symbian_throwIfError(err);
 }
 
 // -----------------------------------------------------------------------------

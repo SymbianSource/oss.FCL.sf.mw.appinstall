@@ -27,7 +27,6 @@ class CCatalogsHttpConfig;
 class MCatalogsHttpObserver;
 class CCatalogsHttpConnectionCreator;
 class CCatalogsHttpConnectionManager;
-class CDocumentHandler;
 
 class MCatalogsHttpSessionManager
     {
@@ -67,12 +66,6 @@ class MCatalogsHttpSessionManager
          * This is used when all operations are canceled at once
          */
         virtual void SetResumeMode( TBool aResumeQueued ) = 0;
-        
-        /**
-         * Document handler getter
-         * @return Document handler instance
-         */
-        virtual CDocumentHandler& DocumentHandler() = 0;
         
         /**
          * Disconnects network connection if it is not used by any

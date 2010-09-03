@@ -24,7 +24,6 @@
 #include <driveinfo.h>
 
 // For silent installation
-#include <SWInstDefs.h>
 #include <usif/sif/sif.h>
 #include <swi/sisregistryentry.h>
 
@@ -120,22 +119,15 @@ IMPORT_C TBool SpaceAvailableInInternalDrivesL(
  **/
 IMPORT_C TBool IsInstalledL( const TUid& aPUid, const TDesC& aExecutable );  
 
-/**
- * Creates options for silent install.
- * Uses DriveToInstallL to etermine target drive to install.
- * 
- * @param aNode
- */
-SwiUI::TInstallOptions SilentInstallOptionsL( const CIAUpdateBaseNode& aNode );
-                                                     
 
 /**
  * Creates options for silent install.
- * Uses DriveToInstallL to etermine target drive to install.
+ * Uses DriveToInstallL to determine target drive to install.
  * 
  * @param aOptions  Silent install options
  */
-void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
+void  UsifSilentInstallOptionsL( 
+        const CIAUpdateBaseNode& aNode,Usif::COpaqueNamedParams * aOptions );
 
 /**
  * Finds drive where a package is currently installed
@@ -145,10 +137,7 @@ void  UsifSilentInstallOptionsL( Usif::COpaqueNamedParams * aOptions );
  **/
 TBool InstalledDriveL( RFs& aFs, const TUid& aUid, TDriveUnit& aLocationDrive );
 
-void InstalledDriveWidgetL( RFs& aFs, 
-                            RWidgetRegistryClientSession& aWidgetRegistry, 
-                            const TUid& aUid, 
-                            TDriveUnit& aLocationDrive );
+void InstalledDriveWidgetL( TDriveUnit& aLocationDrive );
 
 TBool NextInternalDriveL( RFs& aFs, 
                           TDriveUnit aCurrentDrive, 

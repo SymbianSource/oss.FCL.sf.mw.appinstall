@@ -188,7 +188,7 @@ TBool CSisxSifPluginUiHandler::DisplayInstallL( const Swi::CAppInfo& /*aAppInfo*
         const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayInstallL") );
-    iOperationPhase = EInstalling;
+    ASSERT( iOperationPhase == EInstalling );
     return ETrue;
     }
 
@@ -226,15 +226,11 @@ TInt CSisxSifPluginUiHandler::DisplayDriveL( const Swi::CAppInfo& /*aAppInfo*/,
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayDriveL") );
 
-    TInt err = KErrNone;
     TInt driveNumber = EDriveC;
-    if( iSifUi )
+    TInt err = iSifUi->SelectedDrive( driveNumber );
+    if( err )
         {
-        err = iSifUi->SelectedDrive( driveNumber );
-        if( err )
-            {
-            FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDriveL; SelectedDrive err=%d"), err );
-            }
+        FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDriveL; SelectedDrive err=%d"), err );
         }
 
     TChar driveLetter = 'C';
@@ -260,7 +256,6 @@ TBool CSisxSifPluginUiHandler::DisplayUpgradeL( const Swi::CAppInfo& /*aAppInfo*
         const Swi::CAppInfo& /*aExistingAppInfo*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayUpgradeL") );
-
     return ETrue;
     }
 
@@ -302,47 +297,48 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
         Swi::TInstallEvent aEvent, TInt aValue, const TDesC& /*aDes*/ )
     {
     FLOG_2( _L("CSisxSifPluginUiHandler::HandleInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
+    TBool okToContinue = EFalse;
 
-    if( iSifUi->IsCancelled() )
+    if( !iSifUi->IsCancelled() )
         {
-        return EFalse;
+        okToContinue = ETrue;
+
+        switch( aEvent )
+            {
+            case Swi::EEventSetProgressBarFinalValue:
+                iProgressBarFinalValue = aValue;
+                if( iOperationPhase == EInstalling )
+                    {
+                    ShowProgressL( aAppInfo, iProgressBarFinalValue, CSifUi::EInstalling );
+                    }
+                break;
+
+            case Swi::EEventUpdateProgressBar:
+                if( iOperationPhase == EInstalling )
+                    {
+                    iSifUi->IncreaseProgressBarValueL( aValue );
+                    }
+                iProgressBarCurrentValue += aValue;
+                PublishProgressL( EFileOperation );
+                break;
+
+            case Swi::EEventDevCert:
+                // TODO: show "developer certificate" warning note
+                break;
+
+            case Swi::EEventOcspCheckEnd:
+            case Swi::EEventAbortedInstall:
+            case Swi::EEventAbortedUnInstall:
+            case Swi::EEventCompletedInstall:
+            case Swi::EEventCompletedUnInstall:
+            case Swi::EEventCompletedNoMessage:
+            case Swi::EEventLeave:
+            default:
+                break;
+            }
         }
 
-    switch( aEvent )
-        {
-        case Swi::EEventSetProgressBarFinalValue:
-            iProgressBarFinalValue = aValue;
-            if( iOperationPhase == EInstalling )
-                {
-                ShowProgressL( aAppInfo, iProgressBarFinalValue, CSifUi::EInstalling );
-                }
-            break;
-
-        case Swi::EEventUpdateProgressBar:
-            if( iOperationPhase == EInstalling )
-                {
-                iSifUi->IncreaseProgressBarValueL( aValue );
-                }
-            iProgressBarCurrentValue += aValue;
-            PublishProgressL( EFileOperation );
-            break;
-
-        case Swi::EEventDevCert:
-            // TODO: show "developer certificate" warning note
-            break;
-
-        case Swi::EEventOcspCheckEnd:
-        case Swi::EEventAbortedInstall:
-        case Swi::EEventAbortedUnInstall:
-        case Swi::EEventCompletedInstall:
-        case Swi::EEventCompletedUnInstall:
-        case Swi::EEventCompletedNoMessage:
-        case Swi::EEventLeave:
-        default:
-            break;
-        }
-
-    return ETrue;
+    return okToContinue;
     }
 
 // ---------------------------------------------------------------------------
@@ -461,7 +457,7 @@ void CSisxSifPluginUiHandler::DisplayCannotOverwriteFileL( const Swi::CAppInfo& 
         const Swi::CAppInfo& /*aInstalledAppInfo*/, const TDesC& /*aFileName*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayCannotOverwriteFileL") );
-
+    // TODO: implement
     }
 
 // ---------------------------------------------------------------------------
@@ -473,7 +469,7 @@ TBool CSisxSifPluginUiHandler::DisplayMissingDependencyL( const Swi::CAppInfo& /
         TVersion /*aWantedVersionTo*/, TVersion /*aInstalledVersion*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayMissingDependencyL") );
-
+    // TODO: implement
     return ETrue;
     }
 
@@ -484,8 +480,7 @@ TBool CSisxSifPluginUiHandler::DisplayMissingDependencyL( const Swi::CAppInfo& /
 TBool CSisxSifPluginUiHandler::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayUninstallL") );
-
-    iOperationPhase = EUninstalling;
+    ASSERT( iOperationPhase == EUninstalling );
     return ETrue;       // uninstall is always silent
     }
 
@@ -506,7 +501,6 @@ void CSisxSifPluginUiHandler::DisplayPreparingInstallL( const TDesC& /*aFileName
 void CSisxSifPluginUiHandler::DisplayCompleteL()
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayCompleteL") );
-
     iSifUi->ShowCompleteL();
     }
 
@@ -517,12 +511,20 @@ void CSisxSifPluginUiHandler::DisplayCompleteL()
 void CSisxSifPluginUiHandler::DisplayFailedL( const CSisxSifPluginErrorHandler& aError )
     {
     FLOG_1( _L("CSisxSifPluginUiHandler::DisplayFailedL, error code %d"), aError.ErrorCode() );
-
     CSifUiErrorInfo* errorInfo = CSifUiErrorInfo::NewLC( aError.ErrorCategory(),
         aError.ErrorCode(), aError.ExtendedErrorCode(), aError.ErrorMessage(),
         aError.ErrorMessageDetails() );
     iSifUi->ShowFailedL( *errorInfo );
     CleanupStack::PopAndDestroy( errorInfo );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandler::CancelDialogs()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandler::CancelDialogs()
+    {
+    iSifUi->CancelDialogs();
     }
 
 // ---------------------------------------------------------------------------
@@ -577,6 +579,7 @@ void CSisxSifPluginUiHandler::AddMemorySelectionL()
                 }
             }
         }
+
     iSifUi->SetMemorySelectionL( iSelectableDrives );
     }
 
@@ -589,7 +592,6 @@ void CSisxSifPluginUiHandler::AddCertificatesL(
         RPointerArray<CPKIXValidationResultBase>& aPkixResults )
     {
     ASSERT( aCertificates.Count() == aPkixResults.Count() );
-
     RPointerArray<CSifUiCertificateInfo> certificates;
     CleanupResetAndDestroyPushL( certificates );
 
@@ -604,6 +606,7 @@ void CSisxSifPluginUiHandler::AddCertificatesL(
             }
         }
     iSifUi->SetCertificateInfoL( certificates );
+
     CleanupStack::PopAndDestroy( &certificates );
     }
 

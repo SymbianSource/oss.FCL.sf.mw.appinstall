@@ -29,7 +29,7 @@
 
 
 // Constants
-const TInt KRequestTimeoutMicroseconds( 180000000 );
+const TInt KRequestTimeoutMicroseconds( 60000000 );
 
 // Forward declarations
 class RHTTPSession;

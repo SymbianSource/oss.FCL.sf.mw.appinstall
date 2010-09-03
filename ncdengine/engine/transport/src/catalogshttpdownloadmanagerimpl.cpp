@@ -817,17 +817,6 @@ CCatalogsHttpConnectionManager& CCatalogsHttpDownloadManager::ConnectionManager(
     return iConnectionManager;
     }
 
-
-// ---------------------------------------------------------------------------
-// 
-// ---------------------------------------------------------------------------
-//            
-CDocumentHandler& CCatalogsHttpDownloadManager::DocumentHandler()
-    {
-    return iManager.DocumentHandler();
-    }
-
-
 // ---------------------------------------------------------------------------
 // Event handling
 // ---------------------------------------------------------------------------

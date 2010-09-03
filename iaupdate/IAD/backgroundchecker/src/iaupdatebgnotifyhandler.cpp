@@ -24,12 +24,6 @@
 #include "iaupdateuids.h"
 #include "iaupdatebglogger.h"
 
-//CONSTANTS (-> to iaupdaeuids.h)
-#define KIAUpdateBgcUid1 0x200211f4    // Bg checker UID
-const TUint32 KIAUpdateBGNotifyIndicatorRemove = 0x00000003;
-
-const TUid KPSUid = { KIAUpdateBgcUid1 };
-
 //MACROS
 _LIT_SECURITY_POLICY_PASS( KReadPolicy );
 _LIT_SECURITY_POLICY_C1( KWritePolicy, ECapabilityWriteDeviceData );
@@ -72,7 +66,7 @@ void CIAUpdateBGNotifyHandler::ConstructL()
     {
     FLOG("[IAUPDATE] CIAUpdateBGNotifyHandler::ConstructL() begin");
     CActiveScheduler::Add( this );
-    TInt err = RProperty::Define( KPSUid, 
+    TInt err = RProperty::Define( KPSUidBgc, 
                                   KIAUpdateBGNotifyIndicatorRemove, 
                                   RProperty::EInt,
                                   KReadPolicy,
@@ -85,7 +79,7 @@ void CIAUpdateBGNotifyHandler::ConstructL()
     // If not definined, set initial (dummy) value
     if ( err == KErrNone )
         {
-        RProperty::Set(KPSUid, KIAUpdateBGNotifyIndicatorRemove, 0);
+        RProperty::Set(KPSUidBgc, KIAUpdateBGNotifyIndicatorRemove, 0);
         }
     
     FLOG("[IAUPDATE] CIAUpdateBGNotifyHandler::ConstructL() end");   
@@ -125,16 +119,13 @@ CIAUpdateBGNotifyHandler::~CIAUpdateBGNotifyHandler()
 void CIAUpdateBGNotifyHandler::StartListeningL( MIAUpdateBGNotifyObserver* aObserver )
     {
     
-    //#define KIAHelloWorldUiUid1 0xA000017F
-    //const TUid KPSUid1 = { KIAUpdateUiUid1 };
-    
     FLOG("[IAUPDATE] CIAUpdateBGNotifyHandler::StartListeningL() begin");
     
     if ( !iObserver )
         {
     	iObserver = aObserver;
     	User::LeaveIfError( 
-    	        iProperty.Attach( KPSUid, KIAUpdateBGNotifyIndicatorRemove ) );
+    	        iProperty.Attach( KPSUidBgc, KIAUpdateBGNotifyIndicatorRemove ) );
         }
  
    	Cancel();
@@ -172,9 +163,9 @@ void CIAUpdateBGNotifyHandler::RunL()
     
     /* No need to read value so far
     TInt value = 0;
-	User::LeaveIfError( RProperty::Get( KPSUid, 
-                                        KIAUpdateUiRefresh, 
-                                        wgId ) );
+	User::LeaveIfError( RProperty::Get( KPSUidBgc, 
+	                                    KIAUpdateBGNotifyIndicatorRemove, 
+                                        value ) );
     */
     
     iObserver->HandleIndicatorRemoveL();

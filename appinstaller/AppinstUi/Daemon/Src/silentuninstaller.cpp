@@ -46,8 +46,8 @@ void CSilentUninstaller::ConstructL()
     iSifResults = Usif::COpaqueNamedParams::NewL();    
     // Set parameters for silent uninstall.    
     iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );       
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );    
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppBreakDependency, EFalse );     
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );    
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppBreakDependency, Usif::ENotAllowed );     
     }
 
 

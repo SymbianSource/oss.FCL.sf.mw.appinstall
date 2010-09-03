@@ -55,6 +55,8 @@ CSisxSifPluginInstallParams* CSisxSifPluginInstallParams::NewL(
 //
 CSisxSifPluginInstallParams::~CSisxSifPluginInstallParams()
     {
+    iDrives.Close();
+    iLanguages.Close();
     delete iOCSPUrl;
     }
 
@@ -77,21 +79,21 @@ TBool CSisxSifPluginInstallParams::IsInstallInactive() const
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginInstallParams::Drive()
+// CSisxSifPluginInstallParams::Drives()
 // ---------------------------------------------------------------------------
 //
-TUint CSisxSifPluginInstallParams::Drive() const
+const RArray<TUint>& CSisxSifPluginInstallParams::Drives() const
     {
-    return iDrive;
+    return iDrives;
     }
 
 // ---------------------------------------------------------------------------
-// CSisxSifPluginInstallParams::Language()
+// CSisxSifPluginInstallParams::Languages()
 // ---------------------------------------------------------------------------
 //
-TLanguage CSisxSifPluginInstallParams::Language() const
+const RArray<TLanguage>& CSisxSifPluginInstallParams::Languages() const
     {
-    return iLanguage;
+    return iLanguages;
     }
 
 // ---------------------------------------------------------------------------
@@ -222,10 +224,13 @@ void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams 
     {
     iUseSilentMode = GetIntParam( aParams, KSifInParam_InstallSilently, EFalse );
     iIsInstallInactive = GetIntParam( aParams, KSifInParam_InstallInactive, EFalse );
-    // TODO: change drive and language params as arrays when available
-    iDrive = static_cast<TUint>( GetIntParam( aParams, KSifInParam_Drive, EDriveC ) );
-    iLanguage = static_cast<TLanguage>( GetIntParam( aParams, KSifInParam_Languages,
-            ELangNone ) );
+    TRAPD( err, DoProcessDriveParamL( aParams ) );
+    if( err )
+        {
+        TInt defaultDrive = GetIntParam( aParams, KSifInParam_Drive, EDriveC );
+        iDrives.AppendL( defaultDrive );
+        }
+    TRAP_IGNORE( DoProcessLangParamL( aParams ) );  // no default language
     GetStringParamL( aParams, KSifInParam_OCSPUrl, iOCSPUrl );
     GetPolicyParam( aParams, KSifInParam_PerformOCSP, iPerformOCSP, EAllowed );
     GetPolicyParam( aParams, KSifInParam_IgnoreOCSPWarnings, iIgnoreOCSPWarnings, EAllowed );
@@ -249,8 +254,14 @@ void CSisxSifPluginInstallParams::ConstructL( const CSisxSifPluginInstallParams&
     {
 	iUseSilentMode = aParams.iUseSilentMode;
 	iIsInstallInactive = aParams.iIsInstallInactive;
-    iDrive = aParams.iDrive;
-    iLanguage = aParams.iLanguage;
+	for( TInt index = 0; index < aParams.iDrives.Count(); index++ )
+	    {
+	    iDrives.AppendL( aParams.iDrives[ index ] );
+	    }
+	for( TInt index = 0; index < aParams.iLanguages.Count(); index++ )
+	    {
+	    iLanguages.AppendL( aParams.iLanguages[ index ] );
+	    }
     if( aParams.iOCSPUrl )
         {
         iOCSPUrl = aParams.iOCSPUrl->AllocL();
@@ -317,6 +328,34 @@ void CSisxSifPluginInstallParams::GetStringParamL( const COpaqueNamedParams& aPa
             aBuf = NULL;
             }
         aBuf = value.AllocL();
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginInstallParams::DoProcessDriveParamL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginInstallParams::DoProcessDriveParamL( const COpaqueNamedParams& aParams )
+    {
+    const RArray<TInt>& driveArray = aParams.IntArrayByNameL( KSifInParam_Drive );
+    iDrives.Reset();
+    for( TInt index = 0; index < driveArray.Count(); index++ )
+        {
+        iDrives.AppendL( driveArray[ index ] );
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginInstallParams::DoProcessLangParamL()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginInstallParams::DoProcessLangParamL( const COpaqueNamedParams& aParams )
+    {
+    const RArray<TInt>& langArray = aParams.IntArrayByNameL( KSifInParam_Languages );
+    iLanguages.Reset();
+    for( TInt index = 0; index < langArray.Count(); index++ )
+        {
+        iLanguages.AppendL( static_cast<TLanguage>( langArray[ index ] ) );
         }
     }
 

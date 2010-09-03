@@ -24,7 +24,6 @@
 
 class MCatalogsTransportSession;
 class CCatalogsHttpSessionManager;
-class CDocumentHandler;
 
 /**
 * Catalogs Transport implementation
@@ -36,11 +35,9 @@ class CCatalogsTransport : public CBase
 	    /**
 	    * Creator
 	    *
-	    * @param aDocHandler Document handler
 	    * @return A new CCatalogsTransport-object
 	    */
-	    static CCatalogsTransport* NewL( CDocumentHandler& aDocHandler );
-	    
+        static CCatalogsTransport* NewL();
 	    
 	    /**
 	    * Destructor
@@ -85,7 +82,7 @@ class CCatalogsTransport : public CBase
         /** 
         * 2nd phase constructor
         */
-        void ConstructL( CDocumentHandler& aDocHandler );
+	    void ConstructL();
 	    
 	private:
 	

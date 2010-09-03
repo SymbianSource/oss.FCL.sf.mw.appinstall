@@ -17,7 +17,7 @@
 
 
 PRJ_MMPFILES
-catalogsdebug.mmp
+//catalogsdebug.mmp
 ncdutils.mmp
 ncddevicemgmt.mmp
 //catalogsserver.mmp

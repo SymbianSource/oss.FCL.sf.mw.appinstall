@@ -156,16 +156,17 @@ void CNcdSilentInstallActiveObserver::RunL()
     // The launcher is shown in the application list.
     // So, it would not be nice to leave it there after operation is completed.
     
-   
+    /* Uncomment for testing
     TInt ErrCategory = 0;
     TInt ErrCode = 0;
     TInt ExtendedErrCode =0;
     
-    TBool ret = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCategory, ErrCategory);
-    ret = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCode, ErrCode);
-    ret = iResults->GetIntByNameL(Usif::KSifOutParam_ExtendedErrCode, ExtendedErrCode);
+    ErrCategory = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCategory, ErrCategory);
+    ErrCode = iResults->GetIntByNameL(Usif::KSifOutParam_ErrCode, ErrCode);
+    ExtendedErrCode = iResults->GetIntByNameL(Usif::KSifOutParam_ExtendedErrCode, ExtendedErrCode);
     SilentLauncher().Close();
-
+    */
+    
     TInt errorCode( ConvertErrorCode( iStatus.Int() ) );
     
     // Just forward the information to the observer.
@@ -180,7 +181,6 @@ MNcdAsyncSilentInstallObserver& CNcdSilentInstallActiveObserver::AsyncObserver()
 
 Usif::RSoftwareInstall& CNcdSilentInstallActiveObserver::SilentLauncher()
     {
-    // return iSilentLauncher;
     return iInstaller;
     }
 

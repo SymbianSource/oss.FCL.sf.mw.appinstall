@@ -364,6 +364,16 @@ TBool CSifUiPrivate::ShowSelectOptionsL( const MDesCArray& aSelectableItems,
     }
 
 // ---------------------------------------------------------------------------
+// CSifUiPrivate::ShowSelectOptionsL()
+// ---------------------------------------------------------------------------
+//
+void CSifUiPrivate::CancelDialogs()
+    {
+    Cancel();
+    ClearParams();
+    }
+
+// ---------------------------------------------------------------------------
 // CSifUiPrivate::DoCancel()
 // ---------------------------------------------------------------------------
 //
@@ -374,6 +384,7 @@ void CSifUiPrivate::DoCancel()
         {
         iDeviceDialog->Cancel();        // Closes the device dialog.
         }
+    iDialogReturnValue = KErrCancel;
 
     // Cancelled device dialog does not call DeviceDialogClosed() hence have
     // to complete the request now. CActive::Cancel() waits until the request

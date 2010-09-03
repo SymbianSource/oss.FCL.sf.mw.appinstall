@@ -263,6 +263,11 @@ class CSifUi : public CBase
         IMPORT_C TBool ShowSelectOptionsL( const MDesCArray& aSelectableItems,
                 RArray<TInt>& aSelectedIndexes );
 
+        /**
+         * Closes dialogs immediately and resets the CSifUi object.
+         */
+        IMPORT_C void CancelDialogs();
+
 
         //=================================================
         // DEPRECATED METHODS

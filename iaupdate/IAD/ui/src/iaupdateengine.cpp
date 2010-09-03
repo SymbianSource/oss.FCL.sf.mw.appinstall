@@ -576,6 +576,11 @@ void IAUpdateEngine::RefreshCompleteL(TBool /*aWithViewActivation*/,
     else
         {
         emit refresh(iController->Nodes(), iController->FwNodes(), aError);
+        
+        // inform bgchecker to clear indicator menu
+        User::LeaveIfError( 
+                RProperty::Set(KPSUidBgc, KIAUpdateBGNotifyIndicatorRemove, 0) );
+        
         //if ( aWithViewActivation)
         //  {
         //  ActivateLocalViewL( TUid::Uid( EIAUpdateMainViewId ) );

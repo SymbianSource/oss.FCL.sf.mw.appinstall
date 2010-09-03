@@ -228,7 +228,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayInstallL( const Swi::CAppInfo& /*aAp
         const CApaMaskedBitmap* /*aLogo*/,
         const RPointerArray<Swi::CCertificateInfo>& /*aCertificates*/ )
     {
-    iOperationPhase = EInstalling;
+    ASSERT( iOperationPhase == EInstalling );
     return ETrue;
     }
 
@@ -271,13 +271,16 @@ TInt CSisxSifPluginUiHandlerSilent::DisplayLanguageL( const Swi::CAppInfo& /*aAp
 	TInt languageCount = aLanguages.Count();
 	if( iInstallParams )
 		{
-		TLanguage lang = iInstallParams->Language();
-		TInt index = aLanguages.Find( lang );
-		if( index >= 0 && index < languageCount )
-			{
-			languageIndex = index;
-			found = ETrue;
-			}
+		const RArray<TLanguage>& preferredLanguages = iInstallParams->Languages();
+		for( TInt prefIndex = 0; prefIndex < preferredLanguages.Count() && !found; prefIndex++ )
+		    {
+	        TInt selectedIndex = aLanguages.Find( preferredLanguages[ prefIndex ] );
+	        if( selectedIndex >= 0 && selectedIndex < languageCount )
+	            {
+	            languageIndex = selectedIndex;
+	            found = ETrue;
+	            }
+		    }
 		}
 	if( !found )
 		{
@@ -304,22 +307,26 @@ TInt CSisxSifPluginUiHandlerSilent::DisplayDriveL( const Swi::CAppInfo& /*aAppIn
 	TInt driveCount = aDriveLetters.Count();
 	if( iInstallParams )
 		{
+	    const RArray<TUint>& preferredDrives = iInstallParams->Drives();
 		TChar driveLetter = 0;
-		RFs::DriveToChar( iInstallParams->Drive(), driveLetter );
-		TInt index = aDriveLetters.Find( driveLetter );
-		if( index >= 0 && index < driveCount )
-			{
-			if( aDriveSpaces[ index ] > aSize )
-				{
-				driveIndex = index;
-				found = ETrue;
-				}
-			}
+		TIdentityRelation<TChar> relation(CompareDriveLetters);
+		for( TInt prefIndex = 0; prefIndex < preferredDrives.Count() && !found; prefIndex++ )
+		    {
+		    RFs::DriveToChar( preferredDrives[ prefIndex ], driveLetter );
+		    TInt index = aDriveLetters.Find( driveLetter, relation );
+            if( index >= 0 && index < driveCount )
+                {
+                if( aDriveSpaces[ index ] > aSize )
+                    {
+                    driveIndex = index;
+                    found = ETrue;
+                    }
+                }
+		    }
 		}
-	// TODO: should there be some default drive?
 	if( !found )
 		{
-		User::Leave( KErrNoMemory );
+		driveIndex = KErrNotFound;
 		}
     return driveIndex;
     }
@@ -342,6 +349,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayUpgradeL( const Swi::CAppInfo& /*aAp
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    // TODO: SetError
 				break;
 			}
 		}
@@ -366,6 +374,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOptionsL( const Swi::CAppInfo& /*aAp
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    // TODO: SetError
 				break;
 			}
 		}
@@ -468,6 +477,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplaySecurityWarningL( const Swi::CAppInf
 					case EUserConfirm:
 					case ENotAllowed:
 					default:
+					    // TODO: SetError
 						break;
 					}
                 }
@@ -502,6 +512,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayOcspResultL( const Swi::CAppInfo& /*
                 case EUserConfirm:
                 case ENotAllowed:
                 default:
+                    // TODO: SetError
                     break;
                 }
 	        }
@@ -548,6 +559,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
 			case EUserConfirm:
 			case ENotAllowed:
 			default:
+			    // TODO: SetError
 				break;
 			}
 		}
@@ -566,7 +578,7 @@ TBool CSisxSifPluginUiHandlerSilent::DisplayMissingDependencyL( const Swi::CAppI
 //
 TBool CSisxSifPluginUiHandlerSilent::DisplayUninstallL( const Swi::CAppInfo& /*aAppInfo*/ )
     {
-    iOperationPhase = EUninstalling;
+    ASSERT( iOperationPhase == EUninstalling );
     return ETrue;
     }
 
@@ -596,6 +608,15 @@ void CSisxSifPluginUiHandlerSilent::DisplayFailedL(
         const CSisxSifPluginErrorHandler& /*aError*/ )
     {
     // nothing displayed in silent mode
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerSilent::CancelDialogs()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerSilent::CancelDialogs()
+    {
+    // nothing to do
     }
 
 // ---------------------------------------------------------------------------

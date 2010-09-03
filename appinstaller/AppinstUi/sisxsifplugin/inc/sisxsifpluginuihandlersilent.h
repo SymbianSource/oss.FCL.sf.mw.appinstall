@@ -86,6 +86,7 @@ namespace Usif
         void DisplayPreparingInstallL( const TDesC& aFileName );
         void DisplayCompleteL();
         void DisplayFailedL( const CSisxSifPluginErrorHandler& aError );
+        void CancelDialogs();
 
     protected:  // new functions
         CSisxSifPluginUiHandlerSilent( RFs& aFs, CSisxSifPluginErrorHandler& aErrorHandler );

@@ -509,12 +509,13 @@ EXPORT_C TBool IAUpdateUtils::IsInstalledL(
 // 
 // ---------------------------------------------------------------------------
 
-void  IAUpdateUtils::UsifSilentInstallOptionsL( 
-        Usif::COpaqueNamedParams * aOptions )
+void  IAUpdateUtils::UsifSilentInstallOptionsL(
+        const CIAUpdateBaseNode& aNode, Usif::COpaqueNamedParams * aOptions )
     {
-
+    
+    // Install silently
     aOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
-
+    
     // Upgrades are allowed 
     aOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::EAllowed );
     
@@ -547,16 +548,47 @@ void  IAUpdateUtils::UsifSilentInstallOptionsL(
     aOptions->AddIntL( Usif::KSifInParam_AllowIncompatible, Usif::EAllowed  );
     
     // This only affects Java applications.
-    aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
+    // TODO: Add when bigger parameter buffer exists
+    // aOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed  );
     
     // Where to save.
-    //aOptions->AddIntL( Usif::KSifInParam_Drive, EDriveC );
+    
+    TDriveUnit driveUnit;
+    
+    if ( aNode.Mime().Compare( IAUpdateProtocolConsts::KMimeWidget ) == 0 )
+        {
+        driveUnit = IAUpdateUtils::DriveToInstallWidgetL( aNode.Identifier() );
+        }
+    else
+        {
+        driveUnit = IAUpdateUtils::DriveToInstallL( aNode.Uid(), aNode.OwnContentSizeL() );
+        }
+    
+    /* TODO: Add when installer plugin supports integer lists 
+    RArray<TInt> driveArray;
+    CleanupClosePushL( driveArray );
+    User::LeaveIfError( driveArray.Append( driveUnit ) );
+    aOptions->AddIntArrayL( Usif::KSifInParam_Drive, driveArray );
+    CleanupStack::PopAndDestroy( &driveArray );
+    */
+    
+     aOptions->AddIntL( Usif::KSifInParam_Drive, driveUnit ); // to be removed
+     
     
     // Choose the phone language.
+     
     TLanguage lang = User::Language();
+    /* TODO: Add when installer plugin supports integer lists
+    RArray<TInt> langArray;
+    CleanupClosePushL( langArray );
+    User::LeaveIfError( langArray.Append( lang ) );
+    aOptions->AddIntArrayL( Usif::KSifInParam_Drive, langArray );
+    CleanupStack::PopAndDestroy( &langArray );
+    
+    */
+     
     //aOptions->AddIntL( Usif::KSifInParam_Languages, lang ); // User::Language() );
     
-    //aOptions->AddIntL( Usif::KSifInParam_Drive, IAUpdateUtils::DriveToInstallL( aUid, aSize ) );
     }
 // -----------------------------------------------------------------------------
 // IAUpdateUtils::InstalledDriveL
@@ -671,39 +703,33 @@ TBool IAUpdateUtils::InstalledDriveL(
 // 
 // -----------------------------------------------------------------------------
 // 
-void IAUpdateUtils::InstalledDriveWidgetL( RFs& aFs, 
-                                           RWidgetRegistryClientSession& aWidgetRegistry, 
-                                           const TUid& aUid, 
-                                           TDriveUnit& aLocationDrive )
+void IAUpdateUtils::InstalledDriveWidgetL( TDriveUnit& aLocationDrive )
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
-    aLocationDrive = EDriveC;
     
-    //HLa: Widget registry remove
     
-    /*
-    TFileName widgetPath;
-    aWidgetRegistry.GetWidgetPath( aUid, widgetPath );
-    aLocationDrive = widgetPath.Mid( 0, 2 );
-    IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Drive in registry: %S", &aLocationDrive.Name() );
+    // Check drive
     if ( aLocationDrive == EDriveZ )
-        {
-        // if the installation is in ROM, then install to C drive
-        aLocationDrive = EDriveC;
-        IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Exists in ROM, install to C:");
-        }
+       {
+       // if the installation is in ROM, then install to C drive
+       aLocationDrive = EDriveC;
+       IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Exists in ROM, install to C:");
+       }
     else
-        {
-        TUint driveStatus = 0;
-        User::LeaveIfError( DriveInfo::GetDriveStatus( aFs, aLocationDrive, driveStatus ) );
-        // if the installation drive physically removable and it's not available, then install to C drive
-        if ( ( driveStatus & DriveInfo::EDriveRemovable ) && ( !(driveStatus & DriveInfo::EDrivePresent) ) )
-            {
-            aLocationDrive = EDriveC;
-            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Physically removable drive not present, install to C:");
-            }
-        }
-    */
+       {
+       RFs fs;
+       User::LeaveIfError( fs.Connect() );
+       CleanupClosePushL( fs );
+       TUint driveStatus = 0;
+       User::LeaveIfError( DriveInfo::GetDriveStatus( fs, aLocationDrive, driveStatus ) );
+       // if the installation drive physically removable and it's not available, then install to C drive
+       if ( ( driveStatus & DriveInfo::EDriveRemovable ) && ( !(driveStatus & DriveInfo::EDrivePresent) ) )
+           {
+           aLocationDrive = EDriveC;
+           IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() Physically removable drive not present, install to C:");
+           }
+       CleanupStack::PopAndDestroy( &fs );
+       }
     
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::InstalledDriveWidgetL() begin");
     }
@@ -794,45 +820,50 @@ TDriveUnit IAUpdateUtils::DriveToInstallWidgetL( const TDesC& aIdentifier )
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() begin");
     IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() identifier: %S", &aIdentifier );
     
-
     TDriveUnit targetDriveUnit( EDriveC );
     
-    //HLa: Widget registry remove
-    /*
-    RWidgetRegistryClientSession widgetRegistry;
-
-    User::LeaveIfError( widgetRegistry.Connect() );
-        
-    CleanupClosePushL( widgetRegistry );
-        
-    RPointerArray<CWidgetInfo> widgetInfoArr;
-    CleanupResetAndDestroyPushL( widgetInfoArr );
-    TInt err = widgetRegistry.InstalledWidgetsL(widgetInfoArr); 
+    // Connect to registry
+    Usif::RSoftwareComponentRegistry scrSession;  
+    CleanupClosePushL( scrSession );
+    User::LeaveIfError( scrSession.Connect());
     
-    TBool foundInRegistry( EFalse );
-    for( TInt i( widgetInfoArr.Count() - 1 ); !foundInRegistry && i >= 0; --i ) 
+    // Get widget component id by identifier
+    Usif::TComponentId compId = 0;
+    TRAPD( err, compId = 
+           scrSession.GetComponentIdL( aIdentifier, Usif::KSoftwareTypeWidget ));
+    
+     if ( err == KErrNotFound )
         {
-        CWidgetInfo* widgetInfo( widgetInfoArr[i] );  
-            
-        CWidgetPropertyValue* BundleId = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleIdentifier );
-        CleanupStack::PushL( BundleId );
-            
-        if( aIdentifier.Compare( *(BundleId->iValue.s) )== 0 )
-            {
-            IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() Found in registry");
-            foundInRegistry = ETrue;
-            RFs fs;
-            User::LeaveIfError( fs.Connect() );
-            CleanupClosePushL( fs );
-            InstalledDriveWidgetL( fs, widgetRegistry, widgetInfo->iUid, targetDriveUnit );
-            CleanupStack::PopAndDestroy( &fs );
-            }
-        CleanupStack::PopAndDestroy( BundleId );
+        targetDriveUnit = EDriveC ;
         }
+     else if  (err != KErrNone )
+        {
+        User::Leave( err );
+        }
+     else
+        {
+        // Get entry 
+        Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
+        TBool retVal = scrSession.GetComponentL(compId, *entry);
         
-    CleanupStack::PopAndDestroy( &widgetInfoArr );
-    CleanupStack::PopAndDestroy( &widgetRegistry);
-    */
+        // Get drive
+        TDriveList installedDrives = entry->InstalledDrives();
+        for ( TInt index(0); index < KMaxDrives; index++ )
+            {
+            if ( installedDrives[index] )
+                {
+                targetDriveUnit = index;
+                }
+             }
+        
+        // Check drive validity
+        InstalledDriveWidgetL( targetDriveUnit );
+        
+        CleanupStack::PopAndDestroy(entry);
+        }
+    
+    CleanupStack::PopAndDestroy( &scrSession ); 
+    
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DriveToInstallWidgetL() end");
 
     return targetDriveUnit;

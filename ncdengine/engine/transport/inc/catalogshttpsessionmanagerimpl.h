@@ -25,7 +25,6 @@
 #include "catalogsconnection.h"
 
 class CCatalogsNetworkManager;
-class CDocumentHandler;
 
 class CCatalogsHttpSessionManager : public CActive,
     public MCatalogsHttpSessionManager,
@@ -60,9 +59,7 @@ class CCatalogsHttpSessionManager : public CActive,
         /**
         * NewL
         */
-        static CCatalogsHttpSessionManager* NewL( 
-            CDocumentHandler& aDocHandler );
-        
+        static CCatalogsHttpSessionManager* NewL( );
         
         /**  
         * Destructor
@@ -113,9 +110,6 @@ class CCatalogsHttpSessionManager : public CActive,
 
         static CCatalogsNetworkManager& NetworkManagerL();
         
-        
-        CDocumentHandler& DocumentHandler();
-        
         TBool DisconnectL();
         
     public:
@@ -165,8 +159,7 @@ class CCatalogsHttpSessionManager : public CActive,
         /**
         * Constructor
         */
-        CCatalogsHttpSessionManager( CDocumentHandler& aDocHandler );
-        
+        CCatalogsHttpSessionManager();
         void ConstructL();
         
     private:
@@ -237,7 +230,6 @@ class CCatalogsHttpSessionManager : public CActive,
         // APN
         TBool iSwitchApTimer;
         
-        CDocumentHandler& iDocHandler; // not owned
         TCatalogsConnectionMethod iLatestConnectionMethod;
     };
     

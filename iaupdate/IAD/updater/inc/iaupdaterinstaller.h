@@ -23,6 +23,8 @@
 #include <e32base.h>
 #include <f32file.h>
 
+#include <usif/sif/sif.h>
+
 class CIAUpdaterMngr;
 class CIAUpdaterSilentLauncher;
         
@@ -194,7 +196,10 @@ private: // data
 
     // CActiveSchedulerWait object can be used as a data member 
     // inside other CBase derived classes.
-    CActiveSchedulerWait iWaiter;    
+    CActiveSchedulerWait iWaiter;   
+    
+    // Installaion results
+    Usif::COpaqueNamedParams* iResults;
 
     };		
 

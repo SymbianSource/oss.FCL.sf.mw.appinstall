@@ -32,4 +32,5 @@ EXPORTS
 	?ShowSingleSelectionL@CSifUi@@QAEHABVTDesC16@@ABVMDesC16Array@@AAH@Z @ 31 NONAME ; int CSifUi::ShowSingleSelectionL(class TDesC16 const &, class MDesC16Array const &, int &)
 	?ShowFailedL@CSifUi@@QAEXABVCSifUiErrorInfo@@@Z @ 32 NONAME ; void CSifUi::ShowFailedL(class CSifUiErrorInfo const &)
 	?NewLC@CSifUi@@SAPAV1@XZ @ 33 NONAME ; class CSifUi * CSifUi::NewLC(void)
+	?CancelDialogs@CSifUi@@QAEXXZ @ 34 NONAME ; void CSifUi::CancelDialogs(void)
 

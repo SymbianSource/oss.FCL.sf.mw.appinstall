@@ -22,9 +22,28 @@
 #include <centralrepository.h>              // CRepository
 #include <SWInstallerInternalCRKeys.h>      // KCRUidSWInstallerSettings
 #include <hb/hbwidgets/hbdevicemessageboxsymbian.h> // CHbDeviceMessageBoxSymbian
+#include <hb/hbcore/hbtextresolversymbian.h> // HbTextResolverSymbian
 #include <usif/scr/screntries.h>            // CComponentEntry
 
 using namespace Usif;
+
+_LIT( KTextResolverPath, "z:/resource/qt/translations/" );
+_LIT( KSifUiTranslationFile, "sifuidevicedialogplugin" );
+_LIT( KCommonButtonContinue, "txt_common_button_continue" );
+
+_LIT( KMemoryFull, "txt_error_info_memory_full" );
+_LIT( KUnexpectedError, "txt_error_info_an_unexpected_error_occurred" );
+_LIT( KNotEnoughSpace, "txt_error_info_there_is_not_enough_space_currently" );
+_LIT( KNetworkUnavailable, "txt_error_info_network_is_unavailable_currently" );
+_LIT( KInstallerBusy , "txt_error_info_installer_is_busy_currently" );
+_LIT( KCorruptedPackage , "txt_error_info_installation_package_is_corrupted" );
+_LIT( KNotCompatible , "txt_error_info_application_is_not_compatible_with" );
+_LIT( KSecurityIssue , "txt_error_info_there_is_a_security_issue_with_this" );
+_LIT( KNotInstalled , "txt_error_info_application_not_installed" );
+_LIT( KNotDeleted , "txt_error_info_application_not_deleted" );
+_LIT( KCannotBeDeleted , "txt_error_info_application_cannot_be_deleted" );
+
+const TInt KDefaultTimeout = 6000;  // milliseconds
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -37,6 +56,7 @@ CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase( RFs& aFs,
         CSisxSifPluginErrorHandler& aErrorHandler ) : iFs( aFs ),
         iErrorHandler( aErrorHandler )
     {
+    HbTextResolverSymbian::Init( KSifUiTranslationFile, KTextResolverPath );
     }
 
 // ---------------------------------------------------------------------------
@@ -100,8 +120,11 @@ TBool CSisxSifPluginUiHandlerBase::IsOcspMandatoryL() const
 // CSisxSifPluginUiHandlerBase::PublishStartL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aRootNode )
+void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aRootNode,
+        TSifOperationPhase aPhase )
     {
+    iOperationPhase = aPhase;
+
     RPointerArray<HBufC> appNames;
     CleanupResetAndDestroyPushL( appNames );
     RPointerArray<HBufC> appIcons;
@@ -142,8 +165,11 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aR
 // CSisxSifPluginUiHandlerBase::PublishStartL()
 // ---------------------------------------------------------------------------
 //
-void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry )
+void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry,
+        TSifOperationPhase aPhase )
     {
+    iOperationPhase = aPhase;
+
     RPointerArray<HBufC> appNames;
     CleanupResetAndDestroyPushL( appNames );
     RPointerArray<HBufC> appIcons;
@@ -205,57 +231,45 @@ void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode
     iErrorHandler.SetErrorCode( aErrorCode );
     iErrorHandler.SetExtendedErrorCode( aExtErrorCode );
 
-    // TODO: localized UI strings needed
     switch( iErrorHandler.ErrorCategory() )
         {
         case ELowMemory:
-            // txt_error_info_there_is_not_enough_memory_currentl
-            iErrorHandler.SetErrorMessage( _L("There is not enough memory currently.") );
+            SetLocalisedErrorMessageText( KMemoryFull );
             break;
         case ELowDiskSpace:
-            // txt_error_info_there_is_not_enough_space_currently
-            iErrorHandler.SetErrorMessage( _L("There is not enough space currently in this drive.") );
+            SetLocalisedErrorMessageText( KNotEnoughSpace );
             break;
         case ENetworkUnavailable:
-            // txt_error_info_network_is_unavailable_currently
-            iErrorHandler.SetErrorMessage( _L("Network  is unavailable currently.") );
+            SetLocalisedErrorMessageText( KNetworkUnavailable );
             break;
         case EInstallerBusy:
-            // txt_error_info_installer_is_busy_currently
-            iErrorHandler.SetErrorMessage( _L("Installer is busy currently.") );
+            SetLocalisedErrorMessageText( KInstallerBusy );
             break;
         case ECorruptedPackage:
-            // txt_error_info_installation_package_is_corrupted
-            iErrorHandler.SetErrorMessage( _L("Installation package is corrupted. You may want to try again.") );
+            SetLocalisedErrorMessageText( KCorruptedPackage );
             break;
         case EApplicationNotCompatible:
-            // txt_error_info_application_is_not_compatible_with
-            iErrorHandler.SetErrorMessage( _L("Application is not compatible with this device.") );
+            SetLocalisedErrorMessageText( KNotCompatible );
             break;
         case ESecurityError:
-            // txt_error_info_there_is_a_security_issue_with_this
-            iErrorHandler.SetErrorMessage( _L("There is a security issue with this application.") );
+            SetLocalisedErrorMessageText( KSecurityIssue );
             break;
         case EUnexpectedError:
         case EUnknown:
-            // txt_error_info_an_unexpected_error_occurred
-            iErrorHandler.SetErrorMessage( _L("An unexpected error occurred.") );
+            SetLocalisedErrorMessageText( KUnexpectedError );
             break;
         case EUserCancelled:
             if( iOperationPhase == EInstalling )
                 {
-                // txt_error_info_application_not_installed
-                iErrorHandler.SetErrorMessage( _L("Application not installed.") );
+                SetLocalisedErrorMessageText( KNotInstalled );
                 }
             else
                 {
-                // txt_error_info_application_not_deleted
-                iErrorHandler.SetErrorMessage( _L("Application not deleted. ") );
+                SetLocalisedErrorMessageText( KNotDeleted );
                 }
             break;
         case EUninstallationBlocked:
-            // txt_error_info_application_cannot_be_deleted
-            iErrorHandler.SetErrorMessage( _L("Application cannot be deleted.") );
+            SetLocalisedErrorMessageText( KCannotBeDeleted );
             break;
         case ENone:
         default:
@@ -418,7 +432,7 @@ TBool CSisxSifPluginUiHandlerBase::ShowQuestionL( const TDesC& aText ) const
     CleanupStack::PushL( note );
 
     note->SetTextL( aText );
-    note->SetTimeout( 0 );
+    note->SetTimeout( KDefaultTimeout );
     if( note->ExecL() == CHbDeviceMessageBoxSymbian::EAcceptButton )
         {
         questionAccepted = ETrue;
@@ -439,13 +453,35 @@ void CSisxSifPluginUiHandlerBase::ShowQuestionWithContinueL( const TDesC& aText 
     CleanupStack::PushL( note );
 
     note->SetTextL( aText );
-    note->SetTimeout( 0 );
+    note->SetTimeout( KDefaultTimeout );
     note->SetButton( CHbDeviceMessageBoxSymbian::EAcceptButton, EFalse );
     note->SetButton( CHbDeviceMessageBoxSymbian::ERejectButton, ETrue );
-    // TODO: localized UI string needed
-    note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, _L("Continue") );
+    HBufC* contButton = HbTextResolverSymbian::LoadLC( KCommonButtonContinue );
+    note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, contButton->Des() );
     (void)note->ExecL();
+    CleanupStack::PopAndDestroy( contButton );
 
     CleanupStack::PopAndDestroy( note );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::CompareDriveLetters()
+// ---------------------------------------------------------------------------
+//
+TBool CSisxSifPluginUiHandlerBase::CompareDriveLetters( const TChar& aDriveFirst,
+        const TChar& aDriveSecond )
+    {
+    return( aDriveFirst.GetLowerCase() == aDriveSecond.GetLowerCase() );
+    }
+
+// ---------------------------------------------------------------------------
+// CSisxSifPluginUiHandlerBase::SetLocalisedErrorMessageText()
+// ---------------------------------------------------------------------------
+//
+void CSisxSifPluginUiHandlerBase::SetLocalisedErrorMessageText( const TDesC& aLogicalName )
+    {
+    HBufC* errorText = HbTextResolverSymbian::LoadLC( aLogicalName );
+    iErrorHandler.SetErrorMessage( errorText->Des() );
+    CleanupStack::PopAndDestroy( errorText );
     }
 

@@ -104,13 +104,14 @@ void CSisxSifPluginActiveImpl::DoCancel()
 
     if( iClientStatus )
         {
+        if( iUiHandler )
+            {
+            iUiHandler->CancelDialogs();
+            }
         if( iAsyncLauncher )
             {
             iAsyncLauncher->CancelOperation();
-            delete iAsyncLauncher;
-            iAsyncLauncher = NULL;
             }
-
         CompleteClientRequest( KErrCancel );
         }
     }
@@ -544,7 +545,6 @@ void CSisxSifPluginActiveImpl::CompleteClientRequest( TInt aResult )
         User::RequestComplete( iClientStatus, aResult );
         iClientStatus = NULL;
         }
-    __ASSERT_DEBUG( !IsActive(), Panic( ESisxSifInternalError ) );
     iOperation = ENoOperation;
     iPhase = ENotActive;
     }
@@ -637,7 +637,7 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId,
     TUid uid;
     CComponentEntry *entry = CComponentEntry::NewLC();
     GetComponentAndUidL( aComponentId, *entry, uid );
-    iUiHandler->PublishStartL( *entry );
+    iUiHandler->PublishStartL( *entry, EUninstalling );
     CleanupStack::PopAndDestroy( entry );
 
     iAsyncLauncher->UninstallL( *iUiHandler, uid, iStatus );
@@ -896,7 +896,7 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 	TInt maxInstalledSize = rootNode.MaxInstalledSize();
 	iUiHandler->SetMaxInstalledSize( maxInstalledSize );
 
-	iUiHandler->PublishStartL( rootNode );
+	iUiHandler->PublishStartL( rootNode, EInstalling );
 
 	UpdateInstallPrefsForPerformingOcspL();
 	FillDeviceSupportedLanguagesL();

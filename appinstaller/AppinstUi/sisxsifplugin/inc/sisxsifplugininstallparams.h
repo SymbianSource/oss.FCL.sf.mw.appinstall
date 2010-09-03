@@ -36,8 +36,8 @@ namespace Usif
     public:     // new functions
         TBool IsSilentMode() const;
         TBool IsInstallInactive() const;
-        TUint Drive() const;
-        TLanguage Language() const;
+        const RArray<TUint>& Drives() const;
+        const RArray<TLanguage>& Languages() const;
         const TDesC& OCSPUrl() const;
         TSifPolicy PerformOCSP() const;
         TSifPolicy IgnoreOCSPWarnings() const;
@@ -61,12 +61,14 @@ namespace Usif
                 TSifPolicy& aPolicy, const TSifPolicy& aDefault );
         void GetStringParamL( const COpaqueNamedParams& aParams, const TDesC& aParamName,
         		HBufC*& aBuf );
+        void DoProcessDriveParamL( const COpaqueNamedParams& aParams );
+        void DoProcessLangParamL( const COpaqueNamedParams& aParams );
 
     private:    // data
         TBool iUseSilentMode;
         TBool iIsInstallInactive;
-        TUint iDrive;
-        TLanguage iLanguage;
+        RArray<TUint> iDrives;
+        RArray<TLanguage> iLanguages;
         HBufC* iOCSPUrl;
         TSifPolicy iPerformOCSP;
         TSifPolicy iIgnoreOCSPWarnings;

@@ -22,7 +22,6 @@
 
 #include <e32base.h>
 #include <f32file.h>
-#include <SWInstApi.h>
 
 #include <usif/sif/sif.h>
 
@@ -53,9 +52,11 @@ public:
      * @since 
      * @param aFile Name of the file to install
      * @param aStatus Request status
+     * @param aResults Installation results 
      */
-    void InstallL( const TDesC& aFile, TRequestStatus& aStatus );
-
+    void CIAUpdaterSilentLauncher::InstallL ( const TDesC& aFile, 
+            TRequestStatus& aStatus, Usif::COpaqueNamedParams* aResults  );
+    
     /**
      * Cancel the current installation.
      *
@@ -85,7 +86,6 @@ private: //  Data
     
     Usif::RSoftwareInstall iLauncher;
     Usif::COpaqueNamedParams* iOptionsPckg; 
-    Usif::COpaqueNamedParams* iResults;
 
     RFs& iFs;        
     

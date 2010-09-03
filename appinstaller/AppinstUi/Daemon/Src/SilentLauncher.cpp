@@ -44,51 +44,29 @@ CSilentLauncher::CSilentLauncher( RFs& aFs )
 //
 void CSilentLauncher::ConstructL()
     {
-    iConnected = EFalse;
-    
+    iConnected = EFalse;   
     iSifOptions = Usif::COpaqueNamedParams::NewL();
     iSifResults = Usif::COpaqueNamedParams::NewL();
     
-    // Set needed parameters for silent install.
-    FLOG( _L("Daemon: CSilentLauncher::ConstructL: InstallSilently") );
+    // Set needed parameters for silent install.      
+    FLOG( _L("Daemon: CSilentLauncher::ConstructL: InstallSilently: ETrue") );
+    // Note InstallSilently is not a policy so use boolean ETure.
     iSifOptions->AddIntL( Usif::KSifInParam_InstallSilently, ETrue );
 
-    iSifOptions->AddIntL( Usif::KSifInParam_PerformOCSP, EFalse );   
+    iSifOptions->AddIntL( Usif::KSifInParam_PerformOCSP, Usif::ENotAllowed );   
     // Note if upgrade is allowed, see NeedsInstallingL function.
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, EFalse );
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, EFalse );
-    iSifOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, EFalse ); 
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowUpgrade, Usif::ENotAllowed );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowUntrusted, Usif::ENotAllowed );
+    iSifOptions->AddIntL( Usif::KSifInParam_GrantCapabilities, Usif::ENotAllowed ); 
     // Defined for the install.
-    iSifOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, ETrue );          
-    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, ETrue );            
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, ETrue );
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, ETrue );
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, ETrue );
-    
+    iSifOptions->AddIntL( Usif::KSifInParam_InstallOptionalItems, Usif::EAllowed );          
+    iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );            
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed );
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed );
+        
 // TODO: is this defined in USIF?    
-    //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );
-// TODO: Not supported anymore after wk18, do we have some other param for this.
-    //iSifOptions->AddIntL( Usif::KSifInParam_DisplayPackageInfo, ETrue );
-    
-// TODO: remove old params.
-    /*
-    // Old swinstdefs.inl defines for install.   
-    iUpgrade( EPolicyAllowed ),
-    iOptionalItems( EPolicyAllowed ),
-    iOCSP( EPolicyAllowed ),    
-    iIgnoreOCSPWarnings( EPolicyAllowed ),
-    iUntrusted( EPolicyNotAllowed ),
-    iPackageInfo( EPolicyAllowed ),
-    iCapabilities( EPolicyAllowed ),
-    iKillApp( EPolicyAllowed ),
-    iDownload( EPolicyAllowed ),
-    iOverwrite( EPolicyAllowed ),
-    iDrive( 'C' ),
-    iLang( ELangNone ),
-    iUsePhoneLang( ETrue ),
-    iUpgradeData( EPolicyAllowed )
-    */        
+    //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );    
     }
 
 // -----------------------------------------------------------------------------
@@ -143,16 +121,12 @@ void CSilentLauncher::InstallL( RFile& aFileHandle,
          }
         
     // Set drive for installer.
-//    delete iDrive  
-//    iDrive = NULL;
-//    iDrive = HBufC::NewLC( 8 );
-//    TPtr drivePtr = iDrive->Des();
-//     
-//    TInt driveNumber = 0;
-//    TDriveInfo driveInfo;
-//    aFileHandle.Drive( driveNumber, driveInfo );
-// TODO: how is this used? Is this drive letter?      
-//    iSifOptions->AddStringL( Usif::KSifInParam_Drive , *drive );
+    TInt driveNumber = 0;
+    TDriveInfo driveInfo;
+    aFileHandle.Drive( driveNumber, driveInfo );
+    FLOG_1( _L("Daemon: Drive number = %d"), driveNumber );
+// TODO: Use TUint array for drive numbers when plugin does support it.      
+    iSifOptions->AddIntL( Usif::KSifInParam_Drive, driveNumber );
                                  
     FLOG( _L("Daemon: Launch install") );
     iSWInstallerFW.Install( aFileHandle, 

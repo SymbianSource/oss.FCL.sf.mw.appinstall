@@ -19,10 +19,6 @@
 #ifndef M_NCD_INSTALLATION_SERVICE_H
 #define M_NCD_INSTALLATION_SERVICE_H
 
-// SwiUI namespace contains install options 
-// and install options package definitions
-// that are used for the silent install.
-//#include <SWInstDefs.h>
 #include <usif/sif/sifcommon.h>
 
 #include "ncditempurpose.h"
@@ -32,8 +28,6 @@ class TCatalogsVersion;
 class TDataType;
 class RFile;
 class RFs;
-class CDocumentHandler;
-
 
 /**
  * Theme SIS UID
@@ -270,12 +264,6 @@ public: // New functions
      */
     virtual HBufC* RecognizeDataL( const TDesC& aFileName ) = 0;
 
-    
-    /**
-     * Document handler getter
-     * @return Document handler instance
-     */
-    virtual CDocumentHandler& DocumentHandler() = 0;
     };
 
 #endif // M_NCD_INSTALLATION_SERVICE_H

@@ -20,7 +20,6 @@
 
 #include <bautils.h>
 #include <e32err.h>
-#include <DocumentHandler.h>
 #include <apmstd.h> // TDataType
 #include <escapeutils.h>
 #include <downloadmanager.h>
@@ -878,8 +877,11 @@ void CCatalogsHttpDownload::HandledownloadEventL(DownloadEvent& aEvent)
 		        {
 		        errorId = WRT::ConnectionFailed;
 		        }
+		    else
+		        {
+		        errorId = iDownload->attribute(LastError).toInt();
+		        }
             SetTransferring( EFalse );
-            errorId = iDownload->attribute(LastError).toInt();
             if ( errorId > 0 )
                 {
                 // Symbian error codes are always negative numbers 
@@ -2447,8 +2449,8 @@ TInt CCatalogsHttpDownload::StartDownload()
             CleanupStack::PopAndDestroy( &cmManager ); 
             if ( iOwner.GetDownloadManager() )
                 {
-                iOwner.GetDownloadManager()->attribute(AccessPoints).toStringList();
-                iOwner.GetDownloadManager()->setAttribute(AccessPoint, destname);
+                //iOwner.GetDownloadManager()->attribute(AccessPoints).toStringList();
+                //iOwner.GetDownloadManager()->setAttribute(AccessPoint, destname);
                 }
             }
             
@@ -2558,7 +2560,7 @@ void CCatalogsHttpDownload::MoveFileL()
     
     if ( !iConfig->Filename().Length() ) 
         {    
-        // Update filename extension by using dochandler
+        // Update filename extension 
         if ( iConfig->Options() & ECatalogsHttpDisableHeadRequest )
             {
             UpdateExtensionL();    
@@ -2623,7 +2625,7 @@ TBool CCatalogsHttpDownload::ContainsData( const HBufC* aDes ) const
 
 
 // ---------------------------------------------------------------------------
-// Updates file extension by using dochandler
+// Updates file extension 
 // ---------------------------------------------------------------------------
 //  
 void CCatalogsHttpDownload::UpdateExtensionL()
@@ -2644,7 +2646,9 @@ void CCatalogsHttpDownload::UpdateExtensionL()
             ReplaceExtension( filename, KWidgetExtension );
             }
     else
-       iOwner.DocumentHandler().CheckFileNameExtension( filename, type );
+        {
+        ReplaceExtension( filename, KNativeExtension );
+        }
     
     iConfig->SetFilenameL( filename );        
     }

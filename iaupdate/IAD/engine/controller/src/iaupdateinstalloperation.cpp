@@ -208,7 +208,7 @@ MNcdOperation* CIAUpdateInstallOperation::InstallL()
         // Get silent install parameters 
         Usif::COpaqueNamedParams * options = Usif::COpaqueNamedParams::NewLC();
 
-        IAUpdateUtils::UsifSilentInstallOptionsL ( options );
+        IAUpdateUtils::UsifSilentInstallOptionsL ( Node(), options );
         
         operation = install->SilentInstallL( *this, options );
 

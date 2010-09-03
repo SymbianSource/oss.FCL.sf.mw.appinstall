@@ -29,6 +29,9 @@
 // Indicator type
 _LIT(KIndicatorTypeBgc, "com.nokia.iaupdate.indicatorplugin/1.0");
 
+// Icon name
+_LIT( KIconName, "qtg_large_swupdate" );
+
 // ============================ MEMBER FUNCTIONS ===============================
 void CIAUpdateBGSoftNotification::NotificationDialogActivated(
         const CHbDeviceNotificationDialogSymbian* /* aDialog */)
@@ -130,6 +133,7 @@ void CIAUpdateBGSoftNotification::ShowNotificationL()
     // fill texts, icon & behaviour parameters
     FillNotificationParams();
     
+    iNotificationDialog->SetIconNameL( KIconName );
     iNotificationDialog->ShowL();
     
     return;
