@@ -56,7 +56,7 @@ EXPORT_C RSWInstSilentLauncher::RSWInstSilentLauncher()
 // -----------------------------------------------------------------------------
 //
 EXPORT_C TInt RSWInstSilentLauncher::Connect()
-    {
+    {       
     TInt result( KErrNone );
 
     TUint differentiator = 0;

@@ -143,7 +143,7 @@ void RIAUpdateClient::Close()
     {
     IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Close() begin");
     // Let the parent handle closing.
-    RAknAppServiceBase::Close();
+    REikAppServiceBase::Close();
     iConnected = EFalse;
     delete iData;
     iData = NULL;
