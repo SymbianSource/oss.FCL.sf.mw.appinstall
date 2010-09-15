@@ -387,7 +387,7 @@ void CIAUpdateManager::RunL()
     switch ( updateType )
         {
         case EIAUpdateStartServer:
-            if ( errorCode == KErrNone )
+            if ( errorCode == KErrNone || errorCode == KErrAlreadyExists )
                 {
                 CheckUpdatesContinue();            
                 }

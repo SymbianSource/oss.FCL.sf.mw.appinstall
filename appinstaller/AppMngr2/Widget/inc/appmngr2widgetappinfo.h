@@ -35,6 +35,7 @@ public:     // constructor and destructor
 public:     // from CAppMngr2InfoBase
     TInt IconIndex() const;
     const TDesC& Name() const;
+    const TDesC& Version() const;
     const TDesC& Details() const;
     TBool SupportsGenericCommand( TInt aCmdId );
     void HandleCommandL( TInt aCommandId, TRequestStatus& aStatus );
@@ -51,6 +52,7 @@ private:    // new functions
 private:    // data
     TUid iWidgetUid;
     HBufC* iName;
+    HBufC* iVersion;
     HBufC* iDetails;
     SwiUI::RSWInstLauncher* iSWInstLauncher;
     HBufC8* iMimeType;

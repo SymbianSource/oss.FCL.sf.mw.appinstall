@@ -81,6 +81,8 @@ public: // API
 	void GenerateStubRegistry();
 	int GetAugmentationsNumber(TUint32 aUid);
 	CSISController* GetStubController(const TUint32 aUid);
+	CSISController* GetStubControllerUid(const std::wstring& aTarget);
+	const std::wstring& GetRomStubFile() const;
 
 	static const int KSisRegistryMajorVersion;
 	static const int KSisRegistryMinorVersion;
@@ -96,6 +98,7 @@ private: // Internal methods
     void ReadStubs( const std::wstring& aDirectory );
     void ReadRegistry( const std::wstring& aRegistryBasePath );
 	CSISController* GetStubControllerInDir( const std::wstring& aDirectory, const TUint32 aUid);
+	CSISController* GetStubControllerInDir( const std::wstring& aDirectory, const std::wstring& aTarget);
 	CSISController* ReadStubController( const wchar_t* aFilename );
 	void GenerateRegistryEntry(SisRegistryObject& aObj, const SisFile& aSis);
 	void ExtractRegistryFiles(const std::wstring& path);
@@ -105,6 +108,7 @@ private: // Internal methods
 	std::wstring GetRegistryDir( const std::wstring& aDrivePath, TUint32 aUid  ) const;
 	void GenerateRegFile(SisRegistryObject& aObj) const;
 	void GenerateCtlFile(SisRegistryObject& aObj, const SisFile& aSis) const;
+	void SetRomStubFile(const std::wstring& aRomStubFile);
 
 public:
 	TUint32 GetUid(TUint32 aSid) const;
@@ -144,10 +148,10 @@ private: // Data members
 	std::wstring	iCDrive;
 	TInt			iSystemDrive;
     CParameterList& iParamList;
-    RomManager& iRomManager;
-	ConfigManager& iConfigManager;
-	EntryMap iEntries;
-
+    RomManager& 	iRomManager;
+	ConfigManager& 	iConfigManager;
+	EntryMap 		iEntries;
+	std::wstring	iRomStubFile;
 
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 private:

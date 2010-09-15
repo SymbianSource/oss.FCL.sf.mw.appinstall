@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -29,13 +29,15 @@ public:     // constructors and destructor
             TAppMngr2InfoType aInfoType );
     ~CAppMngr2WidgetInfoIterator();
 
-protected:  // new functions
-    void ConstructL();
+protected:  // from CAppMngr2InfoIterator
+    void SetAllFieldsL();
+    void SetVersionL();
     void SetOtherFieldsL();
 
 private:    // new functions
     CAppMngr2WidgetInfoIterator( CAppMngr2InfoBase& aWidget,
             TAppMngr2InfoType aInfoType );
+    void ConstructL();
     };
 
 #endif  // C_APPMNGR2WIDGETINFOITERATOR_H

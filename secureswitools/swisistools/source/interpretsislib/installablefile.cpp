@@ -34,7 +34,8 @@
 
 
 // SA SIS files
-InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFileData* aFdata, const std::wstring aDrivePath, int aInstallingDrive)
+InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFileData* aFdata, const std::wstring aDrivePath, 
+									int aInstallingDrive, const int aSystemdrive, const bool aGenerateRomStub)
 : isExecutable(aFdata->IsExecutable()),
   isExe(aFdata->IsExe()),
   iSid(aFdata->GetSid()),
@@ -50,7 +51,7 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFil
 	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
 
 	// Update the installing file with the actual target drive letter
-	ChangeTargetDrive(aDrivePath, aInstallingDrive);
+	ChangeTargetDrive(aDrivePath, aInstallingDrive, aSystemdrive, aGenerateRomStub);
 
 	// warn the user if they are using a winscw emulator binary
 	if (aFdata->IsEmulatorExecutable())
@@ -59,7 +60,7 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFil
 
 // PA SIS files		
 InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::wstring aDrivePath,
-								 int aInstallingDrive)
+								 int aInstallingDrive, const int aSystemdrive, const bool aGenerateRomStub)
 : isExecutable(false),
   isExe(false),
   iSid(0),
@@ -75,7 +76,7 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::ws
 	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
 
 	// Update the installing file with the actual target drive letter
-	ChangeTargetDrive(aDrivePath, aInstallingDrive);
+	ChangeTargetDrive(aDrivePath, aInstallingDrive, aSystemdrive, aGenerateRomStub);
 
 		// retrieve the file attributes e.g. exe, dll, SID etc.
 	const bool fileExists = FileExists( iLocalTargetFile );
@@ -116,8 +117,13 @@ InstallableFile::~InstallableFile()
 	delete iFileData;
 }
 
+void InstallableFile::SetTarget(const  std::wstring& aTargetFile)
+{
+	iTargetFile = aTargetFile;
+}
 
-void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive)
+void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive, 
+												const int aSystemdrive, const bool aGenerateRomStub)
 {
 	// get the local path
 	ConvertToLocalPath(iLocalTargetFile,aDrivePath);
@@ -132,9 +138,24 @@ void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInst
 		int targetFileDrive = tolower(target[0]);
 		if (targetFileDrive != aInstallingDrive)
 		{
-			iTargetFile[0] = aInstallingDrive;
-			LINFO(L"Disregarding drive selection. Installing "
-				+ target + L" to " + iTargetFile);
+			if((iTargetFile[0] == '$') && !aGenerateRomStub)
+			{
+				//Creating tmpTarget so that '$' in iTargetFile is retained  and 
+				//can be used as a marker while File Copy to system drive and 
+				//not to LocalTargetPath
+				std::wstring tmpTarget(iTargetFile);
+				tmpTarget[0] = aSystemdrive;
+				
+				LINFO(L"Disregarding drive selection. Installing "
+					<< target.c_str() << L" to " << tmpTarget.c_str());
+			}
+			else
+			{
+				iTargetFile[0] = aInstallingDrive;
+				
+				LINFO(L"Disregarding drive selection. Installing "
+					<< target.c_str() << L" to " << iTargetFile.c_str());
+			}
 		}
 	}
 	else

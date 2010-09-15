@@ -203,12 +203,27 @@ void ConfigManager::AddRomAndSystemDrives(const CParameterList& aParamList)
 		CheckAndAddDrive(aParamList.SystemDriveLetter(), aParamList.SystemDrivePath());
 		}
 
-	if ( !IsTargetDrivePresent(aParamList.SystemDriveLetter()) )
+	if ((!IsTargetDrivePresent(aParamList.SystemDriveLetter())) && (!aParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)))
 		{
 		std::stringstream err;
 		err << "The directory representing the system drive is not defined";
 		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
 		}
+
+	if (!((aParamList.IsFlagSet(CParameterList::EFlagsCDriveSet)) ^ (aParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)))) 
+		{
+		std::stringstream err;
+		err << "The System Drive should not be defined for Installation to Rom Drive";
+		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
+		}
+	
+	if ((!aParamList.IsFlagSet(CParameterList::EFlagsCDriveSet)) && (aParamList.IsFlagSet(CParameterList::EFlagsExtDriveSet)))
+		{
+		std::stringstream err;
+		err << "The Extended Drive cannot be specified without -c (System drive) option.";
+		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
+		}
+
 	}
 
 

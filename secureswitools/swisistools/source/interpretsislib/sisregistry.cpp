@@ -223,13 +223,16 @@ SisRegistry::SisRegistry( CParameterList& aOptions, RomManager& aRomManager, Con
 		
 	if(iParamList.RegistryVersionExists())
 		{
-		LINFO(L"Using SIS Registry v" << iParamList.RegistryMajorVersion() << L"." << iParamList.RegistryMinorVersion());
+		if ( !iParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)) 
+			{
+			LINFO(L"Using SIS Registry v" << iParamList.RegistryMajorVersion() << L"." << iParamList.RegistryMinorVersion());
     
-		std::wstring registryPathDriveC = KPathToRegistry;
+			std::wstring registryPathDriveC = KPathToRegistry;
 
-		ConvertToLocalPath( registryPathDriveC, iParamList.SystemDrivePath() );
+			ConvertToLocalPath( registryPathDriveC, iParamList.SystemDrivePath() );
 	
-		ReadRegistry( registryPathDriveC );
+			ReadRegistry( registryPathDriveC );
+			}
 		}
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	// this code is for handling the database registry implementation
@@ -252,7 +255,10 @@ SisRegistry::SisRegistry( CParameterList& aOptions, RomManager& aRomManager, Con
 		}
 	#endif // SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
-	GenerateStubRegistry();
+	if ( !iParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)) 
+		{
+			GenerateStubRegistry();
+		}
     }
 
 
@@ -558,7 +564,7 @@ void SisRegistry::RemoveEntry(const TUint32 aUid, const std::wstring& aPackageNa
 	    {
 		if (aUid == it->first && !wcscmp(aPackageName.c_str(), it->second->GetPackageName().c_str()) && aVendorName == it->second->GetVendorName() )
 			{
-			LINFO(L"Removing package \"" << it->second->GetPackageName() 
+			LINFO(L"Removing package \"" << it->second->GetPackageName().c_str() 
 					<< L"\" prior to re-installation");
 
 			// Remove .reg file
@@ -596,7 +602,7 @@ void SisRegistry::RemoveEntry(const TUint32 aUid, const std::wstring& aPackageNa
 			return;
 			}
 
-		LINFO(L"Removing package \"" << aPackageName << L"\" prior to re-installation");
+		LINFO(L"Removing package \"" << aPackageName.c_str() << L"\" prior to re-installation");
 
 		// Remove .ctl file
 		int drive = tolower(iDbHelper->GetSelectedDrive(componentId));
@@ -732,8 +738,15 @@ void SisRegistry::RemoveInstalledFiles(const FileDescriptions& aFileDes, std::ws
 	for ( ; curr != end ; ++curr)
 	{
 		std::wstring target((*curr)->GetTarget());
-	
-		ConvertToLocalPath(target, aLocalPath);
+
+		if(target[0]==iParamList.SystemDriveLetter())
+		{
+			ConvertToLocalPath(target, iParamList.SystemDrivePath());
+		}
+		else
+		{
+			ConvertToLocalPath(target, aLocalPath);
+		}
 		RemoveFile(target);
 		RemoveHashForFile(target, iParamList.SystemDriveLetter(), iParamList.SystemDrivePath());
 	}
@@ -913,7 +926,7 @@ void SisRegistry::GenerateStubRegistry(SisRegistryObject* aSisRegistryObject, CS
 		throw InterpretSisError(L"Directory Creation Error - "+regPath,	DIRECTORY_CREATION_ERROR);
 		}
 
-	LINFO(L"\tAdding ROM Stub: 0x" << std::hex << aSisRegistryObject->GetUid() << L" \"" << aSisRegistryObject->GetPackageName() << L"\"");
+	LINFO(L"\tAdding ROM Stub: 0x" << std::hex << aSisRegistryObject->GetUid() << L" \"" << aSisRegistryObject->GetPackageName().c_str() << L"\"");
 			
 	if(iParamList.RegistryVersionExists())
 		{
@@ -1101,7 +1114,6 @@ void SisRegistry::GetStubFileEntries(const TUint32 aUid, std::list<std::wstring>
 			}
 	}
 
-
 CSISController* SisRegistry::GetStubController(const TUint32 aUid)
 	{
 	if (iParamList.IsFlagSet(CParameterList::EFlagsDisableZDriveChecksSet)) 
@@ -1153,7 +1165,59 @@ CSISController* SisRegistry::GetStubController(const TUint32 aUid)
 	}
 
 
-CSISController* SisRegistry::GetStubControllerInDir( const std::wstring& aDirectory, const TUint32 aUid)
+CSISController* SisRegistry::GetStubControllerUid(const std::wstring& aTarget)
+	{
+	if (iParamList.IsFlagSet(CParameterList::EFlagsDisableZDriveChecksSet)) 
+		{
+		return NULL;
+		}
+	// If the -z option were used to launch the tool, then read any
+	// SIS stubs that we have gathered from the emulated Z:\System\Install
+	// location.
+	if (iParamList.IsFlagSet(CParameterList::EFlagsZDriveSet)) 
+		{
+		std::wstring stubPathZ = KPathToRomStubs;
+		ConvertToLocalPath( stubPathZ, iParamList.RomDrivePath() );
+
+		CSISController* sisController = GetStubControllerInDir( stubPathZ, aTarget );
+
+		if (sisController)
+			{
+			return sisController;
+			}
+		}
+
+	// If an additional SIS stub path were specified, we'll
+	// also handle that here too.
+	if (iParamList.IsFlagSet(CParameterList::EFlagsStubDirectorySet))
+		{
+		bool readCustomStubPath = true;
+		std::wstring customStubPath = iParamList.SisStubPath();
+
+		// But make sure we don't read the same directory twice!
+		const bool haveRomDrive = iParamList.IsFlagSet(CParameterList::EFlagsZDriveSet);
+		if ( haveRomDrive )
+			{
+			std::wstring stubPathZ = KPathToRomStubs;
+			ConvertToLocalPath( stubPathZ, iParamList.RomDrivePath() );
+			readCustomStubPath = ( stubPathZ != customStubPath );
+			}
+
+		if ( readCustomStubPath )
+			{
+			CSISController* sisController = GetStubControllerInDir( customStubPath, aTarget );
+
+			if (sisController)
+				{
+				return sisController;
+				}
+			}
+		}
+	return NULL;
+	}
+
+
+CSISController* SisRegistry::GetStubControllerInDir( const std::wstring& aDirectory, const std::wstring& aTarget)
 {
     // Make sure the directory name is properly terminated.
     std::wstring basePath = StringUtils::EnsureDirectoryTerminated( aDirectory );
@@ -1180,9 +1244,66 @@ CSISController* SisRegistry::GetStubControllerInDir( const std::wstring& aDirect
         
 		if (!sisController)
 			continue;
+		const CSISInstallBlock& installBlock =	sisController->InstallBlock();
+		int fileCount = installBlock.FileCount();
+				
+		for (int i = 0; i < fileCount; ++i)
+		{
+			std::wstring file(installBlock.FileDescription(i).Target().GetString());
+			if(file[0]!=L'z')
+			{
+				file[0]=L'z';
+			}
+			file = StringUtils::ToLower(file);
+			aTarget = StringUtils::ToLower(aTarget);
+			#ifdef __TOOLS2_LINUX__
+			ConvertToForwardSlash(file);
+			#endif
+			
+			if (!wcscmp(file.c_str(), aTarget.c_str()))
+			{
+				return sisController;
+			}
+		}
 		
+		delete sisController;	
+	}
+
+	return NULL;
+}
+
+CSISController* SisRegistry::GetStubControllerInDir( const std::wstring& aDirectory, const TUint32 aUid)
+{
+    // Make sure the directory name is properly terminated.
+    std::wstring basePath = StringUtils::EnsureDirectoryTerminated( aDirectory );
+
+	std::list<std::wstring> stubDirs;
+	GetDirContents( basePath, stubDirs );
+
+	std::list<std::wstring>::iterator curr;
+	for (curr = stubDirs.begin(); curr != stubDirs.end() ; ++curr)
+	{
+		std::wstring stubPath ( basePath + *curr );
+
+		int dotIndex = stubPath.rfind(L".");
+		if(dotIndex == std::wstring::npos)
+			continue;
+		
+		std::wstring extOfString = stubPath.substr(dotIndex+1);
+
+        std::wstring extOfStringUpper = StringUtils::ToUpper(extOfString);
+		if (extOfStringUpper != L"SIS" && extOfStringUpper != L"SISX")
+			continue;
+		
+		_TCHAR* fileName = const_cast<_TCHAR *>(stubPath.c_str());
+		CSISController* sisController = ReadStubController( fileName );
+        
+		if (!sisController)
+			continue;
+
 		if (sisController->UID1() == aUid)
 		{
+			SetRomStubFile(fileName);
 			return sisController;
 		}
 		delete sisController;	
@@ -1425,6 +1546,17 @@ int SisRegistry::GetAugmentationsNumber(TUint32 aUid)
 	#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	return num;
 }
+
+void SisRegistry::SetRomStubFile(const std::wstring& aRomStubFile)
+{
+	iRomStubFile = aRomStubFile;
+}
+
+const std::wstring& SisRegistry::GetRomStubFile() const
+{
+	return iRomStubFile;
+}
+
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 std::wstring SisRegistry::FormatVersionToString( const Version& aVersion )

@@ -985,6 +985,16 @@
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-017</command>
 	<check type="result"/>
 	</test>
+<test id="INT002-019">
+	<title>SEC-sistools-InterpretSIS-INT002-019</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-019</command>
+	<check type="result"/>
+	</test>
+<test id="INT002-020">
+	<title>SEC-sistools-InterpretSIS-INT002-020</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT002-020</command>
+	<check type="result"/>
+	</test>	
 <test id="SWI002-001" type="nativeonly">
 	<title>SEC-sistools-InterpretSIS-SWI002-001</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat SWI002-001</command>
@@ -1857,6 +1867,108 @@
 	<title>INT_NR_Option-39</title>
 	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\int_nr_option-39.bat  INT_NR_Option-39</command>
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_NR_Option-39  INT_NR_Option-39 3  "positive"  "both" "nouid" "nobatchfile" "int_nr_option-39.script" "int_nr_option-39.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
+<test id="INT-RomInstall-01">
+	<title>INT-RomInstall-01</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-01</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-02">
+	<title>INT-RomInstall-02</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-02</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-03">
+	<title>INT-RomInstall-03</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-03</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-04">
+	<title>INT-RomInstall-04</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-04</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-05">
+	<title>INT-RomInstall-05</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-05</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-06">
+	<title>INT-RomInstall-06</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-06</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-07">
+	<title>INT-RomInstall-07</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-07</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-08">
+	<title>INT-RomInstall-08</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-08</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-09" type="nativeonly">
+	<title>INT-RomInstall-09</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-09</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT-RomInstall-09  INT-RomInstall-09 3  "positive"  "both" "nouid" "nobatchfile" "int-rominstall-09.script" "int-rominstall-09.htm" "nocheck" "PASS = 3" </check>
+	</test>
+	
+<test id="INT-RomInstall-10" type="nativeonly">
+	<title>INT-RomInstall-10</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-10</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT-RomInstall-10  INT-RomInstall-10 3  "positive"  "both" "nouid" "nobatchfile" "int-rominstall-10.script" "int-rominstall-10.htm" "nocheck" "PASS = 4" </check>
+	</test>
+	
+<test id="INT-RomInstall-11">
+	<title>INT-RomInstall-11</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-11</command>
+	<check type="result"/>
+	</test>
+
+<test id="INT-RomInstall-12">
+	<title>INT-RomInstall-12</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-12</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-13">
+	<title>INT-RomInstall-13</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-13</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-14">
+	<title>INT-RomInstall-14</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-14</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-15">
+	<title>INT-RomInstall-15</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-15</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-16">
+	<title>INT-RomInstall-16</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-16</command>
+	<check type="result"/>
+	</test>
+	
+<test id="INT-RomInstall-17">
+	<title>INT-RomInstall-17</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis.bat INT-RomInstall-17</command>
+	<check type="result"/>
 	</test>
 	
 </testlist>

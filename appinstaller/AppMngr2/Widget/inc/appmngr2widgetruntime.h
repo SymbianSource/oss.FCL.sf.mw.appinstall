@@ -51,6 +51,7 @@ public:     // from CAppMngr2Runtime
 
 public:     // new functions
     HBufC8* GetMimeTypeL( const TUid& aWidgetUid );
+    HBufC* GetVersionL( const TUid& aWidgetUid );
 
 private:    // new functions
     CAppMngr2WidgetRuntime( MAppMngr2RuntimeObserver& aObserver );

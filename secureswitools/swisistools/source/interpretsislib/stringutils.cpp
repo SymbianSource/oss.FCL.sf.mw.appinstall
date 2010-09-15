@@ -202,7 +202,7 @@ bool StringUtils::StartsWithDrive( const std::wstring& aText )
 		if  ( colon == ':' && (backslash == '/' || backslash == '\\'))
 		#endif
             {
-            startsWithDrive = ( drive >= 'A' && drive <= 'Z' ) || (drive == '!') ;
+            startsWithDrive = ( drive >= 'A' && drive <= 'Z' ) || (drive == '!') || (drive == '$') ;
             }
         }
     //

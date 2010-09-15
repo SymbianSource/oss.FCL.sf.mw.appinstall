@@ -1,0 +1,40 @@
+/*
+* Copyright (c) 2010- Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+#ifndef SW_HANDLER_PLUGIN_HRH
+#define SW_HANDLER_PLUGIN_HRH
+
+// ***************************************************************************
+// **  THIS FILE IS INCLUDED IN RESOURCES (.rss) AND PROJECT FILES (.mmp).  **
+// **                     ONLY MACROS ARE ALLOWED.                          **
+// ***************************************************************************
+
+// MACROS
+
+/// UID value for specific scheme handler dll.
+    #define SW_HANDLER_PLUGIN_UID         0x20031DF8
+    #define SW_HANDLER_PLUGIN_RSS_NAME    swhandlerplugin.rss
+
+/// Scheme handler interface definition Uid
+    #define SCHEME_INTERFACE_DEF          0x101f8534
+
+/// Implementation UID for specific scheme handler
+    #define SW_HANDLER_PLUGIN_IMP         0x20031DF9
+
+
+
+#endif // SW_HANDLER_PLUGIN_HRH

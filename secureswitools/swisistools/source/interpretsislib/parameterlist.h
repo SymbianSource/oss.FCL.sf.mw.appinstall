@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -45,27 +45,31 @@ public:
 	 * Default constructor. 
 	 */
 	InstallSISFile() : iFileName(L""), iTargetDrive(L'$'), iGenerateStub(false),
-						iNonRemovable(false),iReadOnly(false), iNotRegister(false), iSUFlag(false) {}
+						iNonRemovable(false),iReadOnly(false), iNotRegister(false), 
+						iSUFlag(false), iGenerateRomStub(false) {}
 
 	/**
 	 * Constructor
 	 */
 	InstallSISFile(std::wstring aName, int aDrive, bool aSUFlag)
 		: iFileName(aName), iTargetDrive(aDrive), iGenerateStub(false), 
-			iNonRemovable(false),iReadOnly(false), iNotRegister(false), iSUFlag(aSUFlag) {}
+			iNonRemovable(false),iReadOnly(false), iNotRegister(false), 
+			iSUFlag(aSUFlag), iGenerateRomStub(false) {}
 
 	/**
 	 * Constructor
 	 */
 	InstallSISFile(std::wstring aName, int aDrive, bool aGenerateStub, bool aNonRemovable,
-					bool aReadOnly, bool aNotRegister, bool aSUFlag)
+					bool aReadOnly, bool aNotRegister, bool aSUFlag, bool aGenerateRomStub)
 		: iFileName(aName), iTargetDrive(aDrive), iGenerateStub(aGenerateStub), 
-			iNonRemovable(aNonRemovable), iReadOnly(aReadOnly), iNotRegister(aNotRegister), iSUFlag(aSUFlag) {}
+			iNonRemovable(aNonRemovable), iReadOnly(aReadOnly), iNotRegister(aNotRegister),
+			iSUFlag(aSUFlag), iGenerateRomStub(aGenerateRomStub) {}
 
 public:
 	std::wstring iFileName; // SIS file name
 	int iTargetDrive;		// Target drive
 	bool iGenerateStub;		// Whether to generate stub sis file for this sis or not.
+	bool iGenerateRomStub;	// Whether to generate stub sis file for ROM Install.
 	bool iNonRemovable;		// Whether this is a non-removable SIS or not.
 	bool iReadOnly;		    // Whether this is a Readonly SIS or not.
 	bool iNotRegister;		// Whether to register the sis or not.
@@ -116,7 +120,9 @@ public: // Enumerations
         EFlagsSysDriveSet           = 0x0010,
         EFlagsStubDirectorySet      = 0x0020,
         EFlagsConfigIniSet          = 0x0040,
-		EFlagsDisableZDriveChecksSet= 0x0080
+		EFlagsDisableZDriveChecksSet= 0x0080,
+        EFlagsRomInstallSet         = 0x0100,
+        EFlagsExtDriveSet	        = 0x0200,
         };
 
 public: // Constructors & destructor

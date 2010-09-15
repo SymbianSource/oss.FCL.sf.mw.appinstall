@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -410,8 +410,14 @@ int CCertificateInfo::GetNameEntry(X509_NAME* aName, char *aKey, wchar_t** aName
 	}
 	
 	int len = ConvertMultiByteToWideChar((LPSTR)UTF8Str, strlen((LPSTR)UTF8Str)+1, NULL, 0);
+	#ifndef __TOOLS2_LINUX__
 	*aNameEntry = new wchar_t[len*sizeof(wchar_t)];
 	ConvertMultiByteToWideChar((LPSTR)UTF8Str, strlen((LPSTR)UTF8Str)+1, *aNameEntry, len);
+	#else
+	int tmplen = (len*sizeof(wchar_t))/2;
+	*aNameEntry = new wchar_t[tmplen];
+	ConvertMultiByteToWideChar((LPSTR)UTF8Str, strlen((LPSTR)UTF8Str)+1, *aNameEntry, len*2);
+	#endif
 	return 1;
 	}
 

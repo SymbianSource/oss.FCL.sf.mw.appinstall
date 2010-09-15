@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -39,10 +39,12 @@ struct InstallableFile
 
 public:
 	// constructor for non stub files
-	InstallableFile(const CSISFileDescription&, const CSISFileData*, const std::wstring aDrivePath, int aInstallingDrive);
+	InstallableFile(const CSISFileDescription&, const CSISFileData*, const std::wstring aDrivePath,
+						int aInstallingDrive, const int aSystemdrive, const bool aGenerateRomStub);
 	
 	// constructor for stub files
-	InstallableFile(const CSISFileDescription&, const std::wstring aDrivePath, int aInstallingDrive);
+	InstallableFile(const CSISFileDescription&, const std::wstring aDrivePath, int aInstallingDrive, 
+						const int aSystemdrive, const bool aGenerateRomStub);
 	~InstallableFile();
 
 public:
@@ -53,10 +55,12 @@ public:
 	const CSISFileDescription* FileDescription() const{ return iFileDescription;};
 	const CSISFileData* FileData() const{ return iFileData;};
 	const std::wstring& GetTarget() const { return iTargetFile; };
+	void SetTarget(const std::wstring& aTargetFile);
 	const std::wstring& GetLocalTarget() const { return iLocalTargetFile; };
 
 private:
-	void ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive);
+	void ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive, 
+									const int aSystemdrive, const bool aGenerateRomStub);
 
 private:
 	bool isExecutable;

@@ -48,6 +48,7 @@ CAppMngr2WidgetAppInfo::~CAppMngr2WidgetAppInfo()
     {
     CancelCommand();
     delete iName;
+    delete iVersion;
     delete iDetails;
     delete iMimeType;
     }
@@ -70,6 +71,19 @@ const TDesC& CAppMngr2WidgetAppInfo::Name() const
     if( iName )
         {
         return *iName;
+        }
+    return KNullDesC;
+    }
+
+// ---------------------------------------------------------------------------
+// CAppMngr2WidgetAppInfo::Version()
+// ---------------------------------------------------------------------------
+//
+const TDesC& CAppMngr2WidgetAppInfo::Version() const
+    {
+    if( iVersion )
+        {
+        return *iVersion;
         }
     return KNullDesC;
     }
@@ -188,6 +202,7 @@ void CAppMngr2WidgetAppInfo::ConstructL( const CWidgetInfo& aWidget )
 
     CAppMngr2WidgetRuntime& runtime( static_cast<CAppMngr2WidgetRuntime&>( Runtime() ) );
     iMimeType = runtime.GetMimeTypeL( iWidgetUid );
+    iVersion = runtime.GetVersionL( iWidgetUid );
     }
 
 // ---------------------------------------------------------------------------

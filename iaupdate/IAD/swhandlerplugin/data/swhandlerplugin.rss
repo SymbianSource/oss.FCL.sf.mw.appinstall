@@ -1,0 +1,42 @@
+/*
+* Copyright (c) 2010- Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+#include <ecom/registryinfo.rh>
+#include "swhandlerplugin.hrh"
+
+RESOURCE REGISTRY_INFO theInfo
+    {
+    dll_uid = SW_HANDLER_PLUGIN_UID;
+    interfaces = 
+        {
+        INTERFACE_INFO
+            {
+            interface_uid = SCHEME_INTERFACE_DEF;
+            implementations = 
+                {
+                IMPLEMENTATION_INFO
+                    {
+                    implementation_uid = SW_HANDLER_PLUGIN_IMP;
+                    version_no = 1;
+                    display_name = "URL handler for sw:// scheme";
+                    default_data = "sw";
+                    opaque_data = "";
+                    }
+                };
+            }
+        };
+    }

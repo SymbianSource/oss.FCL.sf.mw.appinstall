@@ -62,7 +62,9 @@ public:
 	bool GetInstallableFiles(InstallableFiles& aFiles, 
 							ExpressionEvaluator& aEvaluator,
 							const std::wstring& aCDrivePath,
-							int aInstallingDrive) const;
+							int aInstallingDrive,
+							const int aSystemDrive,
+							const bool aGenerateRomStub) const;
 
 	void GetControllerData(const char*& aData, int& aLen) const;
 
@@ -95,6 +97,8 @@ public:
 	 
 	void MakeSISStub(std::wstring& aFileName);
 	
+	void MakeSISRomStub(std::wstring& aFileName);
+	
 	const CSISController& GetController(); 
 	
 	void ProcessEmbeddedFileWarning(const CSISInstallBlock& aInstallBlock) const;
@@ -105,13 +109,17 @@ private:
 	void GetInstallableFiles(	InstallableFiles& aFiles, 
 								const CSISInstallBlock& aInstallBlock, 
 								const std::wstring& aDrivePath,
-								int aInstallingDrive) const;
+								int aInstallingDrive,
+								const int aSystemDrive,
+								const bool aGenerateRomStub) const;
 	
 	void ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 							InstallableFiles& aFiles,
 							ExpressionEvaluator& aEvaluator,
 							const std::wstring& aCDrivePath,
-							int aInstallingDrive) const;
+							int aInstallingDrive,
+							const int aSystemDrive,
+							const bool aGenerateRomStub) const;
 
 private:
 	CSISContents iContents;

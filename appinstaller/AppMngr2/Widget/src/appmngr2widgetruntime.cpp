@@ -187,6 +187,25 @@ HBufC8* CAppMngr2WidgetRuntime::GetMimeTypeL( const TUid& aWidgetUid )
     }
 
 // ---------------------------------------------------------------------------
+// CAppMngr2WidgetRuntime::GetVersionL()
+// ---------------------------------------------------------------------------
+//
+HBufC* CAppMngr2WidgetRuntime::GetVersionL( const TUid& aWidgetUid )
+    {
+    HBufC* versionStr = NULL;
+    CWidgetPropertyValue* prop = iWidgetRegistry.GetWidgetPropertyValueL( aWidgetUid,
+        EBundleVersion );
+    if( prop )
+        {
+        CleanupStack::PushL( prop );
+        const TPtrC valuePtr( *prop );
+        versionStr = valuePtr.AllocL();
+        CleanupStack::PopAndDestroy( prop );
+        }
+    return versionStr;
+    }
+
+// ---------------------------------------------------------------------------
 // CAppMngr2WidgetRuntime::CAppMngr2WidgetRuntime()
 // ---------------------------------------------------------------------------
 //

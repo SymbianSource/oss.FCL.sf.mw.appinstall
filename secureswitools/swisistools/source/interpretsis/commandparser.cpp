@@ -523,9 +523,19 @@ void CCommandParser::String2SISFileList(CParameterList& aParamList, int aArgc, c
 
 				char drive = tolower(*++optPtr);
 
-				if (drive < 'a' || drive > 'y')
+				if (drive < 'a' || drive > 'z')
 					throw CCommandParser::ECmdLineInvalidSISFileAttribute;
 
+				if(drive == 'z')
+					{
+					aParamList.SetFlag(CParameterList::EFlagsRomInstallSet);
+					sisFileName.iGenerateRomStub = true;
+					sisFileName.iNotRegister = true;
+					}
+				else
+					{
+					aParamList.SetFlag(CParameterList::EFlagsExtDriveSet);
+					}
 				// Set target drive
 				sisFileName.iTargetDrive = drive;
 

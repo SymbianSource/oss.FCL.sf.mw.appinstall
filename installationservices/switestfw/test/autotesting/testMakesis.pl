@@ -1779,6 +1779,39 @@ sub TestInterpretsisReport {
 }
 
 #
+# New test code for DEF145101 - MakeSIS cannot handle package files that contain large (>1000) language codes.
+# 
+sub TestDEF145101 {
+
+	my $path = "/epoc32/winscw/c/tswi";
+	my $pkgfile = "$path/largelanguagecodes";
+	my $expectedResult = 0;
+
+	WriteLog("Test for DEF145101 - MakeSIS cannot handle package files that contain large (>1000) language codes.\n");
+	
+	# Do MAKESIS test
+	@retval = system("$makesisExeLocation $pkgfile.pkg $pkgfile-tmp.sis > $pkgfile.log");
+	
+	$logMsg = sprintf "Expected code:%5d   result Code:%5d\n", $expectedResult, $?;
+	WriteLog( $logMsg);
+
+	$NumberOfTests++;
+	
+	if( $? == $expectedResult ) {
+		$NumberOfPassed++;
+		WriteLog("Passed\n\n");
+	}
+	else {
+		$NumberOfFailed++;
+		WriteLog("Failed\n\n");
+	}
+
+	unlink("$pkgfile-tmp.sis");
+	unlink("$pkgfile.sis");
+	unlink("$pkgfile.log");
+}
+
+#
 # Main
 #
 # Create environment and control test flow to testing MAKESIS.EXE 
@@ -2912,6 +2945,11 @@ TestPreInstalledWithoutSourceFiles();
 # Test for Makesis -c option. Added as part of the fix for DEF126467.
 #
 TestInterpretsisReport();
+
+#
+# Test for DEF145101 - MakeSIS cannot handle package files that contain large (>1000) language codes.
+#
+TestDEF145101();
 
 #
 # These tests are very specific to windows OS only
