@@ -8,7 +8,7 @@ source \sf\mw\appinstall\installationservices\swi\source
 source \sf\mw\appinstall\installationservices\swi\test
 binary	\sf\mw\appinstall\installationservices\swi\group	all
 exports	\sf\mw\appinstall\installationservices\swi\group
-
+exports	\sf\mw\appinstall\installationservices\swi\group_ncp
 
 notes_source	\component_defs\release.src
 

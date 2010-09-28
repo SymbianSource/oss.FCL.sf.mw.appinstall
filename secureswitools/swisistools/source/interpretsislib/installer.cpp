@@ -1019,7 +1019,7 @@ struct InstallFile
 				// hash file is always created on the system drive
 				reghashdir[0] = iSystemDrive;
 
-				LINFO(L"\tCreating hash: " << reghashdir << basename);				
+				LINFO(L"\tCreating hash: " << reghashdir << basename.c_str());				
 				std::wstring hash = hashdir + basename;
 				HANDLE hFile = MakeSISOpenFile(hash.c_str(), GENERIC_WRITE, CREATE_ALWAYS);		
 				if( INVALID_HANDLE_VALUE == hFile )

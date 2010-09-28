@@ -29,17 +29,17 @@ namespace
 	_LIT8(KXmlMimeType, "text/xml");
 	
 	_LIT8(KNodeSoftwareTypeRegistrationData, "LayeredExecutionEnvironments");
-	_LIT8(KNodeSoftwareType, "softwareType");
-	_LIT8(KNodeLocalizedName, "localizedName");
-	_LIT8(KNodeMimeType, "mimeType");
-	_LIT8(KNodeSifPluginUid, "sifPluginUid");
-    _LIT8(KNodeCustomAcess, "CustomAcess");
+	_LIT8(KNodeSoftwareType, "SoftwareType");
+	_LIT8(KNodeLocalizedName, "LocalizedName");
+	_LIT8(KNodeMimeType, "MimeType");
+	_LIT8(KNodeSifPluginUid, "SifPluginUid");
+    _LIT8(KNodeCustomAccess, "CustomAccess");
     _LIT8(KNodeSecureId, "SecureId");
     _LIT8(KNodeAccessMode, "AccessMode");
-    _LIT8(KNodeLauncherExecutable, "launcherExecutable");
+    _LIT8(KNodeLauncherExecutable, "LauncherExecutable");
     
-	_LIT8(KAttrSoftwareTypeName, "name");
-	_LIT8(KAttrLanguage, "language");
+	_LIT8(KAttrSoftwareTypeName, "Name");
+	_LIT8(KAttrLanguage, "Language");
 
 // ##########################################################################################
 
@@ -395,7 +395,7 @@ CSoftwareTypeRegInfoParser::TXmlNode CSoftwareTypeRegInfoParser::ElementNameToNo
 		{
 		return ENodeSoftwareTypeRegistrationData;
 		}
-	else if (aName == KNodeCustomAcess)
+	else if (aName == KNodeCustomAccess)
 	    {
 	    return ENodeCustomAccess;
 	    }

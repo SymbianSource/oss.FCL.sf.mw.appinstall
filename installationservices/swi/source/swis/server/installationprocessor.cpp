@@ -953,21 +953,9 @@ TBool CInstallationProcessor::ParseRegistrationResourceFileL(const TDesC& aTarge
     if ( NULL == iAppRegExtractor )
         {
         DEBUG_PRINTF(_L("Install Server - ParseRegistrationResourceFileL - Creating CAppRegExtractor for async parsing of registration resource file"));
-        CApplication& app = const_cast<CApplication&>(ApplicationL());
-        RArray<TInt> matchingLanguages = app.GetDeviceSupportedLanguages();
-        RArray<TLanguage> devLanguages;
-        CleanupClosePushL(devLanguages);
-        TInt count = matchingLanguages.Count();
-        
-        DEBUG_PRINTF2(_L("Install Server - ParseRegistrationResourceFileL - %d matching languages found"),count);
-        for ( TInt i=0; i<count; i++)
-            {
-            devLanguages.Append((TLanguage)matchingLanguages[i]);            
-            }
-        iAppRegExtractor = CAppRegExtractor::NewL(Fs(),devLanguages,iApparcRegFileData);
-        CleanupStack::Pop(&devLanguages);       
+        CApplication& app = const_cast<CApplication&>(ApplicationL());        
+        iAppRegExtractor = CAppRegExtractor::NewL(Fs(), iApparcRegFileData);       
         }
-        
     iAppRegExtractor->ExtractAppRegInfoSizeL(aTargetFileName, iStatus);
     return EFalse;
     }
@@ -1293,7 +1281,8 @@ TBool CInstallationProcessor::DoStateUpdateRegistryL()
                {
                if(appUid == currentNotifiableApps[index].iAppUid)
                    {           
-                   currentNotifiableApps.Remove(index);                                    
+                   currentNotifiableApps.Remove(index);   
+                   break;
                    }
                }
             currentNotifiableApps.AppendL(affectedApps[k]);
@@ -1645,8 +1634,6 @@ void CInstallationProcessor::LaunchFileL(const CSisRegistryFileDescription& aFil
 		CleanupClosePushL(fs);
         User::LeaveIfError(fs.Connect());
 		User::LeaveIfError(fs.ShareProtected());
-		RArray<TLanguage> appLanguages;
-		CleanupClosePushL(appLanguages);
 				        
 		const TInt appCount = iApparcRegFiles.Count();
 		for (TInt i=0; i<appCount; ++i)
@@ -1660,7 +1647,7 @@ void CInstallationProcessor::LaunchFileL(const CSisRegistryFileDescription& aFil
 			User::LeaveIfError(file.Open(fs, appFile, EFileRead));
 			CleanupClosePushL(file);
 			Usif::CApplicationRegistrationData* appRegData  = NULL;
-			TRAPD(err, appRegData = launcher.SyncParseResourceFileL(file, appLanguages));
+			TRAPD(err, appRegData = launcher.SyncParseResourceFileL(file));
 			if (KErrNone == err)
 			    {
 		         CleanupStack::PushL(appRegData);
@@ -1673,7 +1660,7 @@ void CInstallationProcessor::LaunchFileL(const CSisRegistryFileDescription& aFil
 		launcher.NotifyNewAppsL(appRegInfoArray);
         fs.Close();
         appRegInfoArray.ResetAndDestroy();
-		CleanupStack::PopAndDestroy(3, &appRegInfoArray);
+		CleanupStack::PopAndDestroy(2, &appRegInfoArray); //fs
 #else
 		launcher.NotifyNewAppsL(iApparcRegFiles);
 #endif

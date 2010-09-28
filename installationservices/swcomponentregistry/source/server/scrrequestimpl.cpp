@@ -4654,9 +4654,9 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
            {
            localizedAppInfo = Usif::CLocalizableAppInfo::NewLC();
            DeleteObjectZ(localizedAppInfo->iShortCaption);
-           localizedAppInfo->iShortCaption = stmt->StrColumnL(0).AllocLC();
+           localizedAppInfo->iShortCaption = stmt->StrColumnL(0).AllocL();
            DeleteObjectZ(localizedAppInfo->iGroupName);
-           localizedAppInfo->iGroupName = stmt->StrColumnL(1).AllocLC();
+           localizedAppInfo->iGroupName = stmt->StrColumnL(1).AllocL();
            localizedAppInfo->iApplicationLanguage = (TLanguage)stmt->IntColumnL(2);           
           
            DEBUG_PRINTF2(_L("The Short Caption for this App is %S "), localizedAppInfo->iShortCaption);
@@ -4670,7 +4670,7 @@ void CScrRequestImpl::GetLocalizableAppInfoL(CApplicationRegistrationData& aAppl
            GetViewsL(localizedAppInfo->iViewDataList, aAppUid, storedLanguage);
            
            aApplicationRegistration.iLocalizableAppInfoList.AppendL(localizedAppInfo);
-           CleanupStack::Pop(3,localizedAppInfo);  //poping iGroupName, iShortCaption and localizedAppInfo
+           CleanupStack::Pop(localizedAppInfo); 
            }
         CleanupStack::PopAndDestroy(stmt);
         }
@@ -4689,43 +4689,39 @@ void CScrRequestImpl::NextApplicationRegistrationInfoSizeL(const RMessage2& aMes
     {
     while(1)
         {
-        TBool dataFound = EFalse;
         DeleteObjectZ(aApplicationRegistration);
         aApplicationRegistration = CApplicationRegistrationData::NewL();
         if((aSubsessionContext->iAppRegIndex < aSubsessionContext->iAppUids.Count()))
             {
+            TBool dataFound = EFalse;
             TUid appUid = aSubsessionContext->iAppUids[aSubsessionContext->iAppRegIndex];
               
+			TInt err = KErrNone; //Initialised to avoid compiler warning 
             //Populate the Application Registration Info
-            TBool retVal = EFalse;
-            TRAPD(err, retVal = GetApplicationRegistrationInfoL(*aApplicationRegistration, appUid));
+            TRAP(err, 
+                    {
+                    TBool retVal = EFalse;
+                    retVal = GetApplicationRegistrationInfoL(*aApplicationRegistration, appUid);
 
-            //Check if we have a valid application
-            if((KErrNone == err) && retVal)
-                {
-                TRAP(err,
-                //Populate File ownership info 
-                GetFileOwnershipInfoL(*aApplicationRegistration, appUid);
-                //Populate service info
-                GetServiceInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
-                //Populate localizable appinfo including caption and icon info 
-                //and view data and its caption and icon info. 
-                GetLocalizableAppInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+                    //Check if we have a valid application
+                    if(retVal)
+                        {
+                        //Populate File ownership info 
+                        GetFileOwnershipInfoL(*aApplicationRegistration, appUid);
+                        //Populate service info
+                        GetServiceInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+                        //Populate localizable appinfo including caption and icon info 
+                        //and view data and its caption and icon info. 
+                        GetLocalizableAppInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
 
-                GetAppRegOpaqueDataL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+                        GetAppRegOpaqueDataL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
     
-                GetAppPropertiesInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage); );
-    
-                dataFound = ETrue;
-                }
-            else
-                {
-                DeleteObjectZ(aApplicationRegistration);
-                }
-
-            if(KErrNone != err)
-                DEBUG_PRINTF2(_L8("Error while reading the app registration info 0x%x. Ignoring current application details."), appUid);
-                           
+                        GetAppPropertiesInfoL(*aApplicationRegistration, appUid, aSubsessionContext->iLanguage);
+                        
+                        dataFound = ETrue;
+                        }
+                    });
+            
             //Incrementing the index
             aSubsessionContext->iAppRegIndex++;
                         
@@ -4734,6 +4730,11 @@ void CScrRequestImpl::NextApplicationRegistrationInfoSizeL(const RMessage2& aMes
                 WriteObjectSizeL(aMessage, 1, aApplicationRegistration);
                 break;
                 }
+            else
+                {
+                DEBUG_PRINTF3(_L8("Error %d while reading the app registration info 0x%x. Ignoring current application details."), err, appUid);
+                }
+                           
             }
         else
             {

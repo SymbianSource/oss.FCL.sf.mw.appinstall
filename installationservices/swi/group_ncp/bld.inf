@@ -1,0 +1,129 @@
+/*
+* Copyright (c) 1999-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* Software Install implementation 
+*
+*/
+
+
+/**
+ @file
+*/
+
+PRJ_EXTENSIONS
+
+
+#include "../source/swiobserver/group/bld.inf"
+#include "../source/upsswiobsplugin/group/bld.inf"
+
+PRJ_PLATFORMS
+DEFAULT TOOLS
+TOOLS2
+
+PRJ_EXPORTS
+../inc/swidaemonplugin.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swidaemonplugin.h)
+../inc/pkgremover.h SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(swi/pkgremover.h)
+../inc/pkgremovererrors.h SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(swi/pkgremovererrors.h)
+../inc/sisregistrywritableentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrywritableentry.h)
+../inc/swi/msisuihandlers.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/msisuihandlers.h)
+../inc/swi/sisdataprovider.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisdataprovider.h)
+../inc/swi/launcher.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/launcher.h)
+../inc/swi/asynclauncher.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/asynclauncher.h)
+../inc/swi/sisinstallerrors.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisinstallerrors.h)
+../inc/swi/hashcontainer.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/hashcontainer.h)
+../inc/swi/sisregistryentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistryentry.h)
+../inc/swi/sisrevocationentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisrevocationentry.h)
+../inc/swi/sisregistrysession.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrysession.h)
+../inc/swi/sisregistrypackage.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrypackage.h)
+../inc/swi/swispubsubdefs.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swispubsubdefs.h)
+../inc/swi/backuprestore.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/backuprestore.h)
+../inc/swi/sispackagetrust.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sispackagetrust.h)
+../inc/swi/sistruststatus.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sistruststatus.h)
+../inc/swi/sisregistrylog.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrylog.h)
+../inc/swi/installtypes.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/installtypes.h)
+../source/swiutils/swiutils.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiutils.h)
+../inc/swi/ipcutil.h 	  SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/ipcutil.h)
+
+// ROMKIT include
+../inc/swidaemon.iby /epoc32/rom/include/swidaemon.iby
+../inc/swi.iby /epoc32/rom/include/swi.iby
+../inc/swi_ncp.iby /epoc32/rom/include/swi_ncp.iby
+// swi.iby split into two part swi.iby and swiplugin.iby, swiplugin can be used by other team for implementing swi observer plug-in independently
+../inc/swiplugin.iby /epoc32/rom/include/swiplugin.iby
+../inc/switextshell.iby /epoc32/rom/include/switextshell.iby
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+../inc/sisregistry_5.3.txt z:/system/data/sisregistry_5.3.txt
+#endif
+
+// export certstoretobin
+../source/certstoretobin/Swicertstoretobin.pl	/epoc32/tools/swicertstoretobin.pl
+../source/certstoretobin/swicertstoretobin.bat	/epoc32/tools/swicertstoretobin.bat
+../source/certstoretobin/Util.pm	/epoc32/tools/util.pm
+../source/certstoretobin/AppGen.pm	/epoc32/tools/appgen.pm
+
+PRJ_MMPFILES
+
+#ifndef TOOLS
+#ifndef TOOLS2
+../group/sisresult.mmp
+../group/sisfile.mmp
+../group/siscontroller.mmp
+../group/swidataprovider.mmp
+../group/cafdataprovider.mmp
+../group/sisxrecognizer.mmp
+../group/uissclient.mmp
+../group/sishelper.mmp
+../group/ocspsupportclient.mmp
+../group/devinfosupportcommon.mmp
+../group/devinfosupport.mmp
+../group/devinfosupportclient.mmp
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+../group/apprscparser.mmp
+../group/swtypereginfo.mmp
+#else
+../group/integrityservices.mmp
+#endif
+
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+../group/sisregistryhelperserver.mmp
+#endif
+
+../group/securitymanager.mmp
+../group/sisregistryclient.mmp
+
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+../group/sisregistryserver.mmp
+#else
+../group/sisregistryserver_legacy.mmp
+#endif
+
+../group/plan.mmp
+../group/sislauncherclient.mmp
+../group/sislauncherserver.mmp
+../group/installserver.mmp
+../group/uiss.mmp
+../group/backuprestore.mmp
+#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+../group/swisidchecker.mmp
+#endif
+../group/pkgremover.mmp
+#ifndef __WINS__
+../group/sishelper_tshell.mmp
+../group/sislauncherserver_tshell.mmp
+#endif
+../group/swiutils.mmp
+#endif
+#endif
+

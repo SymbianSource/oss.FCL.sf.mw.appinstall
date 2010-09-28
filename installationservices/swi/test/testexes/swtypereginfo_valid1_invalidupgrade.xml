@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LayeredExecutionEnvironments SYSTEM "swtype.dtd">
 <LayeredExecutionEnvironments>
-	<softwareType name="testSoftwareType">
-		<localizedName language="15">testSwTypeLoc15</localizedName>
-		<localizedName language="31">testSwTypeLoc31</localizedName>
-		<mimeType>text/sif-testpkg</mimeType>
-		<sifPluginUid>102866EF</sifPluginUid>
-		<CustomAcess SecureId="10285BCC" AccessMode="1"/>
-		<CustomAcess SecureId="80285DE0" AccessMode="1"/>
-		<launcherExecutable>testExeinvalidupgrade</launcherExecutable>
-	</softwareType>
+	<SoftwareType Name="testSoftwareType">
+		<LocalizedName Language="15">testSwTypeLoc15</LocalizedName>
+		<LocalizedName Language="31">testSwTypeLoc31</LocalizedName>
+		<MimeType>text/sif-testpkg</MimeType>
+		<SifPluginUid>102866EF</SifPluginUid>
+		<CustomAccess SecureId="10285BCC" AccessMode="1"/>
+		<CustomAccess SecureId="80285DE0" AccessMode="1"/>
+		<LauncherExecutable>testExeinvalidupgrade</LauncherExecutable>
+	</SoftwareType>
 </LayeredExecutionEnvironments>

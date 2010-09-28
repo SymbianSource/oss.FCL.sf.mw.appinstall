@@ -1065,7 +1065,7 @@ void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepL()
     
     if(iIsPerformanceTest)
         StartTimer();
-    TRAP(err,subSession.GetNextApplicationRegistrationInfoL(noOfEntries, actualAppRegData))
+    TRAP(err,subSession.GetNextApplicationRegistrationInfoL(noOfEntries, actualAppRegData));
     if(iIsPerformanceTest)
         StopTimerAndPrintResultL();
     
@@ -1082,7 +1082,7 @@ void CScrGetApplicationRegistrationViewSubsessionStep::ImplTestStepL()
     
     actualAppRegDataCount = actualAppRegData.Count();
     
-    if(remainingExpectedCount > noOfEntries)
+    if(remainingExpectedCount >= noOfEntries)
         {
         count = noOfEntries;
         remainingExpectedCount -=  count;        

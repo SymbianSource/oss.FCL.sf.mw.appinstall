@@ -38,7 +38,8 @@ PRJ_EXPORTS
 ../inc/sifnotification.h									SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(usif/sif/sifnotification.h)
 
 // ROMKIT includes
-../inc/sif.iby												/epoc32/rom/include/sif.iby
+../inc/sif.iby											/epoc32/rom/include/sif.iby
+../inc/sif_ncp.iby										/epoc32/rom/include/sif_ncp.iby
 
 PRJ_TESTEXPORTS
 

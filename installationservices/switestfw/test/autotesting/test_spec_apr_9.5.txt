@@ -126,8 +126,8 @@ TESTEXECUTE, \logs\testexecute\tintegrityservices.htm,, -Dstartupmode=1 -- \tswi
 TESTEXECUTE, \logs\testexecute\nonusiftuiscriptadaptors.htm,, \tswi\tuiscriptadaptors\scripts\nonusiftuiscriptadaptors.script, 10000, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tuiscriptadaptors_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tuiscriptadaptors_post.bat
 
 [SWI]
-TESTEXECUTE, \logs\testexecute\testfotaupdate1.htm,,    -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testfotaupdate1.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_post.bat
-TESTEXECUTE, \logs\testexecute\testfotaupdate2.htm,,    -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testfotaupdate2.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate2_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate2_post.bat
+TESTEXECUTE, \logs\testexecute\testfotaupdate1.htm,,    -Dstartupmode=5 -- \tswi\tuiscriptadaptors\scripts\testfotaupdate1.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate1_post.bat
+TESTEXECUTE, \logs\testexecute\testfotaupdate2.htm,,    -Dstartupmode=5 -- \tswi\tuiscriptadaptors\scripts\testfotaupdate2.script, 300, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate2_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\testfotaupdate2_post.bat
 TESTEXECUTE, \logs\testexecute\testexpressions.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testexpressions.script, 300, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\testdrives.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testdrives.script, 300, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\testlocations.htm,, -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\testlocations.script, 300, UDEB#UREL,,
@@ -298,7 +298,7 @@ swiobservertestoom.exe, \swiobservertestoom.log,, , 800, UDEB#UREL,,
 [SwiDiran]
 TESTEXECUTE, \logs\testexecute\tswiregcompfields.htm,, \tswi\tuiscriptadaptors\scripts\tswiregcompfields.script, 300, UDEB#UREL,,
 TESTEXECUTE, \logs\testexecute\tswtype.htm,, \tswi\tuiscriptadaptors\scripts\tswtype.script, 300, UDEB#UREL,,
-TESTEXECUTE, \logs\testexecute\tswiappregintegration.htm,, \tswi\tuiscriptadaptors\scripts\tswiappregintegration.script, 3000, UDEB#UREL,,
+TESTEXECUTE, \logs\testexecute\tswiappregintegration.htm,, \tswi\tuiscriptadaptors\scripts\tswiappregintegration.script, 3000, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tswiappregintegration0_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tswiappregintegration0_post.bat
 TESTEXECUTE, \logs\testexecute\tswiappregintegration_stub.htm,,    -Dstartupmode=1 -- \tswi\tuiscriptadaptors\scripts\tswiappregintegration_stub.script, 500, UDEB#UREL, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tswiappregintegration_pre.bat, \epoc32\winscw\c\tswi\tuiscriptadaptors\scripts\batchfiles\tswiappregintegration_post.bat
 
 [SISInstaller]

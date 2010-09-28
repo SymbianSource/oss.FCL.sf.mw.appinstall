@@ -22,14 +22,8 @@
 define ZDRIVE EPOCROOT##epoc32\data\Z
 
 #include "siflauncherconfig.iby"
+#include <sif_ncp.iby>
 
 REM Software Install Framework
-
-file=ABI_DIR\BUILD_DIR\sif.dll				\sys\bin\sif.dll
-file=ABI_DIR\BUILD_DIR\sifutils.dll			\sys\bin\sifutils.dll
-file=ABI_DIR\BUILD_DIR\siftransport.dll		\sys\bin\siftransport.dll
-file=ABI_DIR\BUILD_DIR\sifnotification.dll	\sys\bin\sifnotification.dll
-file=ABI_DIR\BUILD_DIR\sifserver.exe		\sys\bin\sifserver.exe
-file=ABI_DIR\BUILD_DIR\siflauncher.exe		\sys\bin\siflauncher.exe
 
 #endif

@@ -93,6 +93,7 @@ std::wstring DbConstants::CompDeletablePreinstalled = L"CompDeletablePreinstalle
 std::wstring DbConstants::CompTrust = L"CompTrust";
 std::wstring DbConstants::CompIsRemoveWithLastDependent = L"CompIsRemoveWithLastDependent";
 std::wstring DbConstants::CompTrustTimeStamp = L"CompTrustTimeStamp";
+std::wstring DbConstants::CompStubFileName = L"StubFileName";
 
 // trust status
 std::wstring DbConstants::CompTrustValidationStatus = L"CompTrustValidationStatus";

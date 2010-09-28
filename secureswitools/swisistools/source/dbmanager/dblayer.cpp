@@ -38,7 +38,7 @@ typedef std::vector<std::string>::const_iterator ConstStringIterator;
 typedef std::vector<std::wstring>::const_iterator ConstWstringIterator;
 typedef std::vector<XmlDetails::TScrEnvironmentDetails>::const_iterator ScrEnvIterator;
 typedef std::vector<XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName>::const_iterator ScrEnvLocSwTypeNameIterator;
-typedef std::vector<XmlDetails::TScrEnvironmentDetails::TCustomAcessList>::const_iterator ScrEnvCustomAccessIterator;
+typedef std::vector<XmlDetails::TScrEnvironmentDetails::TCustomAccessList>::const_iterator ScrEnvCustomAccessIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponent>::const_iterator CompIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentLocalizable>::const_iterator CompLocIterator;
 typedef std::vector<XmlDetails::TScrPreProvisionDetail::TComponentProperty>::const_iterator CompPropIterator;
@@ -224,7 +224,7 @@ void CDbLayer::PopulateDatabase(const std::vector<XmlDetails::TScrEnvironmentDet
 			ExecuteSwTypeNameStatement(stmtSwTypeName, swTypeId, swTypeNameIter->iLocale, swTypeNameIter->iName);
 			}
                 
-        for(ScrEnvCustomAccessIterator customAccessIter = aScrEnvIterator->iCustomAcessList.begin(); customAccessIter != aScrEnvIterator->iCustomAcessList.end(); ++customAccessIter)
+        for(ScrEnvCustomAccessIterator customAccessIter = aScrEnvIterator->iCustomAccessList.begin(); customAccessIter != aScrEnvIterator->iCustomAccessList.end(); ++customAccessIter)
 			{
         	stmtCustomAccessList->BindInt(1, swTypeId);
             stmtCustomAccessList->BindInt(2, customAccessIter->iSecureId);
@@ -1036,14 +1036,12 @@ void CDbLayer::AddProperty( int aAppUid, const std::vector<XmlDetails::TScrPrePr
 
 		if(appPropertyIter->iIsStr8Bit)
 			{
-				std::string str;
-				int len = appPropertyIter->iStrValue.length();
-				str.assign(appPropertyIter->iStrValue.c_str(),appPropertyIter->iStrValue.c_str()+len);
-				stmtAppProperty->BindBinary(6, str);
+			stmtAppProperty->BindBinary(6, appPropertyIter->iStrValue);
 			}
 		else
 			{
-			stmtAppProperty->BindStr(6, appPropertyIter->iStrValue);
+			std::wstring sStr = string2wstring(appPropertyIter->iStrValue);
+			stmtAppProperty->BindStr(6, sStr);
 			}
 		
 		stmtAppProperty->BindInt(7, appPropertyIter->iIsStr8Bit);

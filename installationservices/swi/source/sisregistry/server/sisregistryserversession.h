@@ -174,13 +174,15 @@ private:
 	TBool IsRegisteredL(const TUid& aUid, const TDesC& aPackageName);
 
 	void RemoveEntryL(const Usif::TComponentId aCompId);
-	void RemoveEntryL(const CSisRegistryPackage& aPackage);
+	HBufC* RemoveEntryLC(const CSisRegistryPackage& aPackage);
 	void RemoveCleanupInfrastructureL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession);
 	TBool RemoveControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, TInt aDrive);
 	void ControllerDriveListL(const CSisRegistryObject& aObject, RArray<TInt>& aDriveList);
 	TUint FixedDrivesL() const;
 	Usif::TComponentId AddRegistryEntryL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aController, Usif::TScrComponentOperationType aOpType);
 	Usif::TComponentId AddEntryL(CSisRegistryObject& aObject, Usif::TScrComponentOperationType aOpType);
+	Usif::TComponentId AddInRomControllerEntryL(CSisRegistryObject& aObject, const TDesC& aStubFileName);
+	TBool RomBasedPackageL(const TUid& aUid);
 	void AddAppsFromStubL(Usif::TComponentId aCompId, const TDesC& aFileName);
 	void AddControllerL(const CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aBuffer, const TInt aDrive);
 	void AddCleanupInfrastructureL(CSisRegistryObject& aObject, Usif::RStsSession& aStsSession, const TDesC8& aControllerBuffer);

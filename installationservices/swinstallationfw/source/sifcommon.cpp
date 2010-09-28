@@ -587,7 +587,7 @@ EXPORT_C COpaqueNamedParams* COpaqueNamedParams::NewLC()
 void COpaqueNamedParams::VerifyExternalizedSizeForNewParamArrayL(TInt aNameSize, TInt aValueSize) const
 	{
 	const TInt load = 2*sizeof(TInt) + aNameSize + aValueSize;
-	if (aNameSize > KMaxOpaqueParamsDescriptorSize || iExternalizedSize + load > KMaxOpaqueParamsExternalizedSize)
+	if (aNameSize > KMaxOpaqueParamNameDescriptorSize || iExternalizedSize + load > KMaxOpaqueParamsExternalizedSize)
 		{
 		User::Leave(KErrOverflow);
 		}
@@ -944,7 +944,7 @@ TInt CItemBase::ValueSize() const
 
 void CItemBase::VerifyExternalizedSizeForParamL(TUint aValueSize) const
     {
-    if(aValueSize > KMaxOpaqueParamsDescriptorSize)
+    if(aValueSize > KMaxOpaqueParamValueDescriptorSize)
         {
         User::Leave(KErrOverflow);
         }
@@ -959,7 +959,7 @@ void CItemBase::ExternalizeL(RWriteStream& aStream) const
 void CItemBase::InternalizeL (RReadStream& aStream)
     {
     delete iName;
-    iName = HBufC::NewL(aStream, KMaxOpaqueParamsDescriptorSize);
+    iName = HBufC::NewL(aStream, KMaxOpaqueParamNameDescriptorSize);
     iSize = aStream.ReadInt32L();
     }
     
@@ -1013,7 +1013,7 @@ void CStringItem::InternalizeL(RReadStream& aStream)
     {
     CItemBase::InternalizeL(aStream);
     DeleteObjectZ(iString);
-    iString = HBufC::NewL(aStream, KMaxOpaqueParamsDescriptorSize);
+    iString = HBufC::NewL(aStream, KMaxOpaqueParamValueDescriptorSize);
     }
 
 const TDesC& CStringItem::StringValue() const

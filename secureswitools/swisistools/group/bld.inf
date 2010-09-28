@@ -1543,6 +1543,8 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-05.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-05.script
 ../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-06.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-06.script
 ../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-08.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-08.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-09.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-09.script
+../test/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-10.script /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/api-inst-testcase-interpretsis-10.script
 
 ../test/tinterpretsisinteg/scripts/int_nr_option-01.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-01.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-02.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-02.script
@@ -1974,6 +1976,9 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/api-inst-testcase-interpretsis-06_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-06_db.bat
 ../test/tinterpretsisinteg/api-inst-testcase-interpretsis-07_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-07_db.bat
 ../test/tinterpretsisinteg/api-inst-testcase-interpretsis-08_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-08_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-09_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-09_db.bat
+../test/tinterpretsisinteg/api-inst-testcase-interpretsis-10_db.bat /epoc32/winscw/c/tswi/tinterpretsisinteg/api-inst-testcase-interpretsis-10_db.bat
+../test/tinterpretsisinteg/preprovision_appproperty_opaquedata.xml /epoc32/winscw/c/tswi/tinterpretsisinteg/preprovision_appproperty_opaquedata.xml
 
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 

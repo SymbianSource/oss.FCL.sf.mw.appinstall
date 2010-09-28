@@ -20,16 +20,23 @@ REM testcase testcase-interpretsis-05 - Install sis. This is a positive testcase
 if not exist .\cdrive mkdir .\cdrive > NUL
 if not exist .\romdrive mkdir .\romdrive > NUL
 
-xcopy /E /Y backup\cdrive cdrive > NUL
-xcopy /E /Y backup\romdrive romdrive > NUL
+REM xcopy /E /Y backup\cdrive cdrive > NUL
+REM xcopy /E /Y backup\romdrive romdrive > NUL
 
 
 REM Remove installation files from any previous tests
 if exist  .\cdrive\Documents\InstTest\devlangsup*.txt  del .\cdrive\Documents\InstTest\devlangsup*.txt  > NUL
+if not exist .\romdrive\sys\install\scr\provisioned mkdir .\romdrive\sys\install\scr\provisioned > NUL
+if exist  .\romdrive\sys\install\scr\provisioned\scr.db  del .\romdrive\sys\install\scr\provisioned\scr.db  > NUL
+copy \epoc32\release\winscw\udeb\z\sys\install\scr\provisioned\scr.db .\romdrive\sys\install\scr\provisioned\scr.db /Y > NUL
 
 call interpretsis -z .\romdrive -c .\cdrive  -a /epoc32/release/winscw/udeb/z/private/10003a3f/test -w info -l /epoc32/winscw/c/interpretsis_test_harness_db.txt > NUL
 
+if not exist \epoc32\winscw\c\sys\install\scr mkdir \epoc32\winscw\c\sys\install\scr > NUL
+if exist  \epoc32\winscw\c\sys\install\scr\scr.db  del \epoc32\winscw\c\sys\install\scr\scr.db  > NUL
 copy .\romdrive\sys\install\scr\provisioned\scr.db \epoc32\winscw\c\sys\install\scr\scr.db /Y > NUL
+
+copy \epoc32\release\winscw\udeb\z\private\10003a3f\test\tstap*_reg.rsc \epoc32\release\winscw\udeb\z\private\10003a3f\apps /Y > NUL
 
 IF NOT EXIST .\backup\cdrive mkdir .\backup\cdrive > NUL
 IF NOT EXIST .\backup\romdrive mkdir .\backup\romdrive > NUL

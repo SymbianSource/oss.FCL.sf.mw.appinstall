@@ -28,7 +28,6 @@ DEFAULT
 
 
 PRJ_EXPORTS
-#ifndef __S60_
 ../swi/swipolicy.ini /epoc32/release/winscw/udeb/z/system/data/swipolicy.ini
 ../swi/swipolicy.ini /epoc32/release/winscw/urel/z/system/data/swipolicy.ini
 ../swi/swipolicy.ini /epoc32/data/z/system/data/swipolicy.ini
@@ -39,7 +38,6 @@ PRJ_EXPORTS
 // ConfML Files
 ../conf/appinstallconfig.confml            OS_LAYER_EXPORTS_CONFML(appinstallconfig.confml)
 ../conf/appinstallconfig_2002cff6.crml	 OS_LAYER_EXPORTS_CRML(appinstallconfig_2002cff6.crml)
-#endif
 
 ../swi/swiconfig.iby /epoc32/rom/include/swiconfig.iby
 

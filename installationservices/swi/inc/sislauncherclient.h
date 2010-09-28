@@ -156,7 +156,7 @@ public:
     * @param aAppLanguages List of the languages
     * @return Return size of buffer needed in TRequestStatus
     */
-    IMPORT_C void AsyncParseResourceFileSizeL(const RFile& aRegistrationFile, const RArray<TLanguage>& aAppLanguages, TRequestStatus& aStatus);
+    IMPORT_C void AsyncParseResourceFileSizeL(const RFile& aRegistrationFile, TRequestStatus& aStatus, TBool aIsForGetCompInfo = EFalse);
     
 	/**
     * Return populate CApplicationRegistrationData 
@@ -170,7 +170,7 @@ public:
     * @param aRegistrationFileName registration file name to be parsed
     * @return Pointer to a CApplicationRegistrationData (caller owns it)
     */    
-    IMPORT_C Usif::CApplicationRegistrationData* SyncParseResourceFileL(const RFile& aRegistrationFile, const RArray<TLanguage>& aAppLanguages); 
+    IMPORT_C Usif::CApplicationRegistrationData* SyncParseResourceFileL(const RFile& aRegistrationFile, TBool aIsForGetCompInfo = EFalse); 
        
 	/**
      * Notifies APPARC of new applications. This call  
@@ -188,8 +188,7 @@ public:
     IMPORT_C void NotifyNewAppsL(const RArray<TAppUpdateInfo>& aAppUpdateInfo);
     
 private:
-    void RegisterSifLauncherMimeTypesImplL(const RPointerArray<HBufC8>& aMimeTypes, TBool aRegister);
-    HBufC8* iBuffForLanguages;        
+    void RegisterSifLauncherMimeTypesImplL(const RPointerArray<HBufC8>& aMimeTypes, TBool aRegister);   
 #endif
     };
 

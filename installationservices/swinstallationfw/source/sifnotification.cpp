@@ -61,7 +61,7 @@ CPublishSifOperationInfo::CPublishSifOperationInfo():
     // empty
     }
 
-CPublishSifOperationInfo::~CPublishSifOperationInfo()
+EXPORT_C CPublishSifOperationInfo::~CPublishSifOperationInfo()
     {
     delete iDeleteTimer;
     if (iStartEndKey != 0)
@@ -530,7 +530,7 @@ TInt CSifOperationsNotifier::RunError(TInt aError)
     }
 
 
-CSifOperationsNotifier::~CSifOperationsNotifier()
+EXPORT_C CSifOperationsNotifier::~CSifOperationsNotifier()
     {
     Cancel();
     iProperty.Close();
@@ -651,7 +651,7 @@ TInt CSifNotifierBase::RunError(TInt aError)
     return KErrNone;
     }
 
-TUint CSifNotifierBase::Key()
+EXPORT_C TUint CSifNotifierBase::Key()
     {
     return iKey;
     }
@@ -662,7 +662,7 @@ void CSifNotifierBase::DoCancel()
     }
 
 
-CSifNotifierBase::~CSifNotifierBase()
+EXPORT_C CSifNotifierBase::~CSifNotifierBase()
     {
     Cancel();
     }
@@ -690,7 +690,7 @@ EXPORT_C CSifOperationKey* CSifOperationKey::NewL()
     return self;
     }
 
-CSifOperationKey* CSifOperationKey::NewLC()
+EXPORT_C CSifOperationKey* CSifOperationKey::NewLC()
     {
     CSifOperationKey *self = new(ELeave) CSifOperationKey();
     CleanupStack::PushL(self);

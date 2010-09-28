@@ -104,6 +104,7 @@ namespace DbConstants
 	extern std::wstring	CompTrust;
 	extern std::wstring	CompIsRemoveWithLastDependent;
 	extern std::wstring	CompTrustTimeStamp;
+	extern std::wstring	CompStubFileName;
 
 	// trust status
 	extern std::wstring	CompTrustValidationStatus;

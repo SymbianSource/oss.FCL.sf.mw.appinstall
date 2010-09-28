@@ -249,6 +249,22 @@ bool DbHelper::GetInRom( TInt32 aComponentId ) const
 	return (stmtInRom->IntColumn(0) == 1);
 	}
 
+std::wstring DbHelper::GetStubFileName( TInt32 aComponentId ) const
+	{
+	std::string selectStubFileName("SELECT StrValue FROM ComponentProperties WHERE ComponentId=? and Name=?;");
+	std::auto_ptr<CStatement> stmtStubFileName(iScrDbHandler->PrepareStatement(selectStubFileName));
+		
+	stmtStubFileName->BindInt(1, aComponentId);
+	stmtStubFileName->BindStr(2, DbConstants::CompStubFileName);
+	
+	if(stmtStubFileName->ProcessNextRow())
+		{
+		return stmtStubFileName->StrColumn(0);
+		}
+
+	return L"\0";
+	}
+
 std::wstring DbHelper::GetPackageName( TInt32 aComponentId ) const
 	{
 	std::string selectPckgName("SELECT Name FROM ComponentLocalizables WHERE ComponentId=?;");

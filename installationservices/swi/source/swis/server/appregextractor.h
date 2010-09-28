@@ -39,9 +39,9 @@ class RSisHelper;
 class CAppRegExtractor : public CActive
     {
 public:
-    static CAppRegExtractor* NewLC(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData );
+    static CAppRegExtractor* NewLC(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData );
     
-    static CAppRegExtractor* NewL(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData );
+    static CAppRegExtractor* NewL(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData );
     
     /**
      * Extract the file, using provided file handle which must be set up correctly.
@@ -54,7 +54,7 @@ public:
     ~CAppRegExtractor();
     
 private:
-    CAppRegExtractor(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData ); 
+    CAppRegExtractor(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData ); 
     void ConstructL();
     
 // from CActive
@@ -75,8 +75,7 @@ private:
     TRequestStatus* iClientStatus;
     RSisLauncherSession iLauncher;
     RFile* iCurrentFile;
-    TBool iManagedFileHandle; // whether we manage the file handle used for file extraction.
-    RArray<TLanguage> iDeviceSupportedLanguages; 
+    TBool iManagedFileHandle; // whether we manage the file handle used for file extraction. 
     RPointerArray<Usif::CApplicationRegistrationData>& iApparcRegFileData;
     TInt iErrCode;
     };

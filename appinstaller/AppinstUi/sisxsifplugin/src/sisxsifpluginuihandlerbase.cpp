@@ -22,13 +22,14 @@
 #include <centralrepository.h>              // CRepository
 #include <SWInstallerInternalCRKeys.h>      // KCRUidSWInstallerSettings
 #include <hb/hbwidgets/hbdevicemessageboxsymbian.h> // CHbDeviceMessageBoxSymbian
-#include <hb/hbcore/hbtextresolversymbian.h> // HbTextResolverSymbian
+// TODO: restore
+//#include <hb/hbcore/hbtextresolversymbian.h> // HbTextResolverSymbian
 #include <usif/scr/screntries.h>            // CComponentEntry
 
 using namespace Usif;
 
 _LIT( KTextResolverPath, "z:/resource/qt/translations/" );
-_LIT( KSifUiTranslationFile, "sifuidevicedialogplugin" );
+_LIT( KSifUiTranslationFile, "sifuidevicedialogplugin_" );
 _LIT( KCommonButtonContinue, "txt_common_button_continue" );
 
 _LIT( KMemoryFull, "txt_error_info_memory_full" );
@@ -56,7 +57,8 @@ CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase( RFs& aFs,
         CSisxSifPluginErrorHandler& aErrorHandler ) : iFs( aFs ),
         iErrorHandler( aErrorHandler )
     {
-    HbTextResolverSymbian::Init( KSifUiTranslationFile, KTextResolverPath );
+    // TODO: restore
+    //HbTextResolverSymbian::Init( KSifUiTranslationFile, KTextResolverPath );
     }
 
 // ---------------------------------------------------------------------------
@@ -456,10 +458,12 @@ void CSisxSifPluginUiHandlerBase::ShowQuestionWithContinueL( const TDesC& aText 
     note->SetTimeout( KDefaultTimeout );
     note->SetButton( CHbDeviceMessageBoxSymbian::EAcceptButton, EFalse );
     note->SetButton( CHbDeviceMessageBoxSymbian::ERejectButton, ETrue );
-    HBufC* contButton = HbTextResolverSymbian::LoadLC( KCommonButtonContinue );
-    note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, contButton->Des() );
+    // TODO: restore
+    //HBufC* contButton = HbTextResolverSymbian::LoadLC( KCommonButtonContinue );
+    //note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, contButton->Des() );
+    note->SetButtonTextL( CHbDeviceMessageBoxSymbian::ERejectButton, _L("Continue") );
     (void)note->ExecL();
-    CleanupStack::PopAndDestroy( contButton );
+    //CleanupStack::PopAndDestroy( contButton );
 
     CleanupStack::PopAndDestroy( note );
     }
@@ -480,8 +484,10 @@ TBool CSisxSifPluginUiHandlerBase::CompareDriveLetters( const TChar& aDriveFirst
 //
 void CSisxSifPluginUiHandlerBase::SetLocalisedErrorMessageText( const TDesC& aLogicalName )
     {
-    HBufC* errorText = HbTextResolverSymbian::LoadLC( aLogicalName );
-    iErrorHandler.SetErrorMessage( errorText->Des() );
-    CleanupStack::PopAndDestroy( errorText );
+    // TODO: restore
+    //HBufC* errorText = HbTextResolverSymbian::LoadLC( aLogicalName );
+    //iErrorHandler.SetErrorMessage( errorText->Des() );
+    iErrorHandler.SetErrorMessage( aLogicalName );
+    //CleanupStack::PopAndDestroy( errorText );
     }
 

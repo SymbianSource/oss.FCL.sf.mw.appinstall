@@ -77,13 +77,13 @@ void CreateAppAttribute(XmlDetails::TScrPreProvisionDetail::TApplicationRegistra
  * Creates Class TAppAttribute for XML Parsing
  */
 void CreateAppProperty(XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppProperty, 
-								const std::wstring& aStrValue, const int aLocale, const int aServiceUid, const bool aIsStr8Bit );
+								const std::string& aStrValue, const int aLocale, const int aServiceUid, const bool aIsStr8Bit );
 
 /**
  * Creates Class TOpaqueDataType for XML Parsing
  */
 void CreateOpaqueDataType(XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppOpaqueData, 
-								const std::wstring& aStrValue, const int aLocale, const int aServUid);
+								const std::string& aStrValue, const int aLocale, const int aServUid);
 
 /**
  * Creates Class TAppLocalizableInfo for XML Parsing

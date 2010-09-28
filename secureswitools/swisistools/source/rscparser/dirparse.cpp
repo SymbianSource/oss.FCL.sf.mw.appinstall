@@ -284,7 +284,7 @@ void CreateAppAttribute(XmlDetails::TScrPreProvisionDetail::TApplicationRegistra
  */
 
 void CreateAppProperty(XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppProperty, 
-								const std::wstring& aStrValue, const int aLocale,
+								const std::string& aStrValue, const int aLocale,
 								const int aServiceUid, const bool aIsStr8Bit )
 {
 	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty componentproperty;
@@ -304,22 +304,15 @@ void CreateAppProperty(XmlDetails::TScrPreProvisionDetail::TApplicationRegistrat
  */
 
 void CreateOpaqueDataType(XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo& aAppOpaqueData, 
-								const std::wstring& aStrValue, const int aLocale, const int aServUid)
+								const std::string& aStrValue, const int aLocale, const int aServUid)
 {
 	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType componentData;
 
 	componentData.iLocale = aLocale;
 	componentData.iServiceUid = aServUid;
 
-	/* 
-	 * Under LINUX : The OpaqueData which is read from the resource file will be in UTF-16 format contained
-	 *               in a std::wstring. So, we need to convert it back to UTF-32 format which is the format
-	 *               of LINUX specific std::wstring.
-     * 
-	 * Under WINDOWS : Nothing needs to be done and this is taken care of by XercesStringToWString()
-	 *				   which is platform specific.	
-	 */
-	 componentData.iOpaqueData = XercesStringToWString(reinterpret_cast<const XMLCh*>(aStrValue.c_str()));
+	 componentData.iOpaqueData = aStrValue;
+	 componentData.iIsBinary = true;
 	 aAppOpaqueData.iOpaqueDataType.push_back(componentData);
 }
 
@@ -406,73 +399,75 @@ void UpdateInstallationInformation_xml(const CParameterList* aParamList,
 void CreateApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TComponent& aComponent, 
 												const CAppInfoReader* aAppInfoReader)
 {
-	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo atemp;
+	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo iApplicationRegistrationInfo;
 
 	Ptr16* iAppBinaryFullName = aAppInfoReader->AppBinaryFullName();
-	std::wstring sStr = DbConstants::CompAppFile;
-	std::wstring sStr1 = Ptr16ToWstring(iAppBinaryFullName);
-	CreateAppAttribute(atemp,sStr,sStr1,false,false);
+	std::wstring sAppAttributeName = DbConstants::CompAppFile;
+	std::wstring sAppAttributeValue = Ptr16ToWstring(iAppBinaryFullName);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,false,false);
 
 	TUidType iAppBinaryUidType = aAppInfoReader->AppBinaryUidType();;
-	sStr = DbConstants::CompAppUid;
+	sAppAttributeName = DbConstants::CompAppUid;
 	TUid Uid = iAppBinaryUidType[2];
-	sStr1 = Utils::IntegerToWideString(Uid.GetUid());
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeValue = Utils::IntegerToWideString(Uid.GetUid());
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompTypeId;
+	sAppAttributeName = DbConstants::CompTypeId;
 	TInt TypeId = -1367772926;
-	sStr1 = Utils::IntegerToWideString(TypeId);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeValue = Utils::IntegerToWideString(TypeId);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
 	TAppCapability iCapability;
 	aAppInfoReader->Capability(iCapability);
 
- 	sStr = DbConstants::CompAttributes;
-	sStr1 = Utils::IntegerToWideString(iCapability.iAttributes);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+ 	sAppAttributeName = DbConstants::CompAttributes;
+	sAppAttributeValue = Utils::IntegerToWideString(iCapability.iAttributes);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompHidden;
-	sStr1 = Utils::IntegerToWideString(iCapability.iAppIsHidden);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeName = DbConstants::CompHidden;
+	sAppAttributeValue = Utils::IntegerToWideString(iCapability.iAppIsHidden);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompEmbeddable;
-	sStr1 = Utils::IntegerToWideString(iCapability.iEmbeddability);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeName = DbConstants::CompEmbeddable;
+	sAppAttributeValue = Utils::IntegerToWideString(iCapability.iEmbeddability);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompNewfile;
-	sStr1 = Utils::IntegerToWideString(iCapability.iSupportsNewFile);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeName = DbConstants::CompNewfile;
+	sAppAttributeValue = Utils::IntegerToWideString(iCapability.iSupportsNewFile);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompLaunch;
-	sStr1 = Utils::IntegerToWideString(iCapability.iLaunchInBackground);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeName = DbConstants::CompLaunch;
+	sAppAttributeValue = Utils::IntegerToWideString(iCapability.iLaunchInBackground);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
-	sStr = DbConstants::CompGroupName;
+	sAppAttributeName = DbConstants::CompGroupName;
 	if(iCapability.iGroupName)
-		sStr1 = Ptr16ToWstring(iCapability.iGroupName);
+		sAppAttributeValue = Ptr16ToWstring(iCapability.iGroupName);
 	else
-		sStr1=L'\0';
-	CreateAppAttribute(atemp,sStr,sStr1,false,false);
+		sAppAttributeValue=L'\0';
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,false,false);
 
 	TUint iDefaultScreenNumber = aAppInfoReader->DefaultScreenNumber();
-	sStr = DbConstants::CompDefaultScreenNumber;
-	sStr1 = Utils::IntegerToWideString(iDefaultScreenNumber);
-	CreateAppAttribute(atemp,sStr,sStr1,true,false);
+	sAppAttributeName = DbConstants::CompDefaultScreenNumber;
+	sAppAttributeValue = Utils::IntegerToWideString(iDefaultScreenNumber);
+	CreateAppAttribute(iApplicationRegistrationInfo,sAppAttributeName,sAppAttributeValue,true,false);
 
 	std::vector<Ptr16*>* ownedFileArray = aAppInfoReader->OwnedFiles();
+	std::wstring sFileName;
 	if(ownedFileArray)
 	{
 		for(TInt ii = 0; ii<ownedFileArray->size(); ii++)
 		{
 			Ptr16 *temp = ownedFileArray->at(ii);
 			if(temp)
-				sStr = Ptr16ToWstring(temp);
+				sFileName = Ptr16ToWstring(temp);
 			else
-				sStr=L'\0';
-			atemp.iFileOwnershipInfo.push_back(sStr);
+				sFileName = L'\0';
+			iApplicationRegistrationInfo.iFileOwnershipInfo.push_back(sFileName);
 		}
 	}
 
+	std::string sOpaqueData;
 	TInt iIndexOfFirstOpenService;
 	std::vector<TAppServiceInfo*>* iServiceArray = aAppInfoReader->ServiceArray(iIndexOfFirstOpenService);
 	if(iServiceArray)
@@ -482,7 +477,7 @@ void CreateApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TCom
 			TAppServiceInfo* temp = iServiceArray->at(i);
 			TUid iUid = temp->GetUid();
 			std::vector<TDataTypeWithPriority*> iData = temp->GetDataType();
-			CreateAppServiceInfo(atemp,iUid,iData);
+			CreateAppServiceInfo(iApplicationRegistrationInfo,iUid,iData);
 
 			int servUid = iUid.GetUid();
 			std::vector<CAppLocalOpaqueDataInfo*> opaqueDataArray = aAppInfoReader->GetOpaqueDataArray();
@@ -494,13 +489,13 @@ void CreateApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TCom
 				if(servUid == serviceUid)
 				{
 					Ptr8*	opaqueData = tp->GetOpaqueData();
+
 					if(opaqueData)
-						sStr1 = Ptr8ToWstring(opaqueData);
+						sOpaqueData.assign(opaqueData->GetPtr(), opaqueData->GetPtr()+opaqueData->GetLength());
 					else
-						sStr1=L'\0';
-				
+						sOpaqueData = '\0';
 					TInt locale = tp->GetLocale();
-					CreateOpaqueDataType(atemp,sStr1,locale,serviceUid);
+					CreateOpaqueDataType(iApplicationRegistrationInfo,sOpaqueData,locale,serviceUid);
 				}
 			}
 		}
@@ -511,7 +506,7 @@ void CreateApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TCom
 	for(TInt i = 0; i<aAppLocalizable.size(); i++)
 	{
 		CAppLocalizableInfo* tp = aAppLocalizable.at(i);
-		CreateLocalizableInfoL(atemp,tp);
+		CreateLocalizableInfoL(iApplicationRegistrationInfo,tp);
 	}
 
 	std::vector<CAppLocalOpaqueDataInfo*> opaqueDataArray = aAppInfoReader->GetOpaqueDataArray();
@@ -523,17 +518,18 @@ void CreateApplicationRegistrationInfoL(XmlDetails::TScrPreProvisionDetail::TCom
 		if(0 == serviceUid)
 		{
 			Ptr8* 	opaqueData = tp->GetOpaqueData();
+
 			if(opaqueData)
-				sStr1 = Ptr8ToWstring(opaqueData);
+				sOpaqueData.assign(opaqueData->GetPtr(), opaqueData->GetPtr()+opaqueData->GetLength());
 			else
-				sStr1=L'\0';
-		
+				sOpaqueData='\0';
+			
 			TInt locale = tp->GetLocale();
-			CreateOpaqueDataType(atemp,sStr1,locale,serviceUid);
+			CreateOpaqueDataType(iApplicationRegistrationInfo,sOpaqueData,locale,serviceUid);
 		}
 	}
 
-	aComponent.iApplicationRegistrationInfo.push_back(atemp);
+	aComponent.iApplicationRegistrationInfo.push_back(iApplicationRegistrationInfo);
 }
 
 

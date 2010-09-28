@@ -1,0 +1,135 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: Secure SQLite C API library
+*
+*/
+
+/**
+ @file
+*/
+
+#include "sqlite3_secure_macro.mmh"
+
+TARGET		sqlite3_secure.dll
+TARGETTYPE	dll
+
+//"ProtServ" because this is specialised version used by the Security Team
+CAPABILITY	ProtServ
+
+UID			0x1000008d 0x102869fd
+
+VendorId	0x70000001
+
+VERSION	3.17
+
+#ifndef WINSCW
+EPOCALLOWDLLDATA
+#endif
+
+MACRO SQLITE_DLL
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////  RVCT compiler warning & optimization options  /////////////////////////////////////////
+
+//550: <entity-kind> "entity" was set but never used
+//C2874W: <name> may be used before being set
+//C3017W: <name> may be used before being set
+
+OPTION ARMCC --diag_suppress 550,2874,368,3017 
+OPTION ARMCC -Ono_cg_cond
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////  CW compiler warning options  //////////////////////////////////////////////////////////
+
+//Variable/argument <x> is not used in function
+//Possible unwanted <x>
+
+OPTION CW -w nounused -w nounwanted
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////  GCC compiler warning options  /////////////////////////////////////////////////////////
+
+//"-w" option suppresses all warnings! 
+//"<variable> might be used uninitialized in this function" - only this warning needs to be suppressed,
+//but there is no option for that.
+
+OPTION GCC -w
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+userinclude		../SQLite
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_LIBC_SYSTEMINCLUDE
+
+SOURCEPATH	../SQLite
+SOURCE		alter.c
+SOURCE		analyze.c
+SOURCE		attach.c
+SOURCE		auth.c
+SOURCE		btree.c
+SOURCE		build.c
+SOURCE		callback.c
+SOURCE		complete.c
+SOURCE		date.c
+SOURCE		delete.c
+SOURCE		expr.c
+SOURCE		func.c
+SOURCE		hash.c
+SOURCE		insert.c
+SOURCE		legacy.c
+SOURCE		loadext.c
+SOURCE		main.c
+SOURCE		opcodes.c
+SOURCE		os.c
+SOURCE		SqliteSecure.cpp
+SOURCE		os_symbian_secure_mt.cpp
+SOURCE		pager.c
+SOURCE		parse.c
+SOURCE		pragma.c
+SOURCE		prepare.c
+SOURCE		printf.c
+SOURCE		random.c
+SOURCE		select.c
+SOURCE		table.c
+SOURCE		tokenize.c
+SOURCE		trigger.c
+SOURCE		update.c
+SOURCE		utf.c
+SOURCE		util.c
+SOURCE		vacuum.c
+SOURCE		vdbe.c
+SOURCE		vdbeapi.c
+SOURCE		vdbeaux.c
+SOURCE		vdbefifo.c
+SOURCE		vdbemem.c
+SOURCE		vtab.c
+SOURCE		where.c
+#ifdef WINSCW
+SOURCE		os_symbian_mutex_emul.cpp
+#else
+SOURCE		os_symbian_mutex_hrdw.cpp
+#endif
+
+LIBRARY		euser.lib 
+LIBRARY		efsrv.lib 
+LIBRARY		estor.lib
+LIBRARY		bafl.lib 
+LIBRARY		libc.lib
+LIBRARY		libpthread.lib
+
+#ifdef WINSCW
+LIBRARY		ewsd.lib
+#endif
+
+DEFFILE		sqlite3_secure.def

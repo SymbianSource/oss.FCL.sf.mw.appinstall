@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LayeredExecutionEnvironments SYSTEM "swtype.dtd">
 <LayeredExecutionEnvironments>
-	<softwareType name="native">
-		<localizedName language="15">testSwTypeLoc15</localizedName>
-		<localizedName language="31">testSwTypeLoc31</localizedName>
-		<mimeType>application/vnd.symbian.install</mimeType>
-		<sifPluginUid>102866EF</sifPluginUid>
-		<CustomAcess SecureId="10285BCB" AccessMode="1"/>
-		<CustomAcess SecureId="80285DE0" AccessMode="1"/>
-		<launcherExecutable>testExenativeinvalid1</launcherExecutable>
-	</softwareType>
+	<SoftwareType Name="native">
+		<LocalizedName Language="15">testSwTypeLoc15</LocalizedName>
+		<LocalizedName Language="31">testSwTypeLoc31</LocalizedName>
+		<MimeType>application/vnd.symbian.install</MimeType>
+		<SifPluginUid>102866EF</SifPluginUid>
+		<CustomAccess SecureId="10285BCB" AccessMode="1"/>
+		<CustomAccess SecureId="80285DE0" AccessMode="1"/>
+		<LauncherExecutable>testExenativeinvalid1</LauncherExecutable>
+	</SoftwareType>
 </LayeredExecutionEnvironments>

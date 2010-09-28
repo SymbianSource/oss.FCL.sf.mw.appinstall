@@ -517,27 +517,31 @@ TInt CSisLauncherSession::AsyncParseResourceFileSizeL(const RMessage2& aMessage)
         CleanupClosePushL(fs);
         file.AdoptFromClient(aMessage, 0, 1);   
         CleanupClosePushL(file);
-        //Read languages need to pass
-        TInt bufSize=0;
-        bufSize = aMessage.GetDesMaxLength(2);
-        HBufC8* bufToHoldLanguages = HBufC8::NewLC(bufSize);
-        TPtr8 bufPtrDscToHoldLanguages = bufToHoldLanguages->Des();
-        aMessage.ReadL(2, bufPtrDscToHoldLanguages, 0);
-      
-        RDesReadStream inStream(bufPtrDscToHoldLanguages);
-        CleanupClosePushL(inStream);
-        TInt32 languageCount = inStream.ReadInt32L();
-
-        RArray<TLanguage> appLanguages;
-        CleanupClosePushL(appLanguages);
-
-        for (TInt i=0; i<languageCount; i++)
-           appLanguages.AppendL((TLanguage)inStream.ReadInt32L());
-                           
+        //Read Boolean to see if request is from getComponentInfo      
+        TBool isForGetCompInfo(aMessage.Int2());        
         CAppRegInfoReader *appRegInfoReader = CAppRegInfoReader::NewL(fs,file);
-        CleanupStack::PushL(appRegInfoReader);
+        CleanupStack::PushL(appRegInfoReader);        
+        TInt err(0);
         
-        TRAPD(err,iCurrentAppRegData = appRegInfoReader->ReadL(appLanguages));
+        // If request is for get component info then don't pass any language else pass the device supported languages 
+        if(isForGetCompInfo)
+            {             
+            RArray<TLanguage> appLanguages;
+            CleanupClosePushL(appLanguages);
+            TRAP(err,iCurrentAppRegData = appRegInfoReader->ReadL(appLanguages));
+            CleanupStack::PopAndDestroy(&appLanguages); 
+            }
+        else
+            {
+            //check if we alredy have the device supported languages, if yes then we will use that else Get and Set the supported langs in the server
+            const RArray<TLanguage>& appLanguages = Server().DeviceSupportedLanguages();
+            if(0 == appLanguages.Count())
+               {
+               Server().ResetInstalledLanguagesL();
+               }
+            TRAP(err,iCurrentAppRegData = appRegInfoReader->ReadL(appLanguages));            
+            }
+                    
         if (KErrNone != err)
             {
             iInAsyncParseResourceFile=EFalse;
@@ -549,8 +553,8 @@ TInt CSisLauncherSession::AsyncParseResourceFileSizeL(const RMessage2& aMessage)
         objectSize= GetObjectSizeL(iCurrentAppRegData);
         if (objectSize > 0)
             {
-            //Everything went fine so return the buffer size.            
-            CleanupStack::PopAndDestroy(6,&fs);  
+            //Everything went fine so return the buffer size.     
+            CleanupStack::PopAndDestroy(3, &fs);    //appRegInfoReader, file
             return objectSize;          
             }
         else

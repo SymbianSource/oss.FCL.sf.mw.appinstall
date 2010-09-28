@@ -58,4 +58,15 @@ EXPORTS
 	_ZN4Usif22CSifOperationStartData5NewLCERK7TDesC16S3_RK13RPointerArrayI7HBufC16ES8_iS3_S3_S3_NS_18TSifOperationPhaseE @ 57 NONAME
 	_ZNK4Usif22CSifOperationStartData14OperationPhaseEv @ 58 NONAME
 	_ZNK4Usif25CSifOperationProgressData15CurrentProgressEv @ 59 NONAME
+	_ZN4Usif16CSifNotifierBase3KeyEv @ 60 NONAME
+	_ZN4Usif16CSifNotifierBaseD0Ev @ 61 NONAME
+	_ZN4Usif16CSifNotifierBaseD1Ev @ 62 NONAME
+	_ZN4Usif16CSifNotifierBaseD2Ev @ 63 NONAME
+	_ZN4Usif16CSifOperationKey5NewLCEv @ 64 NONAME
+	_ZN4Usif22CSifOperationsNotifierD0Ev @ 65 NONAME
+	_ZN4Usif22CSifOperationsNotifierD1Ev @ 66 NONAME
+	_ZN4Usif22CSifOperationsNotifierD2Ev @ 67 NONAME
+	_ZN4Usif24CPublishSifOperationInfoD0Ev @ 68 NONAME
+	_ZN4Usif24CPublishSifOperationInfoD1Ev @ 69 NONAME
+	_ZN4Usif24CPublishSifOperationInfoD2Ev @ 70 NONAME
 

@@ -49,7 +49,7 @@ void CMakeSIS::ShowBanner()
 	{
 	std::wcout << std::endl << L"MAKESIS  " << L" Version  5.3.0.0" << std::endl;
 	std::wcout << L"A utility for creating Software Installation (SIS) files" << std::endl;
-	std::wcout << L"Copyright (c) Symbian Software Ltd. 2000-2008 All rights reserved. " << std::endl;
+	std::wcout << L"Copyright (c) 2000-2008 Nokia Corporation and/or its subsidiary(-ies). All rights reserved. " << std::endl;
 #ifdef _DEBUG
 	std::wcout << std::endl << L"Development Version" << std::endl;
 #endif
@@ -424,7 +424,7 @@ void CMakeSIS::ShowSyntax()
 	std::wcout << L"                 Define file header, including name, uid and version" << std::endl;
 	std::wcout << L"%{\"Vendor-EN\", ... \"Vendor-FR\"}" << std::endl;
 	std::wcout << L"                 Localised vendor names" << std::endl;
-	std::wcout << L":\"Symbian Software Ltd\"" << std::endl;
+	std::wcout << L":\"Nokia Software Ltd\"" << std::endl;
 	std::wcout << L"                 The non-localised vendor name" << std::endl;
 	std::wcout << L"=\"logo.jpg\",\"image/jpeg\",\"target.jpg\"" << std::endl;
 	std::wcout << L"                 Define the logo using file, mimetype, and optional target" << std::endl;

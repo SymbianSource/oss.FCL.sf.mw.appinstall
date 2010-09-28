@@ -69,11 +69,7 @@ EXPORT_C TInt RSisLauncherSession::Connect()
 //
 // Connect to the server, attempting to start it if necessary
 //
-    {
-	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-    iBuffForLanguages = NULL;
-	#endif
-    
+    {    
     TInt retry=2;
     for (;;)
         {
@@ -96,13 +92,7 @@ EXPORT_C TInt RSisLauncherSession::Connect()
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 EXPORT_C void RSisLauncherSession::Close()
     {	
-    if (iBuffForLanguages)
-        {
-        delete iBuffForLanguages;
-        iBuffForLanguages = NULL;
-        }
-	    
-    RSessionBase::Close();
+	RSessionBase::Close();
     }
 #endif
 EXPORT_C void RSisLauncherSession::RunExecutableL(const TDesC& aFileName, TBool aWait)
@@ -367,34 +357,11 @@ void RSisLauncherSession::RegisterSifLauncherMimeTypesImplL(const RPointerArray<
     CleanupStack::PopAndDestroy(buf);
     }
     
-EXPORT_C void  RSisLauncherSession::AsyncParseResourceFileSizeL(const RFile& aRegistrationFile, const RArray<TLanguage>& aAppLanguages, TRequestStatus& aStatus)
+EXPORT_C void  RSisLauncherSession::AsyncParseResourceFileSizeL(const RFile& aRegistrationFile, TRequestStatus& aStatus, TBool aIsForGetCompInfo)
     {
-    TInt langCount = aAppLanguages.Count();
-    const TInt maxBufSize= sizeof(TInt) + langCount*sizeof(TLanguage);   // Size(Number of entries) + (Number of entries)*(Size of Language Id)
-   
-    // Allocate buffer for the array
-    if (iBuffForLanguages)
-        {
-        delete iBuffForLanguages;
-        iBuffForLanguages = NULL;
-        }
-    iBuffForLanguages = HBufC8::NewMaxL(maxBufSize);
-    TPtr8 ptrBufForLanguages = iBuffForLanguages->Des();
-
-    RDesWriteStream ins(ptrBufForLanguages);
-    CleanupClosePushL(ins);
-    ins.WriteInt32L(langCount);
-    for (TInt i = 0; i < langCount; ++i)
-        {
-        ins.WriteInt32L((TInt)(aAppLanguages[i]));
-        }
-       
-    ins.CommitL();
-    CleanupStack::PopAndDestroy(&ins);
-    
     TIpcArgs args;
     aRegistrationFile.TransferToServer(args, 0, 1);
-    args.Set(2,&ptrBufForLanguages);
+    args.Set(2, aIsForGetCompInfo);
     SendReceive(EAsyncParseResourceFileSize, args, aStatus);    
     }
     
@@ -413,19 +380,14 @@ EXPORT_C Usif::CApplicationRegistrationData*  RSisLauncherSession::AsyncParseRes
     CleanupStack::PopAndDestroy(&readStream); 
     CleanupStack::Pop(applicationData);
     CleanupStack::PopAndDestroy(appRegData);
-	if (iBuffForLanguages)
-		{
-		delete iBuffForLanguages;
-		iBuffForLanguages = NULL;
-		}
 	return applicationData;
     }
 
-EXPORT_C Usif::CApplicationRegistrationData* RSisLauncherSession::SyncParseResourceFileL(const RFile& aRegistrationFile, const RArray<TLanguage>& aAppLanguages)
+EXPORT_C Usif::CApplicationRegistrationData* RSisLauncherSession::SyncParseResourceFileL(const RFile& aRegistrationFile, TBool aIsForGetCompInfo)
     {
 	// Get the size of data
     TRequestStatus status;
-    AsyncParseResourceFileSizeL (aRegistrationFile , aAppLanguages , status );
+    AsyncParseResourceFileSizeL (aRegistrationFile, status, aIsForGetCompInfo);
     User::WaitForRequest(status);
     TInt size = status.Int(); 
     if (size < KErrNone)
@@ -525,5 +487,4 @@ EXPORT_C void TAppUpdateInfo::ExternalizeL(RWriteStream& aWriteStream) const
     aWriteStream.WriteUint32L(iAppUid.iUid);
     aWriteStream.WriteInt32L(iAction);
     }
-
 #endif

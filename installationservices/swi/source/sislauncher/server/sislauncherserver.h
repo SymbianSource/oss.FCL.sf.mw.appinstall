@@ -94,13 +94,19 @@ public:
 	void ShutdownL(TUid aUid, TInt aTimeout); 
 	void NotifyNewAppsL(const RPointerArray<TDesC>& aFiles);
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	void NotifyNewAppsL(const RPointerArray<Usif::CApplicationRegistrationData>& aApplicationRegistrationData);
+	void NotifyNewAppsL(const RPointerArray<Usif::CApplicationRegistrationData>& aApplicationRegistrationData);	
 	#endif
 #endif		
 	void HandleShutdownL(TThreadId aThread, TBool aKillOnTimeout = EFalse);
 	void ForceShutdownL(TUid aUid);
 	void RunExecutableL(const TDesC& aFileName, TBool aWait);
-		
+	
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
+	const RArray<TLanguage>& DeviceSupportedLanguages() const;
+	// Get and Set the device supported languages  
+	void ResetInstalledLanguagesL();
+#endif
+	
 private:
 	CSisLauncherServer();
 	void ConstructL();
@@ -109,12 +115,13 @@ private:
 	void ShortServerShutdown();
 	void CancelShutdown();
     #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-	virtual TCustomResult CustomSecurityCheckL(const RMessage2& aMsg, TInt& aAction, TSecurityInfo& aMissing);
+	virtual TCustomResult CustomSecurityCheckL(const RMessage2& aMsg, TInt& aAction, TSecurityInfo& aMissing);	
     #endif	
 	// Server Policies
 	// separate the policies into handled and not handled
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	static const TUint iRangeCount=6;
+	RArray<TLanguage> iDeviceSupportedLanguages;
 #else
 	static const TUint iRangeCount=2;
 #endif

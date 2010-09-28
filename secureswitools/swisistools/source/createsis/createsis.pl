@@ -584,7 +584,7 @@ sub Usage () {
   print <<ENDUSAGESTRING;
 
 createsis, version 1.0
-Copyright (c) 2005 Symbian Software Ltd. All rights reserved.
+Copyright (c) 2005 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 Mandatory SIS file signing for SYMBIAN OS v9.1 onwards. It supports
 creating new SIS files from package files, signs existing package files and
