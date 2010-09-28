@@ -27,8 +27,9 @@
 
 namespace Usif {
 
-const TUint KMaxOpaqueParamsDescriptorSize = 128;
-const TUint KMaxOpaqueParamsExternalizedSize = 512;
+const TUint KMaxOpaqueParamNameDescriptorSize = 128;
+const TUint KMaxOpaqueParamsExternalizedSize = 4096;
+const TUint KMaxOpaqueParamValueDescriptorSize = 1024;
 
 class MOpaqueParam
     {

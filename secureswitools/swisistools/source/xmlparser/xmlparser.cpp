@@ -105,6 +105,44 @@ inline std::wstring XMLChToWString(const XercesString& aXercesString)
 #endif // _WIN32
 
 
+std::string ConvertOpaqueData(const std::string& opaqueData)
+	{
+	int iLength = 0;
+
+	//Cardanility check. Values in the range 0-127 are stored in a single byte, 
+	//128-16383 in two bytes and other values in 4 bytes.
+	if(0x7f > opaqueData.length())
+		iLength = 1;
+	else
+		iLength = 2;
+
+	int iLen = (opaqueData.length()+iLength)*2;
+	std::string sStr(iLen, '\0'); // Make room for characters
+
+	if(1==iLength)
+		{
+		sStr[0]=opaqueData.length();
+		sStr[1]=0xab;
+		}
+	else
+		{
+		sStr[0]=0x1;
+		sStr[1]= ((opaqueData.length() & 0x3F00) >> 8);
+		sStr[2]= (opaqueData.length() & 0xFF);
+		sStr[3]=0xab;
+		}
+
+	char* temp = opaqueData.c_str();
+
+	for(int i =iLength*2; i<iLen; i++)
+		{
+		sStr[i++] = *temp++;
+		}
+	sStr[i] = '\0';
+
+	return sStr;
+	}
+
 DllExport CScrXmlParser::CScrXmlParser()
 	{}
 
@@ -303,7 +341,7 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagLocalizableSwTypeName( &XMLString::release, XMLString::transcode("LocalizableSoftwareTypeName") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSifPluginUid( &XMLString::release, XMLString::transcode("SifPluginUid") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagLauncherExecutable( &XMLString::release, XMLString::transcode("LauncherExecutable") );
-	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagCustomAcess( &XMLString::release, XMLString::transcode("CustomAcess") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagCustomAccess( &XMLString::release, XMLString::transcode("CustomAccess") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagMIMEDetails( &XMLString::release, XMLString::transcode("MIMEDetails") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagMIMEType( &XMLString::release, XMLString::transcode("MIMEType") );
 	
@@ -336,18 +374,22 @@ XmlDetails::TScrEnvironmentDetails CScrXmlParser::GetEnvironmentData( const DOME
     if(0 != launcherExecutable->getLength())
         {
 		textContent = launcherExecutable->item(0)->getTextContent();
-		fn_auto_ptr<releaseXmlChPtr, XMLCh> launcherExecutableText( &XMLString::release,textContent );
+		#ifdef _WIN32
+		fn_auto_ptr<releaseXmlChPtr, XMLCh> launcherExecutableText( &XMLString::release,textContent);
 		const XMLCh* launcherExecutableValue = launcherExecutableText.get();
 		scrEnvDetails.iLauncherExecutable = XMLChToWString(launcherExecutableValue);
+		#else
+		scrEnvDetails.iLauncherExecutable = XMLChToWString(textContent);
+		#endif // _WIN32
 		}
-    DOMNodeList* customAcessList = aEnvironment->getElementsByTagName(tagCustomAcess.get());
-	const  XMLSize_t customAcessDataCount = customAcessList->getLength();
-	for( XMLSize_t count=0 ; count<customAcessDataCount ; ++count )
+    DOMNodeList* customAccessList = aEnvironment->getElementsByTagName(tagCustomAccess.get());
+	const  XMLSize_t customAccessDataCount = customAccessList->getLength();
+	for( XMLSize_t count=0 ; count<customAccessDataCount ; ++count )
 		{
-		DOMNode* customAcessRoot = customAcessList->item(count);
-		DOMElement* customAcessNode = static_cast< xercesc::DOMElement* >( customAcessRoot );
-		XmlDetails::TScrEnvironmentDetails::TCustomAcessList customAcessData = GetCustomAcessList(customAcessNode);
-		scrEnvDetails.iCustomAcessList.push_back(customAcessData);
+		DOMNode* customAccessRoot = customAccessList->item(count);
+		DOMElement* customAccessNode = static_cast< xercesc::DOMElement* >( customAccessRoot );
+		XmlDetails::TScrEnvironmentDetails::TCustomAccessList customAccessData = GetCustomAccessList(customAccessNode);
+		scrEnvDetails.iCustomAccessList.push_back(customAccessData);
 		}
 	
 	DOMNodeList* mimeDetails = aEnvironment->getElementsByTagName(tagMIMEDetails.get());
@@ -824,10 +866,10 @@ XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName
 	return localizedSwTypeName;
 	}
 
-XmlDetails::TScrEnvironmentDetails::TCustomAcessList 
-	CScrXmlParser::GetCustomAcessList(const DOMElement* aDOMElement)
+XmlDetails::TScrEnvironmentDetails::TCustomAccessList 
+	CScrXmlParser::GetCustomAccessList(const DOMElement* aDOMElement)
 	{
-	LOGENTER("CScrXmlParser::GetCustomAcessList()");
+	LOGENTER("CScrXmlParser::GetCustomAccessList()");
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagSecureId( &XMLString::release, XMLString::transcode("SecureId") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagAccessMode( &XMLString::release, XMLString::transcode("AccessMode") );
 	
@@ -835,17 +877,17 @@ XmlDetails::TScrEnvironmentDetails::TCustomAcessList
 	DOMNode* secureId = attributes->getNamedItem(tagSecureId.get());
 	DOMNode* accessMode = attributes->getNamedItem(tagAccessMode.get());
 	
-	XmlDetails::TScrEnvironmentDetails::TCustomAcessList customAcessList;
+	XmlDetails::TScrEnvironmentDetails::TCustomAccessList customAccessList;
 
 	fn_auto_ptr<releaseChPtr,char> textSecureId(&XMLString::release, XMLString::transcode(secureId->getTextContent()));
 	int secureIdVal=0;	
 	sscanf(textSecureId.get(),"%x",&secureIdVal);
-	customAcessList.iSecureId = secureIdVal;
+	customAccessList.iSecureId = secureIdVal;
 	
 	const XMLCh* textAccessMode = accessMode->getTextContent();
-	customAcessList.iAccessMode = XercesStringToInteger(textAccessMode);
-	LOGEXIT("CScrXmlParser::GetCustomAcessList()");
-	return customAcessList;
+	customAccessList.iAccessMode = XercesStringToInteger(textAccessMode);
+	LOGEXIT("CScrXmlParser::GetCustomAccessList()");
+	return customAccessList;
 	}
 
 XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo CScrXmlParser::GetApplicationRegistrationInfo(const DOMElement* aDOMElement)
@@ -899,16 +941,14 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo CScrXmlParser::
 		appProperty.iServiceUid = 0;
 
 		if(opaqueDataType.iIsBinary == 1)
-		{
-			std::string str = wstring2string(opaqueDataType.iOpaqueData);
-			std::string decodedString = Util::Base64Decode(str);
-			int len = decodedString.length();
-			appProperty.iStrValue.assign(decodedString.c_str(),decodedString.c_str()+len);
-		}
+			{
+			std::cout.flush();
+			appProperty.iStrValue = Util::Base64Decode(opaqueDataType.iOpaqueData);
+			}
 		else
-		{
-			appProperty.iStrValue = opaqueDataType.iOpaqueData;
-		}
+			{
+			appProperty.iStrValue = ConvertOpaqueData(opaqueDataType.iOpaqueData);
+			}
 		
 		appRegistrationInfo.iApplicationProperty.push_back(appProperty);
 		}
@@ -1079,7 +1119,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	if( Data->getLength() != 0)
 		{
 		const XMLCh* typ = Data->item(0)->getTextContent();
-		opaqueDataType.iOpaqueData = XMLChToWString(typ);
+		opaqueDataType.iOpaqueData = XMLString::transcode(typ);
 		}
 	
 	if(isBinary->getLength() != 0)
@@ -1099,9 +1139,11 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	// tags in OpaqueDataType 
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagServiceData( &XMLString::release, XMLString::transcode("ServiceData") );
 	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagServiceOpaqueLocale( &XMLString::release, XMLString::transcode("ServiceOpaqueLocale") );
+	fn_auto_ptr<releaseXmlChPtr, XMLCh> tagServiceDataIsBinary( &XMLString::release, XMLString::transcode("ServiceDataIsBinary") );
 
 	DOMNodeList* ServiceData = aDOMElement->getElementsByTagName(tagServiceData.get());
 	DOMNodeList* ServiceOpaqueLocale = aDOMElement->getElementsByTagName(tagServiceOpaqueLocale.get());
+	DOMNodeList* ServiceDataIsBinary = aDOMElement->getElementsByTagName(tagServiceDataIsBinary.get());
 	
 	XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataType opaqueDataType;
 
@@ -1114,8 +1156,15 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TOpaqueDataTyp
 	if( ServiceData->getLength() != 0)
 		{
 		const XMLCh* typ = ServiceData->item(0)->getTextContent();
-		opaqueDataType.iOpaqueData = XMLChToWString(typ);
+		opaqueDataType.iOpaqueData = XMLString::transcode(typ);
 		}
+
+	if(ServiceDataIsBinary->getLength() != 0)
+		{
+		const XMLCh* textIsBinary = ServiceDataIsBinary->item(0)->getTextContent();
+		opaqueDataType.iIsBinary = XercesStringToInteger(textIsBinary);		
+		}
+
 	LOGEXIT("CScrXmlParser::GetServiceOpaqueDataType()");
 	return opaqueDataType;
 	}
@@ -1159,15 +1208,14 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppServiceInf
 		appProperty.iIsStr8Bit = true;
 		appProperty.iServiceUid = appServiceInfo.iUid;
 		if(opaqueDataType.iIsBinary == 1)
-		{
-			std::string str = wstring2string(opaqueDataType.iOpaqueData);
-			std::string decodedString = Util::Base64Decode(str);
-			appProperty.iStrValue = string2wstring(decodedString);
-		}
+			{
+			std::cout.flush();
+			appProperty.iStrValue = Util::Base64Decode(opaqueDataType.iOpaqueData);
+			}
 		else
-		{
-			appProperty.iStrValue = opaqueDataType.iOpaqueData;
-		}
+			{
+			appProperty.iStrValue = ConvertOpaqueData(opaqueDataType.iOpaqueData);
+			}
 		aAppRegistrationInfo.iApplicationProperty.push_back(appProperty);
 		}
 
@@ -1404,7 +1452,7 @@ XmlDetails::TScrPreProvisionDetail::TApplicationRegistrationInfo::TAppProperty
 	else if( strvalue->getLength() != 0)
 		{
 		const XMLCh* strval = strvalue->item(0)->getTextContent();
-		appProperty.iStrValue = XMLChToWString(strval);
+		appProperty.iStrValue = XMLString::transcode(strval);
 		}
 
 	appProperty.iIsStr8Bit = false;

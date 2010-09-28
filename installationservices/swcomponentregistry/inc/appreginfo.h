@@ -19,7 +19,7 @@
 /**
  @file
  @publishedAll
- @prototype 
+ @released 
 */
 
 #ifndef __APPREGINFO_H__

@@ -19,7 +19,7 @@
 /**
  @file
  @publishedAll
- @prototype 
+ @released 
 */
 
 #ifndef APPREGENTRIES_H
@@ -169,7 +169,6 @@ namespace Usif
             Creates a AppRegistrationInfo filter object from a stream.
             @param aStream The stream to read the AppRegistrationInfo filter object from
             @return A pointer to the newly allocated AppRegistrationInfo filter object, if creation is successful.
-            @internalComponent
          */
         IMPORT_C static CAppInfoFilter* NewL(RReadStream& aStream);
         
@@ -249,7 +248,6 @@ namespace Usif
     	Creates a CAppServiceInfoFilter filter object from a stream.
     	@param aStream The stream to read the CAppServiceInfoFilter filter object from
     	@return A pointer to the newly allocated CAppServiceInfoFilter filter object, if creation is successful.
-    	@internalComponent
     	*/
     	IMPORT_C static CAppServiceInfoFilter* NewL(RReadStream& aStream);
     	    	  

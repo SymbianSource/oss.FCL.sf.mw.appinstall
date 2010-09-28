@@ -22,17 +22,17 @@
 namespace Swi
 {
 
-/*static*/ CAppRegExtractor* CAppRegExtractor::NewLC(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData )
+/*static*/ CAppRegExtractor* CAppRegExtractor::NewLC(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData )
     {
-    CAppRegExtractor* self=new(ELeave) CAppRegExtractor(aFs, deviceSupportedLanguages, aApparcRegFileData);
+    CAppRegExtractor* self=new(ELeave) CAppRegExtractor(aFs, aApparcRegFileData);
     CleanupStack::PushL(self);
     self->ConstructL();
     return self;
     }
     
-/*static*/ CAppRegExtractor* CAppRegExtractor::NewL(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData )
+/*static*/ CAppRegExtractor* CAppRegExtractor::NewL(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData )
     {
-    CAppRegExtractor* self=NewLC(aFs, deviceSupportedLanguages, aApparcRegFileData);
+    CAppRegExtractor* self=NewLC(aFs, aApparcRegFileData);
     CleanupStack::Pop(self);
     return self;
     }
@@ -48,13 +48,10 @@ CAppRegExtractor::~CAppRegExtractor()
         }
     
     iLauncher.Close();
-    
-    if (iDeviceSupportedLanguages.Count())
-        iDeviceSupportedLanguages.Close();
     }
 
-CAppRegExtractor::CAppRegExtractor(RFs& aFs, RArray<TLanguage> deviceSupportedLanguages, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData)
-    : CActive(EPriorityStandard), iFs(aFs), iDeviceSupportedLanguages(deviceSupportedLanguages), iApparcRegFileData(aApparcRegFileData)
+CAppRegExtractor::CAppRegExtractor(RFs& aFs, RPointerArray<Usif::CApplicationRegistrationData>& aApparcRegFileData)
+    : CActive(EPriorityStandard), iFs(aFs), iApparcRegFileData(aApparcRegFileData)
     {
     CActiveScheduler::Add(this);
     }
@@ -78,9 +75,8 @@ void CAppRegExtractor::ExtractAppRegInfoSizeL(const TDesC& aFileName, TRequestSt
         delete iCurrentFile;
     iCurrentFile=new(ELeave) RFile;    
     User::LeaveIfError(iCurrentFile->Open(iFs, aFileName, EFileRead));
-    *iClientStatus = KRequestPending;
-    
-    iLauncher.AsyncParseResourceFileSizeL(*iCurrentFile, iDeviceSupportedLanguages, iStatus);
+    *iClientStatus = KRequestPending;    
+    iLauncher.AsyncParseResourceFileSizeL(*iCurrentFile, iStatus);
     SetActive();
     }
 

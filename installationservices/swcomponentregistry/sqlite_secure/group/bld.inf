@@ -1,0 +1,77 @@
+/*
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+* SQLite Secure API
+* ROM build command for the unit tests:
+* buildrom -D_SERIAL_DOWNLOAD -DRVCT -D_EABI=ARMV5 -D_NAND2 -fm=/epoc32/rom/include/featuredatabase.xml h4hrp.oby textshell.oby
+* syslibs_utils.oby sqlite3_secure.iby sqlite3_securetests.iby openenv.iby bluetooth.iby ups.iby -orombld.img
+*
+*/
+
+/**
+ @file
+*/
+
+PRJ_PLATFORMS
+
+PRJ_EXPORTS
+
+../group/sqlite3_secure.iby		/epoc32/rom/include/sqlite3_secure.iby
+
+PRJ_MMPFILES
+
+#if !defined GCCXML && !defined TOOLS && !defined TOOLS2
+../group/sqlite3_secure.mmp
+#endif
+
+PRJ_TESTEXPORTS
+
+../group/sqlite3_securetests.iby	/epoc32/rom/include/sqlite3_securetests.iby
+../group/sqlite3_securetests.bat	/epoc32/data/z/system/test/sqlite3_securetests.bat
+#ifdef SYSLIBS_TEST
+../group/config.ini					/epoc32/data/z/system/test/config.ini
+#endif
+
+PRJ_TESTMMPFILES
+
+#if !defined GCCXML && !defined TOOLS && !defined TOOLS2
+../group/tsqlitesecure_api.mmp
+../group/tsqlitesecure_perf.mmp
+../group/tsqlitesecure_fhperf.mmp
+../group/tsqlitesecure_fhapi.mmp
+../group/tsqlitesecure_defect.mmp
+../group/tsqlitesecure_wsd.mmp
+../group/tsqlitesecure_oom.mmp
+../group/tsqlitesecure_fserr.mmp
+	//tsqlitesecure_wsd2 should not be used as a standalone test application. 
+	//tsqlitesecure_wsd2 is used by tsqlitesecure_wsd test application. 
+../group/tsqlitesecure_wsd2.mmp			support
+
+../group/tsqlitesecure_main.mmp
+	//the next tests should not be used as standalone test applications.
+	//they will be run by the tsqlitesecure_main test application. 
+../group/tsqlitesecure_generalops.mmp	support
+../group/tsqlitesecure_generalops16.mmp	support
+../group/tsqlitesecure_rollback.mmp support
+#endif
+
+#ifdef SYSLIBS_TEST
+
+#if !defined GCCXML && !defined TOOLS && !defined TOOLS2
+//tcl_secure.lib is a static test library used by the TCL tests
+../TEST/TCL/group/tcl84.mmp support
+../group/tclsqlite3secure.mmp manual
+#endif
+
+#endif

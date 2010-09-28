@@ -85,7 +85,7 @@ public:
         @param  aApplicationNames	The list of applications associated with the software component, an empty array in case of no applications
         @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
         @param  aComponentSize		The total size of the component in bytes
-        @param  aIconPath			The path where all application and component icons are found
+        @param  aIconPath			The path where all application and component icons are found. It must have a trailing backslash.
         @param  aComponentIcon		The name of the component icon(without path)
         @param  aSoftwareType		The software type name of the software component
                                                    
@@ -103,7 +103,7 @@ public:
         @param  aApplicationNames   The list of applications associated with the software component, an empty array in case of no applications
         @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
         @param  aComponentSize      The total size of the component in bytes
-        @param  aIconPath           The path where all application and component icons are found
+        @param  aIconPath           The path where all application and component icons are found. It must have a trailing backslash.
         @param  aComponentIcon      The name of the component icon(without path)
         @param  aSoftwareType       The software type name of the software component
         @param  aOperationPhase     The type of SIF operation
@@ -124,7 +124,7 @@ public:
         @param  aApplicationNames   The list of applications associated with the software component, an empty array in case of no applications
         @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
         @param  aComponentSize      The total size of the component in bytes
-        @param  aIconPath           The path where all application and component icons are found
+        @param  aIconPath           The path where all application and component icons are found. It must have a trailing backslash.
         @param  aComponentIcon      The name of the component icon(without path)
         @param  aSoftwareType       The software type name of the software component
                                                            
@@ -144,7 +144,7 @@ public:
         @param  aApplicationNames   The list of applications associated with the software component, an empty array in case of no applications
         @param  aApplicationIcons   The list of corresponding application icon names(without path) for every application, an empty array in case of no applications                 
         @param  aComponentSize      The total size of the component in bytes
-        @param  aIconPath           The path where all application and component icons are found
+        @param  aIconPath           The path where all application and component icons are found. It must have a trailing backslash.
         @param  aComponentIcon      The name of the component icon(without path)
         @param  aSoftwareType       The software type name of the software component
         @param  aOperationPhase     The type of SIF operation
@@ -538,7 +538,7 @@ public:
     /**
        Subscribe for progress and end notifications or only end notification.
        
-       @param aKey The StartEnd key assoicated with the operation.
+       @param aKey The StartEnd key associated with the operation.
        @param aSubscribeForProgressNotifications Boolean to specify optional subscription to progreess information.
      */
     IMPORT_C void SubscribeL(TUint aKey, TBool aSubscribeForProgressNotifications = ETrue);
@@ -546,7 +546,7 @@ public:
     /**
        Cancel Subscription for a specific key.
        
-       @param aKey The StartEnd key assoicated with the operation.
+       @param aKey The StartEnd key associated with the operation.
      */    
     IMPORT_C void CancelSubscribeL(TUint aKey);
     

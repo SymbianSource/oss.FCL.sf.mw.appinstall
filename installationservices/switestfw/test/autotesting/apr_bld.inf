@@ -30,7 +30,7 @@
 #ifndef TOOLS2
 // Disable everything except sistools and security_tools for TOOLS2 target
 
-#include "mw/appinstall/installationservices/swi/group/export/group/bld.inf"
+#include "mw/appinstall/installationservices/swi/group_ncp/bld.inf"
 #include "mw/appinstall/installationservices/switestfw/group/bld.inf"
 
 #include "mw/appinstall/installationservices/swiconfig/group/bld.inf"

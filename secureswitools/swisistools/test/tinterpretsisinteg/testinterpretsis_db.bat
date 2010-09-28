@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -814,6 +814,8 @@ if exist %exist_file% GOTO FAIL_FOUND
 GOTO PASS_CLEAN
 
 :SWI002-001
+
+if exist \epoc32\winscw\c\sys\install\sisregistry\swiregfirstinit.log del \epoc32\winscw\c\sys\install\sisregistry\swiregfirstinit.log /Q > NUL
 if not exist .\romdrive\sys\bin\ mkdir .\romdrive\sys\bin\
 if not exist .\romdrive\private\10273582\ mkdir .\romdrive\private\10273582\
 if not exist .\romdrive\cr1027test\ mkdir .\romdrive\cr1027test\
@@ -841,12 +843,17 @@ call copy \epoc32\release\winscw\udeb\eclipsetest1.dll .\romdrive\sys\bin\saromu
 call copy \epoc32\release\winscw\udeb\tsaromupgradeexe.exe .\romdrive\sys\bin\saromupgrade_execute.exe > NUL
 call copy \epoc32\winscw\c\tswi\teclipsing\data\file2.txt .\romdrive\private\10273582\cr1027_config1.txt > NUL
 call copy \epoc32\winscw\c\tswi\teclipsing\data\file1.txt .\romdrive\cr1027test\cr1027_file1.txt > NUL
+if not exist .\romdrive\sys\install\scr\provisioned mkdir .\romdrive\sys\install\scr\provisioned > NUL
+if exist  .\romdrive\sys\install\scr\provisioned\scr.db  del .\romdrive\sys\install\scr\provisioned\scr.db  > NUL
+copy \epoc32\release\winscw\udeb\z\sys\install\scr\provisioned\scr.db .\romdrive\sys\install\scr\provisioned\scr.db /Y > NUL
+
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\CR1027ROMUpgradeSA.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness_db.txt > NUL
 if not %errorlevel%==0 GOTO LAST
 call xcopy .\romdrive \epoc32\release\winscw\udeb\z /S /Y > NUL
 call xcopy .\cdrive \epoc32\winscw\c /S /Y > NUL
 if exist \epoc32\winscw\c\sys\install\scr\scr.db del \epoc32\winscw\c\sys\install\scr\scr.db /Q > NUL
 call xcopy .\romdrive\sys\install\scr\provisioned\scr.db \epoc32\winscw\c\sys\install\scr\ /S /Y > NUL
+call copy \epoc32\winscw\c\tswi\teclipsing\data\file1.txt \epoc32\winscw\c\sys\install\sisregistry\swiregfirstinit.log > NUL
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness_db.txt
 GOTO END
 
@@ -2766,6 +2773,10 @@ set exist_file=.\cdrive\data\First_fourth.txt
 if not exist %exist_file% GOTO FAIL_NOT_FOUND
 GOTO PASS_CLEAN
 
+:test_long_opaquedata
+call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tsis/data/interpretsis_testcase_11.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness_db.txt
+if not %errorlevel%==0 GOTO LAST
+GOTO PASS_CLEAN
 
 REM Tests for native registry > NUL
 

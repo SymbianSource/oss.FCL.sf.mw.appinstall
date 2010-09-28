@@ -64,7 +64,8 @@ CSisLauncherServer::~CSisLauncherServer()
         }
 #endif
     delete iShutdown;
-    delete iQueueProcessor;
+    delete iQueueProcessor;    
+    iDeviceSupportedLanguages.Close();
     CSecurityPolicy::ReleaseResource();
     }
 
@@ -343,6 +344,70 @@ CPolicyServer::TCustomResult CSisLauncherServer::CustomSecurityCheckL(const RMes
         return CPolicyServer::EFail;
         }
     }
+
+const RArray<TLanguage>& CSisLauncherServer::DeviceSupportedLanguages() const
+    {
+    return iDeviceSupportedLanguages;
+    }
+
+void CSisLauncherServer::ResetInstalledLanguagesL()
+    {
+    _LIT(KLanguagesIni, "z:\\resource\\bootdata\\languages.txt");
+    const TInt KReadBufSize = 10;
+    
+    iDeviceSupportedLanguages.Reset();
+    
+    RFile file;
+    RFs fs;
+    User::LeaveIfError(fs.Connect());
+    CleanupClosePushL(fs);
+    TInt err = file.Open(fs, KLanguagesIni, EFileRead|EFileShareReadersOnly);
+    if (KErrNone == err)
+        {
+        CleanupClosePushL(file);
+        
+        TFileText reader;
+        reader.Set(file);
+        err = reader.Seek(ESeekStart);
+        if (KErrNone == err)
+            {
+            TBuf<KReadBufSize> readBuf;
+            while(KErrNone == reader.Read(readBuf))
+                {
+                if (readBuf.Length() > 0)
+                    {
+                    TLex lex(readBuf);
+                    lex.SkipSpace();
+                    TInt language;
+                    err = lex.Val(language);
+                    if (KErrNone != err)
+                        {
+                        readBuf.Zero();
+                        continue; // Read the next line
+                        }
+                    iDeviceSupportedLanguages.AppendL((TLanguage)language);
+                    }
+                readBuf.Zero();
+                }
+            }
+        else
+            {
+            DEBUG_PRINTF3(_L("Reading %S failed with %d"), &KLanguagesIni, err);
+            }
+        
+        CleanupStack::PopAndDestroy(&file);
+        }
+    else
+        {
+        DEBUG_PRINTF3(_L("Opening %S failed with %d"), &KLanguagesIni, err);
+        }
+    CleanupStack::PopAndDestroy(&fs);
+    // If we are not able fetch the device languages, just parse for the current device language
+    if (0 == iDeviceSupportedLanguages.Count())
+        {
+        iDeviceSupportedLanguages.AppendL(User::Language());
+        }
+    }
 #endif
 
 #ifndef SWI_TEXTSHELL_ROM
@@ -582,7 +647,6 @@ void CSisLauncherServer::NotifyNewAppsL(const RPointerArray<Usif::CApplicationRe
     apaSession.ForceRegistration(aApplicationRegistrationData);
     CleanupStack::PopAndDestroy();
     }
-
 #endif
 #endif
 

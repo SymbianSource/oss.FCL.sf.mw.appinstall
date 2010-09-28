@@ -2,76 +2,76 @@
 <SystemDefinition schema="3.0.0" xmlns:qt="http://www.nokia.com/qt">
   <package id="appinstall" name="Application Installation" levels="tool framework generic api">
   <collection id="appinstall_plat" name="Application Installation Platform Interfaces" level="api">
-   <component id="iaupdate_api" name="IA Update API" class="api" filter="s60">
+   <component id="iaupdate_api" name="IA Update API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/iaupdate_api/iaupdate_api.metaxml"/>
     <unit bldFile="appinstall_plat/iaupdate_api/group"/>
    </component>
-   <component id="task_plugin_api" name="Task Plugin API" class="api" filter="s60">
+   <component id="task_plugin_api" name="Task Plugin API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/task_plugin_api/task_plugin_api.metaxml"/>
     <unit bldFile="appinstall_plat/task_plugin_api/group"/>
    </component>
-   <component id="sw_installer_common_ui_api" name="SW Installer Common UI API" class="api" filter="s60">
+   <component id="sw_installer_common_ui_api" name="SW Installer Common UI API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/sw_installer_common_ui_api/sw_installer_common_ui_api.metaxml"/>
     <unit bldFile="appinstall_plat/sw_installer_common_ui_api/group"/>
    </component>
-   <component id="sw_installer_launcher_api" name="SW Installer Launcher API" class="api" filter="s60">
+   <component id="sw_installer_launcher_api" name="SW Installer Launcher API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/sw_installer_launcher_api/sw_installer_launcher_api.metaxml"/>
     <unit bldFile="appinstall_plat/sw_installer_launcher_api/group"/>
    </component>
-   <component id="task_management_api" name="Task Management API" class="api" filter="s60">
+   <component id="task_management_api" name="Task Management API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/task_management_api/task_management_api.metaxml"/>
     <unit bldFile="appinstall_plat/task_management_api/group"/>
    </component>
-   <component id="sw_installer_ui_plugin_api" name="SW Installer UI Plugin API" class="api" filter="s60">
+   <component id="sw_installer_ui_plugin_api" name="SW Installer UI Plugin API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/sw_installer_ui_plugin_api/sw_installer_ui_plugin_api.metaxml"/>
     <unit bldFile="appinstall_plat/sw_installer_ui_plugin_api/group"/>
    </component>
-   <component id="sw_installer_cr_keys" name="SW Installer CR Keys" class="api" filter="s60">
+   <component id="sw_installer_cr_keys" name="SW Installer CR Keys" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/sw_installer_cr_keys/sw_installer_cr_keys.metaxml"/>
     <unit bldFile="appinstall_plat/sw_installer_cr_keys/group"/>
    </component>
-   <component id="sw_installer_ps_keys" name="SW Installer PS Keys" class="api" filter="s60">
+   <component id="sw_installer_ps_keys" name="SW Installer PS Keys" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_plat/sw_installer_ps_keys/sw_installer_ps_keys.metaxml"/>
     <unit bldFile="appinstall_plat/sw_installer_ps_keys/group"/>
    </component>
-   <component id="sifui_api" name="STIF UI API" class="api" filter="s60">
+   <component id="sifui_api" name="STIF UI API" class="api" filter="s60,build_as_app">
     <unit bldFile="appinstall_plat/sifui_api/group"/>
    </component>
   </collection>
   <collection id="appinstall_pub" name="Application Installation Public Interfaces" level="api">
-   <component id="startup_list_management_api" name="Startup List Management API" class="api" filter="s60">
+   <component id="startup_list_management_api" name="Startup List Management API" class="api" filter="s60,build_as_app">
     <meta rel="Api" href="appinstall_pub/startup_list_management_api/startup_list_management_api.metaxml"/>
     <unit bldFile="appinstall_pub/startup_list_management_api/group"/>
    </component>
   </collection>
     <collection id="ncdengine" name="Nokia Content Discover" level="framework">
-      <component id="ncdengine_build" filter="s60" name="NCD Engine" introduced="^1">
+      <component id="ncdengine_build" filter="s60,build_as_app" name="NCD Engine" introduced="^1">
         <unit bldFile="ncdengine/group"/>
       </component>
-      <component id="ncdengine_qt_build" filter="s60" name="NCD Qt Engine">
+      <component id="ncdengine_qt_build" filter="s60,build_as_app" name="NCD Qt Engine">
         <unit bldFile="ncdengine/engine"  qt:proFile="engine.pro"/>
       </component>
     </collection>
     <collection id="appinstaller" name="Application Installer" level="generic">
-      <component id="appinstui" filter="s60" name="Application Installer UI" introduced="^2">
+      <component id="appinstui" filter="s60,build_as_app" name="Application Installer UI" introduced="^2">
         <unit bldFile="appinstaller/appinstui/group"/>
       </component>
-      <component id="appinstui_qt" filter="s60" name="Application Installer Qt UI" introduced="^2">
+      <component id="appinstui_qt" filter="s60,build_as_app" name="Application Installer Qt UI" introduced="^2">
         <unit bldFile="appinstaller/appinstui" qt:proFile="appinstui.pro"/>
       </component>
     </collection>
     <collection id="iaupdateapi_stub" name="IA Update API Stub" level="api">
     	<!-- the collection is really a component. Move down a directory.-->
-      <component id="iaupdateapi_stub_build" name="IA Update API Stub Build" filter="s60" introduced="^2">
+      <component id="iaupdateapi_stub_build" name="IA Update API Stub Build" filter="s60,build_as_app" introduced="^2">
         <unit bldFile="iaupdateapi_stub/group"/>
       </component>
     </collection>
     <collection id="iaupdate" name="Independent Apps Update" level="api">
     	<!-- Should reorganise into actual components -->
-      <component id="iad" name="Independent App delivery" filter="s60" introduced="^4" purpose="development">
+      <component id="iad" name="Independent App delivery" filter="s60,build_as_app" introduced="^4" purpose="development">
         <unit bldFile="iaupdate" qt:proFile="iaupdate.pro"/>
       </component>
-      <component id="iaupdate_build" filter="s60" name="IA Update Build" introduced="^2">
+      <component id="iaupdate_build" filter="s60,build_as_app" name="IA Update Build" introduced="^2">
       	<meta rel="config">
       		<defined condition="FF_IAUPDATE"/>
       	</meta>  
@@ -79,10 +79,13 @@
       </component>
     </collection>
     <collection id="installationservices" name="Installation Services" level="generic">
-      <component id="swi" name="Secure Software Install" purpose="optional">
+      <component id="swi" name="Secure Software Install" purpose="optional" filter="s60,build_as_app">
         <unit bldFile="installationservices/swi/group" mrp="installationservices/swi/group/security_swi.mrp"/>
       </component>
-      <component id="swidevicetools" name="Secure Software Install Device Tools" introduced="8.1" purpose="development">
+      <component id="swi_ncp" name="Secure Software Install" purpose="optional">
+        <unit bldFile="installationservices/swi/group_ncp" mrp="installationservices/swi/group/security_swi.mrp"/>
+      </component>
+      <component id="swidevicetools" name="Secure Software Install Device Tools" introduced="8.1" purpose="development" filter="s60,build_as_app">
         <unit bldFile="installationservices/swidevicetools/group" mrp="installationservices/swidevicetools/group/security_switools_device.mrp"/>
       </component>
       <component id="swcomponentregistry" name="Software Component Registry" introduced="^4" purpose="mandatory">
@@ -94,13 +97,13 @@
       <component id="swtransactionservices" name="Software Transaction Services" introduced="^4" purpose="optional">
         <unit bldFile="installationservices/swtransactionservices/group" mrp="installationservices/swtransactionservices/group/security_softwaretransactionservices.mrp"/>
       </component>
-      <component id="refswinstallationplugin" name="Reference Software Installation Plugin" introduced="^4" purpose="development" class="plugin">
+      <component id="refswinstallationplugin" name="Reference Software Installation Plugin" introduced="^4" purpose="development" class="plugin" filter="s60,build_as_app">
         <unit bldFile="installationservices/refswinstallationplugin/group" mrp="installationservices/refswinstallationplugin/group/security_sifrefplugin.mrp"/>
       </component>
-      <component id="refsoftwareappmgr" name="Reference Software Application Manager" introduced="^4" purpose="development">
+      <component id="refsoftwareappmgr" name="Reference Software Application Manager" introduced="^4" purpose="development" filter="s60,build_as_app">
         <unit bldFile="installationservices/refsoftwareappmgr/group" mrp="installationservices/refsoftwareappmgr/group/security_referenceapplicationmanager.mrp"/>
       </component>
-      <component id="switestfw" name="Software Install Test Framework" deprecated="^3" introduced="7.0" purpose="development" filter="test">
+      <component id="switestfw" name="Software Install Test Framework" deprecated="^3" introduced="7.0" purpose="development" filter="test,s60,build_as_app">
         <unit mrp="installationservices/switestfw/group/install_testframework.mrp" bldFile="installationservices/switestfw/group"/>
       </component>
       <component id="swiconfig" name="Software Install Config" introduced="9.1" purpose="optional" class="config">
@@ -108,13 +111,13 @@
       </component>
     </collection>
     <collection id="secureswitools" name="Secure Software Install Tools" level="tool">
-      <component id="makekeys" name="MakeKeys" filter="gt" introduced="6.0" purpose="optional" target="desktop">
+      <component id="makekeys" name="MakeKeys" filter="s60,gt,build_as_app" introduced="6.0" purpose="optional" target="desktop">
         <unit bldFile="secureswitools/makekeys/group" mrp="secureswitools/makekeys/group/security_makekeys.mrp"/>
       </component>
-      <component id="swianalysistoolkit" name="SWI Analysis Toolkit" purpose="development" target="desktop">
+      <component id="swianalysistoolkit" name="SWI Analysis Toolkit" purpose="development" target="desktop" filter="s60,build_as_app">
         <unit bldFile="secureswitools/swianalysistoolkit/group" mrp="secureswitools/swianalysistoolkit/group/security_switools.mrp"/>
       </component>
-      <component id="openssllib" name="OpenSSL Library" purpose="optional" target="desktop">
+      <component id="openssllib" name="OpenSSL Library" purpose="optional" target="desktop" filter="s60,build_as_app">
         <unit mrp="secureswitools/openssllib/security_openssl.mrp"/>
       </component>
       <component id="swisistools" name="Secure Software Install SIS Tools" purpose="optional" target="desktop">
@@ -122,7 +125,7 @@
       </component>
     </collection>
     <collection id="appinstall_info" name="Application Installation Info" level="api">
-      <component id="appinstall_test" filter="s60,test,api_test" name="Application Installation Test" purpose="development">
+      <component id="appinstall_test" filter="s60,test,api_test,build_as_app" name="Application Installation Test" purpose="development">
         <unit bldFile="tsrc/group"/>
       </component>
       <component id="appinstall_metadata" name="Application Installation Metadata" class="config" introduced="^2" purpose="development" target="desktop">

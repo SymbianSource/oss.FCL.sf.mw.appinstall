@@ -958,24 +958,26 @@ void CAppInfoReader::ReadOpaqueDataL(TUint aResourceId, CResourceFile* aRegistra
 								//resource string length is limited to 255 characters max.
 								const TInt unicodeLength=*currentPtr;
 		
-								++currentPtr;
 								if (unicodeLength!=0)
 								{
-									if (REINTERPRET_CAST(TUint,currentPtr)&0x1)
+									if (REINTERPRET_CAST(TUint,(currentPtr+1))&0x1)
 									{			
 										// The resource compiler puts out a padding byte (arbitrarily 0xab)
 										// to ensure the alignment of Unicode strings within each resource.
-										if(*currentPtr!=0xab)
+								
+										//Cardanility check. Values in the range 0-127 are stored in a single byte, 
+										//128-16383 in two bytes and other values in 4 bytes.
+										if((*(currentPtr+1)!=0xab) && (*(currentPtr+3)!=0xab))
 										{
 											std::string errMsg= "Failed : Trying to access invalid registrationFile";
 											throw CResourceFileException(errMsg);
 										}
-										++currentPtr;
 									}
 								}
 								
 								opaqueData->SetPtr(currentPtr);
-								opaqueData->ForceLength(unicodeLength*2);
+								opaqueData->SetLength(opaqueData->GetLength());
+								
 							}
 							else
 							{
@@ -1008,25 +1010,25 @@ void CAppInfoReader::ReadOpaqueDataL(TUint aResourceId, CResourceFile* aRegistra
 			//resource string length is limited to 255 characters max.
 			const TInt unicodeLength=*currentPtr;
 		
-			++currentPtr;
 			if (unicodeLength!=0)
 			{
-				if (REINTERPRET_CAST(TUint,currentPtr)&0x1)
+				if (REINTERPRET_CAST(TUint,(currentPtr+1))&0x1)
 				{
 					// The resource compiler puts out a padding byte (arbitrarily 0xab)
 					// to ensure the alignment of Unicode strings within each resource.
-					if(*currentPtr!=0xab)
+					
+					//Cardanility check. Values in the range 0-127 are stored in a single byte, 
+					//128-16383 in two bytes and other values in 4 bytes.
+					if((*(currentPtr+1)!=0xab) && (*(currentPtr+3)!=0xab))
 					{
 						std::string errMsg= "Failed : Trying to access invalid registrationFile";
 						throw CResourceFileException(errMsg);
 					}
-					++currentPtr;
 				}
 			}
 
 			opaqueData->SetPtr(currentPtr);
-			opaqueData->SetLength(unicodeLength*2);
-
+			opaqueData->SetLength(opaqueData->GetLength());
 			CAppLocalOpaqueDataInfo* opaqueInfo = CAppLocalOpaqueDataInfo::NewL(iLocale, aServiceUid, opaqueData);
 			iOpaqueDataArray.push_back(opaqueInfo);
 		}

@@ -1,0 +1,22 @@
+;
+; Install file for multi-lingual application
+; supporting two language variants.
+;
+
+; Languages - 
+&EN
+
+; List of localised vendor names.
+%{"Symbian Software Ltd"}
+
+; Single, non-localised (global) vendor name.
+:"Symbian Software Ltd"
+
+; Installation header.
+; Two component names as we support English and German
+#{"interpretsis_eng_testcase"}, (0xE8000897), 1,0,0
+
+; Language-neutral files to be installed
+;"\epoc32\release\<PLATFORM>\<CONFIGURATION>\interpretsis_testcase_11.exe"-"!:\sys\bin\interpretsis_testcase_11.exe"
+"\epoc32\release\<PLATFORM>\<CONFIGURATION>\z\private\10003a3f\apps\interpretsis_testcase_11_reg.rsc" - "!:\private\10003a3f\import\apps\interpretsis_testcase_11_reg.rsc"
+

@@ -1954,4 +1954,22 @@
 	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">INT_DefaultValueTest  INT_DefaultValueTest 3  "positive"  "both" "nouid" "nobatchfile" "int_defaultvaluetest.script" "int_defaultvaluetest.htm" "FAIL = 0" "FAIL = 0" </check>
 </test>
 
+<test id="test_long_opaquedata">
+	<title>test_long_opaquedata</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\testinterpretsis_db.bat test_long_opaquedata</command>
+	<check type="result"/>
+	</test>
+
+<test id="API-INST-testcase-InterpretSIS-09">
+	<title>API-INST-testcase-InterpretSIS-09</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-09_db.bat  API-INST-testcase-InterpretSIS-09</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-09  API-INST-testcase-InterpretSIS-09 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-09.script" "API-INST-testcase-InterpretSIS-09.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+
+<test id="API-INST-testcase-InterpretSIS-10">
+	<title>API-INST-testcase-InterpretSIS-10</title>
+	<command log="no">\epoc32\winscw\c\tswi\tinterpretsisinteg\api-inst-testcase-interpretsis-10_db.bat  API-INST-testcase-InterpretSIS-10</command>
+	<check type="program" name="perl \epoc32\winscw\c\tswi\tinterpretsisinteg\swicheck.pl">API-INST-testcase-InterpretSIS-10  API-INST-testcase-InterpretSIS-10 3  "positive"  "both" "nouid" "nobatchfile" "API-INST-testcase-InterpretSIS-10.script" "API-INST-testcase-InterpretSIS-10.htm" "FAIL = 0" "FAIL = 0" </check>
+	</test>
+	
 </testlist>

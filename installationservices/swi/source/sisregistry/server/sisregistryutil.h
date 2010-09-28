@@ -48,7 +48,8 @@ public:
 	static void EnsureDirExistsL(RFs& aFs, const TDesC& aPath);
 	static void CreateFileWithAttributesL(RFs& aFs, const TDesC& aPath, const TUint aAttributesMask = 0);
 	static TInt DeleteFile(RFs& aFs, const TDesC& aPath);
-	static TBool RomBasedPackageL(const TUid& aUid);
+	static TBool RomBasedPackageL(const TUid& aUid); // To be removed: Use CSisRegistrySession::RomBasedPackageL instead
+	static TBool CheckIfMatchingStubPUidL(const TUid& aUid, RFs& aFileServer, const TFileName& aStubFileName);
 	static HBufC* BuildLogFileNameLC();
 	static TUid IdentifyUidFromSisFileL(RFs& aFs, TDesC& aFilename);
 
@@ -66,7 +67,6 @@ public:
 		}
 
 private:
-	static TBool CheckIfMatchingStubPUidL(const TUid& aUid, RFs& aFileServer, const TFileName& aStubFileName);
 	static void ReadSymbianHeaderL(RFile& aFile, TUid& aUid1, TUid& aUid2, TUid& aUid3);
 	};
 

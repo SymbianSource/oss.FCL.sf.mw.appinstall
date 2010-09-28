@@ -853,29 +853,9 @@ TBool CRestoreProcessor::ParseRegistrationResourceFileL(const TDesC& aTargetFile
  
     if ( NULL == iAppRegExtractor )
         {
-        DEBUG_PRINTF(_L("Restore Processor - ParseRegistrationResourceFileL - Creating CAppRegExtractor for async parsing of registration resource file"));
-        CApplication& app = const_cast<CApplication&>(*iApplication);
-        const RArray<TInt>& matchingLanguages = app.GetMatchingDeviceLanguages();        
-        TInt userSelectedLanguage = (TInt)iApplication->UserSelections().Language();
-        TInt res = matchingLanguages.Find(userSelectedLanguage);
-        if(res == KErrNotFound)
-            {
-            app.PopulateMatchingDeviceLanguagesL(userSelectedLanguage);
-            }            
-        const RArray<TInt>& matchingLanguages1 = app.GetMatchingDeviceLanguages();        
-        RArray<TLanguage> devLanguages;
-        CleanupClosePushL(devLanguages);       
-        TInt count = matchingLanguages1.Count();
-        DEBUG_PRINTF2(_L("Restore Processor - ParseRegistrationResourceFileL - %d matching languages found"),count);
-        for ( TInt i=0; i<count; i++)
-            {
-            devLanguages.Append((TLanguage)matchingLanguages1[i]);            
-            }
-        
-        iAppRegExtractor = CAppRegExtractor::NewL(iFs,devLanguages,iApparcRegFileData);
-        CleanupStack::Pop(&devLanguages);            
+        DEBUG_PRINTF(_L("Restore Processor - ParseRegistrationResourceFileL - Creating CAppRegExtractor for async parsing of registration resource file"));             
+        iAppRegExtractor = CAppRegExtractor::NewL(iFs, iApparcRegFileData);                   
         }
-        
     iAppRegExtractor->ExtractAppRegInfoSizeL(aTargetFileName, iStatus);
     return EFalse;
     }

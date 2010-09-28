@@ -21,7 +21,7 @@
 
 
 /**
- a software component using @see RApaLsSession::StartDocument. This is
+  This is a software component using @see RApaLsSession::StartDocument.
 */
 
 #include <e32base.h>

@@ -12,6 +12,17 @@
       <module name="">
         <unit unitID="sedoQT.appinstall" mrp="" bldFile="&layer_real_source_path;" name="sedoQT_appinstall" proFile="appinstall.pro" qmakeArgs="-r" />
       </module>
+      <module name="from_package_definition">
+      	<unit unitID="appinstall.swi" mrp="" bldFile="&layer_real_source_path;/installationservices/swi/group" name="appinstall.swi"/>
+        <unit unitID="appinstall.swidevicetools" mrp="" bldFile="&layer_real_source_path;/installationservices/swidevicetools/group" name="appinstall.swidevicetools"/>
+        <unit unitID="appinstall.refswinstallationplugin" mrp="" bldFile="&layer_real_source_path;/installationservices/refswinstallationplugin/group" name="appinstall.refswinstallationplugin"/>
+        <unit unitID="appinstall.refsoftwareappmgr" mrp="" bldFile="&layer_real_source_path;/installationservices/refsoftwareappmgr/group" name="appinstall.refsoftwareappmgr"/>
+        <unit unitID="appinstall.switestfw" mrp="" bldFile="&layer_real_source_path;/installationservices/switestfw/group" name="appinstall.switestfw"/>
+        <unit unitID="appinstall.swiconfig" mrp="" bldFile="&layer_real_source_path;/installationservices/swiconfig/group" name="appinstall.swiconfig"/>
+        <unit unitID="appinstall.makekeys" mrp="" bldFile="&layer_real_source_path;/secureswitools/makekeys/group" name="appinstall.makekeys"/>
+        <unit unitID="appinstall.swianalysistoolkit" mrp="" bldFile="&layer_real_source_path;/secureswitools/swianalysistoolkit/group" name="appinstall.swianalysistoolkit"/>
+        <unit unitID="appinstall.swisistools" mrp="" bldFile="&layer_real_source_path;/secureswitools/swisistools/group" name="appinstall.swisistools"/>
+      </module>
     </layer>
 
 	<layer name="api_test_layer">

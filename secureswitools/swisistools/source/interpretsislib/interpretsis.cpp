@@ -90,7 +90,7 @@ int CInterpretSIS::Install()
 			{
 			if (!dependenciesIt->second.empty())
 				{
-				LERROR(L"Package " << dependenciesIt->first << L" requires:");
+				LERROR(L"Package " << dependenciesIt->first.c_str() << L" requires:");
 				for (std::vector<SisRegistryDependency>::const_iterator dependantsIt = dependenciesIt->second.begin();
 					dependantsIt != dependenciesIt->second.end() ;
 					++dependantsIt)

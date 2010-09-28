@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -67,7 +67,8 @@ public:
 				RomManager& aRomManager,
 				const TUint16 aRegistryFileMajorVersion,
 				const TUint16 aRegistryFileMinorVersion,
-				ConfigManager& aConfigManager);
+				ConfigManager& aConfigManager,
+				const std::wstring& aStubFileName );
 
 	virtual ~SisRegistryObject ();
 
@@ -184,6 +185,12 @@ public:
 	void SetVendorLocalizedName(const std::wstring& aVendorLocalizedName)
 	{ *iVendorLocalizedName = aVendorLocalizedName; }
 
+	const std::wstring& GetStubFileName() const
+	{ return iStubFileName;	}
+
+	void SetStubFileName(const std::wstring& aStubFileName)
+	{ iStubFileName = aStubFileName; }
+
 	const std::vector<TInt>& GetMatchingSupportedLanguages() const
 	{ return iSupportedLanguageIds; }
 
@@ -243,6 +250,7 @@ private:
 	#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 	TBool									iIsHidden;
 	#endif
+	std::wstring                             iStubFileName;
 	// Array of language Id's that are common to the languages in mentioned
 	// in SIS file and device supported languages
 	std::vector<TInt> iSupportedLanguageIds;

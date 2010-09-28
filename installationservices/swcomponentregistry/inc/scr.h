@@ -96,13 +96,9 @@ namespace Usif
 			 
 			Please note that nested/concurrent transactions are NOT supported. 
 			 
-			N.B. It is impossible to start a transaction if at least one component or file view (e.g. RSoftwareComponentRegistryView and
-			RSoftwareComponentRegistryFilesList) owned by another SCR session is in progress. 
-			
 			N.B. Transaction operations are permitted only to registered installers or execution environments.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction is already in progress on the SCR server.
-			@leave KErrScrReadOperationInProgress If one or more component views or file lists owned by other SCR sessions are open.
 			@leave KErrPermissionDenied An unauthorised process attempted a transaction operation. 
 			@leave Or system-wide error codes.
 		 */
@@ -149,7 +145,6 @@ namespace Usif
 			@return  The component ID of the newly added entry.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C TComponentId AddComponentL(const TDesC& aName, const TDesC& aVendor, const TDesC& aUniqueSwTypeName, const TDesC* aGlobalId=NULL, TScrComponentOperationType aCompOpType=EScrCompInstall);
@@ -171,7 +166,6 @@ namespace Usif
 			@return  The component ID of the newly added entry. 
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C TComponentId AddComponentL(const RPointerArray<CLocalizableComponentInfo>& aComponentInfo, const TDesC& aUniqueSwTypeName, const TDesC* aGlobalId=NULL, TScrComponentOperationType aCompOpType=EScrCompInstall);
@@ -209,7 +203,6 @@ namespace Usif
 			@param aValue The value of the software component property.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes. 
 		 */
 		
@@ -229,7 +222,6 @@ namespace Usif
 			@param aLocale The language code of the property. The default value is non-localized property.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes. 
 		 */
 		
@@ -246,7 +238,6 @@ namespace Usif
 			@param aValue The value of the software component property. Can be TInt; if the value cannot exceed 32-bit range, as TInt64 provides automatic casting from TInt.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 	     */
 		IMPORT_C void SetComponentPropertyL(TComponentId aComponentId, const TDesC& aName, TInt64 aValue);
@@ -266,7 +257,6 @@ namespace Usif
 			Please note that if UnregisterComponentFileL is later used on the component, this parameter will not apply, and the file registration may still affect the list of installed drives.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave KErrArgument If the file name is invalid or is not fully qualified
 			@leave Or system-wide error codes.
 		 */	
@@ -287,7 +277,6 @@ namespace Usif
 			@param aPropValue The value of the file property being set.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		*/
 		IMPORT_C void SetFilePropertyL(TComponentId aComponentId, const TDesC& aFileName, const TDesC& aPropName, const TDesC8& aPropValue);
@@ -304,7 +293,6 @@ namespace Usif
 			@param aPropValue The value of the file property being added.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C void SetFilePropertyL(TComponentId aComponentId, const TDesC& aFileName, const TDesC& aPropName, TInt aPropValue);
@@ -322,7 +310,6 @@ namespace Usif
 			@param aLocale The language code of the requested locale. The default value is non-localized.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		*/
 		IMPORT_C void SetComponentNameL(TComponentId aComponentId, const TDesC& aName, TLanguage aLocale=KNonLocalized);
@@ -340,7 +327,6 @@ namespace Usif
 			@param aLocale The language code of the requested locale. The default value is non-localized.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 	    */
 		IMPORT_C void SetVendorNameL(TComponentId aComponentId, const TDesC& aVendor, TLanguage aLocale=KNonLocalized);
@@ -355,7 +341,6 @@ namespace Usif
 			@param aVersion The new value of the version attribute.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C void SetComponentVersionL(TComponentId aComponentId, const TDesC& aVersion);
@@ -370,7 +355,6 @@ namespace Usif
 			@param aValue ETrue to set component as removable. EFalse to set component as unremovable.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 			
 			@capability AllFiles Creating non-removable components requires AllFiles.
@@ -387,7 +371,6 @@ namespace Usif
 			@param aValue ETrue to set component as DRM protected. EFalse to set component as non-DRM protected.
 					
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 					
 			@capability WriteDeviceData Creating DRM protected components requires WriteDeviceData.
@@ -405,7 +388,6 @@ namespace Usif
 			@param aValue ETrue to set component as hidden. EFalse to set component as non-hidden.
 							
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 							
 			@capability WriteDeviceData Creating hidden components requires WriteDeviceData.
@@ -423,7 +405,6 @@ namespace Usif
 			@param aValue ETrue to set component as known-revoked. EFalse to set component as known-unrevoked.
 							
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 							
 			@capability WriteDeviceData Creating known-revoked components requires WriteDeviceData.
@@ -442,7 +423,6 @@ namespace Usif
 			@param aValue ETrue to set component as origin-verified EFalse to set component as origin-non-verified.
 							
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 							
 			@capability WriteDeviceData Creating origin verified components requires WriteDeviceData.
@@ -458,7 +438,6 @@ namespace Usif
 			@param aComponentSizeInBytes The size of the component's files in bytes.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C void SetComponentSizeL(TComponentId aComponentId, TInt64 aComponentSizeInBytes);
@@ -474,7 +453,6 @@ namespace Usif
 			@param aPropName The name of the component property being deleted.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 	     */
 		IMPORT_C void DeleteComponentPropertyL(TComponentId aComponentId, const TDesC& aPropName);
@@ -489,7 +467,6 @@ namespace Usif
 			@param aPropName The name of the file property being deleted.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		 */
 		IMPORT_C void DeleteFilePropertyL(TComponentId aComponentId, const TDesC& aFileName, const TDesC& aPropName);
@@ -505,7 +482,6 @@ namespace Usif
 			@param aFileName The fully qualified name of the file being deregistered.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 	     */
 		IMPORT_C void UnregisterComponentFileL(TComponentId aComponentId, const TDesC& aFileName);
@@ -519,7 +495,6 @@ namespace Usif
 			@param aComponentId The unique ID of the given software component.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or system-wide error codes.
 		*/
 		IMPORT_C void DeleteComponentL(TComponentId aComponentId);
@@ -865,7 +840,6 @@ namespace Usif
 			@param aValue ETrue to set component as present. EFalse to set component as not present.
 			
 			@leave KErrScrWriteOperationInProgress If a transaction started by another session is in progress.
-			@leave KErrScrReadOperationInProgress If a read operation with component or file views is in progress.
 			@leave Or a system-wide error code.
 		 */
 		IMPORT_C void SetIsComponentPresentL(TComponentId aComponentId, TBool aValue);
@@ -978,9 +952,7 @@ namespace Usif
 			If the call to this function completes successfully, then the interface client will access 
 			the enumerated records by using @see RSoftwareComponentRegistryView::NextComponentL.
 			
-			If a transaction owned by another session is in progress on the SCR server, the open view request 
-			will be rejected.
-			
+
 			N.B. After this function completes successfully, NextComponentLor NextComponentSetL functions 
 			can be used together. However, GetComponentIdsL function cannot be called before or after
 			these functions. 
@@ -988,8 +960,7 @@ namespace Usif
 			@param aCompReg An active SCR connection.
 			@param aFilter Pointer to the filter object which will be used by the SCR to enumerate the software components.
 						   If no filter is provided, all software components in the SCR are enumerated.
-			@leave KErrScrWriteOperationInProgress If a transaction owned by another session is in progress.
-			@leave Or a system-wide error code.
+			@leave A system-wide error code.
 
 			@capability  ReadUserData Accessing list of components installed by the user requires ReadUserData
 		*/
@@ -1100,14 +1071,10 @@ namespace Usif
 			If the call to this function completes successfully, then the interface client will access 
 			to the enumerated files by using NextFileL/NextFileSetL interface functions.
 			
-			If a transaction owned by another session is in progress on the SCR server, the open list request 
-			will be rejected.
-			
 			@param aCompReg An active SCR connection.	
 			@param aComponentId The unique ID of the given software component.
 			 
-			@leave KErrScrWriteOperationInProgress If a transaction owned by another session is in progress.
-			@leave Or a system-wide error code.
+			@leave A system-wide error code.
 		 */
 		IMPORT_C void OpenListL(const RSoftwareComponentRegistry& aCompReg, TComponentId aComponentId);		
 		
@@ -1140,7 +1107,7 @@ namespace Usif
 	NONSHARABLE_CLASS(RApplicationRegistryView) : public RScsClientSubsessionBase
 	/**
         This class opens a sub-session to the SCR server and sends a request to create a complete Application Registration view.
-        This class can only be used by Apparc.
+        This class can only be used by Apparc. However RApplicationInfoView is accessible by all.
 	*/
 	{
 	public:
@@ -1161,9 +1128,6 @@ namespace Usif
 	           If the call to this function completes successfully, then the interface client will access 
 	           the enumerated records by using @see RApplicationRegistryView::GetNextApplicationRegistrationInfoL.
 	                
-	           If a transaction owned by another session is in progress on the SCR server, the open view request 
-	           will be rejected.
-	               
 	           N.B. After this function completes successfully, GetNextApplicationRegistrationInfoL function
 	           can be used  
 	                
@@ -1173,7 +1137,7 @@ namespace Usif
 	           If aLocale is provided but the localizable info for that locale is not present in the SCR then 
 	           its(aLocale) downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
 	           the reg details. If it fails, then application registration info for that application is not returned.
-	           If alocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
+	           If aLocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
 	           @leave A system-wide error code.
 	     */
 	     IMPORT_C void OpenViewL(const RSoftwareComponentRegistry& aCompReg, TLanguage aLocale=KUnspecifiedLocale);                 
@@ -1184,9 +1148,6 @@ namespace Usif
 	           If the call to this function completes successfully, then the interface client will access 
 	           the enumerated records by using @see RApplicationRegistryView::GetNextApplicationRegistrationInfoL.
 	                
-	           If a transaction owned by another session is in progress on the SCR server, the open view request 
-	           will be rejected.
-	               
 	           N.B. After this function completes successfully, GetNextApplicationRegistrationInfoL function
 	           can be used  
 	                
@@ -1197,7 +1158,7 @@ namespace Usif
 	           If aLocale is provided but the localizable info for that locale is not present in the SCR then 
 	           its(aLocale) downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
 	           the reg details. If it fails, then application registration info for that application is not returned.
-	           If alocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
+	           If aLocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
 	           @leave A system-wide error code.
 	     */
 		 
@@ -1205,10 +1166,11 @@ namespace Usif
 	                
 	     /**
 	           Retrieves the next Application Registration entry from the view which has already been 
-	           created in the SCR with @see RApplicationRegistryView::OpenApplicationRegistrationViewL.                                
+	           created in the SCR with @see RApplicationRegistryView::OpenViewL.                                
 	                                                  
             @param aNoOfEntries Number of AppInfo Entries to be fetched in a single call.
             @param aApplicationRegistration An output parameter for returning the array of CApplicationRegistrationData.                 
+			@return Once all the entries have been retrieved, this call returns an empty array in aApplicationRegistration.
             @leave A system-wide error code
          */
 	     IMPORT_C void GetNextApplicationRegistrationInfoL(TInt aNoOfEntries, RPointerArray<CApplicationRegistrationData>& aApplicationRegistration) const; 
@@ -1229,11 +1191,11 @@ NONSHARABLE_CLASS(RApplicationInfoView) : public RScsClientSubsessionBase
 /**
 	This class opens a sub-session to the SCR server and sends a request to create a AppInfo view
 	by using the supplied filter on the server side. 
-	It returns information associated to a list of applications, information includes the full pathname to the application and the application's caption and short caption informtion @see TAppRegInfo, 
+	It returns information associated to a list of applications, information includes the full pathname to the application and the application's caption and short caption information @see TAppRegInfo, 
 	however localizable specific information is retrieved only if the app has localizable information 
 	matching the locale with which the subsession was opened or matching the current device language.
 	It is different from class RApplicationRegistryView in the following ways:
-	1. This subsession has the ability to filter the applciations based on certain parameters @see CAppInfoFilter.
+	1. This subsession has the ability to filter the applications based on certain parameters @see CAppInfoFilter.
 	2. This returns specific information contained in TAppRegInfo, however class RApplicationRegistryView returns all the information associated with an app in CApplicationRegistrationData.
 	3. Functionality provided by this class can be used by all, however class RApplicationRegistryView can be used only by AppArc.
 	 
@@ -1254,17 +1216,19 @@ NONSHARABLE_CLASS(RApplicationInfoView) : public RScsClientSubsessionBase
 	    	Opens a view of Application Info in the SCR.
 		
 			If the call to this function completes successfully, then the interface client can access 
-			the enumerated records by using @see RAppInfoView::GetNextAppInfoL.
-			
-			If a transaction owned by another session is in progress on the SCR server, the open view request 
-			will be rejected.
+			the enumerated records by using @see RApplicationInfoView::GetNextAppInfoL.
 			
 			N.B. After this function completes successfully, GetNextAppInfoL function
 			can be used  
 			
 			@param aCompReg An active SCR connection.
 			@param aAppInfoFilter Pointer to the filter object which will be used by the SCR to enumerate the Application Info. Also @see CAppInfoFilter.
-                   			
+	        @param aLocale The language code of the requested locale. The default value is KUnspecifiedLocale.
+		    if aLocale is provided, then application info for that locale is returned(if present in SCR).
+	        If aLocale is provided but the localizable info for that locale is not present in the SCR then 
+	        its(aLocale) downgraded path (@see BaflUtils::GetDowngradePathL) is used to find
+	        the reg details. If it fails, then the non-localized application info is returned.
+	        If aLocale is not provided i.e. KUnspecifiedLocale then it takes the current locale or its downgradables.             
 			@leave A system-wide error code.
 			@capability  ReadUserData, Accessing list of App Info requires ReadUserData
 		*/
@@ -1272,10 +1236,11 @@ NONSHARABLE_CLASS(RApplicationInfoView) : public RScsClientSubsessionBase
 
 		/**
 			Retrieves the next AppInfo entry from the view which has already been 
-			created in the SCR with @see RSoftwareComponentRegistryView::OpenAppInfoViewL.
+			created in the SCR with @see RApplicationInfoView::OpenViewL.
 			
 			@param aNoOfEntries Number of AppInfo Entries to be fetched in a single call.
-			@param aAppInfo An output parameter for returning the array of AppInfo.			   		
+			@param aAppInfo An output parameter for returning the array of AppInfo.		
+			@return Once all the entries have been retrieved, this call returns an empty array in aAppInfo.
 			@leave A system-wide error code.
 	     */
 		IMPORT_C void GetNextAppInfoL(TInt aNoOfEntries, RPointerArray<TAppRegInfo>& aAppInfo) const;
@@ -1380,7 +1345,7 @@ NONSHARABLE_CLASS(RRegistrationInfoForApplication) : public RScsClientSubsession
             @param aFullFileName  returns file name of the icon of the application.   
             @leave A system-wide error code.                 		                                   
 		*/ 
-		IMPORT_C void GetAppViewIconL(TUid aViewUid,HBufC*& aFullFileName) const;
+		IMPORT_C void GetAppViewIconL(TUid aViewUid, HBufC*& aFullFileName) const;
 		
 		/** Returns the view information published by the application for the current locale.
 
@@ -1443,7 +1408,7 @@ NONSHARABLE_CLASS(RApplicationRegistrationInfo) : public RScsClientSubsessionBas
             @return  The App Uid for the given Data type and Service Uid. 
             @leave A system-wide error code.
         */      
-        IMPORT_C TUid GetAppForDataTypeAndServiceL(const TDesC &aName,const TUid aServiceUid) const;
+        IMPORT_C TUid GetAppForDataTypeAndServiceL(const TDesC &aName, const TUid aServiceUid) const;
         
         /**
             Return the App Uid for the given Data type with the highest priority. 

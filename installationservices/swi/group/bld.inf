@@ -28,110 +28,21 @@ PRJ_EXTENSIONS
 #include "../test/testexes/bld.inf"
 #include "../test/tautosigning/bld.inf"
 
-#include "../source/swiobserver/group/bld.inf"
 #include "../test/tswiobserver/group/bld.inf"
-#include "../source/upsswiobsplugin/group/bld.inf"
 
 PRJ_PLATFORMS
 DEFAULT TOOLS
 TOOLS2
 
 PRJ_EXPORTS
-../inc/swidaemonplugin.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swidaemonplugin.h)
-../inc/pkgremover.h SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(swi/pkgremover.h)
-../inc/pkgremovererrors.h SYMBIAN_MW_LAYER_PUBLIC_EXPORT_PATH(swi/pkgremovererrors.h)
-../inc/sisregistrywritableentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrywritableentry.h)
-../inc/swi/msisuihandlers.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/msisuihandlers.h)
-../inc/swi/sisdataprovider.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisdataprovider.h)
-../inc/swi/launcher.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/launcher.h)
-../inc/swi/asynclauncher.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/asynclauncher.h)
-../inc/swi/sisinstallerrors.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisinstallerrors.h)
-../inc/swi/hashcontainer.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/hashcontainer.h)
-../inc/swi/sisregistryentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistryentry.h)
-../inc/swi/sisrevocationentry.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisrevocationentry.h)
-../inc/swi/sisregistrysession.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrysession.h)
-../inc/swi/sisregistrypackage.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrypackage.h)
-../inc/swi/swispubsubdefs.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swispubsubdefs.h)
-../inc/swi/backuprestore.h	SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/backuprestore.h)
-../inc/swi/sispackagetrust.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sispackagetrust.h)
-../inc/swi/sistruststatus.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sistruststatus.h)
-../inc/swi/sisregistrylog.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/sisregistrylog.h)
-../inc/swi/installtypes.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/installtypes.h)
-../source/swiutils/swiutils.h SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/swiutils.h)
-../inc/swi/ipcutil.h 	  SYMBIAN_MW_LAYER_PLATFORM_EXPORT_PATH(swi/ipcutil.h)
-// ROMKIT include
-../inc/swi.iby /epoc32/rom/include/swi.iby
-../inc/swi_ncp.iby /epoc32/rom/include/swi_ncp.iby
-// swi.iby split into two part swi.iby and swiplugin.iby, swiplugin can be used by other team for implementing swi observer plug-in independently
-../inc/swiplugin.iby /epoc32/rom/include/swiplugin.iby
-../inc/switextshell.iby /epoc32/rom/include/switextshell.iby
-../inc/swidaemon.iby /epoc32/rom/include/swidaemon.iby
-
-
-// export certstoretobin
-../source/certstoretobin/Swicertstoretobin.pl	/epoc32/tools/swicertstoretobin.pl
-../source/certstoretobin/swicertstoretobin.bat	/epoc32/tools/swicertstoretobin.bat
-../source/certstoretobin/Util.pm	/epoc32/tools/util.pm
-../source/certstoretobin/AppGen.pm	/epoc32/tools/appgen.pm
-
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-../inc/sisregistry_5.3.txt z:/system/data/sisregistry_5.3.txt
-#endif
-
 
 PRJ_MMPFILES
 
 #ifndef TOOLS
 #ifndef TOOLS2
-sisresult.mmp
-sisfile.mmp
-siscontroller.mmp
-swidataprovider.mmp
-cafdataprovider.mmp
-sisxrecognizer.mmp
-uissclient.mmp
-sishelper.mmp
+
 ocspsupport.mmp
-ocspsupportclient.mmp
-devinfosupportcommon.mmp
-devinfosupport.mmp
-devinfosupportclient.mmp
 
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-apprscparser.mmp
-swtypereginfo.mmp
-#else
-integrityservices.mmp
-#endif
-
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-sisregistryhelperserver.mmp
-#endif
-
-securitymanager.mmp
-sisregistryclient.mmp
-
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-sisregistryserver.mmp
-#else
-sisregistryserver_legacy.mmp
-#endif
-
-plan.mmp
-sislauncherclient.mmp
-sislauncherserver.mmp
-installserver.mmp
-uiss.mmp
-backuprestore.mmp
-#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-swisidchecker.mmp
-#endif
-pkgremover.mmp
-#ifndef __WINS__
-sishelper_tshell.mmp
-sislauncherserver_tshell.mmp
-#endif
-swiutils.mmp
 #endif
 #endif
 
@@ -225,9 +136,9 @@ PRJ_TESTEXPORTS
 ../test/tsishelper/data/test1.controller /epoc32/winscw/c/tswi/tsishelper/data/test1.controller
 ../test/tsishelper/data/test1.data /epoc32/winscw/c/tswi/tsishelper/data/test1.data
 
-../test/tdaemon/scripts/tdaemon.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.script
-../test/tdaemon/scripts/tdaemon_winscw.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon_winscw.script
-../test/tdaemon/scripts/tdaemon.ini /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.ini
+//../test/tdaemon/scripts/tdaemon.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.script
+//../test/tdaemon/scripts/tdaemon_winscw.script /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon_winscw.script
+//../test/tdaemon/scripts/tdaemon.ini /epoc32/winscw/c/tswi/tdaemon/scripts/tdaemon.ini
 
 #ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 ../test/tintegrityservices/Scripts/tintegrityservices.script /epoc32/winscw/c/tswi/tintegrityservices/scripts/tintegrityservices.script
@@ -527,6 +438,7 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tcleanupinfrastructure_armv5.script
 ../test/tsisfile/data/files/uninstall_cdrive.log /epoc32/winscw/c/tswi/tuiscriptadaptors/data/uninstall_cdrive.log
 ../test/tuiscriptadaptors/scripts/tswiappregintegration.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration.script
+../test/tuiscriptadaptors/scripts/languages.txt /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/languages.txt
 ../test/tuiscriptadaptors/scripts/tswiappregintegration_stub.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration_stub.script
 ../test/tuiscriptadaptors/scripts/tswiappregintegration.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswiappregintegration.ini
 ../test/tuiscriptadaptors/scripts/swiappregintegration_base01_stub.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/swiappregintegration_base01_stub.sis 
@@ -686,7 +598,7 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/inc098114_winscw.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/inc098114_winscw.script
 ../test/tuiscriptadaptors/scripts/inc098114_h2.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/inc098114_h2.script
 ../test/tuiscriptadaptors/scripts/inc098114.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/inc098114.ini
-
+/*
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 ../test/tuiscriptadaptors/scripts/tswidaemonstub_armv5.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswidaemonstub_h2.script
 ../test/tuiscriptadaptors/scripts/tswidaemonstub.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswidaemonstub.script
@@ -696,7 +608,7 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/tswidaemonstub_legacy.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswidaemonstub.script
 ../test/tuiscriptadaptors/scripts/tswidaemonstub_legacy.ini /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tswidaemonstub.ini
 #endif
-
+*/
 ../test/tuiscriptadaptors/scripts/tsilent_winscw.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tsilent_winscw.script
 ../test/tuiscriptadaptors/scripts/tsilent_h2.script /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/tsilent_h2.script
 
@@ -1039,6 +951,8 @@ PRJ_TESTEXPORTS
 ../test/tsisregistrytest/Scripts/data/addappregdata.sis /epoc32/winscw/c/tswi/tsisregistrytest/scripts/data/addappregdata.sis
 ../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_pre.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_pre.bat
 ../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_post.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration_post.bat
+../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration0_pre.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration0_pre.bat
+../test/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration0_post.bat /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/batchfiles/tswiappregintegration0_post.bat
 #else
 ../test/tsisregistrytest_legacy/Scripts/batchfiles/tsisregistrytest_post.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/tsisregistrytest_post.bat
 ../test/tsisregistrytest_legacy/Scripts/batchfiles/testlogging_pre.bat /epoc32/winscw/c/tswi/tsisregistrytest/scripts/batchfiles/testlogging_pre.bat
@@ -1082,6 +996,8 @@ PRJ_TESTEXPORTS
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.sis
 ../test/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testpreinstalled_sucert_edrive.pkg
 ../test/tuiscriptadaptors/scripts/testnoaiacert.sis /epoc32/winscw/c/tswi/tuiscriptadaptors/scripts/testnoaiacert.sis
+/*
 ../test/tdaemon/scripts/batchfiles/setupforemmcformat_pre.bat /epoc32/winscw/c/tswi/tdaemon/scripts/setupforemmcformat_pre.bat
 ../test/tdaemon/scripts/batchfiles/setupforemmcformat_post.bat /epoc32/winscw/c/tswi/tdaemon/scripts/setupforemmcformat_post.bat
+*/
 // End of file

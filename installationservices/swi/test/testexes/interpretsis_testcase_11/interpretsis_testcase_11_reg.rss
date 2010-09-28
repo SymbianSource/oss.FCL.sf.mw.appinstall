@@ -1,0 +1,92 @@
+// Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+#include <appinfo.rh>
+
+UID2 KUidAppRegistrationResourceFile
+UID3 0x00000AFF // application UID
+
+STRUCT SERVICE_CONFIGURATION {LTEXT xmldata(4056);}
+STRUCT SERVICE_CONFIGURATION_ARRAY {STRUCT service_configuration_array[];}
+
+
+RESOURCE APP_REGISTRATION_INFO
+	{
+	app_file = "interpretsis_testcase_11";
+	    //
+    hidden = KAppNotHidden;
+    embeddability = KAppNotEmbeddable;
+    newfile = KAppDoesNotSupportNewFile;
+    launch = KAppLaunchInForeground;
+    group_name = "AppNameGroup";
+    //
+    default_screen_number = 2;
+    //
+    datatype_list = 
+        {
+        DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg1"; },
+        DATATYPE { priority=EDataTypePriorityNormal; type="image/gif1"; }
+        };
+    //
+    file_ownership_list =
+        {
+        FILE_OWNERSHIP_INFO {file_name="z:\\temp\\AppNameTempFile.txt"; },
+        FILE_OWNERSHIP_INFO {file_name="z:\\temp\\AppName.txt"; }
+        };
+	
+   //
+    service_list =
+        {
+        SERVICE_INFO
+            {
+            uid = 268123123;
+            datatype_list = 
+                {
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg2"; },
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/gif2"; }
+                };   
+            opaque_data = r_service_configuration_reg;
+            },
+        SERVICE_INFO
+            {
+            uid = 268123124;
+            datatype_list = 
+                {
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/jpeg3"; },
+                DATATYPE { priority=EDataTypePriorityNormal; type="image/gif3"; }
+                };
+            opaque_data = r_service_configuration_reg;
+            }
+        };
+    
+    
+    opaque_data = r_service_configuration_reg;
+	}
+	
+RESOURCE SERVICE_CONFIGURATION_ARRAY r_service_configuration_reg
+	{
+		service_configuration_array=
+			{
+				SERVICE_CONFIGURATION
+				{
+				xmldata = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+				}
+				,
+				SERVICE_CONFIGURATION
+				{
+				xmldata = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+				}
+			};
+	}

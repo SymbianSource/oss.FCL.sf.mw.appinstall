@@ -175,8 +175,8 @@ void CCommandParser::DisplayUsage()
 
 void CCommandParser::DisplayVersion()
 	{
-	std::cout << "\nINTERPRETSIS  " << " Version  3.0.0 ." << std::endl;
-	std::cout << "Copyright (c) 2009 Symbian Software Ltd. All rights reserved.\n " << std::endl;
+	std::cout << "\nINTERPRETSIS  " << " Version  3.1.0 ." << std::endl;
+	std::cout << "Copyright (c) 2009 - 2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.\n " << std::endl;
 	}
  
 

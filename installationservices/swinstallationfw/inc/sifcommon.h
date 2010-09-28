@@ -137,7 +137,7 @@ namespace Usif
                 @param aVersion The version of a component.
                 @param aVendor The name of a component vendor.
                 @param aScomoState The SCOMO state of a component.
-                @param TInstallStatus The installation status of a component.
+                @param aInstallStatus The installation status of a component.
                 @param aComponentId The Id of a component.
                 @param aGlobalComponentId The global Id of a component.
                 @param aAuthenticity The authenticity of a component.
@@ -490,8 +490,8 @@ namespace Usif
 
             @param aName The name of the string param to be added.
             @param aValue The value of the string param to be added.
-            @leave KErrOverflow if the size of the name or value of the string param being added exceeds 128 bytes or
-            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave KErrOverflow if the size of the value of the string param being added exceeds 1024 bytes or if the name of the string param being added 
+            exceeds 128 bytes or the memory allocated for all the params added to this container exceeds 4096 bytes.
             @leave System wide error code
         */
         IMPORT_C void AddStringL(const TDesC& aName, const TDesC& aValue);
@@ -501,8 +501,8 @@ namespace Usif
 
             @param aName The name of the string param to be added.
             @param aValueArray The array of value string params to be added.
-            @leave KErrOverflow if the size of the name or any value in the string array being added exceeds 128 bytes or
-            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave KErrOverflow if the size of the value of the string param being added exceeds 1024 bytes or if the name of the string param being added 
+            exceeds 128 bytes or the memory allocated for all the params added to this container exceeds 4096 bytes.
             @leave System wide error code.
         */
         IMPORT_C void AddStringArrayL(const TDesC& aName, const RPointerArray<HBufC>& aValueArray);        
@@ -512,8 +512,8 @@ namespace Usif
 
             @param aName The name of the integer param to be added.
             @param aValue The value of the integer param to be added.
-            @leave KErrOverflow if the size of the name being added exceeds 128 bytes or
-            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave KErrOverflow if the size of the name of the string param being added exceeds 128 bytes or
+            the memory allocated for all the params added to this container exceeds 4096 bytes.
             @leave System wide error code
         */
         IMPORT_C void AddIntL(const TDesC& aName, TInt aValue);
@@ -523,8 +523,8 @@ namespace Usif
 
             @param aName The name of the integer param to be added.
             @param aValueArray The array of value integer params to be added.
-            @leave KErrOverflow if the size of the name being added exceeds 128 bytes or
-            the memory allocated for all the params added to this container exceeds 512 bytes.
+            @leave KErrOverflow if the size of the name of the string param being added exceeds 128 bytes or
+            the memory allocated for all the params added to this container exceeds 4096 bytes.
             @leave System wide error code.
         */
         IMPORT_C void AddIntArrayL(const TDesC& aName, const RArray<TInt>& aValueArray);

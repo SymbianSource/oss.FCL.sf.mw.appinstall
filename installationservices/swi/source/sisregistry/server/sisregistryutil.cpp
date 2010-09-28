@@ -135,6 +135,8 @@ TInt SisRegistryUtil::DeleteFile(RFs& aFs, const TDesC& aPath)
 
 // Processes the ROM stub files. Retuns ETrue if the aUid or aName
 // is found in any of the ROM stub files, else returns EFalse.
+//
+// NOTE: Use CSisRegistrySession::RomBasedPackageL instead
 TBool SisRegistryUtil::RomBasedPackageL(const TUid& aUid)
 	{	
 	TBool isInRom = EFalse;
@@ -160,8 +162,7 @@ TBool SisRegistryUtil::RomBasedPackageL(const TUid& aUid)
 			{			
 			stubEntry = (*stubList)[stubCount];
 			stubFileName.Format(KRomStubPath, &(stubEntry.iName));		
-			
-			
+						
 			TRAPD(err, isInRom = SisRegistryUtil::CheckIfMatchingStubPUidL(aUid,  fileServer, stubFileName));
 			
 			if ((err >= KErrSISNotEnoughSpaceToInstall)  && (err <= KErrSISFieldIdMissing))
@@ -248,8 +249,7 @@ and match it with aUid
 @return ETrue if the package uid or the pkg name is found, EFalse otherwise.
 */
 TBool SisRegistryUtil::CheckIfMatchingStubPUidL(const TUid& aUid, RFs& aFileServer, const TFileName& aStubFileName)
-	{
-	
+	{	
 	RFile sisFile;
 	User::LeaveIfError(sisFile.Open(aFileServer, aStubFileName, EFileRead));
 	CleanupClosePushL(sisFile);
@@ -259,7 +259,6 @@ TBool SisRegistryUtil::CheckIfMatchingStubPUidL(const TUid& aUid, RFs& aFileServ
 	TUid packageUid = TUid::Uid(sisFileReadStream.ReadUint32L());
 	
 	CleanupStack::PopAndDestroy(2,&sisFile); //readstream, file
-	return (aUid == packageUid);
-	
+	return (aUid == packageUid);	
 	}
 

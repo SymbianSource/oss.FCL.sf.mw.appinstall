@@ -1,0 +1,33 @@
+/*
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
+
+
+#ifndef SIF_NCP_IBY
+#define SIF_NCP_IBY
+
+define ZDRIVE \epoc32\data\Z
+
+REM Software Install Framework
+
+file=ABI_DIR\BUILD_DIR\sif.dll				\sys\bin\sif.dll
+file=ABI_DIR\BUILD_DIR\sifutils.dll			\sys\bin\sifutils.dll
+file=ABI_DIR\BUILD_DIR\siftransport.dll		\sys\bin\siftransport.dll
+file=ABI_DIR\BUILD_DIR\sifnotification.dll	\sys\bin\sifnotification.dll
+file=ABI_DIR\BUILD_DIR\sifserver.exe		\sys\bin\sifserver.exe
+file=ABI_DIR\BUILD_DIR\siflauncher.exe		\sys\bin\siflauncher.exe
+
+#endif

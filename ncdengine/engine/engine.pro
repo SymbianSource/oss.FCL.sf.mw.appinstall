@@ -54,7 +54,7 @@ symbian: {
 	INCLUDEPATH += /epoc32/include/platform/mw/cwrt
 	INCLUDEPATH += /epoc32/include/ecom
 
-	LIBS += -lWrtDownloadMgr -lapmime -lcmmanager -lecom -lapengine -lmsgs -lsmcm -lgsmu -linetprotutil 
+	LIBS += -lWrtDownloadMgr -lapmime -lcmmanager -lecom -lmsgs -lsmcm -lgsmu -linetprotutil 
 	LIBS += -lhttpfiltercommon -lecom -lhttp -lesock -lcommdb -lsysutil -lhash -lestlib -lestor -lbafl -lplatformenv
 	LIBS += -lXmlEngineUtils  -lXmlEngineDOM -lXmlEngine -lXmlInterface -lxmlframework  -lcharconv -ledbms -lefsrv
   LIBS += -lncdutils_20019119 -lncddevicemgmt_20019119

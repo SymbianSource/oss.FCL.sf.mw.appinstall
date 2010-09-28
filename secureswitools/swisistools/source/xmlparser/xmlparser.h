@@ -40,6 +40,8 @@
 #include "symbiantypes.h"
 #include "utf8_wrapper.h"
 
+std::string ConvertOpaqueData(const std::string& opaqueData);
+
 // Xerces library uses XMLCh (UTF16 format) as its default character type.
 // We can store the UTF16 returned form the xerces library in the following
 // template class.
@@ -135,10 +137,10 @@ namespace XmlDetails
 				std::wstring iName;
 				};
 
-            class TCustomAcessList
+            class TCustomAccessList
 				{
 			public:
-				TCustomAcessList()
+				TCustomAccessList()
 				:iAccessMode(1)
 				{}
 								
@@ -150,7 +152,7 @@ namespace XmlDetails
 			std::vector<TLocalizedSoftwareTypeName> iLocalizedSoftwareTypeNames;
 			int iSifPluginUid;
             std::wstring iLauncherExecutable;
-			std::vector<TCustomAcessList> iCustomAcessList;
+			std::vector<TCustomAccessList> iCustomAccessList;
 			std::vector<std::wstring> iMIMEDetails;
 			}; // struct TScrEnvironmentDetails
 
@@ -337,7 +339,7 @@ namespace XmlDetails
 					int iLocale;
 					int iServiceUid;
 					bool iIsBinary; 
-					std::wstring iOpaqueData;
+					std::string iOpaqueData;
 					};
 
 				class TAppServiceInfo
@@ -405,7 +407,7 @@ namespace XmlDetails
 					std::wstring iName;
 					int iServiceUid;
 					int iIntValue;
-					std::wstring iStrValue;
+					std::string iStrValue;
 					bool iIsStr8Bit;
 					};
 
@@ -515,7 +517,7 @@ class CScrXmlParser
 
 		XmlDetails::TScrEnvironmentDetails::TLocalizedSoftwareTypeName GetLocalizedSoftwareTypeName( const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
 		
-        XmlDetails::TScrEnvironmentDetails::TCustomAcessList GetCustomAcessList(const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
+        XmlDetails::TScrEnvironmentDetails::TCustomAccessList GetCustomAccessList(const XERCES_CPP_NAMESPACE::DOMElement* aDOMElement);
 
 		void ConfigDomParser(xercesc::XercesDOMParser& aDomParser);
 	};
@@ -596,13 +598,13 @@ inline std::wstring XercesStringToWString(const XercesString& aString)
 	wchar_t* buffer = new wchar_t[aString.length() + 1];
 	const XMLCh* source = aString.c_str();
 
-	// Using a temp variable in place of buffer as ConvertUTF16toUTF8 modifies the source pointer passed.
+	// Using a temp variable in place of buffer as ConvertUTF16toUCS4 modifies the source pointer passed.
 	wchar_t* temp = buffer;
 
 	ConvertUTF16toUCS4(&source, source + aString.length(), &temp, temp + aString.length());
 
 	// Appending NUL to the converted buffer.
-	*temp = 0;
+	*temp = NULL;
 
 	std::wstring result(buffer);
 	delete[] buffer;

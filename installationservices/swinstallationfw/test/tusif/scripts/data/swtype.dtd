@@ -1,14 +1,14 @@
-<!ELEMENT LayeredExecutionEnvironments (softwareType+)>
+<!ELEMENT LayeredExecutionEnvironments (SoftwareType+)>
 
-<!ELEMENT softwareType (localizedName*,mimeType+,sifPluginUid,CustomAcess*,launcherExecutable)>
-<!ATTLIST softwareType name CDATA #REQUIRED>
+<!ELEMENT SoftwareType (LocalizedName*,MimeType+,SifPluginUid,CustomAccess*,LauncherExecutable)>
+<!ATTLIST SoftwareType Name CDATA #REQUIRED>
 
-<!ELEMENT localizedName (#PCDATA)>
-<!ATTLIST localizedName language CDATA #REQUIRED>
+<!ELEMENT LocalizedName (#PCDATA)>
+<!ATTLIST LocalizedName Language CDATA #REQUIRED>
 
-<!ELEMENT sifPluginUid (#PCDATA)>
+<!ELEMENT SifPluginUid (#PCDATA)>
 
-<!ELEMENT CustomAcess (#PCDATA)>
-<!ATTLIST CustomAcess SecureId CDATA #REQUIRED AccessMode CDATA #REQUIRED>
+<!ELEMENT CustomAccess (#PCDATA)>
+<!ATTLIST CustomAccess SecureId CDATA #REQUIRED AccessMode CDATA #REQUIRED>
 
-<!ELEMENT launcherExecutable (#PCDATA)>
+<!ELEMENT LauncherExecutable (#PCDATA)>

@@ -128,6 +128,7 @@ const XMLCh* KViewData_StrValue = (const XMLCh*) "V\0i\0e\0w\0D\0a\0t\0a\0_\0S\0
 const XMLCh* KApplicationServiceInfo = (const XMLCh*) "A\0p\0p\0l\0i\0c\0a\0t\0i\0o\0n\0S\0e\0r\0v\0i\0c\0e\0I\0n\0f\0o\0\0\0";
 const XMLCh* KUid = (const XMLCh*) "U\0i\0d\0\0\0";
 const XMLCh* KServiceOpaqueData = (const XMLCh*) "S\0e\0r\0v\0i\0c\0e\0O\0p\0a\0q\0u\0e\0D\0a\0t\0a\0\0\0";
+const XMLCh* KServiceDataIsBinary = (const XMLCh*) "S\0e\0r\0v\0i\0c\0e\0D\0a\0t\0a\0I\0s\0B\0i\0n\0a\0r\0y\0\0\0";
 const XMLCh* KServiceData = (const XMLCh*) "S\0e\0r\0v\0i\0c\0e\0D\0a\0t\0a\0\0\0";
 const XMLCh* KServiceOpaqueLocale = (const XMLCh*) "S\0e\0r\0v\0i\0c\0e\0O\0p\0a\0q\0u\0e\0L\0o\0c\0a\0l\0e\0\0\0";
 const XMLCh* KApplicationProperty = (const XMLCh*) "A\0p\0p\0l\0i\0c\0a\0t\0i\0o\0n\0P\0r\0o\0p\0e\0r\0t\0y\0\0\0";
@@ -445,15 +446,13 @@ void CXmlGenerator::WriteAppRegInfo
 				
 				if(fileAppOpaqueDataType->iIsBinary)
 				{
-					std::string temp = wstring2string(fileAppOpaqueDataType->iOpaqueData);
-					std::string binStrData = Util::Base64Encode(temp);
-					std::wstring binData = string2wstring(binStrData);
-					XercesString opaqueBinData = WStringToXercesString(binData);
+					std::string binStrData = Util::Base64Encode(fileAppOpaqueDataType->iOpaqueData);
+					XercesString opaqueBinData = ConvertToXercesString(binStrData.c_str(),binStrData.length());
 					AddChildElement(filePropValueRoot,aDocument, KData, opaqueBinData.c_str());
 				}
 				else
 				{
-					XercesString opaqueData = WStringToXercesString(fileAppOpaqueDataType->iOpaqueData);
+					XercesString opaqueData = ConvertToXercesString(fileAppOpaqueDataType->iOpaqueData.c_str(),fileAppOpaqueDataType->iOpaqueData.length());
 					AddChildElement(filePropValueRoot,aDocument, KData, opaqueData.c_str());
 				}
 				
@@ -605,11 +604,23 @@ void CXmlGenerator::WriteAppServiceInfo
 				{
 					DOMElement* filePropValueRoot = AddTag(filePropRoot, aDocument, KServiceOpaqueData);
 
-					XercesString opaqueData = WStringToXercesString(fileAppPropIter->iOpaqueData);
-					AddChildElement(filePropValueRoot,aDocument, KServiceData, opaqueData.c_str());
+					if(fileAppPropIter->iIsBinary)
+					{
+						std::string binStrData = Util::Base64Encode(fileAppPropIter->iOpaqueData);
+						XercesString opaqueBinData = ConvertToXercesString(binStrData.c_str(),binStrData.length());
+						AddChildElement(filePropValueRoot,aDocument, KServiceData, opaqueBinData.c_str());
+					}
+					else
+					{
+						XercesString opaqueData = ConvertToXercesString(fileAppPropIter->iOpaqueData.c_str(),fileAppPropIter->iOpaqueData.length());
+						AddChildElement(filePropValueRoot,aDocument, KServiceData, opaqueData.c_str());
+					}
 
 					XercesString locale = IntegerToXercesString(fileAppPropIter->iLocale);
 					AddChildElement(filePropValueRoot,aDocument, KServiceOpaqueLocale, locale.c_str());
+
+					XercesString iBinary = IntegerToXercesString(fileAppPropIter->iIsBinary);
+					AddChildElement(filePropValueRoot,aDocument, KServiceDataIsBinary, iBinary.c_str());
 				}
 			}
 		}
@@ -699,7 +710,7 @@ void CXmlGenerator::WriteAppProperty
 		XercesString intValue = IntegerToXercesString(filePropIter->iIntValue);
 		AddChildElement(filePropRoot,aDocument, KIntValue, intValue.c_str());
 
-		XercesString strValue = WStringToXercesString(filePropIter->iStrValue);
+		XercesString strValue = ConvertToXercesString(filePropIter->iStrValue.c_str(),filePropIter->iStrValue.length());
 		AddChildElement(filePropRoot, aDocument, KStrValue, strValue.c_str());
 
 		XercesString isStr8Bit = IntegerToXercesString(filePropIter->iIsStr8Bit);

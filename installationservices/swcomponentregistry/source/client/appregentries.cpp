@@ -1155,7 +1155,7 @@ CLauncherExecutable::CLauncherExecutable()
     {
     }
 
-CLauncherExecutable::~CLauncherExecutable()
+EXPORT_C CLauncherExecutable::~CLauncherExecutable()
     {
     delete iLauncher;
     }

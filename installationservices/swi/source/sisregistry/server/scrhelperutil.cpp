@@ -1456,8 +1456,6 @@ TBool ScrHelperUtil::IsWildcardFile(const TDesC& aFileName)
 void ScrHelperUtil::ExtractCompUidL(const TDesC& aGlobalIdStr, TUid& aUid)
 	{
 	TInt64 uidNum;	
-	// Make sure the length of the global id string is exactly 8 chahacters in length.
-	__ASSERT_ALWAYS((aGlobalIdStr.Length() == 8), User::Leave(KErrCorrupt));
 	TLex lex(aGlobalIdStr);
 	TInt error = lex.Val(uidNum, EHex);
 	__ASSERT_ALWAYS((error == KErrNone), User::Leave(error));

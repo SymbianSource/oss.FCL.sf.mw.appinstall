@@ -20,17 +20,21 @@ REM testcase testcase-interpretsis-03 - Install sis. Add an applications registr
 if not exist .\cdrive mkdir .\cdrive > NUL
 if not exist .\romdrive mkdir .\romdrive > NUL
 
-xcopy /E /Y backup\cdrive cdrive > NUL
-xcopy /E /Y backup\romdrive romdrive > NUL
+REM xcopy /E /Y backup\cdrive cdrive > NUL
+REM xcopy /E /Y backup\romdrive romdrive > NUL
 
 
 REM Remove installation files from any previous tests
 if exist  .\cdrive\Documents\InstTest\devlangsup*.txt  del .\cdrive\Documents\InstTest\devlangsup*.txt  > NUL
-
+if not exist .\romdrive\sys\install\scr\provisioned mkdir .\romdrive\sys\install\scr\provisioned > NUL
+if exist  .\romdrive\sys\install\scr\provisioned\scr.db  del .\romdrive\sys\install\scr\provisioned\scr.db  > NUL
+copy \epoc32\release\winscw\udeb\z\sys\install\scr\provisioned\scr.db .\romdrive\sys\install\scr\provisioned\scr.db /Y > NUL
 
 call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tsis/data/interpretsis_testcase.sis -w info -I /epoc32/winscw/c/tswi/tinterpretsisinteg/testcase-interpretsis-01/argumentfile.ini  -l /epoc32/winscw/c/interpretsis_test_harness_db.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tsis/data/interpretsis_testcase_06.sis -w info -I /epoc32/winscw/c/tswi/tinterpretsisinteg/testcase-interpretsis-01/argumentfile_05.ini  -l /epoc32/winscw/c/interpretsis_test_harness_db.txt > NUL
 
+if not exist \epoc32\winscw\c\sys\install\scr mkdir \epoc32\winscw\c\sys\install\scr > NUL
+if exist  \epoc32\winscw\c\sys\install\scr\scr.db  del \epoc32\winscw\c\sys\install\scr\scr.db  > NUL
 copy .\romdrive\sys\install\scr\provisioned\scr.db \epoc32\winscw\c\sys\install\scr\scr.db /Y > NUL
 
 IF NOT EXIST .\backup\cdrive mkdir .\backup\cdrive > NUL

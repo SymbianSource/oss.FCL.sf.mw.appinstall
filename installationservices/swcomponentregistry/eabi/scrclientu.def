@@ -398,4 +398,7 @@ EXPORTS
 	_ZN4Usif16CComponentFilter17TPropertyOperatorC2ENS0_11TDbOperatorES2_ @ 397 NONAME
 	_ZNK4Usif16CComponentFilter17TPropertyOperator12NameOperatorEv @ 398 NONAME
 	_ZNK4Usif16CComponentFilter17TPropertyOperator13ValueOperatorEv @ 399 NONAME
+	_ZN4Usif19CLauncherExecutableD0Ev @ 400 NONAME
+	_ZN4Usif19CLauncherExecutableD1Ev @ 401 NONAME
+	_ZN4Usif19CLauncherExecutableD2Ev @ 402 NONAME
 

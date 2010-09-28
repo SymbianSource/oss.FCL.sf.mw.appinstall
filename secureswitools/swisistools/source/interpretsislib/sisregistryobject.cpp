@@ -224,7 +224,9 @@ SisRegistryObject::SisRegistryObject(CSISController& aSisController,
 									 RomManager& aRomManager,
 									 const TUint16 aRegistryFileMajorVersion,
 									 const TUint16 aRegistryFileMinorVersion,
-									 ConfigManager& aConfigManager)
+									 ConfigManager& aConfigManager,
+									 const std::wstring& aStubFileName
+									 )
 	: SisRegistryToken(),
 	iFileMajorVersion(aRegistryFileMajorVersion),
 	iFileMinorVersion(aRegistryFileMinorVersion),
@@ -237,6 +239,7 @@ SisRegistryObject::SisRegistryObject(CSISController& aSisController,
 	#endif
 {
 	//*** SisRegistryPackage ***//
+	iStubFileName = aStubFileName;
 
 	// UID
 	const CSISInfo& info = aSisController.SISInfo();

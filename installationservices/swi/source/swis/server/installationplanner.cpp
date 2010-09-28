@@ -1254,7 +1254,10 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
         //to a temporary location.
             
         TInt noOfRegFilesToBeParsed = regFilesArray.Count();        
-        DEBUG_PRINTF2(_L("Total number Registration Resource files to be parsed is %d"), noOfRegFilesToBeParsed);        
+        DEBUG_PRINTF2(_L("Total number Registration Resource files to be parsed is %d"), noOfRegFilesToBeParsed);  
+        RSisLauncherSession launcher;
+        CleanupClosePushL(launcher);
+        User::LeaveIfError(launcher.Connect());
         for(TInt i = 0 ; i < noOfRegFilesToBeParsed ; i++)
             {	   	    
             Usif::CApplicationRegistrationData *appData = NULL;	    	    
@@ -1266,17 +1269,11 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
             DEBUG_PRINTF2(_L("Current Registration Resource file to be parsed is %S"), regFilesArray[i]);
             
             // Ask the launcher to parse the registration resource file 
-            RSisLauncherSession launcher;
-            CleanupClosePushL(launcher);
-            User::LeaveIfError(launcher.Connect());
             RFile file;
             User::LeaveIfError(file.Open(fs, *regFilesArray[i], EFileRead));
-            RArray<TLanguage> appLanguages;
-            CleanupClosePushL(appLanguages);
-            TRAPD(err,appData=launcher.SyncParseResourceFileL(file, appLanguages));
-            CleanupStack::PopAndDestroy(&appLanguages);
+            TBool isForGetCompInfo(ETrue);
+            TRAPD(err,appData=launcher.SyncParseResourceFileL(file, isForGetCompInfo));
             file.Close();
-            CleanupStack::PopAndDestroy(&launcher);            // popping and destroying as it is not reqd further.
             
             DEBUG_PRINTF2(_L("Finished Parsing Registration Resource file %S successfuly"), regFilesArray[i]);
             if(KErrCorrupt == err)	        
@@ -1413,8 +1410,8 @@ CApplication* CInstallationPlanner::ProcessControllerL(const Sis::CController& a
                 CleanupStack::PopAndDestroy(2, appData);    //finalAppName,appData
             languages.Close();	    
             }
-              
-        CleanupStack::PopAndDestroy(3,&drives);  //fs,driveSpaces,drives
+        
+        CleanupStack::PopAndDestroy(4,&drives);             //launcher, fs, driveSpaces
         CleanupStack::Pop(&listOfFilesToBeExtracted);
         listOfFilesToBeExtracted.Close(); 
         CleanupStack::PopAndDestroy(&regFilesArray);  

@@ -260,7 +260,8 @@ std::string Util::Base64Decode( const std::string& aEncodedData )
     // push a Base64 filter so that reading from buffer decodes it
     BIO *bioCmd = BIO_new(BIO_f_base64());
     // we don't want newlines
-    BIO_set_flags(bioCmd, BIO_FLAGS_BASE64_NO_NL);
+	if(inLen<50)
+    	BIO_set_flags(bioCmd, BIO_FLAGS_BASE64_NO_NL);
     bmem = BIO_push(bioCmd, bmem);
 
     int finalLen = BIO_read(bmem, (void*)pOut, outLen);

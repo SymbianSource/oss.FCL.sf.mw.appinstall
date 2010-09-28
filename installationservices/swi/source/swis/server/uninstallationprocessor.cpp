@@ -202,11 +202,11 @@ TBool CUninstallationProcessor::DoParseApplicationRegistrationFilesL()
 #endif
 
 TBool CUninstallationProcessor::DoStateUpdateRegistryL()
-	{
-#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK	 
+    {
+#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK   
     const CApplication& application = ApplicationL();
     RArray<TAppUpdateInfo> affectedApps;    
-    CleanupClosePushL(affectedApps);	    
+    CleanupClosePushL(affectedApps);        
     RArray<Usif::TComponentId> componentIds;
     CleanupClosePushL(componentIds);
     RArray<TUid> existingAppUids;
@@ -215,96 +215,70 @@ TBool CUninstallationProcessor::DoStateUpdateRegistryL()
     CleanupClosePushL(newAppUids);
     
     TAppUpdateInfo existingAppInfo, newAppInfo;     
-    TUid packageUid = application.PackageL().Uid();
+    TUid packageUid = application.PackageL().Uid();   
+    Plan().GetAffectedApps(affectedApps);
     
     // Get all existing componentsIds for the package to to be uninstalled
     TRAPD(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
-    TInt count = componentIds.Count();
-    if(0 == count)
+    TInt componentCount = componentIds.Count();
+    if(0 == componentCount)
         {
         DEBUG_PRINTF(_L("ComponentIDs not found for the base package"));
         User::Leave(KErrNotFound);
         }
     
-    //Get the apps for CompIds and mark them as to be uninstalled     
-    for(TInt i = 0 ; i < count; i++)
+    /* 
+     * Find the apps of the corrosponding component and if they exist in affected list then mark them 'EAppUninstalled' and if not present
+     * append it to the affected apps with EAppUninstalled.
+     */
+    for(TInt i = 0 ; i < componentCount ; ++i)
         {
-        existingAppUids.Reset();                    
-        TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids)); 
-      
-        for(TInt i = 0 ; i < existingAppUids.Count(); i++)
+        existingAppUids.Reset();
+        TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], existingAppUids));  
+        TInt currentAppCount = existingAppUids.Count();
+        for(TInt i = 0 ; i < currentAppCount; ++i)
             {
+            existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppInstalled);
+            TInt index(0);
+            index = affectedApps.Find(existingAppInfo);
+            if(KErrNotFound != index)
+                {                
+                affectedApps.Remove(index);
+                }
             existingAppInfo = TAppUpdateInfo(existingAppUids[i], EAppUninstalled);
-            affectedApps.Append(existingAppInfo);                   
+            affectedApps.Append(existingAppInfo);
             }
-        }        
-    
-	// Now that we are ready to make changes to the registry so we start a transaction
-	// Note that the commit/rollback action is subsequently taken by the later steps of the state machine	
-	iRegistryWrapper.StartMutableOperationsL();
-	iRegistryWrapper.RegistrySession().DeleteEntryL(ApplicationL().PackageL(), TransactionSession().TransactionIdL()); 
+        }
+        
+    // Now that we are ready to make changes to the registry so we start a transaction
+    // Note that the commit/rollback action is subsequently taken by the later steps of the state machine   
+    iRegistryWrapper.StartMutableOperationsL();
+    iRegistryWrapper.RegistrySession().DeleteEntryL(ApplicationL().PackageL(), TransactionSession().TransactionIdL()); 
     
     componentIds.Reset();
     TRAP(err,iRegistryWrapper.RegistrySession().GetComponentIdsForUidL(packageUid, componentIds));            
-    TInt currentComponentCount = componentIds.Count();        
+    TInt currentComponentCount = componentIds.Count();          
     
-    //If there is no component assosiated with this app in the scr and there are affected apps then mark all of them as deleted. 
-    RArray<TAppUpdateInfo> apps;  
-    CleanupClosePushL(apps);
-    Plan().GetAffectedApps(apps);
-    TInt appCount = apps.Count();    
-    
-    //If the there is no component assosiated with the package uid(ie it has been completely deleted) and we have affected apps 
-    //then compare the apps of the package currently being processed with the existing affected apps if alredy exists then
-    //update else add it to the list.
-    if(currentComponentCount == 0 && appCount)
-        {            
-        TInt count = affectedApps.Count();        
-        for(TInt i = 0 ; i < appCount; ++i)
-           {    
-           TUid appUid = apps[i].iAppUid;
-           TBool found = EFalse;
-           for(TInt index = 0; index < count ; ++index)
-             {
-             if(appUid == affectedApps[index].iAppUid)
-                 {                       
-                 existingAppInfo = TAppUpdateInfo(appUid, EAppUninstalled);
-                 affectedApps.Remove(index);
-                 affectedApps.Append(existingAppInfo); 
-                 found = ETrue;     
-                 break;
-                 }               
-             }
-          if(!found)
-             {
-             existingAppInfo = TAppUpdateInfo(appUid,EAppUninstalled);
-             affectedApps.Append(existingAppInfo);
-             }   
-           } 
-        }
-    else
-        {
-        // mark the apps in the affected list as upgraded if they are still in scr
-        for(TInt i = 0 ; i < currentComponentCount; i++)
+    // Mark the apps which are still in scr as 'EAppInstalled'(remove first, if present in affected apps) 
+    for(TInt i = 0 ; i < currentComponentCount; ++i)
+       {
+       newAppUids.Reset();                    
+       TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], newAppUids));          
+       for(TInt i = 0 ; i < newAppUids.Count(); ++i)
            {
-           newAppUids.Reset();                    
-           TRAP(err,iRegistryWrapper.RegistrySession().GetAppUidsForComponentL(componentIds[i], newAppUids));          
-           for(TInt i = 0 ; i < newAppUids.Count(); i++)
+           existingAppInfo = TAppUpdateInfo(newAppUids[i], EAppUninstalled);
+           TInt index = 0;
+           index = affectedApps.Find(existingAppInfo);
+           if(KErrNotFound != index)
                {
-               existingAppInfo = TAppUpdateInfo(newAppUids[i], EAppUninstalled);
-               TInt index = 0;
-               index = affectedApps.Find(existingAppInfo);
-               if(KErrNotFound != index)
-                   {
-                   affectedApps.Remove(index);
-                   existingAppInfo = TAppUpdateInfo(newAppUids[i],EAppInstalled);
-                   affectedApps.Append(existingAppInfo);    
-                   }                           
-               }        
-           } 
-        }
-    CleanupStack::PopAndDestroy(&apps);
-    for(TInt i = 0; i < affectedApps.Count(); i++)
+               affectedApps.Remove(index);
+               }                 
+           existingAppInfo = TAppUpdateInfo(newAppUids[i],EAppInstalled);
+           affectedApps.Append(existingAppInfo);
+           }        
+       }
+    
+    for(TInt i = 0; i < affectedApps.Count(); ++i)
         {
         DEBUG_PRINTF2(_L("AppUid is 0x%x"), affectedApps[i].iAppUid);
         DEBUG_PRINTF2(_L("Action is %d"), affectedApps[i].iAction);
@@ -315,14 +289,14 @@ TBool CUninstallationProcessor::DoStateUpdateRegistryL()
     
     CleanupStack::PopAndDestroy(4, &affectedApps);    
 #else
-	RSisRegistryWritableSession session;
-	User::LeaveIfError(session.Connect());
-	CleanupClosePushL(session);
+    RSisRegistryWritableSession session;
+    User::LeaveIfError(session.Connect());
+    CleanupClosePushL(session);
 
-	session.DeleteEntryL(ApplicationL().PackageL(), IntegrityServices().TransactionId());
-	CleanupStack::PopAndDestroy(&session);
+    session.DeleteEntryL(ApplicationL().PackageL(), IntegrityServices().TransactionId());
+    CleanupStack::PopAndDestroy(&session);
 #endif
-	return ETrue;
+    return ETrue;
 	}
 
 CUninstallationProcessor& CUninstallationProcessor::EmbeddedProcessorL()

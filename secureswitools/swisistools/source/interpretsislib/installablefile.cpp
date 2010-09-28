@@ -134,12 +134,13 @@ void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInst
 		{
 			iTargetFile[0] = aInstallingDrive;
 			LINFO(L"Disregarding drive selection. Installing "
-				+ target + L" to " + iTargetFile);
+				<< target.c_str() << L" to " << iTargetFile.c_str());
 		}
 	}
 	else
 	{
-		std::wstring error = L"Invalid target file " + iTargetFile;
+		std::wstring error = L"Invalid target file ";
+		error.append(iTargetFile.c_str());
 		throw InterpretSisError(error, INVALID_SIS);
 	}
 }
