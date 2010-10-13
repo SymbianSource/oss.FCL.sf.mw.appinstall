@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -29,13 +29,8 @@
 #include "is_utils.h"
 
 // String constants
-#ifndef __TOOLS2_LINUX__
 const std::wstring KRomManagerSysBinPath 			= L"z:\\sys\\bin\\";
 const std::string KRomManagerRomDrive               = "Z:\\";
-#else
-const std::wstring KRomManagerSysBinPath 			= L"z:/sys/bin/";
-const std::string KRomManagerRomDrive               = "Z:/";
-#endif
 const std::string KRomManagerRomLogProcessingFile   = "Processing file ";
 const std::string KRomManagerRomLogReadingResource  = "Reading resource ";
 const std::string KRomManagerRomLogReadingResource2 = " to rom linear address";
@@ -151,7 +146,7 @@ RomManagerLogFiles::RomManagerLogFiles( const std::list<std::wstring>& aLogFileN
     {
     for( std::list<std::wstring>::const_iterator it = aLogFileNames.begin() ; it != aLogFileNames.end(); it++ )
         {
-    	std::string narrowLogFileName = wstring2string( *it );
+    	std::string narrowLogFileName = Ucs2ToUtf8( *it );
     	std::string narrowUpperCaseLogFileName = StringUtils::ToUpper( narrowLogFileName );
 
         // Get the base name
@@ -193,7 +188,7 @@ bool RomManagerLogFiles::RomFileExists( const std::wstring& aFileName )
 
     // Get filename & convert it to uppercase, since our map key is
     // also in upper case form.
-    std::string narrowFileName = wstring2string( aFileName );
+    std::string narrowFileName = Ucs2ToUtf8( aFileName );
     narrowFileName = StringUtils::ToUpper( narrowFileName );
 
     // Do we have a corresponding entry?
@@ -215,7 +210,7 @@ void RomManagerLogFiles::FindAllAdornedVariants(const std::wstring& aSearchNameW
 
 	for ( ; curr != end ; ++curr)
 		{
-		std::wstring romFile = string2wstring(curr->first);
+		std::wstring romFile = Utf8ToUcs2(curr->first);
 		if (StringUtils::WildcardCompare(searchNameWild,romFile))
 			{
 			aAdornedFileNamesFound.push_back(romFile);
@@ -238,7 +233,7 @@ bool RomManagerLogFiles::SidExistsInRom(std::wstring& aFile, TUint32 aSid)
 				TUint32 romSid = romEntry->SecurityInfo().iSecureId;
 				if (romSid != 0 && romSid == aSid)
 					{
-					aFile = string2wstring(romEntry->RomFileName());
+					aFile = Utf8ToUcs2(romEntry->RomFileName());
 					return true;
 					}
 				}
@@ -253,7 +248,7 @@ TInt RomManagerLogFiles::ReadSecurityInfo( SBinarySecurityInfo& aInfo, const std
 
     // Get filename & convert it to uppercase, since our map key is
     // also in upper case form.
-    std::string narrowFileName = wstring2string( aFileName );
+    std::string narrowFileName = Ucs2ToUtf8( aFileName );
     narrowFileName = StringUtils::ToUpper( narrowFileName );
 
     // Do we have a corresponding entry?
@@ -274,7 +269,7 @@ TInt RomManagerLogFiles::ReadSecurityInfo( SBinarySecurityInfo& aInfo, const std
 
 void RomManagerLogFiles::ReadObyFile( const std::string& aFileName )
     {
-	std::wstring fileName = string2wstring( aFileName );
+	std::wstring fileName = Utf8ToUcs2( aFileName );
     if ( FileExists( fileName ) )
         {
     	std::ifstream stream;
@@ -575,7 +570,7 @@ void RomManagerException::Display() const
 	}
     //
     stream << std::endl;
-    std::wstring finalMessage = string2wstring( stream.str() );
+    std::wstring finalMessage = Utf8ToUcs2( stream.str() );
     //
 	LERROR( finalMessage );
     }

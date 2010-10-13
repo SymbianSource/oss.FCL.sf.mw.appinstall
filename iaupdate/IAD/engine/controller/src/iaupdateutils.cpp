@@ -302,7 +302,7 @@ EXPORT_C TBool IAUpdateUtils::IsAppInstalledL(
 // -----------------------------------------------------------------------------
 
 EXPORT_C TBool IAUpdateUtils::IsWidgetInstalledL(const TDesC& aIdentifier, TIAUpdateVersion& aVersion )
-    { 
+    {
     RWidgetRegistryClientSession widgetRegistry;
 
     User::LeaveIfError( widgetRegistry.Connect() );
@@ -317,29 +317,15 @@ EXPORT_C TBool IAUpdateUtils::IsWidgetInstalledL(const TDesC& aIdentifier, TIAUp
         {
         CWidgetInfo* widgetInfo( widgetInfoArr[i] );  
         
-        CWidgetPropertyValue* BundleId = 
-                widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleIdentifier );
+        CWidgetPropertyValue* BundleId = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleIdentifier );
         CleanupStack::PushL( BundleId );
         
         if( aIdentifier.Compare( *(BundleId->iValue.s) )== 0 )
             {
-            // Get version
-            CWidgetPropertyValue* version = 
-                    widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleVersion );
+            CWidgetPropertyValue* version = widgetRegistry.GetWidgetPropertyValueL(widgetInfo->iUid, EBundleVersion );
             CleanupStack::PushL( version );
             
-            // Convert version
-            if (version->iValue.s)
-                {
-                DesToVersionL(*(version->iValue.s), aVersion.iMajor, aVersion.iMinor, aVersion.iBuild );
-                }
-            else
-                {
-                // version does not exist, set default (0.0.1)
-                aVersion.iMajor = 0;
-                aVersion.iMinor = 0;
-                aVersion.iBuild = 1;
-                }
+            DesToVersionL(*(version->iValue.s), aVersion.iMajor, aVersion.iMinor, aVersion.iBuild );
             
             CleanupStack::PopAndDestroy( version );
             CleanupStack::PopAndDestroy( BundleId );

@@ -91,10 +91,6 @@ TInt RIAUpdateClient::OpenToBackroundAsync( TRequestStatus& aStatus )
         {
         TRAP( error, StartNewAppToBackgroundL( ServiceUid(), aStatus ) );
         }
-    else
-        {
-        error = KErrAlreadyExists;
-        } 
     IAUPDATE_TRACE_1("[IAUPDATE] RIAUpdateClient::OpenToBackroundAsync() end error code: %d", error );
     return error;
     }
@@ -108,10 +104,6 @@ TInt RIAUpdateClient::ConnectToApp()
     {
     IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::ConnectToApp() begin");
     TInt error( KErrNone );
-    if ( iConnected )
-        {
-        return error;
-        }
     TName serverName;
     ServerName(serverName, ServiceUid(), iDifferentiator);
     TRAP( error,ConnectExistingByNameL( serverName ) );
@@ -151,7 +143,7 @@ void RIAUpdateClient::Close()
     {
     IAUPDATE_TRACE("[IAUPDATE] RIAUpdateClient::Close() begin");
     // Let the parent handle closing.
-    REikAppServiceBase::Close();
+    RAknAppServiceBase::Close();
     iConnected = EFalse;
     delete iData;
     iData = NULL;

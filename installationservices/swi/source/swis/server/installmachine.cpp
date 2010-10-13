@@ -287,7 +287,10 @@ void CInstallMachine::TConfirmationState::EnterL()
 		
 	// Retrieve logo data which may not be present.
 	const CLogo* logo=iInstallMachine.iController->Logo();
-	if (logo)
+
+	// Don't retrieve the logo if the sis file being installed is a stub
+
+	if (logo && !iInstallMachine.iSisHelper.IsStubL() )
 		{
 		const CFileDescription& fdesc(logo->FileDescription());
 		

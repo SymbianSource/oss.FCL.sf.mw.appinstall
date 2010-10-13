@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -78,7 +78,7 @@ void CSISCapabilities::ExtractCapabilities(const std::wstring& aFileName)
 	CSISException::ThrowIf(oldStderr == -1, CSISException::EFileProblem, "Failed in redirection operation");
 
 	#ifdef __TOOLS2_LINUX__
-	nulStderr = fopen("/dev/null", "w");
+	nulStderr = fopen("NULL", "w");
 	#else
 	nulStderr = fopen("NUL:", "w");
 	#endif

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -38,10 +38,6 @@ FileDescription::FileDescription(const CSISFileDescription& aFile, TInt aSid, co
 	iIndex(aFile.FileIndex()),
 	iSid(aSid)
 {
-	if((L'z'==aTargetDrive) || (L'Z'==aTargetDrive))
-	{
-		iTarget[0]='z';
-	}	
 	const unsigned char* data = aFile.Hash().Blob().Data();
 	TUint32 len = aFile.Hash().Blob().Size();
 

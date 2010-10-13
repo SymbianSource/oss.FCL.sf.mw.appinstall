@@ -310,7 +310,30 @@ void CIAUpdateMainView::DynInitMenuPaneL( TInt aResourceId, CEikMenuPane* aMenuP
         RPointerArray<MIAUpdateAnyNode> selectedNodes;
         CleanupClosePushL( selectedNodes );
         GetSelectedNodesL( selectedNodes ); 
-                    
+        
+        
+        MIAUpdateAnyNode* currentNode = iContainer->GetCurrentNode( iAllNodes ); 
+        if( currentNode )
+            {
+            TBool selected = EFalse; 
+            for( TInt i = 0; i < selectedNodes.Count() && !selected; ++i ) 
+                {
+                MIAUpdateAnyNode* node = selectedNodes[i];
+                if( node == currentNode )
+                    {
+                    selected = ETrue;
+                    }
+                }  
+            if ( selected )
+                {
+                aMenuPane->SetItemDimmed( EAknCmdMark, ETrue ); 
+                }   
+            else
+                {
+                aMenuPane->SetItemDimmed( EAknCmdUnmark, ETrue );   
+                } 
+            }
+        
         if ( selectedNodes.Count() )
             {
             if ( selectedNodes[0]->NodeType() == MIAUpdateAnyNode::ENodeTypeFw )

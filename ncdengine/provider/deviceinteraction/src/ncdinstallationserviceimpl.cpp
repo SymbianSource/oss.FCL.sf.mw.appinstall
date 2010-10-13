@@ -2359,20 +2359,7 @@ TBool CNcdInstallationService::WidgetExistsL(
             CWidgetPropertyValue* version = 
                 iWidgetRegistry.GetWidgetPropertyValueL(aUid, EBundleVersion );
             CleanupStack::PushL( version );
-            
-            // Convert version
-            if (version->iValue.s)
-                {
-                TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
-                }
-            else
-                {
-                // version does not exist, set default (0.0.1)
-                aVersion.iMajor = 0;
-                aVersion.iMinor = 0;
-                aVersion.iBuild = 1;
-                }
-
+            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
             CleanupStack::PopAndDestroy( version ); 
             return (ETrue);
             }
@@ -2416,24 +2403,11 @@ TBool CNcdInstallationService::WidgetExistsL
         
         if( aIdentifier.Compare( *(bundleId->iValue.s) )== 0 )
             {
-            // Get version
             CWidgetPropertyValue* version = 
                 iWidgetRegistry.GetWidgetPropertyValueL
                     (widgetInfo->iUid, EBundleVersion );
             CleanupStack::PushL( version );
-            
-            // Convert version
-            if (version->iValue.s)
-                {
-                TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
-                }
-            else
-                {
-                // version does not exist, set default (0.0.1)
-                aVersion.iMajor = 0;
-                aVersion.iMinor = 0;
-                aVersion.iBuild = 1;
-                }
+            TCatalogsVersion::ConvertL( aVersion, *(version->iValue.s) );
             
             CleanupStack::PopAndDestroy( version );
             CleanupStack::PopAndDestroy( bundleId );

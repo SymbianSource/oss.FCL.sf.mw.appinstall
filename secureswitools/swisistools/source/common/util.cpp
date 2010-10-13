@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -24,6 +24,7 @@
 
 #include "util.h"
 #include "symbiantypes.h"
+#include <windows.h>
 #include <fstream.h>
 #include <iostream>
 #include <sstream>
@@ -31,10 +32,6 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
-#ifdef _WIN32
-#include <windows.h>
-#endif // _WIN32
-#include "utf8.h"
 
 static const TUint32 CrcTab32[256] =
      {
@@ -103,94 +100,38 @@ static const TUint32 CrcTab32[256] =
      0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
      0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
      };
-
-namespace Util
-{
-/**
- * Converts wide char (unicode) string to multibyte string
- * This interface is provided so that we can have different implementation 
- * in windows and linux machine.
- * @param aSource 		string to be converted
- * @param aSourceLen	Source len. If this is -1 then it will calculate the length of the source.
- * @param aTarget		target location.
- * @param aTargetLen	Space in the target location.
- * @param aCodePage		Code page number (currently supported in windows only)
- * @return Number of bytes that make up the converted part of multibyte sequence. 
- * 			If aTarget is NULL then the function will return the size needed to store
- * 			the complete conversion of the source string.
- */
-int ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTarget, int aTargetLen, TUint32 aCodePage = 0);
-/**
- * Converts multibyte string to wide char (unicode)
- * This interface is provided so that we can have different implementation 
- * in windows and linux machine.
- * @param aSource 		string to be converted
- * @param aSourceLen	Source len. If this is -1 then it will calculate the length of the source.
- * @param aTarget		target location.
- * @param aTargetLen	Space in the target location.
- * @param aCodePage		Code page number (currently supported in windows only)
- * @return Number of bytes that make up the converted part of widechar sequence. 
- * 			If aTarget is NULL then the function will return the size needed to store
- * 			the complete conversion of the source string.
- */
-int ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage = 0);
-}; // namespace Util
  
 
-#ifdef __linux__ 
-int Util::ConvertWideCharToMultiByte(const wchar_t* aSource, int /*aSourceLen*/, char* aTarget, int aTargetLen, TUint32 /*aCodePage*/)
+DllExport std::string Util::wstring2string (const std::wstring& aWide)
 	{
-	int retValue = wcstombs(aTarget, aSource, aTargetLen);
-	if (-1 == retValue)
+	int max = WideCharToMultiByte(CP_OEMCP,0,aWide.c_str(),aWide.length(),0,0,0,0);
+	std::string reply;
+	if (max > 0 )
 		{
-		return 0;
+		char* buffer = new char [max];
+		try
+			{
+			WideCharToMultiByte(CP_OEMCP,0,aWide.c_str(),aWide.length(),buffer,max,0,0);
+			reply = std::string (buffer, max);
+			}
+		catch (...)
+			{
+			}
+		delete [] buffer;
 		}
-	return retValue;
+	return reply;
 	}
 
-int Util::ConvertMultiByteToWideChar(const char* aSource, int /*aSourceLen*/, wchar_t* aTarget, int aTargetLen, TUint32 /*aCodePage*/)
+std::wstring Util::string2wstring (const std::string& aNarrow)
 	{
-	int retValue = mbstowcs(aTarget, aSource, aTargetLen);
-	if (-1 == retValue)
-		{
-		return 0;
-		}
-	return retValue;
-	}
-
-#else
-
-int Util::ConvertWideCharToMultiByte(const wchar_t* aSource, int aSourceLen, char* aTarget, int aTargetLen, TUint32 aCodePage)
-	{
-	if(0 == aCodePage)
-		{
-		aCodePage = CP_OEMCP;
-		}
-	return WideCharToMultiByte( aCodePage, 0, aSource, aSourceLen, aTarget, aTargetLen, NULL, NULL);
-	}
-
-int Util::ConvertMultiByteToWideChar(const char* aSource, int aSourceLen, wchar_t* aTarget, int aTargetLen, TUint32 aCodePage)
-	{
-	if(0 == aCodePage)
-		{
-		aCodePage = CP_OEMCP;
-		}
-	return MultiByteToWideChar( aCodePage, 0, aSource, aSourceLen, aTarget, aTargetLen);
-	}
-
-#endif // __linux__
-
-std::wstring Util::string2wstring (const char* aNarrow)
-	{
-	std::string narrowStr(aNarrow);
-	int max = ConvertMultiByteToWideChar(aNarrow, strlen(aNarrow),0,0);
+	int max = MultiByteToWideChar(CP_OEMCP,0,aNarrow.c_str(),aNarrow.length(),0,0);
 	std::wstring reply;
 	if (max > 0 )
 		{
 		wchar_t* buffer = new wchar_t [max];
 		try
 			{
-			ConvertMultiByteToWideChar(aNarrow, strlen(aNarrow),buffer,max);
+			MultiByteToWideChar(CP_OEMCP,0,aNarrow.c_str(),aNarrow.length(),buffer,max);
 			reply = std::wstring (buffer, max);
 			}
 		catch (...)
@@ -201,6 +142,26 @@ std::wstring Util::string2wstring (const char* aNarrow)
 	return reply;
 	}
 
+std::wstring Util::string2wstring (const char* aNarrow)
+	{
+	std::string narrowStr(aNarrow);
+	int max = MultiByteToWideChar(CP_OEMCP,0,narrowStr.c_str(),narrowStr.length(),0,0);
+	std::wstring reply;
+	if (max > 0 )
+		{
+		wchar_t* buffer = new wchar_t [max];
+		try
+			{
+			MultiByteToWideChar(CP_OEMCP,0,narrowStr.c_str(),narrowStr.length(),buffer,max);
+			reply = std::wstring (buffer, max);
+			}
+		catch (...)
+			{
+			}
+		delete [] buffer;
+		}
+	return reply;
+	}
 
 DllExport int Util::WideCharToInteger(const wchar_t* aWideChar)
 	{
@@ -212,7 +173,7 @@ DllExport int Util::WideCharToInteger(const wchar_t* aWideChar)
 
 TInt64 Util::WideCharToInt64(const wchar_t* aWideChar)
 	{
-	TInt64 i64 = 0;
+	__int64 i64 = 0;
 	swscanf(aWideChar, L"%I64d", &i64);
 	return i64;
 	}
@@ -269,3 +230,4 @@ TUint32 Util::Crc32(const void* aPtr, TInt aLength)
 	 crc = (crc >> 8) ^ CrcTab32[(crc ^ *p++) & 0xff];
 	return crc;
 	}
+	

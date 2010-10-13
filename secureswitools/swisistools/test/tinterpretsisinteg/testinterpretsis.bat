@@ -1,5 +1,5 @@
 @rem
-@rem Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+@rem Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 @rem All rights reserved.
 @rem This component and the accompanying materials are made available
 @rem under the terms of the License "Eclipse Public License v1.0"
@@ -900,50 +900,6 @@ set exist_file=.\cdrive\sys\install\sisregistry\10286380\00000000_0000.ctl
 if exist %exist_file% GOTO FAIL_FOUND
 GOTO PASS_CLEAN
 
-
-:INT002-019
-if not exist \ddrive mkdir \ddrive > NUL
-if not exist .\edrive mkdir .\edrive > NUL
-call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\test_system_drive.sis +e -d g -i \epoc32\winscw\c\tswi\tinterpretsisinteg\data\config-drives.ini -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\800000FD\00000000.reg
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\800000FD\00000000_0000.ctl
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\edrive\sys\install\sisregistry\800000FD\00000000_0000.ctl
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\edrive\Documents\InstTest\upgrade1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\Documents\InstTest\upgrade2.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\edrive\Documents\InstTest\upgrade3.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\Documents\InstTest\upgrade4.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-
-:INT002-020
-if not exist \ddrive mkdir \ddrive > NUL
-if not exist .\edrive mkdir .\edrive > NUL
-call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\test_system_drive.sis +e -d g -i \epoc32\winscw\c\tswi\tinterpretsisinteg\data\config-drives.ini -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -c .\cdrive -x 0x800000FD +e -d g -i \epoc32\winscw\c\tswi\tinterpretsisinteg\data\config-drives.ini -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\800000FD\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\800000FD\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\edrive\sys\install\sisregistry\800000FD\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\edrive\Documents\InstTest\upgrade1.txt
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\Documents\InstTest\upgrade2.txt
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\edrive\Documents\InstTest\upgrade3.txt
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\Documents\InstTest\upgrade4.txt
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
 
 :SWI002-001
 if not exist .\romdrive\sys\bin\ mkdir .\romdrive\sys\bin\
@@ -1934,7 +1890,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1948,7 +1904,7 @@ mkdir .\romdrive\system\data
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_1.txt .\romdrive\system\data\sisregistry_5.1.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1962,7 +1918,7 @@ mkdir .\romdrive\system\data\ > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_4_1.txt .\romdrive\system\data\sisregistry_4.0.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_40\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_40\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1972,7 +1928,7 @@ GOTO PASS_CLEAN
 if not exist .\romdrive\system\install mkdir .\romdrive\system\install > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -k 5.3 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1984,7 +1940,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_4_1.txt .\romdrive\system\data\sisregistry_4.0.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -k 5.3 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -1996,7 +1952,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -2008,7 +1964,7 @@ mkdir .\romdrive\system\data
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_1.txt .\romdrive\system\data\sisregistry_5.1.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_51\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -2020,7 +1976,7 @@ if not exist .\romdrive\system\data mkdir .\romdrive\system\data > NUL
 call copy \epoc32\winscw\c\tswi\tinterpretsisinteg\data\version_5_3.txt .\romdrive\system\data\sisregistry_5.3.txt > NUL
 call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterpretsisinteg\data\simple.sis -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-call fc /c  .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
+call fc .\cdrive\sys\install\sisregistry\80000001\00000000.reg \epoc32\winscw\c\tswi\tinterpretsisinteg\data\80000001_53\00000000.reg | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -2547,7 +2503,7 @@ call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tinterprets
 if not %errorlevel%==0 GOTO LAST
 set exist_file=.\edrive\private\10202dce\802730A9_0.sis
 if not exist %exist_file% GOTO FAIL_NOT_FOUND
-call fc /c  .\edrive\private\10202dce\802730A9_0.sis \epoc32\winscw\c\tswi\tinterpretsisinteg\data\802730A9_0.sis | find "FC: no differences encountered" > NUL
+call fc .\edrive\private\10202dce\802730A9_0.sis \epoc32\winscw\c\tswi\tinterpretsisinteg\data\802730A9_0.sis | find "FC: no differences encountered" > NUL
 if not %errorlevel%==0 GOTO LAST
 ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
 GOTO PASS_CLEAN
@@ -3048,304 +3004,6 @@ call makesis \epoc32\winscw\c\tswi\tinterpretsisinteg\testdatainc124436\inc12443
 call interpretsis -z .\romdrive -c .\cdrive  -s /epoc32/winscw/c/tswi/tinterpretsisinteg/sisfiles/inc124436.sis -w info -l /epoc32/winscw/c/interpretsis_test_harness.txt
 call interpretsis -z .\romdrive -c .\cdrive -x 0x81111105 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
 if not %errorlevel%==0 GOTO LAST
-GOTO PASS_CLEAN
-
-:INT-RomInstall-01
-::Testcase to Install SIS file to ROM (z) drive and check for file exists.
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-02
-::Testcase to UnInstall SIS file installed in ROM (z) drive and check for file exists
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -c .\cdrive -x 0xe8000097 -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-
-:INT-RomInstall-03
-::Testcase to Install SA over SA to ROM (z) drive. Also validates that the eclipsing is not done. 
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-04
-::Testcase to Install SP to ROM (z) drive.
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\sp_int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-05
-::Testcase to Install PU to ROM (z) drive.
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\pu_int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-06
-::Testcase to overwrite orphan files when Installing to ROM (z) drive.
-mkdir .\romdrive\documents > NUL
-call copy \epoc32\winscw\c\tswi\teclipsing\data\file1.txt .\romdrive\documents\abc1.txt > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-07
-::Testcase for installing multiple SA to ROM (z) drive using one CLI.
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-
-:INT-RomInstall-08
-::Testcase for overwritting a file belonging to different SA.
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -s \epoc32\winscw\c\tswi\tsis\data\int_rominstall_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\90000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\90000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_romisntall_01_90000086.sis
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-09
-::Testcase for Installing SA using SWI on Rom Stub
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-call xcopy .\cdrive \epoc32\winscw\c /S /Y > NUL
-call xcopy .\romdrive \epoc32\release\winscw\udeb\z /S /Y > NUL
-if exist \epoc32\winscw\c\sys\install\sisregistry\backup.lst del \epoc32\winscw\c\sys\install\sisregistry\backup.lst > NUL
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
-GOTO END
-
-:INT-RomInstall-10
-::Testcase for UnInstalling SA upgrade using SWI on Rom Stub
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-call xcopy .\cdrive \epoc32\winscw\c /S /Y > NUL
-call xcopy .\romdrive \epoc32\release\winscw\udeb\z /S /Y > NUL
-if exist \epoc32\winscw\c\sys\install\sisregistry\backup.lst del \epoc32\winscw\c\sys\install\sisregistry\backup.lst > NUL
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_nr_option_01_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-ECHO ***ERRORCODE*** %errorlevel% PASS>>\epoc32\winscw\c\interpretsis_test_harness.txt
-GOTO END
-
-:INT-RomInstall-11
-::Testcase for verifying drive selection for 'c' , '$', 'e', '!', 'z' from pkg files while installing to Rom (z) drive.
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_rominstall_03.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\romdrive\documents\abc1.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc2.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc3.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc4.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc5.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc6.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_rominstall_03_80000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-12
-::Testcase to validate that for Installing SIS file to ROM (z) drive, system drive should not be mentioned.
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-13
-::Testcase to validate that for Installing SA over SA with different file set to ROM (z) drive.
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_rominstall_01.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\int_rominstall_04.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if not %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\80000086\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc1.txt
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\documents\abc7.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\documents\abc8.txt
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-set exist_file=.\romdrive\system\install\int_rominstall_01_90000086.sis
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\int_rominstall_04_90000086.sis
-if not exist %exist_file% GOTO FAIL_NOT_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-14
-::Testcase to validate that for Installing SIS file to ROM (z) drive, -z option is mendatory.
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-15
-::Testcase to validate that -s +z and -s +e cannot be used in same CLI with system drive defined.
-:: the order of -s +e and -s +z are different then the testcase INT-RomInstall-17. Used to test both combination as each SIS file is installed saperately
-mkdir .\romdrive\sys\bin > NUL
-call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +e -w info -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-16
-::Testcase to validate that -s +z and -s +e cannot be used in same CLI without system drive defined.
-mkdir .\romdrive\sys\bin > NUL
-if not exist \epoc32\winscw\e mkdir \epoc32\winscw\e > NUL
-call interpretsis -z .\romdrive -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +e -w info -i \epoc32\winscw\c\tswi\tinterpretsisinteg\parameters_file\int_nr_option_38.txt -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if exist %exist_file% GOTO FAIL_FOUND
-GOTO PASS_CLEAN
-
-:INT-RomInstall-17
-::Testcase to validate that -s +z and -s +e cannot be used in same CLI with system drive defined.
-:: the order of -s +e and -s +z are different then the testcase INT-RomInstall-15. Used to test both combination as each SIS file is installed saperately
-mkdir .\romdrive\sys\bin > NUL
-if not exist \epoc32\winscw\e mkdir \epoc32\winscw\e > NUL
-call interpretsis -z .\romdrive -c .\cdrive -s \epoc32\winscw\c\tswi\tsis\data\int_nr_option_01.sis +e -s \epoc32\winscw\c\tswi\tsis\data\interpretsis_testcase.sis +z -w info -i \epoc32\winscw\c\tswi\tinterpretsisinteg\parameters_file\int_nr_option_38.txt -l \epoc32\winscw\c\interpretsis_test_harness.txt > NUL
-if %errorlevel%==0 GOTO LAST
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000.reg
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\cdrive\sys\install\sisregistry\e8000097\00000000_0000.ctl
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\sys\bin\interpretsis_testcase_01.exe
-if exist %exist_file% GOTO FAIL_FOUND
-set exist_file=.\romdrive\system\install\interpretsis_testcase_e8000097.sis
-if exist %exist_file% GOTO FAIL_FOUND
 GOTO PASS_CLEAN
 
 

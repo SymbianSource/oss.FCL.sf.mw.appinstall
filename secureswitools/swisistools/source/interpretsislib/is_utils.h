@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -75,10 +75,6 @@ struct stat;
 
 	int GetStat(const std::wstring& aFile, struct stat*);
 
-	void ConvertToPlatformSpecificPath( TUint16* aIn, TUint32 len );
-	#ifdef __TOOLS2_LINUX__
-	void ConvertToForwardSlash( std::wstring& aIn);
-	#endif
 	void ConvertToLocalPath(
 		std::wstring& aIn,
 		const std::wstring& aDrivePath);
@@ -144,6 +140,9 @@ namespace Utils
 			dp38,  dp39,  dp40,  dp41,  dp42,  dp43,  dp44,  dp45};
 	 
 	void GetEquivalentLanguageList(CSISLanguage::TLanguage aLang, TLanguagePath& aEquivalents); 
+	std::string wstring2string (const std::wstring& aWide);
+
+	std::wstring string2wstring (const std::string& aNarrow);
 
 	const std::wstring IntegerToWideString(int aInt);
 

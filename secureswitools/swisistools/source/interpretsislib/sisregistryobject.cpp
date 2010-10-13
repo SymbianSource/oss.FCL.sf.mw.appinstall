@@ -125,7 +125,8 @@ SisRegistryObject::SisRegistryObject(const SisFile& aSis,
 	for( InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
 		InstallableFile* installableFile= *curr;		
-		FileDescription* f = new FileDescription(*installableFile->FileDescription() , installableFile->Sid(), aTargetDrive, installableFile->GetTarget());
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
+		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, aTargetDrive, installableFile->GetTarget());
 		iFileDescriptions.push_back(f);
 	}
 
@@ -401,9 +402,9 @@ SisRegistryObject::SisRegistryObject(CSISController& aSisController,
 		}
 	else
 	{
+		std::string x;
 		std::string error = "can not retrieve localized vendor name";
-		std::string x = wstring2string((std::wstring)packageName);
-		throw InvalidSis(x, error, INVALID_SIS);
+		throw InvalidSis(Ucs2ToUtf8((std::wstring)packageName,x), error, INVALID_SIS);
 	}
 
 	// Signed by SU cert
@@ -723,7 +724,7 @@ void SisRegistryObject::AddFiles(const InstallableFiles& aFiles)
 	for(InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
 		InstallableFile* installableFile= *curr;
-		TUint32 sid = installableFile->Sid();
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
 		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, iSelectedDrive, installableFile->GetTarget());
 		iFileDescriptions.push_back(f);
 
@@ -744,7 +745,7 @@ void SisRegistryObject::RemoveFiles(const InstallableFiles& aFiles)
 	for(InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
 		InstallableFile* installableFile= *curr;
-		TUint32 sid = installableFile->Sid();
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
 		FileDescription f = FileDescription(*installableFile->FileDescription(), sid,
 											iSelectedDrive, installableFile->GetTarget());
 		

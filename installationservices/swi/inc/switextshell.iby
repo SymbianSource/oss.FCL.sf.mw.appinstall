@@ -19,7 +19,7 @@
 #ifndef SWITEXTSHELL
 #define SWITEXTSHELL
 
-define ROMDRIVE EPOCROOT##epoc32\data\Z
+define ROMDRIVE \epoc32\data\Z
 
 // SWI configuration - already in textshell ROM
 #include <swiconfig.iby>

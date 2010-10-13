@@ -116,9 +116,7 @@ const CSISController& SisFile::GetController()
 bool SisFile::GetInstallableFiles(InstallableFiles& aFiles, 
 								  ExpressionEvaluator& aEvaluator,
 								  const std::wstring& aDrivePath,
-								  int aInstallingDrive,
-								  const int aSystemDrive,
-								  const bool aGenerateRomStub) const
+								  int aInstallingDrive) const
 {
 	bool success = true;
 	
@@ -143,12 +141,12 @@ bool SisFile::GetInstallableFiles(InstallableFiles& aFiles,
 			// aFiles will be filled with only file descriptions of files, empty file data
 			if (NULL != dataUnit && fileDes.Operation() != CSISFileDescription::EOpNull)
 				{
-				aFiles.push_back(new InstallableFile(fileDes, new CSISFileData(dataUnit->FileData(fileDes.FileIndex())), aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub));		
+				aFiles.push_back(new InstallableFile(fileDes, new CSISFileData(dataUnit->FileData(fileDes.FileIndex())), aDrivePath, aInstallingDrive));		
 				}
 			else 
 				{
 				// SIS files will not be present in PA stubs
-				aFiles.push_back( new InstallableFile(fileDes,aDrivePath,aInstallingDrive, aSystemDrive, aGenerateRomStub));		
+				aFiles.push_back( new InstallableFile(fileDes,aDrivePath,aInstallingDrive));		
 				}
 			}
 		}
@@ -156,7 +154,7 @@ bool SisFile::GetInstallableFiles(InstallableFiles& aFiles,
 	// process main controller - data unit 0
 	const CSISInstallBlock& installBlock = iContents.Controller().InstallBlock();
 
-	ProcessInstallBlock(installBlock, aFiles, aEvaluator, aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub);
+	ProcessInstallBlock(installBlock, aFiles, aEvaluator, aDrivePath, aInstallingDrive);
 
 	return success;
 }
@@ -206,8 +204,9 @@ void SisFile::CheckValid() const
 
 	if (failed)
 		{
-		std::string x = wstring2string(this->GetPackageName());
-		throw InvalidSis(x, error, SIS_NOT_SUPPORTED);
+		std::string x;
+		throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x),
+			error, SIS_NOT_SUPPORTED);
 		}
 	}
 
@@ -232,39 +231,38 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 				const CSISFileDescription::TSISInstOption operationOptions = fD.OperationOptions();
 				if(operationOptions & CSISFileDescription::EInstFileRunOptionByMimeType)
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"Run-Using-MIME\" option that will be ignored.");
+					LWARN(L"File " << target << L" contains \"Run-Using-MIME\" option that will be ignored.");
 				}
 				if((operationOptions & CSISFileDescription::EInstFileRunOptionInstall) \
 						&& (operationOptions & CSISFileDescription::EInstFileRunOptionUninstall))
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"RUN-BOTH\" option that will be ignored.");			
+					LWARN(L"File " << target << L" contains \"RUN-BOTH\" option that will be ignored.");			
 				}
 				else if(operationOptions & CSISFileDescription::EInstFileRunOptionInstall)
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"Run-On-Install\" option that will be ignored.");			
+					LWARN(L"File " << target << L" contains \"Run-On-Install\" option that will be ignored.");			
 				}
 				else if(operationOptions & CSISFileDescription::EInstFileRunOptionUninstall)
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"Run-On-Uninstall\" option that will be ignored.");			
+					LWARN(L"File " << target << L" contains \"Run-On-Uninstall\" option that will be ignored.");			
 				}
 				if(operationOptions & CSISFileDescription::EInstFileRunOptionBeforeShutdown)
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"Run-Before-Shutdown\" option that will be ignored.");			
+					LWARN(L"File " << target << L" contains \"Run-Before-Shutdown\" option that will be ignored.");			
 				}
                 if(operationOptions & CSISFileDescription::EInstFileRunOptionAfterInstall)
 				{
-					LWARN(L"File " << target.c_str() << L" contains \"Run-After-Install\" option that will be ignored.");			
+					LWARN(L"File " << target << L" contains \"Run-After-Install\" option that will be ignored.");			
 				}
-				LWARN(L"File " << target.c_str() << L" contains \"File-Run\" option that will be ignored.");			
+				LWARN(L"File " << target << L" contains \"File-Run\" option that will be ignored.");			
 			}
             success = true;
             break;
         case CSISFileDescription::EOpText:
-        	LWARN(L"File " << target.c_str() << L" contains \"Display Text\" option that will be ignored." );
+        	LWARN(L"File " << target << L" contains \"Display Text\" option that will be ignored." );
             success = true;
             break;
         case CSISFileDescription::EOpNull:
-		case CSISFileDescription::EOpNone:
             success = true;
             break;
         default:
@@ -278,7 +276,6 @@ bool SisFile::ProcessInstallOptionsWarning(const CSISInstallBlock& aInstallBlock
 			break;
 	    	}
 		}
-	return success;
 	}
 
 
@@ -373,9 +370,7 @@ std::vector<TInt> SisFile::GetAllInstallChainIndices() const
 void SisFile::GetInstallableFiles(	InstallableFiles& aFiles, 
 									const CSISInstallBlock& aInstallBlock, 
 									const std::wstring& aDrivePath,
-									int aInstallingDrive,
-									const int aSystemDrive,
-									const bool aGenerateRomStub) const
+									int aInstallingDrive) const
 	{
 	CSISInfo::TSISInstallationType installType = iContents.Controller().SISInfo().InstallationType();
 	const CSISDataUnit* dataUnit = NULL;
@@ -402,11 +397,11 @@ void SisFile::GetInstallableFiles(	InstallableFiles& aFiles,
 		if (NULL != dataUnit && fileDes.Operation() != CSISFileDescription::EOpNull)
 			{
 			const CSISFileData& filedataref = dataUnit->FileData(fileDes.FileIndex());
-			aFiles.push_back(new InstallableFile(fileDes, new CSISFileData(dataUnit->FileData(fileDes.FileIndex())), aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub));
+			aFiles.push_back(new InstallableFile(fileDes, new CSISFileData(dataUnit->FileData(fileDes.FileIndex())), aDrivePath, aInstallingDrive));
 			}
 		else // for stubs, no file data
 			{
-			aFiles.push_back(new InstallableFile(fileDes, aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub));
+			aFiles.push_back(new InstallableFile(fileDes, aDrivePath, aInstallingDrive));
 			}
 		}
 	}
@@ -415,11 +410,9 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 								  InstallableFiles& aFiles, 
 								  ExpressionEvaluator& aEvaluator, 
 								  const std::wstring& aDrivePath,
-								  int aInstallingDrive,
-								  const int aSystemDrive,
-								  const bool aGenerateRomStub) const
+								  int aInstallingDrive) const
 	{
-	GetInstallableFiles(aFiles, aInstallBlock, aDrivePath, aInstallingDrive, aSystemDrive,aGenerateRomStub);
+	GetInstallableFiles(aFiles, aInstallBlock, aDrivePath, aInstallingDrive);
 
 	const CSISArray<CSISIf, CSISFieldRoot::ESISIf>& ifs = aInstallBlock.Ifs();
 	for (int i = 0; i < ifs.size(); ++i)
@@ -428,9 +421,9 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 
 		if (ifBlock.WasteOfSpace())
 			{
+			std::string x;
 			std::string error = "corrupt SIS file";
-			std::string x = wstring2string(this->GetPackageName());
-			throw InvalidSis(x, error, INVALID_SIS);
+			throw InvalidSis(Ucs2ToUtf8(this->GetPackageName(),x), error, INVALID_SIS);
 			}
 
 		// Main expression
@@ -438,7 +431,7 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 		const bool processBlock = expressionResult.BoolValue();
 		if ( processBlock )
 			{
-			ProcessInstallBlock(ifBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub);
+			ProcessInstallBlock(ifBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive);
 			continue;
 			}
 		
@@ -448,11 +441,11 @@ void SisFile::ProcessInstallBlock(const CSISInstallBlock& aInstallBlock,
 			const CSISElseIf& ifElseBlock = ifBlock.ElseIf(i) ;
 			if ( aEvaluator.Evaluate(ifElseBlock.Expression()).BoolValue())
 				{
-				ProcessInstallBlock(ifElseBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub);
+				ProcessInstallBlock(ifElseBlock.InstallBlock(), aFiles, aEvaluator, aDrivePath, aInstallingDrive);
 				break;	// Stop processing else if blocks
 				}
 			// Process the rest of the files
-			GetInstallableFiles(aFiles, ifElseBlock.InstallBlock(), aDrivePath, aInstallingDrive, aSystemDrive, aGenerateRomStub);
+			GetInstallableFiles(aFiles, ifElseBlock.InstallBlock(), aDrivePath, aInstallingDrive);
 			}
 		} 
 	}
@@ -504,13 +497,6 @@ void SisFile::MakeSISStub(std::wstring& aFileName)
 	{
 	CSISContents contents = iContents;
 	contents.SetStub(CSISContents::EStubPreInstalled);
-	contents.WriteSIS(aFileName);
-	}
-
-void SisFile::MakeSISRomStub(std::wstring& aFileName)
-	{
-	CSISContents contents = iContents;
-	contents.SetStub(CSISContents::EStubROM);
 	contents.WriteSIS(aFileName);
 	}
 

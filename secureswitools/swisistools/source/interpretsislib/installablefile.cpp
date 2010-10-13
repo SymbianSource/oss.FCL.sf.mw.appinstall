@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -34,8 +34,7 @@
 
 
 // SA SIS files
-InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFileData* aFdata, const std::wstring aDrivePath, 
-									int aInstallingDrive, const int aSystemdrive, const bool aGenerateRomStub)
+InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFileData* aFdata, const std::wstring aDrivePath, int aInstallingDrive)
 : isExecutable(aFdata->IsExecutable()),
   isExe(aFdata->IsExe()),
   iSid(aFdata->GetSid()),
@@ -45,22 +44,17 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const CSISFil
   iTargetFile(aFdes.Target().GetString()),
   iLocalTargetFile(aFdes.Target().GetString())
 {
-	// Transforming the file path into lower case to maintain consistency
-	// between Windows and Linux as Linux path is case-sensitive.
-	std::transform(iTargetFile.begin(), iTargetFile.end(), iTargetFile.begin(), tolower);
-	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
-
 	// Update the installing file with the actual target drive letter
-	ChangeTargetDrive(aDrivePath, aInstallingDrive, aSystemdrive, aGenerateRomStub);
+	ChangeTargetDrive(aDrivePath, aInstallingDrive);
 
 	// warn the user if they are using a winscw emulator binary
 	if (aFdata->IsEmulatorExecutable())
-			LWARN(iTargetFile.c_str() << L" is an emulator binary!");
+			LWARN(iTargetFile << L" is an emulator binary!");
 }
 
 // PA SIS files		
 InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::wstring aDrivePath,
-								 int aInstallingDrive, const int aSystemdrive, const bool aGenerateRomStub)
+								 int aInstallingDrive)
 : isExecutable(false),
   isExe(false),
   iSid(0),
@@ -70,13 +64,8 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::ws
   iTargetFile(aFdes.Target().GetString()),
   iLocalTargetFile(aFdes.Target().GetString())
   {
-	// Transforming the file path into lower case to maintain consistency
-	// between Windows and Linux as Linux path is case-sensitive.
-	std::transform(iTargetFile.begin(), iTargetFile.end(), iTargetFile.begin(), tolower);
-	std::transform(iLocalTargetFile.begin(), iLocalTargetFile.end(), iLocalTargetFile.begin(), tolower);
-
 	// Update the installing file with the actual target drive letter
-	ChangeTargetDrive(aDrivePath, aInstallingDrive, aSystemdrive, aGenerateRomStub);
+	ChangeTargetDrive(aDrivePath, aInstallingDrive);
 
 		// retrieve the file attributes e.g. exe, dll, SID etc.
 	const bool fileExists = FileExists( iLocalTargetFile );
@@ -97,7 +86,7 @@ InstallableFile::InstallableFile(const CSISFileDescription& aFdes, const std::ws
 				iSid = info.iSecureId;
 				
 				if(fileType & EFileEmulatorExe)
-					LWARN(iTargetFile.c_str() << L" is an emulator binary!");
+					LWARN(iTargetFile << L" is an emulator binary!");
 				}
 			else if (fileType & EFileDll)
 				{
@@ -117,19 +106,11 @@ InstallableFile::~InstallableFile()
 	delete iFileData;
 }
 
-void InstallableFile::SetTarget(const  std::wstring& aTargetFile)
-{
-	iTargetFile = aTargetFile;
-}
 
-void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive, 
-												const int aSystemdrive, const bool aGenerateRomStub)
+void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInstallingDrive)
 {
 	// get the local path
 	ConvertToLocalPath(iLocalTargetFile,aDrivePath);
-#ifdef __TOOLS2_LINUX__
-	ConvertToForwardSlash(iTargetFile);
-#endif
 
 	// change the drive letter
 	if (StringUtils::StartsWithDrive(iTargetFile))
@@ -138,24 +119,9 @@ void InstallableFile::ChangeTargetDrive(const std::wstring aDrivePath, int aInst
 		int targetFileDrive = tolower(target[0]);
 		if (targetFileDrive != aInstallingDrive)
 		{
-			if((iTargetFile[0] == '$') && !aGenerateRomStub)
-			{
-				//Creating tmpTarget so that '$' in iTargetFile is retained  and 
-				//can be used as a marker while File Copy to system drive and 
-				//not to LocalTargetPath
-				std::wstring tmpTarget(iTargetFile);
-				tmpTarget[0] = aSystemdrive;
-				
-				LINFO(L"Disregarding drive selection. Installing "
-					<< target.c_str() << L" to " << tmpTarget.c_str());
-			}
-			else
-			{
-				iTargetFile[0] = aInstallingDrive;
-				
-				LINFO(L"Disregarding drive selection. Installing "
-					<< target.c_str() << L" to " << iTargetFile.c_str());
-			}
+			iTargetFile[0] = aInstallingDrive;
+			LINFO(L"Disregarding drive selection. Installing "
+				+ target + L" to " + iTargetFile);
 		}
 	}
 	else

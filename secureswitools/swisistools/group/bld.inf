@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 1999-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 1999-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -109,9 +109,6 @@ PRJ_TESTEXPORTS
 // 2 files for testMakesis.pl to test UTF-8 encoded PKG-file
 ../test/testmakesis/utf8.pkg /epoc32/winscw/c/tswi/utf8.pkg
 ../test/testmakesis/utf8.txt /epoc32/winscw/c/tswi/utf8.txt
-
-// file for testMakesis.pl to test 
-../test/testmakesis/largelanguagecodes.pkg /epoc32/winscw/c/tswi/largelanguagecodes.pkg
 
 // signsis
 ../test/tsignsis/largefile.zip									/epoc32/winscw/c/tswi/tsignsis/largefile.zip
@@ -1549,8 +1546,6 @@ PRJ_TESTEXPORTS
 ../test/tinterpretsisinteg/scripts/int_nr_option-37.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-37.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-38.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-38.script
 ../test/tinterpretsisinteg/scripts/int_nr_option-39.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int_nr_option-39.script
-../test/tinterpretsisinteg/scripts/int-rominstall-09.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int-rominstall-09.script
-../test/tinterpretsisinteg/scripts/int-rominstall-10.script  /epoc32/winscw/c/tswi/tinterpretsisinteg/scripts/int-rominstall-10.script
 
 ../test/tinterpretsisinteg/preq2525-interpretsis-01/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-01/argumentfile.ini
 ../test/tinterpretsisinteg/preq2525-interpretsis-02/argumentfile.ini  /epoc32/winscw/c/tswi/tinterpretsisinteg/preq2525-interpretsis-02/argumentfile.ini

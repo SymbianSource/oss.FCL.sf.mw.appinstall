@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -47,18 +47,14 @@ typedef int64_t							TInt64;
 
 typedef			  long		int		TInt32;
 typedef	unsigned  long		int		TUint32;
-typedef			  short		int		TInt16;
+typedef				short	int		TInt16;
 typedef	signed				char	TInt8;
-typedef	unsigned  short		int		TUint16;
+typedef	unsigned	short	int		TUint16;
 typedef	unsigned			char	TUint8;
 typedef						bool	TBool;
 
-typedef TUint16						TCRC;
-typedef						int		TInt;
-typedef unsigned			int		TUint;
-typedef void						TAny;
-typedef unsigned short		int		TText16;
-typedef unsigned			char	TText8;
+typedef TUint16 TCRC;
+typedef int TInt;
 
 #endif	/* __SYMBIAN_TYPES_H__ */
 
@@ -67,6 +63,3 @@ typedef unsigned			char	TText8;
 #else
 #define STRING std::string
 #endif // _UNICODE
-
-#define ETrue  true;
-#define EFalse false;

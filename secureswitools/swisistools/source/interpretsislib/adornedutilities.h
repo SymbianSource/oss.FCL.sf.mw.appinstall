@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -45,11 +45,7 @@ void GetUnadornedFileName(const std::wstring& aAdornedFilename, std::wstring& aU
 @param aFileName1 first name to compare (full path and name)
 @param aFileName2 second name to compare (full path and name)
 */
-#ifndef __TOOLS2_LINUX__
 bool IsAdornedVariationOf(const std::wstring& aFileName1, const std::wstring& aFileName2);
-#else
-bool IsAdornedVariationOf(const std::wstring& aFileName1, const std::wstring& aFileName2, const std::wstring& aDrivePath);
-#endif
 	
 /** Searches through the file system looking for all variants of searchNameWild
 @param aSearchNameWild represents the filename pattern that is to be searched for (i.e: afile{????????}.ext)

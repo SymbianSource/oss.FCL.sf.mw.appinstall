@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -28,10 +28,10 @@
 #include <functional>
 #include <set>
 
+
 #include "dumpsis.h"
 #include "siscontroller.h"
 #include "exception.h"
-#include "utf8.h"
 
 CDumpSis::CDumpSis(const std::wstring& aSISFileName, bool aVerbose)
 		: 	iController(NULL),
@@ -68,7 +68,6 @@ void CDumpSis::CreatePackage(const std::wstring& aPkgFileName)
 	std::wostream outStream (inStream.rdbuf ());
 
 	outStream << wchar_t(0xfeff);
-
 	if(iIsStub)
 		{
 		iController->AddPackageEntry (outStream, iVerbose);
@@ -79,27 +78,7 @@ void CDumpSis::CreatePackage(const std::wstring& aPkgFileName)
 		}
 	
 	std::wstring str = inStream.str();
-#ifndef __TOOLS2_LINUX__
 	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
-#else
-	TUint32 size = str.size();
-	const wchar_t * source = str.c_str();
-
-	unsigned short int* buffer = new unsigned short int[size*2];
-
-	// Using a temp variable in place of buffer as ConvertUTF32toUTF16 modifies the source pointer passed.
-	unsigned short int* temp = buffer;
-
-	//Converting to UTF-16 because makesis do not support UTF-32.	
-	ConvertUTF32toUTF16(&source, source + size, &temp,  temp + (size*2), lenientConversion);
-
-	TUint32 buflen = temp-buffer;
-	// Appending NULL to the converted buffer.
-	*temp = NULL;
-
-	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(buffer), buflen*2);
-	delete[] buffer;
-#endif
 	}
 
 void CDumpSis::CreatePackage(const CSISController& aSisController, const std::wstring& aPkgFileName)
@@ -110,27 +89,7 @@ void CDumpSis::CreatePackage(const CSISController& aSisController, const std::ws
 	outStream << wchar_t(0xfeff);
 	aSisController.AddPackageEntry (outStream, iVerbose);
 	std::wstring str = inStream.str();
-#ifndef __TOOLS2_LINUX__
 	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(str.c_str()), str.length()*2);
-#else
-	TUint32 size = str.size();
-	const wchar_t * source = str.c_str();
-	
-	unsigned short int* buffer = new unsigned short int[size*2];
-	
-	// Using a temp variable in place of buffer as ConvertUTF32toUTF16 modifies the source pointer passed.
-	unsigned short int* temp = buffer;
-	
-	//Converting to UTF-16 because makesis do not support UTF-32.	
-	ConvertUTF32toUTF16(&source, source + size, &temp,	temp + (size*2), lenientConversion);
-	
-	TUint32 buflen = temp-buffer;
-	// Appending NULL to the converted buffer.
-	*temp = NULL;
-	
-	WriteToFile(aPkgFileName, reinterpret_cast<const TUint8*>(buffer), buflen*2);
-	delete[] buffer;
-#endif
 	}
 
 void CDumpSis::ExtractFiles(const std::wstring& aTargetDir, TExtractionLevel aLevel)

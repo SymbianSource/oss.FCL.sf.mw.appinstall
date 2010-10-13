@@ -25,7 +25,6 @@
 #include "SWInstDefs.h"
 #include "SWInstCommon.h"
 
-
 using namespace SwiUI;
 
 // ================= MEMBER FUNCTIONS =======================
@@ -49,17 +48,16 @@ EXPORT_C RSWInstLauncher::RSWInstLauncher()
 //
 EXPORT_C TInt RSWInstLauncher::Connect()
     {
-   
     TInt result( KErrNone );
 
     if ( !iConnected )
         {
         if ( CEikonEnv::Static() )
-            {               
+            {            
             TRAP( result, ConnectChainedAppL( KUidSWInstSvr ) );
             }
         else
-            {             
+            {
             TRAP( result, REikAppServiceBase::ConnectNewAppL( KUidSWInstSvr ) );            
             }
         
@@ -80,22 +78,12 @@ EXPORT_C TInt RSWInstLauncher::Connect()
 // -----------------------------------------------------------------------------
 //  
 EXPORT_C void RSWInstLauncher::Close()
-    {        
+    {
     if ( iConnected )
         {
-        if ( CEikonEnv::Static() )
-            { 
-            // Note this will crash if non ui application like SWI Daemon.
-            RAknAppServiceBase::Close();
-            }
-        else
-            {            
-            // Use EikAppServiceBase if non UI application.
-            REikAppServiceBase::Close();
-            }
-        
+        RAknAppServiceBase::Close();
         iConnected = EFalse;
-        }        
+        }    
     }
 
 // -----------------------------------------------------------------------------

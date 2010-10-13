@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -123,7 +123,7 @@ ConfigManager::ConfigManager(const CParameterList& aParamList)
     if ( FileExists( fileName ) )
         {
     	std::string fName;
-        fName = wstring2string( fileName );
+        fName = Ucs2ToUtf8( fileName );
         //
         std::ifstream stream;
 	    stream.open( fName.c_str(), std::ios::binary );
@@ -203,27 +203,12 @@ void ConfigManager::AddRomAndSystemDrives(const CParameterList& aParamList)
 		CheckAndAddDrive(aParamList.SystemDriveLetter(), aParamList.SystemDrivePath());
 		}
 
-	if ((!IsTargetDrivePresent(aParamList.SystemDriveLetter())) && (!aParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)))
+	if ( !IsTargetDrivePresent(aParamList.SystemDriveLetter()) )
 		{
 		std::stringstream err;
 		err << "The directory representing the system drive is not defined";
 		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
 		}
-
-	if (!((aParamList.IsFlagSet(CParameterList::EFlagsCDriveSet)) ^ (aParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet)))) 
-		{
-		std::stringstream err;
-		err << "The System Drive should not be defined for Installation to Rom Drive";
-		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
-		}
-	
-	if ((!aParamList.IsFlagSet(CParameterList::EFlagsCDriveSet)) && (aParamList.IsFlagSet(CParameterList::EFlagsExtDriveSet)))
-		{
-		std::stringstream err;
-		err << "The Extended Drive cannot be specified without -c (System drive) option.";
-		throw ConfigManagerException( ConfigManagerException::ETypeDriveError, err.str());
-		}
-
 	}
 
 
@@ -397,7 +382,7 @@ void ConfigManager::ConvertLineData( const std::string& aKey, std::string& aValu
 		std::ostringstream stream;
     	stream << "Unsupported keyword at line " << aLineNumber << " of ini file [" << aKey << " = " << aValue << "] ";
     	stream << std::endl;
-    	std::wstring finalMessage = string2wstring( stream.str() );
+    	std::wstring finalMessage = Utf8ToUcs2( stream.str() );
 		LWARN( finalMessage );
 		}
     }
@@ -413,7 +398,7 @@ std::string ConfigManager::AttributeNameById( TUint32 aId )
 		if  ( KConfigAttributes[i].iId == aId )
 			{
 			std::wstring entry( KConfigAttributes[i].iName );
-            ret = wstring2string( entry );
+            ret = Ucs2ToUtf8( entry );
 			}
 		}
     //
@@ -426,7 +411,7 @@ const ConfigAttribute* ConfigManager::AttributeByName( const std::string& aName 
 	std::string upperCased( aName );
     upperCased = StringUtils::ToUpper( upperCased );
     std::wstring searchFor;
-    searchFor = string2wstring( upperCased );
+    searchFor = Utf8ToUcs2( upperCased );
     //
     const int attributeCount = sizeof( KConfigAttributes ) / sizeof( ConfigAttribute );
     const ConfigAttribute* ret = NULL;
@@ -527,7 +512,7 @@ int ConfigManager::ConvertToDriveAttributes( const std::string& aString, DriveAt
 			}
 
 		// Set the drive representation location
-		aDrive->iDir = string2wstring(std::string(it, (currentPos-it)));
+		Utf8ToUcs2(std::string(it, (currentPos-it)), aDrive->iDir);
 			
 		temp =  StringUtils::TrimWhiteSpace( std::string(currentPos, end) );
 
@@ -629,7 +614,7 @@ void ConfigManager::CheckAndAddDrive(const int aDrive, const std::wstring& aDir,
 		char drive = aDrive;
 	 	std::stringstream warn;
 		warn << "Redefining drive: " << drive;
-		std::wstring finalMessage = string2wstring( warn.str() );
+		std::wstring finalMessage = Utf8ToUcs2( warn.str() );
 		LWARN( finalMessage + L" to " + aDir);
 
 		delete it->second;
@@ -702,7 +687,7 @@ void ConfigManagerException::Display() const
 			stream << "\'" << iValue << "\'" << " directory is not found";
 			break;
 		case ETypeDriveError:
-			LERROR( string2wstring( iValue ) );
+			LERROR( Utf8ToUcs2( iValue ) );
 			return;
 
 		default:
@@ -711,7 +696,7 @@ void ConfigManagerException::Display() const
 		}
     //
     stream << std::endl;
-    std::wstring finalMessage = string2wstring( stream.str() );
+    std::wstring finalMessage = Utf8ToUcs2( stream.str() );
     //
 	LERROR( finalMessage );
     }

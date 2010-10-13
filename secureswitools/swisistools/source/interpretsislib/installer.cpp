@@ -21,9 +21,7 @@
 #ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 
 #include "dbhelper.h" 
-#ifndef __TOOLS2_LINUX__
-#include <windows.h>
-#endif 
+
 #endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 #include <exception>
 #include <sstream>
@@ -56,11 +54,7 @@
 // Constants
 const char KRomDriveLetter = 'z';
 const TUint32 KSwiDaemonUid = 0x10202DCE;
-#ifndef __TOOLS2_LINUX__
 const std::wstring KSysBinPath = L"\\sys\\bin\\";
-#else
-const std::wstring KSysBinPath = L"/sys/bin/";
-#endif
 
 TInt CheckWildCard(TInt aVal, TInt aReplace)
 {
@@ -117,11 +111,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 
 		// Ensure formatting is correct
 		if ( StringUtils::IsLastCharacter( shortName, KDirectorySeparator[ 0 ] ) ||
-			 #ifndef __TOOLS2_LINUX__
              StringUtils::IsLastCharacter( shortName, L'/' ) )
-             #else
-			 StringUtils::IsLastCharacter( shortName, L'\\' ) )
-			 #endif
 		{
 			shortName.erase(shortName.length()-1,1);
 		}
@@ -138,8 +128,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 				{
 					InstallSISFile sisFileName(shortName + KDirectorySeparator + *currStr, 
 												curr->iTargetDrive, curr->iGenerateStub, 
-												curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, 
-												curr->iSUFlag, curr->iGenerateRomStub);
+												curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, curr->iSUFlag);
 
 					sisFiles.push_back(sisFileName);
 				}
@@ -154,8 +143,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 				|| (shortName.find(L".sis",0) != std::wstring::npos))
 		{
 			InstallSISFile sisFileName(shortName, curr->iTargetDrive, curr->iGenerateStub, 
-										curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, 
-										curr->iSUFlag, curr->iGenerateRomStub);
+										curr->iNonRemovable, curr->iReadOnly, curr->iNotRegister, curr->iSUFlag);
 
 			sisFiles.push_back(sisFileName);
 		}
@@ -210,7 +198,7 @@ TInt Installer::Install(const CParameterList::SISFileList& aList)
 			catch  (InterpretSisError& e)
 				{
 				LERROR(L"Failed installing " << (curr->iFileName));
-				LERROR(L"\t" << string2wstring(e.what()));
+				LERROR(L"\t" << Utf8ToUcs2(e.what()));
 				curr = sisFiles.erase(curr);
 				
 				if (result == 0)
@@ -340,32 +328,26 @@ TInt Installer::Install(const InstallSISFile& aInstallSISFile)
 		return MISSING_DEPENDENCY;
 	}
 
-	if (!IsValidUpgrade(file, aInstallSISFile.iSUFlag, aInstallSISFile.iNonRemovable, aInstallSISFile.iGenerateRomStub))
+	if (!IsValidUpgrade(file, aInstallSISFile.iSUFlag, aInstallSISFile.iNonRemovable))
 	{
 		return INVALID_UPGRADE;
 	}
 
 	InstallableFiles installable;
-	GetInstallableFiles(file, installable, *iExpressionEvaluator, aInstallSISFile.iTargetDrive, 
-									iParamList.SystemDriveLetter(), aInstallSISFile.iGenerateRomStub);
+	GetInstallableFiles(file, installable, *iExpressionEvaluator, aInstallSISFile.iTargetDrive);
 
 	// Uninstall the same package (if found) prior to any installation
-	UninstallPkg(file, aInstallSISFile.iGenerateRomStub);
+	UninstallPkg(file);
 
 	CheckDestinations(file, installable, aInstallSISFile);
 
-	InstallFiles(installable, iParamList.SystemDriveLetter(), aInstallSISFile.iGenerateRomStub);
+	InstallFiles(installable, iParamList.SystemDriveLetter());
 
 	UpdateRegistry(file, installable, aInstallSISFile, aInstallSISFile.iSUFlag);
 	
 	if (aInstallSISFile.iGenerateStub)
 	{
 		CreateStubSisFile(aInstallSISFile, file);
-	}
-
-	if (aInstallSISFile.iGenerateRomStub)
-	{
-		CreateRomStubSisFile(aInstallSISFile, file);
 	}
 
 	FreeInstallableFiles(installable);
@@ -466,7 +448,7 @@ bool Installer::IsValidEclipsingUpgrade(const SisFile& aSis, const SisRegistryOb
 	return (stubExistsInRom && (romUpgradableSA || puInstall || spInstall));    	
 }
 
-void Installer::UninstallPkg(const SisFile& aSis, const bool aGenerateRomStub)
+void Installer::UninstallPkg(const SisFile& aSis)
 {
 	TUint32 uid = aSis.GetPackageUid();
 	TUint32 installType = aSis.GetInstallType();
@@ -474,7 +456,7 @@ void Installer::UninstallPkg(const SisFile& aSis, const bool aGenerateRomStub)
 	// Check to see the SA is installed, otherwise, RemovePkg() will throw an exception
 	if (iRegistry.IsInstalled(uid) && (installType == CSISInfo::EInstInstallation))
 	{
-		LINFO(L"Removing package \"" << aSis.GetPackageName().c_str() << L"\" prior to re-installation");
+		LINFO(L"Removing package \"" << aSis.GetPackageName() << L"\" prior to re-installation");
 
 		// Remove all installed files for this Uid's packages and all the SisRegistry Entries
 		iRegistry.RemovePkg(uid, true);
@@ -483,35 +465,11 @@ void Installer::UninstallPkg(const SisFile& aSis, const bool aGenerateRomStub)
 	if (installType == CSISInfo::EInstAugmentation)
 	{
 		// Clean up the installed files from the specified SP package and the SisRegistry Entry
-		iRegistry.RemoveEntry(uid, aSis.GetPackageName().c_str(), aSis.GetVendorName().c_str());
+		iRegistry.RemoveEntry(uid, aSis.GetPackageName(), aSis.GetVendorName());
 	}
 
-	if(!aGenerateRomStub)
-	{
-		// Regenerate the ROM stub registry entries for eclipsing check later.
-		iRegistry.GenerateStubRegistry();
-	}
-	else
-	{
-		std::list<std::wstring> stubFileEntries;
-
-		iRegistry.GetStubFileEntries(uid, stubFileEntries);
-		if((!stubFileEntries.empty()))
-	    {
-			LINFO(L"Rom Stub Upgrade, removing \"" << iRegistry.GetRomStubFile() << L"\" prior to re-installation");
-			RemoveFile(iRegistry.GetRomStubFile());
-		
-			std::list<std::wstring>::const_iterator end = stubFileEntries.end();
-			for (std::list<std::wstring>::const_iterator curr = stubFileEntries.begin() ;
-			 curr != end; ++curr)
-			{
-				std::wstring file = *curr;
-				file[0]='z';
-				ConvertToLocalPath(file, iParamList.RomDrivePath());
-				RemoveFile(file);
-			}
-	 	}
-	}
+	// Regenerate the ROM stub registry entries for eclipsing check later.
+	iRegistry.GenerateStubRegistry();
 }
 
 
@@ -577,7 +535,7 @@ bool Installer::DependenciesOk(const SisFile& aFile)
 	}
 
 
-bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable, bool aGenerateRomStub)
+bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable)
 {
 	TUint32 pkg = aFile.GetPackageUid();
 	TUint32 installFlags = aFile.GetInstallFlags();
@@ -614,44 +572,22 @@ bool Installer::IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemo
 
 	if (iRegistry.IsInstalled(pkg))
 		{
-		if (aGenerateRomStub && (installType == CSISInfo::EInstAugmentation || installType == CSISInfo::EInstPartialUpgrade))
-			{
-			// Installing SP and PU to Rom (z) drive not allowed
-			std::stringstream err;
-			err << "Could not perform SP or PU upgrade for Rom (z) drive installation";
-			
-			throw InterpretSisError(err.str(), ATTEMPT_TO_UPGRADE_ROM_PKG);
-			}
-		else
-			{
-			ValidateRegistry(aFile,pkg,installFlags,RUFlag,aNonRemovable,aGenerateRomStub);	
-			}
+		ValidateRegistry(aFile,pkg,installFlags,RUFlag,aNonRemovable);	
 		}
 	else if (installType == CSISInfo::EInstAugmentation || installType == CSISInfo::EInstPartialUpgrade)
 		{
-		if(iParamList.IsFlagSet(CParameterList::EFlagsRomInstallSet))
-			{
-			// Installing SP and PU to Rom Drive is not supported.
-			std::stringstream err;
-			err << "Installing SP and PU to Rom (z) Drive is not supported.";
-			throw InterpretSisError(err.str(), ATTEMPT_TO_UPGRADE_ROM_PKG);
-			}
-		else
-			{
-			// Installing SP and PU without the base package
-			std::stringstream err;
-			err << "Could not perform upgrade - the base package 0x" << std::hex 
-				<< pkg << " is missing";
+		// Installing SP and PU without the base package
+		std::stringstream err;
+		err << "Could not perform upgrade - the base package 0x" << std::hex 
+			<< pkg << " is missing";
 
-			throw InterpretSisError(err.str(), MISSING_BASE_PACKAGE);
-			}
+		throw InterpretSisError(err.str(), MISSING_BASE_PACKAGE);
 		}
 
 	return true;
 	}
 
-void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, 
-										bool aRUFlag, bool aNonRemovable, bool aGenerateRomStub)
+void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag, bool aNonRemovable)
 	{
 	bool isSisNonRemovable = aInstallFlags & CSISInfo::EInstFlagNonRemovable;
 	bool isBaseRemovable = false;
@@ -667,14 +603,14 @@ void Installer::ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32
 
 	if (installType == CSISInfo::EInstInstallation)
 		{
-		if (inRom && !aRUFlag && !aGenerateRomStub)
+		if (inRom && !aRUFlag)
 			{
 			std::stringstream err;
 			err << "Illegal SA upgrade to ROM package 0x" << std::hex << aPckgUid;
 			throw InterpretSisError(err.str(), ATTEMPT_TO_UPGRADE_ROM_PKG);
 			}
 		// This is not a ROM base package, check is there a SIS stub base package present
-		else if (iRegistry.IsRomStubPackage(aPckgUid) && !aRUFlag && !aGenerateRomStub)
+		else if (iRegistry.IsRomStubPackage(aPckgUid) && !aRUFlag)
 			{			
 			std::stringstream err;
 			err << "Indirect SA upgrade to ROM package 0x" << std::hex << aPckgUid
@@ -765,21 +701,20 @@ void Installer::InitializeRegistryDetails(  const TUint32 aPckgUid, bool& aIsBas
 	}
 
 bool Installer::GetInstallableFiles(const SisFile& aFile, InstallableFiles& aList, ExpressionEvaluator& aEvaluator, 
-									int aInstallingDrive, const int aSystemDrive, const bool aGenerateRomStub)
+									int aInstallingDrive)
 {
 	return aFile.GetInstallableFiles(aList, aEvaluator, 
-		iConfigManager.GetLocalDrivePath(aInstallingDrive), aInstallingDrive, aSystemDrive, aGenerateRomStub);
+		iConfigManager.GetLocalDrivePath(aInstallingDrive), aInstallingDrive);
 }
 
 
 struct InstallFile
 {
-	InstallFile(const std::wstring& aCDrive, const int aSystemDrive, const bool aGenerateRomStub)
-		: iSystemDrivePath(aCDrive), iSystemDrive(aSystemDrive), iGenerateRomStub(aGenerateRomStub) {}
+	InstallFile(const std::wstring& aCDrive, const int aSystemDrive)
+		: iSystemDrivePath(aCDrive), iSystemDrive(aSystemDrive) {}
 
 	const std::wstring& iSystemDrivePath;
 	const int iSystemDrive;
-	const bool iGenerateRomStub;
 
 	void operator()(const InstallableFile* aFile)
 	{
@@ -796,21 +731,9 @@ struct InstallFile
         else
             {
 			// Unicode characters can not be displayed on DOS prompt
- 			std::string temporary = wstring2string(target);
-			if(temporary[0]=='$')
-			{
-				temporary[0] = iSystemDrive;
-			}
-			std::wstring targetDisplay = string2wstring( temporary );
+ 			std::string temporary = Ucs2ToUtf8(target);
+			std::wstring targetDisplay = Utf8ToUcs2( temporary );
 		    LINFO(L"Installing file: " << targetDisplay);
-
-			if(target[0]==L'$')
-			{
-				localTarget = target;
-				ConvertToLocalPath( localTarget, iSystemDrivePath );
-				target[0] = iSystemDrive;
-				aFile->SetTarget(target);
-			}
 
             std::wstring targetDirectory = localTarget.substr( 0, localTarget.rfind( KDirectorySeparator ) );    		
 			const unsigned char* buffer = NULL;
@@ -829,7 +752,7 @@ struct InstallFile
 				// if the FN option specified, leave the file creation
 				if (fileNullOption)
 				{
-					LINFO(L"File " << target.c_str() << L" contains \"Delete-File-On-Uninstall\" option." );
+					LINFO(L"File " << target << L" contains \"Delete-File-On-Uninstall\" option." );
 				}
 				else 
 				{
@@ -856,19 +779,12 @@ struct InstallFile
 				}
 			}
 
-			if (aFile->IsExecutable() && !fileNullOption && !iGenerateRomStub)
+			if (aFile->IsExecutable() && !fileNullOption)
 			{
 				// register the hash
 				std::wstring basename = localTarget.substr( localTarget.rfind( KDirectorySeparator ) + 1 );
-				#ifndef __TOOLS2_LINUX__
-				// Remove the null character at the end and.
-				std::wstring tempStr = iSystemDrivePath.c_str();
-				std::wstring hashdir =  tempStr + L"\\sys\\hash\\";				
+				std::wstring hashdir = iSystemDrivePath + L"\\sys\\hash\\";
 				std::wstring reghashdir = L"$:\\sys\\hash\\";
-				#else
-				std::wstring hashdir = iSystemDrivePath + L"/sys/hash/";
-				std::wstring reghashdir = L"$:/sys/hash/";
-				#endif
 
 				if ( !MakeDir( hashdir ) )
 				{
@@ -879,7 +795,8 @@ struct InstallFile
 				// hash file is always created on the system drive
 				reghashdir[0] = iSystemDrive;
 
-				LINFO(L"\tCreating hash: " << reghashdir << basename.c_str());				
+				LINFO(L"\tCreating hash: " << reghashdir << basename);
+
 				std::wstring hash = hashdir + basename;
 				HANDLE hFile = MakeSISOpenFile(hash.c_str(), GENERIC_WRITE, CREATE_ALWAYS);		
 				if( INVALID_HANDLE_VALUE == hFile )
@@ -902,16 +819,11 @@ struct InstallFile
 };
 
 
-void Installer::InstallFiles(const InstallableFiles& aList, int aInstallDrive, const bool aGenerateRomStub)
+void Installer::InstallFiles(const InstallableFiles& aList, const int aInstallDrive)
 {
-	if(aGenerateRomStub)
-		{
-		aInstallDrive = 'z'; //Rom Drive
-		}
-
 	std::wstring localTargetPath = iConfigManager.GetLocalDrivePath(aInstallDrive);
 
-	std::for_each(aList.begin(), aList.end(), InstallFile(localTargetPath, aInstallDrive, aGenerateRomStub));
+	std::for_each(aList.begin(), aList.end(), InstallFile(localTargetPath, aInstallDrive));
 }
 
 
@@ -958,11 +870,7 @@ void Installer::AdornedProcessingOfFile(const std::wstring& aTarget, std::wstrin
 	// find all adorned variants in the ROM/ROFS logs
 	if (iParamList.IsFlagSet(CParameterList::EFlagsRomRofsLogFilesSet))
 	{
-	#ifndef __TOOLS2_LINUX__
 		std::wstring romSearchNameWild = L"z:\\sys\\bin\\";
-	#else
-		std::wstring romSearchNameWild = L"z:/sys/bin/";
-	#endif
 		romSearchNameWild.append(searchNameWild);
 		iRomManager.FindAllAdornedVariants(romSearchNameWild, aAdornedFileNamesFound);
 	}
@@ -1075,11 +983,7 @@ bool Installer::ValidEclipse(const SisFile& aFile, const std::wstring& aTarget, 
 		{
 			// we are eclipsing a ROM file, check if this is authorised:
 			// see implementation of IsEclipsable()
-			#ifndef __TOOLS2_LINUX__
 			if (!IsEclipsable(searchNameUnadorned, aSUFlag))
-			#else
-			if (!IsEclipsable(searchNameUnadorned, aSUFlag, localDir))
-			#endif
 			{
 				result = false;
 				break;
@@ -1094,7 +998,7 @@ bool Installer::ValidEclipse(const SisFile& aFile, const std::wstring& aTarget, 
 		// this drive should be added to iEclipsableOverwriteFiles.
 		if (processEclipsingSuspectsFoundOnThisDrive && unadornedFound)
 		{
-			iEclipsableOverwriteFiles.push_back(searchNameUnadorned.c_str());
+			iEclipsableOverwriteFiles.push_back(searchNameUnadorned);
 		}
 
 		if (processEclipsingSuspectsFoundOnThisDrive && adornedFound)
@@ -1110,7 +1014,7 @@ bool Installer::ValidEclipse(const SisFile& aFile, const std::wstring& aTarget, 
 				int drive = tolower(adornedFile[0]);
 				if (drive == disk)
 				{
-					iEclipsableOverwriteFiles.push_back(adornedFile.c_str());
+					iEclipsableOverwriteFiles.push_back(adornedFile);
 				}
 			}
 		}
@@ -1183,11 +1087,7 @@ void Installer::FilterNonBlockingFilesOfFilename(const SisFile& aFile, const std
  @param aRomFile fully qualified filename in ROM that is to be checked for eclipising (i.e: z:\sys\bin\some.dll)
  @param aSUFlag specifies if the installing SIS file has been signed by a SU certificate
 */
-#ifndef __TOOLS2_LINUX__
 bool Installer::IsEclipsable(std::wstring& aRomFile, bool aSUFlag)
-#else
-bool Installer::IsEclipsable(std::wstring& aRomFile, bool aSUFlag, const std::wstring& aDrivePath)
-#endif
 {
 	// SA/SP/PU sis + RU flag + signed by SU root cert is allowed
 	if (aSUFlag)
@@ -1211,11 +1111,7 @@ bool Installer::IsEclipsable(std::wstring& aRomFile, bool aSUFlag, const std::ws
 		}
 		else if (goesToSysBin) // case 2
 		{
-			#ifndef __TOOLS2_LINUX__
 			if (IsAdornedVariationOf(eclipsableRomFile,aRomFile))
-			#else
-			if (IsAdornedVariationOf(eclipsableRomFile,aRomFile,aDrivePath))
-			#endif
 			{
 				isEclipsable = true;
 				break;
@@ -1224,41 +1120,6 @@ bool Installer::IsEclipsable(std::wstring& aRomFile, bool aSUFlag, const std::ws
 	}
 
 	return isEclipsable;
-}
-
-/** This function handles file overwriting scenarios from Stub SIS files only and not from SISregistry.
-      (i.e: we are trying to install z:\somedir\somename.ext however it already exists)
- @param aFile the SIS file to be installed
- @param aTarget The fully qualified filename (full path and name)
-*/
-void Installer::HandleRomFileOverwriting(const SisFile& aFile, const std::wstring& aTarget)
-{
-	// find out which Rom Stub this file belongs to
-	TUint32 owningUid = 0;
-	CSISController* sisController = iRegistry.GetStubControllerUid(aTarget);
-
-	if(sisController)
-	{
-		owningUid=sisController->UID1();
-	}
-
-	// no package owns this file. Always allow orphaned file overwriting!
-	if (owningUid == 0)
-	{
-		LWARN(aTarget << L" overwrites orphaned file");
-	}
-	else if (aFile.GetPackageUid() != owningUid)
-	{
-		std::wostringstream os;
-		os << aTarget.c_str() << L" overwrites file from package 0x" << std::hex << owningUid << L" \"" << sisController->SISInfo().PackageName(0) << L"\"" << std::endl;
-		iProblemFiles.append(os.str());
-		iError = ECLIPSING_VIOLATION;
-	}
-	
-	if(sisController)
-	{
-		delete sisController;	
-	}
 }
 
 /** This function handles overwriting scenarios (i.e: we are trying to install c:\somedir\somename.ext however it already exists)
@@ -1284,8 +1145,8 @@ void Installer::HandleFileOverwriting(const SisFile& aFile, const std::wstring& 
 		// do not display a warning if the installing file is a PA. The user
 		// needs to copy the installing files to the installing directory
 		// prior to installing the SIS file.
-		std::string tempTarget = wstring2string(aTarget);
-  	  	std::wstring targetDisplay = string2wstring( tempTarget );
+		std::string tempTarget = Ucs2ToUtf8(aTarget);
+  	  	std::wstring targetDisplay = Utf8ToUcs2( tempTarget );
 		if (aFile.GetInstallType() == CSISInfo::EInstPreInstalledApp)
 		{
 			LINFO(targetDisplay << L" found for PA installation");
@@ -1301,7 +1162,7 @@ void Installer::HandleFileOverwriting(const SisFile& aFile, const std::wstring& 
 		if (isSp)
 		{
 			std::wostringstream os;
-			os << aTarget.c_str() << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"" << std::endl;
+			os << aTarget << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"" << std::endl;
 			iProblemFiles.append(os.str());
 			iError = ECLIPSING_VIOLATION;
 		}
@@ -1314,13 +1175,13 @@ void Installer::HandleFileOverwriting(const SisFile& aFile, const std::wstring& 
 		if (isSp || (!aSUFlag && (isPu || isSa)))
 		{
 			std::wostringstream os;
-			os << aTarget.c_str() << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"" << std::endl;
+			os << aTarget << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"" << std::endl;
 			iProblemFiles.append(os.str());
 			iError = ECLIPSING_VIOLATION;
 		}
 		else
 		{
-		    LWARN(aTarget.c_str() << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"");
+			LWARN(aTarget << L" overwrites file from base package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"");
 		}
 	}
 }
@@ -1340,19 +1201,19 @@ void Installer::WarnEclipseOverWrite(const SisFile& aFile)
 			std::wstring eclipseFile(*curr);
 
 			TUint32 owningUid = 0;
-			const SisRegistryObject* owningObj = iRegistry.OwningPackage(eclipseFile.c_str(), owningUid);
+			const SisRegistryObject* owningObj = iRegistry.OwningPackage(eclipseFile, owningUid);
 			
 			// always allow orphaned file overwriting
 			if (owningUid == 0)
 			{
-			    LWARN(eclipseFile.c_str() << L" eclipses orphaned file.");
+				LWARN(eclipseFile << L" eclipses orphaned file.");
 			}
 			else
 			{
 				// SP/PU can not overwrite a file belonging to a different base pkg or
 				// SP/PU can not eclipse a base package which is not in the ROM.
 				std::wostringstream os;
-				os << eclipseFile.c_str() << L" eclipses file from package 0x"  << std::hex << owningUid << L" \"" << owningObj->GetPackageName().c_str() << L"\""<< std::endl;
+				os << eclipseFile << L" eclipses file from package 0x" << std::hex << owningUid << L" \"" << owningObj->GetPackageName() << L"\"" << std::endl;
 				iProblemFiles.append(os.str());
 				iError = ECLIPSING_VIOLATION;
 				continue;
@@ -1374,22 +1235,18 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 	Sids sids;
 	GetSidsFromInstallable(aFiles, sids);
 
-	#ifndef __TOOLS2_LINUX__
 	const std::wstring privatePath = L":\\private\\";
 	const std::wstring sysPath = L":\\sys\\";
 	const std::wstring sysBinPath = L":\\sys\\bin\\";
 	const std::wstring resourcePath = L":\\resource\\";
-	#else
-	const std::wstring privatePath = L":/private/";
-	const std::wstring sysPath = L":/sys/";
-	const std::wstring sysBinPath = L":/sys/bin/";
-	const std::wstring resourcePath = L":/resource/";
-	#endif
 	const std::wstring exeType = L".exe";
 
     int num_of_files = aFiles.size();
 	TUint32 pkgUid = aFile.GetPackageUid();
 	TUint32 installType = aFile.GetInstallType();
+	std::list<std::wstring> stubFileEntries;
+
+	iRegistry.GetStubFileEntries(pkgUid, stubFileEntries);
 
 	// if a base package exists, check to see if it chains back to a ROM stub. If so, populate
 	// iEclipsableRomFiles with the files owned by the ROM stub. Only ROM files can be eclipsed.
@@ -1408,7 +1265,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
         const CSISFileDescription* sisDescription = file->FileDescription();
 
 		// file to be installed
-		std::wstring target( file->GetTarget().c_str() );
+		std::wstring target( file->GetTarget() );
 
 		if (sisDescription->Operation() == CSISFileDescription::EOpText)
 			break;
@@ -1419,7 +1276,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 				{
 				// eclipsing problem
 				std::wostringstream os;
-				os << L"FN file \"" << target.c_str() << L"\" can not remove a file from \\sys or \\resource" << std::endl;
+				os << L"FN file \"" << target << L"\" can not remove a file from \\sys or \\resource" << std::endl;
 				iProblemFiles.append(os.str());
 				iError = DATA_CAGE_VIOLATION;
 				continue;
@@ -1427,7 +1284,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 			}
         else 
             {
-			std::wstring realTarget(file->GetLocalTarget().c_str());
+			std::wstring realTarget(file->GetLocalTarget());
 
 		    std::wstring romTarget(target);
 			romTarget[0] = KRomDriveLetter;
@@ -1439,20 +1296,10 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 				{
 					// eclipsing problem
 					std::wostringstream os;
-					os << target.c_str() << L" eclipses file from ROM" << std::endl;
+					os << target << L" eclipses file from ROM" << std::endl;
 					iProblemFiles.append(os.str());
 					iError = ECLIPSING_VIOLATION;
 					continue;
-				}
-			}
-
-			if(aInstallSISFile.iGenerateRomStub)
-			{
-				bool isOverwrite = FileExists(file->GetLocalTarget());
-				// To check if We are incorrectly overwriting the file present.
-				if (isOverwrite)
-				{
-					HandleRomFileOverwriting(aFile, target);
 				}
 			}
 			
@@ -1501,17 +1348,14 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 
 						const int KUidStringLength = 8;
 						std::wstring importPath = privatePath;
-						#ifndef __TOOLS2_LINUX__
+
 						importPath.append( uidStr.str() + L"\\import" );
-						#else
-						importPath.append( uidStr.str() + L"/import" );
-						#endif
 
 						if ((target.find(importPath,0) == std::wstring::npos) && !suFlag)
 						{
 							// only SA with RU + SU and PU with RU + SU flag can override other private directory
 							std::wostringstream os;
-							os << target.c_str() << L" cannot be written to a private directory which "
+							os << target << L" cannot be written to a private directory which "
 								<< L"does not belong to any exe in this package" << std::endl;
 							iProblemFiles.append(os.str());
 							iError = DATA_CAGE_VIOLATION;
@@ -1581,8 +1425,8 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 					{
 						std::wostringstream os;
 										
-						os << L"The existing file " << owningSidFile.c_str() << L" already has the SID 0x" << std::hex << sid
-						   << std::dec << L", cannot install " << target.c_str() << std::endl;
+						os << L"The existing file " << owningSidFile << L" already has the SID 0x" << std::hex << sid
+						   << std::dec << L", cannot install " << target << std::endl;
 						iProblemFiles.append(os.str());
 						iError = DUPLICATE_SID;
 						continue;
@@ -1606,7 +1450,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 							{
 								const CSISFileDescription* fD = *iter;
 
-								std::wstring romStubTarget(fD->Target().GetString().c_str());
+								std::wstring romStubTarget(fD->Target().GetString());
 
 								if (StringUtils::WildcardCompare(romStubTarget,romFileWithDuplicateSid))
 								{
@@ -1627,7 +1471,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 						std::wostringstream os;
 											
 						os << L"A ROM file already has the SID 0x" << std::hex << file->Sid()
-						   << std::dec << L", cannot install " << target.c_str() << std::endl;
+						   << std::dec << L", cannot install " << target << std::endl;
 						iProblemFiles.append(os.str());
 						iError = DUPLICATE_SID;
 						continue;
@@ -1637,7 +1481,7 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 		    else if (realTarget.find(sysBinPath) != std::wstring::npos)
 		    {
 				std::wostringstream os;
-				os << target.c_str() << L" cannot be installed to a data caged area" << std::endl;
+				os << target << L" cannot be installed to a data caged area" << std::endl;
 				iProblemFiles.append(os.str());
 				iError = DATA_CAGE_VIOLATION;
 				continue;
@@ -1653,8 +1497,8 @@ void Installer::CheckDestinations(const SisFile& aFile, InstallableFiles& aFiles
 
 	if (!iProblemFiles.empty())
 	{
-		std::string x = wstring2string(iProblemFiles);
-		throw InvalidSis("", x, iError);
+		std::string x;
+		throw InvalidSis("", Ucs2ToUtf8(iProblemFiles,x), iError);
 	}
 }
 
@@ -1688,54 +1532,12 @@ void Installer::CheckEmbedded(const SisFile& aFile)
 }
 
 
-void Installer::CreateRomStubSisFile(const InstallSISFile& aInstallSISFile, SisFile& aSis)
-{
-
-	int targetDrive = aInstallSISFile.iTargetDrive;
-	std::wstring drivePath = iConfigManager.GetLocalDrivePath(targetDrive);
-
-	#ifndef __TOOLS2_LINUX__
-	drivePath.append(L"\\system\\install\\");
-	#else
-	drivePath.append(L"/system/install/");
-	#endif
-
-	// build Rom Stub Pathname
-	if ( !MakeDir( drivePath ) )
-	{
-		throw InterpretSisError(L"Directory Creation Error - "+drivePath, DIRECTORY_CREATION_ERROR);
-	}
-
-	size_t found;
-  	found=aInstallSISFile.iFileName.find_last_of(L"/\\");
-	std::wstring sisFile = aInstallSISFile.iFileName.substr(found+1);
-	std::wstring sisFilename = sisFile.substr(0,sisFile.length()-4);
-	drivePath.append(sisFilename);
-	drivePath.append(L"_");
-	std::wstringstream sUid;
-	sUid << std::hex << aSis.GetPackageUid();
-	drivePath.append(sUid.str());
-	drivePath.append(L".sis");
-
-	// Display the target SIS file. Format the stub SIS file string so it displays correctly.
-	std::wstring ctrlDrive(L"z:");
-	std::wstring ctrlTarget = drivePath.substr(iConfigManager.GetLocalDrivePath(targetDrive).length(),drivePath.length());
-	ctrlDrive.append(ctrlTarget);
-
-	LINFO(L"\tCreating ROM stub: " << ctrlDrive);
-	aSis.MakeSISRomStub(drivePath);
-	// If the NR flag is set, change the file attribute to RO
-}
-
 void Installer::CreateStubSisFile(const InstallSISFile& aInstallSISFile, SisFile& aSis)
 {
 	int targetDrive = aInstallSISFile.iTargetDrive;
 	std::wstring drivePath = iConfigManager.GetLocalDrivePath(targetDrive);
-	#ifndef __TOOLS2_LINUX__
+	
 	drivePath.append(L"\\private\\");
-	#else
-	drivePath.append(L"/private/");
-	#endif
 
 	// build SwiDaemon Pathname
 	std::wstring ctrl = StringUtils::MakePathFromSID(drivePath, KSwiDaemonUid);
@@ -1749,6 +1551,7 @@ void Installer::CreateStubSisFile(const InstallSISFile& aInstallSISFile, SisFile
 	s << std::hex << aSis.GetPackageUid();
 
 	ctrl.append(s.str());
+
 
 	switch(aSis.GetInstallType())
     {

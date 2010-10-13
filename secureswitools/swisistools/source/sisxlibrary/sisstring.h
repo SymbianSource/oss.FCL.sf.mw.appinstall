@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -261,7 +261,7 @@ inline bool CSISString::operator != (const wchar_t* aString) const
 		{
 		return true;
 		}
-	return wcscmp(iData.c_str(), aString) != 0;
+	return iData.compare (aString) != 0;
 	}
 
 
@@ -278,7 +278,7 @@ inline std::wstring CSISString::GetString() const
 inline void CSISString::AddPackageEntry(std::wostream& aStream, bool aVerbose) const
 	{
 	(void)aVerbose;
-	aStream << iData.c_str();
+	aStream << iData;
 	}
 
 #endif // __SISSTRING_H__

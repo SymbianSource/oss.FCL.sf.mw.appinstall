@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -56,22 +56,13 @@ void GetUnadornedFileName(const std::wstring& aAdornedFilename, std::wstring& aU
 	}
 }
 
-#ifndef __TOOLS2_LINUX__
 bool IsAdornedVariationOf(const std::wstring& aFileName1, const std::wstring& aFileName2)
-#else
-bool IsAdornedVariationOf(const std::wstring& aFileName1, const std::wstring& aFileName2, const std::wstring& aDrivePath)
-#endif
 {
 	std::wstring unadornedFileName1;
 	GetUnadornedFileName(aFileName1,unadornedFileName1);
 
 	std::wstring unadornedFileName2;
 	GetUnadornedFileName(aFileName2,unadornedFileName2);
-
-	#ifdef __TOOLS2_LINUX__
-	ConvertToLocalPath( unadornedFileName1, aDrivePath );
-	ConvertToLocalPath( unadornedFileName2, aDrivePath );
-	#endif
 
   	// Check whether filename2 is a variant of filename1
   	// e.g: d:\sys\bin\DummyDll{000A0001}.dll is considered a variant of c:\sys\bin\DummyDll.dll 
@@ -82,7 +73,7 @@ bool IsAdornedVariationOf(const std::wstring& aFileName1, const std::wstring& aF
 	std::wstring fileName2Path(StringUtils::Path(unadornedFileName2));
 	std::wstring fileName2NameAndExt(StringUtils::NameAndExt(unadornedFileName2));
 
-	return ( !wcscmp(fileName1Path.c_str(), fileName2Path.c_str()) && !wcscmp(fileName1NameAndExt.c_str(), fileName2NameAndExt.c_str()) );
+	return ((fileName1Path == fileName2Path) && (fileName1NameAndExt == fileName2NameAndExt));
 }
 	
 void FindAllAdornedVariants(const std::wstring& aSearchNameWild, const std::wstring& aSearchPath, std::list<std::wstring>& aAdornedFileNamesFound, const DrivesMap& aDriveMap)

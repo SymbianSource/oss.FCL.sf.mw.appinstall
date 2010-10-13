@@ -801,7 +801,6 @@ SignFileWithSpecifiedCert("nonremovablebase.sis", "nonremovablebase_sucert.sis",
 SignFileWithSpecifiedCert("int_nr_option_04.sis", "int_nr_option_04_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 SignFileWithSpecifiedCert("int_nr_option_05.sis", "int_nr_option_05_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 SignFileWithSpecifiedCert("sp_int_nr_option_06.sis", "sp_int_nr_option_06_sucert.sis", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
-SignFileWithSpecifiedCert("int_rominstall_02.sis", "int_rominstall_02.sisx", "tsisfile\\data\\signedsis\\sucert\\sucert.der", "tsisfile\\data\\signedsis\\sucert\\sucertkey.pem", \*iby);
 
 SignFile("romupgrademorecapsthansucert_sucert.sis", "romupgrademorecapsthansucert_sucert_root5.sis", "root5ca", \*iby);
 

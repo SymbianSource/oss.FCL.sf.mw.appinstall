@@ -66,24 +66,22 @@ private:
 
 	void SanitiseSISFileAttributes(const InstallSISFile& aInstallSISFile);
 
-	void UninstallPkg(const SisFile& aSis, const bool aGenerateRomStub); // Uninstall the same package (if found)
+	void UninstallPkg(const SisFile& aSis); // Uninstall the same package (if found)
 											// prior to installation
 
 	bool DependenciesOk(const SisFile& aFile);			// Check to see if the sis file
 														// meets it's dependencies
 
-	bool IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable, bool aGenerateRomStub);	// Check to see if this is a valid upgrade
+	bool IsValidUpgrade(const SisFile& aFile, bool aSUFlag, bool aNonRemovable);	// Check to see if this is a valid upgrade
 																	// to the existing packages
-	void ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, 
-										bool aRUFlag, bool aNonRemovable, bool aGenerateRomStub);
+	void ValidateRegistry(const SisFile& aFile, TUint32 aPckgUid, TUint32 aInstallFlags, bool aRUFlag, bool aNonRemovable);
 	void InitializeRegistryDetails	( const TUint32 aPckgUid, bool& aIsBaseRemovable, bool& aInRom, bool& aIsPreInstalled, TUint32& aUid, std::wstring& aPackageName );
 
 
 	bool GetInstallableFiles(
-	const SisFile& aFile, InstallableFiles& aList, ExpressionEvaluator& aEvaluator, 
-						int aInstallingDrive, const int aSystemDrive, const bool aGenerateRomStub);
+		const SisFile& aFile, InstallableFiles& aList, ExpressionEvaluator& aEvaluator, int aInstallingDrive);
 
-	void InstallFiles(const InstallableFiles& aList, int aInstallDrive, const bool aGenerateRomStub);	// Retrieves the list of files
+	void InstallFiles(const InstallableFiles& aList, const int aInstallDrive);	// Retrieves the list of files
 														// to install from the sis file
 
 	static void Install(const InstallableFile& aFile);
@@ -108,19 +106,12 @@ private:
 
 	void CreateStubSisFile(const InstallSISFile& aInstallSISFile, SisFile& aSis);
 	
-	void CreateRomStubSisFile(const InstallSISFile& aInstallSISFile, SisFile& aSis);
-	
 	// Eclipsing check methods
 	void PrepareEclipsableFilesList(const SisFile& aSis);
 	bool IsValidEclipsingUpgrade(const SisFile& aSis, const SisRegistryObject& registryEntry);
 	bool ValidEclipse(const SisFile& aFile, const std::wstring& target, const InstallableFile& aInstallableFile, bool aSUFlag);
 	void HandleFileOverwriting(const SisFile& aFile, const std::wstring& target, bool aSUFlag);
-	void HandleRomFileOverwriting(const SisFile& aFile, const std::wstring& target);
-	#ifndef __TOOLS2_LINUX__
 	bool IsEclipsable(std::wstring& aRomFile, bool aSUFlag);
-	#else
-	bool IsEclipsable(std::wstring& aRomFile, bool aSUFlag, const std::wstring& aDrivePath);
-	#endif
 	void FilterNonBlockingFilesOfFilename(const SisFile& aFile, const std::wstring& target);
 	void WarnEclipseOverWrite(const SisFile& aFile);
 

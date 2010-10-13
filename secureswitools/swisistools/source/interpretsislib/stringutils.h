@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -35,17 +35,7 @@
 #include "symbiantypes.h"
 
 // Constants
-#ifndef __TOOLS2_LINUX__
 const std::wstring KDirectorySeparator( L"\\" );
-const std::wstring KDoubleSlashPathPrefix( L"\\\\" );
-const std::string KDirectorySeparatorString( "\\" );
-const std::string KDoubleSlashPathPrefixString( "\\\\" );
-#else
-const std::wstring KDirectorySeparator( L"/" );
-const std::wstring KDoubleSlashPathPrefix( L"//" );
-const std::string KDirectorySeparatorString( "/" );
-const std::string KDoubleSlashPathPrefixString( "//" );
-#endif
 
 class StringUtils
 	{
@@ -57,7 +47,6 @@ public:
     static std::string ToUpper( const std::string& aString );
 	static std::wstring ToUpper( const std::wstring& aString );
 	static std::string ToLower( const std::string& aString );
-	static std::wstring ToLower( const std::wstring& aString );
     static bool IsLastCharacter( const std::wstring& aString, wchar_t aChar );
     static bool StartsWithDrive( const std::wstring& aText );
     static std::wstring MakePathFromSID( const std::wstring& aBasePath, TUint32 aSID );

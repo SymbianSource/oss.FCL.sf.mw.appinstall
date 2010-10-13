@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -84,7 +84,7 @@ void Options::DisplayVersion()
 {
 	std::cout << "\nDUMPSIS  Version  " << MajorVersion << '.' << MinorVersion << std::endl;
 	std::cout << "A utility for decompiling Software Installation (SIS) files" << std::endl;
-	std::cout <<"Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.\n\n" << std::flush;
+	std::cout <<"Copyright (c) Symbian Software Limited 2004-2008. All rights reserved.\n\n" << std::flush;
 }
 
 Options::Options (int argc, wchar_t** argv)
@@ -99,21 +99,7 @@ Options::Options (int argc, wchar_t** argv)
 	while (--argc)
 		{
 		argv++;
-		// WINDOWS ENVIRONMENT : If the underlying platform is WINDOWS then, 
-		// cope up with multiple arguments following the '-' or '/'. 
-		//
-		// LINUX ENVIRONMENT : If the underlying platform is LINUX then, cope 
-		// up with multiple arguments following only the '-'. This restriction 
-		// of not dealing with arguments following '/' is due to the fact that, 
-		// the absolute paths in case of LINUX start with a '/'. So, this could 
-		// be mistaken as an option if we treat anything prefixed by a '/' as 
-		// an option. Hence, this facility is being removed once for all and 
-		// only '-' can(should) be used for specifying an option.
-					if (	   (**argv == '-')   
-#ifndef __TOOLS2_LINUX__
-							|| (**argv == '/')
-#endif
-					   )
+		if ((**argv == '-') || (**argv == '/'))
 			{
 			const wchar_t* optPtr = *argv;
 

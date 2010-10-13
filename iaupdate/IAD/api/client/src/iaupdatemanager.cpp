@@ -101,6 +101,15 @@ CIAUpdateManager::~CIAUpdateManager()
     // If an operation is still active, 
     // then DoCancel will cancel ongoing request
     Cancel();
+
+    // if server is just started then session to be created that closing can be
+    // done normal way  
+    if ( UpdateType() == EIAUpdateStartServer )
+        {
+        IAUPDATE_TRACE("[IAUPDATE] CIAUpdateManager::~CIAUpdateManager() server just started"); 
+        UpdateClient().ConnectToApp();
+        } 
+
     UpdateClient().Close();
     if ( iEikEnv )
         {
@@ -387,7 +396,7 @@ void CIAUpdateManager::RunL()
     switch ( updateType )
         {
         case EIAUpdateStartServer:
-            if ( errorCode == KErrNone || errorCode == KErrAlreadyExists )
+            if ( errorCode == KErrNone )
                 {
                 CheckUpdatesContinue();            
                 }

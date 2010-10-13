@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -26,8 +26,6 @@
 #include "serialisable.h"
 #include "cardinality.h"
 #include "ucmp.h"
-#include "utf8.h"
-#include "is_utils.h"
 
 #pragma warning (disable: 4800)
 
@@ -139,50 +137,6 @@ public:
 	return *this;
 	}
 
-#ifdef __TOOLS2_LINUX__
-
-	Deserialiser& operator>>(std::wstring& val)
-	{
-		Cardinality card;
-		*this >> card;
-		TUint32 size = card;
-
-		TUint32 sizebackup = size;
-
-		unsigned short int* buff = 0;
-	
-		if (size & 0x01)
-		{
-			throw std::runtime_error("Decoding 8bit text into std::wstring");
-		}
-		else
-		{
-			size = size >> 1;
-			buff = new unsigned short int[(int)size];
-			TUnicodeExpander exp;
-			TMemoryUnicodeSink sink((TUint16*)buff);
-			exp.ExpandL(sink, *this ,size);
-			unsigned short int* source = buff;
-			wchar_t buffer[size];
-			// Using a temp variable in place of buffer as ConvertUTF16toUTF32 modifies the source pointer passed.
-			wchar_t* temp = buffer;
-	
-			ConvertUTF16toUTF32(&source, source + sizebackup, &temp,  temp + size, lenientConversion);
-	
-			// Appending NUL to the converted buffer.
-			*temp = 0;
-			val.assign(buffer, size);
-
-		}
-
-		ConvertToForwardSlash(val);
-
-		delete buff;
-		return *this;
-	}
-
-#else
-
 	Deserialiser& operator>>(std::wstring& val)
 	{
 
@@ -207,7 +161,6 @@ public:
 	delete buff;
 	return *this;
 	}
-#endif
 
 	void read(TUint8* aDst, TUint32 aCount)
 	{

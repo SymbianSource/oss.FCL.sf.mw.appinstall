@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of the License "Eclipse Public License v1.0"
@@ -50,7 +50,7 @@ class CSisHelperShutdown : public CTimer
 #ifdef __WINS__ // Occassionally, there are transient problems in the emulator that cause the timer to kick in sooner than needed (DEF104102)
 	enum {KShutdownDelay=5*1000*1000}; // 5 seconds
 #else
-	enum {KShutdownDelay=2*1000*1000}; // 2 seconds
+	enum {KShutdownDelay=12*1000*1000}; // 12 seconds
 #endif
 public:
 	inline CSisHelperShutdown();
