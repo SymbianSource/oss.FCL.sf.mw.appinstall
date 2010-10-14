@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -35,8 +35,8 @@ class CIAUpdateFWSyncState;
 class CIAUpdateFWActiveCaller;
 
 class CIAUpdateFWSyncAppEngine;
-class CAknWaitDialog;
 class CIAUpdateFWFotaModel;
+class MIAUpdateFWUpdateObserver;
 // CLASS DECLARATION
 
 /**
@@ -173,6 +173,9 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
 	
 	
 	public:
+		
+		void SetUpdateObserver( MIAUpdateFWUpdateObserver* aObserver );
+		
         /**
         * Performs synchronization.
         * @param aServerName Name of the server
@@ -186,30 +189,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
 		                   const TInt aProfileId,
 		                   const TInt aConnectionBearer,
                            const TBool aUseFotaProgressNote );
-		
-        /**
-        * Performs ServerInitiated synchronization.
-        * @param aServerName Name of the server
-		* @param aProfileId Profile id
-		* @param aJobId Job id.
-		* @param aConnectionBearer Bearer
-		* @param aUseFotaProgressNote Should the simplified progress note used. Only
-		*                             used when checking for firmware updates.
-        * @return None
-        */		
-		void SynchronizeL( TDesC& aServerName, 
-		                   const TInt aProfileId,
-		                   const TInt aJobId,
-		                   const TInt aConnectionBearer,
-                           const TBool aUseFotaProgressNote );
-		
-        /**
-        * Shows the progress dialog.
-		* @param None.
-        * @return None.
-        */
-        void ShowProgressDialogL();
-        
+ 
         /**            
          * Select IAP
          * @param None.
@@ -217,29 +197,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
          */
         void SelectIAPL();
 
-        /**
-        * Deletes the progress dialog if it exists.
-		* @param None.
-        * @return None.
-        */
-        void HideProgressDialogL();
-        
-		/**
-        * Cancel synchronization.
-		* @param None 
-        * @return None
-        */
-		void CancelSynchronizeL();
-		
-        /**
-        * From MProgressDialogCallback. Handles the situation when the dialog
-        * is dismissed.
-        * @param aButtonId The identifier of the button, with which the dialog
-        *                  was dismissed.
-        * @return None
-        */
-        void DialogDismissedL( TInt aButtonId );
-		
+ 		
 	private:
         
         /**
@@ -288,9 +246,6 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
 		TInt                            iSyncJobId;
 		// sync job
 		RSyncMLDevManJob                iSyncJob;
-
-        // The alternative wait dialog used in FOTA
-        CAknWaitDialog*                 iWaitDialog;
         
 		// sync handler state
 		CIAUpdateFWSyncState*               iState;
@@ -312,8 +267,8 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncHandler) : public CBase,
         TBool                           iServerAlertedSync;
         // Should the simpler FOTA progress not be used
         TBool                           iUseFotaProgressNote;
-        // Retry sync (authentication error)
-        TBool							iRetrySync;
+         
+        MIAUpdateFWUpdateObserver*      iObserver;
 	};
 
 #endif  // NSMLDMSYNCHANDLER_H

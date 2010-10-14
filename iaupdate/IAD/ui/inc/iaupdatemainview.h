@@ -27,7 +27,8 @@
 #include "iaupdatebasenode.h"
 
 
-class HbListWidget;
+//class HbListWidget;
+class HbListView;
 class HbAction;
 class HbAbstractViewItem;
 class HbGroupBox;
@@ -36,6 +37,8 @@ class IAUpdateEngine;
 class IAUpdateDialogUtil;
 class TIAUpdateVersion;
 class HbTranslator;
+class HbIconItem;
+class HbLabel;
 
 
 class IAUpdateMainView : public HbView
@@ -49,6 +52,11 @@ public:
     void refresh(const RPointerArray<MIAUpdateNode> &nodes,
                  const RPointerArray<MIAUpdateFwNode> &fwNodes,
                  int error);
+    void refreshProgress();
+    void startRefreshingAnimation();
+    void stopRefreshingAnimation();
+    void updateCompleted();
+    
 signals:
     void toSettingView();
     
@@ -58,6 +66,10 @@ public slots:
     void handleSettings();
  
     void handleDisclaimer();
+    
+    void handleCancelRefresh();
+    
+    void handleCancelUpdate();
     
     void handleDetails(HbAbstractViewItem *, const QPointF &);
     
@@ -84,13 +96,13 @@ private:
     void constructDetailsText(MIAUpdateAnyNode &node, QString &text);
     void versionText(const TIAUpdateVersion &version, QString &versionText);
     void fileSizeText(int fileSize, QString &text);
-    void setImportance(MIAUpdateAnyNode *node, QString &importanceDescription);
     void removeCurrentContentLayout();
     void refreshFirmwareUpdates(const RPointerArray<MIAUpdateFwNode> &fwNodes);
     void refreshFotaUpdate(MIAUpdateFwNode& fwNode);
-    void refreshNsuUpdate();
+    void refreshNsuUpdate(MIAUpdateFwNode& fwNode);
     void refreshApplicationUpdates(const RPointerArray<MIAUpdateNode> &nodes);
     void updateSelectionInfoInDock();
+    int countOfSelections() const;
     
 private:
     enum DialogState
@@ -104,8 +116,10 @@ private:
     IAUpdateEngine *mEngine;
     IAUpdateDialogUtil *mDialogUtil;
     HbWidget *mContent;
-    HbListWidget *mListView;
-    HbListWidget *mFwListView;
+    //HbListWidget *mListView;
+    HbListView *mListView;
+    //HbListWidget *mFwListView;
+    HbListView *mFwListView;
     HbGroupBox *mApplicationUpdatesGroupBox;
     HbGroupBox *mFwNSUGroupBox;
     HbDataForm *mContentDataForm;
@@ -118,7 +132,15 @@ private:
     bool mMark;
     bool mSelectionUpdate;
     bool mSelectionConnect;
+    bool mUpdating;
     HbTranslator *mTranslator;
+    HbIconItem *mAnimationIconItem;
+    HbLabel *mLabel;
+    HbAction *mActionStartUpdate;
+    HbAction *mActionSettings;
+    HbAction *mActionDisclaimer;
+    HbAction *mActionCancelRefresh;
+    HbAction *mActionCancelUpdate;
 
 };
 

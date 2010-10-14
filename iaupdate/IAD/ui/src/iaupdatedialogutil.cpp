@@ -17,6 +17,7 @@
 */
 #include <hblabel.h>
 #include <hbmessagebox.h>
+#include <hbstringutil.h>
 
 #include "iaupdatedialogutil.h"
 #include "iaupdatedialogobserver.h"
@@ -84,11 +85,16 @@ void IAUpdateDialogUtil::showAgreement(HbAction *primaryAction, HbAction *second
 {
     HbMessageBox *agreementDialog = new HbMessageBox(HbMessageBox::MessageTypeQuestion); 
     HbLabel *label = new HbLabel(agreementDialog);
-    label->setHtml(QString("Disclaimer"));
+    label->setHtml(hbTrId("txt_software_title_disclaimer"));
     agreementDialog->setHeadingWidget(label);
     agreementDialog->setIconVisible(false);
-    agreementDialog->setText("This application allows you to download and use applications and services provided by Nokia or third parties. Service Terms and Privacy Policy will apply. Nokia will not assume any liability or responsibility for the availability or third party applications or services. Before using the third party application or service, read the applicable terms of use.<br /><br />Use of this application involves transmission of data. Contact your network service provider for information about data transmission charges.<br /><br />(c) 2007-2010 Nokia. All rights reserved.");
-
+    agreementDialog->setText(hbTrId("txt_software_info_this_application_allows_you_to_d").arg(2007).arg(2010));
+    // TODO: when textmap contains %1, change to:
+    /*
+    agreementDialog->
+        setText(hbTrId("txt_software_info_this_application_allows_you_to_d").
+                arg(HbStringUtil::convertDigits("2007")).arg(HbStringUtil::convertDigits("2007")));
+    */
     int actionCount = agreementDialog->actions().count();
     for (int i=actionCount-1; i >= 0; i--)
     { 

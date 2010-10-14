@@ -3,4 +3,8 @@
     <qresource prefix="/xml">
         <file>iaupdate_mainview.docml</file>
     </qresource>
+    <qresource prefix="/layout">
+        <file>iaupdateapplistitem.css</file>
+        <file>iaupdateapplistitem.widgetml</file>
+    </qresource>
 </RCC>

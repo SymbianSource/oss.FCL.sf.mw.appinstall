@@ -22,6 +22,9 @@
 
 #include <bldvariant.hrh>
 
+#include <data_caging_paths_for_iby.hrh>
+data=DATAZ_\QT_TRANSLATIONS_DIR\swupdate.qm      QT_TRANSLATIONS_DIR\swupdate.qm
+
 #ifdef FF_IAUPDATE
 S60_APP_RESOURCE(iaupdate)
 S60_APP_RESOURCE(iaupdatelauncher)

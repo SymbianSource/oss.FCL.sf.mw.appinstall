@@ -19,14 +19,11 @@
 
 
 // INCLUDES
-#include <StringLoader.h>
 #include <e32property.h>
-#include <data_caging_path_literals.hrh>  // for resource and bitmap directories
 #include <SyncMLErr.h>      // sync error codes
 #include <DevManInternalCRKeys.h>
 #include <centralrepository.h>
 #include <rconnmon.h>
-#include <es_enum.h>
 
 #include <cmconnectionmethod.h>
 #include <cmconnectionmethoddef.h>
@@ -35,7 +32,6 @@
 #include <cmdestination.h>
 #include <cmmanagerdef.h>
 
-#include <uikon.hrh>
 
 #include "iaupdateconnectionmethod.h"
 #include "iaupdateprivatecrkeys.h"
@@ -49,6 +45,8 @@
 #include "iaupdatefwconst.h"
 #include "iaupdatefwnsmlcrkeys.h"
 #include "iaupdatefwnsmlpskeys.h"
+
+#include "iaupdatefwupdateobserver.h"
 
 // -----------------------------------------------------------------------------
 // CIAUpdateFWSyncHandler::NewL
@@ -79,12 +77,7 @@ CIAUpdateFWSyncHandler* CIAUpdateFWSyncHandler::NewL( RSyncMLSession* aSyncSessi
 //
 CIAUpdateFWSyncHandler::~CIAUpdateFWSyncHandler()
     {
-    /*if ( iWaitDialog )
-        {
-        TRAP_IGNORE( iWaitDialog->ProcessFinishedL() );
-        iWaitDialog = NULL;
-        }*/
-    
+        
 	delete iState;
 	delete iActiveCaller;
 
@@ -124,28 +117,14 @@ CIAUpdateFWSyncHandler::CIAUpdateFWSyncHandler( RSyncMLSession* aSyncSession,
 	{
 	}
 
-
 // -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::SynchronizeL
+// CIAUpdateFWSyncHandler::SetUpdateObserver
 // -----------------------------------------------------------------------------
 //
-void CIAUpdateFWSyncHandler::SynchronizeL( TDesC& aServerName,
-                                       const TInt aProfileId,
-                                       const TInt aJobId,
-                                       const TInt aConnectionBearer,
-                                       const TBool aUseFotaProgressNote )
-	{
-
-	iServerName = aServerName;
-	iConnectionBearer = aConnectionBearer;
-    iProfileId = aProfileId;
-    iJobId = aJobId;
-    iUseFotaProgressNote = aUseFotaProgressNote;
-    
-    iSyncJob.OpenL( Session(), iJobId );
-    iSyncJobId = iSyncJob.Identifier();
-    SynchronizeL();
-	}
+void CIAUpdateFWSyncHandler::SetUpdateObserver( MIAUpdateFWUpdateObserver* aObserver )
+    {
+    iObserver = aObserver;
+    }
 	
 // -----------------------------------------------------------------------------
 // CIAUpdateFWSyncHandler::SynchronizeL
@@ -223,8 +202,12 @@ void CIAUpdateFWSyncHandler::SynchronizeL()
 	FLOG("[IAUPDATE] CIAUpdateFWSyncHandler::SynchronizeL 16");
 	State()->SetSyncPhase( CIAUpdateFWSyncState::EPhaseConnecting );
 	FLOG("[IAUPDATE] CIAUpdateFWSyncHandler::SynchronizeL 17");
+
+	if ( iObserver )
+	     {
+	     iObserver->PreparingStarted();
+	     }
 	
-	TRAP( err, ShowProgressDialogL() );
 	FLOG("[IAUPDATE] CIAUpdateFWSyncHandler::SynchronizeL 18");
 	if ( err != KErrNone )
 		{
@@ -331,13 +314,11 @@ void CIAUpdateFWSyncHandler::SynchronizeCompletedL( TInt aError )
 	iSyncRunning = EFalse;
 	iSyncError = aError;
 
-    /*if ( iWaitDialog )
-        {
-        
-        iWaitDialog->ProcessFinishedL();
-        iWaitDialog = NULL;
-        }*/
-
+	if ( iObserver )
+	    {
+	    iObserver->Prepared();
+	    }
+    
 	iUseFotaProgressNote = EFalse;
     iSyncJob.Close();
     FLOG("[IAUPDATE] CIAUpdateFWSyncHandler::SynchronizeCompletedL 13");
@@ -664,73 +645,12 @@ void CIAUpdateFWSyncHandler::OnSyncMLDataSyncModifications( TInt /*aTaskId*/,
 //
 void CIAUpdateFWSyncHandler::HandleActiveCallL()
 	{
+    FLOG("CIAUpdateFWSyncHandler::HandleActiveCallL")
 
-    FLOG("CIAUpdateFWSyncHandler::HandleActiveCallL 1")
-    // HandleSyncErrorL will set this to true if
-    // sync will be retried.
-    iRetrySync = EFalse;
-
-	if ( (iSyncError != KErrNone) && (iSyncError != KErrCancel) )
-		{
-		 FLOG("CIAUpdateFWSyncHandler::HandleActiveCallL 2")
-		TRAP_IGNORE( HandleSyncErrorL() );
-		}
-	if ( iRetrySync == EFalse )
-		{
-		 FLOG("CIAUpdateFWSyncHandler::HandleActiveCallL 3")
-	    // Inform parent that sync is done.
-	    iSyncAppEngine->SyncCompleted( ENSmlSyncComplete );		
-		 FLOG("CIAUpdateFWSyncHandler::HandleActiveCallL 4")
-		}
+    // Inform parent that sync is done.
+	iSyncAppEngine->SyncCompleted( ENSmlSyncComplete );		
 	}
 
-// -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::HandleSyncErrorL
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateFWSyncHandler::HandleSyncErrorL()
-	{
-
-	FLOG("CIAUpdateFWSyncHandler::HandleSyncErrorL 1")
-	if ( iSyncError != KDMErr )
-		{
-		FLOG("CIAUpdateFWSyncHandler::HandleSyncErrorL 2")
-		}
-
-	   FLOG("CIAUpdateFWSyncHandler::HandleSyncErrorL 4")
-	if ( ( iSyncError == SyncMLError::KErrAuthenticationFailure ) ||
-	    ( iSyncError == SyncMLError::KErrTransportAuthenticationFailure ) )
-        {
-        //we don't handle this at the moment
-        FLOG("CIAUpdateFWSyncHandler::HandleSyncErrorL 5")
-        }
-	FLOG("CIAUpdateFWSyncHandler::HandleSyncErrorL 8")
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::ShowProgressDialogL
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateFWSyncHandler::ShowProgressDialogL( )
-	{
-        //iWaitDialog = new ( ELeave ) CAknWaitDialog(
-        //    ( REINTERPRET_CAST( CEikDialog**, &iWaitDialog ) ) );
-        //iWaitDialog->ExecuteLD( R_FOTA_CHECK_WAIT_NOTE );
-        //iWaitDialog->SetCallback( this );
-	}
-
-// -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::HideProgressDialogL
-// -----------------------------------------------------------------------------
-//
-void CIAUpdateFWSyncHandler::HideProgressDialogL()
-    {
-    /*if ( iWaitDialog )
-        {
-        iWaitDialog->ProcessFinishedL();
-        iWaitDialog = NULL;
-        }*/
-    }
 
 // -----------------------------------------------------------------------------
 // CIAUpdateFWSyncHandler::Session
@@ -764,37 +684,5 @@ CIAUpdateFWSyncState* CIAUpdateFWSyncHandler::State()
 	return iState;
 	}
 	
-// -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::CancelSynchronizeL
-// -----------------------------------------------------------------------------
-//		
-void CIAUpdateFWSyncHandler::CancelSynchronizeL()
-    { 
-    if ( iSyncRunning )
-        {
-        iSyncJob.StopL();
-        SynchronizeCompletedL( KErrCancel );
-        }
-    }
-
-// -----------------------------------------------------------------------------
-// CIAUpdateFWSyncHandler::DialogDismissedL
-// -----------------------------------------------------------------------------
-//		
-void CIAUpdateFWSyncHandler::DialogDismissedL( TInt aButtonId )
-    {
-	if ( aButtonId == EEikBidCancel )
-		{
-
-		if ( SyncRunning() )
-			{
-
-			TRAP_IGNORE( iSyncJob.StopL() );
-		    
-		    State()->SetSyncPhase( CIAUpdateFWSyncState::EPhaseCanceling );
-			}
-		}
-    }
-
 
 // End of File

@@ -124,11 +124,12 @@ SisRegistryObject::SisRegistryObject(const SisFile& aSis,
 {
 	for( InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
-		InstallableFile* installableFile= *curr;	
+		InstallableFile* installableFile= *curr;
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
 		#ifndef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
-		FileDescription* f = new FileDescription(*installableFile->FileDescription() , installableFile->Sid(), aTargetDrive, installableFile->GetTarget());
+		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, aTargetDrive, installableFile->GetTarget());
 		#else
-		FileDescription* f = new FileDescription(*installableFile->FileDescription() , installableFile->Sid(), aTargetDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
+		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, aTargetDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
 		#endif //SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		iFileDescriptions.push_back(f);
 	}
@@ -733,7 +734,7 @@ void SisRegistryObject::AddFiles(const InstallableFiles& aFiles)
 	for(InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
 		InstallableFile* installableFile= *curr;
-		TUint32 sid = installableFile->Sid();
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
 		#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		FileDescription* f = new FileDescription(*installableFile->FileDescription() , sid, iSelectedDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());
 		#else
@@ -758,7 +759,7 @@ void SisRegistryObject::RemoveFiles(const InstallableFiles& aFiles)
 	for(InstallableFiles::const_iterator curr = aFiles.begin(); curr != aFiles.end(); ++curr )
 	{	
 		InstallableFile* installableFile= *curr;
-		TUint32 sid = installableFile->Sid();
+		TUint32 sid = ((installableFile->IsExe())?(installableFile->Sid()):0);
 		#ifdef SYMBIAN_UNIVERSAL_INSTALL_FRAMEWORK
 		FileDescription f = FileDescription(*installableFile->FileDescription(), sid,
 											iSelectedDrive, installableFile->GetTarget(),installableFile->GetLocalTarget());

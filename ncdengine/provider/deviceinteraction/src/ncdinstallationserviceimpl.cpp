@@ -495,9 +495,9 @@ TBool CNcdInstallationService::JavaAppExistsL(
         }
          
     Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
-    TRAPD(err, iScrSession.GetComponentL(compId, *entry));
+    TRAPD(err, retVal = iScrSession.GetComponentL(compId, *entry));
     
-    if ( err == KErrNotFound )
+    if ( err == KErrNotFound || !retVal )
         {
         retVal = EFalse;
         }
@@ -1962,14 +1962,17 @@ void CNcdInstallationService::PopulateInstalledWidgetsL
         // Get widget
         Usif::TComponentId compId = widgetComponentIdList[i];
         Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
-        iScrSession.GetComponentL(compId, *entry);
+        TBool retVal = iScrSession.GetComponentL(compId, *entry);
         
-        // Fill id & version
-        tempInfo->iUid.iUid= compId;
-        *(tempInfo->iVersion) = entry->Version();
+        if ( retVal )
+            {
+            // Fill id & version
+            tempInfo->iUid.iUid= compId;
+            *(tempInfo->iVersion) = entry->Version();
         
-        // Append to arrayt
-        aWidgets.AppendL( tempInfo );
+            // Append to arrayt
+            aWidgets.AppendL( tempInfo );
+            }
         
         CleanupStack::PopAndDestroy(entry);
         CleanupStack::Pop( tempInfo );
@@ -2115,7 +2118,7 @@ TBool CNcdInstallationService::WidgetExistsL( const TUid& aUid )
     // Get entry 
     Usif::TComponentId compId = aUid.iUid;
     Usif::CComponentEntry* entry = Usif::CComponentEntry::NewLC();
-    TRAPD(err, iScrSession.GetComponentL(compId, *entry));
+    TRAPD(err, retVal = iScrSession.GetComponentL(compId, *entry));
     
     if ( err == KErrNotFound || !retVal )
         {

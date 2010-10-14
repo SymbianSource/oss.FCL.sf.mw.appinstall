@@ -25,9 +25,13 @@
 #include <hbtextresolversymbian.h>
 
 
-_LIT(KFilename, "iaupdate.ts");
-_LIT(KPath, "z://data");
+// translator
+_LIT(KPath, "z:/resource/qt/translations/"); 
+_LIT(KFileName, "swupdate_");
+
+// notification text and icon
 _LIT(KInstalling, "txt_software_info_installing_1"); 
+_LIT( KIconName, "qtg_large_swupdate" );
 
 // ======== LOCAL FUNCTIONS ========
 
@@ -86,7 +90,7 @@ void CIAUpdaterDialog::ConstructL()
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ConstructL begin");
     
     // Get resource file path
-    iIsResolverSuccess = HbTextResolverSymbian::Init(KFilename, KPath);
+    iIsResolverSuccess = HbTextResolverSymbian::Init(KFileName, KPath);
     
     IAUPDATE_TRACE("[IAUpdater] CIAUpdaterDialog::ConstructL end");
     }
@@ -119,11 +123,10 @@ void CIAUpdaterDialog::ShowWaitingNoteL( const TDesC& aName, TInt /*aIndex*/, TI
     
     // loc: Load string 
     iGlobalResource = HbTextResolverSymbian::LoadL( KInstalling, aName );
-    if ( iGlobalResource )
-        iGlobalWaitNote->SetTextL( iGlobalResource->Des() );
+    iGlobalWaitNote->SetTextL( iGlobalResource->Des() );
 
-    // Icon ?
-    //iGlobalWaitNote->SetIconNameL(const TDesC& aIconName);
+    // Icon 
+    iGlobalWaitNote->SetIconNameL( KIconName );
     
     // Button ?
     iGlobalWaitNote->SetButton(ETrue);
