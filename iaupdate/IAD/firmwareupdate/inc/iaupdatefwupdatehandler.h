@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -21,11 +21,11 @@
 
 class CIAUpdateFWFotaModel;
 class CIAUpdateFWSyncAppEngine;
+class MIAUpdateFWUpdateObserver;
 
 #include <e32base.h>
 
-
-class CIAUpdateFWUpdateHandler : public CActive
+NONSHARABLE_CLASS (CIAUpdateFWUpdateHandler) : public CActive
     {
     public:
 
@@ -36,21 +36,13 @@ class CIAUpdateFWUpdateHandler : public CActive
         virtual ~CIAUpdateFWUpdateHandler();
 
     public:
-      
-        IMPORT_C void FirmWareUpdatewithNSU();
         
-        IMPORT_C void FirmWareUpdatewithFOTA();
+        IMPORT_C void FirmWareUpdatewithFOTA( MIAUpdateFWUpdateObserver* aObserver );
         
         IMPORT_C TBool IsDMSupportAvailableL();
 
     private:
-    
-        enum TRequest
-            {
-            EFOTA =1,
-            ENSU
-            };
- 
+
         CIAUpdateFWUpdateHandler();
    
         void ConstructL();
@@ -65,9 +57,9 @@ class CIAUpdateFWUpdateHandler : public CActive
     
     private: // data
 
-        TRequest iRequest;
         CIAUpdateFWFotaModel* iFotaModel;
-        CIAUpdateFWSyncAppEngine* iDMEngine;
+        CIAUpdateFWSyncAppEngine* iFWSyncAppEngine;
+        MIAUpdateFWUpdateObserver* iObserver;
     };
     
     

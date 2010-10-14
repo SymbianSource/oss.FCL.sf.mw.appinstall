@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -54,6 +54,15 @@ public: // Observer API
      * @param aError Error code
     */
     virtual void RefreshUI() = 0;
+    
+    /**
+     Called when UI to be redrawn during update process
+     *
+     * @param aError Error code
+     */
+    virtual void RefreshUIProgress() = 0;
+    
+    virtual void SetUpdatesRefreshing( TBool aRefreshing ) = 0;
     
     /**
     * Called when async update list refresh is completed

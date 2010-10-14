@@ -24,6 +24,7 @@
 #include "iaupdateuidefines.h"
 #include "iaupdateuicontrollerobserver.h"
 #include "iaupdatenode.h"
+#include "iaupdatefwupdateobserver.h"
 
 class IAUpdateServiceProvider;
 class CIAUpdateUiController;
@@ -40,7 +41,8 @@ class HbAction;
 class IAUpdateResultsDialog;
 
 class IAUpdateEngine : public QObject,
-                       public MIAUpdateUiControllerObserver
+                       public MIAUpdateUiControllerObserver,
+                       public MIAUpdateFWUpdateObserver
     {
     Q_OBJECT
 
@@ -104,7 +106,9 @@ public:
       * @param True value if client application is in background
       */
       bool ClientInBackgroundL() const;
-    
+  
+     CIAUpdateUiController* Controller() const;
+ 
 signals:
     void toMainView();
     
@@ -115,6 +119,12 @@ signals:
     void refresh(const RPointerArray<MIAUpdateNode>& nodes,
                  const RPointerArray<MIAUpdateFwNode>& fwNodes,
                  int error);
+    
+    void refreshProgress();
+    
+    void setUpdatesRefreshing(bool refreshingUpdates);
+    
+    void updateCompleted();
     
 
 public slots:    
@@ -157,6 +167,15 @@ private: // From MIAUpdateUiControllerObserver
     * @param aError Error code
     */
     void RefreshUI();
+    
+    /**
+    Called when UI to be redrawn during update process
+    *
+    * @param aError Error code
+    */
+    void RefreshUIProgress();
+    
+    void SetUpdatesRefreshing( TBool aRefreshing );
             
     /**
     * Called when async update list refresh is completed
@@ -171,6 +190,12 @@ private: // From MIAUpdateUiControllerObserver
     * @param aError Error code
     */     
     void UpdateCompleteL( TInt aError );
+    
+private: // From MIAUpdateFWUpdateObserver     
+    
+    void PreparingStarted();
+    
+    void Prepared();
     
 private:  //new methods
 

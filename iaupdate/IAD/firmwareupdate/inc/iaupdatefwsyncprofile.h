@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -45,15 +45,13 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         * Two-phased constructor.
         * @param aParam
         */
-        static CIAUpdateFWSyncProfile* NewLC( const TInt aApplicationId,
-                                          RSyncMLSession* aSyncSession);
+        static CIAUpdateFWSyncProfile* NewLC( RSyncMLSession* aSyncSession);
 
         /**
         * Two-phased constructor.
         * @param aParam
         */
-         static CIAUpdateFWSyncProfile* NewL( const TInt aApplicationId,
-                                         RSyncMLSession* aSyncSession );
+         static CIAUpdateFWSyncProfile* NewL( RSyncMLSession* aSyncSession );
 
 	    /**
         * Destructor.
@@ -65,8 +63,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         * C++ default constructor.
         * @param aParam
         */
-	    CIAUpdateFWSyncProfile( const TInt aApplicationId,
-	                        RSyncMLSession* aSyncSession );
+	    CIAUpdateFWSyncProfile( RSyncMLSession* aSyncSession );
 
         /**
         * By default Symbian 2nd phase constructor is private.
@@ -82,19 +79,6 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         */
          void OpenL( TInt aProfileId, TInt aOpenMode );
         
-        /**
-		* Create profile
-        * @param None.
-		* @return Profile ID.
-        */
-         TInt CreateL();
-        
-        /**
-		* Create copy profile
-        * @param aProfileId Profile that is used for copying
-		* @return None
-        */
-         void CreateCopyL( TInt aProfileId );
         
         /**
 		* Save profile
@@ -105,12 +89,6 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         
 	public:
         
-        /**
-		* Set name for profile
-        * @param aText name for profile
-		* @return None
-        */
-         void SetNameL(const TDesC& aText);
         
         /**
 		* Get profile name
@@ -118,21 +96,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
 		* @return None
         */
          void GetName( TDes& aText );
-        
-        /**
-		* Set creator id for the profile
-        * @param aCreatorId creator id
-		* @return None
-        */
-         void SetCreatorId(TInt aCraetorId);
-        
-        /**
-		* Get creator id
-        * @param None
-		* @return creator id
-        */
-         TInt CreatorId();
-        
+
         /**
 		* Get profile id
         * @param None
@@ -140,92 +104,18 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         */
          TInt ProfileId();
         
-        /**
-		* Check if delete is allowed
-        * @param None
-		* @return ETrue if allowed
-        */
-         TBool DeleteAllowed();
-        
-        /**
-		* Has profile been synced
-        * @param None
-		* @return ETrue if synced
-        */
-		 TBool IsSynced();
-        
-        /**
-		* Last sync time
-        * @param None
-		* @return Time of sync
-        */
-		 TTime LastSync();
-		
-		/**
-		* Last Success sync time
-        * @param None
-		* @return Time of sync
-        */
-		 TTime LastSuccessSync();
-
+    
+ 
     // settings that connection dialog displays
     public:
-        /**
-		* Set server id
-        * @param aText server id
-		* @return None
-        */
-         void SetServerIdL(const TDesC& aText);
-        
-        /**
-		* Get server id
-        * @param aText server id
-		* @return NOne
-        */
-         void GetServerId(TDes& aText);
-        
-        /**
-		* Get server password
-        * @param aText server password
-		* @return None
-        */
-         void GetServerPassword( TDes& aText );
-        
-        /**
-		* Set server password
-        * @param aText server password
-		* @return None
-        */
-         void SetServerPasswordL( const TDesC& aText );
-        
-        /**
-		* Get protocol version
-        * @param None
-		* @return Version
-        */
-         TInt ProtocolVersion();
-        
-        /**
-		* Set Protocol version
-        * @param aProtocolVersion protocol version
-		* @return None
-        */
-         void SetProtocolVersionL( TInt aProtocolVersion );
-        
+         
         /**
 		* Get bearer type
         * @param None
 		* @return bearer type
         */
          TInt BearerType();
-        
-        /**
-		* Set bearer type
-        * @param aId bearer type
-		* @return None
-        */
-         void SetBearerTypeL( TInt aId );
-        
+         
         /**
 		* Get accesspoint
         * @param None
@@ -239,64 +129,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
 		* @return None
         */
          void SetAccessPointL(const TInt aId);
-        
-        /**
-		* Get host address
-        * @param aText host address
-        * @param aPort host port
-		* @return None
-        */
-         void GetHostAddress( TDes& aText, TInt& aPort );
-        
-        /**
-		* set host address
-        * @param aText host address
-        * @param aPort host 
-		* @return None
-        */
-         void SetHostAddressL( const TDesC& aText, const TInt aPort );
-        
-        /**
-		* Get port number 
-        * @param None
-		* @return port number
-        */
-         TInt PortNumber();
-        
-        /**
-		* Set port number
-        * @param aPortNumber port number
-		* @return None
-        */
-         void SetPortNumber( TInt aPortNumber );
-        
-        /**
-		* Get user name
-        * @param aText user name
-		* @return None
-        */
-         void GetUserName( TDes& aText );
-        
-        /**
-		* Set user name
-        * @param aText user name
-		* @return None
-        */
-         void SetUserNameL( const TDesC& aText );
-        
-        /**
-		* Get user password
-        * @param aText user password
-		* @return None
-        */
-         void GetPassword( TDes& aText );
-        
-        /**
-		* Set user password
-        * @param aText user password
-		* @return None
-        */
-         void SetPasswordL( const TDesC& aText );
+
         
         /**
 		* Set server alert state
@@ -311,59 +144,12 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
 		* @return server alert state
         */
          TInt SASyncState();
-        
-        /**
-		* Set http used state
-        * @param aEnable ETrue if http authentication needs to be used
-		* @return None
-        */
-         void SetHttpUsedL( TBool aEnable );
-        
-        /**
-		* Check whether http authentication is used
-        * @param None
-		* @return ETrue if http authentication is used
-        */
-         TBool HttpUsedL();
-        
-        /**
-		* Get http user name
-        * @param aText user name
-		* @return None
-        */        
-         void GetHttpUserNameL( TDes& aText );
-        
-        /**
-		* Set http user name
-        * @param aText user name
-		* @return None
-        */
-         void SetHttpUserNameL( const TDesC& aText );
-        
-        /**
-		* Get http password
-        * @param aText password
-		* @return None
-        */
-         void GetHttpPasswordL( TDes& aText );
-        
-        /**
-		* Set http password
-        * @param aText password
-		* @return None
-        */
-         void SetHttpPasswordL( const TDesC& aText );
+ 
+         
  
                
     public:
        
-        /**
-		* Return latest history job
-        * @param None
-		* @return CSyncMLHistoryJob*
-        */        
-         const CSyncMLHistoryJob* LatestHistoryJob();
-        
         /**
 		* Open connection
         * @param None
@@ -371,20 +157,7 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         */
          void OpenConnection();
         
-        /**
-		* Open history log
-        * @param None
-		* @return None
-        */
-         void OpenHistoryLog();
-
-        /**
-		* Close history log
-        * @param None
-		* @return None
-        */        
-         void CloseHistoryLog();
-
+ 
         /**
 		* Return DevMan profile
         * @param None
@@ -408,24 +181,13 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
         */
          void GetConnectionPropertyNameL( TDes8& aText, TInt aPropertyPos );
         
-    private:
-    
-        /**
-		* Copy values from one profile to another
-        * @param aSource source profile
-		* @return None
-        */    
-        void CopyValuesL( CIAUpdateFWSyncProfile* aSource );
-
 	private:
 	    // profile id
         TInt                    iProfileId;
         // Log open
-        TBool                   iHistoryLogOpen;
+        //TBool                   iHistoryLogOpen;
         // Connection open
         TBool                   iConnectionOpen;
-        // Port number
-        TInt                    iPortNumber;
    		// needed for setting creator id
 		TInt                    iApplicationId;
 		// long buffer for string handling 
@@ -436,8 +198,6 @@ NONSHARABLE_CLASS (CIAUpdateFWSyncProfile) : public CBase
 		RSyncMLSession*         iSyncSession;
 		// sync profile
 		RSyncMLDevManProfile    iProfile;
-		// history log
-		RSyncMLHistoryLog       iHistoryLog;
 		// sync connection
 		RSyncMLConnection       iConnection;
     };

@@ -24,8 +24,8 @@
 
 #include "bgcindicator.h" 
 
-const char KTranslatorFileName[] = "swupdate";
-const char KIconName[] = "qtg_large_swupdate";
+const QString KTranslationsFileName = "swupdate";
+const QString KIconName = "qtg_large_swupdate";
 
 //----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ HbIndicatorInterface(indicatorType,
         mTranslator(0)
     {
   
-    HbTranslator* mTranslator = new HbTranslator(KTranslatorFileName);
+    HbTranslator* mTranslator = new HbTranslator(KTranslationsFileName);
     
     }
 

@@ -24,6 +24,7 @@ symbian {
     TARGET.CAPABILITY = CAP_APPLICATION TrustedUI PowerMgmt
     rssrules = "hidden = KAppIsHidden;"
     RSS_RULES += rssrules
+    SKINICON = qtg_large_swupdate
     TRANSLATIONS = swupdate.ts
 }
 
@@ -63,12 +64,13 @@ SOURCES += iaupdatemain.cpp \
     iaupdateuicontroller.cpp \
     iaupdateuitimer.cpp \
     iaupdateserviceprovider.cpp \
-    iaupdatewaitdialog.cpp \
     iaupdatenodeid.cpp \
     iaupdatetools.cpp \
     iaupdatesettingdialog.cpp \
     iaupdateresultsdialog.cpp \
-    iaupdatedialogutil.cpp
+    iaupdatedialogutil.cpp \
+    iaupdateapplistmodel.cpp \
+    iaupdateapplistitem.cpp
 
     
 
@@ -76,8 +78,6 @@ HEADERS = iaupdateapplication.h \
     iaupdatemainwindow.h \
     iaupdatemainview.h \
     iaupdateengine.h \
-    iaupdatewaitdialog.h \
-    iaupdatewaitdialogobserver.h \
     iaupdateagreement.h \
     iaupdateautomaticcheck.h \
     iaupdatedeputils.h \
@@ -109,7 +109,9 @@ HEADERS = iaupdateapplication.h \
     iaupdatetools.h \
     iaupdatesettingdialog.h \
     iaupdateresultsdialog.h \ 
-    iaupdatedialogutil.h
+    iaupdatedialogutil.h \
+    iaupdateapplistmodel.h \
+    iaupdateapplistitem.h
 
 
 LIBS += -lbafl

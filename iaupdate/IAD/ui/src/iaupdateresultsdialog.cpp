@@ -42,7 +42,7 @@ void IAUpdateResultsDialog::showResults(const TIAUpdateResultsInfo &param, QObje
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
     
     HbLabel *label = new HbLabel(messageBox);
-    label->setHtml(QString("Update results"));
+    label->setHtml(hbTrId("txt_software_title_update_results"));
     messageBox->setHeadingWidget(label);
     
     messageBox->setIconVisible(false);
@@ -66,59 +66,26 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
     if (param.iCountSuccessfull == 0 && param.iCountCancelled == 0 &&
         param.iCountFailed == 0)
     {
-        QString stringCount;
-        stringCount.setNum(param.iCountSuccessfull);    
-        buf.append(stringCount);
-        buf.append(" updates successful");
+        buf.append(hbTrId("txt_software_info_ln_updates_successful", param.iCountSuccessfull));
         buf.append("<br />");
         return;
     } 
   
     if (param.iCountSuccessfull != 0)
     {
-        QString stringCount;
-        stringCount.setNum(param.iCountSuccessfull);    
-        buf.append(stringCount);
-        if (param.iCountSuccessfull == 1)
-        {
-            buf.append(" application updated"); 
-        }
-        else
-        {
-            buf.append(" applications updated"); 
-        }
+        buf.append(hbTrId("txt_software_info_ln_updates_successful", param.iCountSuccessfull));
         buf.append("<br />");
     }
     
     if (param.iCountCancelled != 0)
     {
-        QString stringCount;
-        stringCount.setNum(param.iCountCancelled);    
-        buf.append(stringCount);
-        if (param.iCountCancelled == 1)
-        {
-            buf.append(" update cancelled");
-        }
-        else
-        {
-            buf.append(" updates cancelled");
-        }
+        buf.append(hbTrId("txt_software_info_ln_updates_cancelled", param.iCountCancelled));
         buf.append("<br />");
     }
 
     if (param.iCountFailed != 0)
     {
-        QString stringCount;
-        stringCount.setNum(param.iCountFailed);    
-        buf.append(stringCount);
-        if (param.iCountFailed == 1)
-        {
-            buf.append(" update failed");
-        }
-        else
-        {
-            buf.append(" updates failed");
-        }
+        buf.append(hbTrId("txt_software_info_ln_updates_failed", param.iCountFailed));
         buf.append("<br />");
     }
     

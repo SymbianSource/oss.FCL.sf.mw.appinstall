@@ -111,10 +111,14 @@ void CIAUpdateAutomaticCheck::AcceptAutomaticCheckL()
 	        if ( mDialogUtil )
 	            {
 	            mPrimaryAction = NULL;
-	            mPrimaryAction = new HbAction("Yes");
+	            mPrimaryAction = new HbAction(hbTrId("txt_common_button_yes"));
 	            HbAction *secondaryAction = NULL;
-	            secondaryAction = new HbAction("No");
-	            mDialogUtil->showQuestion(QString("Turn on setting for Automatic update checks?"), mPrimaryAction, secondaryAction);
+	            secondaryAction = new HbAction(hbTrId("txt_common_button_no"));
+	            mDialogUtil->showQuestion(
+	                hbTrId("txt_software_info_allow_automatic_update_checks"),
+	                mPrimaryAction,
+	                secondaryAction);
+	                
 	            }
  	        }
 	    }

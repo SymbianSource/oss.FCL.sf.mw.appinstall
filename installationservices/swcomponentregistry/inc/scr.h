@@ -580,9 +580,9 @@ namespace Usif
 						   and if non-localized versions don't exist, the function will leave with KErrScrUnsupportedLocale.
 						   If a particular language is provided, then the names are searched for this particular language
 						   and its downgraded languages. If there is no name and vendor with the provided language, then the function leaves with KErrScrUnsupportedLocale.
-		    @return aEntry A pointer to the component entry object for the given global component id. 
+		    @return aEntry A pointer to the component entry object for the given global component id. If the GlobalIdName couldn't be found, then NULL is returned.
 		    
-		    @leave KErrScrUnsupportedLocale The component requested with the global id couldn't be found for the specified locale.
+		    @leave KErrScrUnsupportedLocale The component requested with the global id couldn't be found for the specified locale.                                            
 		    @leave System-wide error codes.
 		 */
 		IMPORT_C CComponentEntry* GetComponentL(const TDesC& aGlobalIdName, const TDesC& aUniqueSwTypeName, TLanguage aLocale=KUnspecifiedLocale) const;
@@ -1354,9 +1354,9 @@ NONSHARABLE_CLASS(RRegistrationInfoForApplication) : public RScsClientSubsession
 		    @see CAppViewData 
             @leave A system-wide error code.		    
 		**/
-
+		
 		 IMPORT_C void GetAppViewsL(RPointerArray<CAppViewData>& aAppViewInfoArray) const;
-
+		 
 	private:
 		void CheckSubSessionHandleL() const;     //Checks for Valid SubSessionHandle
 		TInt SendSyncMessage(TInt aFunction, const TIpcArgs& aArgs) const;

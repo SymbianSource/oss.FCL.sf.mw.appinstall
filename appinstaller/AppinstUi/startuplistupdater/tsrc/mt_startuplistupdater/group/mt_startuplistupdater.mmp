@@ -32,8 +32,8 @@ SOURCE          mt_startuplistupdater.cpp
 SOURCE          mt_startuplistupdaterblocks.cpp
 
 LIBRARY         euser.lib
-LIBRARY         stiftestinterface.lib
-LIBRARY         stiftestengine.lib
+LIBRARY         StifTestInterface.lib
+LIBRARY         StifTestEngine.lib
 LIBRARY         sif.lib
 LIBRARY         scrclient.lib
 LIBRARY         dscstore.lib

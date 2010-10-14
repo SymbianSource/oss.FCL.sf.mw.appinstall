@@ -200,13 +200,13 @@ void CIAUpdateSettingDialog::saveSettingsL()
     switch ( value )
          {
          case KAutoUpdateOn:
-             value = EIAUpdateSettingValueDisableWhenRoaming;
+             value = EIAUpdateSettingValueEnable;
              break;
          case KAutoUpdateOff:
              value = EIAUpdateSettingValueDisable;
              break;
          case KAutoUpdateOnInHomeNetwork:
-             value = EIAUpdateSettingValueEnable;
+             value = EIAUpdateSettingValueDisableWhenRoaming; 
              break;
          default: 
              break;
@@ -321,33 +321,26 @@ void CIAUpdateSettingDialog::getDestinationNameL( uint aItemUid, QString& aItemN
 void CIAUpdateSettingDialog::initializeView()
     {
     
-    setTitle("Software update"); 
-    //setTitle(hbTrId("txt_software_title_software_update")); 
+    setTitle(hbTrId("txt_software_title_software_update")); 
     
-    mSettingsForm->setHeading("Settings"); 
-    //mSettingsForm->setHeading(hbTrId("txt_software_subhead_settings"));
+    mSettingsForm->setHeading(hbTrId("txt_software_subhead_settings"));
     
     //create a model class
     HbDataFormModel *mModel = new HbDataFormModel();
 
     // add Destination item
     mDestinationItem = mModel->appendDataFormItem(
-        HbDataFormModelItem::ToggleValueItem, QString("Network connection"));
-        //HbDataFormModelItem::ToggleValueItem, hbTrId("txt_software_formlabel_network_connection"));
+        HbDataFormModelItem::ToggleValueItem, hbTrId("txt_software_formlabel_network_connection"));
 
     // add auto update item
     mAutoUpdateItem = mModel->appendDataFormItem(
-       HbDataFormModelItem::ComboBoxItem, QString("Auto-check for updates"));
-       //HbDataFormModelItem::ComboBoxItem, hbTrId("txt_software_setlabel_autocheck_for_updates"));
+       HbDataFormModelItem::ComboBoxItem, hbTrId("txt_software_setlabel_autocheck_for_updates"));
     
     // auto update selection values
     QStringList list;
-    list.insert(0, QString("On"));
-    //list.insert(0, hbTrId("txt_software_setlabel_val_on"));
-    list.append(QString("Off")); 
-    //list.append(hbTrId("txt_software_setlabel_val_off"));
-    list.append(QString("On in home network"));
-    //list.append(hbTrId("txt_software_setlabel_val_on_in_home_network"));
+    list.insert(0, hbTrId("txt_software_setlabel_val_on"));
+    list.append(hbTrId("txt_software_setlabel_val_off"));
+    list.append(hbTrId("txt_software_setlabel_val_on_in_home_network"));
     
     mAutoUpdateItem->setContentWidgetData("items", list);
 

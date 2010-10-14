@@ -1931,8 +1931,8 @@ void CInstallMachine::TFinalState::PopulateNativeComponentInfoL(const CControlle
 		{
 		Usif::CComponentEntry* componentEntry = NULL;
 		// Get the component entry using the global Id and the software type.
-		TRAPD(err, componentEntry = scrSession.GetComponentL(*(aNativeComponentInfo->iGlobalComponentId), Usif::KSoftwareTypeNative));
-		if (err == KErrNone)
+		componentEntry = scrSession.GetComponentL(*(aNativeComponentInfo->iGlobalComponentId), Usif::KSoftwareTypeNative);		
+		if (NULL != componentEntry)
 			{			
 			aNativeComponentInfo->iComponentId = componentEntry->ComponentId();
 			aNativeComponentInfo->iScomoState = static_cast<Usif::TScomoState>(componentEntry->ScomoState());
@@ -2068,7 +2068,7 @@ void CInstallMachine::TFinalState::PopulateInstallStatusL(const CController& aCo
 		Usif::CComponentEntry* componentEntry = NULL;
 		HBufC* globalId = FormatGlobalIdLC(controllerInfo.Uid().Uid(), componentName, EInstInstallation);
 		componentEntry = aScrSession.GetComponentL(*globalId, Usif::KSoftwareTypeNative);
-		if (componentEntry != NULL)		
+		if (NULL != componentEntry)		
 			{
 			aNativeComponentInfo->iInstallStatus = Usif::ENewComponent;
 			}
@@ -2098,7 +2098,7 @@ void CInstallMachine::TFinalState::SendBackComponentInfoL()
 		stream.Open(*tempBuffer);
 		CleanupClosePushL(stream);		
 	
-		// Externalise the component info in to the stream		
+		// Externalise the component info in to the stream
 		TRAP(err, iInstallMachine.iNativeComponentInfo->ExternalizeL(stream));
 		if (err == KErrOverflow)
 			{

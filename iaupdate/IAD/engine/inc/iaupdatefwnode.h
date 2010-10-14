@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -61,6 +61,12 @@ public:
 
         };
 
+    enum TUIUpdateState
+        {
+        ENormal,
+        EPreparing
+        };
+    
 
     /**
      * @return TFwUpdateType The type of this firmware update.
@@ -122,6 +128,10 @@ public:
      * @return const TDesC& Download URL for firmware update.
      */
     virtual const TDesC& ContentUrl() const = 0;
+    
+    virtual void SetUiState( TUIUpdateState aState ) = 0;
+        
+    virtual TUIUpdateState UiState() const = 0;
 
 
 protected:

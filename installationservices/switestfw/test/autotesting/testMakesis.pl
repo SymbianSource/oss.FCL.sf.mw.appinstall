@@ -1,4 +1,5 @@
-﻿#
+﻿#!/usr/bin/perl
+#
 # Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 # All rights reserved.
 # This component and the accompanying materials are made available
@@ -15,9 +16,18 @@
 # Perl script that creates PKG files and test MAKESIS tools with different ranges
 #
 
-$logFile = "/epoc32/winscw/c/makesis_test.txt";
-$makesisExeLocation = "/epoc32/tools/makesis";
-$dumpsisExeLocation = "/epoc32/tools/dumpsis";
+if ($^O =~ /^LINUX$/i)
+{
+	$logFile = "$ENV{EPOCROOT}/epoc32/winscw/c/makesis_test.txt";
+	$makesisExeLocation = "makesis";
+	$dumpsisExeLocation = "dumpsis";
+}
+else
+{
+	$logFile = "/epoc32/winscw/c/makesis_test.txt";
+	$makesisExeLocation = "/epoc32/tools/makesis";
+	$dumpsisExeLocation = "/epoc32/tools/dumpsis";
+}
 
 sub GetTmpFilesCount()
 {
@@ -304,7 +314,14 @@ sub TestPDEF081989 {
 	$testembeddingsis = "testembedding.sis";
 	$testembeddedpkg = "testembedded.pkg";
 	$testembeddedsis = "testembedded.sis";
-	$sisFileToEmbed = "/epoc32/winscw/c/";
+	if ($^O =~ /^LINUX$/i)
+		{
+		$sisFileToEmbed = "$ENV{EPOCROOT}/epoc32/winscw/c/";
+		}
+	else
+		{
+		$sisFileToEmbed = "/epoc32/winscw/c/";
+		}
 	$outputFile = $sisFileToEmbed.$testembeddingsis;
 	$testEmbedLog = "testembedded.log";
 
@@ -457,7 +474,7 @@ sub TestLDEF104895 {
 	$testembeddingsis = "testembedding.sis";
 	$testembeddedpkg = "testembedded.pkg";
 	$testembeddedsis = "testembedded.sis";
-	$sisFileToEmbed = "\\\\epoc32\\\\winscw\\\\c\\\\";
+	$sisFileToEmbed = "$ENV{EPOCROOT}/epoc32/winscw/c/";
 	$outputFile = $sisFileToEmbed.$testembeddingsis;
 	$testEmbedLog = "testembedded.log";
 
@@ -621,7 +638,7 @@ sub TestLDEF091942{
 
 	$NumberOfTests++;
 
-	my $file = "/epoc32/winscw/c/tswi/passed.txt";
+	my $file = "$ENV{EPOCROOT}/epoc32/winscw/c/tswi/passed.txt";
 	
 	WriteLog("Test for DEF091942 - makesis can not handle package files names written with japanese symbols\n");
 	
@@ -654,7 +671,72 @@ sub TestLDEF091942{
 	unlink("$pkgfile.pkg");
 }
 
+# Linux Test
+# Test code for  RC DEF577103 
+# Test case generates a SIS. Recreate the SIS file and checks the file access permissions. 
+# Make the SIS file readonly & then recreate the SIS file and checks the file access permissions. 
+ 
+sub TestLRCDEF577103{
 
+	$pkgfile = "/tmp/file.pkg";
+	$sisfile = "/tmp/file.sis";
+	$logfile = "/tmp/file.log";
+
+	$NumberOfTests++;
+
+	my $file = "$ENV{EPOCROOT}/epoc32/winscw/c/tswi/passed.txt";
+	
+	WriteLog("Test for RC DEF577103 - File access permission changes after makesis on an existing SIS file\n");
+	
+	# Generate test PKG file contents.
+	$PkgFile = sprintf( $PkgLanguageFileTemp); 
+	# Create PKG file
+	CreateFile($pkgfile, $PkgFile);
+
+	# Do MAKESIS
+	my $result = system("$makesisExeLocation $pkgfile $sisfile > $logfile");
+	
+	# Do MAKESIS (Re-create)
+	my $result1 = system("$makesisExeLocation $pkgfile $sisfile > $logfile");
+	
+	use File::stat;
+	$sb = stat($sisfile);
+	my $mode = $sb->mode & 07777;
+	
+	$logMsg = sprintf "Expected mode:%04o\n", $mode;
+	WriteLog( $logMsg);
+
+	# Make the SIS file readonly
+	chmod(0444, "$sisfile");
+	$sb = stat($sisfile);
+	my $mode1 = $sb->mode & 07777;
+	
+	$logMsg = sprintf "Read-only mode :%04o\n", $mode1;
+	WriteLog( $logMsg);
+	
+	# Do MAKESIS (Re-create)
+	my $result2 = system("$makesisExeLocation $pkgfile $sisfile > $logfile");
+	
+	$sb = stat($sisfile);
+	my $mode2 = $sb->mode & 07777;
+	
+	$logMsg = sprintf "Expected code:%5d   result Code:%5d  mode : %04o\n", $expectedResult, $?, $mode2;
+	WriteLog( $logMsg);
+	
+	#mode = 0664 if executed by user else mode = 0644 if executed by root depending upon umask
+	if( $? == $expectedResult && $result == 0 && $result1 == 0 && $result2 == 0 && $mode == 0664 && $mode1 == 0444 && $mode2 == 0664) {
+		$NumberOfPassed++;
+		WriteLog("Passed\n\n");
+	}
+	else {
+		$NumberOfFailed++;
+		WriteLog("Failed\n\n");
+	}	
+	
+	unlink("$pkgfile");
+	unlink("$sisfile");
+	unlink("$logfile");
+}
  
 #
 # New test code for DEF091780 - Makesis have problems parsing IF-ENDIF block
@@ -1046,7 +1128,7 @@ sub TestDEF090912 {
 #
 sub TestLDEF090912 {
 
-	my $path = "/epoc32/winscw/c/tswi";
+	my $path = "$ENV{EPOCROOT}/epoc32/winscw/c/tswi";
 	my $ucs2 = "$path/ﾅｿﾄ.txt";
 	my $pkgfile = "$path/ucs2jpn";
 	my $expectedResult = 0;
@@ -1545,10 +1627,17 @@ sub TestDEF111264 {
 	my $OutputData = "Processing $pkgFile...\n$DEF111264ExpectedOutput$trailingData";
 	
 	CreateFile($ExpectedLogFile ,$OutputData);
-
+	my $result = 0;
 	# Create a sis file
-	my $result = system("/epoc32/tools/makesis -s $pkgFile  $sisFile > $LogFile");
-
+	if ($^O =~ /^LINUX$/i)
+		{
+		$result = system("$ENV{EPOCROOT}/epoc32/tools/makesis -s $pkgFile  $sisFile > $LogFile");
+		}
+	else
+		{
+		$result = system("/epoc32/tools/makesis -s $pkgFile  $sisFile > $LogFile");
+		}
+	
 	use File::Compare;
 	my $result1;
 	
@@ -1604,8 +1693,7 @@ sub TestDEF113349 {
 	CreateFile($pkgEmbeddedFile, $PkgFile);	
 
 	# Create SIS file for the embedded package of type = PA.
-	my $result = system("/epoc32/tools/makesis $pkgEmbeddedFile $sisEmbeddedFile > $LogFile");
-
+	my $result = system("makesis $pkgEmbeddedFile $sisEmbeddedFile > $LogFile");
 	# Generate test PKG file contents for embedding pkg file.
 	$PkgFile = sprintf( $EmbeddingPApkgFile, "-1,-1,-1"); 
 	
@@ -1613,7 +1701,7 @@ sub TestDEF113349 {
 	CreateFile($pkgFile , $PkgFile);	
 	
 	# Create SIS file for the embedding package of type = SA.
-	my $result1 = system("/epoc32/tools/makesis $pkgFile $sisFile > $LogFile");
+	my $result1 = system("makesis $pkgFile $sisFile > $LogFile");
 	
 	my $OutputData = "Processing $pkgFile...\n$DEF113349ExpectedOutput";
 	
@@ -1728,7 +1816,7 @@ sub TestInterpretsisReport {
 	CreateFile($pkgEmbeddedFile, $PkgFile);	
 
 	# Create SIS file for the embedded package.
-	my $result = system("/epoc32/tools/makesis $pkgEmbeddedFile $sisEmbeddedFile > $LogFile");
+	my $result = system("makesis $pkgEmbeddedFile $sisEmbeddedFile > $LogFile");
 
 	# Generate test PKG file contents for embedding pkg file.
 	$PkgFile = sprintf( $PkgFileInterpretsisVersionTemplate, "-1,-1,-1"); 
@@ -1737,7 +1825,7 @@ sub TestInterpretsisReport {
 	CreateFile($pkgFile , $PkgFile);	
 	
 	# Create SIS file for the embedding package of type = SA.
-	my $result1 = system("/epoc32/tools/makesis -c $pkgFile $sisFile > $LogFile");
+	my $result1 = system("makesis -c $pkgFile $sisFile > $LogFile");
 	
 	# Create expected log file
 	my $trailingData = "Created  $sisFile.";
@@ -1782,8 +1870,15 @@ sub TestInterpretsisReport {
 # New test code for DEF145101 - MakeSIS cannot handle package files that contain large (>1000) language codes.
 # 
 sub TestDEF145101 {
-
-	my $path = "/epoc32/winscw/c/tswi";
+	my $path;
+	if ($^O =~ /^LINUX$/i)
+		{
+		$path = "$ENV{EPOCROOT}/epoc32/winscw/c/tswi";
+		}
+	else
+		{
+		$path = "/epoc32/winscw/c/tswi";
+		}
 	my $pkgfile = "$path/largelanguagecodes";
 	my $expectedResult = 0;
 
@@ -3020,6 +3115,11 @@ TestLDEF090912();
 #
 
 TestLDEF104895();
+
+#
+# Test for RC DEF577103
+#
+TestLRCDEF577103();
 
 }
 

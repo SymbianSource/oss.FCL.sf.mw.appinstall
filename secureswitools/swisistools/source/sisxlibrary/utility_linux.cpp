@@ -300,7 +300,14 @@ unsigned long attributes, void*)
 		}
 	else if(creation == CREATE_ALWAYS) 
 		{
-		fd = creat(filename, 0664);
+		fd = creat(filename, 0666);
+		//Set access right depending on umask after 
+		//re-creating (file already exists) the file.
+		mode_t oldMask,mode;
+		oldMask = umask(0002);
+		umask(oldMask);
+		mode = ((0666) & (~oldMask));
+		chmod(filename, mode);
 		}
 	else 
 		{
@@ -394,10 +401,10 @@ int _wchmod(const wchar_t *filename, unsigned long mode )
 	 return ret;
 	 }
 	 if(mode == _S_IWRITE || mode == _S_IWRITE | _S_IREAD)
-		chmod(tmp,S_IWUSR);
+		chmod(tmp,0666);
 	 else 
 		if(mode == _S_IREAD)
-		  chmod(tmp,S_IRUSR);   
+		  chmod(tmp,0444);   
 	 
 	ret = mbstowcs(const_cast<wchar_t*>(filename),tmp,sizeof(tmp));
 	

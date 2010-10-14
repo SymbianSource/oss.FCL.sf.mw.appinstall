@@ -27,7 +27,6 @@
 #include "iaupdatecontroller.h"
 #include "iaupdatecontrollerobserver.h"
 #include "iaupdatenodeobserver.h"
-#include "iaupdatewaitdialogobserver.h"
 #include "iaupdatedialogobserver.h"
 #include "iaupdatestarterobserver.h"
 #include "iaupdateroaminghandlerobserver.h"
@@ -37,8 +36,6 @@
 #include "iaupdateanynode.h"
 
 // FORWARD DECLARATIONS
-class CIAUpdateWaitDialog;
-class CIAUpdateProgressDialog;
 class CIAUpdateNodeFilter;
 class CIAUpdateStarter;
 class CIAUpdateControllerFile;
@@ -48,7 +45,6 @@ class CIAUpdateRefreshHandler;
 class MIAUpdateUiControllerObserver;
 class MIAUpdateHistory;
 class MIAUpdateFwNode;
-class IAUpdateWaitDialog;
 class IAUpdateDialogUtil;
 
 class QString;
@@ -66,7 +62,6 @@ class CIAUpdateUiController :
     public CBase, 
     public MIAUpdateControllerObserver,
     public MIAUpdateNodeObserver,
-    public MIAUpdateWaitDialogObserver,
     public MIAUpdateStarterObserver,
     public MIAUpdateRoamingHandlerObserver,
     public MIAUpdateRefreshObserver,
@@ -160,6 +155,12 @@ public: //new functions
     void SetRequestType( 
         IAUpdateUiDefines::TIAUpdateUiRequestType aRequestType );
 
+    /**
+    * Handles user cancel
+    */    
+    void HandleUserCancelL();
+    
+    
     /**
      * Cancel ongoing async operation
      **/
@@ -333,14 +334,7 @@ private:  // MIAUpdateRoamingHandlerObserver
       * Called when roaming handler is prepared
       */
      void RoamingHandlerPrepared();
-  
-        
-private: // From MIAUpdateWaitDialogObserver    
-    
-    /**
-     * This is called when the dialog is  closed.
-     */
-     void HandleWaitDialogCancel();   
+ 
      
 private: // From IAUpdateDialogObserver     
          
@@ -428,55 +422,7 @@ private: // new functions
      * @param aPtr Pointer to this instance
      */
     static TInt CheckUpdatesDeferredCallbackL( TAny* aPtr );
-                       
-    /**
-     * Shows waiting/progress dialog during update process.
-     *
-     * @param aTextResourceId Resource id of text (Downloading or Installing)
-     * @param aName           Name of update
-     * @param aNumber         Counter of current update
-     * @param aTotalCount     Total count of updates to be updated
-     */                   
-    void ShowUpdatingDialogL( TInt aTextResourceId,
-                              const TDesC& aName,
-                              TInt aNumber,
-                              TInt aTotalCount );  
-     
-    /**
-     * Shows waiting dialog during update process.
-     *
-     * @param aDisplayString       A string to be displayed
-     * @param aVisibilityDelayOff  ETrue if visibility delay is off
-     */                  
-    void ShowWaitDialogL( const QString& aDisplayString, 
-                          TBool aVisibilityDelayOff ); 
-    
-    /**
-     * Shows progress dialog during update process.
-     *
-     * @param aDisplayString       A string to be displayed
-     * @param aVisibilityDelayOff  ETrue if visibility delay is off
-     */  
-    void ShowProgressDialogL( const TDesC& aDisplayString, 
-                              TBool aVisibilityDelayOff ); 
-    
-    /**
-     * Removes all possible existing update flow dialogs.
-     * This method is a general way to handle removal of 
-     * wait or progress dialogs.
-     */
-    void RemoveUpdatingDialogsL();
-    
-    /**
-     * Removes waiting dialog.
-     */ 
-    void RemoveWaitDialogL();
-    
-    /**
-     * Removes progress dialog.
-     */ 
-    void RemoveProgressDialogL();
-    
+            
     /**
      * Checks if refreshing of update list allowed from a network
      * @return ETrue if network refresh allowed
@@ -520,12 +466,7 @@ private: // new functions
      * @param aErrorCode Error code that self updater has failed with.
      */
     void UpdateFailedSelfUpdaterInfoToPurchaseHistoryL( TInt aErrorCode );
-    
-   /**
-     * Handles user cancel
-     */    
-    void HandleUserCancelL();
-
+  
     /**
      * @return TBool ETrue if IAD has been started right after
      * the self update. In other words, self update related data
@@ -586,11 +527,7 @@ private: // data
     RPointerArray<MIAUpdateNode> iServicePackNodes;
     
     IAUpdateDialogUtil *mDialogUtil;  
- 
-    IAUpdateWaitDialog *mWaitDialog;
-    
-    CIAUpdateProgressDialog* iProgressDialog;
-    
+            
     CIAUpdateStarter* iStarter;
     
     CIAUpdateRoamingHandler* iRoamingHandler;

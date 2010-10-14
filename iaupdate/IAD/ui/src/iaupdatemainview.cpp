@@ -21,9 +21,10 @@
 #include <QGraphicsLayout>
 #include <QGraphicsLayoutItem>
 #include <QGraphicsLinearLayout>
+#include <QSizeF>
 
 #include <hbdockwidget.h>
-#include <hblistwidget.h>
+#include <HbListView>
 #include <hblistviewitem.h>
 #include <hblistwidgetitem.h>
 #include <hbtoolbar.h>
@@ -33,8 +34,14 @@
 #include <hbmessagebox.h>
 #include <hblabel.h>
 #include <hbgroupbox.h>
-#include <hbdataform.h>
+#include <HbDataForm>
+#include <HbLabel>
 #include <hbtranslator.h>
+#include <HbStyleLoader>
+#include <HbIconItem>
+#include <HbIconAnimationManager>
+#include <HbIconAnimator>
+#include <hbparameterlengthlimiter.h>
 
 #include "iaupdatemainview.h"
 #include "iaupdateengine.h"
@@ -42,6 +49,9 @@
 #include "iaupdatedeputils.h"
 #include "iaupdatedialogutil.h"
 #include "iaupdateversion.h"
+#include "iaupdateapplistmodel.h"
+#include "iaupdateapplistitem.h"
+#include "iaupdateuicontroller.h"
 
 #include "iaupdatedebug.h"
 
@@ -52,6 +62,9 @@ const int KMegaByte = 1024 * 1024;
 const int KMaxShownInKiloBytes = 10 * KMegaByte;
 const QString KTranslationsPath = "/resource/qt/translations/";
 const QString KTranslationsFile = "swupdate";
+
+const QString ANIMATION_ICON("qtg_anim_loading");
+const QString ANIMATION_FILE("qtg_anim_loading.axml");
 
 
 IAUpdateMainView::IAUpdateMainView(IAUpdateEngine *engine):
@@ -69,9 +82,13 @@ mEngine(engine)
     mSelectionUpdate = false;
     mSelectionConnect = false;
     mTranslator = NULL;
+    mAnimationIconItem = NULL;
+    mLabel = NULL;
+    mMark = false;
+    mUpdating = false;
         
-    //mTranslator = new HbTranslator(KTranslationsPath, KTranslationsFile);
-    
+    mTranslator = new HbTranslator(KTranslationsPath, KTranslationsFile);
+        
     HbDocumentLoader loader;
     bool ok = false;
     loader.load(":/xml/iaupdate_mainview.docml", &ok);
@@ -94,25 +111,45 @@ mEngine(engine)
     setMenu(menu);
     
     //Get the Action objects from the docml file
-    HbAction *action = qobject_cast<HbAction*>(loader.findObject("action"));
-    HbAction *action_1 = qobject_cast<HbAction*>(loader.findObject("action_1"));
-    HbAction *action_2 = qobject_cast<HbAction*>(loader.findObject("action_2"));
+    mActionStartUpdate = qobject_cast<HbAction*>(loader.findObject("action"));
+    mActionSettings = qobject_cast<HbAction*>(loader.findObject("action_1"));
+    mActionDisclaimer = qobject_cast<HbAction*>(loader.findObject("action_2"));
+    mActionCancelRefresh = qobject_cast<HbAction*>(loader.findObject("action_3"));
+    mActionCancelUpdate = qobject_cast<HbAction*>(loader.findObject("action_4"));
     
-    connect(action, SIGNAL(triggered()), this, SLOT(handleStartUpdate()));
-    connect(action_1, SIGNAL(triggered()), this, SLOT(handleSettings()));
-    connect(action_2, SIGNAL(triggered()), this, SLOT(handleDisclaimer()));
+    
+    connect(mActionStartUpdate, SIGNAL(triggered()), this, SLOT(handleStartUpdate()));
+    connect(mActionSettings, SIGNAL(triggered()), this, SLOT(handleSettings()));
+    connect(mActionDisclaimer, SIGNAL(triggered()), this, SLOT(handleDisclaimer()));
+    connect(mActionCancelRefresh, SIGNAL(triggered()), this, SLOT(handleCancelRefresh()));
+    connect(mActionCancelUpdate, SIGNAL(triggered()), this, SLOT(handleCancelUpdate()));
+    
+    mActionStartUpdate->setDisabled(true);
+    
+    mActionCancelRefresh->setVisible(false);
+    mActionCancelUpdate->setVisible(false);
         
     mContent = qobject_cast< HbWidget*>( loader.findWidget("content") );
            
-    mListView = qobject_cast<HbListWidget*>( loader.findWidget("listWidget") );
-    mListView->setSelectionMode( HbAbstractItemView::MultiSelection );
+    //mListView = qobject_cast<HbListView*>( loader.findWidget("listWidget") );
+    mListView = new HbListView(mContent);
+    mListView->setSelectionMode(HbAbstractItemView::MultiSelection);
+    
+    //mListView->setLayoutName("iaupdate_progress");
+    HbStyleLoader::registerFilePath(":/layout/");
     
     connect( mListView, SIGNAL( longPressed( HbAbstractViewItem *, const QPointF & ) ),
             this, SLOT( handleDetails( HbAbstractViewItem *, const QPointF & ) ) ); 
-        
-    HbListViewItem *prototype = mListView->listItemPrototype();
-
+    
+    IAUpdateAppListModel *model = new IAUpdateAppListModel();
+    
+    //HbListViewItem *prototype = mListView->listItemPrototype();
+    
+    HbListViewItem *prototype = new IAUpdateAppListItem(mListView);
     prototype->setGraphicsSize(HbListViewItem::LargeIcon);
+    prototype->setStretchingStyle(HbListViewItem::NoStretching); 
+            
+    mListView->setModel(model, prototype);
     
     HbDockWidget *dock = new HbDockWidget(this);
     HbWidget *dockContainer = new HbWidget(dock);
@@ -121,11 +158,12 @@ mEngine(engine)
     dockContainer->setLayout(dockLayout);
     
     mSelections = new HbGroupBox(dockContainer);
-    mSelections->setHeading("Selected 0/0 (0 kB)");
-    //QString selectedString = QString(hbTrId("txt_software_subhead_selected_1l_2l_3l_kb")).arg(0).arg(0).arg(0);
-    //mSelections->setHeading(selectedString);                                            
+
+    QString selectedString = 
+        QString(hbTrId("txt_software_subhead_selected_1l_2l_3l_kb")).arg(0).arg(0).arg(0);
+    mSelections->setHeading(selectedString); 
     
-    dockLayout->addItem( mSelections);
+    dockLayout->addItem(mSelections);
     
     dockLayout->addItem(toolBar);
     
@@ -140,7 +178,7 @@ mEngine(engine)
 IAUpdateMainView::~IAUpdateMainView()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::~IAUpdateMainView() begin");
-    //delete mTranslator;
+    delete mTranslator;
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::~IAUpdateMainView() end");
 }
 
@@ -167,31 +205,124 @@ void IAUpdateMainView::refresh(const RPointerArray<MIAUpdateNode> &nodes,
         {
             mContentDataForm  = new HbDataForm(mContent); 
         }
+        else
+        {
+            mContentDataForm->setVisible(true);
+        }
         QGraphicsLinearLayout *linearLayout = (QGraphicsLinearLayout*) mContent->layout();
         linearLayout->addItem(mContentDataForm);
         QString formText;
         
         if (error == KErrNone)
         {
-            formText = QString("Applications are up to date");
-            //formText = hbTrId("txt_software_formlabel_applications_are_up_to_date");
+             formText = 
+                hbTrId("txt_software_formlabel_applications_are_up_to_date");
         }
         else
         {
-            formText = QString("Refreshing failed. Try again later.");
+            formText = 
+                hbTrId("txt_software_formlabel_refreshing_failed_try_agai");
         }
         mContentDataForm->setDescription(formText);
     }
-    updateSelectionInfoInDock();  
+    updateSelectionInfoInDock(); 
+    
+    if (!mUpdating)
+    {    
+        mActionStartUpdate->setEnabled(countOfSelections() > 0);
+    } 
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refresh() end");
 }
 
+void IAUpdateMainView::refreshProgress()
+{ 
+    IAUpdateAppListModel *model = NULL;
+    model = (IAUpdateAppListModel*)  mListView->model();
+    if (model)
+    {
+        model->refreshProgress();    
+    }
+}
 
+void IAUpdateMainView::startRefreshingAnimation()
+{
+    removeCurrentContentLayout();
+     
+    mActionDisclaimer->setVisible(false);
+    mActionSettings->setVisible(false);
+    mActionCancelRefresh->setVisible(true);
+   
+    
+    if (!mLabel)
+    {    
+        mLabel = new HbLabel(mContent);
+    }
+    else
+    {    
+        mLabel->setVisible(true);
+    }
+        
+    QString formText;
+    formText = hbTrId("txt_software_formlabel_refreshing_updates_list");
+    mLabel->setPlainText(formText);
+    mLabel->setAlignment(Qt::AlignHCenter);
+          
+     
+    QGraphicsLinearLayout *linearLayout = (QGraphicsLinearLayout*) mContent->layout();
+    linearLayout->addStretch();
+    linearLayout->addItem(mLabel);
+    
+    
+    if (!mAnimationIconItem)
+    {    
+        mAnimationIconItem = new HbIconItem(ANIMATION_ICON,mContent);
+    }
+    else
+    {
+        mAnimationIconItem->setVisible(true);
+    }
+    mAnimationIconItem->setAlignment(Qt::AlignHCenter );
+    linearLayout->addItem(mAnimationIconItem);
+    linearLayout->addStretch();
+        
+    HbIconAnimationManager::global()->addDefinitionFile(ANIMATION_FILE);
+    
+    mAnimationIconItem->animator().startAnimation();
+}
+    
+void IAUpdateMainView::stopRefreshingAnimation()
+{
+    mActionDisclaimer->setVisible(true);
+    mActionSettings->setVisible(true);
+    mActionCancelRefresh->setVisible(false);
 
+    mAnimationIconItem->animator().stopAnimation();
+}    
+
+void IAUpdateMainView::updateCompleted()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::updateCompleted() begin");  
+    mUpdating = false;
+    mActionStartUpdate->setEnabled(countOfSelections() > 0);
+    mActionDisclaimer->setVisible(true);
+    mActionSettings->setVisible(true);
+    mActionCancelUpdate->setVisible(false);
+    connect( mListView, SIGNAL( longPressed( HbAbstractViewItem *, const QPointF & ) ),
+            this, SLOT( handleDetails( HbAbstractViewItem *, const QPointF & ) ) ); 
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::updateCompleted() end"); 
+}
 
 void IAUpdateMainView::handleStartUpdate()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleStartUpdate() begin");
+
+    mActionStartUpdate->setEnabled(false);
+    mActionDisclaimer->setVisible(false);
+    mActionSettings->setVisible(false);
+    mActionCancelUpdate->setVisible(true);
+    disconnect( mListView, SIGNAL( longPressed( HbAbstractViewItem *, const QPointF & ) ),
+                this, SLOT( handleDetails( HbAbstractViewItem *, const QPointF & ) ) ); 
+    mUpdating = true;
     mEngine->StartUpdate(fotaSelected());
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleStartUpdate() end");
 }
@@ -207,6 +338,8 @@ void IAUpdateMainView::handleSettings()
 void IAUpdateMainView::handleDisclaimer()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleDisclaimer() begin");
+    int counter = mListView->model()->rowCount();
+       
     if (!mDialogUtil)
     {
         mDialogUtil = new IAUpdateDialogUtil(this);
@@ -218,6 +351,22 @@ void IAUpdateMainView::handleDisclaimer()
     }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleDisclaimer() end");
 }
+
+void IAUpdateMainView::handleCancelRefresh()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleCancelRefresh() begin");
+    mEngine->Controller()->HandleUserCancelL();
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleCancelRefresh() end");
+}
+
+void IAUpdateMainView::handleCancelUpdate()
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleCancelUpdate() begin");
+    mEngine->Controller()->HandleUserCancelL();
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::handleCancelUpdate() end");
+}
+
+
 
 void IAUpdateMainView::handleDetails(HbAbstractViewItem * item, const QPointF &)
 {
@@ -311,6 +460,7 @@ void IAUpdateMainView::dialogFinished(HbAction *action)
             }
             updateSelectionsToList();
             updateSelectionInfoInDock();
+            mActionStartUpdate->setEnabled(countOfSelections() > 0);
             break;
         case CannotOmit:    
             break;
@@ -447,30 +597,25 @@ void IAUpdateMainView::markListItem(bool mark, int index)
             {
                 if (depCount > 1) 
                 {
-                    text.append("This update needs also updates "); 
-                    text.append(names);
-                    text.append(" for working");
+                    text.append(hbTrId("txt_software_info_selected_update_also_needs_updat").arg(names));
                 } 
                 else
                 {
-                    text.append("This update needs also \""); 
-                    text.append(names);
-                    text.append("\" for working");
-                    }
+                    text.append(hbTrId("txt_software_info_selected_update_also_needs_1").arg(names));
+                    
                 }
+            }
             else
             {
                 if (depCount > 1) 
                 {
-                    text.append("Updates "); 
-                    text.append(names);
-                    text.append(" need this update for working");
+                    HbParameterLengthLimiter limiter(hbTrId("txt_software_info_updates_1_needs_deselected_upd"));  
+                    text.append(limiter.arg("names")); 
                 } 
                 else
                 {
-                    text.append("Update \""); 
-                    text.append(names);
-                    text.append("\" needs this update for working");
+                    HbParameterLengthLimiter limiter(hbTrId("txt_software_info_update_1_needs_deselected_upd"));  
+                    text.append(limiter.arg("names")); 
                 }   
             }
                 
@@ -496,6 +641,10 @@ void IAUpdateMainView::markListItem(bool mark, int index)
     {    
         updateSelectionsToList();
         updateSelectionInfoInDock();
+        if (!mUpdating)
+        {    
+            mActionStartUpdate->setEnabled(countOfSelections() > 0);
+        }    
     }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::markListItem() end");
 }       
@@ -516,6 +665,7 @@ void IAUpdateMainView::markFotaItem(bool mark)
             if (mNodes[i]->Base().IsSelected())
             {
                 mNodes[i]->Base().SetSelected(false);
+                deselected = true;
             }
         } 
         if (deselected)
@@ -540,6 +690,7 @@ void IAUpdateMainView::markFotaItem(bool mark)
         }
     }
     updateSelectionInfoInDock();
+    mActionStartUpdate->setEnabled(countOfSelections() > 0);
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::markFotaItem() end");
 }
 
@@ -636,14 +787,14 @@ void IAUpdateMainView::showUpdateCannotOmitDialog()
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::showUpdateCannotOmitDialog() begin");
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
-    messageBox->setText(QString("This required update cannot be omitted"));
+    messageBox->setText(hbTrId("txt_software_info_this_required_update_cannot_be_o"));
     int actionCount = messageBox->actions().count();
     for (int i=actionCount-1; i >= 0; i--)
     { 
         messageBox->removeAction(messageBox->actions().at(i));
     }
     HbAction *okAction = NULL;
-    okAction = new HbAction("Ok");
+    okAction = new HbAction(hbTrId("txt_common_button_ok"));
     messageBox->addAction(okAction);
     messageBox->setTimeout(HbPopup::StandardTimeout);
     messageBox->setAttribute(Qt::WA_DeleteOnClose);
@@ -657,7 +808,7 @@ void IAUpdateMainView::showDependenciesFoundDialog(QString &text)
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::showDependenciesFoundDialog() begin");
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeQuestion);
     HbLabel *label = new HbLabel(messageBox);
-    label->setHtml(QString("Depencencies"));
+    label->setHtml(hbTrId("txt_software_title_dependencies"));
     messageBox->setHeadingWidget(label);
     //messageBox->setIconVisible(false);
         
@@ -670,7 +821,7 @@ void IAUpdateMainView::showDependenciesFoundDialog(QString &text)
     mPrimaryAction = NULL;
     mPrimaryAction = new HbAction("Continue");
     HbAction *secondaryAction = NULL;
-    secondaryAction = new HbAction("Cancel");
+    secondaryAction = new HbAction(hbTrId("txt_common_button_cancel"));
     messageBox->addAction(mPrimaryAction);
     messageBox->addAction(secondaryAction);
     messageBox->setTimeout(HbPopup::NoTimeout);
@@ -742,24 +893,28 @@ void IAUpdateMainView::showDetails(MIAUpdateAnyNode& node)
 void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &text)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::constructDetailsText() begin");
-    text.append(QString("Name:"));
+    text.append(hbTrId("txt_software_dialog_name"));
     text.append(QString("<br />"));
-    QString name = XQConversions::s60DescToQString(node.Base().Name());
-    text.append(name);
     if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
     {    
-        name.append(QString(" Device software"));
+        text.append(hbTrId("txt_software_dblist_device_software ")); // TODO: wrong layout
+    }
+    else
+    {
+        QString name = XQConversions::s60DescToQString(node.Base().Name());
+        text.append(name);
     }
         
     text.append(QString("<br />"));
     text.append(QString("<br />"));
     
-    text.append(QString("Description:"));
+    text.append(hbTrId("txt_software_dialog_description"));
     text.append(QString("<br />"));
     QString description;
     if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
     {
-        description = QString("This update improves your device performance and brings you latest features.");
+        description = 
+            hbTrId("txt_software_info_this_update_improves_your_device");
     }
     else
     {    
@@ -775,7 +930,7 @@ void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &tex
         MIAUpdateNode *iaupdateNode = static_cast<MIAUpdateNode*> (&node);
         if (iaupdateNode->Type()!= MIAUpdateNode::EPackageTypeServicePack)
         {
-            text.append(QString("Version:"));
+            text.append(hbTrId("txt_software_dialog_version"));
             text.append(QString("<br />"));
             QString textVersion;
             versionText(node.Base().Version(), textVersion);
@@ -787,7 +942,7 @@ void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &tex
     if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
     {    
         MIAUpdateFwNode *fwNode = static_cast<MIAUpdateFwNode*> (&node);
-        text.append(QString("Version:"));
+        text.append(hbTrId("txt_software_dialog_version"));
         text.append(QString("<br />"));
         QString textVersion = XQConversions::s60DescToQString(fwNode->FwVersion1());
         text.append(textVersion);
@@ -798,7 +953,7 @@ void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &tex
     int contentSize = node.Base().ContentSizeL();
     if (contentSize > 0)
     {
-        text.append(QString("Size:"));
+        text.append(hbTrId("txt_software_dialog_size"));
         text.append(QString("<br />"));
         QString textFileSize;
         fileSizeText(contentSize, textFileSize);
@@ -810,18 +965,8 @@ void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &tex
 void IAUpdateMainView::versionText(const TIAUpdateVersion &version, QString &versionText)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::versionText() begin");
-    QString stringMajor;
-    stringMajor.setNum(version.iMajor);
-    versionText.append(stringMajor);
-    versionText.append(QString("."));
-    QString stringMinor;
-    stringMinor.setNum(version.iMinor);
-    versionText.append(stringMinor);
-    versionText.append(QString("("));
-    QString stringBuild;
-    stringBuild.setNum(version.iBuild);
-    versionText.append(stringBuild);
-    versionText.append(QString(")"));
+    versionText.append
+        (hbTrId("txt_software_info_version_1l_2l_3l").arg(version.iMajor).arg(version.iMinor).arg(version.iBuild));
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::versionText() end");
 }
 
@@ -829,141 +974,29 @@ void IAUpdateMainView::fileSizeText(int fileSize, QString &text)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::fileSizeText() begin");
     int size = 0;
-    QString stringUnit;
     
     if (fileSize >= KMaxShownInKiloBytes )
         {
-        stringUnit.append(" MB");
         size = fileSize / KMegaByte;
         if ( fileSize % KMegaByte != 0 )
             {
             size++;
             }
+        text.append(hbTrId("txt_software_dialog_l_kb").arg(size));
         }
     else
         {
-        stringUnit.append(" kB");
         size = fileSize / KKiloByte;
         if ( fileSize % KKiloByte != 0 )
             {
             size++;
-            }   
+            } 
+        text.append(hbTrId("txt_software_dialog_l_mb").arg(size));
         }
-    text.setNum(size);
-    text.append(stringUnit); 
+    
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::fileSizeText() end");
 }
 
-void IAUpdateMainView::setImportance(MIAUpdateAnyNode *node, QString &importanceDescription)
-{
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::setImportance() begin");
-    int sizeInBytes = node->Base().ContentSizeL();
-    int size = 0;
-    bool shownInMegabytes = false;        
-    if (sizeInBytes >= KMaxShownInKiloBytes)
-    {
-        shownInMegabytes = true;
-        size = sizeInBytes / KMegaByte;
-        if (sizeInBytes % KMegaByte != 0)
-        {
-           size++;
-        }
-    }
-    else 
-    {
-        size = sizeInBytes / KKiloByte;
-        if (sizeInBytes % KKiloByte != 0)
-        {
-            size++;
-        }  
-    }
-    QString sizeString;
-    sizeString.setNum(size);     
-    switch(node->Base().Importance())
-    {        
-        case MIAUpdateBaseNode::EMandatory:
-        {
-            importanceDescription = "Required ";
-            importanceDescription.append(sizeString);
-            if (shownInMegabytes)
-            {
-                importanceDescription.append(" MB" );
-            }
-            else 
-            {
-                importanceDescription.append(" kB" );
-            }  
-            break;
-        }
-                
-        case MIAUpdateBaseNode::ECritical:
-        {
-            bool isNSU = false;
-            if(node->NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
-            {
-                MIAUpdateFwNode *fwnode = static_cast<MIAUpdateFwNode*>(node);          
-                if (fwnode->FwType() == MIAUpdateFwNode::EFotiNsu)
-                {
-                   isNSU = true;
-                }
-            }
-            importanceDescription = "Important ";
-            if (!size || isNSU)
-            {
-                //for firmware when size info is not provided by server
-            }
-            else
-            {
-                importanceDescription.append(sizeString);
-                if (shownInMegabytes)
-                {
-                    importanceDescription.append(" MB" );
-                }
-                else 
-                {
-                    importanceDescription.append(" kB" );
-                } 
-            }
-            break;
-        }
-            
-        case MIAUpdateBaseNode::ERecommended:
-        {
-            importanceDescription = "Recommended ";
-            importanceDescription.append(sizeString);
-            if (shownInMegabytes)
-            {
-                importanceDescription.append(" MB" );
-            }
-            else 
-            {
-                importanceDescription.append(" kB" );
-            }  
-            break;
-        }
-            
-        case MIAUpdateBaseNode::ENormal:
-        {
-            importanceDescription = "Optional ";
-            importanceDescription.append(sizeString);
-            if (shownInMegabytes)
-            {
-                importanceDescription.append(" MB" );
-            }
-            else 
-            {
-                importanceDescription.append(" kB" );
-            }  
-            break;
-        }
-
-        default:
-        {
-            break;
-        }
-    }
-    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::setImportance() end");
-}    
 
 void IAUpdateMainView::removeCurrentContentLayout()
 {
@@ -972,6 +1005,19 @@ void IAUpdateMainView::removeCurrentContentLayout()
     for (int i = 0; i < itemCount; i++)    
     {
         mContent->layout()->removeAt(i);
+    }
+    if (mContentDataForm)
+    {
+        mContentDataForm->setVisible(false);
+    }
+    if (mLabel)
+    {
+        mLabel->setVisible(false);
+    }
+    if (mAnimationIconItem)
+    {   
+        delete mAnimationIconItem;
+        mAnimationIconItem = NULL;
     }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::removeCurrentContentLayout() end");    
 }
@@ -992,7 +1038,7 @@ void IAUpdateMainView::refreshFirmwareUpdates(const RPointerArray<MIAUpdateFwNod
         }
         else if (fwNodes.Count() == 1 && fwnode->FwType() == MIAUpdateFwNode::EFotiNsu)
         {
-            refreshNsuUpdate();
+        refreshNsuUpdate(*fwnode);
         }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refreshFirmwareUpdates() end");    
     }    
@@ -1003,10 +1049,17 @@ void IAUpdateMainView::refreshFotaUpdate(MIAUpdateFwNode& fwNode)
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refreshFotaUpdate() begin");
     if (!mFwListView)
     {
-        mFwListView  = new HbListWidget(mContent);
+        mFwListView  = new HbListView(mContent);
         mFwListView->setSelectionMode( HbAbstractItemView::MultiSelection );
         connect( mFwListView, SIGNAL( longPressed( HbAbstractViewItem *, const QPointF & ) ),
         this, SLOT( handleFotaDetails( HbAbstractViewItem *, const QPointF & ) ) ); 
+        
+        IAUpdateAppListModel *model = new IAUpdateAppListModel();
+        HbListViewItem *prototype = new IAUpdateAppListItem(mListView);
+        prototype->setGraphicsSize(HbListViewItem::LargeIcon);
+        prototype->setStretchingStyle(HbListViewItem::NoStretching);            
+        mListView->setModel(model, prototype);
+         
         mFwListView->listItemPrototype()->setGraphicsSize(HbListViewItem::LargeIcon);   
         mFwListView->listItemPrototype()->setStretchingStyle(HbListViewItem::NoStretching);
         connect(mFwListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -1014,37 +1067,34 @@ void IAUpdateMainView::refreshFotaUpdate(MIAUpdateFwNode& fwNode)
     }
     QGraphicsLinearLayout *linearLayout = (QGraphicsLinearLayout*) mContent->layout();
     linearLayout->addItem(mFwListView);
-    mFwListView->clear();
+    IAUpdateAppListModel *model = (IAUpdateAppListModel*)  mListView->model();
     QItemSelectionModel *selectionModel = mFwListView->selectionModel();  
+    mSelectionUpdate = true;
     selectionModel->clear();
-    HbListWidgetItem *fwItem = new HbListWidgetItem();
-    QString name(XQConversions::s60DescToQString(fwNode.Base().Name()));
-    name.append(" DEVICE SOFTWARE");
-    fwItem->setText(name);
-    QString importanceDescription;
-    setImportance(&fwNode, importanceDescription);
-    fwItem->setSecondaryText(importanceDescription);
-    HbIcon icon(QString(":/icons/qgn_menu_swupdate"));
-    fwItem->setIcon(icon);
+    mSelectionUpdate = false;
+    model->setFwNode(&fwNode);
+ 
     if (fwNode.Base().IsSelected())
     {
         QModelIndex modelIndex = mFwListView->model()->index(0,0);
         selectionModel->select(modelIndex, QItemSelectionModel::Select);
     }
-    mFwListView->addItem(fwItem); 
+    model->refresh();
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refreshFotaUpdate() end");
 }
 
-void IAUpdateMainView::refreshNsuUpdate()
+void IAUpdateMainView::refreshNsuUpdate(MIAUpdateFwNode& fwNode)
 {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refreshNsuUpdate() begin");
     if (!mFwNSUGroupBox)
     {
         mFwNSUGroupBox = new HbGroupBox(mContent);
-        mFwNSUGroupBox->setHeading("Device software available");
+        mFwNSUGroupBox->setHeading(hbTrId("txt_software_subhead_device_software_available"));
         HbDataForm *dataForm  = new HbDataForm(mFwNSUGroupBox); 
         mFwNSUGroupBox->setContentWidget(dataForm);
-        dataForm->setDescription("Use your PC to update the device software ([version %L]) from address www.nokia.com/softwareupdate");
+        QString textVersion = XQConversions::s60DescToQString(fwNode.FwVersion1());
+        dataForm->setDescription
+            (hbTrId("txt_software_info_please_use_your_pc_to_update_the").arg(textVersion));
     }
     QGraphicsLinearLayout *linearLayout = (QGraphicsLinearLayout*) mContent->layout();
     linearLayout->addItem(mFwNSUGroupBox);
@@ -1059,59 +1109,32 @@ void IAUpdateMainView::refreshApplicationUpdates(const RPointerArray<MIAUpdateNo
         if (!mApplicationUpdatesGroupBox)
         {
             mApplicationUpdatesGroupBox = new HbGroupBox(mContent);
-            mApplicationUpdatesGroupBox->setHeading("Application updates");
+            mApplicationUpdatesGroupBox->setHeading(hbTrId("txt_software_subhead_application_updates"));
         }
         QGraphicsLinearLayout *linearLayout = (QGraphicsLinearLayout*) mContent->layout();
         linearLayout->addItem(mApplicationUpdatesGroupBox);
         linearLayout->addItem(mListView);
     }
-    mListView->clear();
+    IAUpdateAppListModel *model = (IAUpdateAppListModel*)  mListView->model();
     QItemSelectionModel *selectionModel = mListView->selectionModel();  
+    mSelectionUpdate = true;
     selectionModel->clear();
-    HbIcon icon(QString(":/icons/qgn_menu_swupdate"));
+    mSelectionUpdate = false;
+    
+    //HbIcon icon(QString(":/icons/qgn_menu_swupdate"));
     mNodes.Reset();
+
     for(int i = 0; i < nodes.Count(); ++i) 
     {
         MIAUpdateNode *node = nodes[i];
         mNodes.Append(node);
-        QString importanceDescription;
-        MIAUpdateNode::TUIUpdateState uiState = node->UiState();
-        if (uiState == MIAUpdateNode::ENormal)
+    }
+    model->setNodeArray(mNodes);
+    for(int j = 0; j < mNodes.Count(); ++j) 
+    {
+        if (mNodes[j]->Base().IsSelected())
         {
-            setImportance(node, importanceDescription);
-        }
-        else if (uiState == MIAUpdateNode::EUpdated)
-        {
-            importanceDescription = "Updated";
-        }
-        else if (uiState == MIAUpdateNode::EFailed)
-        {
-            importanceDescription = "Failed";
-        }
-        else if (uiState == MIAUpdateNode::EDownloaded)
-        {
-            importanceDescription = "Downloaded";
-        }
-        HbListWidgetItem *item = new HbListWidgetItem();    
-        QString name;
-        if (uiState == MIAUpdateNode::EDownloading)
-        {
-            name = QString("Downloading ");
-        }
-        else if (uiState == MIAUpdateNode::EInstalling)
-        {
-            name = QString("Installing ");
-        }
-        name.append(XQConversions::s60DescToQString(node->Base().Name()));
-        item->setText(name);
-        item->setSecondaryText(importanceDescription);
-        item->setIcon(icon);
-        mListView->addItem(item); 
-         
-        if (node->Base().IsSelected())
-        {
-            int count = mListView->count();
-            QModelIndex modelIndex = mListView->model()->index(count-1,0);
+            QModelIndex modelIndex = mListView->model()->index(j,0);
             selectionModel->select(modelIndex, QItemSelectionModel::Select);
         }
     }
@@ -1120,6 +1143,8 @@ void IAUpdateMainView::refreshApplicationUpdates(const RPointerArray<MIAUpdateNo
         mSelectionConnect = connect(selectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                         this, SLOT(handleSelectionChanged(QItemSelection,QItemSelection)));     
     }
+    model->refresh();
+
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::refreshApplicationUpdates() end");
 }
 
@@ -1191,3 +1216,28 @@ void IAUpdateMainView::updateSelectionInfoInDock()
     mSelections->setHeading(selectionString);
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::updateSelectionInfoInDock() end");
 }
+
+int IAUpdateMainView::countOfSelections() const
+{
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::countOfSelections() begin");
+    int countOfSelectedItems = 0;
+    for (int i = 0; i < mFwNodes.Count(); ++i)
+    {
+        if (mFwNodes[i]->FwType() == MIAUpdateFwNode::EFotaDp2)
+        {
+            if (mFwNodes[i]->Base().IsSelected())
+            {
+                countOfSelectedItems++;
+            }
+        }
+    } 
+    for (int j = 0; j < mNodes.Count(); ++j)
+    {    
+        if (mNodes[j]->Base().IsSelected())
+        {
+            countOfSelectedItems++;
+        }
+    } 
+    IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::countOfSelections() end");
+    return countOfSelectedItems;
+}    

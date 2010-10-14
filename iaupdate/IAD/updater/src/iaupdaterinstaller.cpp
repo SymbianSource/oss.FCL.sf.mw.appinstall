@@ -268,10 +268,10 @@ void CIAUpdaterInstaller::RunL()
                 SetActive();                        
                 break;                        
                 }                
-            else if ( (errCategory == Usif::ESecurityError && 
-                iInstallErr == KErrNone) ||
-                (iStatus.Int() != KErrNone && 
-                 iStatus.Int() != errCategory == Usif::ESecurityError) )
+            else if ( ( errCategory == Usif::ESecurityError && 
+                        iInstallErr == KErrNone) ||
+                      ( iStatus.Int() != KErrNone && 
+                        errCategory != Usif::ESecurityError ) )
                 {
                 IAUPDATE_TRACE("[IAUpdater] RunL() Ins. err or sec. failure"); 
                 

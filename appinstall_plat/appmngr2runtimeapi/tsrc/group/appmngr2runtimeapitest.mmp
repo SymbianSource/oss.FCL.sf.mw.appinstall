@@ -34,8 +34,8 @@ SOURCE          appmngr2runtimeapitestmain.cpp
 SOURCE          appmngr2testcommand.cpp
 
 LIBRARY         euser.lib                       // Base
-LIBRARY         stiftestinterface.lib           // STIF Framework
-LIBRARY         stiftestengine.lib              // STIF Framework
+LIBRARY         StifTestInterface.lib           // STIF Framework
+LIBRARY         StifTestEngine.lib              // STIF Framework
 LIBRARY         appmngr2pluginapi.lib           // AppMngr2 Runtime API
 LIBRARY         ecom.lib                        // ECom
 LIBRARY         avkon.lib                       // CAknIconArray

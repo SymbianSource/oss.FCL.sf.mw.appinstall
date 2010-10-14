@@ -40,6 +40,12 @@ IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     connect(&(*mainView), SIGNAL(toSettingView()), &(*mMainWindow), SLOT(toSettingView()));
     connect(&(*mEngine), SIGNAL(refresh(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)),
             &(*mMainWindow), SLOT(refreshMainView(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)));
+    connect(&(*mEngine), SIGNAL(refreshProgress()),
+            &(*mMainWindow), SLOT(refreshMainViewProgress()));
+    connect(&(*mEngine), SIGNAL(setUpdatesRefreshing(bool)),
+            &(*mMainWindow), SLOT(setRefreshingAnimation(bool)));
+    connect(&(*mEngine), SIGNAL(updateCompleted()),
+            &(*mMainWindow), SLOT(updateCompleted()));
     }
 
 IAUpdateApplication::~IAUpdateApplication()

@@ -73,8 +73,27 @@ void IAUpdateMainWindow::refreshMainView(const RPointerArray<MIAUpdateNode>& nod
     show(); 
 } 
 
+void IAUpdateMainWindow::refreshMainViewProgress()
+{
+    mMainView->refreshProgress();
+}
 
+void IAUpdateMainWindow::setRefreshingAnimation(bool animation)
+{
+    if (animation)
+    {
+        mMainView->startRefreshingAnimation();
+    }
+    else
+    {
+        mMainView->stopRefreshingAnimation();    
+    }
+}
 
+void IAUpdateMainWindow::updateCompleted()
+{
+    mMainView->updateCompleted();    
+}
 
 IAUpdateMainView* IAUpdateMainWindow::GetMainView()
 {

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2008 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2008-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -104,105 +104,5 @@ void CIAUpdateFWSyncState::ConstructL()
 	return iSyncPhase;
 	}
 
-
-// -----------------------------------------------------------------------------
-// SetProgress
-//
-// -----------------------------------------------------------------------------
-//
-  void CIAUpdateFWSyncState::SetProgress(TInt aCount)
-	{
-	iProgressCount = aCount;
-	}
-
-// -----------------------------------------------------------------------------
-// IncreaseProgress
-//
-// -----------------------------------------------------------------------------
-//
-  void CIAUpdateFWSyncState::IncreaseProgress()
-	{
-	if (iProgressCount < iTotalProgressCount)
-		{
-		iProgressCount++;
-		}
-	}
-
-// -----------------------------------------------------------------------------
-// Progress
-//
-// -----------------------------------------------------------------------------
-//
-  TInt CIAUpdateFWSyncState::Progress()
-	{
-	return iProgressCount;
-	}
-
-// -----------------------------------------------------------------------------
-// SetTotalProgress
-//
-// -----------------------------------------------------------------------------
-//
-  void CIAUpdateFWSyncState::SetTotalProgress(TInt aCount)
-	{
-	iTotalProgressCount = aCount;
-	}
-
-// -----------------------------------------------------------------------------
-// TotalProgress
-//
-// -----------------------------------------------------------------------------
-//
-  TInt CIAUpdateFWSyncState::TotalProgress()
-	{
-	return iTotalProgressCount;
-	}
-
-// -----------------------------------------------------------------------------
-// SetContent
-//
-// -----------------------------------------------------------------------------
-//
-  void CIAUpdateFWSyncState::SetContent(const TDesC& aContent)
-	{
-	TUtil::StrCopy(iSyncContent, aContent);
-	}
-
-// -----------------------------------------------------------------------------
-// Content
-//
-// -----------------------------------------------------------------------------
-//
-  const TDesC& CIAUpdateFWSyncState::Content()
-	{
-	return iSyncContent;
-	}
-
-// -----------------------------------------------------------------------------
-// ResetProgress
-//
-// -----------------------------------------------------------------------------
-//
-  void CIAUpdateFWSyncState::ResetProgress()
-	{
-	iProgressCount = 0;
-	iTotalProgressCount = 0;
-	iSyncContent = KNullDesC;
-	}
-
-// -----------------------------------------------------------------------------
-// ProgressKnown
-//
-// -----------------------------------------------------------------------------
-//
-  TBool CIAUpdateFWSyncState::ProgressKnown()
-	{
-	if (iTotalProgressCount == -1 )
-		{
-		return EFalse;
-		}
-
-	return ETrue;
-	}
 
 

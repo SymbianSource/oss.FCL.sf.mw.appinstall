@@ -46,6 +46,9 @@ public slots:
     void refreshMainView(const RPointerArray<MIAUpdateNode>& nodes,
                          const RPointerArray<MIAUpdateFwNode>& fwNodes,
                          int error);
+    void refreshMainViewProgress();
+    void setRefreshingAnimation(bool animation);
+    void updateCompleted();
     void toSettingView();
 
 private:

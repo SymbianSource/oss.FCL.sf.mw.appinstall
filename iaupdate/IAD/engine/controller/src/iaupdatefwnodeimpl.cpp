@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -431,4 +431,25 @@ void CIAUpdateFwNode::SetNameL( const MNcdNodeMetadata& /*aMetaData*/ )
     CleanupStack::PopAndDestroy( &telServer );
      
     IAUPDATE_TRACE("[IAUPDATE] CIAUpdateFwNode::SetNameL() end");
+    }
+
+
+// ---------------------------------------------------------------------------
+// CIAUpdateFwNode::SetUiState()
+// 
+// ---------------------------------------------------------------------------
+//
+void CIAUpdateFwNode::SetUiState( MIAUpdateFwNode::TUIUpdateState aState )
+    {
+    iUiUpdateState = aState;
+    }
+
+// ---------------------------------------------------------------------------
+// CIAUpdateFwNode::UiState()
+// 
+// ---------------------------------------------------------------------------
+//
+MIAUpdateFwNode::TUIUpdateState CIAUpdateFwNode::UiState() const
+    {
+    return iUiUpdateState;
     }

@@ -74,6 +74,11 @@ IAUpdateEngine::~IAUpdateEngine()
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::~IAUpdateEngine() begin");
     InformRequestObserver(KErrCancel);
+    if (iController)
+        {
+        delete iController;
+        }
+    
     if (iIdle)
         {
         delete iIdle;
@@ -90,10 +95,7 @@ IAUpdateEngine::~IAUpdateEngine()
         {
         delete iAutomaticCheck;
         }
-    if (iController)
-        {
-        delete iController;
-        }
+    
     if (iFwUpdateHandler)
         {
         delete iFwUpdateHandler;
@@ -255,11 +257,11 @@ void IAUpdateEngine::StartUpdate(bool aFirmwareUpdate)
         {
         if (!iFwUpdateHandler)
             {
-            TRAP_IGNORE( CIAUpdateFWUpdateHandler::NewL() );
+            TRAP_IGNORE(CIAUpdateFWUpdateHandler::NewL());
             }
         if (iFwUpdateHandler)
             {
-            iFwUpdateHandler->FirmWareUpdatewithFOTA();
+            iFwUpdateHandler->FirmWareUpdatewithFOTA(this);
             }
         }
     else
@@ -288,6 +290,7 @@ void IAUpdateEngine::StartUpdate(bool aFirmwareUpdate)
         }
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::StartUpdate() end");
     }
+
 
 // -----------------------------------------------------------------------------
 // IAUpdateEngine::SetVisibleL
@@ -353,6 +356,20 @@ bool IAUpdateEngine::ClientInBackgroundL() const
     IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateEngine::ClientInBackgroundL() inBackground: %d", inBackground );
     return inBackground;
     }
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngine::Controller()
+// 
+// -----------------------------------------------------------------------------
+//      
+CIAUpdateUiController* IAUpdateEngine::Controller() const
+    {
+    return iController;
+    }
+
+
+
+
 
 // -----------------------------------------------------------------------------
 // IAUpdateEngine::handleAllClientsClosed()
@@ -556,6 +573,26 @@ void IAUpdateEngine::RefreshUI()
     }
 
 // -----------------------------------------------------------------------------
+// IAUpdateEngine::RefreshUIProgress
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateEngine::RefreshUIProgress()
+    {
+    emit refreshProgress();
+    }
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngine::SetUpdatesRefreshing
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateEngine::SetUpdatesRefreshing( TBool aRefreshing )
+    {
+    emit setUpdatesRefreshing(aRefreshing);
+    }
+
+// -----------------------------------------------------------------------------
 // IAUpdateEngine::RefreshCompleteL
 // 
 // -----------------------------------------------------------------------------
@@ -576,11 +613,6 @@ void IAUpdateEngine::RefreshCompleteL(TBool /*aWithViewActivation*/,
     else
         {
         emit refresh(iController->Nodes(), iController->FwNodes(), aError);
-        
-        // inform bgchecker to clear indicator menu
-        User::LeaveIfError( 
-                RProperty::Set(KPSUidBgc, KIAUpdateBGNotifyIndicatorRemove, 0) );
-        
         //if ( aWithViewActivation)
         //  {
         //  ActivateLocalViewL( TUid::Uid( EIAUpdateMainViewId ) );
@@ -623,9 +655,30 @@ void IAUpdateEngine::UpdateCompleteL(TInt aError)
         InformRequestObserver(aError);
         }
 
+    emit updateCompleted();
     ShowResultsDialogL();
 
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::UpdateCompleteL end");
+    }
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngine::PreparingStarted
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateEngine::PreparingStarted()
+    {
+
+    }
+
+// -----------------------------------------------------------------------------
+// IAUpdateEngine::Prepared
+// 
+// -----------------------------------------------------------------------------
+//
+void IAUpdateEngine::Prepared()
+    {
+    emit updateCompleted();
     }
 
 // -----------------------------------------------------------------------------
@@ -657,16 +710,17 @@ void IAUpdateEngine::ShowRebootDialogL()
 
     HbMessageBox *messageBox = new HbMessageBox(
             HbMessageBox::MessageTypeQuestion);
-    messageBox->setText(QString("Phone restart needed. Restart now?"));
+    messageBox->setText
+        (hbTrId("txt_software_info_device_restart_is_needed_restar"));
     int actionCount = messageBox->actions().count();
     for (int i = actionCount - 1; i >= 0; i--)
         {
         messageBox->removeAction(messageBox->actions().at(i));
         }
     mPrimaryAction = NULL;
-    mPrimaryAction = new HbAction("Ok");
+    mPrimaryAction = new HbAction(hbTrId("txt_common_button_ok"));
     HbAction *secondaryAction = NULL;
-    secondaryAction = new HbAction("Cancel");
+    secondaryAction = new HbAction(hbTrId("txt_common_button_cancel"));
 
     messageBox->addAction(mPrimaryAction);
     messageBox->addAction(secondaryAction);

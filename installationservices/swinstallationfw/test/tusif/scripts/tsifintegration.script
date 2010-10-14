@@ -706,6 +706,21 @@ RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tsifintegration\tsifintegration.
 
 END_TESTCASE API-SEC-USIF-tsifintegration-0050
 
+RUN_TEST_STEP 100 tscr SCRDeleteDbFile z:\tusif\tscr\tscr.ini db_file
+
+// Get the component information, when the some component was already installed on the device,
+// for this component having same pkg name, vendor name but diff UID 
+//! @SYMTestCaseID 		API-SEC-USIF-tsifintegration-0051
+//! @SYMTestStatus 		3. Released
+
+START_TESTCASE API-SEC-USIF-tsifintegration-0051
+
+RUN_TEST_STEP 100 tUsifSuite SifInstallStep            z:\tusif\tsifintegration\tsifintegration.ini InstallComponentInfoIntegByFileName
+RUN_TEST_STEP 100 tUsifSuite SifGetComponentInfoStep   z:\tusif\tsifintegration\tsifintegration.ini GetCompInfoForSifComponentInfoIntegration_DiffUid
+RUN_TEST_STEP 100 tUsifSuite SifUninstallStep          z:\tusif\tsifintegration\tsifintegration.ini UninstallComponentInfoInteg
+
+END_TESTCASE API-SEC-USIF-tsifintegration-0051
+
 // Wait 3 seconds in order to let the SIF server shutdown itself
 DELAY 3000
 
