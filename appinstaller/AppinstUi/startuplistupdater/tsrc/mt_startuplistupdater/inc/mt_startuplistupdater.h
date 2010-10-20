@@ -53,6 +53,9 @@ class CTestStartupListUpdater : public CScriptBase
         TInt RemoveL( CStifItemParser& aItem );
         TInt CheckStartListContainsL( CStifItemParser& aItem );
         TInt CheckStartListDoesNotContainL( CStifItemParser& aItem );
+        TInt MakeDevTraceLogDirL( CStifItemParser& aItem );
+        TInt RemoveDevTraceLogDirL( CStifItemParser& aItem );
+        TInt WaitImportProcessingL( CStifItemParser& aItem );
 
     private:    // new functions
         void GetStartupListL( RPointerArray<HBufC>& aStartupList );

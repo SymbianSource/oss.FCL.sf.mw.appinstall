@@ -17,10 +17,12 @@
 
 
 #include "teststartlist.h"
+#include <e32debug.h>           // RDebug
 
 
 GLDEF_C TInt E32Main()
     {
+    RDebug::Printf("AUTO-STARTUP-TRACE: teststartlist started");
     return KErrNone;
     }
 

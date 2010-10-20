@@ -22,6 +22,7 @@
 [0x1028315F],0,0,0,{"Series60ProductID"}
 [0x10283160],0,0,0,{"Series60ProductID"}
 [0x20022E6D],0,0,0,{"Series60ProductID"}
+[0x20032DE7],0,0,0,{"Series60ProductID"}
 
 ; Localised Vendor name
 %{"Nokia"}
@@ -31,5 +32,5 @@
 
 ; Files
 "\epoc32\release\armv5\urel\teststartlist.exe" - "c:\sys\bin\teststartlist.exe"
-"\epoc32\data\z\private\101f875a\import\ebe1c11b.rsc" - "c:\private\101f875a\import\ebe1c11b.rsc"
+"\epoc32\data\z\private\101f875a\import\ebe1c11b.rsc" - "c:\private\101f875a\import\[ebe1c11b].rsc"
 

@@ -31,7 +31,7 @@ _LIT16(KFalseString16, "false");
 // set caused the prefix to be ignored.
 
 #define XML_PREFIX_HACK
-#warning XML DOM API PREFIX HACK ENABLED ON 3.2 AND 5.0 PLATFORMS
+//#warning XML DOM API PREFIX HACK ENABLED ON 3.2 AND 5.0 PLATFORMS
 
 
 

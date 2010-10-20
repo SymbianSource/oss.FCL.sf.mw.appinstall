@@ -114,7 +114,7 @@ PRJ_TESTEXPORTS
 
 ../test/testdb/scr.db			z:/sys/install/scr/provisioned/scr.db
 
-// The second copy is required for ARMV5 builds, where z:/ does not automatically transfer into the simulated Z drive. The custom steps in ONB take care of copying testscr.db into scr.db before ROM build and test
+// The second copy is required DABS/BATS builds
 ../test/testdb/scr.db /epoc32/release/winscw/udeb/z/sys/install/scr/provisioned/testscr.db
 ../test/testdb/scr.db /epoc32/release/winscw/urel/z/sys/install/scr/provisioned/testscr.db
 

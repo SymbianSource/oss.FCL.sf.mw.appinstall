@@ -28,9 +28,10 @@
 
 using namespace Usif;
 
-_LIT( KTextResolverPath, "z:/resource/qt/translations/" );
-_LIT( KSifUiTranslationFile, "sifuidevicedialogplugin_" );
-_LIT( KCommonButtonContinue, "txt_common_button_continue" );
+// TODO: restore
+//_LIT( KTextResolverPath, "z:/resource/qt/translations/" );
+//_LIT( KSifUiTranslationFile, "sifuidevicedialogplugin_" );
+//_LIT( KCommonButtonContinue, "txt_common_button_continue" );
 
 _LIT( KMemoryFull, "txt_error_info_memory_full" );
 _LIT( KUnexpectedError, "txt_error_info_an_unexpected_error_occurred" );
@@ -46,6 +47,17 @@ _LIT( KCannotBeDeleted , "txt_error_info_application_cannot_be_deleted" );
 
 const TInt KDefaultTimeout = 6000;  // milliseconds
 
+// TODO: replace with proper logging
+#ifdef _DEBUG
+#define FLOG(x)         RDebug::Print(x)
+#define FLOG_1(x,y)     RDebug::Print((x),(y))
+#define FLOG_2(x,y,z)   RDebug::Print((x),(y),(z))
+#else
+#define FLOG(x)
+#define FLOG_1(x,y)
+#define FLOG_2(x,y,z)
+#endif
+
 
 // ======== MEMBER FUNCTIONS ========
 
@@ -57,6 +69,7 @@ CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase( RFs& aFs,
         CSisxSifPluginErrorHandler& aErrorHandler ) : iFs( aFs ),
         iErrorHandler( aErrorHandler )
     {
+    FLOG( _L("CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase") );
     // TODO: restore
     //HbTextResolverSymbian::Init( KSifUiTranslationFile, KTextResolverPath );
     }
@@ -67,6 +80,7 @@ CSisxSifPluginUiHandlerBase::CSisxSifPluginUiHandlerBase( RFs& aFs,
 //
 CSisxSifPluginUiHandlerBase::~CSisxSifPluginUiHandlerBase()
     {
+    FLOG( _L("CSisxSifPluginUiHandlerBase::~CSisxSifPluginUiHandlerBase") );
     delete iInstallParams;
     delete iPublishSifOperationInfo;
     delete iGlobalComponentId;
@@ -79,6 +93,7 @@ CSisxSifPluginUiHandlerBase::~CSisxSifPluginUiHandlerBase()
 void CSisxSifPluginUiHandlerBase::SetInstallParamsL(
         const CSisxSifPluginInstallParams& aInstallParams )
     {
+    FLOG( _L("CSisxSifPluginUiHandlerBase::SetInstallParamsL") );
     if( iInstallParams )
         {
         delete iInstallParams;
@@ -93,6 +108,7 @@ void CSisxSifPluginUiHandlerBase::SetInstallParamsL(
 //
 void CSisxSifPluginUiHandlerBase::SetMaxInstalledSize( TInt aSize )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetMaxInstalledSize, aSize=%d"), aSize );
     iMaxInstalledSize = aSize;
     }
 
@@ -102,6 +118,8 @@ void CSisxSifPluginUiHandlerBase::SetMaxInstalledSize( TInt aSize )
 //
 void CSisxSifPluginUiHandlerBase::SetDriveSelectionRequired( TBool aIsRequired )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetDriveSelectionRequired, aIsRequired=%d"),
+        aIsRequired );
     iIsDriveSelectionRequired = aIsRequired;
     }
 
@@ -111,11 +129,18 @@ void CSisxSifPluginUiHandlerBase::SetDriveSelectionRequired( TBool aIsRequired )
 //
 TBool CSisxSifPluginUiHandlerBase::IsOcspMandatoryL() const
     {
+    FLOG( _L("CSisxSifPluginUiHandlerBase::IsOcspMandatoryL, begin") );
     CRepository* cenRep = CRepository::NewLC( KCRUidSWInstallerSettings );
     TInt ocspProcedure = ESWInstallerOcspProcedureOff;
-    User::LeaveIfError( cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure ) );
+    TInt err = cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure );
+    FLOG_2( _L("CSisxSifPluginUiHandlerBase::IsOcspMandatoryL, ocspProcedure=%d, err=%d"),
+        ocspProcedure, err );
     CleanupStack::PopAndDestroy( cenRep );
-    return ( ocspProcedure == ESWInstallerOcspProcedureMust );
+
+    TBool isOcspMandatory = ( ocspProcedure == ESWInstallerOcspProcedureMust );
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::IsOcspMandatoryL, return %d"),
+        isOcspMandatory );
+    return isOcspMandatory;
     }
 
 // ---------------------------------------------------------------------------
@@ -125,6 +150,7 @@ TBool CSisxSifPluginUiHandlerBase::IsOcspMandatoryL() const
 void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aRootNode,
         TSifOperationPhase aPhase )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::PublishStartL, aPhase=%d"), aPhase );
     iOperationPhase = aPhase;
 
     RPointerArray<HBufC> appNames;
@@ -161,6 +187,7 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aR
     iPublishSifOperationInfo->PublishStartL( *data );
 
     CleanupStack::PopAndDestroy( 3, &appNames );    // data, appIcons, appNames
+    FLOG( _L("CSisxSifPluginUiHandlerBase::PublishStartL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -170,6 +197,7 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentInfo::CNode& aR
 void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry,
         TSifOperationPhase aPhase )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::PublishStartL, aPhase=%d"), aPhase );
     iOperationPhase = aPhase;
 
     RPointerArray<HBufC> appNames;
@@ -195,6 +223,7 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry,
     iPublishSifOperationInfo->PublishStartL( *data );
 
     CleanupStack::PopAndDestroy( 3, &appNames );    // data, appIcons, appNames
+    FLOG( _L("CSisxSifPluginUiHandlerBase::PublishStartL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -203,11 +232,13 @@ void CSisxSifPluginUiHandlerBase::PublishStartL( const CComponentEntry& aEntry,
 //
 void CSisxSifPluginUiHandlerBase::PublishProgressL( TSifOperationSubPhase aSubPhase )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::PublishProgressL, aSubPhase=%d"), aSubPhase );
     User::LeaveIfNull( iPublishSifOperationInfo );
     CSifOperationProgressData* data = CSifOperationProgressData::NewLC( *iGlobalComponentId,
             iOperationPhase, aSubPhase, iProgressBarCurrentValue, iProgressBarFinalValue );
     iPublishSifOperationInfo->PublishProgressL( *data );
     CleanupStack::PopAndDestroy( data );
+    FLOG( _L("CSisxSifPluginUiHandlerBase::PublishProgressL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -216,12 +247,14 @@ void CSisxSifPluginUiHandlerBase::PublishProgressL( TSifOperationSubPhase aSubPh
 //
 void CSisxSifPluginUiHandlerBase::PublishCompletionL()
     {
+    FLOG( _L("CSisxSifPluginUiHandlerBase::PublishCompletionL") );
     User::LeaveIfNull( iPublishSifOperationInfo );
     CSifOperationEndData* data = CSifOperationEndData::NewLC( *iGlobalComponentId,
             iErrorHandler.ErrorCategory(), iErrorHandler.ErrorCode(),
             iErrorHandler.ErrorMessage(), iErrorHandler.ErrorMessageDetails() );
     iPublishSifOperationInfo->PublishCompletionL( *data );
     CleanupStack::PopAndDestroy( data );
+    FLOG( _L("CSisxSifPluginUiHandlerBase::PublishCompletionL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -230,6 +263,7 @@ void CSisxSifPluginUiHandlerBase::PublishCompletionL()
 //
 void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetErrorL, aErrorCode=%d"), aErrorCode );
     iErrorHandler.SetErrorCode( aErrorCode );
     iErrorHandler.SetExtendedErrorCode( aExtErrorCode );
 
@@ -286,6 +320,7 @@ void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode
 void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode,
     const TDesC& aErrMsgDetails )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetErrorL, aErrorCode=%d"), aErrorCode );
     SetErrorL( aErrorCode, aExtErrorCode );
     iErrorHandler.SetErrorMessageDetails( aErrMsgDetails );
     }
@@ -297,6 +332,7 @@ void CSisxSifPluginUiHandlerBase::SetErrorL( TInt aErrorCode, TInt aExtErrorCode
 void CSisxSifPluginUiHandlerBase::SetErrorSwiErrorL( Swi::TErrorDialog aType,
         const TDesC& /*aParam*/ )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetErrorSwiErrorL, aType=%d"), aType );
     // TODO: localised detailed error messages
     // TODO: append aParam when message supports parameters
     TBuf<512> details;
@@ -382,6 +418,7 @@ void CSisxSifPluginUiHandlerBase::SetErrorSwiErrorL( Swi::TErrorDialog aType,
 //
 void CSisxSifPluginUiHandlerBase::SetOcspErrorL( Swi::TRevocationDialogMessage aMessage )
     {
+    FLOG_1( _L("CSisxSifPluginUiHandlerBase::SetOcspErrorL, aMessage=%d"), aMessage );
     // TODO: localised error strings needed
     iErrorHandler.SetErrorMessage( _L("Unable to check certificate validity online." ) );
     iErrorHandler.SetExtendedErrorCode( aMessage );

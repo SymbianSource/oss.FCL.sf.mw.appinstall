@@ -20,6 +20,16 @@
 
 using namespace Usif;
 
+#ifdef _DEBUG
+#define FLOG(x)         RDebug::Print(x)
+#define FLOG_1(x,y)     RDebug::Print((x),(y))
+#define FLOG_2(x,y,z)   RDebug::Print((x),(y),(z))
+#else
+#define FLOG(x)
+#define FLOG_1(x,y)
+#define FLOG_2(x,y,z)
+#endif
+
 
 // ---------------------------------------------------------------------------
 // CSisxSifPluginInstallParams::NewL()
@@ -222,6 +232,7 @@ CSisxSifPluginInstallParams::CSisxSifPluginInstallParams() : iAllowUntrusted( EN
 //
 void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams )
     {
+    FLOG( _L("CSisxSifPluginInstallParams::ConstructL, begin") );
     iUseSilentMode = GetIntParam( aParams, KSifInParam_InstallSilently, EFalse );
     iIsInstallInactive = GetIntParam( aParams, KSifInParam_InstallInactive, EFalse );
     TRAPD( err, DoProcessDriveParamL( aParams ) );
@@ -244,6 +255,7 @@ void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams 
     GetPolicyParam( aParams, KSifInParam_AllowOverwrite, iAllowOverwrite, EAllowed );
     GetPolicyParam( aParams, KSifInParam_PackageInfo, iPackageInfo, EAllowed );
     GetPolicyParam( aParams, KSifInParam_AllowIncompatible, iAllowIncompatible, EAllowed );
+    FLOG( _L("CSisxSifPluginInstallParams::ConstructL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -252,31 +264,64 @@ void CSisxSifPluginInstallParams::ConstructL( const COpaqueNamedParams& aParams 
 //
 void CSisxSifPluginInstallParams::ConstructL( const CSisxSifPluginInstallParams& aParams )
     {
+    FLOG( _L("CSisxSifPluginInstallParams::ConstructL") );
 	iUseSilentMode = aParams.iUseSilentMode;
+	FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iUseSilentMode=%d"),
+	    iUseSilentMode );
 	iIsInstallInactive = aParams.iIsInstallInactive;
+	FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iIsInstallInactive=%d"),
+	    iIsInstallInactive );
 	for( TInt index = 0; index < aParams.iDrives.Count(); index++ )
 	    {
 	    iDrives.AppendL( aParams.iDrives[ index ] );
+        FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iDrives %d"),
+            aParams.iDrives[ index ] );
 	    }
 	for( TInt index = 0; index < aParams.iLanguages.Count(); index++ )
 	    {
 	    iLanguages.AppendL( aParams.iLanguages[ index ] );
+        FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iLanguages %d"),
+            aParams.iLanguages[ index ] );
 	    }
     if( aParams.iOCSPUrl )
         {
         iOCSPUrl = aParams.iOCSPUrl->AllocL();
+        FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iOCSPUrl '%S'"), iOCSPUrl );
         }
     iPerformOCSP = aParams.iPerformOCSP;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iPerformOCSP=%d"),
+        iPerformOCSP );
     iIgnoreOCSPWarnings = aParams.iIgnoreOCSPWarnings;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iIgnoreOCSPWarnings=%d"),
+        iIgnoreOCSPWarnings );
     iAllowUpgrade = aParams.iAllowUpgrade;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowUpgrade=%d"),
+        iAllowUpgrade );
     iInstallOptionalItems = aParams.iInstallOptionalItems;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iInstallOptionalItems=%d"),
+        iInstallOptionalItems );
     iAllowUntrusted = aParams.iAllowUntrusted;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowUntrusted=%d"),
+        iAllowUntrusted );
     iGrantCapabilities = aParams.iGrantCapabilities;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iGrantCapabilities=%d"),
+        iGrantCapabilities );
     iAllowAppShutdown = aParams.iAllowAppShutdown;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowAppShutdown=%d"),
+        iAllowAppShutdown );
     iAllowAppBreakDependency = aParams.iAllowAppBreakDependency;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowAppBreakDependency=%d"),
+        iAllowAppBreakDependency );
     iAllowOverwrite = aParams.iAllowOverwrite;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowOverwrite=%d"),
+        iAllowOverwrite );
     iPackageInfo = aParams.iPackageInfo;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iPackageInfo=%d"),
+        iPackageInfo );
     iAllowIncompatible = aParams.iAllowIncompatible;
+    FLOG_1( _L("CSisxSifPluginInstallParams::ConstructL, iAllowIncompatible=%d"),
+        iAllowIncompatible );
+    FLOG( _L("CSisxSifPluginInstallParams::ConstructL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -291,6 +336,8 @@ TInt CSisxSifPluginInstallParams::GetIntParam( const COpaqueNamedParams& aParams
     TRAPD( err, paramFound = aParams.GetIntByNameL( aParamName, value ) );
     if( !err && paramFound )
         {
+        FLOG_2( _L("CSisxSifPluginInstallParams::GetIntParam, %S=%d"),
+            &aParamName, value );
         return value;
         }
     return aDefaultValue;
@@ -308,6 +355,8 @@ void CSisxSifPluginInstallParams::GetPolicyParam( const COpaqueNamedParams& aPar
     TRAPD( err, paramFound = aParams.GetIntByNameL( aParamName, value ) );
     if( !err && paramFound )
         {
+        FLOG_2( _L("CSisxSifPluginInstallParams::GetPolicyParam, %S=%d"),
+            &aParamName, aPolicy );
         aPolicy = static_cast<TSifPolicy>( value );
         }
     }
@@ -328,6 +377,8 @@ void CSisxSifPluginInstallParams::GetStringParamL( const COpaqueNamedParams& aPa
             aBuf = NULL;
             }
         aBuf = value.AllocL();
+        FLOG_2( _L("CSisxSifPluginInstallParams::GetStringParamL, %S='%S'"),
+            &aParamName, aBuf );
         }
     }
 
@@ -341,6 +392,8 @@ void CSisxSifPluginInstallParams::DoProcessDriveParamL( const COpaqueNamedParams
     iDrives.Reset();
     for( TInt index = 0; index < driveArray.Count(); index++ )
         {
+        FLOG_1( _L("CSisxSifPluginInstallParams::DoProcessDriveParamL, drive %d"),
+            driveArray[ index ] );
         iDrives.AppendL( driveArray[ index ] );
         }
     }
@@ -355,6 +408,8 @@ void CSisxSifPluginInstallParams::DoProcessLangParamL( const COpaqueNamedParams&
     iLanguages.Reset();
     for( TInt index = 0; index < langArray.Count(); index++ )
         {
+        FLOG_1( _L("CSisxSifPluginInstallParams::DoProcessLangParamL, lang %d"),
+            langArray[ index ] );
         iLanguages.AppendL( static_cast<TLanguage>( langArray[ index ] ) );
         }
     }

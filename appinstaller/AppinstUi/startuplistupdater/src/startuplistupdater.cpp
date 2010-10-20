@@ -37,6 +37,22 @@ _LIT( KAsterisk, "*" );
 const TInt KDriveSpecLength = 2;
 const TInt KFirstStartupItemInfo = 1;
 
+#ifdef _DEBUG
+#define FLOG(x)         RDebug::Print(x);
+#define FLOG_1(x,y)     RDebug::Print(x, y);
+#define FLOG_2(x,y,z)   RDebug::Print(x, y, z);
+#define FLOG_3(x,y,z,v) RDebug::Print(x, y, z, v);
+#else
+#define FLOG(x)
+#define FLOG_1(x,y)
+#define FLOG_2(x,y,z)
+#define FLOG_3(x,y,z,v)
+#endif
+
+_LIT( KDevTraceDir, "c:\\data\\logs\\swinst\\" );
+_LIT( KDevTraceFile, "startuplistmgmt.log" );
+const TInt KDevTraceBuffer = 256;
+
 
 // ======== LOCAL FUNCTIONS ========
 
@@ -58,6 +74,7 @@ TBool FileNamesEqual( const HBufC& aFile1, const HBufC& aFile2 )
 //
 CStartupListUpdater* CStartupListUpdater::NewL()
     {
+    FLOG( _L("CStartupListUpdater::NewL") );
     CStartupListUpdater* self = new( ELeave ) CStartupListUpdater;
     CleanupStack::PushL( self );
     self->ConstructL();
@@ -71,6 +88,10 @@ CStartupListUpdater* CStartupListUpdater::NewL()
 //
 CStartupListUpdater::~CStartupListUpdater()
     {
+    FLOG( _L("CStartupListUpdater::~CStartupListUpdater") );
+    iLogFile.Close();
+    iFileBuf.Close();
+    delete iLogBuf;
     delete iPrivateImportPath;
     iFs.Close();
 
@@ -83,7 +104,8 @@ CStartupListUpdater::~CStartupListUpdater()
 //
 void CStartupListUpdater::UpdateStartupListL()
     {
-    if ( FeatureManager::FeatureSupported( KFeatureIdExtendedStartup ) )
+    FLOG( _L("CStartupListUpdater::UpdateStartupListL") );
+    if( FeatureManager::FeatureSupported( KFeatureIdExtendedStartup ) )
         {
         ProcessImportsAndUninstallsL();
         }
@@ -103,14 +125,17 @@ CStartupListUpdater::CStartupListUpdater()
 //
 void CStartupListUpdater::ConstructL()
     {
+    FLOG( _L("CStartupListUpdater::ConstructL, begin") );
     FeatureManager::InitializeLibL();
     User::LeaveIfError( iFs.Connect() );
 
     TInt err = iFs.MkDirAll( PrivateImportPathL() );
     if( err != KErrNone && err != KErrAlreadyExists )
         {
+        FLOG_1( _L("CStartupListUpdater::ConstructL, err %d"), err );
         User::Leave( err );
         }
+    FLOG( _L("CStartupListUpdater::ConstructL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -135,6 +160,7 @@ const TDesC& CStartupListUpdater::PrivateImportPathL()
         TPtr ptr( iPrivateImportPath->Des() );
         ptr.Format( KDriveAndPathFormat, static_cast< TUint >( driveLetter ), &privateImportPath );
         }
+    FLOG_1( _L("CStartupListUpdater::PrivateImportPathL %S"), iPrivateImportPath );
     return *iPrivateImportPath;
     }
 
@@ -144,13 +170,20 @@ const TDesC& CStartupListUpdater::PrivateImportPathL()
 //
 void CStartupListUpdater::ProcessImportsAndUninstallsL()
     {
+    FLOG( _L("CStartupListUpdater::ProcessImportsAndUninstallsL, begin") );
     RDscStore dscStore;
     OpenDscStoreLC( dscStore );
 
-    ImportNewResourceFilesL( dscStore );
+    TRAPD( err, ImportNewResourceFilesL( dscStore ) );
+    if( err )
+        {
+        DevTrace( _L("Error: import failed, error code %d"), err );
+        User::Leave( err );
+        }
     DeregisterUninstalledAppsL( dscStore );
 
     CleanupStack::PopAndDestroy( &dscStore );
+    FLOG( _L("CStartupListUpdater::ProcessImportsAndUninstallsL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -159,6 +192,7 @@ void CStartupListUpdater::ProcessImportsAndUninstallsL()
 //
 void CStartupListUpdater::OpenDscStoreLC( RDscStore& aDscStore )
     {
+    FLOG( _L("CStartupListUpdater::OpenDscStoreLC") );
     if( !aDscStore.IsOpened() )
         {
         aDscStore.OpenL();
@@ -170,6 +204,7 @@ void CStartupListUpdater::OpenDscStoreLC( RDscStore& aDscStore )
         }
     else
         {
+        FLOG( _L("CStartupListUpdater::OpenDscStoreLC, KErrAlreadyExists") );
         User::Leave( KErrAlreadyExists );
         }
     }
@@ -180,6 +215,7 @@ void CStartupListUpdater::OpenDscStoreLC( RDscStore& aDscStore )
 //
 void CStartupListUpdater::ImportNewResourceFilesL( RDscStore& aDscStore )
     {
+    FLOG( _L("CStartupListUpdater::ImportNewResourceFilesL, begin") );
     RPointerArray<HBufC> executableArray;
     CleanupResetAndDestroyPushL( executableArray );
     RPointerArray<HBufC> resourceFileArray;
@@ -190,6 +226,7 @@ void CStartupListUpdater::ImportNewResourceFilesL( RDscStore& aDscStore )
     RemoveImportedResourceFiles( resourceFileArray );
 
     CleanupStack::PopAndDestroy( 2, &executableArray );
+    FLOG( _L("CStartupListUpdater::ImportNewResourceFilesL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -198,6 +235,7 @@ void CStartupListUpdater::ImportNewResourceFilesL( RDscStore& aDscStore )
 //
 void CStartupListUpdater::DeregisterUninstalledAppsL( RDscStore& aDscStore )
     {
+    FLOG( _L("CStartupListUpdater::DeregisterUninstalledAppsL, begin") );
     RPointerArray<HBufC> startedAtBootArray;
     CleanupResetAndDestroyPushL( startedAtBootArray );
     RPointerArray<HBufC> installedArray;
@@ -211,6 +249,7 @@ void CStartupListUpdater::DeregisterUninstalledAppsL( RDscStore& aDscStore )
     RemoveFromStartupListL( aDscStore, startedNotInstalled );
 
     CleanupStack::PopAndDestroy( 3, &startedAtBootArray );
+    FLOG( _L("CStartupListUpdater::DeregisterUninstalledAppsL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -221,6 +260,7 @@ void CStartupListUpdater::GetDataToBeImportedL(
         RPointerArray<HBufC>& aExecutableArray,
         RPointerArray<HBufC>& aResourceFileArray )
     {
+    FLOG( _L("CStartupListUpdater::GetDataToBeImportedL, begin") );
     TParse resourceFiles;
     User::LeaveIfError( resourceFiles.Set( KResourceFileSpec, &PrivateImportPathL(), NULL ) );
     const TPtrC importDir( resourceFiles.FullName() );
@@ -242,6 +282,7 @@ void CStartupListUpdater::GetDataToBeImportedL(
             }
         }
     CleanupStack::PopAndDestroy( dir );
+    FLOG( _L("CStartupListUpdater::GetDataToBeImportedL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -251,16 +292,25 @@ void CStartupListUpdater::GetDataToBeImportedL(
 void CStartupListUpdater::ImportExecutablesL( RDscStore& aDscStore,
         RPointerArray<HBufC>& aExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::ImportExecutablesL, begin") );
     for( TInt index = 0; index < aExecutableArray.Count(); ++index )
         {
         const TDesC& executableName = *( aExecutableArray[ index ] );
+        FLOG_1( _L("CStartupListUpdater::ImportExecutablesL, exe %S"), &executableName );
         CDscItem* item = CDscItem::NewLC( executableName, KNullDesC );
         if( !aDscStore.ItemExistsL( *item ) )
             {
+            FLOG( _L("CStartupListUpdater::ImportExecutablesL, add item to DscStore") );
             aDscStore.AddItemL( *item );
+            DevTrace( _L("Success: '%S' will be started at boot"), &executableName );
+            }
+        else
+            {
+            DevTrace( _L("Error: '%S' already in start list"), &executableName );
             }
         CleanupStack::PopAndDestroy( item );
         }
+    FLOG( _L("CStartupListUpdater::ImportExecutablesL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -270,18 +320,19 @@ void CStartupListUpdater::ImportExecutablesL( RDscStore& aDscStore,
 void CStartupListUpdater::RemoveImportedResourceFiles(
         RPointerArray<HBufC>& aResourceFileArray )
     {
+    FLOG( _L("CStartupListUpdater::RemoveImportedResourceFiles, begin") );
     for( TInt index = 0; index < aResourceFileArray.Count(); ++index )
         {
         const TDesC& fileName = *( aResourceFileArray[ index ] );
+        FLOG_1( _L("CStartupListUpdater::RemoveImportedResourceFiles, deleting %S"), &fileName );
         TInt err = iFs.Delete( fileName );
-        if( err )
+        FLOG_1( _L("CStartupListUpdater::RemoveImportedResourceFiles, err %d"), err );
+        if( !err )
             {
-#ifdef _DEBUG
-            RDebug::Print( _L("CStartupListUpdater: cannot delete %S, error %d"),
-                    &fileName, err );
-#endif
+            DevTrace( _L("Resource file '%S' processed"), &fileName );
             }
         }
+    FLOG( _L("CStartupListUpdater::RemoveImportedResourceFiles, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -292,12 +343,18 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
         const TDesC& aResourceFile,
         RPointerArray<HBufC>& aExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, begin") );
+    OpenDevTraceL();
+    DevTrace( _L("Processing resource file: %S"), &aResourceFile );
+
     RResourceFile resource;
     CleanupClosePushL( resource );
     resource.OpenL( iFs, aResourceFile );
+    FLOG_1( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, %S"), &aResourceFile );
 
     for( TInt id = KFirstStartupItemInfo; resource.OwnsResourceId( id ); ++id )
         {
+        FLOG_1( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, resource id %d"), id );
         HBufC8* buffer = resource.AllocReadLC( id );
 
         TResourceReader reader;
@@ -308,6 +365,10 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
         TFileName executableName;
         executableName.Copy( reader.ReadTPtrC() );
         TInt recoveryPolicy = reader.ReadUint16();
+        FLOG_1( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, executableName %S"),
+                &executableName );
+        FLOG_1( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, recoveryPolicy %d"),
+                recoveryPolicy );
 
         CleanupStack::PopAndDestroy( buffer );
 
@@ -327,16 +388,33 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
                     executableName.Replace( 0, 1, fileFinder.File() );
                     CleanupStack::PopAndDestroy( executableDir );
                     }
+
+                FLOG_1( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, new name %S"),
+                        &executableName );
                 }
 
+            DevTrace( _L("Executable file: %S"), &executableName );
             if( IsValidExecutableForStartupL( aResourceFile, executableName ) )
                 {
+                FLOG( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, adding to array") );
                 aExecutableArray.AppendL( executableName.AllocL() );
+                }
+            }
+        else
+            {
+            if( versionInfo != 0 )
+                {
+                DevTrace( _L("Error: unsupported STARTUP_ITEM_INFO version: %d"), versionInfo );
+                }
+            else
+                {
+                DevTrace( _L("Error: unsupported recovery policy: %d"), recoveryPolicy );
                 }
             }
         }
 
     CleanupStack::PopAndDestroy( &resource );
+    FLOG( _L("CStartupListUpdater::AppendExecutablesFromResourceFileL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -346,86 +424,264 @@ void CStartupListUpdater::AppendExecutablesFromResourceFileL(
 TBool CStartupListUpdater::IsValidExecutableForStartupL( const TDesC& aResourceFile,
         const TDesC& aExecutableName )
     {
+    FLOG( _L("CStartupListUpdater::IsValidExecutableForStartupL, begin") );
+    FLOG_1( _L("CStartupListUpdater::IsValidExecutableForStartupL, res %S"), &aResourceFile );
+    FLOG_1( _L("CStartupListUpdater::IsValidExecutableForStartupL, exe %S"), &aExecutableName );
     TBool isValid = EFalse;
 
     TEntry entry;
     if( iFs.Entry( aExecutableName, entry ) == KErrNone )   // needs AllFiles capability
         {
-        isValid = ETrue;
+        FLOG( _L("CStartupListUpdater::IsValidExecutableForStartupL, exe file exists") );
 
-        // Extract package UID from the resource file name
-        // - allow both "[1234ABCD]" and "1234ABCD" formats
-        // - allow possible "0x" prefix too
         TUid packageUid = KNullUid;
-        TParsePtrC parse( aResourceFile );
-        TPtrC parseName = parse.Name();
-        TInt fileNameLength = parseName.Length();
-        if( !parse.IsNameWild() && fileNameLength > 0 )
-            {
-            TPtr fileName( const_cast<TUint16*>( parseName.Ptr() ),
-                fileNameLength, fileNameLength );
+        ExtractPackageUidFromResourceFileL( aResourceFile, packageUid );
 
-            if( fileName[ 0 ] == '[' && fileName[ fileNameLength - 1 ] == ']' )
-                {
-                const TInt KTwoCharsLength = 2;
-                fileNameLength -= KTwoCharsLength;
-                fileName = fileName.Mid( 1, fileNameLength );
-                }
-
-            _LIT( KHexPrefix, "0x" );
-            const TInt KHexPrefixLength = 2;
-            if( fileName.Left( KHexPrefixLength ) == KHexPrefix )
-                {
-                fileNameLength -= KHexPrefixLength;
-                fileName = fileName.Mid( KHexPrefixLength, fileNameLength );
-                }
-
-            TLex lex( fileName );
-            TUint32 uidValue = 0;
-            TInt lexError = lex.Val( uidValue, EHex );
-            if( !lexError )
-                {
-                packageUid.iUid = uidValue;
-                }
-            }
-
-        // Get package info from RSisRegistry, and check that
-        // - the package contains the resource file
-        // - the package is properly signed
         if( packageUid != KNullUid )
             {
             Swi::RSisRegistrySession sisRegSession;
             User::LeaveIfError( sisRegSession.Connect() );
             CleanupClosePushL( sisRegSession );
 
-            Swi::RSisRegistryEntry package;
-            CleanupClosePushL( package );
-            TInt openError = package.Open( sisRegSession, packageUid );
-            if( !openError )
-                {
-                TBool hasResourceFile = EFalse;
+            isValid = IsResourceFileValidForPackageL( sisRegSession, aResourceFile, packageUid ) &&
+                    IsExeFileIncludedInPackageL( sisRegSession, aExecutableName, packageUid );
 
-                RPointerArray<HBufC> files;
-                CleanupResetAndDestroyPushL( files );
-                package.FilesL( files );
-                for( TInt index = 0; index < files.Count() && !hasResourceFile; ++index )
-                    {
-                    hasResourceFile = ( aResourceFile.CompareF( *files[ index ] ) == 0 );
-                    }
+            CleanupStack::PopAndDestroy( &sisRegSession );
+            }
+        else
+            {
+            DevTrace( _L("Error: invalid package UID - check resource file name") );
+            }
+        }
+    else
+        {
+        DevTrace( _L("Error: executable file '%S' not found"), &aExecutableName );
+        }
 
-                if( hasResourceFile && package.TrustStatusL().IsTrusted() )
-                    {
-                    isValid = ETrue;
-                    }
+    FLOG_1( _L("CStartupListUpdater::IsValidExecutableForStartupL, return %d"), isValid );
+    return isValid;
+    }
 
-                CleanupStack::PopAndDestroy( &files );
-                }
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::ExtractPackageUidFromResourceFileL()
+// ---------------------------------------------------------------------------
+//
+void CStartupListUpdater::ExtractPackageUidFromResourceFileL( const TDesC& aResourceFile,
+        TUid& aPackageUid )
+    {
+    FLOG( _L("CStartupListUpdater::ExtractPackageUidFromResourceFileL, begin") );
 
-            CleanupStack::PopAndDestroy( 2, &sisRegSession );  // package, sisRegSession
+    // Extract package UID from the resource file name
+    // - allow both "[1234ABCD]" and "1234ABCD" formats
+    // - allow possible "0x" prefix too
+    aPackageUid = KNullUid;
+
+    TParse parse;
+    parse.Set( aResourceFile, NULL, NULL );
+    TPtrC parseName = parse.Name();
+    TInt fileNameLength = parseName.Length();
+    if( !parse.IsNameWild() && fileNameLength > 0 )
+        {
+        TPtr fileName( const_cast<TUint16*>( parseName.Ptr() ),
+            fileNameLength, fileNameLength );
+
+        if( fileName[ 0 ] == '[' && fileName[ fileNameLength - 1 ] == ']' )
+            {
+            const TInt KTwoCharsLength = 2;
+            fileNameLength -= KTwoCharsLength;
+            fileName = fileName.Mid( 1, fileNameLength );
+            }
+
+        _LIT( KHexPrefix, "0x" );
+        const TInt KHexPrefixLength = 2;
+        if( fileName.Left( KHexPrefixLength ) == KHexPrefix )
+            {
+            fileNameLength -= KHexPrefixLength;
+            fileName = fileName.Mid( KHexPrefixLength, fileNameLength );
+            }
+
+        FLOG_1( _L("CStartupListUpdater::ExtractPackageUidFromResourceFileL, fileName %S"),
+                &fileName );
+        TLex lex( fileName );
+        TUint32 uidValue = 0;
+        TInt lexError = lex.Val( uidValue, EHex );
+        if( !lexError )
+            {
+            aPackageUid.iUid = uidValue;
             }
         }
 
-    return isValid;
+    FLOG_1( _L("CStartupListUpdater::ExtractPackageUidFromResourceFileL, end, ret 0x%08x"),
+            aPackageUid.iUid );
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::IsResourceFileValidForPackageL()
+// ---------------------------------------------------------------------------
+//
+TBool CStartupListUpdater::IsResourceFileValidForPackageL(
+        Swi::RSisRegistrySession& aSisRegSession,
+        const TDesC& aResourceFile,
+        const TUid& aPackageUid )
+    {
+    FLOG( _L("CStartupListUpdater::IsResourceFileValidForPackageL, begin") );
+    TBool isValidForPackage = EFalse;
+
+    // Get package info from RSisRegistry, and check that
+    // - the package contains the resource file, and
+    // - the package is properly signed
+
+    Swi::RSisRegistryEntry package;
+    CleanupClosePushL( package );
+    TInt openError = package.Open( aSisRegSession, aPackageUid );
+    FLOG_1( _L("CStartupListUpdater::IsResourceFileValidForPackageL, openError %d"), openError );
+    if( !openError )
+        {
+        Swi::TSisTrustStatus trustStatus = package.TrustStatusL();
+        Swi::TValidationStatus validationStatus = trustStatus.ValidationStatus();
+        FLOG_1( _L("CStartupListUpdater::IsResourceFileValidForPackageL, validationStatus %d"),
+                validationStatus );
+        Swi::TRevocationStatus revocationStatus = trustStatus.RevocationStatus();
+        FLOG_1( _L("CStartupListUpdater::IsResourceFileValidForPackageL, revocationStatus %d"),
+                revocationStatus );
+        TBool isTrusted = (validationStatus == Swi::EPackageInRom ||
+                validationStatus == Swi::EValidatedToAnchor) &&
+                revocationStatus != Swi::EOcspRevoked;
+        FLOG_1( _L("CStartupListUpdater::IsResourceFileValidForPackageL, isTrusted %d"),
+                isTrusted );
+
+        if( isTrusted )
+            {
+            isValidForPackage = IsFileIncludedInPackageL( aResourceFile, package );
+
+            if( !isValidForPackage )
+                {
+                DevTrace( _L("Error: package 0x%08x does not install resource file %S"),
+                        aPackageUid.iUid, &aResourceFile );
+                }
+            }
+        else
+            {
+            DevTrace( _L("Error: package 0x%08x not trusted"), aPackageUid.iUid );
+            }
+        }
+    else
+        {
+        DevTrace( _L("Error: package 0x%08x open failed, error %d - check resource file name"),
+                aPackageUid.iUid, openError );
+        }
+
+    CleanupStack::PopAndDestroy( &package );
+
+    FLOG_1( _L("CStartupListUpdater::IsResourceFileValidForPackageL, ret %d"), isValidForPackage );
+    return isValidForPackage;
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::IsFileIncludedInPackageL()
+// ---------------------------------------------------------------------------
+//
+TBool CStartupListUpdater::IsFileIncludedInPackageL( const TDesC& aFile,
+        Swi::RSisRegistryEntry& aPackage )
+    {
+    FLOG_1( _L("CStartupListUpdater::IsFileIncludedInPackageL, begin, file %S"), &aFile );
+    TBool isIncluded = EFalse;
+
+    RPointerArray<HBufC> files;
+    CleanupResetAndDestroyPushL( files );
+    aPackage.FilesL( files );
+    TInt fileCount = files.Count();
+    FLOG_1( _L("CStartupListUpdater::IsFileIncludedInPackageL, pckg fileCount %d"), fileCount );
+    for( TInt index = 0; index < fileCount && !isIncluded; ++index )
+        {
+        TPtrC pckgFile( *files[ index ] );
+        FLOG_1( _L("CStartupListUpdater::IsFileIncludedInPackageL, pckgFile %S"), &pckgFile );
+        isIncluded = ( aFile.CompareF( pckgFile ) == 0 );
+        }
+    CleanupStack::PopAndDestroy( &files );
+
+    if( isIncluded )
+        {
+        DevTrace( _L("File '%S' installed by package 0x%08x" ), &aFile, aPackage.UidL().iUid );
+        }
+    else
+        {
+        DevTrace( _L("File '%S' not installed by package 0x%08x" ), &aFile, aPackage.UidL().iUid );
+        }
+    FLOG_1( _L("CStartupListUpdater::IsFileIncludedInPackageL, ret %d"), isIncluded );
+    return isIncluded;
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL()
+// ---------------------------------------------------------------------------
+//
+TBool CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL(
+        Swi::RSisRegistrySession& aSisRegSession, const TDesC& aFile,
+        Swi::RSisRegistryEntry& aPackage )
+    {
+    FLOG( _L("CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL, begin") );
+    TBool isIncluded = EFalse;
+
+    RPointerArray<Swi::CSisRegistryPackage> embeddedPackages;
+    CleanupResetAndDestroyPushL( embeddedPackages );
+    aPackage.EmbeddedPackagesL( embeddedPackages );
+
+    TInt embeddedPackagesCount = embeddedPackages.Count();
+    FLOG_1( _L("CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL, embeddedPackagesCount %d"),
+            embeddedPackagesCount );
+    for( TInt index = 0; index < embeddedPackagesCount && !isIncluded; ++index )
+        {
+        TUid uid = embeddedPackages[index]->Uid();
+        FLOG_1( _L("CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL, uid 0x%08x"),
+                uid.iUid );
+
+        Swi::RSisRegistryEntry package;
+        if( package.Open( aSisRegSession, uid ) == KErrNone )
+            {
+            CleanupClosePushL( package );
+            isIncluded = IsFileIncludedInPackageL( aFile, package );
+            if( !isIncluded )
+                {
+                // Check other embedded packages recursively if necessary
+                isIncluded = IsFileIncludedInEmbeddedPackagesL( aSisRegSession, aFile, package );
+                }
+            CleanupStack::PopAndDestroy( &package );
+            }
+        }
+    CleanupStack::PopAndDestroy( &embeddedPackages );
+
+    FLOG_1( _L("CStartupListUpdater::IsFileIncludedInEmbeddedPackagesL, ret %d"), isIncluded );
+    return isIncluded;
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::IsExeFileIncludedInPackageL()
+// ---------------------------------------------------------------------------
+//
+TBool CStartupListUpdater::IsExeFileIncludedInPackageL(
+        Swi::RSisRegistrySession& aSisRegSession,
+        const TDesC& aExeFile, const TUid& aPackageUid )
+    {
+    FLOG_1( _L("CStartupListUpdater::IsExeFileIncludedInPackageL, begin, file %S"), &aExeFile );
+    TBool isIncluded = EFalse;
+
+    Swi::RSisRegistryEntry package;
+    CleanupClosePushL( package );
+    TInt openError = package.Open( aSisRegSession, aPackageUid );
+    if( !openError )
+        {
+        isIncluded = IsFileIncludedInPackageL( aExeFile, package ) ||
+                IsFileIncludedInEmbeddedPackagesL( aSisRegSession, aExeFile, package );
+        if( !isIncluded )
+            {
+            DevTrace( _L("Error: exe not installed by this package or it's subpackages") );
+            }
+        }
+    CleanupStack::PopAndDestroy( &package );
+
+    FLOG_1( _L("CStartupListUpdater::IsExeFileIncludedInPackageL, return %d"), isIncluded );
+    return isIncluded;
     }
 
 // ---------------------------------------------------------------------------
@@ -435,6 +691,7 @@ TBool CStartupListUpdater::IsValidExecutableForStartupL( const TDesC& aResourceF
 void CStartupListUpdater::GetInstalledAppsL(
         RPointerArray<HBufC>& aInstalledExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::GetInstalledAppsL, begin") );
     Swi::RSisRegistrySession sisRegistrySession;
     User::LeaveIfError( sisRegistrySession.Connect() );
     CleanupClosePushL( sisRegistrySession );
@@ -443,8 +700,12 @@ void CStartupListUpdater::GetInstalledAppsL(
     CleanupResetAndDestroyPushL( removablePackages );
     sisRegistrySession.RemovablePackagesL( removablePackages );
 
-    for( TInt index = 0; index < removablePackages.Count(); ++index )
+    TInt removablePackagesCount = removablePackages.Count();
+    FLOG_1( _L("CStartupListUpdater::GetInstalledAppsL, removablePackagesCount %d"),
+            removablePackagesCount );
+    for( TInt index = 0; index < removablePackagesCount; ++index )
         {
+        FLOG_1( _L("CStartupListUpdater::GetInstalledAppsL, index %d"), index );
         Swi::RSisRegistryEntry entry;
         CleanupClosePushL( entry );
         entry.OpenL( sisRegistrySession, *( removablePackages[ index ] ) );
@@ -456,6 +717,7 @@ void CStartupListUpdater::GetInstalledAppsL(
         }
 
     CleanupStack::PopAndDestroy( 2, &sisRegistrySession );
+    FLOG( _L("CStartupListUpdater::GetInstalledAppsL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -465,16 +727,20 @@ void CStartupListUpdater::GetInstalledAppsL(
 void CStartupListUpdater::GetStartupListAppsL( RDscStore& aDscStore,
         RPointerArray<HBufC>& aStartedExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::GetStartupListAppsL, begin") );
     aDscStore.EnumOpenLC();
 
     while( CDscItem* item = aDscStore.EnumReadNextL() )
         {
         CleanupStack::PushL( item );
-        aStartedExecutableArray.AppendL( item->FileName().AllocL() );
+        TPtrC fileName( item->FileName() );
+        FLOG_1( _L("CStartupListUpdater::GetStartupListAppsL, fileName %S"), &fileName );
+        aStartedExecutableArray.AppendL( fileName.AllocL() );
         CleanupStack::PopAndDestroy( item );
         }
 
     CleanupStack::PopAndDestroy();  // runs EnumClose
+    FLOG( _L("CStartupListUpdater::GetStartupListAppsL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -486,17 +752,22 @@ void CStartupListUpdater::StartedButNotInstalledAppsL(
         RPointerArray<HBufC>& aInstalledExecutableArray,                // in
         RPointerArray<HBufC>& aStartedButNotInstalledExecutableArray )  // out
     {
+    FLOG( _L("CStartupListUpdater::StartedButNotInstalledAppsL, begin") );
     aStartedButNotInstalledExecutableArray.ResetAndDestroy();
 
     TIdentityRelation<HBufC> identityRelation( FileNamesEqual );
     for( TInt index = 0; index < aStartedExecutableArray.Count(); ++index )
         {
         const HBufC* startedAppName = aStartedExecutableArray[ index ];
+        FLOG_1( _L("CStartupListUpdater::StartedButNotInstalledAppsL, startedAppName %S"),
+                startedAppName );
         if( aInstalledExecutableArray.Find( startedAppName, identityRelation ) == KErrNotFound )
             {
+            FLOG( _L("CStartupListUpdater::StartedButNotInstalledAppsL, adding to array") );
             aStartedButNotInstalledExecutableArray.AppendL( startedAppName->AllocL() );
             }
         }
+    FLOG( _L("CStartupListUpdater::StartedButNotInstalledAppsL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -506,16 +777,21 @@ void CStartupListUpdater::StartedButNotInstalledAppsL(
 void CStartupListUpdater::RemoveFromStartupListL( RDscStore& aDscStore,
         RPointerArray<HBufC>& aExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::RemoveFromStartupListL, begin") );
     for( TInt index = 0; index < aExecutableArray.Count(); ++index )
         {
         const TDesC& executableName = *( aExecutableArray[ index ] );
+        FLOG_1( _L("CStartupListUpdater::RemoveFromStartupListL, executableName %S"),
+                &executableName );
         CDscItem* item = CDscItem::NewLC( executableName, KNullDesC );
         if( aDscStore.ItemExistsL( *item ) )
             {
+            FLOG( _L("CStartupListUpdater::RemoveFromStartupListL, removing from DscStore") );
             aDscStore.DeleteItemL( *item );
             }
         CleanupStack::PopAndDestroy( item );
         }
+    FLOG( _L("CStartupListUpdater::RemoveFromStartupListL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -525,6 +801,7 @@ void CStartupListUpdater::RemoveFromStartupListL( RDscStore& aDscStore,
 void CStartupListUpdater::GetExecutablesFromEntryL( Swi::RSisRegistryEntry& aEntry,
         RPointerArray<HBufC>& aExecutableArray )
     {
+    FLOG( _L("CStartupListUpdater::GetExecutablesFromEntryL, begin") );
     RPointerArray<HBufC> filesList;
     CleanupResetAndDestroyPushL( filesList );
     aEntry.FilesL( filesList );
@@ -533,12 +810,66 @@ void CStartupListUpdater::GetExecutablesFromEntryL( Swi::RSisRegistryEntry& aEnt
         {
         TParse parse;
         TInt err = parse.SetNoWild( KNullDesC, filesList[ index ], NULL );
+        FLOG_3( _L("CStartupListUpdater::GetExecutablesFromEntryL, index %d, parse %S, err %d"),
+                index, &(parse.FullName()), err );
         if( !err && ( parse.Ext().CompareF( KExecutableExtension ) == 0 ) )
             {
+            FLOG( _L("CStartupListUpdater::GetExecutablesFromEntryL, adding to array") );
             aExecutableArray.AppendL( parse.FullName().AllocL() );
+            }
+        else
+            {
+            FLOG( _L("CStartupListUpdater::GetExecutablesFromEntryL, skipped") );
             }
         }
 
     CleanupStack::PopAndDestroy( &filesList );
+    FLOG( _L("CStartupListUpdater::GetExecutablesFromEntryL, end") );
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::OpenDevTraceL()
+// ---------------------------------------------------------------------------
+//
+void CStartupListUpdater::OpenDevTraceL()
+    {
+    if( !iLogBuf )
+        {
+        TEntry entry;
+        if( iFs.Entry( KDevTraceDir, entry ) == KErrNone )
+            {
+            FLOG( _L("CStartupListUpdater::OpenDevTraceL, log dir exists") );
+            TFileName fileName;
+            fileName.Copy( KDevTraceDir );
+            fileName.Append( KDevTraceFile );
+            if( iLogFile.Replace( iFs, fileName, EFileWrite ) == KErrNone )
+                {
+                iLogBuf = HBufC::NewL( KDevTraceBuffer );
+                iFileBuf.CreateL( KDevTraceBuffer );
+                FLOG( _L("CStartupListUpdater::OpenDevTraceL, log file opened") );
+                }
+            }
+        }
+    }
+
+// ---------------------------------------------------------------------------
+// CStartupListUpdater::DevTrace()
+// ---------------------------------------------------------------------------
+//
+void CStartupListUpdater::DevTrace( TRefByValue<const TDesC> aFmt, ... )
+    {
+    if( iLogBuf )
+        {
+        VA_LIST list;
+        VA_START( list, aFmt );
+        TPtr line( iLogBuf->Des() );
+        line.FormatList( aFmt, list );
+        FLOG_1( _L("CStartupListUpdater::DevTrace: %S"), iLogBuf );
+
+        const TChar KNewLine( '\n' );
+        line.Append( KNewLine );
+        iFileBuf.Copy( line );
+        iLogFile.Write( iFileBuf );  // return value ignored
+        }
     }
 

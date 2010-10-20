@@ -825,6 +825,13 @@ void CInstallationProcessor::AddAppArcRegResourceFilesL()
 
 void CInstallationProcessor::AddAppArcRegResourceFilesForRegEntryL(RSisRegistryEntry& aEntry)
     {
+
+    // Don't add files belonging to the registry entry present in ROM if SA upgrade is detected
+    if ( aEntry.IsInRomL() && ApplicationL().ControllerL().Info().InstallType() == Sis::EInstInstallation )
+        {
+        return;
+        }
+
     RPointerArray<HBufC> filesArray;
     CleanupResetAndDestroyPushL(filesArray);
     aEntry.FilesL(filesArray);    

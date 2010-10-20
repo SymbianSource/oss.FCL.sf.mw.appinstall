@@ -1,0 +1,39 @@
+/*
+* Copyright (c) 2002-2010 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:   Project specification for obsolete SWInstCli.
+*
+*/
+
+
+#include <platform_paths.hrh>
+
+TARGET          SWInstCli.dll
+TARGETTYPE      dll
+UID             0x1000008D 0x101F8759   // KSWInstCliUid
+
+CAPABILITY      CAP_CLIENT_DLL DRM
+VENDORID        VID_DEFAULT
+
+SOURCEPATH      ../Src
+SOURCE          SWInstLauncher.cpp
+SOURCE          SWInstSilentLauncher.cpp
+
+MW_LAYER_SYSTEMINCLUDE
+
+LIBRARY         euser.lib
+LIBRARY         eikcore.lib
+LIBRARY         apparc.lib
+
+SMPSAFE
+

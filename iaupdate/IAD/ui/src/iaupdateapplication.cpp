@@ -24,31 +24,38 @@
 
 IAUpdateApplication::IAUpdateApplication(  int argc, char* argv[] ) :
     HbApplication( argc, argv ),
-    mEngine (new IAUpdateEngine),
-    mMainWindow (new IAUpdateMainWindow(mEngine))
-    {
-    
-    // get mainview 
-    IAUpdateMainView* mainView = mMainWindow->GetMainView();
-    
-    // get settig view
-    CIAUpdateSettingDialog* settingView = mMainWindow->GetSettingView();
-    
-    // Connect view change signals to the view change slots
-    //connect(&(*mEngine), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
-    connect(&(*settingView), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
-    connect(&(*mainView), SIGNAL(toSettingView()), &(*mMainWindow), SLOT(toSettingView()));
-    connect(&(*mEngine), SIGNAL(refresh(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)),
-            &(*mMainWindow), SLOT(refreshMainView(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)));
-    connect(&(*mEngine), SIGNAL(refreshProgress()),
-            &(*mMainWindow), SLOT(refreshMainViewProgress()));
-    connect(&(*mEngine), SIGNAL(setUpdatesRefreshing(bool)),
-            &(*mMainWindow), SLOT(setRefreshingAnimation(bool)));
-    connect(&(*mEngine), SIGNAL(updateCompleted()),
-            &(*mMainWindow), SLOT(updateCompleted()));
-    }
+    mEngine (new IAUpdateEngine)
+{
+    connect(&(*mEngine), SIGNAL(createUI()),
+                &(*this), SLOT(createUI()));
+}
 
 IAUpdateApplication::~IAUpdateApplication()
 {
     delete mEngine;    
+}
+
+void IAUpdateApplication::createUI()
+{ 
+    if (mMainWindow.isNull())
+    {    
+        mMainWindow = (QSharedPointer<IAUpdateMainWindow>) new IAUpdateMainWindow(mEngine); 
+        // get mainview 
+        IAUpdateMainView* mainView = mMainWindow->GetMainView();
+        
+        // get setting view
+        CIAUpdateSettingDialog* settingView = mMainWindow->GetSettingView();
+        
+        // Connect view change signals to the view change slots
+        connect(&(*settingView), SIGNAL(toMainView()), &(*mMainWindow), SLOT(toMainView()));
+        connect(&(*mainView), SIGNAL(toSettingView()), &(*mMainWindow), SLOT(toSettingView()));
+        connect(&(*mEngine), SIGNAL(refresh(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)),
+                &(*mMainWindow), SLOT(refreshMainView(const RPointerArray<MIAUpdateNode>&, const RPointerArray<MIAUpdateFwNode>&,int)));
+        connect(&(*mEngine), SIGNAL(refreshProgress()),
+                &(*mMainWindow), SLOT(refreshMainViewProgress()));
+        connect(&(*mEngine), SIGNAL(setUpdatesRefreshing(bool)),
+                &(*mMainWindow), SLOT(setRefreshingAnimation(bool)));
+        connect(&(*mEngine), SIGNAL(updateCompleted()),
+                &(*mMainWindow), SLOT(updateCompleted()));
+    }
 }

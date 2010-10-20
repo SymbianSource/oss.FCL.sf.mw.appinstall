@@ -84,15 +84,18 @@ QVariant IAUpdateAppListModel::data(const QModelIndex &index, int role) const
                 }
                 else if (uiState == MIAUpdateNode::EUpdated)
                 {
-                    importanceDescription = "Updated";
+                    importanceDescription = 
+                            hbTrId("txt_software_dblist_1_val_updated");
                 }
                 else if (uiState == MIAUpdateNode::EFailed)
                 {
-                    importanceDescription = "Failed";
+                    importanceDescription = 
+                            hbTrId("txt_software_dblist_1_val_failed");
                 }
                 else if (uiState == MIAUpdateNode::EDownloaded)
                 {
-                    importanceDescription = "Downloaded";
+                    importanceDescription = 
+                            hbTrId("txt_software_dblist_1_val_downloaded");
                 }
             }            
             QStringList stringList;

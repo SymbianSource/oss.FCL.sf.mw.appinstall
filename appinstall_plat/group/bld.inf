@@ -11,19 +11,22 @@
 *
 * Contributors:
 *
-* Description:   Includes all the Domain API specific bld.inf files, which 
-*                export files.
+* Description:  Build info file for application install UI domain APIs
 *
 */
 
 
 #include "../iaupdate_api/group/bld.inf"
-#include "../task_plugin_api/group/bld.inf"
-#include "../sw_installer_common_ui_api/group/bld.inf"
-#include "../sw_installer_launcher_api/group/bld.inf"
-#include "../task_management_api/group/bld.inf"
-#include "../sw_installer_ui_plugin_api/group/bld.inf"
-#include "../sw_installer_cr_keys/group/bld.inf"
+#include "../sw_installer_cr_keys/group/bld.inf"    // TODO: remove too?
 #include "../sw_installer_ps_keys/group/bld.inf"
 #include "../sifui_api/group/bld.inf"
+
+
+// TODO: deprecated, remove when not used any more
+#include "../task_plugin_api/group/bld.inf"
+#include "../task_management_api/group/bld.inf"
+#include "../sw_installer_common_ui_api/group/bld.inf"
+#include "../sw_installer_launcher_api/group/bld.inf"
+#include "../sw_installer_ui_plugin_api/group/bld.inf"
+
 

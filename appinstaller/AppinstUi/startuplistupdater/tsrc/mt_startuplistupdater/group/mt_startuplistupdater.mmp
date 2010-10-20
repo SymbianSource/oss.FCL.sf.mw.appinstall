@@ -37,6 +37,7 @@ LIBRARY         StifTestEngine.lib
 LIBRARY         sif.lib
 LIBRARY         scrclient.lib
 LIBRARY         dscstore.lib
+LIBRARY         efsrv.lib
 
 LANG            SC
 

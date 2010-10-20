@@ -115,6 +115,7 @@ IAUpdateEngine::~IAUpdateEngine()
 void IAUpdateEngine::StartedByLauncherL(bool aRefreshFromNetworkDenied)
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::StartedByLauncherL() begin");
+    emit createUI();
     mRequestIssued = true;
     mRequestType = IAUpdateUiDefines::ENoRequest;
     iController->SetRequestType(mRequestType);
@@ -166,6 +167,7 @@ void IAUpdateEngine::ShowUpdatesRequestL(int wgid,
         CIAUpdateParameters* aFilterParams)
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowUpdatesRequestL() begin");
+    emit createUI();
     SetClientWgId(wgid);
     mRequestIssued = true;
     //    delete iBackgroundTimer;
@@ -227,6 +229,7 @@ void IAUpdateEngine::ShowUpdatesRequestL(int wgid,
 void IAUpdateEngine::ShowUpdateQueryRequestL(int wgid, uint aUid)
     {
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateEngine::ShowUpdateQueryRequestL begin");
+    emit createUI();
     SetClientWgId(wgid);
     mRequestIssued = true;
     mStartedFromApplication = true;
@@ -1159,16 +1162,16 @@ void IAUpdateEngine::ShowUpdateQueryL()
         HbMessageBox *messageBox = new HbMessageBox(
                 HbMessageBox::MessageTypeQuestion);
         messageBox->setText(QString(
-                "Application update is available from Nokia. Update?"));
+                hbTrId("txt_software_info_application_update_is_available")));
         int actionCount = messageBox->actions().count();
         for (int i = actionCount - 1; i >= 0; i--)
             {
             messageBox->removeAction(messageBox->actions().at(i));
             }
         mPrimaryAction = NULL;
-        mPrimaryAction = new HbAction("Now");
+        mPrimaryAction = new HbAction(hbTrId("txt_software_button_now"));
         mSecondaryAction = NULL;
-        mSecondaryAction = new HbAction("Later");
+        mSecondaryAction = new HbAction(hbTrId("txt_software_button_later"));
         messageBox->addAction(mPrimaryAction);
         messageBox->addAction(mSecondaryAction);
         messageBox->setTimeout(HbPopup::NoTimeout);

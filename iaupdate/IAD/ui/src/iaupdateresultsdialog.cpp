@@ -91,7 +91,7 @@ void IAUpdateResultsDialog::constructText(const TIAUpdateResultsInfo &param, QSt
     
     if (param.iFileInUseError)
     {
-    	buf.append("Close all applications and try again.");
+    	buf.append(hbTrId("txt_swupdate_info_close_all_applications_and_try_a")); 
     	buf.append("<br />");
     }
 } 

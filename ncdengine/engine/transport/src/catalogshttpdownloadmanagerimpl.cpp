@@ -112,11 +112,11 @@ CCatalogsHttpDownloadManager::~CCatalogsHttpDownloadManager()
         {
         DLTRACE(("We were connected to DL manager"));
         DeleteHangingDownloads();
+        
+        // Close download manager session    
+        iDmgr->removeAll();
         }
       
-    // Close download manager session    
-    iDmgr->removeAll();
-    
    
     delete iDefaultConfig;
     iManager.Release();

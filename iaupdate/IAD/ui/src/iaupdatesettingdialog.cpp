@@ -88,7 +88,7 @@ CIAUpdateSettingDialog::~CIAUpdateSettingDialog()
 void CIAUpdateSettingDialog::toggleChange(QModelIndex startIn, QModelIndex /*endIn*/)
 {
     // HLa: this should work
-    HbDataFormModelItem *itm = mModel->itemFromIndex(startIn);
+    //HbDataFormModelItem *itm = mModel->itemFromIndex(startIn);
 
     // Destination ?
     if ( startIn.row() == 0 )
