@@ -97,6 +97,7 @@ CNcdInstallationService* CNcdInstallationService::NewLC()
 CNcdInstallationService::~CNcdInstallationService()
     {
     DLTRACEIN((""));
+    delete iThemeName;
     delete iSilentInstallActiveObserver;
     iSilentInstallActiveObserver = NULL;
     iRegistrySession.Close();

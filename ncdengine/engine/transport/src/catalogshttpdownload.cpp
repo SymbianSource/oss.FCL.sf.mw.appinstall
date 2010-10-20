@@ -2222,7 +2222,7 @@ void CCatalogsHttpDownload::UpdateResponseHeadersL(
 // ---------------------------------------------------------------------------
 //	    
 TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader( 
-    const TDesC8& aHeader ) const
+    const TDesC8& /* aHeader */ ) const
     {
     /* HLa
     if ( aHeader.CompareF( KHttpRequestAcceptHeader ) == 0 ) 
@@ -2280,7 +2280,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedRequestHeader(
 // ---------------------------------------------------------------------------
 //	           
 TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader( 
-    const TDesC8& aHeader ) const
+    const TDesC8& /* aHeader */ ) const
     {
     /* HLa
     if ( aHeader.CompareF( KHttpGeneralCacheControlHeader ) == 0 ) 
@@ -2314,7 +2314,7 @@ TUint CCatalogsHttpDownload::MatchWithPredefinedGeneralHeader(
 // ---------------------------------------------------------------------------
 //	    
 TUint CCatalogsHttpDownload::MatchWithPredefinedEntityHeader( 
-    const TDesC8& aHeader ) const
+    const TDesC8& /* aHeader */ ) const
     {
     /*
     if ( aHeader.CompareF( KHttpEntityAllowHeader ) == 0 ) 

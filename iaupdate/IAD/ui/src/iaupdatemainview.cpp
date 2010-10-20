@@ -609,7 +609,7 @@ void IAUpdateMainView::markListItem(bool mark, int index)
             {
                 if (depCount > 1) 
                 {
-                    HbParameterLengthLimiter limiter(hbTrId("txt_software_info_updates_1_needs_deselected_upd"));  
+                    HbParameterLengthLimiter limiter(hbTrId("txt_software_info_updates_1_need_deselected_upd"));  
                     text.append(limiter.arg("names")); 
                 } 
                 else
@@ -874,7 +874,7 @@ void IAUpdateMainView::showDetails(MIAUpdateAnyNode& node)
     IAUPDATE_TRACE("[IAUPDATE] IAUpdateMainView::showDetails() begin");
     HbMessageBox *messageBox = new HbMessageBox(HbMessageBox::MessageTypeInformation);
     HbLabel *label = new HbLabel(messageBox);
-    label->setHtml(QString("Details"));
+    label->setHtml(hbTrId("txt_software_title_details"));
     messageBox->setHeadingWidget(label);
        
     messageBox->setIconVisible(false);
@@ -897,7 +897,7 @@ void IAUpdateMainView::constructDetailsText(MIAUpdateAnyNode &node, QString &tex
     text.append(QString("<br />"));
     if (node.NodeType() == MIAUpdateAnyNode::ENodeTypeFw)
     {    
-        text.append(hbTrId("txt_software_dblist_device_software ")); // TODO: wrong layout
+        text.append(hbTrId("txt_swupdate_dialog_device_software")); 
     }
     else
     {

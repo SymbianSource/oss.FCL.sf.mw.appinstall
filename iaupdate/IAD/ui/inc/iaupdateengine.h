@@ -110,6 +110,8 @@ public:
      CIAUpdateUiController* Controller() const;
  
 signals:
+    void createUI();
+
     void toMainView();
     
     /**

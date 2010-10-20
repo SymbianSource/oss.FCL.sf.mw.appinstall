@@ -88,13 +88,10 @@ void IAUpdateDialogUtil::showAgreement(HbAction *primaryAction, HbAction *second
     label->setHtml(hbTrId("txt_software_title_disclaimer"));
     agreementDialog->setHeadingWidget(label);
     agreementDialog->setIconVisible(false);
-    agreementDialog->setText(hbTrId("txt_software_info_this_application_allows_you_to_d").arg(2007).arg(2010));
-    // TODO: when textmap contains %1, change to:
-    /*
     agreementDialog->
         setText(hbTrId("txt_software_info_this_application_allows_you_to_d").
                 arg(HbStringUtil::convertDigits("2007")).arg(HbStringUtil::convertDigits("2007")));
-    */
+    
     int actionCount = agreementDialog->actions().count();
     for (int i=actionCount-1; i >= 0; i--)
     { 

@@ -38,10 +38,10 @@
 
 // TODO: replace with proper logging
 #ifdef _DEBUG
-#define FLOG(x)         RDebug::Print(x);
-#define FLOG_1(x,y)     RDebug::Print(x, y);
-#define FLOG_2(x,y,z)   RDebug::Print(x, y, z);
-#define FLOG_3(x,y,z,v) RDebug::Print(x, y, z, v);
+#define FLOG(x)         RDebug::Print(x)
+#define FLOG_1(x,y)     RDebug::Print((x),(y))
+#define FLOG_2(x,y,z)   RDebug::Print((x),(y),(z))
+#define FLOG_3(x,y,z,v) RDebug::Print((x),(y),(z),(v))
 #else
 #define FLOG(x)
 #define FLOG_1(x,y)
@@ -633,6 +633,7 @@ void CSisxSifPluginActiveImpl::DoUninstallL( TComponentId aComponentId,
 		TRequestStatus& aStatus )
     {
     CommonRequestPreambleL( aInputParams, aOutputParams, aStatus );
+    FLOG_1( _L("CSisxSifPluginActiveImpl::DoUninstallL, IsSilentMode=%d"), IsSilentMode() );
 
     TUid uid;
     CComponentEntry *entry = CComponentEntry::NewLC();
@@ -655,6 +656,7 @@ void CSisxSifPluginActiveImpl::DoActivateL( TComponentId aComponentId,
         TRequestStatus& aStatus )
     {
     CommonRequestPreambleL( aStatus );
+    FLOG( _L("CSisxSifPluginActiveImpl::DoActivateL()") );
 
     Swi::RSisRegistryWritableSession sisRegSession;
     User::LeaveIfError( sisRegSession.Connect() );
@@ -677,6 +679,7 @@ void CSisxSifPluginActiveImpl::DoDeactivateL( TComponentId aComponentId,
         TRequestStatus& aStatus )
     {
     CommonRequestPreambleL( aStatus );
+    FLOG( _L("CSisxSifPluginActiveImpl::DoDeactivateL()") );
 
     Swi::RSisRegistryWritableSession sisRegSession;
     User::LeaveIfError( sisRegSession.Connect() );
@@ -747,6 +750,7 @@ void CSisxSifPluginActiveImpl::SetFile( RFile& aFileHandle )
 //
 TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL, begin") );
     __ASSERT_DEBUG( iOperation == EInstall, Panic( ESisxSifInternalError ) );
 
     // Find the id of the last installed component and return it
@@ -761,6 +765,7 @@ TComponentId CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL()
     TComponentId componentId = sisRegistrySession.GetComponentIdForUidL( tuid );
     CleanupStack::PopAndDestroy( &sisRegistrySession );
 
+    FLOG_1( _L("CSisxSifPluginActiveImpl::GetLastInstalledComponentIdL, ret 0x%08x"), componentId );
     return componentId;
     }
 
@@ -831,6 +836,8 @@ TBool CSisxSifPluginActiveImpl::RequiresUserCapabilityL(
 //
 void CSisxSifPluginActiveImpl::SetInstallPrefsRevocationServerUriL( const TDesC& aUri )
     {
+    FLOG_1( _L("CSisxSifPluginActiveImpl::SetInstallPrefsRevocationServerUriL '%S'"), &aUri );
+    
     if( aUri.Length() )
         {
         HBufC8* uriBuf = HBufC8::NewLC( aUri.Length() );
@@ -851,37 +858,71 @@ void CSisxSifPluginActiveImpl::SetInstallPrefsRevocationServerUriL( const TDesC&
 //
 void CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL()
     {
-    if( IsSilentMode() )
-        {
-        TBool performOcsp( iInstallParams->PerformOCSP() != ENotAllowed );
-        iInstallPrefs->SetPerformRevocationCheck( performOcsp );
+    FLOG( _L("CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL") );
 
-        if( performOcsp )
+    TBool performOcsp = EFalse;
+    /*
+     * performOcsp decision table:
+     *
+     * KSWInstallerOcspProcedure settings:
+     *                 |  Must    |  On      |  Off     |  Undefined  |
+     * ----------------+----------+----------+----------+-------------+
+     * Normal install: |  ETrue   |  ETrue   |  EFalse  |  EFalse     |
+     * ----------------+----------+----------+----------+-------------+
+     * Silent install having KSifInParam_PerformOCSP value:           |
+     * - EAllowed      |  ETrue   |  ETrue   |  EFalse  |  EFalse     |
+     * - ENotAllowed   |  ETrue   |  EFalse  |  EFalse  |  EFalse     |
+     * - EUserConfirm  |  ETrue   |  ETrue   |  EFalse  |  EFalse     |
+     * - undefined     |  ETrue   |  ETrue   |  EFalse  |  EFalse     |
+     * ----------------+----------+----------+----------+-------------+
+     */
+
+    CRepository* cenRep = CRepository::NewLC( KCRUidSWInstallerSettings );
+    TInt ocspProcedure = ESWInstallerOcspProcedureOff;
+    cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure );    // return value ignored
+    FLOG_1( _L("CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL, ocspProcedure=%d"),
+            ocspProcedure );
+    switch( ocspProcedure )
+        {
+        case ESWInstallerOcspProcedureMust:
+            performOcsp = ETrue;
+            break;
+        case ESWInstallerOcspProcedureOn:
+            if( IsSilentMode() )
+                {
+                performOcsp = ( iInstallParams->PerformOCSP() != ENotAllowed );
+                }
+            else
+                {
+                performOcsp = ETrue;
+                }
+            break;
+        case ESWInstallerOcspProcedureOff:
+        default:
+            // already EFalse
+            break;
+        }
+    FLOG_1( _L("CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL, performOcsp=%d"),
+        performOcsp );
+
+    if( performOcsp )
+        {
+        if( IsSilentMode() && iInstallParams->OCSPUrl().Length() )
             {
             SetInstallPrefsRevocationServerUriL( iInstallParams->OCSPUrl() );
             }
-        }
-    else
-        {
-        CRepository* cenRep = CRepository::NewLC( KCRUidSWInstallerSettings );
-
-        TInt ocspProcedure = ESWInstallerOcspProcedureOff;
-        (void)cenRep->Get( KSWInstallerOcspProcedure, ocspProcedure );
-        TBool performOcsp( ocspProcedure != ESWInstallerOcspProcedureOff );
-        iInstallPrefs->SetPerformRevocationCheck( performOcsp );
-
-        if( performOcsp )
+        else
             {
             HBufC* ocspUrlBuf = HBufC::NewLC(
                     NCentralRepositoryConstants::KMaxUnicodeStringLength );
             TPtr ocspUrl( ocspUrlBuf->Des() );
-            (void)cenRep->Get( KSWInstallerOcspDefaultURL, ocspUrl );
+            cenRep->Get( KSWInstallerOcspDefaultURL, ocspUrl );     // return value ignored
             SetInstallPrefsRevocationServerUriL( ocspUrl );
             CleanupStack::PopAndDestroy( ocspUrlBuf );
             }
-
-        CleanupStack::PopAndDestroy( cenRep );
         }
+
+    CleanupStack::PopAndDestroy( cenRep );
     }
 
 // ---------------------------------------------------------------------------
@@ -890,6 +931,8 @@ void CSisxSifPluginActiveImpl::UpdateInstallPrefsForPerformingOcspL()
 //
 void CSisxSifPluginActiveImpl::StartInstallingL()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::StartInstallingL, begin") );
+
 	const CComponentInfo::CNode& rootNode( iComponentInfo->RootNodeL() );
 	TBool driveSelection = rootNode.DriveSeletionRequired();
 	iUiHandler->SetDriveSelectionRequired( driveSelection );
@@ -918,6 +961,8 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 
     iPhase = ERunningOperation;
     SetActive();
+
+    FLOG( _L("CSisxSifPluginActiveImpl::StartInstallingL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -926,6 +971,8 @@ void CSisxSifPluginActiveImpl::StartInstallingL()
 //
 void CSisxSifPluginActiveImpl::StartSilentInstallingL()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::StartSilentInstallingL, begin") );
+
     // TODO: fix this, removed temporarily to allow installations
 #ifdef _NOT_DEFINED_
     const CComponentInfo::CNode& rootNode( iComponentInfo->RootNodeL() );
@@ -958,6 +1005,8 @@ void CSisxSifPluginActiveImpl::StartSilentInstallingL()
         {
         StartInstallingL();
         }
+
+    FLOG( _L("CSisxSifPluginActiveImpl::StartSilentInstallingL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -966,6 +1015,8 @@ void CSisxSifPluginActiveImpl::StartSilentInstallingL()
 //
 void CSisxSifPluginActiveImpl::FinalizeInstallationL()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::FinalizeInstallationL, begin") );
+
     UpdateStartupListL();
 
     if( iOutputParams )
@@ -976,6 +1027,8 @@ void CSisxSifPluginActiveImpl::FinalizeInstallationL()
 
     iUiHandler->PublishCompletionL();
 	iUiHandler->DisplayCompleteL();
+
+	FLOG( _L("CSisxSifPluginActiveImpl::FinalizeInstallationL, end") );
     }
 
 // ---------------------------------------------------------------------------
@@ -984,14 +1037,19 @@ void CSisxSifPluginActiveImpl::FinalizeInstallationL()
 //
 void CSisxSifPluginActiveImpl::UpdateStartupListL()
     {
+    FLOG( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, begin") );
+
     if( FeatureManager::FeatureSupported( KFeatureIdExtendedStartup ) )
         {
+        FLOG( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, KFeatureIdExtendedStartup") );
+
         TFullName name( KStartupListUpdaterName );
         name.Append( '*' );
         TFindProcess findProcess( name );
         if( findProcess.Next( name ) == KErrNone )
             {
             // already running, no need to do anything
+            FLOG( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, startuplistupdater running") );
             return;
             }
 
@@ -999,6 +1057,7 @@ void CSisxSifPluginActiveImpl::UpdateStartupListL()
         CleanupClosePushL( process );
 
         TInt result = process.Create( KStartupListUpdaterExecutable, KNullDesC );
+        FLOG_1( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, create result=%d"), result );
         if( result == KErrNone )
             {
             TRequestStatus rendezvousStatus;
@@ -1006,14 +1065,18 @@ void CSisxSifPluginActiveImpl::UpdateStartupListL()
 
             // start process and wait until it is started
             process.Resume();
+            FLOG( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, waiting for rendezvous") );
             User::WaitForRequest( rendezvousStatus );
 
             // ignore possible errors
             result = rendezvousStatus.Int();
+            FLOG_1( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, result=%d"), result );
             }
 
         CleanupStack::PopAndDestroy( &process );
         }
+
+    FLOG( _L("CSisxSifPluginActiveImpl::UpdateStartupListL, end") );
     }
 
 // ---------------------------------------------------------------------------

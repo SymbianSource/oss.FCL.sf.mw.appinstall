@@ -32,7 +32,7 @@ IAUpdateMainWindow::IAUpdateMainWindow(IAUpdateEngine *engine)
     addSettingView();
     
     // show the main window (which will display the last view that was added)
-    show();   //temp
+    show();   
 }
 
 // Destructor
@@ -102,6 +102,7 @@ IAUpdateMainView* IAUpdateMainWindow::GetMainView()
    
 CIAUpdateSettingDialog* IAUpdateMainWindow::GetSettingView()
 {
-    return mSettingView;}
+    return mSettingView;
+}
 
 

@@ -28,10 +28,14 @@ class IAUpdateMainWindow;
 
 class IAUpdateApplication : public HbApplication
     {
+    Q_OBJECT
 public:
     IAUpdateApplication(int argc, char* argv[]);
     virtual ~IAUpdateApplication();
     
+public slots:    
+     void createUI();
+     
 private:
     IAUpdateEngine *mEngine;         // owned
     QSharedPointer<IAUpdateMainWindow> mMainWindow; // owned

@@ -1073,7 +1073,7 @@ void IAUpdateUtils::DrivesWithBinariesL( Swi::RSisRegistryEntry& aEntry, RArray<
         IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() fullname: %S", &fullName);
         TParse parse;
         parse.Set( fullName, NULL, NULL);    
-        IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() extension: %S", &parse.Ext());
+        //IAUPDATE_TRACE_1("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() extension: %S", &parse.Ext());
         if ( parse.Ext().CompareF( KExe() ) == 0  || parse.Ext().CompareF( KDll() ) == 0 )
             {
             IAUPDATE_TRACE("[IAUPDATE] IAUpdateUtils::DrivesWithBinariesL() EXE or DLL found");

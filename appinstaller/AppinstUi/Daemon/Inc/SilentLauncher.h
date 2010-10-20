@@ -64,8 +64,7 @@ class CSilentLauncher : public CBase
         * @param aFileHandle - Handle of the file to be installed 
         * @param aStatus - Request status
         */
-        void InstallL( RFile& aFileHandle, 
-                       const TDesC& aFile, 
+        void InstallL( RFile& aFileHandle,                       
                        TRequestStatus& aStatus );
 
         /**

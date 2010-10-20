@@ -30,6 +30,9 @@ _LIT( KTestStartFormat, "%S: start" );
 _LIT( KTestParamFormatArg, "%S: %S => %d");
 _LIT( KTestDoneFormat, "%S: done" );
 
+_LIT( KStartupListUpdaterThread, "StartupListUpdater" );
+_LIT( KDevTraceDir, "c:\\data\\logs\\swinst\\" );
+
 using namespace Usif;
 
 
@@ -81,7 +84,10 @@ TInt CTestStartupListUpdater::RunMethodL( CStifItemParser& aItem )
         ENTRY( "Install", CTestStartupListUpdater::InstallL ),
         ENTRY( "Remove", CTestStartupListUpdater::RemoveL ),
         ENTRY( "InStartList", CTestStartupListUpdater::CheckStartListContainsL ),
-        ENTRY( "NotInStartList", CTestStartupListUpdater::CheckStartListDoesNotContainL )
+        ENTRY( "NotInStartList", CTestStartupListUpdater::CheckStartListDoesNotContainL ),
+        ENTRY( "MkLogDir", CTestStartupListUpdater::MakeDevTraceLogDirL ),
+        ENTRY( "RmLogDir", CTestStartupListUpdater::RemoveDevTraceLogDirL ),
+        ENTRY( "WaitImportProcessing", CTestStartupListUpdater::WaitImportProcessingL )
         };
 
     const TInt count = sizeof( KFunctions ) / sizeof( TStifFunctionInfo );
@@ -107,7 +113,7 @@ TInt CTestStartupListUpdater::InstallL( CStifItemParser& aItem )
         {
         COpaqueNamedParams* args = COpaqueNamedParams::NewLC();
         COpaqueNamedParams* results = COpaqueNamedParams::NewLC();
-        args->AddIntL( KSifInParam_InstallSilently, 1 );
+        args->AddIntL( KSifInParam_InstallSilently, ETrue );
 
         TRequestStatus status;
         installer.Install( param, *args, *results, status );
@@ -323,3 +329,96 @@ void CTestStartupListUpdater::GetStartupListL( RPointerArray<HBufC>& aStartupLis
 
     CleanupStack::PopAndDestroy( 2, &dscStore );    // EnumClose, dscStore
     }
+
+// ---------------------------------------------------------------------------
+// CTestStartupListUpdater::MakeDevTraceLogDirL()
+// ---------------------------------------------------------------------------
+//
+TInt CTestStartupListUpdater::MakeDevTraceLogDirL( CStifItemParser& /*aItem*/ )
+    {
+    _LIT( KTestName, "MkLogDir" );
+    Print( 0, KTestStartFormat, &KTestName );
+    TInt testResult = KErrNone;
+
+    RFs fs;
+    User::LeaveIfError( fs.Connect() );
+    CleanupClosePushL( fs );
+
+    TEntry entry;
+    TInt err = fs.Entry( KDevTraceDir, entry );
+    if( err == KErrNone )
+        {
+        testResult = fs.MkDirAll( KDevTraceDir );
+        }
+    else if( err == KErrAlreadyExists )
+        {
+        // nothing to do
+        }
+    else
+        {
+        User::Leave( err );
+        }
+
+    CleanupStack::PopAndDestroy( &fs );
+    return testResult;
+    }
+
+// ---------------------------------------------------------------------------
+// CTestStartupListUpdater::RemoveDevTraceLogDirL()
+// ---------------------------------------------------------------------------
+//
+TInt CTestStartupListUpdater::RemoveDevTraceLogDirL( CStifItemParser& /*aItem*/ )
+    {
+    _LIT( KTestName, "RmLogDir" );
+    Print( 0, KTestStartFormat, &KTestName );
+    TInt testResult = KErrNone;
+
+    RFs fs;
+    User::LeaveIfError( fs.Connect() );
+    CleanupClosePushL( fs );
+
+    TEntry entry;
+    if( fs.Entry( KDevTraceDir, entry ) == KErrNone )
+        {
+        CFileMan* fileMan = CFileMan::NewL( fs );
+        CleanupStack::PushL( fileMan );
+        testResult = fileMan->RmDir( KDevTraceDir );
+        CleanupStack::PopAndDestroy( fileMan );
+        }
+    // else nothing to do
+
+    CleanupStack::PopAndDestroy( &fs );
+    return testResult;
+    }
+
+// ---------------------------------------------------------------------------
+// CTestStartupListUpdater::WaitImportProcessingL()
+// ---------------------------------------------------------------------------
+//
+TInt CTestStartupListUpdater::WaitImportProcessingL( CStifItemParser& /*aItem*/ )
+    {
+    _LIT( KTestName, "WaitImportProcessing" );
+    Print( 0, KTestStartFormat, &KTestName );
+    TInt testResult = KErrNone;
+
+    TFullName name( KStartupListUpdaterThread );
+    name.Append( '*' );
+    TFindThread findThread;
+    if( findThread.Next( name ) == KErrNone )
+        {
+        RThread thread;
+        CleanupClosePushL( thread );
+
+        User::LeaveIfError( thread.Open( name ) );
+        TRequestStatus status;
+        thread.Logon( status );
+        User::WaitForRequest( status );
+        testResult = status.Int();
+
+        CleanupStack::PopAndDestroy( &thread );
+        }
+
+    return testResult;
+    }
+
+

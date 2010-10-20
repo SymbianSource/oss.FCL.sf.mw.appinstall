@@ -30,9 +30,9 @@ file=ABI_DIR\BUILD_DIR\scrhelperclient.dll		sys\bin\scrhelperclient.dll
 file=ABI_DIR\BUILD_DIR\scrhelperserver.exe		sys\bin\scrhelperserver.exe
 
 // Export SCR DB.
-data=EPOCROOT##epoc32\release\winscw\udeb\z\sys\install\scr\provisioned\scr.db		sys\install\scr\provisioned\scr.db
+data=EPOCROOT##epoc32\data\z\sys\install\scr\provisioned\scr.db		sys\install\scr\provisioned\scr.db
 // Export SCR Cenrep file.
-data=EPOCROOT##epoc32\release\winscw\udeb\z\private\10202be9\10285bc0.txt   		private\10202be9\10285bc0.txt
+data=EPOCROOT##epoc32\data\z\system\data\10285bc0.txt	private\10202be9\10285bc0.txt
 
 #endif
 

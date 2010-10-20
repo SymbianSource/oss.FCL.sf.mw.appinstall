@@ -461,16 +461,16 @@ void CSisInstaller::RunL()
                         else
                             {  
                             // Start also the universal indicator.
-                            TRAP_IGNORE( iDialogs->ActivateIndicatorL( iPercentValue ) );
+                            TRAP_IGNORE( iDialogs->ActivateIndicatorL( 
+                                    iPercentValue ) );
                             // Start to show progress dialog. Dialog is shown 
                             // only 3 sec. 
                             TRAP_IGNORE( iDialogs->ShowWaitingNoteL() );    
                                                         
-                            FLOG_1( _L("Daemon: Start install for %S"), &iSisFile );
+                            FLOG_1( _L("Daemon: Start install for %S"), 
+                                    &iSisFile );
                                                                                                                                                                                                                                                    
-                            iInstallLauncher->InstallL( iSisFileHandle, 
-                                                        iSisFile, 
-                                                        iStatus );
+                            iInstallLauncher->InstallL( iSisFileHandle, iStatus );
                                                         
                             iState = EDSisInstallerStateInstalling;                       
                             iInstallerState = iState;                                                   
@@ -528,9 +528,7 @@ void CSisInstaller::RunL()
                 if ( iFileOpen )
                     {
                     FLOG_1( _L("Daemon: Try install again for: %S"), &iSisFile );
-                    iInstallLauncher->InstallL( iSisFileHandle,
-                                                iSisFile, 
-                                                iStatus );                
+                    iInstallLauncher->InstallL( iSisFileHandle, iStatus );                
                 
                     iState = EDSisInstallerStateInstalling;                   
                     iInstallerState = iState;                                   

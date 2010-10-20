@@ -34,9 +34,9 @@ const TInt KFreeSpaceTreshold = 128*1024;   // bytes
 
 // TODO: replace with proper tracing support
 #ifdef _DEBUG
-#define FLOG(x)         RDebug::Print(x);
-#define FLOG_1(x,y)     RDebug::Print(x, y);
-#define FLOG_2(x,y,z)   RDebug::Print(x, y, z);
+#define FLOG(x)         RDebug::Print(x)
+#define FLOG_1(x,y)     RDebug::Print((x),(y))
+#define FLOG_2(x,y,z)   RDebug::Print((x),(y),(z))
 #else
 #define FLOG(x)
 #define FLOG_1(x,y)
@@ -103,6 +103,7 @@ TBool CSisxSifPluginUiHandler::DisplayTextL( const Swi::CAppInfo& /*aAppInfo*/,
             break;
         }
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayTextL, okToContinue=%d"), okToContinue );
     return okToContinue;
     }
 
@@ -131,6 +132,8 @@ TBool CSisxSifPluginUiHandler::DisplayDependencyBreakL( const Swi::CAppInfo& /*a
     _LIT( KText, "Removal may stop other applications working. Continue?" );
     okToContinue = ShowQuestionL( KText );
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDependencyBreakL, okToContinue=%d"),
+        okToContinue );
     return okToContinue;
     }
 
@@ -176,6 +179,7 @@ TBool CSisxSifPluginUiHandler::DisplayQuestionL( const Swi::CAppInfo& /*aAppInfo
             break;
         }
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayQuestionL, okToContinue=%d"), okToContinue );
     return okToContinue;
     }
 
@@ -201,6 +205,8 @@ TBool CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL( const Swi::CAppInfo& /
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL") );
     TBool okToContinue = iSifUi->ShowGrantCapabilitiesL( aCapabilitySet );
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayGrantCapabilitiesL, okToContinue=%d"),
+        okToContinue );
     return okToContinue;
     }
 
@@ -213,6 +219,7 @@ TInt CSisxSifPluginUiHandler::DisplayLanguageL( const Swi::CAppInfo& /*aAppInfo*
     {
     FLOG( _L("CSisxSifPluginUiHandler::DisplayLanguageL") );
     TInt langIndex = iSifUi->ShowSelectLanguageL( aLanguages );
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayLanguageL, langIndex=%d"), langIndex );
     return langIndex;
     }
 
@@ -243,8 +250,10 @@ TInt CSisxSifPluginUiHandler::DisplayDriveL( const Swi::CAppInfo& /*aAppInfo*/,
     TInt index = aDriveLetters.Find( driveLetter );
     if( index >= 0 && index < aDriveLetters.Count() )
         {
+        FLOG_1( _L("CSisxSifPluginUiHandler::DisplayDriveL, return %d"), index );
         return index;
         }
+    FLOG( _L("CSisxSifPluginUiHandler::DisplayDriveL, return default 0") );
     return 0;
     }
 
@@ -286,6 +295,7 @@ TBool CSisxSifPluginUiHandler::DisplayOptionsL( const Swi::CAppInfo& /*aAppInfo*
             aSelections[ index ] = ( selectedIndexes.Find( index ) != KErrNotFound );
             }
         }
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayOptionsL, isSelected=%d"), isSelected );
     return isSelected;
     }
 
@@ -296,7 +306,8 @@ TBool CSisxSifPluginUiHandler::DisplayOptionsL( const Swi::CAppInfo& /*aAppInfo*
 TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInfo,
         Swi::TInstallEvent aEvent, TInt aValue, const TDesC& /*aDes*/ )
     {
-    FLOG_2( _L("CSisxSifPluginUiHandler::HandleInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
+    FLOG_2( _L("CSisxSifPluginUiHandler::HandleInstallEventL: aEvent=%d, aValue=%d"),
+        aEvent, aValue );
     TBool okToContinue = EFalse;
 
     if( !iSifUi->IsCancelled() )
@@ -338,6 +349,8 @@ TBool CSisxSifPluginUiHandler::HandleInstallEventL( const Swi::CAppInfo& aAppInf
             }
         }
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::HandleInstallEventL: okToContinue %d"),
+        okToContinue);
     return okToContinue;
     }
 
@@ -349,10 +362,12 @@ void CSisxSifPluginUiHandler::HandleCancellableInstallEventL( const Swi::CAppInf
         Swi::TInstallCancellableEvent aEvent, Swi::MCancelHandler& aCancelHandler,
         TInt aValue, const TDesC& /*aDes*/ )
     {
-    FLOG_2( _L("CSisxSifPluginUiHandler::HandleCancellableInstallEventL: aEvent %d, aValue %d"), aEvent, aValue );
+    FLOG_2( _L("CSisxSifPluginUiHandler::HandleCancellableInstallEventL: aEvent=%d, aValue=%d"),
+        aEvent, aValue );
 
     if( iSifUi->IsCancelled() )
         {
+        FLOG( _L("CSisxSifPluginUiHandler::HandleCancellableInstallEventL: cancelling") );
         aCancelHandler.HandleCancel();
         }
     else
@@ -417,6 +432,7 @@ TBool CSisxSifPluginUiHandler::DisplaySecurityWarningL( const Swi::CAppInfo& aAp
             break;
         }
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplaySecurityWarningL, result=%d"), result );
     return result;
     }
 
@@ -446,6 +462,7 @@ TBool CSisxSifPluginUiHandler::DisplayOcspResultL( const Swi::CAppInfo& /*aAppIn
         SetOcspErrorL( aMessage );
         }
 
+    FLOG_1( _L("CSisxSifPluginUiHandler::DisplayOcspResultL, okToContinue=%d"), okToContinue );
     return okToContinue;
     }
 
@@ -524,6 +541,7 @@ void CSisxSifPluginUiHandler::DisplayFailedL( const CSisxSifPluginErrorHandler& 
 //
 void CSisxSifPluginUiHandler::CancelDialogs()
     {
+    FLOG( _L("CSisxSifPluginUiHandler::CancelDialogs") );
     iSifUi->CancelDialogs();
     }
 

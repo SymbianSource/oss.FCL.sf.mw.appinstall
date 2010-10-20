@@ -63,10 +63,7 @@ void CSilentLauncher::ConstructL()
     iSifOptions->AddIntL( Usif::KSifInParam_IgnoreOCSPWarnings, Usif::EAllowed );            
     iSifOptions->AddIntL( Usif::KSifInParam_AllowAppShutdown, Usif::EAllowed );
     iSifOptions->AddIntL( Usif::KSifInParam_AllowDownload, Usif::EAllowed );
-    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed );
-        
-// TODO: is this defined in USIF?    
-    //iSifOptions->AddIntL( Usif::KSifInParam_Languages, NULL );    
+    iSifOptions->AddIntL( Usif::KSifInParam_AllowOverwrite, Usif::EAllowed );        
     }
 
 // -----------------------------------------------------------------------------
@@ -101,15 +98,12 @@ CSilentLauncher::~CSilentLauncher()
     delete iDrive;
     }
 
-
 // -----------------------------------------------------------------------------
 // CSilentLauncher::InstallL
 // Perform installation with file handle.
 // -----------------------------------------------------------------------------
 //
-void CSilentLauncher::InstallL( RFile& aFileHandle, 
-                                const TDesC& aFile, 
-                                TRequestStatus& aStatus )
+void CSilentLauncher::InstallL( RFile& aFileHandle, TRequestStatus& aStatus )
     {
     FLOG( _L("Daemon: CSilentLauncher::InstallL (aFileHandle) START") );
     
@@ -120,21 +114,26 @@ void CSilentLauncher::InstallL( RFile& aFileHandle,
          iConnected = ETrue;            
          }
         
-    // Set drive for installer.
+    // Get drive number from file path. by default SWI Daemon installs
+    // package to drive where PA sis or SA sis is found.
     TInt driveNumber = 0;
     TDriveInfo driveInfo;
     aFileHandle.Drive( driveNumber, driveInfo );
     FLOG_1( _L("Daemon: Drive number = %d"), driveNumber );
-// TODO: Use TUint array for drive numbers when plugin does support it.      
-    iSifOptions->AddIntL( Usif::KSifInParam_Drive, driveNumber );
-                                 
+
+    RArray<TInt> driveArray;
+    CleanupClosePushL( driveArray );
+    User::LeaveIfError( driveArray.Append( driveNumber ) );        
+    iSifOptions->AddIntArrayL( Usif::KSifInParam_Drive, driveArray );
+    CleanupStack::PopAndDestroy( &driveArray );
+                                     
     FLOG( _L("Daemon: Launch install") );
     iSWInstallerFW.Install( aFileHandle, 
                            *iSifOptions, 
                            *iSifResults,
                            aStatus,
                            ETrue );
-    
+          
     FLOG( _L("Daemon: CSilentLauncher::InstallL (aFileHandle) END") );       
     }
        

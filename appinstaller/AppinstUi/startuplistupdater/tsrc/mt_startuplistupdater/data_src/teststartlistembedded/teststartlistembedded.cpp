@@ -17,10 +17,12 @@
 
 
 #include "teststartlistembedded.h"
+#include <e32debug.h>           // RDebug
 
 
 GLDEF_C TInt E32Main()
     {
+    RDebug::Printf("AUTO-STARTUP-TRACE: teststartlistembedded started");
     return KErrNone;
     }
 

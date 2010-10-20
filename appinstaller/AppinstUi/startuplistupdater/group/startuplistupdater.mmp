@@ -25,7 +25,7 @@
 
 TARGET          startuplistupdater.exe
 TARGETTYPE      exe
-UID             0x100039CE 0xE5F88F39   // TODO: Change UID3 to 0x101F875A after SWInstSvrUI has been removed
+UID             0x100039CE 0x101F875A
 CAPABILITY      CAP_SERVER AllFiles
 VENDORID        VID_DEFAULT
 
