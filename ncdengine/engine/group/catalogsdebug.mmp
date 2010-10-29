@@ -63,6 +63,4 @@ SYSTEMINCLUDE /Epoc32/include
 
 LIBRARY euser.lib flogger.lib hal.lib
 
-EXPORTUNFROZEN
-
 SMPSAFE
