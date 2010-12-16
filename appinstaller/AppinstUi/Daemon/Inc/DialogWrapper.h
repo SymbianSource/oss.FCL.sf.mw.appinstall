@@ -84,6 +84,15 @@ class CDialogWrapper : public CBase
           * @since 3.2         
           */              
         void ShowWaitingNoteForUninstallerL();
+        
+        /**
+          * Disable installer's notes. This is used in first boot
+          * to disable wait note and error notes. 
+          * This flag do not affect to uninstaller's wait note.
+          * @since 9.2  
+          * @parm TBool Flag for dialog contorl. If True = disabled.       
+          */                   
+        void DisableInstallNotes( TBool aValue );
 
     private:
 
@@ -112,6 +121,8 @@ class CDialogWrapper : public CBase
         TInt iNoteId;  
         TInt iDisableAllNotes;
         CDialogWatcher* iWatcher;
+        // Disable install notes in first boot if device has emmc.
+        TBool iDisableInstallNotes;        
     };
 }
 

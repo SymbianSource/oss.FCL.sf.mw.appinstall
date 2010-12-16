@@ -15,6 +15,8 @@
 *
 */
 
+#include <e32property.h>	//First boot issues.
+#include <startupdomainpskeys.h> // Defines Statup PS keys.
 
 #include "daemoninstaller.h"
 #include "DialogWrapper.h"
@@ -108,7 +110,9 @@ void CSisInstaller::ConstructL( CProgramStatus& aMainStatus )
     // For uninstaller
     // SisInstaller do not own this so do not delete.     
     iProgramStatus = &aMainStatus;  
-    iUpdateCache = ETrue;       
+    iUpdateCache = ETrue; 
+    // For first boot issues. See FirstBootCheck function.
+    iFirstBootDisableNotes = EFalse;    
     }
 		
 // Set the location of all sis files and the list of them
@@ -245,8 +249,8 @@ void CSisInstaller::RunL()
         {
         // Ok uninstaller is in idle, run installing.
         iProgramStatus->SetProgramStatus( EStateInstalling );
-        FLOG( _L("Daemon: RunL: Set EStateInstalling") );    
-
+        FLOG( _L("Daemon: RunL: Set EStateInstalling") ); 
+                       
         switch (iState)
             {      
             // Reached when installation is completed
@@ -339,7 +343,11 @@ void CSisInstaller::RunL()
                     {             
                     iSisFile.Copy( *iFilesToInstall[iFileIndex] );
                     ++iFileIndex;
-                               
+                                        
+                    // Check if this is first boot and does device have eMMC.
+                    // If first boot and eMMC is found disable wait dialog.
+                    FirstBootCheck();            
+                                                                                                                                                                                        
                     // No need to install if the package has been installed 
                     // some time in the past
                     if ( IsValidPackageL( iSisFile ) && NeedsInstallingL( iSisFile ) )
@@ -475,7 +483,7 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
             TRAP_IGNORE( iDialogs->ShowErrorResultL() );
             }    
         }
-    
+    			    
     FLOG( _L("Daemon: InstallationCompleted: Update installed cache") );
     // Update cache so we do not start to install those packages 
     // which are installed by the user manyally. 
@@ -488,15 +496,25 @@ void CSisInstaller::InstallationCompleted( TInt aResult )
     // Notify plugin that daemon has complete installation.
     // Note that program status is set to idle for uninstaller.
     // Plugin needs to wait uninstaller if it starts before.
-    iDaemonBehaviour->DoNotifyMediaProcessingComplete();   
-    
+    iDaemonBehaviour->DoNotifyMediaProcessingComplete();  
+        
     // For uninstaller
     // Set Installer to idle, if state is installing    
      if ( EStateInstalling == iProgramStatus->GetProgramStatus() )
           {
           FLOG( _L("Daemon: InstallationCompleted: Set EStateIdle") );
           iProgramStatus->SetProgramStatusToIdle();
-          }       
+          }
+     
+     if ( iFirstBootDisableNotes )
+          {
+          // All is done in first boot, set flag to false.
+          iFirstBootDisableNotes = EFalse;
+          // Allow to show dialogs when needed.
+          iDialogs->DisableInstallNotes( EFalse );
+          }
+     FLOG_1( _L("Daemon: InstallationCompleted iFirstBootDisableNotes = %d"), 
+             iFirstBootDisableNotes ); 
     }  
 
 // Indicates if this package is installed or not.
@@ -612,6 +630,56 @@ TBool CSisInstaller::IsValidPackageL( const TDesC& aPackageName )
         }
 
     return result;    
+    }
+
+void CSisInstaller::FirstBootCheck()
+    { 
+    FLOG( _L("Daemon: FirstBootCheck") );
+    // TB9.2 project (PR1) has request that SWI Daemon should not show
+    // dialogs in first boot if device has eMMC. Reason is that wait 
+    // dialog is shown too long time top of UI, since eMMC contains
+    // several pre-installed applications.
+    // Note Unintall dialogs are shown in boot.
+            
+    iFirstBootDisableNotes = EFalse;    
+    TInt iFirstBoot = 0;
+    
+    // Check first, that drive is E. 
+    // If drive is e.g. F no need to check eMMC issue.
+    
+    if ( TChar( iSisFile[0] ) == 'e' || TChar( iSisFile[0] ) == 'E' )
+        {   
+        FLOG( _L("Daemon: FirstBootCheck: Drive is E - check boot reason") );
+        FLOG( _L("Daemon: FirstBootCheck: Get startup reason") );
+        // Get startup key.
+        RProperty::Get( KPSUidStartup, KPSStartupFirstBoot, iFirstBoot );   
+        
+        FLOG_1( _L("Daemon: FirstBootCheck: iFirstBoot = %d"), iFirstBoot );
+        
+        if ( iFirstBoot == EPSStartupFirstBoot )
+            { 
+            FLOG( _L("Daemon: FirstBootCheck: EPSStartupFirstBoot") );
+            TDriveInfo iDriveInfo;  
+            if( iFs.Drive( iDriveInfo, EDriveE ) == KErrNone )
+                {
+                // If E drive is internal we have eMMC.
+                if ( iDriveInfo.iDriveAtt & KDriveAttInternal )
+                    {
+                    iFirstBootDisableNotes = ETrue;
+                    iDialogs->DisableInstallNotes( ETrue ); 
+                    FLOG( _L("Daemon: FirstBootCheck: eMMC found, disable notes") );                
+                    }
+                }        
+            }
+        }
+    else
+        {
+        iDialogs->DisableInstallNotes( EFalse ); 
+        FLOG( _L("Daemon: FirstBootCheck: Enable UI notes") ); 
+        }
+       
+    FLOG_1( _L("Daemon: FirstBootCheck: iFirstBootDisableNotes = %d"), 
+            iFirstBootDisableNotes );      
     }
     
 //EOF

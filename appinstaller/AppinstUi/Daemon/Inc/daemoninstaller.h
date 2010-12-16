@@ -176,7 +176,13 @@ class CSisInstaller : public CActive, public MShutdownObserver
         /**
         * Indicates if this package is valid.
         */
-        TBool IsValidPackageL( const TDesC& aPackageName );      
+        TBool IsValidPackageL( const TDesC& aPackageName );   
+        
+        /**
+        * This function checks boot reason and sets flag to 
+        * disable UI notes in boot if first boot and eMMC found.
+        */        
+        void FirstBootCheck();
         	          
 	
     private:
@@ -212,6 +218,8 @@ class CSisInstaller : public CActive, public MShutdownObserver
         CProgramStatus* iProgramStatus;   
         // For plugin support
         TBool iUpdateCache;
+        // Defines need to diable notes in first boot.
+        TBool iFirstBootDisableNotes;         
     };		
 }
 

@@ -77,6 +77,8 @@ void CDialogWrapper::ConstructL()
         }
     // Start AO
     iWatcher->StartWatcher();
+    
+    iNoteId = 0;
     }
 
 // -----------------------------------------------------------------------------
@@ -96,6 +98,7 @@ CDialogWrapper* CDialogWrapper::NewL( RFs& aFs )
 // Destructor
 CDialogWrapper::~CDialogWrapper()
     {
+    FLOG( _L("Daemon: ~CDialogWrapper") );
     iResourceFile.Close();
     if ( iWatcher )
         {
@@ -112,15 +115,20 @@ CDialogWrapper::~CDialogWrapper()
 // 
 void CDialogWrapper::ShowUntrustedResultL()
     {  
+    FLOG( _L("Daemon: ShowUntrustedResultL") );
     // Let watcher to know that waiting note is canceled.
     iWatcher->CancelNoteRequest();
     
-    if ( iDisableAllNotes == EFalse )
-        {    
-        HBufC* string = ReadResourceLC( R_DAEMON_UNTRUSTED_FOUND );    
-        CAknGlobalNote* note = CAknGlobalNote::NewLC();
-        note->ShowNoteL( EAknGlobalInformationNote, *string );   
-        CleanupStack::PopAndDestroy( 2, string ); 
+    if ( iDisableInstallNotes == EFalse )
+        {
+        if ( iDisableAllNotes == EFalse )
+            {    
+            HBufC* string = ReadResourceLC( R_DAEMON_UNTRUSTED_FOUND );    
+            CAknGlobalNote* note = CAknGlobalNote::NewLC();
+            FLOG( _L("Daemon: ShowUntrustedResultL: ShowNoteL GlobalInfoNote") );
+            note->ShowNoteL( EAknGlobalInformationNote, *string );   
+            CleanupStack::PopAndDestroy( 2, string ); 
+            }
         }
     }
 
@@ -132,15 +140,20 @@ void CDialogWrapper::ShowUntrustedResultL()
 // 
 void CDialogWrapper::ShowErrorResultL()
     { 
+    FLOG( _L("Daemon: ShowErrorResultL") );
     // Let watcher to know that waiting note is canceled.
     iWatcher->CancelNoteRequest();   
     
-    if ( iDisableAllNotes == EFalse )
+    if ( iDisableInstallNotes == EFalse )
         {
-        HBufC* string = ReadResourceLC( R_DAEMON_INSTALLATION_ERROR );    
-        CAknGlobalNote* note = CAknGlobalNote::NewLC();
-        note->ShowNoteL( EAknGlobalInformationNote, *string );   
-        CleanupStack::PopAndDestroy( 2, string );  
+        if ( iDisableAllNotes == EFalse )
+            {
+            HBufC* string = ReadResourceLC( R_DAEMON_INSTALLATION_ERROR );    
+            CAknGlobalNote* note = CAknGlobalNote::NewLC();
+            FLOG( _L("Daemon: ShowErrorResultL: ShowNoteL GlobalInfoNote") );
+            note->ShowNoteL( EAknGlobalInformationNote, *string );   
+            CleanupStack::PopAndDestroy( 2, string );  
+            }
         }
     }
 
@@ -152,22 +165,32 @@ void CDialogWrapper::ShowErrorResultL()
 // 
 void CDialogWrapper::ShowWaitingNoteL()
 	{
-    if ( iDisableAllNotes == EFalse )
+    FLOG( _L("Daemon: ShowWaitingNoteL") );
+    
+    FLOG_1( _L("Daemon: iDisableInstallNotes = %d"), iDisableInstallNotes );
+    FLOG_1( _L("Daemon: iDisableAllNotes = %d"), iDisableAllNotes );
+    FLOG_1( _L("Daemon: iNoteId = %d"), iNoteId );
+    
+    if ( iDisableInstallNotes == EFalse )
         {
-        if ( iNoteId == 0 )
+        if ( iDisableAllNotes == EFalse )
             {
-            HBufC* string = ReadResourceLC( R_DAEMON_INSTALLING );   
-            CAknGlobalNote* note = CAknGlobalNote::NewLC();
-            note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
-            iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
-            CleanupStack::PopAndDestroy( 2, string );
+            if ( iNoteId == 0 )
+                {
+                HBufC* string = ReadResourceLC( R_DAEMON_INSTALLING );   
+                CAknGlobalNote* note = CAknGlobalNote::NewLC();
+                note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
+                FLOG( _L("Daemon: ShowWaitingNoteL: ShowNoteL GlobalWaitNote") );
+                iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
+                CleanupStack::PopAndDestroy( 2, string );
+                }
             }
-        }
-    else if ( iDisableAllNotes )
-        {
-        // Let watcher to know that waiting note should be shown 
-        // after dialogs are enabled.
-        iWatcher->RequestToDisplayNote();
+        else if ( iDisableAllNotes )
+            {
+            // Let watcher to know that waiting note should be shown 
+            // after dialogs are enabled.
+            iWatcher->RequestToDisplayNote();
+            }
         }
 	}
 	
@@ -179,9 +202,14 @@ void CDialogWrapper::ShowWaitingNoteL()
 // 
 void CDialogWrapper::CancelWaitingNoteL()
 	{
+    FLOG( _L("Daemon: CancelWaitingNoteL") );         
+    FLOG_1( _L("Daemon: iNoteId = %d"), iNoteId ); 
+    
 	if ( iNoteId )
 		{
 		CAknGlobalNote* note = CAknGlobalNote::NewLC();
+		FLOG_1( _L("Daemon: CancelWaitingNoteL: CancelNoteL iNoteID = %d"), 
+		        iNoteId );
 		note->CancelNoteL( iNoteId );
 		iNoteId = 0;
 		CleanupStack::PopAndDestroy();
@@ -222,6 +250,11 @@ void CDialogWrapper::SetUIFlag( TInt aUIFlag )
 // 
 void CDialogWrapper::ShowWaitingNoteForUninstallerL()
     {
+    FLOG( _L("Daemon: ShowWaitingNoteForUninstallerL") );
+    
+    FLOG_1( _L("Daemon: iDisableAllNotes = %d"), iDisableAllNotes );
+    FLOG_1( _L("Daemon: iNoteId = %d"), iNoteId ); 
+    
     if ( iDisableAllNotes == EFalse )
         {
         if ( iNoteId == 0 )
@@ -229,6 +262,7 @@ void CDialogWrapper::ShowWaitingNoteForUninstallerL()
             HBufC* string = ReadResourceLC( R_UNINSTALLER_INSTALL );   
             CAknGlobalNote* note = CAknGlobalNote::NewLC();
             note->SetSoftkeys( R_AVKON_SOFTKEYS_EMPTY );
+            FLOG( _L("Daemon: ShowWaitingNoteForUninstallerL GlobalWaitNote") );
             iNoteId = note->ShowNoteL( EAknGlobalWaitNote, *string );
             CleanupStack::PopAndDestroy( 2, string );
             }
@@ -240,4 +274,15 @@ void CDialogWrapper::ShowWaitingNoteForUninstallerL()
         iWatcher->RequestToDisplayNote();
         }
     }
+    
+// -----------------------------------------------------------------------------
+// CDialogWrapper::DisableInstallNotes  
+// Set boolean to disable install notes. This is used in first boot if eMMC is
+// found in device. 
+// -----------------------------------------------------------------------------
+// 
+void CDialogWrapper::DisableInstallNotes( TBool aValue )
+    {   
+    iDisableInstallNotes = aValue;            
+    }    
 //  End of File  

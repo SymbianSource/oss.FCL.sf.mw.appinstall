@@ -21,7 +21,7 @@
 
 #include <StringLoader.h>
 #include <SWInstDefs.h>
-#include <SWInstSvrUI.rsg>
+#include <swinstsvrui.rsg>
 #include <SWInstTaskManager.h>
 
 #include "SWInstRequestObject.h"
@@ -75,9 +75,10 @@ void CSWInstRequestObject::BaseConstructL()
     
 // Destructor
 CSWInstRequestObject::~CSWInstRequestObject()
-    {    
+    {  
+    CActive::Cancel(); // Cancel before delete, othervice plugin is not canceled.  
     delete iUIPlugin;
-    CActive::Cancel();
+    iUIPlugin = NULL;     
     delete iTaskManager;
     iSingleInstanceMutex.Close();
     }
